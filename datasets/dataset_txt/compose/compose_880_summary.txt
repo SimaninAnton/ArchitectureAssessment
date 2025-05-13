@@ -1,0 +1,1 @@
+build --pull fails for local image dependency, works without --pull

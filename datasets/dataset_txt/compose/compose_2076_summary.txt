@@ -1,0 +1,1 @@
+env_file interpolating vars from .env and shell the same as environment does

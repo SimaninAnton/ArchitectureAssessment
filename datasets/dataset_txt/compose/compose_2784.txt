@@ -1,0 +1,5 @@
+Contributor
+clkao commented on 12 Feb 2016
+(Follow up to #754)
+This might be somewhat awkward option in docker-compose.yml, but perhaps a pass-through argument for docker-compose run?
+16

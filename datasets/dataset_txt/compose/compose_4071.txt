@@ -1,0 +1,5 @@
+matleh commented on 29 Nov 2014
+fig run <container> does already return the exit-code of the container (see #197) but fig up returns with 0 no matter what the exit-code of the started containers is.
+It would be helpful to able to detect, if one of the containers returned with a non-zero exit code and have fig return a non-zero exit-code in that case, too.
+Also, fig up does end with exit-code 1 if one of the containers could not be started at all, and also if one does Ctl-C once, but it ends with exit-code 0 of one does Ctl-C twice. It would be more in line with "standard unix behavior" if fig would exit with -2 in case of single Ctl-C (SIGINT) and -9 in case of double Ctl-C (SIGKILL).
+2

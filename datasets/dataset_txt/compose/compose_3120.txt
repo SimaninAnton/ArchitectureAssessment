@@ -1,0 +1,3 @@
+djmaze commented on 10 Nov 2015
+The new environment variable substitution is really handy. But as using a .env file is a common pattern for many projects, it should be possible to use env_file in combination with $VARIABLE substitution in the docker-compose.yml.
+Often this is much more useful then just using variables from the current shell environment. This way, local configuration and credentials can stay out of version control (e.g. container hostnames, ports or database passwords).

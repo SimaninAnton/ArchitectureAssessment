@@ -1,0 +1,1 @@
+docker-compose network ipam additional properties are not allowed

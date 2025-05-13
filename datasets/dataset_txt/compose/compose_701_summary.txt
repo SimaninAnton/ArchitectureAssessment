@@ -1,0 +1,1 @@
+Attachable flag brakes compatibility mode and requires local swarm cluster

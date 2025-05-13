@@ -1,0 +1,25 @@
+tjamet commented on 4 Aug 2016
+Hi,
+Having distinct repositories for our frontend and backend, we would like, to be able to reference, in frontend compose file, services exposed in the backend compose file without having to handle the dependencies (databases, volumes, configuration, ...) of the backend.
+sample frontend compose file:
+version: "2"
+services:
+  - public:
+    - image: public
+    - depends_on:
+      - backend
+  - private:
+    - image: private
+    - depends_on:
+      - backend
+sample backend compose file:
+version: "2"
+services:
+  - db:
+    - image: our_database
+  - backend:
+    - image: backend
+To tackle our issue, we currently do the following:
+curl -o docker-compose.backend.yml https://our.server.local/backend/docker-compose.yml
+docker-compose -f docker-compose.backend.yml -f docker-compose.yml up -d
+Would there be an option (or intent to implement it) to describe this natively within the compose file?

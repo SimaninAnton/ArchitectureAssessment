@@ -1,0 +1,1 @@
+Error when using registry: first path segment in URL cannot contain colon

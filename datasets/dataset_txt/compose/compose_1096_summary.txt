@@ -1,0 +1,1 @@
+stop one task in docker swarm mode will lead to task restart again and again

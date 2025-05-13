@@ -1,0 +1,14 @@
+SISheogorath commented on 12 May 2017 •
+edited
+I noticed a problem with the output docker compose config.
+If you put one or multiple files with a version: '3.1' spec in its output for the ports section looks like this:
+ ports:
+    - published: '443'
+      target: '443'
+    - published: '80'
+      target: '80'
+    - published: '8080'
+      target: '8080'
+The version stays on version: 3.1. As a result, the config fails to deploy as this is invalid in 3.1.
+$ docker-compose --version
+docker-compose version 1.12.0, build b31ff33

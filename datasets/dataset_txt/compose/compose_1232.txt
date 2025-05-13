@@ -1,0 +1,2 @@
+Puneeth-n commented on 1 Sep 2017
+Is it possible to build multiple services in a docker-compose file in parallel?

@@ -1,0 +1,5 @@
+Contributor
+dnephin commented on 1 Sep 2015
+(from #1627 (comment))
+Related to #1936
+We can't maintain an example for every setup, but we can link to repos and blog posts that contain examples of compose uses. Let's add a page to the docs where we can include these links.

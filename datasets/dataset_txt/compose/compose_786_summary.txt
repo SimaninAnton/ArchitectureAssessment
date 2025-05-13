@@ -1,0 +1,1 @@
+Compose 1.20.0 crashes while building image from Dockerfile

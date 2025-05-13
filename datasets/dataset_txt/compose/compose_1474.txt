@@ -1,0 +1,127 @@
+cnkuyan commented on 9 May 2017 •
+edited by shin-
+Hi,
+docker-compose fails to pull the image, whereas plain `docker pull o_auth:${O_AUTH_VERSION}' is successful. ( Upon successfully logging in to the registry , with 'docker login')
+I'm using a vagrant plugin (https://github.com/leighmcculloch/vagrant-docker-compose ) to do this.
+Host OS: ubuntu 16.04
+~/dev/docker$ docker-compose --version
+docker-compose version 1.11.2, build dfed245
+~/dev/docker$ docker --version
+Docker version 17.04.0-ce, build 4845c56
+~/dev/docker$ vagrant --version
+Vagrant 1.9.4
+
+~/dev/docker$ cat Vagrantfile
+....
+ config.vm.box = "ubuntu/trusty64"
+  config.vm.provision :docker
+  config.vm.provision :docker_compose , yml: "/vagrant/mongo_replica/docker-compose.yml", run: "always"
+  config.vm.provision :docker_compose , yml: "/vagrant/docker-compose.yml",
+  options: " --verbose",
+  run: "always",
+..
+~/dev/docker$ cat docker-compose.yml
+version: '2'
+services:
+  o_redis:
+    hostname: o_redis
+    image: redis:latest
+    ports:
+    - "6379:6379"
+    networks:
+      mongoreplica_app_net:
+        ipv4_address:  172.18.0.9
+
+  o_auth:
+    hostname: o_auth
+    image: MYPRIVATE_REG:5011/o_auth:${O_AUTH_VERSION}
+    environment:
+    - HOST_IP=172.17.0.1
+    - ETCD2_PROT=http
+    - O_AUTH_PORT_6379_TCP_ADDR=172.18.0.9
+    - VERSION=${O_AUTH_VERSION}
+    links:
+        - o_redis
+    ports:
+      - "8081:8081"
+    networks:
+      mongoreplica_app_net:
+          ipv4_address: 172.18.0.10
+
+networks:
+  mongoreplica_app_net:
+      external: true
+The output of the docker-compose
+==> default: compose.config.config.find: Using configuration files: /vagrant/docker-compose.yml
+==> default: docker.auth.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+==> default: docker.auth.find_config_file: No config file found
+==> default: compose.cli.command.get_client: docker-compose version 1.11.2, build dfed245
+==> default: docker-py version: 2.1.0
+==> default: CPython version: 2.7.13
+==> default: OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+==> default: compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+==> default: compose.cli.command.get_client: Docker version: KernelVersion=3.13.0-117-generic, Arch=amd64, BuildTime=2017-05-04T22:06:06.693142599+00:00, ApiVersion=1.29, Versi
+on=17.05.0-ce, MinAPIVersion=1.12, GitCommit=89658be, Os=linux, GoVersion=go1.7.5
+==> default: compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+==> default: compose.cli.verbose_proxy.proxy_callable: docker info -> {u'Architecture': u'x86_64',
+==> default:  u'BridgeNfIp6tables': True,
+==> default:  u'BridgeNfIptables': True,
+==> default:  u'CPUSet': True,
+==> default:  u'CPUShares': True,
+==> default:  u'CgroupDriver': u'cgroupfs',
+==> default:  u'ClusterAdvertise': u'',
+==> default:  u'ClusterStore': u'',
+==> default:  u'ContainerdCommit': {u'Expected': u'9048e5e50717ea4497b757314bad98ea3763c145',
+==> default:                        u'ID': u'9048e5e50717ea4497b757314bad98ea3763c145'},
+==> default: ...
+==> default: compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('mongoreplica_app_net')
+==> default: compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {u'Attachable': False,
+==> default:  u'Containers': {u'25734b8f2d6160709935b0957cca981a41f924474bd6541c9080a69184b12923': {u'EndpointID': u'f654c0c7301a97c30e7b04b4c6b4b2403e89dd6dbc729ed329ddb006bb8
+e9cb8',
+==> default:                                                                                        u'IPv4Address': u'172.18.0.3/24',
+==> default:                                                                                        u'IPv6Address': u'',
+==> default:                                                                                        u'MacAddress': u'02:42:ac:12:00:03',
+==> default:                                                                                        u'Name': u'mongoreplica_mongo2_1'},
+==> default:                  u'9c7b4f568eace9605186d4b4a4d535681eae0f105f73ac3840d8dd792fb10a13': {u'EndpointID': u'80abf1b8035e6bb982598e2786fa7e24e6a940c762353d3908f946b4d2b
+54ac7',
+==> default:                                                                                        u'IPv4Address': u'172.18.0.2/24',
+==> default:                                                                                        u'IPv6Address': u'',
+==> default:                                                                                        u'MacAddress': u'02:42:ac:12:00:02',
+==> default: ...
+==> default: compose.network.ensure: Network mongoreplica_app_net declared as external. No new network will be created.
+==> default: compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=vagrant', u'com.docker.compose.oneoff=F
+alse']})
+==> default: compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+==> default: compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=vagrant', u'com.docker.compose.service=o
+_redis', u'com.docker.compose.oneoff=False']})
+==> default: compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+==> default: compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=vagrant', u'com.docker.compose.service=o
+_auth', u'com.docker.compose.oneoff=False']})
+==> default: compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+==> default: compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('redis:latest')
+==> default: compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+==> default:  u'Author': u'',
+==> default:  u'Comment': u'',
+==> default:  u'Config': {u'ArgsEscaped': True,
+==> default:              u'AttachStderr': False,
+==> default:              u'AttachStdin': False,
+==> default:              u'AttachStdout': False,
+==> default:              u'Cmd': [u'redis-server'],
+==> default:              u'Domainname': u'',
+==> default:              u'Entrypoint': [u'docker-entrypoint.sh'],
+==> default: ...
+==> default: compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('MYPRIVATE_REG:5011/o_auth:0.6.0-5-g29276c8')
+==> default: compose.service.pull: Pulling o_auth (MYPRIVATE_REG:5011/o_auth:0.6.0-5-g29276c8)...
+==> default: compose.cli.verbose_proxy.proxy_callable: docker pull <- (u'MYPRIVATE_REG:5011/o_auth', tag=u'0.6.0-5-g29276c8', stream=True)
+==> default: docker.auth.get_config_header: Looking for auth config
+==> default: docker.auth.get_config_header: No auth config in memory - loading from filesystem
+==> default: docker.auth.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+==> default: docker.auth.find_config_file: No config file found
+==> default: docker.auth.resolve_authconfig: Looking for auth entry for u'MYPRIVATE_REG:5021'
+==> default: docker.auth.resolve_authconfig: No entry found
+==> default: docker.auth.get_config_header: No auth config found
+==> default: compose.cli.errors.log_api_error: Get https://MYPRIVATE_REG:5011/v1/_ping: x5MYPRIVATE_REG09: certificate signed by unknown authority
+
+docker.auth.resolve_authconfig: No entry found
+docker.auth.get_config_header: No auth config found
+compose.cli.errors.log_api_error: Get https://MYPRIVATE_REG:5011/v1/_ping: x509: certificate signed by unknown authority

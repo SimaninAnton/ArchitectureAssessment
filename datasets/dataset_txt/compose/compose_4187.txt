@@ -1,0 +1,4 @@
+stefanfoulis commented on 18 Sep 2014
+Note: needs a better title
+We're using fig for development of our entire application, currently consisting of about 20 individual docker containers. This works great, but it takes for ages to build and some of our developers only work on a small subset of the services.
+My proposition would be something along the lines of allowing to set both image and build on the same service. If you just need the service running locally, you could use the pre-built docker container defined in image and run that. If you're actively developing a service, you'd check out the source and build the container from the latest source locally by using build.

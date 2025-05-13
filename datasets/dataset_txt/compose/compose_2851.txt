@@ -1,0 +1,15 @@
+ac111 commented on 2 Feb 2016
+Not sure if this is supported, but I'm trying to do is use an overlay network endpoint reference in my application file (where "lstest" is the overlay name) to support a multi-host swarm setup:
+ls:
+  build: .
+  ports:
+    - "12201:12201/udp"
+logtester:
+  build: ./test
+  dockerfile: Dockerfile-logdriver
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://lstest_ls_1:12201"
+The error I get when running compose up (with overlay option and -p lstest):
+ERROR: Cannot start container c9e93566d0ac83365e91235fa74c6aeab51908f906c65749a5fbbcc980a46e24: Failed to initialize logging driver: gelf: cannot connect to GELF endpoint: lstest_ls_1:12201 dial udp: lookup lstest_ls_1: no DNS servers
+Is there another approach I should take?

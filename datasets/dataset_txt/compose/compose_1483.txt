@@ -1,0 +1,28 @@
+SysOfM commented on 5 May 2017
+I used the docker compose version 1.11 and after upgrading to 1.13.0 I had problems.
+docker-compose --version docker-compose version 1.13.0, build 1719ceb
+Docker-compose file is version '2.1'.
+The new version exits with an error:
+Starting consul0 ... error
+ERROR: for consul0  Cannot create container for service consul0: invalid port specification: "None"
+ERROR: Encountered errors while bringing up the project.
+The port specification of consul0 is:
+    ports:
+      - "8500:8500"
+Similar problems with all containers, for example with nginx0:
+nginx0:
+   image: nginx:alpine
+   container_name: nginx0
+   hostname: nginx0
+   domainname: xxx.yyy.zzz
+   networks:
+     internal_network:
+       aliases:
+         - nginx0.xxx.yyy.zzz
+   depends_on:
+     - proxy0
+   ports:
+     - "80:80"
+     - "443:443"
+As far as I know everything should work. But as you see after the upgrade everything broke.
+If you need more information feel free to contact.

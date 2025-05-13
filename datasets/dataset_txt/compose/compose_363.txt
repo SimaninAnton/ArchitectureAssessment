@@ -1,0 +1,413 @@
+ArseniiPetrovich commented on 7 Dec 2018
+Description of the issue
+I've tried to launch a set of containers on Ubuntu 18 that worked perfectly on Ubuntu 16, but they've failed into restarting state. I'm not sure if that is the issue that should be addressed to this repo. Please, redirect me if I wrong.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+Output of docker version
+Docker version 18.09.0, build 4d60db4
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  net_db_bridge_affirmation:
+    driver: bridge
+  net_db_bridge_collected:
+    driver: bridge
+  net_db_bridge_request:
+    driver: bridge
+  net_db_bridge_senderforeign:
+    driver: bridge
+  net_db_bridge_senderhome:
+    driver: bridge
+  net_rabbit_bridge_affirmation:
+    driver: bridge
+  net_rabbit_bridge_collected:
+    driver: bridge
+  net_rabbit_bridge_request:
+    driver: bridge
+  net_rabbit_bridge_senderforeign:
+    driver: bridge
+  net_rabbit_bridge_senderhome:
+    driver: bridge
+services:
+  bridge:
+    build:
+      context: /home/poadocker/bridge
+    command: "true"
+    cpus: 0.1
+    environment:
+      ALLOW_HTTP: "no"
+      BRIDGE_MODE: ERC_TO_NATIVE
+      ERC20_TOKEN_ADDRESS: '<redacted>'
+      FOREIGN_BRIDGE_ADDRESS: '<redacted>'
+      FOREIGN_GAS_PRICE_FALLBACK: '10000000000'
+      FOREIGN_GAS_PRICE_ORACLE_URL: https://gasprice.poa.network/
+      FOREIGN_GAS_PRICE_SPEED_TYPE: standard
+      FOREIGN_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      FOREIGN_POLLING_INTERVAL: '5000'
+      FOREIGN_RPC_URL: https://mainnet.infura.io
+      FOREIGN_START_BLOCK: '6478417'
+      HOME_BRIDGE_ADDRESS: '<redacted>'
+      HOME_GAS_PRICE_FALLBACK: '0'
+      HOME_GAS_PRICE_SPEED_TYPE: standard
+      HOME_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      HOME_POLLING_INTERVAL: '5000'
+      HOME_RPC_URL: <redacted>
+      HOME_START_BLOCK: '759'
+      NODE_ENV: production
+      QUEUE_URL: amqp://rabbit
+      REDIS_LOCK_TTL: '1000'
+      REDIS_URL: redis://redis
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    restart: on-failure
+  bridge_affirmation:
+    build:
+      context: /home/poadocker/bridge
+    command: "true"
+    cpus: 0.1
+    entrypoint: npm run watcher:affirmation-request
+    environment:
+      ALLOW_HTTP: "no"
+      BRIDGE_MODE: ERC_TO_NATIVE
+      ERC20_TOKEN_ADDRESS: '<redacted>'
+      FOREIGN_BRIDGE_ADDRESS: '<redacted>'
+      FOREIGN_GAS_PRICE_FALLBACK: '10000000000'
+      FOREIGN_GAS_PRICE_ORACLE_URL: https://gasprice.poa.network/
+      FOREIGN_GAS_PRICE_SPEED_TYPE: standard
+      FOREIGN_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      FOREIGN_POLLING_INTERVAL: '5000'
+      FOREIGN_RPC_URL: https://mainnet.infura.io
+      FOREIGN_START_BLOCK: '6478417'
+      HOME_BRIDGE_ADDRESS: '<redacted>'
+      HOME_GAS_PRICE_FALLBACK: '0'
+      HOME_GAS_PRICE_SPEED_TYPE: standard
+      HOME_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      HOME_POLLING_INTERVAL: '5000'
+      HOME_RPC_URL: <redacted>
+      HOME_START_BLOCK: '759'
+      NODE_ENV: production
+      QUEUE_URL: amqp://rabbit
+      REDIS_LOCK_TTL: '1000'
+      REDIS_URL: redis://redis
+      VALIDATOR_ADDRESS: '<redacted>'
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    networks:
+      net_db_bridge_affirmation: null
+      net_rabbit_bridge_affirmation: null
+    restart: unless-stopped
+  bridge_collected:
+    build:
+      context: /home/poadocker/bridge
+    command: "true"
+    cpus: 0.1
+    entrypoint: npm run watcher:collected-signatures
+    environment:
+      ALLOW_HTTP: "no"
+      BRIDGE_MODE: ERC_TO_NATIVE
+      ERC20_TOKEN_ADDRESS: '<redacted>'
+      FOREIGN_BRIDGE_ADDRESS: '<redacted>'
+      FOREIGN_GAS_PRICE_FALLBACK: '10000000000'
+      FOREIGN_GAS_PRICE_ORACLE_URL: https://gasprice.poa.network/
+      FOREIGN_GAS_PRICE_SPEED_TYPE: standard
+      FOREIGN_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      FOREIGN_POLLING_INTERVAL: '5000'
+      FOREIGN_RPC_URL: https://mainnet.infura.io
+      FOREIGN_START_BLOCK: '6478417'
+      HOME_BRIDGE_ADDRESS: '<redacted>'
+      HOME_GAS_PRICE_FALLBACK: '0'
+      HOME_GAS_PRICE_SPEED_TYPE: standard
+      HOME_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      HOME_POLLING_INTERVAL: '5000'
+      HOME_RPC_URL: <redacted>
+      HOME_START_BLOCK: '759'
+      NODE_ENV: production
+      QUEUE_URL: amqp://rabbit
+      REDIS_LOCK_TTL: '1000'
+      REDIS_URL: redis://redis
+      VALIDATOR_ADDRESS: '<redacted>'
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    networks:
+      net_db_bridge_collected: null
+      net_rabbit_bridge_collected: null
+    restart: unless-stopped
+  bridge_request:
+    build:
+      context: /home/poadocker/bridge
+    command: "true"
+    cpus: 0.1
+    entrypoint: npm run watcher:signature-request
+    environment:
+      ALLOW_HTTP: "no"
+      BRIDGE_MODE: ERC_TO_NATIVE
+      ERC20_TOKEN_ADDRESS: '<redacted>'
+      FOREIGN_BRIDGE_ADDRESS: '<redacted>'
+      FOREIGN_GAS_PRICE_FALLBACK: '10000000000'
+      FOREIGN_GAS_PRICE_ORACLE_URL: https://gasprice.poa.network/
+      FOREIGN_GAS_PRICE_SPEED_TYPE: standard
+      FOREIGN_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      FOREIGN_POLLING_INTERVAL: '5000'
+      FOREIGN_RPC_URL: https://mainnet.infura.io
+      FOREIGN_START_BLOCK: '6478417'
+      HOME_BRIDGE_ADDRESS: '<redacted>'
+      HOME_GAS_PRICE_FALLBACK: '0'
+      HOME_GAS_PRICE_SPEED_TYPE: standard
+      HOME_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      HOME_POLLING_INTERVAL: '5000'
+      HOME_RPC_URL: <redacted>
+      HOME_START_BLOCK: '759'
+      NODE_ENV: production
+      QUEUE_URL: amqp://rabbit
+      REDIS_LOCK_TTL: '1000'
+      REDIS_URL: redis://redis
+      VALIDATOR_ADDRESS: '<redacted>'
+      VALIDATOR_ADDRESS_PRIVATE_KEY: '<redacted>'
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    networks:
+      net_db_bridge_request: null
+      net_rabbit_bridge_request: null
+    restart: unless-stopped
+  bridge_senderforeign:
+    build:
+      context: /home/poadocker/bridge
+    command: "true"
+    cpus: 0.1
+    entrypoint: npm run sender:foreign
+    environment:
+      ALLOW_HTTP: "no"
+      BRIDGE_MODE: ERC_TO_NATIVE
+      ERC20_TOKEN_ADDRESS: '<redacted>'
+      FOREIGN_BRIDGE_ADDRESS: '<redacted>'
+      FOREIGN_GAS_PRICE_FALLBACK: '10000000000'
+      FOREIGN_GAS_PRICE_ORACLE_URL: https://gasprice.poa.network/
+      FOREIGN_GAS_PRICE_SPEED_TYPE: standard
+      FOREIGN_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      FOREIGN_POLLING_INTERVAL: '5000'
+      FOREIGN_RPC_URL: https://mainnet.infura.io
+      FOREIGN_START_BLOCK: '6478417'
+      HOME_BRIDGE_ADDRESS: '<redacted>'
+      HOME_GAS_PRICE_FALLBACK: '0'
+      HOME_GAS_PRICE_SPEED_TYPE: standard
+      HOME_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      HOME_POLLING_INTERVAL: '5000'
+      HOME_RPC_URL: <redacted>
+      HOME_START_BLOCK: '759'
+      NODE_ENV: production
+      QUEUE_URL: amqp://rabbit
+      REDIS_LOCK_TTL: '1000'
+      REDIS_URL: redis://redis
+      VALIDATOR_ADDRESS: '<redacted>'
+      VALIDATOR_ADDRESS_PRIVATE_KEY: '<redacted>'
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    networks:
+      net_db_bridge_senderforeign: null
+      net_rabbit_bridge_senderforeign: null
+    restart: unless-stopped
+  bridge_senderhome:
+    build:
+      context: /home/poadocker/bridge
+    command: "true"
+    cpus: 0.1
+    entrypoint: npm run sender:home
+    environment:
+      ALLOW_HTTP: "no"
+      BRIDGE_MODE: ERC_TO_NATIVE
+      ERC20_TOKEN_ADDRESS: '<redacted>'
+      FOREIGN_BRIDGE_ADDRESS: '<redacted>'
+      FOREIGN_GAS_PRICE_FALLBACK: '10000000000'
+      FOREIGN_GAS_PRICE_ORACLE_URL: https://gasprice.poa.network/
+      FOREIGN_GAS_PRICE_SPEED_TYPE: standard
+      FOREIGN_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      FOREIGN_POLLING_INTERVAL: '5000'
+      FOREIGN_RPC_URL: https://mainnet.infura.io
+      FOREIGN_START_BLOCK: '6478417'
+      HOME_BRIDGE_ADDRESS: '<redacted>'
+      HOME_GAS_PRICE_FALLBACK: '0'
+      HOME_GAS_PRICE_SPEED_TYPE: standard
+      HOME_GAS_PRICE_UPDATE_INTERVAL: '600000'
+      HOME_POLLING_INTERVAL: '5000'
+      HOME_RPC_URL: <redacted>
+      HOME_START_BLOCK: '759'
+      NODE_ENV: production
+      QUEUE_URL: amqp://rabbit
+      REDIS_LOCK_TTL: '1000'
+      REDIS_URL: redis://redis
+      VALIDATOR_ADDRESS: '<redacted>'
+      VALIDATOR_ADDRESS_PRIVATE_KEY: '<redacted>'
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    networks:
+      net_db_bridge_senderhome: null
+      net_rabbit_bridge_senderhome: null
+    restart: unless-stopped
+  rabbit:
+    cpus: 0.3
+    environment:
+      RABBITMQ_NODENAME: node@rabbit
+    hostname: rabbit
+    image: rabbitmq:3
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    networks:
+      net_rabbit_bridge_affirmation: null
+      net_rabbit_bridge_collected: null
+      net_rabbit_bridge_request: null
+      net_rabbit_bridge_senderforeign: null
+      net_rabbit_bridge_senderhome: null
+    restart: unless-stopped
+    volumes:
+    - /root/bridge_data/rabbitmq:/var/lib/rabbitmq/mnesia:rw
+  redis:
+    command:
+    - redis-server
+    - --appendonly
+    - "yes"
+    cpus: 0.1
+    hostname: redis
+    image: redis:4
+    logging:
+      driver: syslog
+      options:
+        tag: '{{.Name}}/{{.ID}}'
+    mem_limit: 500m
+    networks:
+      net_db_bridge_affirmation: null
+      net_db_bridge_collected: null
+      net_db_bridge_request: null
+      net_db_bridge_senderforeign: null
+      net_db_bridge_senderhome: null
+    restart: unless-stopped
+    volumes:
+    - /root/bridge_data/redis:/data:rw
+version: '2.4'
+Steps to reproduce the issue
+Install Ubuntu 18
+Git clone https://github.com/ArseniiPetrovich/token-bridge
+Use VALIDATOR_ADDRESS && VALIDATOR_ADDRESS_PRIVATE_KEY keys to launch the bridge ( VALIDATOR_ADDRESS=$vaddr VALIDATOR_ADDRESS_PRIVATE_KEY=$vkey /usr/local/bin/docker-compose up --detach --force-recreate --no-deps --build)
+Observed result
+Containers started to fail with the following error:
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! code ELIFECYCLE
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! errno 11
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! bridge-nodejs@1.0.0 watcher:affirmation-request: `./scripts/start-worker.sh watcher affirmation-request-watcher "true"`
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! Exit status 11
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR!
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! Failed at the bridge-nodejs@1.0.0 watcher:affirmation-request script.
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: 
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! A complete log of this run can be found in:
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR!     /root/.npm/_logs/2018-12-07T10_34_32_512Z-debug.log
+^C
+root@poa-node:/var/log/docker# tail -f bridge_affirmation_1/docker.log 
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! code ELIFECYCLE
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! errno 11
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! bridge-nodejs@1.0.0 watcher:affirmation-request: `./scripts/start-worker.sh watcher affirmation-request-watcher "true"`
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! Exit status 11
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR!
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! Failed at the bridge-nodejs@1.0.0 watcher:affirmation-request script.
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: 
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR! A complete log of this run can be found in:
+Dec  7 10:34:32 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: npm ERR!     /root/.npm/_logs/2018-12-07T10_34_32_512Z-debug.log
+Dec  7 10:34:38 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: 
+Dec  7 10:34:38 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: > bridge-nodejs@1.0.0 watcher:affirmation-request /bridge
+Dec  7 10:34:38 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: > ./scripts/start-worker.sh watcher affirmation-request-watcher "true"
+Dec  7 10:34:38 poa-node bridge_bridge_affirmation_1/173360e2f293[19564]: 
+Expected result
+Containers are alive.
+Stacktrace / full error message
+Dec  6 11:18:24 poa-node containerd[9656]: time="2018-12-06T11:18:24.770482386Z" level=info msg="shim reaped" id=d9da0e551ff4fa1ad95a3e49fb799da4ef02eac049c641414482b90f94f298d9
+Dec  6 11:18:24 poa-node dockerd[19564]: time="2018-12-06T11:18:24.780951872Z" level=info msg="ignoring event" module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+Dec  6 11:18:24 poa-node systemd-networkd[999]: veth6819b3b: Lost carrier
+Dec  6 11:18:24 poa-node kernel: [180188.784362] br-dd1ee1c82b7c: port 1(veth6819b3b) entered disabled state
+Dec  6 11:18:24 poa-node kernel: [180188.784840] veth76afcd5: renamed from eth0
+Dec  6 11:18:24 poa-node systemd-udevd[439]: link_config: autonegotiation is unset or enabled, the speed and duplex are not writable.
+Dec  6 11:18:24 poa-node networkd-dispatcher[15655]: WARNING:Unknown index 2570 seen, reloading interface list
+Dec  6 11:18:24 poa-node kernel: [180188.835963] br-dd1ee1c82b7c: port 1(veth6819b3b) entered disabled state
+Dec  6 11:18:24 poa-node kernel: [180188.843488] device veth6819b3b left promiscuous mode
+Dec  6 11:18:24 poa-node kernel: [180188.843506] br-dd1ee1c82b7c: port 1(veth6819b3b) entered disabled state
+Dec  6 11:18:24 poa-node networkd-dispatcher[15655]: ERROR:Unknown interface index 2570 seen even after reload
+Dec  6 11:18:24 poa-node networkd-dispatcher[15655]: Failed to request link: No such device
+Dec  6 11:18:24 poa-node networkd-dispatcher[15655]: ERROR:Failed to get interface "veth6819b3b" status: Command '['/bin/networkctl', 'status', '--no-pager', '--no-legend', '--', 'veth6819b3b']' returned non-zero exit status 1.
+Dec  6 11:18:24 poa-node networkd-dispatcher[15655]: WARNING:Unknown index 2570 seen, reloading interface list
+Dec  6 11:18:24 poa-node networkd-dispatcher[15655]: ERROR:Unknown interface index 2570 seen even after reload
+Dec  6 11:18:24 poa-node systemd-networkd[999]: veth1d93bdf: Lost carrier
+Dec  6 11:18:24 poa-node kernel: [180188.919868] br-145e0181cf29: port 1(veth1d93bdf) entered disabled state
+Dec  6 11:18:24 poa-node kernel: [180188.919957] vethea0e112: renamed from eth1
+Dec  6 11:18:25 poa-node systemd-udevd[457]: link_config: autonegotiation is unset or enabled, the speed and duplex are not writable.
+Dec  6 11:18:25 poa-node kernel: [180188.982280] br-145e0181cf29: port 1(veth1d93bdf) entered disabled state
+Dec  6 11:18:25 poa-node kernel: [180188.985039] device veth1d93bdf left promiscuous mode
+Dec  6 11:18:25 poa-node kernel: [180188.985057] br-145e0181cf29: port 1(veth1d93bdf) entered disabled state
+Dec  6 11:18:25 poa-node networkd-dispatcher[15655]: Failed to request link: No such device
+Dec  6 11:18:25 poa-node networkd-dispatcher[15655]: ERROR:Failed to get interface "veth1d93bdf" status: Command '['/bin/networkctl', 'status', '--no-pager', '--no-legend', '--', 'veth1d93bdf']' returned non-zero exit status 1.
+Dec  6 11:18:25 poa-node networkd-dispatcher[15655]: WARNING:Unknown index 2572 seen, reloading interface list
+Dec  6 11:18:25 poa-node networkd-dispatcher[15655]: ERROR:Unknown interface index 2572 seen even after reload
+Dec  6 11:18:25 poa-node kernel: [180189.158350] br-dd1ee1c82b7c: port 1(veth0853806) entered blocking state
+Dec  6 11:18:25 poa-node kernel: [180189.158353] br-dd1ee1c82b7c: port 1(veth0853806) entered disabled state
+Dec  6 11:18:25 poa-node kernel: [180189.158419] device veth0853806 entered promiscuous mode
+Dec  6 11:18:25 poa-node kernel: [180189.158525] IPv6: ADDRCONF(NETDEV_UP): veth0853806: link is not ready
+Dec  6 11:18:25 poa-node kernel: [180189.158531] br-dd1ee1c82b7c: port 1(veth0853806) entered blocking state
+Dec  6 11:18:25 poa-node kernel: [180189.158534] br-dd1ee1c82b7c: port 1(veth0853806) entered forwarding state
+Dec  6 11:18:25 poa-node systemd-udevd[472]: link_config: autonegotiation is unset or enabled, the speed and duplex are not writable.
+Dec  6 11:18:25 poa-node systemd-udevd[471]: link_config: autonegotiation is unset or enabled, the speed and duplex are not writable.
+Dec  6 11:18:25 poa-node networkd-dispatcher[15655]: WARNING:Unknown index 2579 seen, reloading interface list
+Dec  6 11:18:25 poa-node kernel: [180189.196814] br-145e0181cf29: port 1(veth868834b) entered blocking state
+Dec  6 11:18:25 poa-node kernel: [180189.196817] br-145e0181cf29: port 1(veth868834b) entered disabled state
+Dec  6 11:18:25 poa-node kernel: [180189.196907] device veth868834b entered promiscuous mode
+Dec  6 11:18:25 poa-node kernel: [180189.197026] IPv6: ADDRCONF(NETDEV_UP): veth868834b: link is not ready
+Dec  6 11:18:25 poa-node kernel: [180189.197034] br-145e0181cf29: port 1(veth868834b) entered blocking state
+Dec  6 11:18:25 poa-node kernel: [180189.197037] br-145e0181cf29: port 1(veth868834b) entered forwarding state
+Dec  6 11:18:25 poa-node networkd-dispatcher[15655]: WARNING:Unknown index 2581 seen, reloading interface list
+Dec  6 11:18:25 poa-node systemd-udevd[480]: link_config: autonegotiation is unset or enabled, the speed and duplex are not writable.
+Dec  6 11:18:25 poa-node systemd-udevd[484]: link_config: autonegotiation is unset or enabled, the speed and duplex are not writable.
+Dec  6 11:18:25 poa-node containerd[9656]: time="2018-12-06T11:18:25.280573565Z" level=info msg="shim containerd-shim started" address="/containerd-shim/moby/d9da0e551ff4fa1ad95a3e49fb799da4ef02eac049c641414482b90f94f298d9/shim.sock" debug=false pid=488
+Dec  6 11:18:25 poa-node kernel: [180189.779685] eth0: renamed from vethd8a22a7
+Dec  6 11:18:25 poa-node kernel: [180189.807495] br-dd1ee1c82b7c: port 1(veth0853806) entered disabled state
+Dec  6 11:18:25 poa-node kernel: [180189.807595] br-145e0181cf29: port 1(veth868834b) entered disabled state
+Dec  6 11:18:25 poa-node kernel: [180189.807850] IPv6: ADDRCONF(NETDEV_CHANGE): veth0853806: link becomes ready
+Dec  6 11:18:25 poa-node kernel: [180189.807898] br-dd1ee1c82b7c: port 1(veth0853806) entered blocking state
+Dec  6 11:18:25 poa-node kernel: [180189.807901] br-dd1ee1c82b7c: port 1(veth0853806) entered forwarding state
+Dec  6 11:18:25 poa-node systemd-networkd[999]: veth0853806: Gained carrier
+Dec  6 11:18:25 poa-node kernel: [180189.832378] eth1: renamed from veth36a61c8
+Dec  6 11:18:25 poa-node systemd-networkd[999]: veth868834b: Gained carrier
+Dec  6 11:18:25 poa-node kernel: [180189.855729] IPv6: ADDRCONF(NETDEV_CHANGE): veth868834b: link becomes ready
+Dec  6 11:18:25 poa-node kernel: [180189.855779] br-145e0181cf29: port 1(veth868834b) entered blocking state
+Dec  6 11:18:25 poa-node kernel: [180189.855783] br-145e0181cf29: port 1(veth868834b) entered forwarding state
+Additional information
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=18.04
+DISTRIB_CODENAME=bionic
+DISTRIB_DESCRIPTION="Ubuntu 18.04.1 LTS"
+NAME="Ubuntu"
+VERSION="18.04.1 LTS (Bionic Beaver)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.04.1 LTS"
+VERSION_ID="18.04"
+VERSION_CODENAME=bionic
+UBUNTU_CODENAME=bionic
+I'm not sure if this is a chicken or an egg. Does the some of the docker issues makes containers to fail or vice versa.

@@ -1,0 +1,8 @@
+dmp1ce commented on 20 Oct 2014
+Running a shell like bash using fig run test sh and then allowing it to idle for a few minutes will make the shell unresponsive. Typing any command will produce no results.
+I recently updated to Fig 1.0.0 and I'm running on and up-to-date Arch Linux.
+Here is my fig.yml
+test:
+  image: busybox
+  command: echo "Hello"
+And the command I ran is fig run test sh then I waited for a few minutes and tried to run ls in the container. The shell initially works, so you have to idle for some amount of time.

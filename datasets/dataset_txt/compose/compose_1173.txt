@@ -1,0 +1,15 @@
+guilbill commented on 2 Oct 2017
+PR #4649 says that it fixes #4378, which is the usage of port range in docker-compose.
+But it does not work (or I'm missing something).
+I've made a very simple docker-compose to test it
+version: '3.3'
+services:
+  nginx:
+    image: nginx
+    ports:
+    - 4200-4500:80
+with docker-compose version : 1.17.0dev (same result with 1.16.1)
+and docker : 17.06.0-ce
+I've checked the source code, and it seems that there is no test for this use case.
+The docker-compose.yml in the test/fixtures/ports-composefile miss an case with port range.
+2

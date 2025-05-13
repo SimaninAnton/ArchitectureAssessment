@@ -1,0 +1,69 @@
+veqryn commented on 5 Sep 2017
+When running docker-compose build through the default git-bash mingw terminal in windows, I try to cancel and stop the build with a CTRL-C, but it doesn't stop it (as you can see below).
+Windows 10 Pro with Docker for Windows
+Docker version 17.06.0-ce, build 02c1d87
+docker-compose version 1.14.0, build c7bdf9e
+MinGW 11:17:16 ~/workspace$ docker-compose --verbose build oracle
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.find_config_file: Trying paths: ['C:\\Users\\xxx\\.docker\\config.json', 'C:\\Users\\xxx\\.dockercfg']
+docker.auth.find_config_file: Found file at path: C:\Users\xxx\.docker\config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Auth data for {0} is absent. Client might be using a credentials store instead.
+docker.auth.parse_auth: Auth data for {0} is absent. Client might be using a credentials store instead.
+docker.auth.load_config: Found 'credsStore' section
+compose.cli.command.get_client: docker-compose version 1.14.0, build c7bdf9e3
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localnpipe
+compose.cli.command.get_client: Docker version: KernelVersion=4.9.36-moby, Arch=amd64, BuildTime=2017-06-23T21:51:55.152028673+00:00, ApiVersion=1.30, Version=17.06.0-ce, MinAPIVersion=1.12, GitCommit=02c1d87, Os=linux, Experimental=True, GoVersion=go1.8.3
+compose.service.build: Building oracle
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, cache_from=None, stream=True, nocache=False, labels=None, tag='oracle:latest', buildargs={}, forcerm=False, rm=True, path=u'C:\\Users\\xxx\\workspace\\', dockerfile='./docker/oracle/Dockerfile')
+docker.api.build._set_auth_headers: Looking for auth config
+docker.auth.resolve_authconfig: Using credentials store "wincred"
+docker.auth._resolve_authconfig_credstore: Looking for auth entry for u'xxx.dkr.ecr.us-east-1.amazonaws.com'
+docker.auth.resolve_authconfig: Using credentials store "wincred"
+docker.auth._resolve_authconfig_credstore: Looking for auth entry for u'xxx.dkr.ecr.us-east-1.amazonaws.com'
+docker.api.build._set_auth_headers: Sending auth config (u'xxx.dkr.ecr.us-east-1.amazonaws.com', u'xxx.dkr.ecr.us-east-1.amazonaws.com')
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x000000000373DE58>
+Step 1/9 : FROM container-registry.oracle.com/database/enterprise:12.1.0.2
+ ---> db889cfe1e90
+Step 2/9 : ENV DB_SID ORCL
+ ---> Using cache
+ ---> 2764c2a32159
+Step 3/9 : ENV DB_PASSWD pwtemp
+ ---> Using cache
+ ---> c2d3ebad232b
+Step 4/9 : ENV DB_DOMAIN localdomain
+ ---> Using cache
+ ---> 09315b7539cb
+Step 5/9 : ENV DB_PDB PDB1
+ ---> Using cache
+ ---> 2eba0bc0fcae
+Step 6/9 : ENV DB_MEMORY 4G
+ ---> Using cache
+ ---> 00bc3f4a5255
+Step 7/9 : ENV SETUP_DIR /home/oracle/setup
+ ---> Using cache
+ ---> 38a7ce7f59d3
+Step 8/9 : COPY ./docker/oracle/*.sh ${SETUP_DIR}/
+ ---> 0349b48b6c20
+Removing intermediate container 498591f98d7c
+Step 9/9 : RUN set -eux;   yum -y update;   yum clean all;   xxx;   rm -rf /tmp/* /var/tmp/* /var/cache/yum;
+ ---> Running in c7b7a8c3b998
++ yum -y update
+Loaded plugins: ovl, ulninfo
+
+MinGW 11:17:45 ~/workspace$ ^C
+MinGW 11:17:45 ~/workspace$ ^C
+MinGW 11:17:46 ~/workspace$
+MinGW 11:17:48 ~/workspace$ Resolving Dependencies
+--> Running transaction check
+---> Package audit-libs.x86_64 0:2.6.5-3.el7_3.1 will be updated
+---> Package audit-libs.x86_64 0:2.7.6-3.el7 will be an update
+---> Package bash.x86_64 0:4.2.46-21.0.1.el7_3 will be updated
+---> Package bash.x86_64 0:4.2.46-28.el7 will be an update
+---> Package bind-libs.x86_64 32:9.9.4-38.el7_3.3 will be updated
+...
+...
+<and on and on for a good 10 minutes, with multiple commands continuing to run>

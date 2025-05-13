@@ -1,0 +1,43 @@
+abhishek246 commented on 27 Apr 2017 •
+edited
+`
+version: '2'
+ services:
+    redis:
+        image: redis:alpine
+        hostname: redis
+        container_name: redis
+        ports:
+            - "6379:6379"
+        networks:
+            vpcbr:
+                ipv4_address: 10.5.0.5
+        restart: on-failure
+
+backend:
+    build: ./myapp
+    hostname: myapp
+    container_name: myapp
+    depends_on:
+        - redis
+    links:
+        - redis:redis
+    ports:
+        - 9003:8082
+    volumes:
+        - /Users/abhishek/Myapp/:/home/
+    networks:
+        vpcbr:
+            ipv4_address: 10.5.0.6
+    restart: on-failure
+
+networks:
+   vpcbr:
+     driver: bridge
+   ipam:
+      config:
+          - subnet: 10.5.0.0/16
+             gateway: 10.5.0.1`
+The above is my docker-compose file. I'm unable to make a connection between Redis and backend.I have found a workaround by assigning static IP for both of them and adding it to host of backend via an EntryPoint script in DockerFile. Please let me what is the issue.
+my /etc/hosts file
+127.0.0.1 localhost ::1 localhost ip6-localhost ip6-loopback fe00::0 ip6-localnet ff00::0 ip6-mcastprefix ff02::1 ip6-allnodes ff02::2 ip6-allrouters 10.5.0.6 myapp

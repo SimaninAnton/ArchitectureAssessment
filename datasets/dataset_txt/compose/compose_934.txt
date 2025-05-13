@@ -1,0 +1,48 @@
+ecsousa commented on 16 Jan 2018 •
+edited
+When you piped something into compose's stdin on Linux, it's not forwarded to docker engine.
+Steps to reproduce:
+Use the following docker-compose.yml
+version: '3.5'
+
+services:
+  test-container:
+    container_name: test-container
+    image: alpine
+    stdin_open: true
+Start services: docker-compose up -d
+Execute command: echo test | docker-compose exec -T test-container cat -
+Expected results
+string test should be output.
+Actual results
+On Linux the command freezes. On windows however everything is ok.
+Note: executing echo test | docker exec -i test-container cat - works fines on both Linux and Windows. Therefore the bug seems to be on compose rather docker engine.
+Environment version:
+OS: lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 16.04.3 LTS
+Release:        16.04
+Codename:       xenial
+docker-compose version
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.6.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

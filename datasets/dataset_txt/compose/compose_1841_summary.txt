@@ -1,0 +1,1 @@
+Feature Request: Please provide checksum in the download section on the release page

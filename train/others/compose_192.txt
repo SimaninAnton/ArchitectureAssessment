@@ -1,0 +1,6 @@
+usamamashkoor commented on 3 May 2019
+I am trying to install docker compose on the Ubuntu 18 but when i run the command
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+then after some time it gives me this error
+curl: (56) OpenSSL SSL_read: SSL_ERROR_SYSCALL, errno 104
+kindly help me on this i have tried many times running the above command but it is not working.

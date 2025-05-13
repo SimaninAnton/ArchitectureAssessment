@@ -1,0 +1,1 @@
+Compose trying to attach to dead container after error reported?

@@ -1,0 +1,11 @@
+remie commented on 10 Feb 2017
+Docker-compose will fail to build if it cannot access one of the nested folders in the build context. This is actually valid behaviour as the Docker client will return an error as well. Unfortunately, instead of relaying the Docker engine message, docker-compose makes a bad guess at the root cause of the issue.
+You can reproduce this issue by creating a Dockerfile, a docker-compose YAML and a build context with nested folders, of which one of them is created using sudo mkdir -p some/nested/path.
+If you now run $ docker build -t A . it will give you the following error:
+Error checking context: 'no permission to read from 'some/nested/path/''.
+If you run $ docker-compose build the error is less comprehensive:
+$ docker-compose build
+Building A
+ERROR: Couldn't connect to Docker daemon. You might need to start Docker for Mac.
+The problem is not that Docker for Mac is not running or that docker-compose cannot connect, the problem is that it cannot sent the build context to the Docker daemon because of read permission issue.
+1

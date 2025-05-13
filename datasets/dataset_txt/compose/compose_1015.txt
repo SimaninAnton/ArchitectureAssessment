@@ -1,0 +1,18 @@
+AnthonyMastrean commented on 13 Dec 2017 •
+edited
+The docs say
+If the image does not exist, Compose attempts to pull it, unless you have also specified build, in which case it builds it using the specified options and tags it with the specified tag.
+https://docs.docker.com/compose/compose-file/#image
+I have this minimal manifest:
+version: '2'
+services:
+  scheduler:
+    image: scheduler:local
+    build:
+      context: .
+But, when I run pull, I get an error and pulling stops at that image (this is not a problem for the example, but for production manifests, it might stop pulling halfway through).
+$ docker-compose pull
+...
+Pulling scheduler (scheduler:local)...
+ERROR: pull access denied for scheduler, repository does not exist or may require 'docker login'
+I guess I expected it to just pass by the scheduler service (in the case of the minimal example, it would just finish and do nothing else, in the case of a bigger manifest, it would continue pulling other service images).

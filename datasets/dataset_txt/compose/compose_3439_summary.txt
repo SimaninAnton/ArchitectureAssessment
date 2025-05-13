@@ -1,0 +1,1 @@
+Pulling an image for a service also pulls images for dependent services

@@ -1,0 +1,39 @@
+dms-cat commented on 22 May 2019
+Description of the issue
+Looks like a regression to #1092. I found that when running a docker-compose command in a Git pre-commit hook the command would output nothing, but running the command in an interactive shell I would receive the expected output.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa5906
+docker-py version: 3.7.2
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+Output of docker version
+Client:
+ Version:           18.09.6
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        481bc77
+ Built:             Sat May  4 02:35:57 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.6-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.12.4
+  Git commit:       481bc77156
+  Built:            Sat May 11 06:10:35 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+Irrelevant, proprietary.
+Steps to reproduce the issue
+Set up any Linux container
+Run docker-compose run --entrypoint=ls -T service-name <&- or docker-compose exec -T service-name ls <&-
+Observed result
+No output whatsoever.
+Expected result
+The output should list the files.
+Additional information
+Workaround: Make sure there is a TTY. In case of the Git hook, simply add exec < /dev/tty before the relevant command.

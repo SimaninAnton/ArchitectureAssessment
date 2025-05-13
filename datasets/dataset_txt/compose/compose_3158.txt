@@ -1,0 +1,33 @@
+LoicMahieu commented on 30 Oct 2015
+Related: #2051
+I would like to use multiple -f parameter for running multiple docker-compose in one.
+Example:
+Project A needs Project B. There are not in the same directory.
+Project A docker-compose.yml:
+app:
+  image: some/image
+  command: /project-A-start.sh
+  working_dir: /app
+  volumes:
+    - .:/app
+  ports:
+    - "3001:3000"
+  links:
+    - api
+Project B docker-compose.yml:
+api:
+  image: some/other/image
+  command: /project-B-start.sh
+  working_dir: /app
+  volumes:
+    - .:/app
+  ports:
+    - "3000:3000"
+So I use the command in project A:
+docker-compose -f docker-compose.yml -f ../project-b/docker-compose.yml up
+But api container from project B does not start because command /project-B-start.sh can not be found. It appears the volume/cwd used for ../project-b/docker-compose.yml is not ../project-b but the initial directory, the project A. (Hope it's clear)
+Furthermore, it turns out that it is the first -f parameter that define the directory. If I inverse the two parameter, the directory used is now project-b and now it is /project-A-start.sh that can not be found.
+Is this behavior by design ? In my case the perfect behavior would be to use a separate "cwd" for each docker-compose.
+Thanks for your help.
+Docker: 1.8.0
+Docker Compose: 1.5.0rc2

@@ -1,0 +1,23 @@
+lindycoder commented on 20 Dec 2017
+Hi!
+Just wanted to report that docker-compose 1.18 is not compatible with docker 2.4.2 which is now in the openstack-pike upper constraint file, which is the reason i'm on this docker version
+https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=stable/pike
+Here's my error
+ERROR: for ....  __init__() got an unexpected keyword argument 'mounts'
+Traceback (most recent call last):
+  File "/tmp/venv/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/tmp/venv/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/tmp/venv/lib/python2.7/site-packages/compose/cli/main.py", line 124, in perform_command
+    handler(command, command_options)
+  File "/tmp/venv/lib/python2.7/site-packages/compose/cli/main.py", line 959, in up
+    start=not no_start
+  File "/tmp/venv/lib/python2.7/site-packages/compose/project.py", line 479, in up
+    get_deps,
+  File "/tmp/venv/lib/python2.7/site-packages/compose/parallel.py", line 80, in parallel_execute
+    raise error_to_reraise
+TypeError: __init__() got an unexpected keyword argument 'mounts'
+Works fine with latest docker (2.6.1)
+Works fine with last docker-compose (1.17.1)
+Thank you for your great work!

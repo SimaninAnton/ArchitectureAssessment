@@ -1,0 +1,226 @@
+iMerica commented on 19 Feb 2015
+I'm seeing Error starting userland proxy: listen tcp <host>:<port>: bind: address already in use when doing fig up.
+Here's my fig.yml
+web:
+  build: .
+  links:
+    - db
+    - redisA
+    - redisB
+    - redisC
+    - redisD
+    - redisE
+    - redisF
+    - redisG
+    - redisH
+    - redisI
+    - redisJ
+    - redisK
+    - redisL
+    - redisM
+    - redisN
+    - redisO
+    - redisP
+    - redisQ
+    - redisR
+    - redisS
+    - redisT
+    - redisU
+    - redisV
+    - redisW
+    - redisX
+    - mongo
+    - dynamo
+    - elasticsearch
+    - rabbitmq
+  ports:
+    - "8888:8888"
+    - "49100:22"
+    - "10017:10017"
+    - "127.0.0.1:10000:10000"
+    - "127.0.0.1:10001:10001"
+    - "127.0.0.1:10002:10002"
+    - "127.0.0.1:10003:10003"
+    - "127.0.0.1:10033:10033"
+    - "127.0.0.1:10333:10333"
+    - "127.0.0.1:10004:10004"
+    - "127.0.0.1:10005:10005"
+    - "127.0.0.1:10006:10006"
+    - "127.0.0.1:10007:10007"
+    - "127.0.0.1:10008:10008"
+    - "127.0.0.1:10009:10009"
+    - "127.0.0.1:10010:10010"
+    - "127.0.0.1:10011:10011"
+    - "127.0.0.1:10012:10012"
+    - "127.0.0.1:10013:10013"
+    - "127.0.0.1:10014:10014"
+    - "127.0.0.1:10015:10015"
+    - "127.0.0.1:10016:10016"
+    - "127.0.0.1:10017:10017"
+    - "127.0.0.1:10018:10018"
+    - "127.0.0.1:10077:10077"
+    - "127.0.0.1:10019:10019"
+    - "127.0.0.1:10020:10020"
+    - "127.0.0.1:10021:10021"
+db:
+  image: postgres
+redisA:
+  image: redis
+  ports:
+    - "10000:6379"
+  expose: 
+    - "10000"
+redisB:
+  image: redis
+  ports:
+    - "10001:6379"
+  expose:
+    - "10001"
+redisC:
+  image: redis
+  ports:
+    - "10002:6379"
+  expose:
+    - "10002"
+redisD:
+  image: redis
+  ports:
+    - "10003:6379"
+  expose:
+    - "10003"
+redisE:
+  image: redis
+  ports:
+    - "10333:6379"
+  expose:
+    - "10333"
+redisF:
+  image: redis
+  ports:
+    - "10004:6379"
+  expose:
+    - "10004"
+redisG:
+  image: redis
+  ports:
+    - "10005:6379"
+  expose:
+    - "10005"
+redisH:
+  image: redis
+  ports:
+    - "10006:6379"
+  expose:
+    - "10006"
+redisI:
+  image: redis
+  ports:
+    - "10077:6379"
+  expose:
+    - "10077"
+redisJ:
+  image: redis
+  ports:
+    - "10007:6379"
+  expose:
+    - "10007"
+redisK:
+  image: redis
+  ports:
+    - "10008:6379"
+  expose:
+    - "10008"
+redisL:
+  image: redis
+  ports:
+    - "10009:6379"
+  expose:
+    - "10009"
+redisM:
+  image: redis
+  ports:
+    - "10010:6379"
+  expose:
+    - "10010"
+redisN:
+  image: redis
+  ports:
+    - "10011:6379"
+  expose:
+    - "10011"
+redisO:
+  image: redis
+  ports:
+    - "10012:6379"
+  expose:
+    - "10012"
+redisP:
+  image: redis
+  ports:
+    - "10013:6379"
+  expose:
+    - "10013"
+redisQ:
+  image: redis
+  ports:
+    - "10033:6379"
+  expose:
+    - "10033"
+redisR:
+  image: redis
+  ports:
+    - "10014:6379"
+  expose:
+    - "10014"
+redisS:
+  image: redis
+  ports:
+    - "10015:6379"
+  expose:
+    - "10015"
+redisT:
+  image: redis
+  ports:
+    - "10016:6379"
+  expose:
+    - "10016"
+redisU:
+  image: redis
+  ports:
+    - "10017:6379"
+  expose:
+    - "10017"
+redisV:
+  image: redis
+  ports:
+    - "10018:6379"
+  expose:
+    - "10018"
+redisW:
+  image: redis
+  ports:
+    - "10019:6379"
+  expose:
+    - "10019"
+redisX:
+  image: redis
+  ports:
+    - "10020:6379"
+  expose:
+    - "10020"
+redisY:
+  image: redis
+  ports:
+    - "10021:6379"
+  expose:
+    - "10021" 
+mongo:
+  image: mongo
+dynamo:
+  image: deangiberson/aws-dynamodb-local
+elasticsearch:
+  image: dockerfile/elasticsearch
+rabbitmq:
+  image: rabbitmq
+I'm guessing I'm doing something wrong with port binding, right? Every service builds fine, it fails when it starts running the web container.
+Thanks!

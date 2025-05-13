@@ -1,0 +1,49 @@
+ahmetb commented on 31 May 2015
+I have a system that execs the composecommand and that logs the output (stderr/stdout output streams redirected) to a log file.
+Apparently the docker up -d is showing some image pull animations (obviously contains ANSI escape sequences to clear lines or delete chars) and when those get logged to the log file, I just see bunch of empty lines.
+Not a big deal, mostly a cosmetics issue but wanted to bring up if it's easy to fix.
+Output:
+Creating compose307929553_blog_1...
+Pulling image ghost:latest...
+latest: Pulling from ghost
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ghost:latest: The image you are pulling has been verified. Important: image verification is a tech preview feature and should not be relied on to provide security.
+Digest: sha256:b415d8cdf5aa809b95def3e122251b80fe6f99c557bd37ba9d7af2523089511a
+Status: Downloaded newer image for ghost:latest
+Creating compose307929553_cache_1...
+Pulling image memcached:latest...
+latest: Pulling from memcached
+
+
+
+
+
+
+
+
+
+
+memcached:latest: The image you are pulling has been verified. Important: image verification is a tech preview feature and should not be relied on to provide security.
+Digest: sha256:61a047af4f93bf3750658197594e5145beadf02f1236b411034b9ce6cfa61140
+Status: Downloaded newer image for memcached:latest

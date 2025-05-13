@@ -1,0 +1,6 @@
+zrml commented on 12 Jul 2016
+it might be totally my fault,
+but a couple of fairly obvious syntax to retrieve a passed-in array is failing with an "Invalid interpolation format" error.
+In the doc it says that arrays are supported. In my case, being tricky, I need to make use of the associative array (bash > v4)
+Any hope for me?
+thank you

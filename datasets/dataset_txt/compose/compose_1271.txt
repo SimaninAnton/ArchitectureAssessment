@@ -1,0 +1,15 @@
+Adiqq commented on 6 Aug 2017 •
+edited
+Hi, I'm using Arch linux and this package https://www.archlinux.org/packages/community/x86_64/docker-compose/ . There's no problem on windows, but on arch there's exception on docker-compose up.
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.15.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 944, in up
+    cascade_starter = log_printer.run()
+  File "/usr/lib/python3.6/site-packages/compose/cli/log_printer.py", line 105, in run
+    self.output.write(line)
+UnicodeEncodeError: 'ascii' codec can't encode character '\u2714' in position 21: ordinal not in range(128)

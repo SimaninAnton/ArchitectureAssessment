@@ -1,0 +1,1 @@
+docker compose tries to load non existing python36.dll from %temp% + related applocker issues

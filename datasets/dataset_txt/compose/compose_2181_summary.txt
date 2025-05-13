@@ -1,0 +1,1 @@
+Docker for Mac - docker-compose not setting compose env

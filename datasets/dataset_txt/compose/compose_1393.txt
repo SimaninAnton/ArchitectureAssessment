@@ -1,0 +1,90 @@
+ArcTanSusan commented on 13 Jun 2017
+>> docker-compose run <app> py.test -xvvv
+Starting swngdev_swng_db_1 ... done
+Starting swngdev_thumbor_1 ... done
+====================================================== test session starts ======================================================
+platform linux2 -- Python 2.7.6, pytest-3.0.7, py-1.4.33, pluggy-0.4.0 -- /usr/bin/python
+                                                                                         cachedir: .cache
+                                                                                                         Django settings: content_service.settings_unittest (from ini file)
+                                          rootdir: /code/app, inifile: pytest.ini
+                                                                                 plugins: xdist-1.16.0, profiling-1.2.2, django-3.1.2
+collected 5 items
+
+                  profilesapi/tests/test_tasks.py::test_generate_report_and_send_email_task_retry_works <- /code/app/profilesapi/tests/test_tasks.py FAILED
+
+                          =========================================================== FAILURES ============================================================
+                          _____________________________________ test_generate_report_and_send_email_task_retry_works ______________________________________
+
+                          mock_email_profile_report_link = <MagicMock name='email_profile_report_link' id='140690309533136'>
+                                                                                                                            institution_filter_mock = <MagicMock name='filter' id='140690309472720'>
+                                                                   profile_filter_mock = <MagicMock name='filter' id='140690309512144'>
+      smart_open_mock = <MagicMock name='smart_open' id='140690309414544'>
+                                                                          csvmock = <MagicMock name='write_csv_to_file' id='140690309393232'>
+            download_link_mock = <MagicMock name='get_s3_url' id='140690309565840'>
+
+                                                                                       @mock.patch('profilesapi.views.profile_report.get_s3_url')
+                    @mock.patch('profilesapi.views.profile_report.write_csv_to_file')
+                                                                                         @mock.patch('smart_open.smart_open')
+                                                                                                                                 @mock.patch('profilesapi.models.profiles.BPProfile.objects.filter')
+                                                                       @mock.patch('institutionsapi.models.institutions.Institution.objects.filter',
+                                   side_effect=institution_filter_mock(name='meow-university'))
+                                                                                                   @mock.patch('profilesapi.views.profile_report.email_profile_report_link')
+                                               def test_generate_report_and_send_email_task_retry_works(
+                                                                                                                                                    mock_email_profile_report_link, institution_filter_mock, profile_filter_mock,
+                                                                                                                                            smart_open_mock, csvmock, download_link_mock):
+                                                                 recipient = 'meow@meow.com'
+                                                                                                    profile_filter_mock.count.return_value = 42
+
+                          with pytest.raises(Exception) and pytest.raises(MaxRetriesExceededError):
+                                                                                                                   smart_open_mock.side_effect = raise_exception
+                               >               generate_report_and_send_email_task(institution_id=institution_filter_mock.id, recipient=recipient)
+
+                 profilesapi/tests/test_tasks.py:91:
+                                                     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                                                     /usr/local/lib/python2.7/dist-packages/celery/local.py:188: in __call__
+                                                                                                                                return self._get_current_object()(*a, **kw)
+                                          /usr/local/lib/python2.7/dist-packages/celery/app/task.py:420: in __call__
+                                                                                                                        return self.run(*args, **kwargs)
+                       profilesapi/tasks.py:320: in generate_report_and_send_email_task
+                                                                                           raise self.retry(exc=exc, max_retries=3, countdown=120)
+                 /usr/local/lib/python2.7/dist-packages/celery/app/task.py:654: in retry
+                                                                                            maybe_reraise()  # raise orig stack if PyErr_Occurred
+                /usr/local/lib/python2.7/dist-packages/celery/utils/__init__.py:242: in maybe_reraise
+                                                                                                         reraise(exc_info[0], exc_info[1], exc_info[2])
+                      profilesapi/tasks.py:315: in generate_report_and_send_email_task
+                                                                                          download_link = generate_report(institution=institution)
+                 profilesapi/views/profile_report.py:474: in generate_report
+                                                                                with smart_open.smart_open(s3_connection, 'w') as csvfile:
+         /usr/local/lib/python2.7/dist-packages/mock.py:955: in __call__
+                                                                            return _mock_self._mock_call(*args, **kwargs)
+                                                                                                                         /usr/local/lib/python2.7/dist-packages/mock.py:1018: in _mock_call
+                                                              ret_val = effect(*args, **kwargs)
+                                                                                               _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+                                                                                               args = ("s3://AKIAJSNTP55DTHJXZ7UA:/RhSmpg/UBr8yvF0bSp3w1dupBPA/JypqWljuWAo@bepress-attached-resources-dev/reports/profiles/<...d' id='140690309219152'>/<Mock name='mock().first().name.lower().replace()' id='140690309219024'>-2017-06-13.csv", 'w')
+                                                                                    kwargs = {}
+
+                                                                                                   def raise_exception(*args, **kwargs):
+       >       raise Exception()
+                                E       Exception
+
+                                                 profilesapi/tests/test_tasks.py:60: Exception
+                                                                                              ----------------------------------------------------- Captured stderr call ------------------------------------------------------
+                                                                                              INFO profilesapi.views.profile_report -- Writing num_profiles: <MagicMock name='filter().count()' id='140690309176720'> to s3 path: reports/profiles/<Mock name='mock().first().id' id='140690309219152'>/<Mock name='mock().first().name.lower().replace()' id='140690309219024'>-2017-06-13.csv
+                                                                                                                             ERROR profilesapi.tasks -- Profile report failed to generate. Going to retry. institution_uuid: <MagicMock name='filter.id' id='140690309079824'>
+            Traceback (most recent call last):
+                                                File "/code/app/profilesapi/tasks.py", line 315, in generate_report_and_send_email_task
+          download_link = generate_report(institution=institution)
+                                                                    File "/code/app/profilesapi/views/profile_report.py", line 474, in generate_report
+                         with smart_open.smart_open(s3_connection, 'w') as csvfile:
+                                                                                     File "/usr/local/lib/python2.7/dist-packages/mock.py", line 955, in __call__
+                                    return _mock_self._mock_call(*args, **kwargs)
+                                                                                   File "/usr/local/lib/python2.7/dist-packages/mock.py", line 1018, in _mock_call
+                                     ret_val = effect(*args, **kwargs)
+                                                                        File "/code/app/profilesapi/tests/test_tasks.py", line 60, in raise_exception
+                        raise Exception()
+                                         Exception
+                                                  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Interrupted: stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                                  =================================================== 1 failed in 0.44 seconds ====================================================
+                                                  stan@stan-2 swng-dev (master) $
+I've ssh'ed into docker container to set stty sane and reset w/o success.

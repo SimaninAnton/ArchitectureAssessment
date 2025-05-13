@@ -1,0 +1,25 @@
+Contributor
+garribas commented on 9 Oct 2017
+Test docker-compose.yml
+`version: "2.2"
+services:
+www:
+image: nginx
+ports:
+- "8000-8010:80"`
+Output of docker-compose's port command, only reports a single port mapping:
+$ docker-compose port www 80
+0.0.0.0:8004
+Expected output, should report all port mappings as docker cli:
+$ docker port testing_www_1
+80/tcp -> 0.0.0.0:8004
+80/tcp -> 0.0.0.0:8003
+80/tcp -> 0.0.0.0:8002
+80/tcp -> 0.0.0.0:8001
+80/tcp -> 0.0.0.0:8000
+80/tcp -> 0.0.0.0:8005
+80/tcp -> 0.0.0.0:8010
+80/tcp -> 0.0.0.0:8009
+80/tcp -> 0.0.0.0:8008
+80/tcp -> 0.0.0.0:8007
+80/tcp -> 0.0.0.0:8006

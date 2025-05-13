@@ -1,0 +1,39 @@
+jstoner commented on 18 May 2016
+I am doing something pretty simple. I have a docker-compose.yml file:
+  tsdb:
+    build:
+      context: ./tsdb_prod
+    ....
+and in the Dockerfile in that directory I have:
+FROM influxdb:0.13
+COPY file_prod /etc/file_prod
+and I have the file_prod file in that directory.
+running docker-compose build with --no-cache to rebuild my image after changes:
+0s 👍  $> docker-compose build --no-cache
+
+[snip]
+
+Building tsdb
+Step 1 : FROM influxdb:0.13
+ ---> c7a58aa7ce3b
+Step 2 : COPY file_prod /etc/file_prod
+ ---> ff2aa86452fd
+Removing intermediate container 91c3eafd328c
+Successfully built ff2aa86452fd
+2s 👍  $> docker run --rm -it ff2aa86452fd /bin/bash
+root@0e660d6a1784:/# ls /etc/file_prod
+/etc/file_prod
+But when I do my docker-compose up I see
+2s 👍  $> docker-compose up
+Recreating task_tsdb_1
+
+[snip]
+
+tsdb_1   | run: open server: open service: open "/etc/file_prod": no such file or directory
+I'm pretty new to Docker. I'm sure I'm missing something stupid here. Is it building one image but starting another? I do see
+2s 👍  $> docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+f742363da3aa        58fcf34dd924        "/entrypoint.sh influ"   44 minutes ago      Exited (1) 34 minutes ago                       task_tsdb_1
+
+[snip]
+Not sure what's going on with that. I would appreciate anyone's insight.

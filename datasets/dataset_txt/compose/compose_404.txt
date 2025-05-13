@@ -1,0 +1,67 @@
+pwaller commented on 14 Nov 2018
+Description of the issue
+Tried to run docker-compose on a trivial docker-compose.yml, and it crashes with the error message given in the issue title . Unable to get it working on anything since upgrading from docker-compose-1.8.0 to docker-compose-1.23.1.
+Context information (for bug reports)
+Output of docker-compose version
+$ docker-compose version
+docker-compose version 1.23.1, build b02f130
+docker-py version: 3.5.1
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:56 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:21 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  svc:
+    image: postgres
+version: '2.1'
+Steps to reproduce the issue
+Install docker-compose using pip3 install --user -U docker-compose on Ubuntu 16.04.5 LTS.
+Run docker-compose up.
+Observed result
+docker-compose crashes with a stack trace.
+Expected result
+docker-compose should run a postgres database.
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "/home/pwaller/.local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/home/pwaller/.local/lib/python3.5/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/home/pwaller/.local/lib/python3.5/site-packages/compose/cli/main.py", line 124, in perform_command
+    project = project_from_options('.', options)
+  File "/home/pwaller/.local/lib/python3.5/site-packages/compose/cli/command.py", line 42, in project_from_options
+    compatibility=options.get('--compatibility'),
+  File "/home/pwaller/.local/lib/python3.5/site-packages/compose/cli/command.py", line 123, in get_project
+    host=host, environment=environment
+  File "/home/pwaller/.local/lib/python3.5/site-packages/compose/cli/command.py", line 94, in get_client
+    environment=environment, tls_version=get_tls_version(environment)
+  File "/home/pwaller/.local/lib/python3.5/site-packages/compose/cli/docker_client.py", line 127, in docker_client
+    client = APIClient(**kwargs)
+  File "/home/pwaller/.local/lib/python3.5/site-packages/docker/api/client.py", line 113, in __init__
+    config_dict=self._general_configs
+TypeError: load_config() got an unexpected keyword argument 'config_dict'
+Additional information
+OS version / distribution, docker-compose install method, etc.
+docker-compose was installed using pip3 install --user -U docker-compose on Ubuntu 16.04.5 LTS.
+Seems related to this issue, which I did not find before writing the above: docker/docker-py#1916
+I was able to fix the issue by doing pip3 uninstall docker-py docker and then redoing the installation of docker-compose.
+Figure it is worth posting this issue to this tracker at least so that anyone else searching for it here finds this, even if the issue isn't actually with docker-compose itself. Perhaps this can be fixed by preventing the simultaneous installation of docker and docker-py or detecting this case?

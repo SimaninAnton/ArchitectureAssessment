@@ -1,0 +1,24 @@
+nitnelave commented on 15 Jun 2016
+Hello,
+I'm trying to have a docker compose with a container providing the connection to a VPN, and another container using that connection as the network_mode. Here's a minimal example:
+services:
+    openvpn-client:
+        build: ./openvpn-client
+        image: nitnelave/openvpn-client
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - "/dev/net/tun"
+        container_name: openvpn-client
+    rtorrent:
+        image: diameter/rtorrent-rutorrent:64
+        container_name: rtorrent
+        network_mode: "container:openvpn-client"
+        depends_on:
+            - openvpn-client
+However, when I try to run docker-compose up or create, I get the following error:
+ERROR: Service 'rtorrent' uses the network stack of container 'openvpn-client' which does not exist.
+The problem is that it won't even pull the image if openvpn-client is not running, which makes no sense. Building the images shouldn't be a problem, for sure, and starting the images either, since I have the explicit dependency.
+Any idea on how to make this work?
+Thanks!
+1

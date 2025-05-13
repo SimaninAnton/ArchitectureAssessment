@@ -1,0 +1,67 @@
+jaggerwang commented on 1 Jul 2016 •
+edited
+Docker version:
+Docker for Mac beta
+Version 1.12.0-rc2-beta16 (build: 9493)
+f615be9fb245904fbdf1aa0cad251d418c869428
+Command and output:
+docker-compose -p zqctest -f docker-compose.yml -f docker-compose.test.yml up -d
+Creating network "zqctest_default" with the default driver
+Creating volume "zqctest_mongodb" with local driver
+Creating volume "zqctest_server" with local driver
+Creating zqctest_mongodb_1
+Creating zqctest_server_1
+ERROR: for server driver failed programming external connectivity on endpoint zqctest_server_1 (d5ff29cdb695cb720967f01ea3a6ac2876c4ae07063643f684dbc5179d599b58): Bind for 0.0.0.0:1323 failed: port is already allocated
+ERROR: Encountered errors while bringing up the project.
+Compose config files:
+cat docker-compose.yml
+version: "2"
+services:
+server:
+image: daocloud.io/jaggerwang/zqc-server
+environment:
+ZQC_SERVER_DEBUG: "false"
+ZQC_LOG_LEVEL: info
+ports:
+- 1323:1323
+volumes:
+- server:/data/zaiqiuchang/server
+depends_on:
+- mongodb
+mongodb:
+image: daocloud.io/jaggerwang/mongodb
+volumes:
+- mongodb:/data/mongodb
+volumes:
+server:
+driver: local
+mongodb:
+driver: local
+cat docker-compose.test.yml
+version: "2"
+services:
+server:
+ports:
+- 1324:1323
+environment:
+ZQC_SERVER_DEBUG: "true"
+ZQC_LOG_LEVEL: debug
+volumes:
+- ~/data/projects/zaiqiuchang/server:/data/zaiqiuchang/server
+cat docker-compose.override.yml
+version: "2"
+services:
+server:
+environment:
+ZQC_SERVER_DEBUG: "true"
+ZQC_LOG_LEVEL: debug
+volumes:
+- ./:/go/src/zaiqiuchang.com/server
+- ~/data/projects/zaiqiuchang/server:/data/zaiqiuchang/server
+docker-compose -p zqctest ps
+zqctest_mongodb_1 /bin/sh -c mongod --dbpath ... Up 27017/tcp
+zqctest_server_1 /bin/sh -c supervisord Exit 128
+There is already another envrioment started by command docker-compose -p zqctest up -d, so I changed ports to "1324:1323" in test config. But it not working.
+docker-compose -p zqc ps
+zqc_mongodb_1 /bin/sh -c mongod --dbpath ... Up 27017/tcp
+zqc_server_1 /bin/sh -c supervisord Up 0.0.0.0:1323->1323/tcp

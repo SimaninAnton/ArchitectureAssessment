@@ -1,0 +1,26 @@
+ioben commented on 28 Apr 2017 •
+edited
+Say I have a master container dependent on a slave container. I may just run docker-compose up master to test something specific on the master container. Because the slave container is dependent, it is automatically brought up as well. When I exit the compose up command it only cleans up the master container, it doesn't touch the slave container.
+Replicate:
+docker-compose.yaml:
+version: '2'
+services:
+    node1:
+        image: centos:latest
+        depends_on: [node2, node3]
+        command: bash -c 'while true; do sleep 1; done'
+
+    node2:
+        image: centos:latest
+        command: bash -c 'while true; do sleep 1; done'
+
+    node3:
+        image: centos:latest
+        command: bash -c 'while true; do sleep 1; done'
+Run: docker-compose up node
+Then press Ctrl+C
+Then docker ps, you'll see node2 and node3 are still there, even though node1 was cleaned up.
+Versions:
+docker-compose version 1.12.0, build unknown
+Docker version 17.04.0-ce, build 4845c56
+Seems tangentially related to issue #3397

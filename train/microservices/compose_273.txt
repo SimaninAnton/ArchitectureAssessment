@@ -1,0 +1,18 @@
+ograndebe commented on 28 Feb 2019
+Consider the following compose:
+version: '2' 
+services: 
+  node1: 
+    image: centos:latest 
+    depends_on: [node2, node3] 
+    command: bash -c 'while true; do sleep 1; done' 
+  node2: 
+    image: centos:latest 
+    command: bash -c 'while true; do sleep 1; done' 
+  node3: 
+    image: centos:latest 
+    command: bash -c 'while true; do sleep 1; done'
+If i type docker-compose up -d --build , docker starts node2, node3 and after that node1 as expected.
+If i change node3 for example, to sleep 2 instead of 1 and retype docker-compose up -d --build docker recreates node3 and node1
+But if i type docker-compose up -d --build node3, docker does'n recreate node1.
+The question is, this behavior is expected or this can be a bug?

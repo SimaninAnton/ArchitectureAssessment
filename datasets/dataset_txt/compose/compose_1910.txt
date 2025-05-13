@@ -1,0 +1,3 @@
+onorua commented on 23 Nov 2016
+Apparently pids-limit is not implemented at all, it is not mentioned neither in config_schema nor in source code.
+I've expected it to be on the same level as shm_size , is there a way to make it work or we need to create PR for it?

@@ -1,0 +1,2 @@
+allanchau commented on 16 Mar 2018
+I think an issue and PR template would be nice, especially for first time contributors

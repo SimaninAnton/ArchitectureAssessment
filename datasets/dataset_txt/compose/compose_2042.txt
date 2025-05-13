@@ -1,0 +1,23 @@
+sielaq commented on 25 Sep 2016
+Hi,
+I'm not sure if this is possible currently to solve with ENV variable.
+I need to have docker-compose yaml that has optional volume mounting.
+For example I could mount local version of docker binary into the container on demand.
+so I can't use:
+export OPT_PATH=/usr/local/bin/docker
+  volumes:
+   - ${OPT_PATH}:${OPT_PATH}
+because if variable is not set - it generates errors.
+I can't use ENV variable for the whole line either - since it breaks yaml structure:
+export VOLUME_DOCKER='- "/usr/local/bin/docker:/usr/local/bin/docker" '
+...
+  volumes:
+    ${VOLUME_DOCKER}
+If only there was an additional flag like ignore or disable,
+I would be able to describe the mount point,
+and enable it on demand and still have a one common deployment plan:
+export FLAG=ignore:
+  volumes:
+   - /tmp:/tmp:ignore
+   - /usr/local/bin/docker:/usr/local/bin/docker:ro:${FLAG}
+16

@@ -1,0 +1,2 @@
+CSUwang commented on 29 Jun 2017
+the same docker image, when I use docker run command,the files exeist. However,when I run docker-compose up ,the files did not exeist in the container. why this happened

@@ -1,0 +1,7 @@
+ahromis commented on 28 Jun 2017
+With the recent addition of service templates such as:
+$ docker service create --name hosttempl \
+                        --hostname="{{.Node.ID}}-{{.Service.Name}}"\
+                         busybox top
+https://docs.docker.com/engine/reference/commandline/service_create/#create-services-using-templates
+Does docker compose support this as well? If not, are there plans to add it in? I have a few use cases where this would be really helpful. Thanks!

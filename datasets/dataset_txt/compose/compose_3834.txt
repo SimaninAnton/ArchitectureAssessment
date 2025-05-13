@@ -1,0 +1,33 @@
+toli commented on 14 Mar 2015
+Creating an image with docker-compose up and shutting it down and subsequently deleting the underlying image results in next docker-compose up command erroring out with "No such image" error.
+Steps to reproduce:
+checkout https://github.com/toli/metc-docker, it's a Docker Compose setup with some bins and 2 underlying dependencies
+run it with docker-compose up
+Stop it
+Remove the top-level built image with docker rm -f metcdocker_metc
+Run docker-compose up again
+You will see the error:
+metc-docker> docker-compose up
+Recreating metcdocker_mysql_1...
+Recreating metcdocker_metc_1...
+No such image: 19b5e447fe00 (tag: latest)
+The referenced image was the first of deleted images:
+toli@toli-docker:~/dev/marketcetera/metc-docker> docker rmi -f 19b5e447fe00
+Untagged: metcdocker_metc:latest
+Deleted: 19b5e447fe007b86dba74fd35b03d2ca4e12afbbad509274476ff907e7f96499
+.....
+toli:~/metc-docker> docker-compose up
+Recreating metcdocker_mysql_1...
+Recreating metcdocker_metc_1...
+No such image: 19b5e447fe00 (tag: latest)
+And the way to fix it is to run docker ps -a and delete the reference to the container that used that image
+toli@toli:~/metc-docker> docker ps -a
+CONTAINER ID        IMAGE                                COMMAND                CREATED             STATUS                        PORTS                    NAMES
+154b0e044fc4        19b5e447fe00                         "/bin/sh -c ./start-   19 minutes ago      Exited (137) 18 minutes ago                            metcdocker_metc_1
+
+toli@toli:~/metc-docker>docker rm 154b0e044fc4
+154b0e044fc4
+Even though the container has exited, it still seems to be referencing deleted image.
+Running docker-container up again works after deleting the already-deleted image.
+17
+2

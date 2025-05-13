@@ -1,0 +1,31 @@
+KevM commented on 13 Apr 2018
+Attempting to mix windows and linux containers in a single docker-compose.yml does not work.
+Description of the issue
+With the release of compose 1.21.0 I was expecting to be able to mix windows and linux containers.
+Context information (for bug reports)
+Windows 10 Version 1709 (OS Build 16299.371)
+Docker Engine: 18.04.0-ce-win62 (17151)
+Machine: 0.14.0
+Compose: 1.21.0
+Output of "docker-compose config"
+services:
+  mssql:
+    image: microsoft/windowsservercore
+  nginx:
+    image: nginx-alpine
+    platform: linux
+version: '2.4'
+Steps to reproduce the issue
+Switch to Windows containers
+Run docker-compose up
+Observed result
+Creating network "test_default" with the default driver
+Pulling mssql (microsoft/windowsservercore:)...
+latest: Pulling from microsoft/windowsservercore
+ERROR: cannot download image with operating system "windows" when requesting "linux"
+Expected result
+Containers to be started.
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Using Edge install of Docker for Windows.
+3

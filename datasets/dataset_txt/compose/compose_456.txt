@@ -1,0 +1,17 @@
+daltonwamser commented on 10 Oct 2018
+Hi,
+Why docker-compose doesn't work on Windows 10?
+Thanks
+Description of the issue
+Context information (for bug reports)
+Output of "docker-compose version"
+Output of "docker version"
+Output of "docker-compose config"
+Steps to reproduce the issue
+Observed result
+Expected result
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+1

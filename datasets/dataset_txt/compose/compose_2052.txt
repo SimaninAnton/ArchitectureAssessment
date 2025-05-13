@@ -1,0 +1,50 @@
+Thubo commented on 22 Sep 2016
+Hi there,
+I'm trying to use the devicemapper storage backend for volumes. Here is my example docker-compose file:
+version: '2'
+
+services:
+  influxdb:
+    image: influxdb:latest
+    volumes:
+      - data:/var/lib/influxdb
+
+volumes:
+  data:
+    driver: devicemapper
+I get the following error:
+# docker-compose up -d
+Creating volume "test_data" with devicemapper driver
+ERROR: Volume data specifies nonexistent driver devicemapper
+I've configured docker to use the devicemapper storage driver:
+# docker info | grep Driver
+WARNING: No swap limit support
+Storage Driver: devicemapper
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+If I remove the driver: devicemapper statement, everything works, however the volume is created at /var/lib/docker/volumes/... as a plain folder volume.
+For me this is an issue, as the / partition is quite small, while the disk I'm using for the devicemapper storage is a lot bigger.
+Is this expected? Is there a way to have the named volumes also on the devicemapper backend?
+For reference:
+# docker version
+Client:
+ Version:      1.12.1
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   23cf638
+ Built:        Thu Aug 18 05:22:43 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.1
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   23cf638
+ Built:        Thu Aug 18 05:22:43 2016
+ OS/Arch:      linux/amd64
+
+# docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

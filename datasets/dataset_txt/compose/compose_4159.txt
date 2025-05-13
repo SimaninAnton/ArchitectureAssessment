@@ -1,0 +1,58 @@
+ziyan commented on 18 Oct 2014
+When I tried running fig on start up using upstart on Ubuntu, I got some very cryptic error.
+Here is my /etc/init/fig.conf:
+description "fig"
+start on filesystem and started docker
+stop on runlevel [!2345]
+respawn
+chdir /opt/containers
+script
+    exec /usr/local/bin/fig up
+end script
+This is the error I got:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 49, in perform_command
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 78, in get_project
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 54, in get_client
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docker_client", line 14, in docker_client
+  File "/code/build/fig/out00-PYZ.pyz/posixpath", line 77, in join
+AttributeError: 'NoneType' object has no attribute 'endswith'
+After hours of fiddling, I decided to re-installed fig using pip, and the error finally became clear:
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==1.0.0', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 28, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 49, in perform_command
+    verbose=options.get('--verbose'))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 78, in get_project
+    self.get_client(verbose=verbose))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 54, in get_client
+    client = docker_client()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docker_client.py", line 14, in docker_client
+    cert_path = os.path.join(os.environ.get('HOME'), '.docker')
+  File "/usr/lib/python2.7/posixpath.py", line 77, in join
+    elif path == '' or path.endswith('/'):
+AttributeError: 'NoneType' object has no attribute 'endswith'
+Basically, fig is expecting HOME environment variable to be set, and upstart does not have that. So adding export HOME=/root to the script section of the init config fixes this issue.
+description "fig"
+start on filesystem and started docker
+stop on runlevel [!2345]
+respawn
+chdir /opt/containers
+script
+    export HOME="/root"
+    exec /usr/local/bin/fig up
+end script
+This is not really a bug. I am simply putting it here to save other people's time.

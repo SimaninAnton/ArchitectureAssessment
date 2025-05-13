@@ -1,0 +1,90 @@
+janmyszkier commented on 27 Aug 2018 •
+edited
+Description of the issue
+After running docker compose up, volumes are not visible.
+I'm logging with docker run -it CONTAINERNAME bash but the files are not there
+Output of "docker-compose version"
+docker-compose verions 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f 25 May 2017
+Output of "docker version"
+docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:25:03 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:27 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"
+services:
+  myapp-elasticsearch:
+    image: elasticsearch:5.6.8
+    ports:
+    - 10005:9200/tcp
+  myapp-jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+    - 10007:8080/tcp
+  myapp-php:
+    build:
+      context: /var/www/ml/dockerize/vendor/myapp/myapp-on-docker
+      dockerfile: php-extensions
+    volumes:
+    - /var/www/ml/dockerize:/data/shop/development/current:rw
+  myapp-psql:
+    image: postgres:9.6.10
+  myapp-redis:
+    image: redis:3.2.6
+    ports:
+    - 10009:6379/tcp
+  myapp-web:
+    image: nginx:1.10.3
+    links:
+    - myapp-php
+    ports:
+    - 10080:80/tcp
+    volumes:
+    - /var/www/ml/dockerize/vendor/myapp/myapp-on-docker/conf/nginx/myapp:/etc/nginx/myapp:rw
+    - /var/www/ml/dockerize/vendor/myapp/myapp-on-docker/conf/nginx/conf.d:/etc/nginx/conf.d:rw
+    - /var/www/ml/dockerize:/data/shop/development/current:rw
+version: '3.0'
+Steps to reproduce the issue
+steps to reproduce:
+github repository with files I'm using
+https://github.com/janmyszkier/dockerize-app
+docker compose up
+docker container ls
+docker run -it nginx:1.10.3 bash
+(inside the container) ls -al /etc/nginx
+Observed result
+myapp volume / folder is NOT in /etc/nginx
+ls -a /etc/nginx/
+.  ..  conf.d  fastcgi_params  koi-utf koi-win  mime.types  modules  nginx.conf  scgi_params  uwsgi_params  win-utf
+Expected result
+myapp volume / folder is available in /etc/nginx
+ls -a /etc/nginx/
+.  ..  conf.d  fastcgi_params  koi-utf koi-win  mime.types  modules  myapp  nginx.conf  scgi_params  uwsgi_params  win-utf
+Stacktrace / full error message
+N/A
+Additional information
+Ubuntu Linux 18.04 LTS
+based on what I could read on docker docs volume is correctly set up in docker-compose.yml file
+Doc I'm referring to:
+https://docs.docker.com/compose/compose-file/
+which shows how to define volumes for a service (which my container is under)
+running docker-compose build and docker-compose up doesn't solve the issue
+restarting docker service doesn't solve the issue
+1

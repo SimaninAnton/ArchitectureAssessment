@@ -1,0 +1,1 @@
+`docker-compose pull` should pull base images for built containers

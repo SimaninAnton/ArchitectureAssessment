@@ -1,0 +1,7 @@
+ghost commented on 10 Jul 2015
+I get an error, when I run the command from https://docs.docker.com/compose/completion/ to install completion for zsh:
+manu:~/ $ mkdir -p ~/.zsh/completion
+manu:~/ $ curl -L https://raw.githubusercontent.com/docker/compose/
+$\(docker-compose --version | awk 'NR==1{print $NF}')/contrib/compl
+etion/zsh/_docker-compose > ~/.zsh/completion/_docker-compose
+zsh: parse error near `)'

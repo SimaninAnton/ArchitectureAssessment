@@ -1,0 +1,1 @@
+docker-compose with two volumes create one empty folder

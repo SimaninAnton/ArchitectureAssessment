@@ -1,0 +1,7 @@
+wader commented on 11 Aug 2015
+Hi, i'm trying to use docker-compose logs in a git hook script but got no log lines. After some fiddling i figured out that the output seems to be buffered. If i run python with -u or PYTHONUNBUFFERED=1 it works fine.
+How to reproduce:
+docker-compose logs | cat
+This works:
+PYTHONUNBUFFERED=1 docker-compose logs | cat
+Not really sure how it should behave. Maybe configure line buffering for stdout somehow when not a tty?

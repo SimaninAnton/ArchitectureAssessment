@@ -1,0 +1,2 @@
+dunk commented on 12 Aug 2015
+When using the container_name directive in the docker-compose.yml file, entries in docker-compose logs still show up with the container_name_1 naming scheme. It's non-critical, but a little inconsistent.

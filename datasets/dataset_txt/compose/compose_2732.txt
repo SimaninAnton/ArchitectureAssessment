@@ -1,0 +1,91 @@
+o1lo01ol1o commented on 20 Feb 2016
+I have a swarm agent, manager and consul running on a single node following the manual swarm provisioning documention here. The daemon on this node has labels in order to constrain containers to hardware:
+swarm manger:
+$ docker -H :4000 info
+Containers: 13
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 7
+Role: replica
+Primary:
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 1
+ [Redacted]: 2375
+  └ Status: Healthy
+  └ Containers: 13
+  └ Reserved CPUs: 0 / 12
+  └ Reserved Memory: 0 B / 24.72 GiB
+  └ Labels: celery_host=1, executiondriver=native-0.2, kernelversion=3.16.0-30-generic, operatingsystem=Ubuntu 14.04.2 LTS, storagedriver=aufs
+Plugins:
+ Volume:
+ Network:
+CPUs: 12
+Total Memory: 24.72 GiB
+Name: c40a4e85d57a
+WARNING: No oom kill disable support
+WARNING: No cpu cfs quota support
+WARNING: No cpu cfs period support
+WARNING: No cpu shares support
+WARNING: No cpuset support
+However, this minimal compose file still builds a container where there should be none built:
+docker-compose.yml
+version: '2'
+services:
+  rabbitmq:
+      image: rabbitmq
+      expose:
+          - "5672"
+          - "15672"
+      environment:
+          constraint: "celery_host==1"
+      networks:
+          - front
+  gpu2_worker:
+          context: ./base
+          dockerfile: dockerfile
+      env_file:
+          - ./base/config/base.env
+          - ./base/config/gpu2.env
+      environment:
+          constraint: "device.gpu.1==1"
+      devices:
+          - "/dev/nvidiactl"
+          - "/dev/nvidia1"
+      networks:
+          - front
+networks:
+  front:
+      driver: overlay
+$ DOCKER_HOST=[Redacted]:4000 docker-compose up -d
+Creating network "dockerdeployment_front" with driver "overlay"
+Creating dockerdeployment_rabbitmq_1
+Creating dockerdeployment_gpu2_worker_1
+ERROR: error gathering device information while adding custom device "/dev/nvidia1": lstat /dev/nvidia1: no such file or directory
+"/dev/nvidia1" does not exist on this node, so the the above fails.
+But then neither does the label device.gpu.1==1, so why does compose not respect the constraint defined in docker-compose.yml?
+Version info:
+$ docker version
+Client:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 19:27:08 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 19:27:08 2016
+ OS/Arch:      linux/amd64
+$ docker-compose version
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+$ uname -a
+Linux gpucompute1 3.16.0-30-generic #40~14.04.1-Ubuntu SMP Thu Jan 15 17:43:14 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux

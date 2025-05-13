@@ -1,0 +1,1 @@
+Filter does not restrict list (`docker-compose ps --filter publish=19088`)

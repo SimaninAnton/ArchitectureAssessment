@@ -1,0 +1,2 @@
+MichaelLSmith commented on 10 Aug 2016
+I have docker installed and have run containers build from images using full-length commands. But after writing a docker-compose.yml file, the docker-compose command is not found in my terminal. What should I trouble shoot?

@@ -1,0 +1,3 @@
+Contributor
+dnephin commented on 5 Jan 2016
+It's been a year and 5 releases, I think 1.6 will be a good time to drop support, since we're introducing a bunch of new conditionals for v1/v2 config.

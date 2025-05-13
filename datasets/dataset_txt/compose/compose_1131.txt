@@ -1,0 +1,4 @@
+KevinTHU commented on 23 Oct 2017 •
+edited
+Because docker-compose does not firstly allocate ips for the services which have specify ip for default network, so when those two kinds of services (specify ip or not) started at the same time, ip conflicts may happened, and especially if a project has been up, and we just recreate serveral(like two) those two kind of services, the conflicts will happen in a high probability, because docker-compose allocate default network ips for services in a order, almost 50% probability to cause ip conflict for the situation above.
+For solving this problem, I hope that docker-compose could firstly allocate ips for the services which have specify ip for default network(even external network), so the problem mentioned above would not happend. PTAL~

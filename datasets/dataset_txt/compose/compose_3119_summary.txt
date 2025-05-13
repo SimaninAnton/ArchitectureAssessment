@@ -1,0 +1,1 @@
+expose field does not raise a validation error on invalid format

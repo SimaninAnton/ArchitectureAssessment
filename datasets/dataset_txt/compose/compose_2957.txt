@@ -1,0 +1,26 @@
+slnovak commented on 31 Dec 2015
+Hi,
+I have a use-case where I'm starting to develop a docker-compose.yml configuration of 20+ services. I'd like to start grouping similar services together so that I can run docker-compose up on a select group, instead of listing the individual services. What are your thoughts about supporting a groups attribute that supports an array of tags, like:
+myservice:
+  container_name: myservice
+  build: services/myservice
+  groups:
+    - core
+    - web
+
+mydatabase:
+  container_name: mydatabase
+  build: services/mydatabase
+  groups:
+    - core
+    - web
+
+something_else:
+  container_name: somethingelse
+  build: services/something_else
+  groups:
+    - misc
+To start myservice and mydatabase, I could run docker-compose up --groups=core, docker-compose up --groups=core,web, etc.
+Thanks!
+62
+12

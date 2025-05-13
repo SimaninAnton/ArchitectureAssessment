@@ -1,0 +1,15 @@
+caldarolad commented on 22 Aug 2018
+I'm trying to get the latest version of compose. What am I doing wrong here?
+[root@cua43118doc402 docker]# sudo rm /usr/local/bin/docker-compose
+[root@cua43118doc402 docker]# cd /usr/local/bin
+[root@cua43118doc402 bin]# ls -l
+total 0
+[root@cua43118doc402 bin]# sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+100 617 0 617 0 0 1202 0 --:--:-- --:--:-- --:--:-- 1205
+100 11.2M 100 11.2M 0 0 13.5M 0 --:--:-- --:--:-- --:--:-- 103M
+[root@cua43118doc402 bin]# docker-compose --version
+docker-compose version 1.9.0, build 2585387
+[root@cua43118doc402 etc]# cat system-release
+Red Hat Enterprise Linux Server release 7.5 (Maipo)

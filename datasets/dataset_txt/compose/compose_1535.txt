@@ -1,0 +1,52 @@
+mkilchhofer commented on 10 Apr 2017 •
+edited
+Hi there
+We use macvlan as a 2nd network in a docker container to connect it to the physical network.
+Mostly it works fine, but approximately every 8th "docker-compose up" command fails with this message:
+(...)
+Creating default_orion_1
+Creating default_pegasus_1
+
+ERROR: for broho  Cannot start service broho: driver failed revoking external connectivity on endpoint default_broho_1 (4aed7b1bb508a07d3daf074901d011778a153460c1c87a238f2f4d4c08a7519d): network not found: 1e320a2ba090ea6f6b563c421ecc3eda121aa3065cd32c52dc74fb42851d23d6
+Encountered errors while bringing up the project.
+Network definition of service broho:
+    networks:
+      - default
+      - vehicle
+Networks in docker-compose.yaml:
+networks:
+  default:
+    external:
+      name: isa-docker
+  vehicle:
+    external:
+      name: isa-vehicle
+Configured networks
+docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+530780f98c1e        bridge              bridge              local               
+825f17b6eb35        host                host                local               
+d2c78b4012c0        isa-docker          bridge              local               
+1e320a2ba090        isa-vehicle         macvlan             local               
+72893e5fdf80        none                null                local
+Tested on rhel7.3 with docker 1.12.6 and compose 1.11 and 1.12.0-rc2, compose file version 2 and 2.1:
+[root@eddie027 ~]# docker version
+Client:
+ Version:         1.12.6
+ API version:     1.24
+ Package version: docker-common-1.12.6-11.el7.x86_64
+ Go version:      go1.7.4
+ Git commit:      96d83a5/1.12.6
+ Built:           Thu Feb 23 11:52:33 2017
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.12.6
+ API version:     1.24
+ Package version: docker-common-1.12.6-11.el7.x86_64
+ Go version:      go1.7.4
+ Git commit:      96d83a5/1.12.6
+ Built:           Thu Feb 23 11:52:33 2017
+ OS/Arch:         linux/amd64
+Is there something I can test to help debugging?
+When I remove 'networks' in the service 'broho', and connect this container by "docker network connect isa-vehicle default_broho_1" after compose started the container, it works fine.

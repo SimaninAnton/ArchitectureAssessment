@@ -1,0 +1,40 @@
+MarSoft commented on 27 Mar 2018
+Description of the issue
+Let's consider the following docker-compose.yml snippet:
+services:
+  test:
+    image: alpine
+    command: printenv
+    environment:
+      VAR1: $TEST
+      VAR2: ${TEST}
+      VAR3: ${TEST:-default}
+      VAR4: ${TEST:-}
+Consider we run it with no $TEST variable set.
+For $TEST and ${TEST} syntax docker-compose will yield a warning:
+WARNING: The TEST variable is not set. Defaulting to a blank string.
+Which is expected.
+For ${TEST:-default} syntax it will use default string which is also expected.
+But if I want to (intentionally) pass an empty string as the default value, thus eliminating a warning
+and telling Docker-Compose that missing variable is okay,
+then I bump this bug:
+WARNING: The TEST:- variable is not set. Defaulting to a blank string.
+I.e., unlike Bash and friends, Docker-Compose does not recognize ${VAR:-} and ${VAR-} syntax
+if default value specified is empty.
+This makes it impossible to avoid a warning.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.19.0, build unknown
+docker-py version: 3.1.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+Steps to reproduce the issue
+Wherever variable expansion works in docker-compose.yml (e.g. environment section),
+specify variable with empty default value: ${VAR:-} or ${VAR-}
+Run docker-compose config or any other docker-compose command
+Observed result
+A warning is printed mentioning an "impossible" variable name ending with a dash.
+Expected result
+Empty string should be used (or the value of corresponding env var if present), and no warning should be printed.
+Additional information
+Arch Linux (latest)

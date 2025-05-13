@@ -1,0 +1,102 @@
+brantburnett commented on 13 Apr 2018
+Description of the issue
+When using the gcloud credential helper on Docker for Windows, docker pull commands authenticate and succeed without problems. However, docker-compose pull or similar commands that trigger a pull will fail with file not found errors related to docker-credential-gcloud. This has been replicated across several systems.
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b2
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Wed Mar 21 23:06:28 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:14:32 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+{
+  "auths": {
+    "https://index.docker.io/v1/": {}
+  }, 
+  "credHelpers": {
+    "gcr.io": "gcloud", 
+    "us.gcr.io": "gcloud", 
+    "eu.gcr.io": "gcloud", 
+    "asia.gcr.io": "gcloud", 
+    "staging-k8s.gcr.io": "gcloud"
+  }, 
+  "credsStore": "wincred", 
+  "HttpHeaders": {
+    "User-Agent": "Docker-Client/18.03.0-ce (windows)"
+  }
+}
+Steps to reproduce the issue
+Install Google Cloud SDK and authenticate
+Run gcloud auth configure-docker to setup the helpers in config.json (per https://cloud.google.com/sdk/gcloud/reference/auth/configure-docker)
+Run docker-compose pull using a docker-compose.yaml that pulls from a private GCR registry
+Observed result
+Pulling images from GCR fails with a low-level exception. However, docker pull commands work fine.
+Expected result
+Authentication using docker-credential-gcloud should succeed.
+Stacktrace / full error message
+Using configuration files: .\docker-compose.ci.yml
+Trying paths: ['C:\\Users\\bburnett\\.docker\\config.json', 'C:\\Users\\bburnett\\.dockercfg']
+Found file at path: C:\Users\bburnett\.docker\config.json
+Found 'auths' section
+Auth data for https://index.docker.io/v1/ is absent. Client might be using a credentials store instead.
+Found 'credsStore' section
+Found 'credHelpers' section
+Pulling couchbase (btburnett3/couchbasefakeit:enterprise-5.1.0)...
+Looking for auth config
+Using credentials store "wincred"
+Looking for auth entry for 'https://index.docker.io/v1/'
+Found auth config
+http://localhost:None "POST /v1.25/images/create?tag=enterprise-5.1.0&fromImage=btburnett3%2Fcouchbasefakeit HTTP/1.1" 200 None
+enterprise-5.1.0: Pulling from btburnett3/couchbasefakeit
+Digest: sha256:a19f90e51454d50a024b8384dc3faa90511b4b417a3a6caaf183c0497482528c
+Status: Image is up to date for btburnett3/couchbasefakeit:enterprise-5.1.0
+Pulling undertest (us.gcr.io/[redacted]:latest)...
+Looking for auth config
+Using credentials store "gcloud"
+Looking for auth entry for 'us.gcr.io'
+Traceback (most recent call last):
+  File "site-packages\dockerpycreds\store.py", line 52, in _execute
+  File "subprocess.py", line 336, in check_output
+  File "subprocess.py", line 403, in run
+  File "subprocess.py", line 709, in __init__
+  File "subprocess.py", line 997, in _execute_child
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "site-packages\docker\auth.py", line 126, in _resolve_authconfig_credstore
+  File "site-packages\dockerpycreds\store.py", line 25, in get
+  File "site-packages\dockerpycreds\store.py", line 70, in _execute
+dockerpycreds.errors.StoreError: docker-credential-gcloud not installed or not available in PATH
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 716, in pull
+  File "compose\project.py", line 561, in pull
+  File "compose\service.py", line 1105, in pull
+  File "site-packages\docker\api\image.py", line 359, in pull
+  File "site-packages\docker\auth.py", line 47, in get_config_header
+  File "site-packages\docker\auth.py", line 94, in resolve_authconfig
+  File "site-packages\docker\auth.py", line 143, in _resolve_authconfig_credstore
+docker.errors.DockerException: Credentials store error: StoreError('docker-credential-gcloud not installed or not available in PATH',)
+Additional information
+Windows 10 Fall Creators Update 1709 or Version Next 1803, running Docker for Windows 18.03 (no special installation steps)
+We also tried downloading the latest docker-compose, 1.21.0, and overwriting the installed version. Same results.

@@ -1,0 +1,8 @@
+jderusse commented on 19 Jul 2017
+By calling pip freeze, in the main module, the actual code slow down every commands. In my case about 1 seconds par call, "just" to check if docker-compose is properly installed. I don't think it worst it.
+Some tentative to improve this part had been made #5000 and #4698, but it still 1 second (in my case repeated tens time in my makefile)
+Could we:
+remove this check and move it in a dedicated command docker-compose debug, or only on docker-compose version/help or when an exception is caugth.
+or add an env variable to skip this check
+if would be happy to write the patch.
+4

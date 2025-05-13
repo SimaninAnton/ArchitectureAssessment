@@ -1,0 +1,1 @@
+Logs stopping abruptly when starting services without -d flag

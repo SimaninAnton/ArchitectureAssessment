@@ -1,0 +1,17 @@
+naidukr commented 16 hours ago
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+(paste here)
+Output of docker version
+(paste here)
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+(paste here)
+Steps to reproduce the issue
+Observed result
+Expected result
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.

@@ -1,0 +1,37 @@
+cdd-aix commented on 26 Oct 2017 •
+edited
+Dockerfile allows nested ${VAR1:-${VAR2:-default}} expansion.
+Rendering $VAR1 if VAR1 set, $VAR2 if VAR2 set and VAR1 unset/empty. default if VAR1 and VAR2 are unset/empty
+docker-compose.yaml
+${VAR1:-${VAR2}}
+is rendered as
+$${VAR2}
+Working Dockerfile
+ARG NEW_POSTGRES_TAG
+ARG OLD_POSTGRES_TAG
+ARG TAG=${NEW_POSTGRES_TAG:-${OLD_POSTGRES_TAG:-10-alpine}}
+Breaking docker-compose.yaml appears with 'docker-compose config'
+---
+version: '2.3'
+services:
+  pg-upgrader:
+    build:
+      context: /tmp
+      args:
+        - "TAG=${NEW_POSTGRES_TAG:-${OLD_POSTGRES_TAG:-10-alpine}}"
+Expected
+services:
+  pg-upgrader:
+    build:
+      args:
+        TAG: 10-alpine
+      context: /tmp
+version: '2.3'
+Reality
+services:
+  pg-upgrader:
+    build:
+      args:
+        TAG: $${OLD_POSTGRES_TAG:-10-alpine}
+      context: /tmp
+version: '2.3'

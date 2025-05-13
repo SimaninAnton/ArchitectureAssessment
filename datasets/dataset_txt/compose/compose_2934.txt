@@ -1,0 +1,9 @@
+Contributor
+hourliert commented on 11 Jan 2016
+Hi,
+I have an issue when:
+running docker-compose in the official container (Installed with this command curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-uname -s-uname -m > /usr/local/bin/docker-compose)
+using a private a registry with authentication (so when this file is created in ~/.docker/config.json)
+It seems my home directory is not mounted at the right place in the docker-compose container.
+If I change this line by this line : VOLUMES="$VOLUMES -v $HOME:/root" it works.
+I could do a pull request if requested.

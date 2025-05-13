@@ -1,0 +1,25 @@
+KSolovyev commented on 25 Jul 2017
+enable_ipv6 is still in the docs: https://docs.docker.com/compose/compose-file/#enable_ipv6
+and in the code: https://github.com/docker/compose/blob/master/compose/network.py#L37
+it is working on compose-files v 2.x.
+The problem is seems to be in validation file: https://github.com/docker/compose/blob/master/compose/config/config_schema_v3.3.json#L394
+There is no permitted enable_ipv6 field
+I used pretty simple docker-compose file:
+version: '3.3'
+networks:
+  app_net:
+    enable_ipv6: true
+    driver: bridge
+
+services:
+  app:
+    build: ./
+    ports:
+        - "8080:8080"
+    networks:
+        - app_net
+The output is:
+213:compose-example solovyev$ docker-compose up --build
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+networks.app_net value Additional properties are not allowed ('enable_ipv6' was unexpected)
+213:compose-example solovyev$ 

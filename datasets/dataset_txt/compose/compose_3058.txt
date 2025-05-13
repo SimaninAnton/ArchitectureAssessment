@@ -1,0 +1,41 @@
+nathanleclaire commented on 24 Nov 2015
+Consider something like:
+kv:
+  image: redis
+  environment:
+    - affinity:com.docker.compose.service!=kv
+(I used the Compose-assigned labels for brevity, but the same problem exists if you do it with your own custom labels).
+Running a similar command using the docker CLI (serially) schedules as expected (will cut you off after all the nodes have containers with the label), but Compose will allow you to scale and schedule unexpectedly. In a 5 node Swarm cluster, no complaints about docker-compose scale kv=6:
+$ docker-compose scale kv=6
+Creating and starting 2 ... done
+Creating and starting 3 ... done
+Creating and starting 4 ... done
+Creating and starting 5 ... done
+Creating and starting 6 ... done
+But FWIW, a subsequent request to scale refuses appropriately:
+$ docker-compose scale kv=10
+Creating and starting 7 ... error
+Creating and starting 8 ... error
+Creating and starting 9 ... error
+Creating and starting 10 ... error
+
+ERROR: for 8  unable to find a node that satisfies com.docker.compose.service!=kv
+ERROR: for 9  unable to find a node that satisfies com.docker.compose.service!=kv
+ERROR: for 10  unable to find a node that satisfies com.docker.compose.service!=kv
+ERROR: for 7  unable to find a node that satisfies com.docker.compose.service!=kv
+If you bash on it and just chuck docker-compose scale kv=10 over the wall right from the start, behavior starts to get really erratic:
+$ docker-compose scale kv=10
+Creating and starting 2 ... done
+Creating and starting 3 ... done
+Creating and starting 4 ... done
+Creating and starting 5 ... done
+Creating and starting 6 ... error
+Creating and starting 7 ... done
+Creating and starting 8 ... done
+Creating and starting 9 ... done
+Creating and starting 10 ... done
+
+ERROR: for 6  Cannot start container 83fe38d5ccd62129527f7ff96604f55760ed3bdf3317164f005f77fe63c4062b: [8] System error: open /sys/fs/cgroup/memory/system.slice/docker-83fe38d5ccd62129527f7ff96604f55760ed3bdf3317164f005f77fe63c4062b.scope/memory.swappiness: no such file or directory
+Removing tmp_kv_6 ... done
+(That last error seems related to Swarm/Docker, not Compose, but it was what I got).
+I'm not sure what the best resolution is. Compose making requests in serial seems inelegant. Maybe some day Swarm could "stage" / batch scheduled containers for you before actually doing it to mitigate these types of issues. But at any rate, it would be good to come to a consensus and document what the expected behavior of both tools should be in these scenarios.

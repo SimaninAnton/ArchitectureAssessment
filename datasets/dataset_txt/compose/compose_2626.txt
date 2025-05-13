@@ -1,0 +1,14 @@
+Contributor
+aanand commented on 15 Mar 2016
+Running docker-compose down a second time should be a no-op, but it complains about the network having already been removed:
+$ docker-compose down
+Stopping app_web_1 ... done
+Stopping app_redis_1 ... done
+Removing app_web_1 ... done
+Removing app_redis_1 ... done
+Removing network app_default
+
+$ docker-compose down
+Removing network app_default
+ERROR: network app_default not found
+The same thing happens with volumes if you pass -v.

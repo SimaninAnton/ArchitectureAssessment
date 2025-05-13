@@ -1,0 +1,4 @@
+Contributor
+joakimr-axis commented on 8 Mar 2019
+Using one ADD command for each file to be copied is sub-optimal. Furthermore, Docker best practice is to use COPY if possible (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#add-or-copy).
+I will provide a pull request for this.

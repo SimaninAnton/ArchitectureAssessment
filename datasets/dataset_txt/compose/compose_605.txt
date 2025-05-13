@@ -1,0 +1,41 @@
+benyanke commented on 27 Jun 2018
+Description of the issue
+Docker compose doesn't seem to support locally built images, instead, assuming they are docker hub images, and prompting that they are not found there, and might require docker login.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+Output of "docker version"
+Client:
+Version: 18.03.1-ce
+API version: 1.37
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:17:20 2018
+OS/Arch: linux/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.1-ce
+API version: 1.37 (minimum version 1.12)
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:15:30 2018
+OS/Arch: linux/amd64
+Experimental: false
+Steps to reproduce the issue
+Build an image outside the current working dir (docker build -t testimg1 .)
+Reference this image in the image field of a docker-compose file
+Instead of pulling it, it attempts and fails to pull from dockerhub.
+Observed result
+Tries to use dockerhub despite needed image existing locally.
+Expected result
+Use local image if available before pulling from DH
+Stacktrace / full error message
+ERROR: pull access denied for testimg1, repository does not exist or may require 'docker login'
+Additional information
+OS version / distribution, docker-compose install method, etc.
+KDE Neon (based on Ubuntu 16.04).

@@ -1,0 +1,25 @@
+jonmorehouse commented on 29 Sep 2014
+I'm trying to use fig to expose my entire test environment.
+My fig file looks like this:
+test:
+  links:
+    - postgres
+    - redis
+  ports:
+    - "5432:5432"
+    - "6379:6379"
+
+postgres:
+  image: paintedfox/postgresql
+  environment: 
+    USER: "accounts" 
+    PASS: "accounts_password"
+    DB: "accounts"
+  expose:
+    - "5432"
+
+redis:
+  image: redis
+  expose:
+    - "6379"
+I'd like to just run fig up test to build the test app so I can then use both postgres and redis externally. What am I missing here?

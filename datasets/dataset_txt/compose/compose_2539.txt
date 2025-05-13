@@ -1,0 +1,13 @@
+OJFord commented on 4 Apr 2016
+% docker-compose --version
+INTERNAL ERROR: cannot create temporary directory!
+%
+I can't do anything. The version, not that it'll tell me (above is real output!), is latest - 1.6.2.
+This occurred after stopping (gracefully). I then ran up:
+% docker-compose up
+Failed to write all bytes for libpython2.7.so.1.0
+% docker-compose up
+INTERNAL ERROR: cannot create temporary directory!
+%
+It seemed to correct itself after a 'manual' docker start of all containers - but it would be good if this error gave some indication of what to do. (e.g. is there an orphaned temp dir I can delete?)
+15

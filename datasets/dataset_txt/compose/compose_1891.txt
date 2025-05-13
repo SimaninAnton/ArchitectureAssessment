@@ -1,0 +1,14 @@
+andrewyang96 commented on 29 Nov 2016
+Every time I run Flask apps in a docker-compose configuration, they always take awhile to stop. I tried testing this cloning this repository, navigating to the cloned directory and running docker-compose up, and then pressing Ctrl-C once the containers are running. Here is the stdout I see:
+Recreating dockerflasktest_greetings_1
+Recreating dockerflasktest_mathmachine_1
+Attaching to dockerflasktest_greetings_1, dockerflasktest_mathmachine_1
+greetings_1   |  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+mathmachine_1 |  * Running on http://0.0.0.0:5001/ (Press CTRL+C to quit)
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping dockerflasktest_mathmachine_1 ... done
+Stopping dockerflasktest_greetings_1 ... done
+dockerflasktest_mathmachine_1 exited with code 137
+dockerflasktest_greetings_1 exited with code 137
+After doing some research, I found out that "exited with code 137" meant that the containers had to be stopped using SIGKILL. When I tried running the containers individually (e.g. docker-compose run greetings or docker-compose run mathmachine), they were able to stop gracefully, so I think that the problem lies in docker-compose. Has anyone else encountered this issue?
+If it's relevant, I ran this on an Ubuntu 16.04 VM.

@@ -1,0 +1,23 @@
+jakebailey commented on 17 Feb 2018 •
+edited
+Arch Linux updated its docker-compose version to 1.19.0, and the Docker Python SDK to 3.0.1.
+However, the commits bumping docker-compose to use 3.0.x didn't make it into 1.19.0, even though they happened before the version tag. (See: 1.19.0...master)
+This leads to errors like the following using the latest stable releases:
+Building emby
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.19.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 124, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 254, in build
+    build_args=build_args)
+  File "/usr/lib/python3.6/site-packages/compose/project.py", line 372, in build
+    service.build(no_cache, pull, force_rm, memory, build_args)
+  File "/usr/lib/python3.6/site-packages/compose/service.py", line 989, in build
+    'memory': parse_bytes(memory) if memory else None
+TypeError: build() got an unexpected keyword argument 'stream'
+Since #5631 removed the stream argument, which needs to be gone for 3.0.x to work.
+Was this intended?
+5

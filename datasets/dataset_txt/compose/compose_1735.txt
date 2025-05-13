@@ -1,0 +1,3 @@
+borntorock commented on 2 Feb 2017
+It would be great to have the docker v1.13 init feature in Compose v3 so as to provision the containers with docker compose with an init process running as PID 1 inside the containers.
+17

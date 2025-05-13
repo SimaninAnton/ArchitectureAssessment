@@ -1,0 +1,6 @@
+m-radzikowski commented on 16 Feb 2018
+Would it be possible to allow tmpfs volumes in top-level volumes configuration? Currently it's possible only with long syntax for single service.
+Use case - multiple services using the same temporary volume, for cache for example, that would be cleared on containers stop / restart.
+Current service volumes long syntax documentation:
+type: the mount type volume, bind or tmpfs
+source: the source of the mount, a path on the host for a bind mount, or the name of a volume defined in the top-level volumes key. Not applicable for a tmpfs mount.

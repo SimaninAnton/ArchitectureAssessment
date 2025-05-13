@@ -1,0 +1,3 @@
+dbjpanda commented on 10 Oct 2018 •
+edited
+I executed command DOMAIN=example.com docker-compose up --no-start . The container is created and when I inspect the container I could see the env variable already set there. Then later on when I executed docker-compose start it provided me the error that " defaulting to blank string" . When I executed docker start container_name the container started. Is it an intentional behaviour or any bug or I am doing something wrong ?

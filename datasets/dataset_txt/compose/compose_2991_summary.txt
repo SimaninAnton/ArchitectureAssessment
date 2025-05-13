@@ -1,0 +1,1 @@
+Support environment variable substitution in the value of `privileged:`

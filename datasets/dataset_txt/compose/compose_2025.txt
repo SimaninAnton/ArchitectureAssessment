@@ -1,0 +1,14 @@
+kachkaev commented on 4 Oct 2016 •
+edited
+The services defined in docker-compose.yml allow hyphens in their name, which means that the resulting containers can obtain the following names:
+myproject_some-service_1
+myproject_some-other-service_1
+However, when it is attempted to use COMPOSE_PROJECT_NAME=my-project instead of myproject, the names of the services do not change to the following:
+my-project_some-service_1
+my-project_some-other-service_1
+The cause is this line in command.py:
+ return re.sub(r'[^a-z0-9]', '', name.lower())
+I might be wrong, but there seems to be no reason for having inconsistent naming restrictions in different parts of the resulting container name. Could be go for this?
+ return re.sub(r'[^a-z0-9-]', '', name.lower())
+Some of my projects haveprettylongnamesanditbecomeshardtoreadthemwithouthyphens. this-could-be-improved.
+15

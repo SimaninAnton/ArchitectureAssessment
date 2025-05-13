@@ -1,0 +1,5 @@
+etoews commented on 4 Mar 2016
+The Compose File Reference documents both version 1 and 2 of the file format simultaneously. This makes for a very confusing read.
+Only the current version should be documented at Compose File Reference. Previous versions should be handled like other Docker docs (e.g. Docker 1.9).
+If the intention behind having both version 1 and 2 in the same doc is to help people upgrade their files, I think that use case would be much better served by a dedicated migration guide.
+Keep up the good work all. It's great to see Compose progressing!

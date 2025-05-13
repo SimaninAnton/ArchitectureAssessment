@@ -1,0 +1,14 @@
+gggeek commented on 29 Jul 2016
+I have a set of containers where the mysql one has a 'weird' shell script as entrypoint.
+I can start mysql after starting the container via 'docker exec ... /etc/init.d/mysql start', but when I do so, the command line hangs (I can ctrl+c to exit the docker command, and the mysql service does indeed run).
+I just updated to docker 1.12 and docker-compose 1.8.0, and it seems that now handling of the 'rogue' container is getting worse: after executing the above steps, I tried 'docker-compose ps' and I get:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 61, in main
+  File "compose/cli/main.py", line 113, in perform_command
+  File "contextlib.py", line 35, in __exit__
+  File "compose/cli/errors.py", line 56, in handle_connection_errors
+TypeError: log_timeout_error() takes exactly 1 argument (0 given)
+docker-compose returned -1
+the same happens if I run docker-compose kill -s SIGKILL
+23

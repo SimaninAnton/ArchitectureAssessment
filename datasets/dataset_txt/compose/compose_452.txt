@@ -1,0 +1,36 @@
+Tockra commented on 12 Oct 2018 •
+edited
+Description of the issue
+For beginning I have to admit this request is releated with #6096 and #4179 . But since that issues wasn't discussed fair and the most discussion participants didn't understand the problem I open this specific feature request.
+Feature
+There should be a equivalent for external networks which creates the network when it doesn't already exists.
+You can do this e.g. by adding a different keyword like "shared" for networks.
+What is a shared network?
+A shared network is a network, which will be created if there isn't a network with the same name,
+which won't be created (just used) if there is a network with the same name,
+which will be delete if no other docker container uses that network,
+which won't be delted if a other docker container uses that network.
+What is the intend?
+You can use docker-container in the same network without notice a specific order while using docker-compose up and you don't need to hack your intend with help of scripts.
+Example where to use the feature
+I have n docker container which need to be in the same network because all of them need to interact with each other. I don't add all n services in the same docker file because reasons of overview.
+I have to use a specific network name in the networks definition like this:
+networks:
+    my_network:
+        name: cool-name
+Now I have following possibilities:
+Use above definition in 1 docker-compose file and in all other n-1 docker-compose files I have to use the "external" keyword.
+=> Problem: I have to start the non-external network container before I start the n-1 docker container, I have to stop the non-external network container after I stopped all other.
+I use only the "external" keyword and create the network with "docker network create"
+=> Problem: In my eyes that possibility offends the docker-compose principe. I'm using docker-compose to avoid docker commands. Additionally its not nice for other administrators if they want to use my docker-compose file
+Use above definition in all n-1 docker-compose files.
+=> Problem: If you try to docker-compose down a a container while a other container still uses the cool-name network you'll get a error. That is okay, because my solution is just a hack but it is annoying because my hack works and there is no other docker-compose-way to solute the problem of shared networks.
+Example how to use the feature
+Just add in every docker-compose.yml:
+networks:
+        my_shared_network:
+            shared:
+                name: cool-name-of-shared-network
+I hope I could clarify my point of view and the importance of that feature.
+If there is a docker-compose way to realize shared networks than say it but don't mention ugly hacks, please. Just because there are ugly ways (see above) to realize a shared network it's not reason not to add that feature...
+1

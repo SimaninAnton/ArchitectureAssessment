@@ -1,0 +1,26 @@
+Softwaremaker commented on 4 Sep 2017 •
+edited by shin-
+Hi all,
+How do I resolve host address for an api container url that another web container has a dependency on in compose 3 ?
+For example, my compose file is:
+version: '3'
+
+services:
+  web2:
+    image: softwaremaker/web-w
+    environment:
+      - wtmsdemo_customerapi01=http://api/api/values
+    ports:
+      - "89:80"
+    depends_on:
+      - api
+  api:
+    image: softwaremaker/api-w
+
+networks:
+  default:
+    external:
+      name: nat
+I used to think that the api image (softwaremaker/api-w) will be able to resolve into the environment variables I had set up above but it doesnt work.
+Also, how would this be different in both Linux and Windows ? I understand Windows docker still has the same internal NAT issues so I used the networks section above.
+Thanks for looking and helping.

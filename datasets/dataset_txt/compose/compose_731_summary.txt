@@ -1,0 +1,1 @@
+Setting up IPAM for dualstack IPv4+IPv6 breaks reading configuration

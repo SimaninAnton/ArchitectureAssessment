@@ -1,0 +1,21 @@
+ctmnz commented on 1 Apr 2015
+I was experimenting with docker-compose and I saw something a little bit disturbing in my output of phpinfo() function: LAMPDB_1_ENV_MYSQL_ROOT_PASSWORD lamppass
+my docker-compose.yml:
+lampapp:
+build: .
+ports:
+"8000:80"
+links:
+lampdb
+lampmemcache
+volumes:
+/var/
+lampdb:
+image: "mysql:5"
+volumes:
+./mysql:/etc/mysql/conf.d
+environment:
+MYSQL_ROOT_PASSWORD=lamppass
+lampmemcache:
+image: "memcached"
+I know that it is set by 'environment:' but my question: Is it O.K. (I think it is not) any application from my 'composed' docker infrastructure to see set passwords from the installation process ?

@@ -1,0 +1,2 @@
+josephjoice commented on 21 Dec 2017
+I am using pip distribution. This started after the release of 1.18.0

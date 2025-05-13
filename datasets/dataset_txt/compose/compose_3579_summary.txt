@@ -1,0 +1,1 @@
+Comments in docker-compose.yml result in "yaml.reader.ReaderError: unacceptable character #x0000: special characters are not allowed"

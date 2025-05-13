@@ -1,0 +1,3 @@
+faceleg commented on 29 Jul 2015
+It was not until I read this docker-library/mysql#51 (comment) that I realised rm did not delete the volumes.
+Please update the documentation to note the -v flag for docker-compose rm?

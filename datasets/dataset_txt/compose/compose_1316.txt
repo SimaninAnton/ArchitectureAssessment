@@ -1,0 +1,13 @@
+valentin2105 commented on 17 Jul 2017 •
+edited
+Hi,
+I'm trying to use Docker-compose in a IPv6 only network topology but today, it seem impossible.
+With Docker only, I'm able to give a fixed-cidr-v6 and an IPv6 DNS that allow me to run container without using any IPv4 (the DNS is passed in the resolv.conf) and everything is routed.
+With Docker-compose (v2.1 or newer), I can use dual-stack (v4/v6) for containers and describe which IPv6 for each container but I can't use it on IPv6 only due of :
+The Docker embedded DNS ( 127.0.0.11 )
+root@8b9a37581c7a:/# cat /etc/resolv.conf
+nameserver 127.0.0.11
+nameserver 2405:f400::12
+My question,
+Is this possible to disable totally this IPv4 embedded DNS using Docker-compose ?
+Thanks a lot by advance.

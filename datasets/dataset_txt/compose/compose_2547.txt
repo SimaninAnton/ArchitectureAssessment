@@ -1,0 +1,18 @@
+arun-gupta commented on 1 Apr 2016
+docker-compose ps shows the output as:
+docker-compose ps
+             Name                             Command                            State                             Ports              
+-------------------------------------------------------------------------------------------------------------------------------------
+db                                /entrypoint.sh /opt/couchb ...    Up                                11207/tcp, 192.168.99.120:11210 
+                                                                                                      ->11210/tcp, 11211/tcp,         
+                                                                                                      18091/tcp, 18092/tcp,           
+                                                                                                      192.168.99.120:8091->8091/tcp,  
+                                                                                                      192.168.99.120:8092->8092/tcp,  
+                                                                                                      192.168.99.120:8093->8093/tcp   
+hellojavaee_web_1                 /opt/jboss/wildfly/bin/sta ...    Up                                192.168.99.121:8080->8080/tcp
+Corresponding docker ps shows the output as:
+docker ps
+CONTAINER ID        IMAGE                                COMMAND                  CREATED             STATUS              PORTS                                                                                                             NAMES
+f2f1906ce950        arungupta/oreilly-wildfly:latest     "/opt/jboss/wildfly/b"   27 seconds ago      Up 23 seconds       192.168.99.121:8080->8080/tcp                                                                                     swarm-node-02/hellojavaee_web_1
+2e46c44c38f5        arungupta/oreilly-couchbase:latest   "/entrypoint.sh /opt/"   2 minutes ago       Up About a minute   192.168.99.120:8091-8093->8091-8093/tcp, 11207/tcp, 11211/tcp, 192.168.99.120:11210->11210/tcp, 18091-18092/tcp   swarm-node-01/db
+Host name information can be found from docker ps but not so from docker-compose ps.

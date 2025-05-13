@@ -1,0 +1,11 @@
+heidricha commented on 27 Oct 2016
+for a service with more then one network, the networks are created in a strange way:
+eth0 / eth1 order is ok, BUT
+eth0 is eth0@ifxxx and eth1 is eth1@ifyyy where yyy < xxx, so f.e. "ip addr" command displays the network interfaces like:
+eth1
+eth0
+which is strange, but I guess doesn't harm at all.
+Unfortunately /etc/hosts contains "hostname" twice with the addresses of the host in net1 and net2 accordingly AND the order of these lines in /etc/hosts is not fixed, for some services the order is
+hostname eth1-IP
+hostname eth0-IP
+and vice versa for some services. I think it should be deterministic.

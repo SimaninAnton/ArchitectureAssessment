@@ -1,0 +1,4 @@
+morvans commented on 6 Nov 2014
+Since docker 1.3.0 / fig 1.0.0 (I upgraded both at the same time), I cannot fig up my projects without fig rm'ing before.
+If I do fig up on already existing (stopper) containers, volumes specified in fig.yml aren't remounted (default docker mounts instead, so empty dirs).
+fig rm && fig up recreates everything correctly but for locally built containers this is pretty time consuming.

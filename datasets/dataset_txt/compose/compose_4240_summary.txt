@@ -1,0 +1,1 @@
+fig.yml: Add 'autostart: false' option

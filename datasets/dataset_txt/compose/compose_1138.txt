@@ -1,0 +1,26 @@
+clery commented on 18 Oct 2017
+I'm having an issue with extra_hosts on compose.
+$> docker -v               
+Docker version 17.06.0-ce, build 02c1d87
+$> docker-compose -v 
+docker-compose version 1.16.1, build 6d1ac219
+The --add-host option works correctly with docker build but the extra_hosts of docker-compose doesn't.
+I'm using a 3.3 version ok Compose file, here is a sample
+version: '3.3'
+
+services:
+  my_service:
+    build:
+      context: ./some_folder
+      args:
+        ARG1: $ARG1
+        ARG2: $ARG2
+    extra_hosts:
+      - "my.local.network.url:XXX.XXX.XXX.XXX"
+    environment:
+      SOME_VAR: $SOME_VAR
+    volumes:
+      - ./folder1:/folder1
+My volumes are not interfering with /etc/hosts or anything like that.
+Can anyone tell me if I'm doing anything wrong ?
+5

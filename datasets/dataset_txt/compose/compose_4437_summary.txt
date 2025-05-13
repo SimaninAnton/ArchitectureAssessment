@@ -1,0 +1,1 @@
+fig up and fig run should start dependencies when you specify a specific service

@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 17 Jan 2014
+Probably blocked by boot2docker/boot2docker#63, boot2docker/boot2docker#84 and boot2docker/boot2docker#85.
+See noplay/docker-osx#17 and noplay/docker-osx#29 for more background.

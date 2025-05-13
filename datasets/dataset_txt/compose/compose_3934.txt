@@ -1,0 +1,8 @@
+Contributor
+bfirsh commented on 11 Feb 2015
+We should acknowledge the fact that it is possible to use Docker in production, but it is not recommended. We should also explain that we are working on improved support for production and link to the roadmap.
+Options:
+You can run your Compose app on a single server
+You could use Compose to manage configuration for a single service (e.g. putting fig up web in your upstart script or similar)
+You can point Compose at Swarm, but this integration is experimental and Swarm is in beta
+/cc @fredlf

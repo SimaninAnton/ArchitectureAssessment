@@ -1,0 +1,139 @@
+Contributor
+hholst80 commented on 10 Nov 2019
+$ DOCKER_HOST= docker version
+Client:
+ Version:           19.03.4-ce
+ API version:       1.40
+ Go version:        go1.13.1
+ Git commit:        9013bf583a
+ Built:             Sat Oct 19 04:40:07 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          19.03.4-ce
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.13.1
+  Git commit:       9013bf583a
+  Built:            Sat Oct 19 04:39:38 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.3.0.m
+  GitCommit:        d50db0a42053864a270f648048f9a8b4f24eced3.m
+ runc:
+  Version:          1.0.0-rc9
+  GitCommit:        d736ef14f0288d6993a1845745d6756cfc9ddd5a
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+$ DOCKER_HOST= docker-compose version
+docker-compose version 1.24.1, build unknown
+docker-py version: 4.1.0
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.1d  10 Sep 2019
+$ DOCKER_HOST=ssh://core@HOST.DOMAIN.TLD docker-compose --verbose images
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.utils.config.find_config_file: Trying paths: ['/home/holst/.docker/config.json', '/home/holst/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /home/holst/.docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: [snip]
+docker.auth.parse_auth: [snip]
+docker.auth.parse_auth: [snip]
+paramiko.transport._log: starting thread (client mode): 0x327150
+paramiko.transport._log: Local version/idstring: SSH-2.0-paramiko_2.6.0
+paramiko.transport._log: Remote version/idstring: SSH-2.0-OpenSSH_7.9
+paramiko.transport._log: Connected (version 2.0, client OpenSSH_7.9)
+paramiko.transport._log: kex algos:['curve25519-sha256', 'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp256', 'ecdh-sha2-nistp384', 'ecdh-sha2-nistp521', 'diffie-hellman-group-exchange-sha256', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'diffie-hellman-group14-sha256', 'diffie-hellman-group14-sha1'] server key:['rsa-sha2-512', 'rsa-sha2-256', 'ssh-rsa', 'ecdsa-sha2-nistp256', 'ssh-ed25519'] client encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com'] server encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com'] client mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] server mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] client compress:['none', 'zlib@openssh.com'] server compress:['none', 'zlib@openssh.com'] client lang:[''] server lang:[''] kex follows?False
+paramiko.transport._log: Kex agreed: curve25519-sha256@libssh.org
+paramiko.transport._log: HostKey agreed: ecdsa-sha2-nistp256
+paramiko.transport._log: Cipher agreed: aes128-ctr
+paramiko.transport._log: MAC agreed: hmac-sha2-256
+paramiko.transport._log: Compression agreed: none
+paramiko.transport._log: kex engine KexCurve25519 specified hash_algo <built-in function openssl_sha256>
+paramiko.transport._log: Switch to new keys ...
+paramiko.transport._log: Trying SSH agent key b'edb2480efc0f8bfa9ceca5c76660ac6f'
+paramiko.transport._log: userauth is OK
+paramiko.transport._log: Authentication (publickey) successful!
+paramiko.transport._log: Received global request "hostkeys-00@openssh.com"
+paramiko.transport._log: Rejecting "hostkeys-00@openssh.com" global request from server.
+paramiko.transport._log: [chan 0] Max packet in: 32768 bytes
+paramiko.transport._log: Debug msg: b'/home/core/.ssh/authorized_keys:2: key options: agent-forwarding port-forwarding pty user-rc x11-forwarding'
+paramiko.transport._log: [chan 0] Max packet out: 32768 bytes
+paramiko.transport._log: Secsh channel 0 opened.
+paramiko.transport._log: [chan 0] Sesch channel 0 request ok
+paramiko.transport._log: [chan 0] EOF received (0)
+paramiko.transport._log: [chan 0] EOF sent (0)
+Traceback (most recent call last):
+  File "/usr/lib/python3.7/site-packages/urllib3/connectionpool.py", line 672, in urlopen
+    chunked=chunked,
+  File "/usr/lib/python3.7/site-packages/urllib3/connectionpool.py", line 421, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/usr/lib/python3.7/site-packages/urllib3/connectionpool.py", line 416, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/lib/python3.7/http/client.py", line 1336, in getresponse
+    response.begin()
+  File "/usr/lib/python3.7/http/client.py", line 306, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.7/http/client.py", line 275, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.7/site-packages/requests/adapters.py", line 449, in send
+    timeout=timeout
+  File "/usr/lib/python3.7/site-packages/urllib3/connectionpool.py", line 720, in urlopen
+    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
+  File "/usr/lib/python3.7/site-packages/urllib3/util/retry.py", line 400, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/usr/lib/python3.7/site-packages/urllib3/packages/six.py", line 734, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3.7/site-packages/urllib3/connectionpool.py", line 672, in urlopen
+    chunked=chunked,
+  File "/usr/lib/python3.7/site-packages/urllib3/connectionpool.py", line 421, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/usr/lib/python3.7/site-packages/urllib3/connectionpool.py", line 416, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/lib/python3.7/http/client.py", line 1336, in getresponse
+    response.begin()
+  File "/usr/lib/python3.7/http/client.py", line 306, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.7/http/client.py", line 275, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.24.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python3.7/site-packages/compose/cli/main.py", line 124, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python3.7/site-packages/compose/cli/command.py", line 42, in project_from_options
+    compatibility=options.get('--compatibility'),
+  File "/usr/lib/python3.7/site-packages/compose/cli/command.py", line 123, in get_project
+    host=host, environment=environment
+  File "/usr/lib/python3.7/site-packages/compose/cli/command.py", line 97, in get_client
+    version_info = six.iteritems(client.version())
+  File "/usr/lib/python3.7/site-packages/docker/api/daemon.py", line 181, in version
+    return self._result(self._get(url), json=True)
+  File "/usr/lib/python3.7/site-packages/docker/utils/decorators.py", line 46, in inner
+    return f(self, *args, **kwargs)
+  File "/usr/lib/python3.7/site-packages/docker/api/client.py", line 230, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/lib/python3.7/site-packages/requests/sessions.py", line 546, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/lib/python3.7/site-packages/requests/sessions.py", line 533, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3.7/site-packages/requests/sessions.py", line 646, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3.7/site-packages/requests/adapters.py", line 498, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))

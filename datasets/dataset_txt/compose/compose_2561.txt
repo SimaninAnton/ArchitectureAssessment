@@ -1,0 +1,12 @@
+Hendrik-H commented on 30 Mar 2016
+On https://docs.docker.com/compose/compose-file/#networks networks are specified as:
+networks:
+  - some-network
+  - other-network
+Using docker-compose version 1.6.2, build 4d72027 and a version 2 file I get this error:
+ERROR: In file './docker-compose.yml', network must be a mapping, not an array.
+The correct syntax seems to be:
+networks:
+  some-network:
+  other-network:
+7

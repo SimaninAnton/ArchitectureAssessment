@@ -1,0 +1,1 @@
+up should not add 3 dots after container name. Makes slow to copy/paste

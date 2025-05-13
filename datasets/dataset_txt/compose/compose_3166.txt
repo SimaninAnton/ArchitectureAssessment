@@ -1,0 +1,5 @@
+Contributor
+michael-k commented on 28 Oct 2015
+When looking at https://pypi.python.org/pypi/docker-compose, I'm missing at least the following information:
+link to the github repo
+list of supported python versions

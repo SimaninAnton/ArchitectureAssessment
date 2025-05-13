@@ -1,0 +1,1 @@
+Docker COPY doesn't work properly for symlinks using Fig

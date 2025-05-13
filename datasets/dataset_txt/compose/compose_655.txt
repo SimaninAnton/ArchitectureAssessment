@@ -1,0 +1,29 @@
+yamac-kurtulus commented on 23 May 2018
+I am using docker-compose to start nanoserver dotnet core containers in Windows Server 2016. Not in swarm mode, as we don't have 1709 update yet. I need to read some passwords from environment variables in staging and production. One of them contains pound symbol "£". All other environment variables such as connection strings, etc. work fine, however, I am getting the "Invalid interpolation format for "environment" option" error. It works as intended when I delete that environment variable from the compose file, or change the variable, so I know this is the only one that causes problem.
+I am assuming this is an encoding problem. Is there a way to change the encoding for docker compose or containers? Or should I devise a work around? Or do i somehow need to escape this?
+Expected behavior
+excerpt of compose file with the problems:
+  emailservice:
+    image: emailservice
+    build:
+      context: ./EmailService/EmailService
+      dockerfile: Dockerfile
+    environment:
+      "SMTPSettings__Username": "$EmailService_SMTPSettings_Username"
+      "SMTPSettings__Password": "$EmailService_SMTPSettings_Password"
+      "ConnectionStrings__SqlDb": "$SqlConnectionStrings"`
+where
+$EmailService_SMTPSettings_Password = "some£password"
+When i call
+docker-compose -f docker-compose.yml up
+the containers should start
+Actual behavior
+Invalid interpolation format for "environment" option in docker-compose
+Information
+I have tried both on the server and my PC
+Windows Versions:
+Windows Server 2016
+Windows 10 with 1709 update
+Docker for Windows Versions:
+17.06.2-ee-6 for server
+18.03.1-ce for my PC

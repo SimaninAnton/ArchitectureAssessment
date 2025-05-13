@@ -1,0 +1,21 @@
+jderusse commented on 1 Dec 2015
+Looks like, we can't use the commande docker-compose run on a service with --net if an other container for this service is running
+Given the network demo
+$ docker network create demo
+and a simple docker-compose.yml
+app:
+  image: nginx
+  net: demo
+When I start the service in background, everything's OK
+$ docker-compose up -d
+Starting test_app_1
+But when I want to run a command on the same service
+$ docker-compose run --rm app pwd
+ERROR: 409 Conflict: Conflicting options: --net=<NETWORK> can't be used with links. This would result in undefined behavior
+I've to stop the backgrounded app to fix the run command
+$ docker-compose stop app 
+Stopping test_app_1 ... done
+$ docker-compose run --rm app pwd
+/
+docker version: Server Version: 1.9.1
+docker-compose version: 1.5.1

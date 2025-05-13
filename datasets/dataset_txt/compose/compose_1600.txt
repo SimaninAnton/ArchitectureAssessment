@@ -1,0 +1,23 @@
+xuqingsz commented on 14 Mar 2017
+Hi,
+I am building from source
+(and yes, I could just use yum install, but let's assume it cannot be made available a.t.m.)
+% python setup.py build
+% python setup.py install
+and upon installing, ran into SyntaxErrors:
+byte-compiling build/bdist.linux-x86_64/egg/compose/config/serialize.py to serialize.pyc
+SyntaxError: ('invalid syntax', ('build/bdist.linux-x86_64/egg/compose/config/serialize.py', 35, 11, '        for service_dict in denormalized_services\n'))
+byte-compiling build/bdist.linux-x86_64/egg/compose/config/config.py to config.pyc
+SyntaxError: ('invalid syntax', ('build/bdist.linux-x86_64/egg/compose/config/config.py', 450, 15, '            for name in all_service_names\n'))
+(and lots more)
+Could not find the file in build/bdist*/egg/compose/config/*.py, to which it complaint syntax error.
+[root@nsn176-175 compose]# pwd
+/root/compose/build/lib/compose
+[root@nsn176-175 compose]# ls
+__init__.py  __main__.py  bundle.py  cli  config  const.py  container.py  errors.py  network.py  parallel.py  progress_stream.py  project.py  service.py  state.py  timeparse.py  utils.py  volume.py
+
+[root@nsn176-175 bdist.linux-x86_64]# pwd
+/root/compose/build/bdist.linux-x86_64
+[root@nsn176-175 bdist.linux-x86_64]# ls
+Am i missing flags for building, or installing?
+Thanks.

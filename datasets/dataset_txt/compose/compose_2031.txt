@@ -1,0 +1,7 @@
+jwodder commented on 1 Oct 2016
+Suggestion: Add a docker-compose.yml service configuration option auto_up: BOOL (or whatever you want to call it) that, when false (default value: true), causes the given service to not be created or started by docker-compose up unless that service is explicitly listed on the command line (or possibly if it's a dependency of another service that would normally be started; I'm primarily interested in this for services that aren't dependencies, so I have no strong feelings on this aspect either way).
+This would make the following setups less awkward to manage (i.e., the user could just run docker-compose up instead of docker-compose desired-service1 desired-service2 ...):
+A Compose project defines several services that should always be running plus one or more services (such as database backup actions) that are only intended to be started on occasion through docker-compose run.
+A Compose project defines a service that is intended to be only extended, not run.
+This can currently be achieved by defining the parent service in a separate file, but this seems a bit excessive.
+This would require either explicitly adding auto_start: true to the child services or else making auto_start: false non-inheritable, whichever ends up being more user-friendly.

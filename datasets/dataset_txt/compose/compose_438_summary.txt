@@ -1,0 +1,1 @@
+Error relocating /usr/lib/libpython3.6m.so.1.0

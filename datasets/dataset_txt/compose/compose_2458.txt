@@ -1,0 +1,20 @@
+ThiefMaster commented on 24 Apr 2016 •
+edited
+It would be nice if the v2 compose file allowed a custom key on the top level which would simply be ignored by the parser and compose itself.
+This would be really useful combined with YAML inheritance. For example, I have a few service definitions which need the same environment variables. Right now I have this in my first service:
+    environment: &flask_env
+      SECRET_KEY: ~
+      SQLALCHEMY_DATABASE_URI: ~
+And then this in the other services using the same ones:
+    environment:
+      <<: *flask_env
+However, I think it would be cleaner if I could define those variables somewhere else and inherit them in all the services I use:
+custom:
+  flask-env: &flask_env
+    SECRET_KEY: ~
+    SQLALCHEMY_DATABASE_URI: ~
+With that done I'd only need
+    environment:
+      <<: *flask_env
+in all the service definitions.
+6

@@ -1,0 +1,8 @@
+jgadbois commented on 23 Jul 2014
+In my Dockerfile I have
+RUN mkdir /code
+WORKDIR /code
+ADD . /code
+RUN bundle install
+However after I run fig build, all fig run commands see /code as an empty directory. This is strange because the bundle install does work (it initially sees the Gemfile).
+I'm on OSX using boot2docker.

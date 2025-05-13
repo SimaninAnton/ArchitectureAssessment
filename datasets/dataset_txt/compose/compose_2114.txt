@@ -1,0 +1,78 @@
+isocra commented on 28 Aug 2016 •
+edited
+I'm getting the ValueError in the title when I try fig build. I've attached the fig.yml file and the db Dockerfile below. If I try docker build lib/db the build works, so I don't think it's a problem with the Dockerfile.
+Thanks
+fig.yml
+---
+
+web:
+  build: lib/web
+  ports:
+    - "5000:80"
+  volumes:
+   - ./lib/web/:/opt/project
+  links:
+    - db
+
+db:
+  build: lib/db
+  environment:
+    STARTUP_SQL: /dump.sql
+lib/db/Dockerfile
+FROM node
+
+MAINTAINER Fernando Mayo <fernando@tutum.co>, Feng Honglin <hfeng@tutum.co>
+
+# Install packages
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+  apt-get -yq install mariadb-server-10.0 pwgen && \
+  rm -rf /var/lib/apt/lists/*
+
+# Remove pre-installed database
+RUN rm -rf /var/lib/mysql/*
+
+# Remove syslog configuration
+RUN rm /etc/mysql/conf.d/mysqld_safe_syslog.cnf
+
+# Add MySQL scripts
+ADD import_sql.sh /import_sql.sh
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
+
+# Add MySQL configuration
+ADD my.cnf /etc/mysql/conf.d/my.cnf
+ADD mysqld_charset.cnf /etc/mysql/conf.d/mysqld_charset.cnf
+
+# Add dump
+ADD dump.sql /dump.sql
+
+# Exposed ENV
+ENV MYSQL_USER admin
+ENV MYSQL_PASS pass
+
+# Replication ENV
+ENV REPLICATION_MASTER **False**
+ENV REPLICATION_SLAVE **False**
+ENV REPLICATION_USER replica
+ENV REPLICATION_PASS replica
+
+VOLUME  ["/etc/mysql", "/var/lib/mysql"]
+
+EXPOSE 3306
+CMD ["/run.sh"]
+The stack trace is:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 56, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 119, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.project", line 166, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 397, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.progress_stream", line 17, in stream_output
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/docker.client", line 289, in _stream_helper
+ValueError: invalid literal for int() with base 16: '{"stream":"Step 2 : MAINTAINER Fernando Mayo \\u003cfernando@tutum.co\\u003e, Feng Honglin \\u003chfeng@tutum.co\\u003e\\n"}\r\n'
+I'm on Mac OS 10.11.5, using Docker for Mac 1.12.0-a and Python 2.7.10.

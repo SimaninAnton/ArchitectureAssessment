@@ -1,0 +1,21 @@
+ezyk commented on 12 Apr 2015
+I have 2 docker containers, Jenkins master and Jenkins slave. I am using docker compose to start them
+docker-compose up master worker
+When the worker container stops either because the slave Jenkins crashed or because i manually stopped the container, the master also stops which is really unexpected with the following message( with --verbose flag) :
+docker wait -> 137
+eeadockerjenkins_worker_1 exited with code 137
+Gracefully stopping... (press Ctrl+C again to force)
+docker containers <- (all=False)
+docker containers -> (list with 2 items)
+docker containers <- (all=False)
+docker containers -> (list with 2 items)
+Stopping eeadockerjenkins_master_1...
+docker stop <- (u'013f5f6dec6a4d8d5c828fe05f762cff3802eb2c85827e6e7afb4d791905a78b')
+docker wait <- (u'013f5f6dec6a4d8d5c828fe05f762cff3802eb2c85827e6e7afb4d791905a78b')
+docker stop -> None
+docker wait -> 143
+If i start my container in detached mode using:
+docker-compose up -d master worker
+it's working fine, the master keeps running after the worker has stopped (or crashed). Any ideas why this is happening? Is this an expected behavior?
+docker --version: Docker version 1.5.0, build a8a31ef/1.5.0
+docker-compose --version: dockerdocker-compose 1.1.0

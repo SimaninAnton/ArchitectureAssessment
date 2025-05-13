@@ -1,0 +1,82 @@
+Contributor
+aanand commented on 15 Jan 2015
+There are a whole load of things that people are asking for in fig.yml. I want to pull them together here so that we can discuss configuration at a high level and avoid incremental bloat and viscosity.
+(Important note: I haven’t the least bit of interest in discussing filenames or alternatives to YAML in this issue. A separate issue, sure, but don’t shed those bikes in here.)
+I also want to discuss what I see as an emerging boundary between portable and non-portable configuration. By way of analogy, let's look at the Dockerfile format, which aims to be fully portable. For example:
+VOLUME lets you specify paths inside the container that should be volumes, but doesn't let you specify a host path.
+EXPOSE lets you specify a port to expose, but not what port on the host to map it to.
+As a result, a Docker image will work anywhere - it isn't coupled to any features of the host environment, such as filesystem layout or available ports. This enables people to build tools on Docker which can run any image without worrying about how it's configured, an abstraction which is only possible because Dockerfile enforces separation.
+With Fig we've created a configuration format for a group of containers - let's call it an app. Most of what you specify in fig.yml (i.e. most container configuration plus links between defined containers) is, to my eyes, portable - but not all of it. We let you specify:
+volume paths on the host
+ports to expose on the host
+links to externally-managed containers (#544, merged but not released)
+build keys which reference paths outside the current directory
+There have also been requests/PRs for support for:
+service scaling directives (#630)
+order of container startup (#235)
+parameterisation of configuration values, probably based on environment variables local to the shell in which Fig is being invoked (#426, #495, #845)
+spinning up other Fig apps which an app depends on, identified by the path to their code/configuration (#318, #758)
+All of this looks highly non-portable to me - if we continue to support such features in fig.yml, it’ll never be suitable as an abstract app definition, and apps will remain coupled to particular characteristics of the systems they’re running on. As we move towards a future where deploying Docker apps on multiple hosts (e.g. with Swarm) or to multiple environments (dev, CI, staging, production), this will become more and more of a pain point.
+So I want to talk about how we might redesign Fig’s configuration such that we can support the use cases those features would serve - all of them real problems that real users have faced - and simultaneously achieve an app definition format that is as portable as a Dockerfile.
+If we want to do this without sacrificing a significant amount of usability, one approach I’ve thought of is to define two formats:
+A core app definition file, analogous to Dockerfile, which only allows portable configuration.
+An auxiliary file which allows host-specific configuration, and can perhaps augment or override bits of the core definition
+The idea is that there’s always a single, version-controlled core definition, whereas there may be zero or more auxiliary configs which may or may not be versioned.
+Here’s an example:
+# app-definition.yml
+
+web:
+  build: ./webapp
+  command: python app.py
+  ports:
+    - 80
+  links:
+    - db
+    - authentication-service
+
+db:
+  image: redis:latest
+# development-config.yml
+
+web:
+  volumes:
+    # host volume paths are allowed
+    - ./webapp:/code
+  ports:
+    # host ports are allowed
+    - "8000:80"
+  links:
+    # names of external containers are allowed
+    - my-external-authentication-container:authentication-service
+Down the line, the auxiliary definition can be extended to allow the user to supply more of the asked-for things: variable parameterisation, initial scaling directives, dependencies on other apps, affinity constraints for Swarm, etc.
+(Aside: it might be valuable from an "explicit is better than implicit" standpoint to make you name things in the core definition (such as volumes and ports) which the auxiliary config can provide, rather than letting it reach inside and change anything. For example:
+# app-definition.yml
+
+web:
+  build: ./webapp
+  command: python app.py
+  volumes:
+    - web-code:/code
+  ports:
+    - http:80
+  links:
+    - db
+    - authentication-service
+
+db:
+  image: redis:latest
+# development-config.yml
+
+volumes:
+  web-code: ./webapp
+
+ports:
+  http: 8000
+
+links:
+  authentication-service: my-external-authentication-container
+But I digress.)
+In conclusion:
+Firstly I want to know how the community feels about the current design of fig.yml in terms of portability, extensibility and usability, especially as we add more stuff to it.
+Secondly, ditto for the proposed enforced separation of core/auxiliary configuration.
+Finally, if it sounds good, we can get into the details of the design.

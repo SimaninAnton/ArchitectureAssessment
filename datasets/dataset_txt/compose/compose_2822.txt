@@ -1,0 +1,10 @@
+matevarga commented on 7 Feb 2016
+Environment: docker 1.10, docker-compose 1.6, Ubuntu 15.10
+Background:
+I've just updated docker to 1.10 and docker-compose to 1.7 on my Ubuntu 15.10 box. I am using around 7-8 containers linked with docker-compose, and it was working perfectly under docker-compose 1.6, but with 1.7, some containers don't see other (linked) containers. This seems to be related to the changed name resolution (changed from /etc/hosts to the /etc/resolv.conf-based approach).
+Let's say I have containers named A and B. B is linked to A, and the Java code running inside the container wants to connect to 'A'. B starts up, I am getting exceptions saying "cannot connect to ". Note that is the random (?) ID of the container, not its name.
+How does B know the ID of A? Somehow the DNS must return this ID when trying to look up 'A'.
+If the DNS returns this ID, then why can't B connect to A through its ID?
+So somehow, something must have regressed between 1.6 and 1.7.
+Note that linking works for some containers (always), and doesn't for some others (always).
+1

@@ -1,0 +1,18 @@
+opyate commented on 26 Nov 2015
+Test:
+# in terminal 1, run a service like a database
+docker run --rm --name first postgres
+
+# in terminal 2
+cat <<EOF > docker-compose.yml
+second:
+  image: busybox
+  external_links:
+   - first:uno
+EOF
+docker-compose run --rm second /bin/sh
+Which will give you a BusyBox shell, and env shows the UNO_* env vars.
+However, change the YAML to the following VALID YAML (e.g. try this linter or this one), and it will not work with docker-compose 1.5.1 (via DockerToolbox-1.9.1a.pkg).
+second:
+  image: busybox
+  external_links: {first: uno}

@@ -1,0 +1,54 @@
+aram535 commented on 29 Dec 2017 •
+edited
+I cannot seem to replicate a network_mode in docker-compose.yml to bind any of the container ports. There are a bunch of ports:
+"ExposedPorts": {
+"1900/udp": {},
+"3005/tcp": {},
+"32400/tcp": {},
+"32410/udp": {},
+"32412/udp": {},
+"32413/udp": {},
+"32414/udp": {},
+"32469/tcp": {},
+"8324/tcp": {}
+},
+ENV:
+CentOS Linux release 7.4.1708 (Core) - 3.10.0-693.2.2 64bit
+Docker version 17.11.0-ce, build 1caf76c
+docker-compose version 1.18.0, build 8dd22a9
+CMD:
+docker run -d \
+    --name plex \
+    --network=host \
+    -e TZ="America/New_York" \
+    -e CHANGE_CONFIG_DIR_OWNERSHIP="true" \
+    -e RUN_AS_ROOT="false" \
+    -e PLEX_CLAIM="CLAIM-foo" \
+    -h "plex" \
+    -v /home/plex/database:/config \
+    -v /home/plex/transcode/temp:/transcode \
+    -v /home/plex/media:/data
+    plexinc/pms-docker
+# ss -an | grep LISTEN | grep 32400
+tcp    LISTEN     0      128       *:32400                 *:*
+#
+docker-compose.yml:
+version: '2'
+services: 
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    hostname: "plex"
+    environment:
+        - CHANGE_CONFIG_DIR_OWNERSHIP="true"
+        - PLEX_CLAIM="CLAIM-foo"
+        - RUN_AS_ROOT="false"
+        - TZ="America/New_York"
+    network_mode: "host"
+    volumes:
+        - /home/plex/database:/config
+        - /home/plex/transcode/temp:/transcode
+        - /home/plex/media:/data
+# ss -an | grep LISTEN | grep 32400
+#
+2

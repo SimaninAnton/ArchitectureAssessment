@@ -1,0 +1,1 @@
+Suppress [projectname]_ from appending to network created by docker-compose

@@ -1,0 +1,9 @@
+ferrouswheel commented on 25 Mar 2015
+The documentation is slightly ambiguous about what happens when you specify environment variables using both env_file and environment. It does say "Environment variables specified in environment override these values" but what about when environment doesn't specify the values like so:
+  environment:
+   POSTGRES_PASSWORD:
+   POSTGRES_USER:
+  env_file: .env
+It'd be nice to have POSTGRES_PASSWORD and POSTGRES_USER in .env and have them in docker-compose.yml at the same time. Basically telling people, "hey, you need to provide these values" either in .env or in the shell environment you run docker-compose up in.
+If that's not possible or would only add confusion, then it'd be cool to add that the override happens even when they are blank and read from the shell environment.
+4

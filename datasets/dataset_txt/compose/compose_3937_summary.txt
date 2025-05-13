@@ -1,0 +1,1 @@
+Support for uppercase or underscores or any separator in container names

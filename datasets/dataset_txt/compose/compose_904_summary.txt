@@ -1,0 +1,1 @@
+docker-compose cli command eat previous lines from the console output

@@ -1,0 +1,1 @@
+Disabling clients 1.5 and earlier

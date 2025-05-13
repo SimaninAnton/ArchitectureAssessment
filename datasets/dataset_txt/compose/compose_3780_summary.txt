@@ -1,0 +1,1 @@
+Document that containers are scheduled onto the same node on Swarm

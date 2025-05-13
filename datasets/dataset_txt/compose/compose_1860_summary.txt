@@ -1,0 +1,1 @@
+Add a way to enforce full isolation of the environment

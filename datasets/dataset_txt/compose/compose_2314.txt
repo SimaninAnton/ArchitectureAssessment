@@ -1,0 +1,5 @@
+kag0 commented on 9 Jun 2016
+It would be nice if there were an option to check for new versions of images when running docker-compose up.
+We already have this functionality with docker build --pull as was discussed here moby/moby#4238 and there is an open issue to bring --pull to docker run here moby/moby#13331.
+I propose adding --pull to up to always attempt to pull a newer version of the images in the compose file.
+56

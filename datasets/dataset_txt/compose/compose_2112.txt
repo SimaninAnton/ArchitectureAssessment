@@ -1,0 +1,4 @@
+waynebrantley commented on 29 Aug 2016
+Allow a source option for build that points to a source repository.
+Compose would pull from that repository before building.
+As it is now, the docker compose can do everything related to building and using, except I must pull first. This would be a nice addition.

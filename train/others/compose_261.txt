@@ -1,0 +1,4 @@
+Contributor
+joakimr-axis commented on 8 Mar 2019
+The docker-compose docker image is HUGE. A full-blown Debian image should not be needed.
+At least using a slim version as base image would decrease the footprint (even if that is not the ultimate solution).

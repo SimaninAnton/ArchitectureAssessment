@@ -1,0 +1,44 @@
+Contributor
+ColinHebert commented on 14 Feb 2017
+Hi guys.
+I've been struggling with a weird issue:
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'mytest_default')
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 88, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 140, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 900, in up
+    remove_orphans=remove_orphans)
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 387, in up
+    self.initialize()
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 431, in initialize
+    self.networks.initialize()
+  File "/usr/local/lib/python2.7/dist-packages/compose/network.py", line 203, in initialize
+    network.ensure()
+  File "/usr/local/lib/python2.7/dist-packages/compose/network.py", line 59, in ensure
+    data = self.inspect()
+  File "/usr/local/lib/python2.7/dist-packages/compose/network.py", line 91, in inspect
+    return self.client.inspect_network(self.full_name)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/verbose_proxy.py", line 55, in proxy_callable
+    result = getattr(self.obj, call_name)(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/docker/utils/decorators.py", line 35, in wrapper
+    return f(self, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/network.py", line 158, in inspect_network
+    return self._result(res, json=True)
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 216, in _result
+    self._raise_for_status(response)
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 210, in _raise_for_status
+    response.raise_for_status()
+  File "/usr/share/python-wheels/requests-2.9.1-py2.py3-none-any.whl/requests/models.py", line 840, in raise_for_status
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: http://docker:2375/v1.25/networks/baseagent_default
+From the looks of it, the client fails to recover from a 404 (an expected one, the network mytest_default doesn't exist yet.
+I have been able to create a more self-contained test to reproduce the error (spoiler alert it relies on dind, but that should be irrelevant): https://github.com/ColinHebert/compose-404
+It may sound a bit convoluted but here is what's happening:
+docker-compose.yaml starts two containers, the first one is dind (the one we're going to test against through http). It uses privileges to run docker properly.
+The second container runs a docker container "client" which is an ubuntu box with docker-compose installed. The client container is linked to dind container and has the env variable DOCKER_HOST=docker:2375 (meaning that docker commands run inside this container are going straight to dind
+When starting the client container, we attempt to run docker-compose which ends up failing on the 404.
+I'm not 100% across the reason why the HTTP 404 bubbles up in my case. When running against a socket (albeit a different environment), the 404 gets caught properly ending with:
+pip._vendor.requests.packages.urllib3.connectionpool._make_request: "GET /v1.25/networks/mytest_default HTTP/1.1" 404 50

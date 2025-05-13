@@ -1,0 +1,1 @@
+docker-compose, when using -f option, the config is picking up environment variables defined in other .env files

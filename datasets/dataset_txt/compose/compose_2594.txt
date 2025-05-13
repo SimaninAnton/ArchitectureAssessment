@@ -1,0 +1,3 @@
+iamKurt commented on 21 Mar 2016
+Is there a way to specify container-wide settings for all containers that apply to all containers started by a compose file? Specifically, I'd like to be able to enable TLS, set memory and CPU limits, etc. but don't want to have to put those settings under the environment section of every container. Is there another way to do this?
+Thanks!

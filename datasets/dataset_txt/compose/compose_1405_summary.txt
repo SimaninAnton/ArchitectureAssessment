@@ -1,0 +1,1 @@
+A label with a value of only numbers causes unmarshal error

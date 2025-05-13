@@ -1,0 +1,7 @@
+ej3 commented on 4 Apr 2017
+Windows 10 (build 15063.11) running Xenial (16.04.2 LTS) with a docker (17.03) client attaching to the hyper-V docker-for-windows daemon (17.03.1).
+In WSL running docker run -v c:/some/stuff/here:/var/is/now/here --rm bash ls /var/is/now/here will list the content of c:/some/stuff/here as expected. I don't think this will work if you try to run a volume from the WSL file system (I haven't tried that in awhile). but as long as the file is in the windows file system the volume seems to mount as expected - no problems.
+When a relative path is specified within docker-compose.yml for a service
+serviceName: volumes: -./some/path:/var/another/path
+Compose generates the absolute path in collusion with the underlying WSL libraries to be something like: /mnt/c/Users/thedude/dev/some/path which docker ingests, and pukes when it tries to access anything in /mnt/c/... because /mnt/c/ is an alias that's only valid in the WSL environment. The windows daemon does not understand that /mnt/c === c:/.
+The quick fix would be to make compose filter paths that start with /mnt/c and simply transform them to c:/ - but also may be a completely terrible idea.

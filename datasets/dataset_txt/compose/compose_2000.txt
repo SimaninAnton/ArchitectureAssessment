@@ -1,0 +1,7 @@
+garveen commented on 20 Oct 2016
+I am writing a plugin which can manage docker-compose in a software. All non-interactive docker-compose commands are working good, except up and logs -f: they have a continuous output.
+In my computer, docker-compose uses two process to do all the jobs. If I kill the first which I can get the pid from APIs, the second one will not exit and became a dummy process. This also happened with Windows Task Manager.
+Environment:
+Windows 10 Pro 14393
+Docker 1.12.2-beta28(7813)
+docker-compose 1.8.1, build 004ddae

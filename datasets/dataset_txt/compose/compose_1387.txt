@@ -1,0 +1,42 @@
+jamshid commented on 14 Jun 2017 •
+edited
+I haven't tried to narrow this down, but using Docker for Mac Edge (docker-compose 1.14.0-rc2) with a docker 17.05 server I'm seeing below error. Maybe it's a docker / docker for mac problem?
+$ docker-compose --version
+docker-compose version 1.14.0-rc2, build 24dae73
+$ docker version
+Client:
+ Version:      17.06.0-ce-rc2
+ API version:  1.29 (downgraded from 1.30)
+ Go version:   go1.8.1
+ Git commit:   402dd4a
+ Built:        Wed Jun  7 10:02:52 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+  foo:
+    image: 192.168.2.61:5000/foo:latest
+   ...
+$ docker-compose pull
+...
+Downloading images / checking for updates...
+Pulling foo (192.168.2.61:5000/foo:latest)...
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 118, in perform_command
+  File "compose/cli/main.py", line 641, in pull
+  File "compose/project.py", line 480, in pull
+  File "compose/service.py", line 994, in pull
+  File "site-packages/docker/api/image.py", line 358, in pull
+  File "site-packages/docker/auth.py", line 50, in get_config_header
+  File "site-packages/docker/auth.py", line 85, in resolve_authconfig
+  File "site-packages/docker/auth.py", line 129, in _resolve_authconfig_credstore
+docker.errors.DockerException: Credentials store error: StoreError('Credentials store docker-credential-osxkeychain exited with "parse 192.168.2.61:5000: first path segment in URL cannot contain colon".',)
+Failed to execute script docker-compose

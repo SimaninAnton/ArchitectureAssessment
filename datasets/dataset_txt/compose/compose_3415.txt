@@ -1,0 +1,8 @@
+Contributor
+bfirsh commented on 3 Aug 2015
+Docker has introduced a new top-level concept of a "network", accompanied by new CLI and API functionality. Compose should support this – both out of the box, and allowing the user to manually configure complex topologies.
+Experimental support for networks - #2191
+Specify networks in the Compose file - #2478
+Move network support out of experimental status and make it the default (or only) means of inter-service communication
+Use service name and short name alises #2312
+Support setting the default network name #2470

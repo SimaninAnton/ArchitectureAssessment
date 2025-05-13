@@ -1,0 +1,9 @@
+mbana commented on 19 Jun 2018
+$ docker -v
+Docker version 18.05.0-ce, build f150324
+$ docker-compose -v
+docker-compose version 1.21.2, build a133471
+I want to silence the output of docker-compose build just like there is a --quiet command in docker if so, please display the full command required to get quiet builds.
+I guess one could just redirect standard out, but I'd rather not do this.
+Many thanks,
+4

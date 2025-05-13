@@ -1,0 +1,64 @@
+acdha commented on 13 Feb 2018
+While working on a larger project, I noticed that the restart behaviour is unreliable. According to the documentation restart seems pretty simple:
+no is the default restart policy, and it does not restart a container under any circumstance. When always is specified, the container always restarts. The on-failure policy restarts a container if the exit code indicates an on-failure error.
+restart: "no"
+restart: always
+restart: on-failure
+restart: unless-stopped
+https://docs.docker.com/compose/compose-file/#restart
+Unfortunately, using Docker for Mac (version: 17.12.0-ce-mac49) that behaviour was unreliable. The example below uses this docker-compose.yml file:
+version: '3'
+
+services:
+    restart_on_failure:
+        container_name: restart_on_failure
+        image: alpine:latest
+        restart: on-failure
+        command: /bin/sh -c "date; exit 1"
+It appears that the restart policy is ignored on the first launch:
+cadams@jupiter:~/Desktop $ docker-compose up
+Creating restart_on_failure ... done
+Attaching to restart_on_failure
+restart_on_failure    | Mon Feb 12 20:13:20 UTC 2018
+restart_on_failure exited with code 1
+cadams@jupiter:~/Desktop $ docker-compose up
+restart_on_failure is up-to-date
+Attaching to restart_on_failure
+restart_on_failure    | Mon Feb 12 20:13:20 UTC 2018
+restart_on_failure    | Mon Feb 12 20:13:24 UTC 2018
+restart_on_failure    | Mon Feb 12 20:13:25 UTC 2018
+restart_on_failure    | Mon Feb 12 20:13:26 UTC 2018
+restart_on_failure    | Mon Feb 12 20:13:27 UTC 2018
+restart_on_failure    | Mon Feb 12 20:13:29 UTC 2018
+restart_on_failure    | Mon Feb 12 20:13:36 UTC 2018
+restart_on_failure exited with code 1
+This means that using --force-recreate will prevent it from ever being restarted, with no indication for why:
+cadams@jupiter:~/Desktop $ docker-compose up --force-recreate
+Recreating restart_on_failure ... done
+Attaching to restart_on_failure
+restart_on_failure    | Mon Feb 12 20:15:47 UTC 2018
+restart_on_failure exited with code 1
+cadams@jupiter:~/Desktop $ docker-compose up --force-recreate
+Recreating restart_on_failure ... done
+Attaching to restart_on_failure
+restart_on_failure    | Mon Feb 12 20:15:56 UTC 2018
+restart_on_failure exited with code 1
+Curiously, this is not consistent with multiple containers - using this Dockerfile, it usually but not always will restart as expected:
+version: '3'
+
+services:
+    restart_on_failure:
+        container_name: restart_on_failure
+        image: alpine:latest
+        restart: on-failure
+        command: /bin/sh -c "date; exit 1"
+    restart_unless_stopped:
+        container_name: restart_unless_stopped
+        image: alpine:latest
+        restart: unless-stopped
+        command: /bin/sh -c "date; exit 1"
+    restart_always:
+        container_name: restart_always
+        image: alpine:latest
+        restart: always
+        command: /bin/sh -c "date; exit 1"

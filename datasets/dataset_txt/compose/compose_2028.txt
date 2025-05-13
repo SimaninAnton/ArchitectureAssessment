@@ -1,0 +1,11 @@
+Binarytales commented on 3 Oct 2016 •
+edited
+Assuming that
+build:
+    args:
+        - key=token
+is analogous to --build-arg <varname>=<value> command line option and it's realtion opt the ARG command in a Dockerfile, should the documentation not include the same warning about not using this to pass secrets as seen in the Dockerfile documentation:
+https://docs.docker.com/engine/reference/builder/#/arg
+Related PR/Issue: moby/moby#24522
+That the example uses password:secret seems particularly egregious if my assumption is correct.
+If somebody can clarify my assumption in the affirmative I'll open a PR to update the examples and add the same wording as a warning from PR linked above.

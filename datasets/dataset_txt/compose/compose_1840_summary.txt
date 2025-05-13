@@ -1,0 +1,1 @@
+network name won't resolve variable in docker-compose.yaml

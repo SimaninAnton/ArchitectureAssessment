@@ -1,0 +1,10 @@
+kilianc commented on 8 Dec 2017 •
+edited
+I have compose file with the following:
+      cache_from:
+        - ${IMAGE_NAME}:development
+        - ${IMAGE_NAME}:${REVISION}
+This works great for CI because I pull the development version of that image (which is the most recent) and optionally one tagged with the commit hash. CI uses the layers and builds are fast.
+When building locally, I don't have an image tagged as :development and every time the commit hash changes (HEAD changes) it does not reuse the layers. Even if I bite the bullet and pull every time (it could take 30+s on a slow connection) I lose all the caching on the layers I changed until next CI run (will tag :development).
+Is there a way to tell compose to use the local layers + cache_from? If not is there a smart workaround for this use case?
+6

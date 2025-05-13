@@ -1,0 +1,4 @@
+wernight commented on 26 Jan 2015
+Please make it also Python3 compatible, should be easy to convert using 2to3 but you can make it Python 2 and Python 3 compatible via:
+$ pip install modernize
+$ python-modernize -w my_script.py

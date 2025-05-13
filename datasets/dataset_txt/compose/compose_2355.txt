@@ -1,0 +1,6 @@
+Contributor
+aanand commented on 26 May 2016
+#3488 introduces an internal keyword for network definitions, mirroring docker network create --internal, for disallowing external access to a network.
+Unfortunately, we have an external keyword on network and volume definitions, which relates to something else entirely - specifying that the network/volume is not managed by Compose, but created externally.
+It's going to be really confusing to have two antonyms which relate to completely different things (even if, fortunately, they can't be used at the same time). So we should probably deprecate external and introduce a new alias. Any ideas?
+1

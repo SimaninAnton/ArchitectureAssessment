@@ -1,0 +1,12 @@
+jjoubert commented on 8 May 2015
+Please consider the example where I have a Dockerfile in a specific directory including an ADD operation with a relative path to the target.
+Something like this: /a/b/c/Dockerfile:
+FROM base
+ADD ../b/file.txt
+This image builds correctly if I just run docker build in the same directory as the Dockerfile (/a/b/c/).
+Now, let's say I have a docker-compose.yml file in a higher-level with a relative path to the Dockerfile: /a/docker-compose.yml:
+myimage:
+  build: ./b/c/
+It seems to me that if I run (up) on this docker-compose.yml, the build context path for the Dockerfile is the path of the docker-compose.yml, in other words, the relative path to "file.txt" in my Dockerfile does not resolve correctly.
+Is this expected? Is there a way for me to override this behaviour without re-arranging the structure? In other words, force the build context path to be the path of the Dockerfile regardless of where the docker-compose.yml file is?
+My current situation is that the top-level docker-compose actually reference a number of lower-level Dockerfiles.

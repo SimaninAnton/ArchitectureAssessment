@@ -1,0 +1,9 @@
+j4r3kb commented on 2 Nov 2018 •
+edited
+The default naming scheme for containers created by Compose in this version
+has changed from <project>_<service>_<index> to
+<project>_<service>_<index>_<slug>
+Is there any way to disable this behavior apart from using container_name in yaml file?
+We have many scripts that rely on container names and are not using swarm, just a single container stack. This change is very inconvenient for us.
+81
+12

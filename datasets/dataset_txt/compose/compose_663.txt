@@ -1,0 +1,33 @@
+dickmao commented on 20 May 2018 •
+edited
+Description of the issue
+docker-compose up in container (jpetazzo/pseudo-dind) loses stdout if nothing is printed for a minute. Proposed labels: compose-in-a-container kind/bug
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Steps to reproduce the issue
+cat > Dockerfile -<<EOF
+FROM bash
+ENTRYPOINT [ "sh", "-c", "echo 1; sleep 63; echo 2" ]
+EOF
+docker build -t foo .
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -ti alpine:latest
+The following commands occur within the alpine image
+apk --update add py-pip && pip install docker-compose
+cat > docker-compose.yml -<<EOF
+version: "2"
+services:
+   foo:
+     image: "foo"
+EOF
+docker-compose up 
+Observed result
+foo_1  | 1
+default_foo_1 exited with code 0
+Expected result
+foo_1  | 1
+foo_1  | 2
+default_foo_1 exited with code 0
+The expected result can be achieved by sleeping for less than 60 seconds in step 1, or by pip3 install docker-compose (instead of plain pip) in step 4 thereby getting a CPython version that is 3.x.

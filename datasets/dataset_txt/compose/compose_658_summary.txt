@@ -1,0 +1,1 @@
+Build error if folder starts with dash and underscore

@@ -1,0 +1,16 @@
+dogmatic69 commented on 22 Nov 2016
+I am running some docker commands through a node wrapper script child_process.exec(). So far not had any issues with other commands, compose, stop etc.
+Can recreate the issue doing the following:
+$ touch 1; docker-compose --file /path/to/compose.yml -p <project> ps < 1 > 2
+stty: 'standard input': Inappropriate ioctl for device
+Was able to work round the issue using the following command:
+script --return -qc "docker-compose --file /path/to/compose.yml -p <project> ps"
+System
+$ docker-compose --version
+docker-compose version 1.7.1, build 0a9ab35
+
+$ docker --version
+Docker version 1.12.2, build bb80604
+
+$ uname -a
+Linux ubuntu02 4.4.0-45-generic #66-Ubuntu SMP Wed Oct 19 14:12:37 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux

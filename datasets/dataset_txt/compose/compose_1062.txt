@@ -1,0 +1,3 @@
+gucki commented on 23 Nov 2017
+docker-compose logs -t seems to output the log entries in random order. It should be possible, best as default, to get a sorted by time output.
+8

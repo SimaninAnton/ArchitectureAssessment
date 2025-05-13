@@ -1,0 +1,26 @@
+erichonkanen commented on 3 Jun 2015
+Hello,
+I am using compose in microservice setup and it would be ideal to have service names such as "service-one", "service_two" etc but apparently that is not allowed and also I didn't see it in the docs...
+Example of how I used it currently which shows service names mushed together
+contentservicedb:
+  image: postgres:latest
+contentservice:
+  extends:
+    file: ../content/docker-compose.yml
+    service: web
+  links:
+    - contentservicedb
+
+usersservicedb:
+  image: postgres:latest
+usersservice:
+  extends:
+    file: ../users/docker-compose.yml
+    service: web
+  links:
+    - usersservicedb
+
+gatekeeperservice:
+  image: clusterhq/twisted
+Just wondering if it will ever be possible to include hyphen or underscore for this use case...
+Thanks!

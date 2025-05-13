@@ -1,0 +1,4 @@
+Contributor
+jonlemmon commented on 4 May 2016
+I've been trying out docker-compose with Rails, using the example from the docker rails documentation, and I notice that every time I add a new gem to the project I have to rebuild using docker-compose build. It's pretty annoying because it takes a while to re-download all the gems. Is this standard behavior? Is there a way to get around this?
+Ideally I'd like docker-compose up to run a bash terminal instead of attempting to start the server, that way I can start the server manually from within the shell and also run any other commands I need to in the shell. This would allow me to not have rebuild every time I add a gem to the project.

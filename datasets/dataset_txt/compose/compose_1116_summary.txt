@@ -1,0 +1,1 @@
+Docker Compose build fails: "Top level object in DockerFile needs to be an object not '<type 'str'>'"

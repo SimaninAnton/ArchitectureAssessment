@@ -1,0 +1,26 @@
+Zechtitus commented on 22 Aug 2017 •
+edited
+I just updated to 1.15 docker-compose and ran into issues with existing scripts. The issue seems to be when using extends and the service is in the same file (I never had to supply the file: param before - this is apparently a valid method of use according to the docs https://docs.docker.com/compose/extends/#understand-the-extends-configuration).
+Attempting to run I get the following error:
+ERROR: Cannot extend service 'app' in common.yml: Service not found
+I reverted back to 1.14 version and it was working as expected. If I also pull the service out to another file (made a app.yml with the app service in it) and extend using that file (and qualifying the file: app.yml) it works.
+example Files:
+<docker-compose.yml>
+version: "2"
+services:
+  automation:
+    extends:
+      file: common.yml
+      service: app
+<common.yml>
+version: "2"
+services:
+  app:
+    extra_hosts:
+      -<dns>:<ip>
+    ...
+
+  automation:
+    extends:
+      service: app
+    ...

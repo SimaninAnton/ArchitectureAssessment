@@ -1,0 +1,19 @@
+kyndtp commented on 1 Jul 2015
+I have just set up a new cloud server with Ubuntu 14.04.2, Docker 1.7.0 and Docker Compose 1.2.0.
+When I am executing, docker-compose up -d, I am getting the following errors (the image is coming from a private repo)
+Traceback (most recent call last):
+File "", line 3, in
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 208, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 214, in recreate_containers
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 199, in create_container
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 37, in stream_output
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 50, in print_output_event
+compose.progress_stream.StreamOutputError: Error: image togger/main-db:2.1.2 not found
+any help would be greatly appreciated
+5

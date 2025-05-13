@@ -1,0 +1,105 @@
+approxit commented on 25 Nov 2015
+Versions:
+# docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:12:04 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:12:04 UTC 2015
+ OS/Arch:      linux/amd64
+
+# docker-compose version
+docker-compose version: 1.5.1  
+docker-py version: 1.5.0  
+CPython version: 2.7.6  
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+
+# uname -a
+Linux docker-test 3.13.0-24-generic #47-Ubuntu SMP Fri May 2 23:30:00 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+Case:
+I have compose with my app and mysql running in container outside of that compose. Mysql container have restart=always too.
+# docker-compose.yml
+web:
+  image: some_project_image
+  restart: always
+  links:
+    - rabbitmq
+  external_links:
+    - mysql:db
+
+nginx:
+  image: nginx
+  restart: always
+  links:
+    - web
+
+worker:
+  image: some_project_image
+  restart: always
+  links:
+    - rabbitmq
+  external_links:
+    - mysql:db
+
+beat:
+  image: some_project_image
+  restart: always
+  links:
+    - rabbitmq
+  external_links:
+    - mysql:db
+
+rabbitmq:
+  image: rabbitmq
+  restart: always
+Expectations:
+Every container knows IP's of linked containers by docker magic. Using restart=always policy ensures that docker will take care of for eg. system reboot with auto starting things we want.
+Problem:
+Sometimes containers (worker and beat) fails to start. Reason: Unknown MySQL server host 'db' (it's unknown not can't connect. I'm aware of longer startup times, but that's not the case). It's a little 'play with it until it breaks' to catch it. My score is somewhere around 10%~20% of tries..
+Analysis:
+Everything looks like #2445 but much more different situation. Starting order / containers IP looks not so important: MySQL can receive lower or higher IP than problematic containers. Below we have example of situation when problem occurs:
+# docker inspect --format '{{ .NetworkSettings.IPAddress }} - {{ .Name }}' $(docker ps -q)
+172.17.0.6 - /project_beat_1
+172.17.0.4 - /project_nginx_1
+172.17.0.2 - /project_web_1
+172.17.0.5 - /project_worker_1
+172.17.0.7 - /project_rabbitmq_1
+172.17.0.3 - /mysql
+
+# docker cp project_beat_1:/etc/hosts hosts && cat hosts (because container is still restarting in background)
+172.17.0.6      9622f7ff5749
+127.0.0.1       localhost
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+        db f976697bfb2c mysql
+        project_rabbitmq_1 caea9351f869
+        rabbitmq caea9351f869 project_rabbitmq_1
+        rabbitmq_1 caea9351f869 project_rabbitmq_1
+Or another situation:
+# docker cp project_beat_1:/etc/hosts hosts && cat hosts (because container is still restarting in background)
+172.17.0.3      9622f7ff5749
+127.0.0.1       localhost
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+        db f976697bfb2c mysql
+172.17.0.7      project_rabbitmq_1 caea9351f869
+172.17.0.7      rabbitmq caea9351f869 project_rabbitmq_1
+172.17.0.7      rabbitmq_1 caea9351f869 project_rabbitmq_1
+Pay attention to empty IP column in 1st example and 2nd. Policy restart=always is restarting container with corrupted /etc/hosts and fails forever until we manually run docker restart project_beat_1 to refresh them. In /var/log/upstart/docker.log we can see nothing but 'everything is alright here'.
+Ideas?
+Upon /etc/hosts render time container IP have a unhandled gap when is not yet accessible, because everything is happening in parallel?

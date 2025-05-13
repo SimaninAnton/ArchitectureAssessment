@@ -1,0 +1,20 @@
+gfortytwo commented on 7 Dec 2017 •
+edited
+I'm super-grateful for the addition of custom network references to the "build" command in #4095 / #4997 , but is problematically inconsistent with other Compose network configs. The build.network value is interpreted as the fully-qualified name, whereas in all other compose network references a context-local, logical name is used and the "project name" is automatically pre-pended to get the actual network name. For example, let's assume we have the following docker-compose.yml in a project directory called sample:
+networks:
+  foo:
+
+services:
+  my-service:
+    build: ./my-service
+      network: foo
+    image: my-service
+    networks:
+      - foo
+The local name foo is specified as the network to create, to attach at run-time, and to attach at build-time. Compose takes the "project name" of "sample" (derived from the containing directory name, can be overridden via cmdline or envvar) and combines it with the specified network name (in the format [project-name]_[network-name]) to create a custom network called "sample_foo". Similarly, the my-service service attaches to that network by specifying the local name "foo" in services.my-service.networks list - Compose prefixes the project name just as it did when creating the network. However, if one similarly uses the local name "foo" for the build.network config it will fail with the message: "Service 'my-service' failed to build: No such network: foo". If one uses the fully-qualified name "sample_foo" for the build.network config then the build succeeds as expected.
+This inconsistency is confusing at best, and really just seems broken to me. The only justification I can think of would be to allow access to a non-compose-local network (such as the default "bridge" network), but that can already be accomplished by using the "pre-existing network" support, just as any compose-declared container/service would.
+As a side note, the new build.network and build.target attributes are mentioned in the v3.4 change log, but they are not documented at all on the v3 Compose File Reference page (as of 2017-12-06).
+Environment:
+  engine: Docker version 17.09.0-ce, build afdb6d4
+  compose:  docker-compose version 1.17.0, build ac53b73
+1

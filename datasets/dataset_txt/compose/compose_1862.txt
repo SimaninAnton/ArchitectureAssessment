@@ -1,0 +1,13 @@
+k2xl commented on 9 Dec 2016
+Trying to test out some systems with docker.
+system:
+    mac_address: 11:11:12:34:5a:bc
+I need the first few characters of the mac address to always be 1111 (another container searches the network and looks for devices starting with these values).
+I'd like to do docker-compose scale system=5, but when I do it, all 5 will have the same mac address. Is there some way to get the mac address dynamic? I don't care if I need to hack my way around it.
+One idea I had was to write a bash script that would run something like
+export MAC_ADDR=11:11:<random value>
+docker-compose scale=2
+export MAC_ADDR=11:11:<random value>
+docker-compose scale=3
+... etc
+But wasn't sure if there was some other mechanism?

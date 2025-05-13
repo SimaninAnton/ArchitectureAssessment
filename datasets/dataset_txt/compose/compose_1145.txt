@@ -1,0 +1,30 @@
+Contributor
+kinghuang commented on 16 Oct 2017 •
+edited
+Description
+Variables in Docker Compose files support fallback values for empty/unset variables. For example ${MY_VAR:-default} will resolve to default if MY_VAR isn't set.
+This doesn't work if the default value itself is a variable. For example, if DEFAULT_TAG=latest, and ${MY_VAR:-$DEFAULT_TAG} is specified in a Docker Compose file, the resulting value becomes $$DEFAULT_TAG instead of latest.
+Steps to reproduce the issue:
+Given a variable named DEFAULT_TAG that is set to latest and a variable named CUSTOM_TAG that is not set, attempt to use $DEFAULT_TAG as the default value to $CUSTOM_TAG in a Docker Compose file.
+Run docker-compose config to see the result.
+version: '3.3'
+services:
+  nginx:
+    image: nginx:${CUSTOM_TAG:-$DEFAULT_TAG}
+Describe the results you received:
+In the above example, the image resolves to nginx:$$DEFAULT_TAG.
+version: '3.3'
+services:
+  nginx:
+    image: nginx:$$DEFAULT_TAG
+Describe the results you expected:
+I expected nginx:latest.
+version: '3.3'
+services:
+  nginx:
+    image: nginx:latest
+Output of docker-compose version:
+docker-compose version 1.16.1, build 6d1ac21
+docker-py version: 2.5.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016

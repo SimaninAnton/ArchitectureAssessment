@@ -1,0 +1,45 @@
+dyerrington commented on 13 Mar 2017 •
+edited
+I've been at this for weeks, and I'm assuming I'm overlooking something completely simple. I've created a Dockerfile that creates a Python:2.7 image, copies a few files and directories over, and also an nginx and MySQL image as well. Originally, I constructed a Dockerfile and a docker-compose file, ported my apps to use this setup, then deployed onto an AWS EC2 instance, no problems. At some point, my Django startup script was showing up as command not found. So, I tried to just rebuild everything, and while everything built successfully, I just had the same error. So Naturally, I double checked my configuration in production with my local and found everything to be exactly 1:1 with regards to my Dockerfile and docker-compose config.
+The relevant part of my Dockerfile looks like this:
+FROM python:2.7
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+ADD environment.yml /code/
+ADD requirements.txt /code/
+ADD start_maxlabs.sh /code/
+RUN chmod +x /code/start_maxlabs.sh
+RUN apt-get update
+RUN apt-get install -y libmysqlclient-dev gunicorn 
+RUN apt-get install -y libcairo2-dev 
+RUN apt-get install -y libjpeg62-turbo-dev 
+RUN apt-get install -y libpango1.0-dev
+RUN apt-get install -y libgif-dev 
+RUN apt-get install -y build-essential 
+RUN apt-get install -y g++ 
+RUN apt-get install -y python-imaging
+RUN pip install -U pip
+RUN pip install mysql-python
+RUN pip install -r requirements.txt
+ADD . /code/
+ADD maxlabs /code/
+ADD webapp /code/
+My composer file looks like this:
+  web:
+    image: python:2.7
+    container_name: maxlabs
+    restart: always
+    build: .
+    depends_on:
+      - db
+    command: /bin/bash /code/start_maxlabs.sh
+After everything builds, and comes online, I see this message:
+maxlabs exited with code 127
+maxlabs | /bin/bash: /code/start_maxlabs.sh: No such file or directory
+maxlabs | /bin/bash: /code/start_maxlabs.sh: No such file or directory
+maxlabs | /bin/bash: /code/start_maxlabs.sh: No such file or directory
+maxlabs | /bin/bash: /code/start_maxlabs.sh: No such file or directory
+Indeed when I login to the container, there is no /code directory. Nothing has changed. My versioned copy in my repo of Dockerfile and docker-compose.yml hasn't changed.
+If there's a better place to ask this, please let me know.
+Thanks in advance!

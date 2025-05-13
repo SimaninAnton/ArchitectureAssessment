@@ -1,0 +1,14 @@
+Contributor
+bfirsh commented on 10 Mar 2015
+This is a meta-issue for keeping track of all the things we're doing around Windows support for Compose.
+Various things that are part of this:
+Building a binary on Windows. PyInstaller, the method we currently use to build binaries for Linux and OS X, also works with Windows. In theory this should just work. It would be useful to have build scripts etc to automate this.
+Run Compose inside a container. This may be be easier than building a native binary for Windows. #169 #1806
+Making Compose Windows compatible. I expect this will be mostly making sure paths work and getting the TTYs to work.
+Volume sharing. When running Compose on OS X, it expects /Users to be mounted in the right place so volumes work. I wonder if we need something added to Machine/boot2docker to make volumes work as expected on Windows. (The Compose quick start guide has a demonstration of how volumes are used to mount code inside a container.)
+Run CI tests on Windows. We don't all test on Windows, so we'd have to be careful about regressions. #886
+Steps:
+Investigate whether binaries will build cleanly on Windows #1051
+Investigate whether running Compose inside a container will be easier than running it natively on Windows
+Related issues:
+#598

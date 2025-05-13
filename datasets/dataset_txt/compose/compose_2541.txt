@@ -1,0 +1,11 @@
+gittycat commented on 4 Apr 2016
+Issue #3144 shows a sample where docker can't tell whether we're trying to mount a volume from a service or a container:
+    volumes_from:
+      - vault
+However, the error message states that vault is neither a services nor a container.
+ERROR: Service "app" mounts volumes from "vault", which is not the name of a service or container.
+which is incorrect. Vault is a container in this case and the following works.
+    volumes_from:
+      - container:vault
+This kind of incorrect error message makes me lose quite a lot of time. The error messages should instead say something like
+"ERROR: Service "app" mounts volumes from unknown "vault". "vault" is either not a service or container or it is a container in which case you need to use "container:vault" for the name.

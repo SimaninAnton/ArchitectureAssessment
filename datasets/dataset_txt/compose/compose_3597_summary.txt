@@ -1,0 +1,1 @@
+Make shell completion DRYer and less hacky

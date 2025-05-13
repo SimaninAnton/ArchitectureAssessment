@@ -1,0 +1,38 @@
+Contributor
+dtenenba commented on 5 Dec 2014
+When I invoke my fig.yml file with fig up, it hangs before the output of the command gets to the end, and therefore the web app in my container does not start running.
+If I instead invoke the yml file with fig run then the output does get to the end. I think this is because fig run allocates a TTY by default. I'm not sure why this makes a difference though. However, when I invoke with fig run, I have no ports, therefore I also can't access my web app via a browser.
+Here is how to reproduce:
+git clone https://github.com/dtenenba/bioc_docker.git
+cd bioc_docker/support.bioconductor.org
+git checkout so
+git clone https://github.com/Bioconductor/support.bioconductor.org.git \
+    biostar-central
+If you run fig up you'll see it hang after a line that looks like this:
+web_1 | *** Run the development server with biostar.settings.base and DATABASE_NAME=biostar
+However, it just hangs there and never goes past that to where the web app server is listening.
+If you run fig run --rm web you'll get more output after that line:
+*** Run the development server with biostar.settings.base and DATABASE_NAME=biostar
+Validating models...
+
+0 errors found
+December 04, 2014 - 18:58:52
+Django version 1.6.8, using settings 'biostar.settings.base'
+Starting development server at http://0379c8f27d90:8080/
+Quit the server with CONTROL-C.
+So now, the server is listening but I can't connect to it because fig run does not "do" ports.
+So it seems that there is no way to run my web app with fig. With plain old docker commands I can do it, if I run this in one window:
+docker run --rm --name db training/postgres
+And this in another window:
+docker run -ti --rm -e POSTGRES_PASSWORD=mypostgrespassword -e \
+    POSTGRES_USER=postgres -e POSTGRESQL_HOST=db -e POSTGRES_DATABASE_NAME=biostar \
+    --link db:db -v `pwd`/biostar-central:/biostar-central  -P \
+    dtenenba/support.bioconductor.org:so /conf/start.sh
+Then the server comes up AND I can connect to it.
+So what should I do if I want to use fig?
+I'd like to figure out one (or all) of the following:
+Why does the container hang when run with fig up?
+Is there a way to get a TTY with fig up?
+Or ports with fig run?
+Does this have something to do with buffering/flushing output?
+Thanks.

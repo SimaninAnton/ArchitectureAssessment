@@ -1,0 +1,46 @@
+jpetazzo commented on 8 May 2017 •
+edited
+Note: this might be a 1.13 regression, since I don't remember seeing it with 1.12.
+What I do:
+I have a simple Compose file with two NGINX servers.
+cat >docker-compose.yml <<EOF
+www1:
+  image: nginx
+www2:
+  image: nginx
+EOF
+I start them.
+docker-compose up -d
+What I expect to see:
+The radiant beauty of the first-class, Python-powered, terminal-aware, ANSI-enlightened CLI which makes Compose a perpetual joy and delight to use and brings happiness to my darkest hours, i.e.:
+$ docker-compose up -d
+Creating tmp_www1_1 ... done
+Creating tmp_www2_1 ... done
+Starting tmp_www1_1 ... done
+Starting tmp_www2_1 ... done
+What I see instead:
+Stuff gets slightly glitchy, i.e.:
+$ docker-compose up -d
+Creating tmp_www2_1 ... 
+Creating tmp_www1_1 ... 
+Creating tmp_www2_1
+Creating tmp_www1_1 ... done
+Additional notes:
+While up is playfully humoring me, down won't let me, ahem, down, if I may intend the pun:
+$ docker-compose down
+Stopping tmp_www1_1 ... done
+Stopping tmp_www2_1 ... done
+Removing tmp_www1_1 ... done
+Removing tmp_www2_1 ... done
+It appears that scale took sides with up:
+$ docker-compose scale www1=2
+Starting tmp_www1_1 ... done
+Creating tmp_www1_2 ... 
+Creating tmp_www1_2 ... done
+Is this an important issue?
+I don't know! What is important? Is the breeze that blows through the bubbles of dew on morning leaves of blue mint important? In the grand scheme of things, it's not a big deal, but I know that my Compose fellows are perfectionists, and that they shan't have any of this.
+In all seriousness, though: I'm so used to Compose embodying the eternal jewel of software perfection, that when I saw this, I thought my containers had been lost at sea. So I think it's fix-worthy.
+♥,
+7
+3
+1

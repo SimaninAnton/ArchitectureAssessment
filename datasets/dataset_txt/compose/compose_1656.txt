@@ -1,0 +1,2 @@
+philtay commented on 22 Feb 2017
+docker-compose up and friends automatically read the docker-compose.override.yml file if present. Sometimes it would come handy to disable this behavior. Something like docker-compose --ignore-override up.

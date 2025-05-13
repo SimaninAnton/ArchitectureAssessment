@@ -1,0 +1,3 @@
+Contributor
+ankon commented on 16 Nov 2016
+For debugging it would be helpful to be able to directly invoke docker run ..., providing the same arguments that docker-compose would use.

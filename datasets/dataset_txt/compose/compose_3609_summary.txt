@@ -1,0 +1,1 @@
+Stop containers that have been removed from docker-compose.yml

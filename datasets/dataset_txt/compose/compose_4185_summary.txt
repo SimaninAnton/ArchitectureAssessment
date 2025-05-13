@@ -1,0 +1,1 @@
+net: "container:[name or id]" should support a named service and recognize the dependency

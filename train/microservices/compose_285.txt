@@ -1,0 +1,38 @@
+gforghetti commented on 14 Feb 2019
+Description of the issue
+Getting this error below running docker-compose version 1.24.0-rc1, build 0f3d4dda in a Docker EE UCP 2.1 cluster
+$ docker-compose up -d
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 39, in project_from_options
+  File "compose/cli/docker_client.py", line 84, in tls_config_from_options
+  File "site-packages/docker/tls.py", line 81, in __init__
+docker.errors.TLSParameterError: Path to a certificate and key files must be provided through the client_config param. TLS configurations should map the Docker CLI client configurations. See https://docs.docker.com/engine/articles/https/ for API details.
+[6] Failed to execute script docker-compose
+$ uname -a
+Linux manager.example.com 4.15.0-29-generic #31-Ubuntu SMP Tue Jul 17 15:39:52 UTC 2018 x86_64 x86_64 x86_64 GNU/Li
+$ env | grep DOCKER
+DOCKER_CERT_PATH=/home/gforghetti
+DOCKER_USER=gforghetti
+DOCKER_PASSWORD=blah-blah-blah
+DOCKER_TLS_VERIFY=1
+DOCKER_HOST=tcp://172.16.129.75:443
+$ docker node ls
+ID                            HOSTNAME              STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+t043ljdp94w09durwbn3jmbog *   manager.example.com   Ready               Active              Leader              18.09.2
+tdkt2l4py31alev6jlj4kvute     worker1.example.com   Ready               Active                                  18.09.2
+$ docker version --format '{{if .Server.Platform.Name}}{{println .Server.Platform.Name}}{{end}}Client: {{.Client.Version}}{{range .Server.Components}}{{println}}{{.Name}}: {{.Version}}{{end}}'
+Docker Enterprise 2.1
+Client: 18.09.2
+Engine: 18.09.2
+Universal Control Plane: 3.1.3
+Kubernetes: 1.11+
+Calico: v3.5.0
+docker-compose 1.23.2 works fine.
+$ docker-compose --version
+docker-compose version 1.23.2, build 1110ad01
+$ docker-compose up -d
+gforghetti_postgres-wildbook_1 is up-to-date
+gforghetti_tomcat-wildbook_1 is up-to-date

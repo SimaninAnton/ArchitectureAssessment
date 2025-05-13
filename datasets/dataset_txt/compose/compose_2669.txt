@@ -1,0 +1,71 @@
+ChristianKniep commented on 4 Mar 2016
+I use the latest homebrew version of docker and docker-compose.
+➜  temp  docker version
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.6
+ Git commit:   c3959b1
+ Built:        Tue Feb 23 21:12:32 UTC 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 22:37:33 2016
+ OS/Arch:      linux/amd64
+➜  temp  compose version
+docker-compose version 1.6.2, build unknown
+docker-py version: 1.7.2
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 0.9.8zg 14 July 2015
+➜  temp
+When running a container the --dns option is handled correctly.
+$ docker run -d --hostname consul \
+                  --dns=127.0.0.1 -p 8500 -e DC_NAME=dc1 \
+                  -e CONSUL_BOOTSTRAP=true qnib/alpn-consul
+$ docker exec -ti 86e7f95119c5 cat /etc/resolv.conf
+search ad.gaikai.biz
+nameserver 127.0.0.1
+$
+When starting the exact container using docker-compose v2, I get the embedded DNS server. :(
+➜  temp  cat docker-compose.yml
+version: '2'
+services:
+  consul:
+    image: qnib/alpn-consul
+    hostname: consul
+    dns:
+     - 127.0.0.1
+    ports:
+     - 8500
+    environment:
+     - DC_NAME=dc1
+     - CONSUL_BOOTSTRAP=true
+➜  temp  compose up -d
+Creating temp_consul_1
+➜  temp  docker exec -ti temp_consul_1 cat /etc/resolv.conf
+search ad.gaikai.biz
+nameserver 127.0.0.11
+options ndots:0
+➜  temp
+docker-compose v1, consideres the correct DNS though...
+➜  temp  compose up -d
+Creating temp_consul_1
+➜  temp  docker exec -ti temp_consul_1 cat /etc/resolv.conf
+search ad.gaikai.biz
+nameserver 127.0.0.1
+➜  temp  cat docker-compose.yml
+consul:
+    image: qnib/alpn-consul
+    hostname: consul
+    dns:
+     - 127.0.0.1
+    ports:
+     - 8500
+    environment:
+     - DC_NAME=dc1
+     - CONSUL_BOOTSTRAP=true
+➜  temp

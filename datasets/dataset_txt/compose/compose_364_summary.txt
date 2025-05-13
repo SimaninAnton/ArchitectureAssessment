@@ -1,0 +1,1 @@
+docker-compose should provide command to generate a minimal docker-compose.yaml

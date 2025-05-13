@@ -1,0 +1,49 @@
+tomasaschan commented on 11 May 2017 •
+edited
+Expected behavior
+When I run e.g. docker-compose up hello (see docker-compose.yml below) and the Docker daemon is not running, I expect an error message to that effect (much like docker ps gives me).
+Actual behavior
+Instead, I get a Python stack trace, ultimately complaining that "The system cannot find the file specified."
+PS C:\Work\SBAB\sbab-klirra-2017-01-19\backend> docker-compose up -d server
+Traceback (most recent call last):
+File "docker-compose", line 3, in
+File "compose\cli\main.py", line 64, in main
+File "compose\cli\main.py", line 116, in perform_command
+File "compose\cli\main.py", line 876, in up
+File "compose\project.py", line 385, in up
+File "compose\project.py", line 590, in warn_for_swarm_mode
+File "site-packages\docker\api\daemon.py", line 73, in info
+File "site-packages\docker\utils\decorators.py", line 47, in inner
+File "site-packages\docker\api\client.py", line 183, in _get
+File "site-packages\requests\sessions.py", line 488, in get
+File "site-packages\requests\sessions.py", line 475, in request
+File "site-packages\requests\sessions.py", line 596, in send
+File "site-packages\requests\adapters.py", line 423, in send
+File "site-packages\requests\packages\urllib3\connectionpool.py", line 595, in urlopen
+File "site-packages\requests\packages\urllib3\connectionpool.py", line 363, in _make_request
+File "httplib.py", line 1042, in request
+File "httplib.py", line 1082, in _send_request
+File "httplib.py", line 1038, in endheaders
+File "httplib.py", line 882, in _send_output
+File "httplib.py", line 844, in send
+File "site-packages\docker\transport\npipeconn.py", line 31, in connect
+File "site-packages\docker\transport\npipesocket.py", line 22, in wrapped
+File "site-packages\docker\transport\npipesocket.py", line 50, in connect
+pywintypes.error: (2, 'WaitNamedPipe', 'The system cannot find the file specified.')
+Failed to execute script docker-compose
+Steps to reproduce
+With the following docker-compose.yml as the only file in the directory, and the Docker daemon stopped, run docker-compose up hello:
+version: '3'
+services:
+  hello:
+    image: hello-world
+Host distribution and version
+PS C:\hello> [System.Environment]::OSVersion.Version
+Major  Minor  Build  Revision
+-----  -----  -----  --------
+10     0      15063  0
+PS C:\hello> docker --version
+Docker version 17.03.1-ce, build c6d412e
+PS C:\hello> docker-compose --version
+docker-compose version 1.11.2, build f963d76f
+2

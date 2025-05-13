@@ -1,0 +1,1 @@
+dockerignore file to ignore everything except two folders and their contents is not working

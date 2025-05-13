@@ -1,0 +1,2 @@
+pchico83 commented on 30 Jul 2014
+The idea would be to define a new service key that indicates the host where the container is to be deployed. This would allow production deployments.

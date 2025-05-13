@@ -1,0 +1,17 @@
+jareware commented on 30 Jun 2015
+Given this docker-compose.yml:
+test:
+  image: node:0.10.35
+The following works as expected:
+$ docker run --entrypoint bash node:0.10.35 -c 'echo HELLO'
+HELLO
+But the following doesn't:
+$ docker-compose run --entrypoint bash test -c 'echo HELLO'
+Cannot start container d160893c56b9f3c0f60e7ace1f0a004095eecb5b40a0fee14a287e265939f138: [8] System error: exec: "\"bash\"": executable file not found in $PATH
+My versions are:
+$ docker -v
+Docker version 1.7.0, build 0baf609
+$ docker-compose -v
+docker-compose version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

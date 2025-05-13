@@ -1,0 +1,1 @@
+compose file for having a container with two static IP addresses - one of these public address

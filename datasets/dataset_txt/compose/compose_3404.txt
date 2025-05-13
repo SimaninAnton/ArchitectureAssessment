@@ -1,0 +1,9 @@
+McAlister commented on 7 Aug 2015
+I was creating a test environment for a tool with many ... MANY ... external dependencies. Among its typical ecosystem is a Rabbit MQ ring with three nodes and a pair of Apache Solr servers along with memcached, and some services we wrote ourselves.
+When I 'docker_compose up' my environment has over 1k entries in it from linking containers. The rings are particularly chatty with rabbit3 along haveing well over 100 entries. This is causing my kernel to be unable to execute binaries. Per documentation the shell environment, some security information, and argv/argc are all put into the same buffer when execing a program and it has limited size.
+Validation:
+If I open a sub-shell in the dock and empty the ENV, the binaries run just fine.
+If I copy my environment into a file, strip out everything but what compose generated, and load the same variables on a physical centOS box the same failures start occuring. So it isn't a poison environmental pill or special value interracting with our code.
+Since I'm using /etc/hosts instead of these variables anyway I don't need them.
+Can I get a flag to just prevent them from being generated in the first place?
+Thank You

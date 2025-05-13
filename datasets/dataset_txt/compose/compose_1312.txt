@@ -1,0 +1,11 @@
+akalipetis commented on 18 Jul 2017
+When updating a Docker service, the following option exists:
+      --update-order string                Update order ("start-first"|"stop-first")
+This can be used to create rolling update deployments, even if a service has just one replica.
+I propose adding the following keys to the Docker Compose spec, which will allow for these updates to work with docker deploy -c.
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+I would be happy to contribute the needed code to docker/docker-ce if that's something we'd like to have in the spec.

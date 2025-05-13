@@ -1,0 +1,4 @@
+jtwebman commented on 28 Nov 2018
+Compose pull parallel limited to only 5 at a time
+Version 1.23.0+
+It use to be much faster but it looks like when you guys added that compose build to have a --parallel flag you also limited pull to 5 at a time as well. Can we remove that limit on pull to be what it was before or can we add a new flag to set how many can run in parallel?

@@ -1,0 +1,1 @@
+docker-compose up leads to error message (non-zero code: 127)

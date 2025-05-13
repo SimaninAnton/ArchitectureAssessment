@@ -1,0 +1,1 @@
+Allow removing variables in child config

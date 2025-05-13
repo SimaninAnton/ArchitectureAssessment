@@ -1,0 +1,11 @@
+wcchh commented on 14 Nov 2014
+No work for me.
+A simple config:
+gwm:
+image: poseidon/all:latest
+ports:
+"5000:5000"
+$ fig up
+Service "%s" doesn't have any configuration options. All top level keys in your fig.yml must map to a dictionary of configuration options.
+But it works if I take off "ports: - ..."
+Does someone could help me?

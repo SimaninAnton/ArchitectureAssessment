@@ -1,0 +1,18 @@
+Contributor
+aanand commented on 21 Jan 2015
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 28, in dispatch
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 60, in perform_command
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 445, in up
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.project", line 183, in up
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 262, in recreate_containers
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 293, in recreate_container
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 222, in create_container
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 448, in _get_container_create_options
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 628, in merge_environment
+  File "/Users/aanand/work/docker/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 660, in env_vars_from_file
+IOError: [Errno 2] No such file or directory: 'web.env'

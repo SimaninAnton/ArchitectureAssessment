@@ -1,0 +1,21 @@
+n1ru4l commented on 1 Dec 2017 •
+edited
+When you set the port of a published port via an environment variable it is interpreted as a string.
+Expected: The variable is interpreted as an integer.
+# docker-compose build
+ERROR: The Compose file './docker-stack.yml' is invalid because:
+services.nginx.ports.published contains "8000", which is an invalid type, it should be an integer
+# .env
+PUBLIC_PORT=8080
+DOCKER_REGISTRY=foobars
+# docker-compose.yml
+version: "3.2"
+
+services:
+  nginx:
+    image: '${DOCKER_REGISTRY}/nginx-proxy'
+    ports:
+      - target: 80
+        published: ${PUBLIC_PORT}
+        protocol: tcp
+        mode: host

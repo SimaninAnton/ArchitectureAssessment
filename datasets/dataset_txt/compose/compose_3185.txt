@@ -1,0 +1,10 @@
+dracan commented on 23 Oct 2015
+Docker Compose seems to fail getting environment variables in Windows. I'm testing on Windows 10 (not tried on any other versions of Windows). Here's a simple YML file:
+test:
+  image: centos:centos6
+  environment:
+    MY_ENVIRONMENT_VARIABLE:
+Regardless of whether MY_ENVIRONMENT_VARIABLE has been set, I get the following error:
+Validation failed, reason(s):
+Service 'test' configuration key 'environment' 'MY_ENVIRONMENT_VARIABLE' contains None, which is an invalid type, it should be a stringnumber or a boolean
+This is with Docker Compose 1.5.0rc1.

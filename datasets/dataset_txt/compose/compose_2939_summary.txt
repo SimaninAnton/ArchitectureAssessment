@@ -1,0 +1,1 @@
+Upgrade `events` to use the new API fields

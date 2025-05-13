@@ -1,0 +1,17 @@
+PlayMa256 commented on 14 Mar 2017 •
+edited
+I'm running docker-compose -f /path/to/docker-compose.yml up my-service with python using Popen, it starts up the containers and all the linked services correctly.
+After that, a few moments later, the following message just pops on my terminal.
+File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 64, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 889, in up
+    log_printer.run()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/log_printer.py", line 99, in run
+    self.output.flush()
+IOError: [Errno 32] Broken pipe
+I followed #1509 but on my system i dont have any ndg-httpsclient.
+I saw a similar issue opened #3880 which is exactly the same error, but with no answers.

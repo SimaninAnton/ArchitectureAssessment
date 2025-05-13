@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 21 Apr 2016
+https://docs.docker.com/compose/gettingstarted/
+facepalm

@@ -1,0 +1,7 @@
+Contributor
+dnephin commented on 17 Jan 2016
+Original implementation is #686
+Now that networks don't require you to define service dependencies we could provide a new field to define an order, allowing applications to start and stop containers in a specific order.
+The advantage to a new field (and not re-using an existing one), is that it allows applications that don't need an order to start and stop everything in parallel. Order would only be applied explicitly if the user wants it.
+This does not address healthchecking and the problems described in #374, but it's a prerequisite of any solution to that problem. It does solve issues like #2619 (and maybe others?).
+Current proposal is to name the field depends_on

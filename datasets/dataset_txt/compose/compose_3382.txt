@@ -1,0 +1,29 @@
+mahnunchik commented on 13 Aug 2015
+/etc/default/docker
+DOCKER_OPTS='
+-H tcp://0.0.0.0:2376
+-H unix:///var/run/docker.sock
+--storage-driver aufs
+--tlsverify
+--tlscacert /etc/docker/ca.pem
+--tlscert /etc/docker/server.pem
+--tlskey /etc/docker/server-key.pem
+--label provider=generic
+--log-driver=syslog
+'
+docker-compose.yml
+web:
+  build: ./
+  ports:
+    - "80:80"
+  links:
+    - db:DB
+db:
+  image: mariadb:latest
+Following command starts application with default json-file log-driver:
+$ docker-compose up -d
+Despite the global specified syslog log-driver.
+$ docker -v
+Docker version 1.8.1, build d12ea79
+$ docker-compose -v
+docker-compose version: 1.4.0

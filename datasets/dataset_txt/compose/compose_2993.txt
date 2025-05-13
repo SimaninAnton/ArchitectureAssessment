@@ -1,0 +1,44 @@
+Contributor
+metal3d commented on 11 Dec 2015
+Hi,
+I'm running a project with docker-compose. Sometimes, I need to launch commands inside the container to setup some behaviour (eg. To launch "bower install XYZ"). So that's my process:
+$ docker-compose ps
+           Name                         Command               State           Ports          
+--------------------------------------------------------------------------------------------
+dcpangularmodules_bundle_1   /entrypoint.sh make _gulpserve   Up      0.0.0.0:3001->3000/tcp 
+And:
+$ docker ps -a --filter name="dcpangularmodules" --format "{{ .Names }}"
+dcpangularmodules_bundle_1
+So it's ok for me. Now I launch "run" command:
+$ docker-compose run bundle bash
+And in another terminal
+$ docker ps -a --filter name="dcpangularmodules" --format "{{ .Names }}"
+dcpangularmodules_bundle_run_1
+dcpangularmodules_bundle_1
+
+$ docker-compose ps
+             Name                           Command               State           Ports          
+------------------------------------------------------------------------------------------------
+dcpangularmodules_bundle_1       /entrypoint.sh make _gulpserve   Up      0.0.0.0:3001->3000/tcp 
+dcpangularmodules_bundle_run_1   /entrypoint.sh bash              Up   
+That's ok.
+Now, I close the container I created using "docker-compose run ..." by typing "exit", and I check:
+$ docker-compose ps 
+           Name                         Command               State           Ports          
+--------------------------------------------------------------------------------------------
+dcpangularmodules_bundle_1   /entrypoint.sh make _gulpserve   Up      0.0.0.0:3001->3000/tcp 
+
+$ docker ps -a --filter name="dcpangularmodules" --format "{{ .Names }}" 
+dcpangularmodules_bundle_run_1
+dcpangularmodules_bundle_1
+I close the entire docker-compose, and try to cleanup:
+$ docker-compose rm 
+Going to remove dcpangularmodules_bundle_1
+Are you sure? [yN] y
+
+$ docker ps -a --filter name="dcpangularmodules" --format "{{ .Names }}"
+dcpangularmodules_bundle_run_1
+As you can see, the "runned" container is still here, and the next time I will use "run" command, a new container will be created. This may be a llimitation and maybe there are a lot of reason to make docker-compose working like that but I think this is problematic.
+It only want to remove the containers that are launched with "up", not "run". So, after a while, I've got a huge list of stopped containers suffixed by "_run_X"...
+Is there a way to avoid this ? At this time I use docker rm $(docker ps -a -q --filter name="dcpangularmodules") to cleanup... But because I'm not alone on the project and not the entire team is aware of the problem... their host are filled by unused containers.
+BTW: I Love docker and docker-compose :)

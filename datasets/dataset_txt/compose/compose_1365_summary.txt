@@ -1,0 +1,1 @@
+error during container creation does not stop or remove already created containers

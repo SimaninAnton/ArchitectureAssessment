@@ -1,0 +1,49 @@
+RobWatersIEA commented on 22 Aug 2018
+Description of the issue
+making three identical containers of the same service
+encounter the error message
+"ERROR: Arguments to scale should be in the form service=num"
+containers created successfully
+cannot prevent error, though it does not stop container generation
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.12.0, build b31ff33
+docker-py version: 2.2.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+Output of "docker version"
+Client:
+Version: 17.05.0-ce
+API version: 1.29
+Go version: go1.7.5
+Git commit: 89658be
+Built: Thu May 4 22:06:25 2017
+OS/Arch: linux/amd64
+Server:
+Version: 17.05.0-ce
+API version: 1.29 (minimum version 1.12)
+Go version: go1.7.5
+Git commit: 89658be
+Built: Thu May 4 22:06:25 2017
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+networks: {}
+services:
+bulkera:
+build:
+context: /home/rob/bulk_era5
+privileged: true
+stdin_open: true
+tty: true
+volumes:
+- /home/rob/.ecmwfapirc:/root/.ecmwfapirc:rw
+- /home/rob/bulk_era5:/era5:rw
+- /mnt/rds:/mnt/rds:rw
+version: '3.2'
+volumes: {}
+Steps to reproduce the issue
+Run: docker-compose scale bulkera=3 -d
+Observed result
+Expected result
+above without the error message

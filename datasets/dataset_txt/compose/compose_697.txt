@@ -1,0 +1,34 @@
+arshanvit commented on 3 May 2018 •
+edited
+I am running mode-red module of nodejs with docker-compose in following way:
+version: "3"
+services:
+    node-red:
+        build: node-red/.
+        container_name: mynodered
+        network_mode: "host"
+        volumes:
+         - $PWD/data/node:/data
+        ports:
+         - "1880:1880"
+I have placed the following docker file in folder node-red:
+FROM nodered/node-red-docker:v8
+RUN npm i -S basic-auth bcryptjs body-parser cheerio clone cookie cookie-parser cors cron express express-session follow-redirects fs-extra fs.notify hash-sum i18next is-utf8 js-yaml json-stringify-safe jsonata media-typer memorystore mqtt multer mustache node-red-contrib-cloudera node-red-contrib-confluent node-red-contrib-ksql node-red-contrib-python-function node-red-contrib-rdkafka node-red-contrib-s3 node-red-node-email node-red-node-feedparser node-red-node-rbe node-red-node-twitter nopt oauth2orize on-headers passport passport-http-bearer passport-oauth2-client-password raw-body semver sentiment uglify-js when ws xml2js && npm i -D chromedriver grunt grunt-chmod grunt-cli grunt-concurrent grunt-contrib-clean grunt-contrib-compress grunt-contrib-concat grunt-contrib-copy grunt-contrib-jshint grunt-contrib-uglify grunt-contrib-watch grunt-jsonlint grunt-mocha-istanbul grunt-nodemon grunt-sass grunt-simple-mocha grunt-webdriver istanbul mocha should sinon supertest wdio-chromedriver-service wdio-mocha-framework wdio-spec-reporter webdriverio && npm i -O bcrypt
+When i am building image explicitly from this docker file in following way,its working fine
+docker build --network host -t dvnode .
+But when i am using docker-compose,it gives following error:
+docker-compose up
+Building node-red
+Step 1/2 : FROM nodered/node-red-docker:v8
+ ---> 8d6fdff59c2c
+Step 2/2 : RUN npm i -S basic-auth bcryptjs body-parser cheerio clone cookie cookie-parser cors cron express express-session follow-redirects fs-extra fs.notify hash-sum i18next is-utf8 js-yaml json-stringify-safe jsonata media-typer memorystore mqtt multer mustache node-red-contrib-cloudera node-red-contrib-confluent node-red-contrib-ksql node-red-contrib-python-function node-red-contrib-rdkafka node-red-contrib-s3 node-red-node-email node-red-node-feedparser node-red-node-rbe node-red-node-twitter nopt oauth2orize on-headers passport passport-http-bearer passport-oauth2-client-password raw-body semver sentiment uglify-js when ws xml2js && npm i -D chromedriver grunt grunt-chmod grunt-cli grunt-concurrent grunt-contrib-clean grunt-contrib-compress grunt-contrib-concat grunt-contrib-copy grunt-contrib-jshint grunt-contrib-uglify grunt-contrib-watch grunt-jsonlint grunt-mocha-istanbul grunt-nodemon grunt-sass grunt-simple-mocha grunt-webdriver istanbul mocha should sinon supertest wdio-chromedriver-service wdio-mocha-framework wdio-spec-reporter webdriverio && npm i -O bcrypt
+ ---> Running in a69e76805cc1
+npm WARN registry Unexpected warning for https://registry.npmjs.org/: Miscellaneous Warning EAI_AGAIN: request to https://registry.npmjs.org/basic-auth failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org:443
+npm WARN registry Using stale package data from https://registry.npmjs.org/ due to a request error during revalidation.
+npm ERR! code EAI_AGAIN
+npm ERR! errno EAI_AGAIN
+npm ERR! request to https://registry.npmjs.org/node-red-contrib-cloudera failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org:443
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /usr/src/node-red/.npm/_logs/2018-05-03T08_10_08_489Z-debug.log
+ERROR: Service 'node-red' failed to build: The command '/bin/sh -c npm i -S basic-auth bcryptjs body-parser cheerio clone cookie cookie-parser cors cron express express-session follow-redirects fs-extra fs.notify hash-sum i18next is-utf8 js-yaml json-stringify-safe jsonata media-typer memorystore mqtt multer mustache node-red-contrib-cloudera node-red-contrib-confluent node-red-contrib-ksql node-red-contrib-python-function node-red-contrib-rdkafka node-red-contrib-s3 node-red-node-email node-red-node-feedparser node-red-node-rbe node-red-node-twitter nopt oauth2orize on-headers passport passport-http-bearer passport-oauth2-client-password raw-body semver sentiment uglify-js when ws xml2js && npm i -D chromedriver grunt grunt-chmod grunt-cli grunt-concurrent grunt-contrib-clean grunt-contrib-compress grunt-contrib-concat grunt-contrib-copy grunt-contrib-jshint grunt-contrib-uglify grunt-contrib-watch grunt-jsonlint grunt-mocha-istanbul grunt-nodemon grunt-sass grunt-simple-mocha grunt-webdriver istanbul mocha should sinon supertest wdio-chromedriver-service wdio-mocha-framework wdio-spec-reporter webdriverio && npm i -O bcrypt' returned a non-zero code: 1

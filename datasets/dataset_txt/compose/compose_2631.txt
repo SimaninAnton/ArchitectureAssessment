@@ -1,0 +1,52 @@
+franz-josef-kaiser commented on 14 Mar 2016 •
+edited
+When building images and starting containers using Compose, the result is a different container. This results in the following error for an Nginx v1.9.4 container:
+$ docker-compose run --rm nginx nginx -s reload
+nginx: [error] open() "/var/run/nginx.pid" failed (2: No such file or directory)
+Manually using /etc/init.d/nginx to fetch the status confirms that the process is not running:
+$ docker-compose run --rm nginx /etc/init.d/nginx status
+[FAIL] nginx is not running ... failed!
+The Compose and Docker versions and the different output for each. As the container was built using Compose and not Docker (cleaned all containers and images and re run it clean), I am unsure where to start fixing that issue.
+$ docker -v; \
+Docker version 1.10.2, build c3959b1
+
+$ docker-compose -v; \
+docker-compose version 1.6.0, build d99cad6
+
+$ docker exec -it nginx ls -la /run; \
+total 16
+drwxr-xr-x  3 root root 4096 Mar 14 17:24 .
+drwxr-xr-x 41 root root 4096 Mar 14 17:24 ..
+drwxrwxrwt  2 root root 4096 Mar  1 17:24 lock
+-rw-r--r--  1 root root    2 Mar 14 17:24 nginx.pid
+-rw-rw-r--  1 root utmp    0 Mar  1 17:24 utmp
+
+$ docker-compose run --rm nginx ls -la /run
+total 12
+drwxr-xr-x  3 root root 4096 Mar  1 17:24 .
+drwxr-xr-x 39 root root 4096 Mar 14 17:40 ..
+drwxrwxrwt  2 root root 4096 Mar  1 17:24 lock
+-rw-rw-r--  1 root utmp    0 Mar  1 17:24 utmp
+The shortened docker-compose.yml file:
+version: '2'
+services:
+    nginx:
+        container_name: nginx
+        build:
+            context: .
+        volumes:
+            - ./sites-available/:/etc/nginx/sites-available/
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./global:/etc/nginx/global/
+        ports:
+            - "80:80" 
+        restart: on-failure:3
+        volumes_from:
+            - app
+            - logs
+        depends_on:
+            - php
+            - mongodb
+        networks:
+            - front
+Please advise in case I can add additional information to debug this one further.

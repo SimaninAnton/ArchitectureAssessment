@@ -1,0 +1,9 @@
+iMerica commented on 28 Mar 2015
+Hey guys!
+I think the current default behavior works fine for small applications that might have one runtime and one database, but as these environments continue to grow (because docker makes it easy to grow) both A) aggregating the stdout of all containers and B) recreating all on fig up (or docker compose up) seems almost never useful.
+For example, my environment has more than 15-30 redis containers, rabbit MQ, lua, node, nginx, elastic search, postgres, dynamo etc. In most cases, the commands I need are:
+(fig or docker compose)
+fig up -d to bootstrap the entire environment.
+fig stop <container> to make some changes and and see the difference.
+fig up -d --no-recreate to start the container and set up port forwarding to the host OS/boot2Docker.
+It could also be that I'm in the minority for the number of running containers my local dev contains . If that's the case I understand the current defaults.

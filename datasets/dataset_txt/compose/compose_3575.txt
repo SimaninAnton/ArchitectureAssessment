@@ -1,0 +1,9 @@
+Contributor
+aanand commented on 11 Jun 2015
+An issue brought up both by @fxdgear:
+Right now we use Pass (http://www.passwordstore.org) to store all our secrets. Because of this we’ve had to write our own deployment utility which can read yaml files which have passwords stored in them.
+It would be really cool if we could figure out a way to extract these secrets from the env_file when running docker-compose up.
+I know that Pass isn’t the only password manager in the world… so it’s an interesting problem. But if we could have support in compose for extracting secrets at runtime, that would make deploying docker applications using compose (in the real world) more feasible.
+@dhiltgen also brought up the same issue, and suggested adding the ability to do Bash-style shell command substitution like MYPASSWORD=$(pass show dev/.../password). But executing commands on the host machine is extremely unportable - this is also why we don't want to add anything like pre/post hooks for the container lifecycle.
+So the problem here is getting secrets into containers without coupling Compose to anything host-specific, let alone a specific password storage tool.
+So far, the only step towards making this easier is #1488, which will at least remove some of the hassle from generating a YAML configuration to pass to Compose.

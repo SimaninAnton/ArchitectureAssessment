@@ -1,0 +1,14 @@
+Contributor
+bfirsh commented on 29 Jul 2015
+It should be possible to define a single file that can abstractly describe the high-level structure of application. This file should be able to be used across development, test and production with no modification, but may need additional configuration files or environment variables to describe the variances between environments.
+Related things:
+extends in Compose files. This was a good start, but is still pretty clunky for achieving the above.
+Interpolate environment variables in Compose files
+Research use cases and what users want to do
+Extend an entire Compose file
+Recommend patterns for achieving what users want to do (see also #1786)
+(This list is not a complete list of what it will take to achieve this goal, and may change as we research what users want.)
+Research:
+Here is a recommended setup for how to run a Django app in both dev and production with Compose, using two different Compose files: pydanny/cookiecutter-django#284
+User feedback on extends and where it falls short for this use case: #1380
+Example production Compose files

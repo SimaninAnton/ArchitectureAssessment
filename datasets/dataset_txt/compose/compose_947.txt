@@ -1,0 +1,38 @@
+fogine commented on 10 Jan 2018
+When the .env file has the following setup:
+POSTGRES_DB=test
+POSTGRES_USER=test
+with the following docker-compose.yml section:
+  service_name:
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-${POSTGRES_USER}}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+When the container is run the POSTGRES_DB is incorrectly evaluated to value "test}" .
+Expected correct POSTGRES_DB value is "test".
+When either .env file is not present or the docker-compose.yml file doesn't use nested variable interpolation, the POSTGRES_DB is correctly evaluated to "test".
+> docker-compose version
+docker-compose version 1.17.1, build unknown                                                                                                                                                                                                  
+docker-py version: 2.6.1
+CPython version: 3.6.3
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+
+> uname -a
+Linux username 4.14.6-1-ARCH #1 SMP PREEMPT Thu Dec 14 21:26:16 UTC 2017 x86_64 GNU/Linux
+
+> docker  version
+Client:                                                                                                                                                                                                                                       
+ Version:      17.11.0-ce
+ API version:  1.34
+ Go version:   go1.9.2
+ Git commit:   1caf76ce6b
+ Built:        Sun Dec 10 10:15:57 2017                                                                                                                                                                                                       
+ OS/Arch:      linux/amd64                                                                                                                                                                                                                    
+
+Server:
+ Version:      17.11.0-ce
+ API version:  1.34 (minimum version 1.12)
+ Go version:   go1.9.2
+ Git commit:   1caf76ce6b
+ Built:        Sun Dec 10 10:16:13 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

@@ -1,0 +1,107 @@
+soletan commented on 4 Feb 2019 •
+edited
+Description of the issue
+In a project we've discovered that a given service description doesn't result in properly built service container which is part of a composition. Analysis resulted in some environment variable not read from a file which is required to exist though to get the docker-compose running at all (so the file is detected). The container reflects environment variable has been unset during build.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:31 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:02:44 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  mytest:
+    build:
+      args:
+        DOMAIN: ''
+      context: /root/test/sub
+    environment:
+      DOMAIN: adjusted
+version: '3.6'
+Steps to reproduce the issue
+I don't know if either information is essential for reproducing the bug here, but this is what I've done to reproduce the bug without any affection by some actual project's files I've been working on while discovering this:
+I create a vanilla folder to contain some project. Let's call it test.
+I create another folder in test and call it sub.
+In test/sub I've created multiple files:
+docker-compose-file.yml is containing
+version: "3.6"
+
+services:
+  mytest:
+    env_file:
+      - .env.dist
+      - .env
+    build:
+      context: .
+      args:
+        - DOMAIN
+Dockerfile is containing
+FROM alpine
+
+ARG DOMAIN
+
+RUN mkdir /root/target && mkdir -p /opt/$DOMAIN && ln -s /opt/$DOMAIN /root/target/link
+
+ENTRYPOINT ["/bin/sh", "-c", "ls -la /root/target"]
+.env.dist is containing
+FOO=2
+DOMAIN=default
+BAR=1
+.env is containing
+DOMAIN=adjusted
+When in test I invoke docker-compose -f sub/docker-compose-file.yml build mytest. This generates following output:
+Building mytest
+Step 1/4 : FROM alpine
+ ---> caf27325b298
+Step 2/4 : ARG DOMAIN
+ ---> Using cache
+ ---> e8d9924c6437
+Step 3/4 : RUN mkdir /root/target && mkdir -p /opt/$DOMAIN && ln -s /opt/$DOMAIN /root/target/link
+ ---> Using cache
+ ---> abf3bba6fa2f
+Step 4/4 : ENTRYPOINT ["/bin/sh", "-c", "ls -la /root/target"]
+ ---> Using cache
+ ---> 9ee7594d1c0f
+
+Successfully built 9ee7594d1c0f
+Successfully tagged sub_mytest:latest
+I invoke the resulting container with docker run -it --rm 9ee. It's output is:
+total 8
+drwxr-xr-x    2 root     root          4096 Feb  4 13:47 .
+drwx------    1 root     root          4096 Feb  4 13:47 ..
+lrwxrwxrwx    1 root     root             5 Feb  4 13:47 link -> /opt/
+Observed result
+See last step above.
+Expected result
+The last line in output when running container should end with
+link -> /opt/adjusted
+or at least with
+link -> /opt/default
+When I pass an environment variable explicitly on building container it's reflected in output on running the container.
+DOMAIN=explicit docker-compose -f sub/docker-compose-file.yml build --no-cache mytest
+results in
+lrwxrwxrwx    1 root     root            13 Feb  4 14:04 link -> /opt/explicit
+Stacktrace / full error message
+none
+Additional information
+I've installed docker and docker-compose as described here and here starting with a vanilla installation of Ubuntu 18.04 on a remote server.

@@ -1,0 +1,23 @@
+wangjiyu92 commented on 12 Oct 2018 •
+edited
+Description of the issue
+I am using docker on windows and trying to copy the results to my machine. However, when I input 'make run' command in windows cmd, there is no error report but the files I expected to have does not appear in the target folder as well. The code is attached, I planned to get the file in C:\Result. Thanks!
+Context information (for bug reports)
+IMG_NAME=test
+COMMAND_RUN=docker run \
+--name test \
+--detach=false \
+-e DISPLAY=${DISPLAY} \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+--rm \
+-v "/c/Result":/mnt/shared/ \
+-i \
+-t \
+${IMG_NAME} /bin/bash -c
+build:
+docker build --network host --no-cache --rm -t ${IMG_NAME} .
+remove-image:
+docker rmi ${IMG_NAME}
+run:
+$(COMMAND_RUN) \
+"cd /mnt/shared/testcase && python run.py && exit"

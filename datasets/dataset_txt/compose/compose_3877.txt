@@ -1,0 +1,4 @@
+wernight commented on 3 Mar 2015
+Home page is missing two important things:
+Many people have already Fig, there should be a link to an upgrade documentation which also include what's new/different (possibly others come from Crane).
+docs/index.md should be linked from that page.

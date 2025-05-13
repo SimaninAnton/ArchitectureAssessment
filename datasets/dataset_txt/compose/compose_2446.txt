@@ -1,0 +1,7 @@
+Contributor
+dnephin commented on 29 Apr 2016
+I think it was a mistake to add this command. It's lead to a lot of confusion, and duplication with up. Instead of create we should have added a --no-start or --create-only flag to up.
+Let's do that now and deprecate `create.
+See #3394 and #2908
+7
+2

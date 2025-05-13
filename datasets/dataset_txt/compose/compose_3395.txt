@@ -1,0 +1,25 @@
+mclate commented on 11 Aug 2015
+When building container, environment variables are not applied.
+docker-compose.yml:
+img:
+    build: img
+    environment:
+        VAR: Hello
+/img/Dockerfile:
+FROM python:2.7
+RUN python -c 'import os; print os.environ["VAR"]'
+Expected to have "Hello" written, received KeyError: VAR - missing environment variable.
+If you get into container with docker-compose run --rm img bash (after removing that last failing line) and do python -c 'import os; print os.environ["VAR"]' you will get expected result.
+docker-compose==1.3.3
+docker-version:
+Client version: 1.7.1
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 786b29d
+OS/Arch (client): linux/amd64
+Server version: 1.7.1
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 786b29d
+OS/Arch (server): linux/amd64
+16

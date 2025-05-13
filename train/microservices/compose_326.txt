@@ -1,0 +1,35 @@
+leikao commented on 15 Jan 2019
+Description of the issue
+Run docker-compose -v failed:
+./docker-compose -v
+Traceback (most recent call last):
+File "site-packages/PyInstaller/loader/pyiboot01_bootstrap.py", line 127, in
+File "", line 971, in _find_and_load
+File "", line 955, in _find_and_load_unlocked
+File "", line 665, in _load_unlocked
+File "/code/.tox/py36/lib/python3.6/site-packages/PyInstaller/loader/pyimod03_importers.py", line 631, in exec_module
+File "ctypes/init.py", line 538, in
+File "ctypes/init.py", line 273, in _reset_cache
+MemoryError
+[128273] Failed to execute script pyiboot01_bootstrap
+Context information (for bug reports)
+docker-compose download link:
+https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Linux-x86_64
+OS info:
+$ lsb_release -a
+LSB Version: :core-4.1-amd64:core-4.1-noarch
+Distributor ID: CentOS
+Description: CentOS Linux release 7.6.1810 (Core)
+Release: 7.6.1810
+Codename: Core
+$ uname -r
+3.10.0-957.1.3.el7.x86_64
+$ arch
+x86_64
+$ docker -v
+Docker version 18.09.1, build 4c52b90
+Steps to reproduce the issue
+curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Linux-x86_64" > ./docker-compose
+chmod +x ./docker-compose
+./docker-compose -v
+1

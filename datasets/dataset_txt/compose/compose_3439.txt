@@ -1,0 +1,12 @@
+Contributor
+viranch commented on 24 Jul 2015
+I'm not sure if this a bug or is it intentional. Consider the following docker-compose.yml:
+db:
+  image: mysql
+
+web:
+  image: nginx
+  links:
+    - db:database
+Now when I do a docker-compose pull web it also pulls the mysql image. This may not be desired in a production system. Pulling both images probably makes sense if mysql is not present, but if its present and I want to upgrade just nginx, compose should not force me to pull mysql also.
+Neither can I find a workaround similar to --no-deps for the up command.

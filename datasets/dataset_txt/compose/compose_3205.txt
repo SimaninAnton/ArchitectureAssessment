@@ -1,0 +1,46 @@
+denyeo commented on 16 Oct 2015
+OS: Windows 8.1
+docker-compose (Win executable) version: 1.5.0rc1
+Running through Docker Toolbox's Docker Quickstart Terminal (Shell: MINGW64).
+Following tutorial at http://pothibo.com/2015/6/now-i-understand-a-little-bit-how-docker-works (though this should not matter)
+Problem: When I do docker-compose up, I get the error "Could not locate Gemfile". It seems that the volume containing the app's code (including the Gemfile) isn't accessible / isn't being mounted.
+Dockerfile:
+FROM ruby:2.2
+RUN apt-get update -qq && apt-get install -y build-essential
+RUN apt-get install -y nodejs
+WORKDIR /image_tagger
+docker-compose.yml:
+image_tagger:
+  build: .
+  command: bundle exec rails server -p 3000 -b 0.0.0.0
+  environment:
+    BUNDLE_PATH: /bundle
+    RACK_ENV: development
+    RAILS_ENV: development
+  ports:
+    - "3000:3000"
+  volumes:
+    - .bundle:/bundle
+    - .:/image_tagger
+(Note the 2 volumes specified - /image_tagger in particular)
+Contents of current folder (D:#dev):
+Dockerfile  Gemfile  README.md  Rakefile  app/  bin/  config/  config.ru  db/  docker-compose.yml  lib/  log/  public/  test/  vendor/
+Steps to reproduce:
+docker-compose build
+docker-compose up
+Result:
+$ ../docker-compose.exe up
+Creating test2_image_tagger_1
+Attaching to test2_image_tagger_1
+image_tagger_1 | Could not locate Gemfile
+test2_image_tagger_1 exited with code 10
+Gracefully stopping... (press Ctrl+C again to force)
+I tried various commands in docker-compose.yml:
+pwd resulted in /image_tagger, which is the correct working folder
+ls Gem* resulted in no matching files/folders (i.e. the current folder is probably empty).
+Doing docker inspect on the image shows:
+$ docker inspect 1196e29ed94b
+...
+        "Volumes": null,
+        "WorkingDir": "/image_tagger",
+Conclusion: The current folder isn't being mounted at /image_tagger as specified in docker-compose.yml. Bug?

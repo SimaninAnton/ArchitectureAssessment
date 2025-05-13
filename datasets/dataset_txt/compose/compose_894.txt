@@ -1,0 +1,126 @@
+Nithya25Mari commented on 5 Feb 2018 •
+edited
+Hi, I have created an image for meanstack application . in my repository nitikishu/sampledocker.
+When i try to run that image by docker run -p 4200:4200 nitikishu/sampledocker I am getting this msg:
+`> sampleproject@1.0.0 start /C:Usersuser2Sample
+node server.js
+server running on port 4200
+Press CTRL-C to stop
+(node:15) DeprecationWarning: req.validationErrors() may be removed in a future version. Use req.getValidationResult() instead.
+`
+unable to login to the application.
+in my application browser window i am getting this:
+POST http://192.168.99.100:5000/login net::ERR_EMPTY_RESPONSE
+docker.compose
+version : '3'
+services :
+sampledocker:
+build: .
+ports:
+- "4200:4200"
+depends_on:
+- mongo
+mongo:
+image: mongo
+ports:
+- "27017:27017"
+volumes:
+- data:/data/db
+volumes:
+data:
+docker file
+FROM node:latest
+RUN mkdir -p C:\Users\user2\Sample
+WORKDIR C:\Users\user2\Sample
+COPY package.json C:\Users\user2\Sample
+RUN npm install
+COPY  . .
+EXPOSE 4200
+ CMD [ "npm", "start" ]
+package.json:
+{
+  "name": "sampleproject",
+  "version": "1.0.0",
+  "main": "server.js",
+   "author": "Nithya <nitikishu@gmail.com>",
+  
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "async": "^2.1.5",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.4.2",
+    "bootstrap-ui-datetime-picker": "^2.5.4",
+    "chalk": "^1.1.3",
+    "connect-mongo": "^1.3.2",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.6",
+    "errorhandler": "^1.5.0",
+    "express": "~4.5.1",
+    "express-session": "^1.15.1",
+    "express-validator": "^3.1.2",
+    "handlebars": "^4.0.6",
+    "method-override": "~2.0.2",
+    "mongoose": "~5.0.3",
+    "morgan": "^1.8.1",
+    "multer": "^1.3.0",
+    "nodemailer": "^3.1.7",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "request": "^2.81.0"
+  }
+}
+server.js
+> var express = require('express');
+> var session = require('express-session');
+> const bodyParser = require('body-parser');
+> const logger = require('morgan');
+> const chalk = require('chalk');
+> const errorHandler = require('errorhandler');
+> const dotenv = require('dotenv');
+> const path = require('path');
+> const mongoose = require('mongoose');
+> const MongoStore = require('connect-mongo')(session);
+> const passport = require('passport');
+> const expressValidator = require('express-validator');
+> var app = express();
+> var multer = require('multer');
+> var request = require('request');
+> 
+> 
+> var App_PORT = 4200;
+> var dbpath = "mongodb://mongo:27017/PMS_DB";
+> 
+> 
+> var SESSION_SECRET = "sample";
+> var fs = require('fs')
+> 
+> dotenv.load({ path: '.env.Config' });
+> 
+> app.use(express.static(__dirname + "/public"));
+> app.set('views', __dirname + '\\public');
+> app.engine('html', require('ejs').renderFile);
+> app.set('view engine', 'html');
+> app.use(bodyParser.json());
+> mongoose.connect(dbpath);
+
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: SESSION_SECRET,
+    store: new MongoStore({
+        url: dbpath,
+        autoReconnect: true
+    })
+}));
+
+app.set('port', App_PORT || 3000);
+app.listen(app.get('port'), () => {
+    console.log('%s server running on port', chalk.green('✓'), app.get('port'));
+    console.log('  Press CTRL-C to stop\n');
+});
+my mongodb which I am using in my window system version is 3.4.2 ip address:127.0.0.1:27017
+my docker-machine ip is 192.168.99.100
+what is the mistake that I done here. please help me sort out the problem.
+1

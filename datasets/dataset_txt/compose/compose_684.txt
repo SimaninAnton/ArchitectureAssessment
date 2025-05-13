@@ -1,0 +1,43 @@
+Stono commented on 9 May 2018 •
+edited
+Hey,
+We are seeing strange behaviour with compose and default cred helpers when pulling as part of a build.
+Both our image, and our base image are in a private gcloud repo.
+We do gcloud auth configure-docker to configure docker to give us this config:
+{
+  "credHelpers": {
+    "gcr.io": "gcloud",
+    "us.gcr.io": "gcloud",
+    "eu.gcr.io": "gcloud",
+    "asia.gcr.io": "gcloud",
+    "staging-k8s.gcr.io": "gcloud"
+  }
+}
+Which allows us to pull private images, eg:
+bash-4.2$ docker pull eu.gcr.io/at-artefacts/platform-base-nodejs
+Using default tag: latest
+latest: Pulling from at-artefacts/platform-base-nodejs
+Digest: sha256:ca558cb49a6fd2e0f178e4016c30638ed722328608bfb87fdc389c76a9c9af03
+Status: Image is up to date for eu.gcr.io/at-artefacts/platform-base-nodejs:latest
+We have this compose file:
+version: '3.2'
+
+services:
+  app:
+    image: "eu.gcr.io/at-artefacts/platform-base-nodejs:${IMAGE_TAG:-latest}"
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GO_DEPENDENCY_LABEL_BASE_CENTOS: "${GO_DEPENDENCY_LABEL_BASE_CENTOS:-latest}"
+And a docker-compose pull doesn't give any output, but it does pull the image.
+bash-4.2$ docker-compose pull
+Pulling app ... done
+But, a build with --pull in it fails:
+bash-4.2$ docker-compose build --pull --compress app
+Building app
+Step 1/8 : FROM eu.gcr.io/at-artefacts/platform-base-centos:latest
+ERROR: Service 'app' failed to build: unauthorized: You don't have the needed permissions to perform this operation, and you may have invalid credentials. To authenticate your request, follow the steps in: https://cloud.google.com/container-registry/docs/advanced-authentication
+Any ideas?
+8

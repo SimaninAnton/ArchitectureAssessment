@@ -1,0 +1,8 @@
+taichunmin commented on 19 Jan 2018 •
+edited
+Dear All,
+When I change my docker-compose.yml to version 3.X, I got following error:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services.ngrok: 'scale'
+But I didn't know why the scale option is missing. I can't find scale in Compose file version 3 reference. And the upgrade guide of version 3 didn't say the removal of scale.
+2

@@ -1,0 +1,1 @@
+Service cannot link to itself even with scale larger than 1

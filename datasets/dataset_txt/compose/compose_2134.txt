@@ -1,0 +1,33 @@
+kunashir commented on 20 Aug 2016
+Today I have tried use docker-compose and got next error:
+>>docker-compose 
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 9, in <module>
+load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 558, in load_entry_point
+return get_distribution(dist).load_entry_point(group, name)
+File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2682, in load_entry_point
+return ep.load()
+File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2355, in load
+return self.resolve()
+File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2361, in resolve
+module = __import__(self.module_name, fromlist=['__name__'], level=0)
+File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 14, in <module>
+from . import errors
+File "/usr/lib/python2.7/site-packages/compose/cli/errors.py", line 9, in <module>
+from docker.errors import APIError
+File "/usr/lib/python2.7/site-packages/docker/__init__.py", line 20, in <module>
+from .client import Client, AutoVersionClient, from_env # flake8: noqa
+File "/usr/lib/python2.7/site-packages/docker/client.py", line 22, in <module>
+import websocket
+File "/usr/lib/python2.7/site-packages/websocket/__init__.py", line 22, in <module>
+from ._core import *
+File "/usr/lib/python2.7/site-packages/websocket/_core.py", line 39, in <module>
+from ._socket import *
+File "/usr/lib/python2.7/site-packages/websocket/_socket.py", line 28, in <module>
+from ._ssl_compat import *
+AttributeError: 'module' object has no attribute 'ssl'
+OS: OpenSuse Leap 42.1
+Docker-compose: 1.7.1
+Docker: 1.11.2
+libopenssl-devel installed

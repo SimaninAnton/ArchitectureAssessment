@@ -1,0 +1,2 @@
+xwang2713 commented on 26 May 2016
+Is there a way to set number of containers per service to start in configure file

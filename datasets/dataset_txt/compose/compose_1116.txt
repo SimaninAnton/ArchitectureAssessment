@@ -1,0 +1,63 @@
+SunnyOswal commented on 27 Oct 2017
+docker version
+Client:
+    Version:      17.03.2-ee-5
+    API version:  1.27
+    Go version:   go1.7.5
+    Git commit:   fa09039
+    Built:        Wed Jul 19 23:56:45 2017
+    OS/Arch:      windows/amd64
+    Server:
+    Version:      17.03.2-ee-5
+    API version:  1.27 (minimum version 1.24)
+    Go version:   go1.7.5
+    Git commit:   fa09039
+    Built:        Wed Jul 19 23:56:45 2017
+    OS/Arch:      windows/amd64
+    Experimental: false
+docker-compose version
+docker-compose version 1.14.0, build c7bdf9e3
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+docker-compose.yml
+version: '2.1'
+
+services:
+  ucmvstsagent:
+    volumes:
+    - E:\DockerPoolCache:C:\_cache
+    - E:\DockerPoolWork:C:\Agent\_work
+    build:
+     context: .
+     dockerfile: DockerFile
+DockerFile:
+FROM microsoft/windowsservercore:latest
+
+ENV chocolateyUseWindowsCompression=false
+RUN @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+RUN choco install -y sql2016-dacframework
+
+SHELL [ "powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';" ]
+RUN Install-PackageProvider Nuget -Force
+RUN Install-Module Azure -Force
+RUN Install-Module AzureRM -Force
+
+RUN Import-Module Azure -Force
+RUN Import-Module AzureRM -Force
+
+RUN mkdir C:\Agent
+RUN mkdir C:\Agent\Drop
+RUN mkdir C:\shared\Deployment
+
+WORKDIR C:/Agent
+
+ENV Drop=C:\\Agent\\Drop
+ENV WINDOWS_IMAGE_VERSION=latest
+
+COPY ./Start.* ./
+
+CMD ["Start.cmd"]
+Error:
+Top level object in 'd:\a\1\s\private\Docker\VstsAgent\DockerFile' needs to be an object not '<type 'str'>'.
+Can someone please help me identify what is the issue with DockerFile or docker-compose file ?

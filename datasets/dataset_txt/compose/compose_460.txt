@@ -1,0 +1,6 @@
+oleersoy commented on 9 Oct 2018
+Hi,
+I've written up the issue on SO.
+Summary
+The setup works when I'm not using docker compose. In other words I create the network, build the nginx image manually, and run the containers manually. When I try to automate everything with docker compose, it works, but it will not pass through a domain name that I can configured in /etc/hosts. I provided curl examples in the SO post.
+I also filed in an issue with Nginx/docker

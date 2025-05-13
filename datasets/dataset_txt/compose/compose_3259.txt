@@ -1,0 +1,2 @@
+moltar commented on 28 Sep 2015
+docker-compose logs exits abruptly when one of the containers exists, yet others remain running.

@@ -1,0 +1,6 @@
+baptistedonaux commented on 24 Nov 2014
+I use Fig to deploy an application but I would like build images to stay in a history of my last builds. I think at an possibility to tag the image created by fig.
+Per example, for a project X, I have two service Y and Z. The two images created will be x_y_1:latest and x_z_1:latest. It will be possible to add an option to build and run images with others tags ?
+Example :
+fig --tag v1.0 build
+fig --tag v1.0 up

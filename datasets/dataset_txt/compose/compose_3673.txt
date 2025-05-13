@@ -1,0 +1,3 @@
+Contributor
+jonaseck2 commented on 29 Apr 2015
+Docker supports both local and url build paths. docker-compose should do the same.

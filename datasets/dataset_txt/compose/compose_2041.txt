@@ -1,0 +1,17 @@
+gazedash commented on 26 Sep 2016 •
+edited
+Expected behavior: docker-compose stop stops containers defined in docker-compose.yml
+Unexpected behavior: docker-compose stop stops all running containers
+System information
+Docker-compose:
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Kernel
+Linux 4.4.0-38-generic #57-Ubuntu SMP Tue Sep 6 15:42:33 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+Ubuntu Release
+Distributor ID: Ubuntu
+Description:    Ubuntu 16.04.1 LTS
+Release:        16.04
+Codename:       xenial

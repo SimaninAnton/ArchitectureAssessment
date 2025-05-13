@@ -1,0 +1,1 @@
+Feature request: make it possible to manage external services

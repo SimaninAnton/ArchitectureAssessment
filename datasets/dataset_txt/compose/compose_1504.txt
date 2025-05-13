@@ -1,0 +1,22 @@
+mdeboer commented on 26 Apr 2017
+I have a problem with my .env file when it's not in the same folder as the docker-compose file. When I place it in a subfolder and reference it, it will simply say the variables are undefined and will default to a blank string. When I remove the .env file it says it can't find the .env file, so it finds the file but doesn't do anything. When I move the .env file to the same directory as the docker-compose file and update it's path or create a symlink instead, all works fine.
+Apparently docker-compose has issues with loading env files that are not in the same directory as the docker-compose file.
+Currently I "fixed" this by symlinking the .env file as it's shared with a Laravel project in a subfolder.
+My docker-compose file (simplified):
+version: '3'
+
+services:
+  mysql:
+    image: mariadb
+    volumes:
+      - mysql_data:/var/lib/mysql/data
+    env_file:
+      - ./api/.env
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  mysql_data:

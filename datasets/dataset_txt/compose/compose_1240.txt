@@ -1,0 +1,5 @@
+nikoo56 commented on 30 Aug 2017
+My application was working fine but suddenly I start to get this message:
+The Docker Engine you're using is running in swarm mode.
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+I am not using swarm in my application but I worked with it before this app.

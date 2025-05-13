@@ -1,0 +1,57 @@
+kmlsh04 commented on 15 Feb 2017
+I have installed the Docker 1.13.1 stable version for windows 10 Pro.
+Docker version details :
+Version 1.13.1 (10072)
+Channel: Stable
+94675c5
+When I tried to copy the docker-stack.yml to VM that I have created for voting app below is the docker document url.
+https://docs.docker.com/engine/getstarted-voting-app/deploy-app/
+I wrote the below command to copy from my host to VM machine but it gives error
+"You must have a copy of the scp binary locally to use the scp feature".
+C:\Windows\system32>docker-machine scp ~/sandbox/voting-app/docker-stack.yml manager:/home/docker/.
+You must have a copy of the scp binary locally to use the scp feature
+I checked docker-machine --help and able to find this command but still it is not working.
+below is the output for docker-machine help from command prompt of windows 10.
+C:\Windows\system32>docker-machine --help
+Usage: docker-machine [OPTIONS] COMMAND [arg...]
+Create and manage machines running Docker.
+Version: 0.9.0, build 15fd4c7
+Author:
+Docker Machine Contributors - https://github.com/docker/machine
+Options:
+--debug, -D Enable debug mode
+--storage-path, -s "C:\Users\kamleshp.docker\machine" Configures storage path [$MACHINE_STORAGE_PATH]
+--tls-ca-cert CA to verify remotes against [$MACHINE_TLS_CA_CERT]
+--tls-ca-key Private key to generate certificates [$MACHINE_TLS_CA_KEY]
+--tls-client-cert Client cert to use for TLS [$MACHINE_TLS_CLIENT_CERT]
+--tls-client-key Private key used in client TLS auth [$MACHINE_TLS_CLIENT_KEY]
+--github-api-token Token to use for requests to the Github API [$MACHINE_GITHUB_API_TOKEN]
+--native-ssh Use the native (Go-based) SSH implementation. [$MACHINE_NATIVE_SSH]
+--bugsnag-api-token BugSnag API token for crash reporting [$MACHINE_BUGSNAG_API_TOKEN]
+--help, -h show help
+--version, -v print the version
+Commands:
+active Print which machine is active
+config Print the connection config for machine
+create Create a machine
+env Display the commands to set up the environment for the Docker client
+inspect Inspect information about a machine
+ip Get the IP address of a machine
+kill Kill a machine
+ls List machines
+provision Re-provision existing machines
+regenerate-certs Regenerate TLS Certificates for a machine
+restart Restart a machine
+rm Remove a machine
+ssh Log into or run a command on a machine with SSH.
+scp Copy files between machines
+start Start a machine
+status Get the status of a machine
+stop Stop a machine
+upgrade Upgrade a machine to the latest version of Docker
+url Get the URL of a machine
+version Show the Docker Machine version or a machine docker version
+help Shows a list of commands or help for one command
+Run 'docker-machine COMMAND --help' for more information on a command.
+I do not understand it is showing the scp command in help but still it is not working.
+Could anyone please help me to resolved the below issue ?

@@ -1,0 +1,38 @@
+exarkun commented on 10 Feb 2016
+When trying to use a docker-compose.yml file like this one:
+version: "2"
+
+services:
+    foo:
+        build:
+            dockerfile: "Dockerfile.foo"
+The failure mode from docker-compose 1.6.0 is an unhandled UnboundLocalError:
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.6.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 55, in main
+    command.sys_dispatch()
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 172, in perform_command
+    project = project_from_options(self.base_dir, options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 52, in project_from_options
+    verbose=options.get('--verbose'),
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 80, in get_project
+    config_data = config.load(config_details)
+  File "/usr/lib/python2.7/site-packages/compose/config/config.py", line 298, in load
+    [file.get_service_dicts() for file in config_details.config_files])
+  File "/usr/lib/python2.7/site-packages/compose/config/config.py", line 376, in load_services
+    return build_services(service_config)
+  File "/usr/lib/python2.7/site-packages/compose/config/config.py", line 359, in build_services
+    for name, service_dict in service_config.items()
+  File "/usr/lib/python2.7/site-packages/compose/config/config.py", line 348, in build_service
+    validate_service(service_config, service_names, config_file.version)
+  File "/usr/lib/python2.7/site-packages/compose/config/config.py", line 531, in validate_service
+    validate_paths(service_dict)
+  File "/usr/lib/python2.7/site-packages/compose/config/config.py", line 881, in validate_paths
+    not is_url(build_path) and
+UnboundLocalError: local variable 'build_path' referenced before assignment
+This makes it difficult to understand the problem - which seems to be that the context has not been specified.

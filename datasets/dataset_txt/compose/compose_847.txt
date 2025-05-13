@@ -1,0 +1,29 @@
+wirwolf commented on 26 Feb 2018
+Dockerfile
+FROM node:9
+WORKDIR /root/app
+RUN yarn global add webpack typescript nodemon
+CMD ["yarn", "start"]
+docker-compose.yaml
+version: "3.4"
+services:
+  app:
+    container_name: ${COMPOSE_PROJECT_NAME}_app
+    image: node:9
+    build:
+      context: .
+      dockerfile: .docker/app/Dockerfile
+    stop_signal: INT
+    tty: true
+    volumes:
+      - ./app/:/root/app/
+docker build output console
+https://pastebin.com/Q8S085dg
+docker-compose build outpute(after docker build)
+https://pastebin.com/RuJtK6aq
+Why do I re-build the assembly without changing the Dockerfail system does not use the cache
+Docker version 17.12.0-ce, build c97c6d6
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016

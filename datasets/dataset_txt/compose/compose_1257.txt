@@ -1,0 +1,16 @@
+MrHash commented on 16 Aug 2017
+Docker version 17.07.0-ce-rc2, build 36ce605
+docker-compose version 1.15.0, build e12f3b9
+sample config
+version: "3.3"
+configs:
+  config.yml:
+    file: ../config/config.yml
+services:
+  php:
+    image: php:7.1-fpm
+    configs:
+      - source: config.yml
+        target: /configs/config.yml
+returns
+WARNING: Some services (php) use the 'configs' key, which will be ignored. Compose does not support 'configs' configuration - use docker stack deploy to deploy to a swarm.

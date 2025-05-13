@@ -1,0 +1,25 @@
+antonkri97 commented on 20 Feb 2017 •
+edited
+Problems started after renaming the service from 'my-nginx' to 'nginx' in docker-compose file. When I roll back changes the problem was still there.
+Furthermore, when I use --force-recreate and --build flags or docker-compose down + up. Compose creates docker image with old file, which has nowhere
+docker-compose.yml
+nginx:
+  build: .
+  volumes:
+   - ./dailylottery:/usr/share/nginx/dailylottery
+  ports:
+   - "3000:80"
+Dockerfile
+FROM nginx:stable-alpine
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY dailylottery /usr/share/nginx/dailylottery
+
+CMD ["nginx", "-g", "daemon off;"]
+directory
+-rw-r--r--  1 anton  staff  167 Feb 20 06:44 Dockerfile
+drwxr-xr-x  3 anton  staff  102 Feb 19 21:36 dailylottery
+-rw-r--r--  1 anton  staff  103 Feb 20 06:42 docker-compose.yml
+-rw-r--r--  1 anton  staff  857 Feb 20 06:42 issue.txt
+drwxr-xr-x  4 anton  staff  136 Feb 19 21:36 nginx
+-rw-r--r--  1 anton  staff  264 Feb 19 21:36 readme.md
+1

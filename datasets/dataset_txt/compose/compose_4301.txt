@@ -1,0 +1,6 @@
+pmlopes commented on 24 Jun 2014
+if i create a container with fig and let it run and produce lots and lots of logs, when i execute:
+fig logs
+for the first time it can take minutes to print all the logs (this is because I am running some development application in debug mode). I would like to have a feature like with tail, where I can specify the initial amount of lines say for example:
+fig logs -n 1000
+which would print the last 1000 lines of the logs it could be either the last for each container or the total 1000, as long i can avoid the initial print of thousands of logs... that I am not interested in...

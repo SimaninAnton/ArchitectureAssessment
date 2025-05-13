@@ -1,0 +1,8 @@
+Contributor
+kiniou commented on 18 Nov 2019
+Is your feature request related to a problem? Please describe.
+The --compatibility option is only available as an option and I find myself obliged to add it everywhere on command line or in shell scripts when I do up or run commands.
+Describe the solution you'd like
+I would like to setup compatibility mode from my .env file.
+Describe alternatives you've considered
+The only alternative I've come up with is to use some script wrapper to docker-compose that prepend this option.

@@ -1,0 +1,25 @@
+mkurek commented on 11 Oct 2015
+When newest version from master is installed using Python3 on OSX, there are garbled characters in container's output.
+$ uname -a
+Darwin polpc01298 14.4.0 Darwin Kernel Version 14.4.0: Thu May 28 11:35:04 PDT 2015; root:xnu-2782.30.5~1/RELEASE_X86_64 x86_64
+$ docker-compose --version
+docker-compose version: 1.5.0dev
+docker --version
+Docker version 1.8.1, build d12ea79
+docker-machine --version
+docker-machine version 0.4.1 (e2c88d6)
+docker-compose.yml content:
+test:
+    image: busybox
+    command: echo "hello world"
+How to reproduce:
+$ pyvenv-3.4 compose
+$ cd compose
+$ source bin/activate
+$ pip install -U git+https://github.com/docker/compose.git@master
+$ cat - > docker-compose.yml
+...
+$ docker-compose run test
+��Šy��������U�P�9
+           ����mF�?��D5���U����q�?V
+Notice that using the same steps on Ubuntu 15.04 everything works fine. This is probably related to https://github.com/d11wtq/dockerpty library.

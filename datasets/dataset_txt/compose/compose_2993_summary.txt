@@ -1,0 +1,1 @@
+"run" doesn't remove containers after exit and "rm" doesn't remove them

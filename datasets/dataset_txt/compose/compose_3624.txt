@@ -1,0 +1,3 @@
+skorokithakis commented on 23 May 2015
+Running a docker file with the -f option does the right thing, namely, it considers ADD to be relative to the directory you're in. Docker-compose switches to the docker file directory, which is completely inflexible, and violates good UX by not letting me place files wherever I want. I don't want my code to be in a subdirectory of the docker configuration, since the docker configuration isn't more important than my code.
+Docker-compose should allow you to build images relative to any path you want, so you can place all the configuration and Dockerfiles in any subdirectory you want.

@@ -1,0 +1,2 @@
+nikoo56 commented on 5 Jul 2017
+I am getting this errro when I create a new project with Docker support in VS2017. I am using vs2017, Windows container, Windows 10. by the #4024 post I have changed the version of Compose file to 2.1 but now I am getting new error as : Creating network with default driver HNS failed with error: The parameter is incorrect.

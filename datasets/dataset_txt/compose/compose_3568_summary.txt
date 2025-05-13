@@ -1,0 +1,1 @@
+Don't always start a service defined in yml when docker-compose up

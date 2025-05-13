@@ -1,0 +1,23 @@
+csabakoncz commented on 6 Nov 2016
+I am trying to dockerize a single-page web application that accesses multiple backend services via CORS.
+The problem with this approach is that the backend services all need their ports exposed on the Docker host so that they can be accessed from the browser.
+The service hosting the web page is informed about the location of the backend services through an environment variable. I would like to be able to fill this environment variable with information on how the backend ports are mapped to the Docker host. E.g. if there were environment variables starting with 'MAPPED_link_PORT_portnum' I could do the following:
+service1:
+  ports:
+    - 8080
+service2:
+  ports:
+    - 8080
+web:
+  ports:
+    - 80
+  links:
+    - service1
+    - service2
+  environment:
+    # DH holds the docker host address used to access the web service
+    serviceURLs: '{"service1":"http://${DH}:{MAPPED_SERVICE1_PORT_8080}", "service2":"http://${DH}:{MAPPED_SERVICE2_PORT_8080}"}'
+Of course, I could explicitly specify the port mappings and then I could create serviceURLs without problems, but then I would have port collisions whenever I try to launch the app multiple times.
+So my question would be: is there a way to inform a container about the exposed port mappings of its dependencies?
+Best regards,
+Csaba

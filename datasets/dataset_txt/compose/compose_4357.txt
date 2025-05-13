@@ -1,0 +1,12 @@
+umrashrf commented on 29 Mar 2014
+I created Dockerfile and fig.yml and executed "sudo fig up" but it is throwing this error. I have a simple django app ending with.
+CMD python manage.py runserver 0.0.0.0:8000
+Here's my fig file.
+web:
+  build: .
+  volumes:
+    - .:/opt/myapp
+  ports:
+    - "8000:8000"
+I tested sudo docker run -p 8000:8000 myapp_web_1 and it is working but fig is not working.
+Ubuntu 12.04 LTS (Linux 3.8)

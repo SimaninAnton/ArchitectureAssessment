@@ -1,0 +1,1 @@
+[SOLVED] File "<string>", line 3, in <module> IOError: [Errno 13] Permission denied:

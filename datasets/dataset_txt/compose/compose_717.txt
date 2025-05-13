@@ -1,0 +1,82 @@
+Iliyass commented on 25 Apr 2018 •
+edited
+Description of the issue
+When I try to up my services that has volumes it stack at
+compose.parallel.feed_queue: Pending: set()
+Context information (for bug reports)
+ERROR: for docker_mongo_1  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=300)
+compose.parallel.parallel_execute_iter: Failed: <Service: mongo>
+compose.parallel.feed_queue: Pending: set()
+
+ERROR: for mongo  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=300)
+ERROR: compose.cli.errors.log_timeout_error: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 300).
+Output of "docker-compose version"
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:06:22 2018
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:14:32 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+  mongo:
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: 'mongo --eval ''quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'''
+    image: mongo:3.2
+    networks:
+      network_name1: null
+    ports:
+    - 27017:27017/tcp
+    volumes:
+    - /Users/username/dev/project/rs4:/data/db:rw
+Steps to reproduce the issue
+docker-compose up -d mongo
+Observed result
+When I comment out the volumes from service definition in docker-compose, the up works
+Expected result
+Stacktrace / full error message
+compose.cli.verbose_proxy.proxy_callable: docker attach <- ('d7b52821f9ca8ef39720e6c3154d31b107f2ed85847327ad59664f35c085e7b2', stdout=True, stderr=True, stream=True)
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.24/containers/d7b52821f9ca8ef39720e6c3154d31b107f2ed85847327ad59664f35c085e7b2/attach?logs=0&stdout=1&stderr=1&stream=1 HTTP/1.1" 101 0
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.24/containers/d7b52821f9ca8ef39720e6c3154d31b107f2ed85847327ad59664f35c085e7b2/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker attach -> <docker.types.daemon.CancellableStream object at 0x103a36940>
+compose.cli.verbose_proxy.proxy_callable: docker disconnect_container_from_network <- ('d7b52821f9ca8ef39720e6c3154d31b107f2ed85847327ad59664f35c085e7b2', '$name$')
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.24/networks/$name$/disconnect HTTP/1.1" 200 0
+compose.cli.verbose_proxy.proxy_callable: docker disconnect_container_from_network -> None
+compose.cli.verbose_proxy.proxy_callable: docker connect_container_to_network <- ('d7b52821f9ca8ef39720e6c3154d31b107f2ed85847327ad59664f35c085e7b2', '$name$', aliases=['d7b52821f9ca', 'mongo'], ipv4_address=None, ipv6_address=None, links=[], link_local_ips=None)
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.24/networks/$name$/connect HTTP/1.1" 200 0
+compose.cli.verbose_proxy.proxy_callable: docker connect_container_to_network -> None
+compose.cli.verbose_proxy.proxy_callable: docker start <- ('d7b52821f9ca8ef39720e6c3154d31b107f2ed85847327ad59664f35c085e7b2')
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.parallel_execute_iter: Failed: <Container:docker_mongo_1 (8778c4)>
+compose.parallel.feed_queue: Pending: set()
+
+ERROR: for docker_mongo_1  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=300)
+compose.parallel.parallel_execute_iter: Failed: <Service: mongo>
+compose.parallel.feed_queue: Pending: set()
+
+ERROR: for mongo  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=300)
+ERROR: compose.cli.errors.log_timeout_error: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 300).
+Additional information
+OS version / distribution, docker-compose install method, etc.

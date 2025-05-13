@@ -1,0 +1,73 @@
+SC7639 commented on 13 Nov 2015
+Since updating to the latest docker toolbox version and getting docker-compose natively on windows I've been getting no output and the command hangs (I have to use ctrl+f5 to stop the command) when using docker-compose logs. Before I was using docker-compose directly inside the boot2docker vm.
+docker-logs displays the logs output just fine
+docker version:
+Client:
+ Version:      1.9.0
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   76d6bc9
+ Built:        Tue Nov  3 19:20:09 UTC 2015
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.9.0
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   76d6bc9
+ Built:        Tue Nov  3 19:20:09 UTC 2015
+ OS/Arch:      linux/amd64
+docker-compose version:
+docker-compose version: 1.5.0
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+docker info:
+Containers: 10
+Images: 180
+Server Version: 1.9.0
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 200
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 4.1.12-boot2docker
+Operating System: Boot2Docker 1.9.0 (TCL 6.4); master : 16e4a2a - Tue Nov  3 19:49:22 UTC 2015
+CPUs: 1
+Total Memory: 1.956 GiB
+Name: default
+ID: VV7K:5FQZ:VWGH:YA2Y:BPIY:ODZ2:MS5H:KF2B:XB7R:XMAF:BLZY:GWPS
+Debug mode (server): true
+ File Descriptors: 46
+ Goroutines: 152
+ System Time: 2015-11-13T16:55:57.389097815Z
+ EventsListeners: 0
+ Init SHA1:
+ Init Path: /usr/local/bin/docker
+ Docker Root Dir: /mnt/sda1/var/lib/docker
+Labels:
+ provider=virtualbox
+Contents of the docker-compose.yml
+nginx:
+    build: docker/nginx
+    links:
+        - php:php
+    ports:
+        - "80:80"
+    volumes:
+        - /home/docker/docs/:/docs/
+
+php:
+    build: docker/php
+    expose:
+        - "9000"
+    volumes:
+        - /home/docker/docs/:/docs/
+
+invoice-pdf:
+    build: invoice pdf/
+    ports:
+        - "9003:9003"
+Below is screen shot of the docker compose containers running and the lack of output from docker-compse logs

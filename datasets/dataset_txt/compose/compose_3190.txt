@@ -1,0 +1,4 @@
+Yajo commented on 20 Oct 2015
+When using docker-compose logs, it adds colors by container, but if the container's logs were colorized, they appear all in the same color.
+Colorized logs are very useful, so it should be respected by docker-compose.
+19

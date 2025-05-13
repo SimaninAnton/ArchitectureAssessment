@@ -1,0 +1,119 @@
+marianatuma commented on 19 Dec 2019
+Description of the issue
+I have posted about this on SO. Basically, I'm working on an older project that was previously in a Linux environment. I'm now using WSL (not WSL2), and docker is working fine. However, docker-compose adds \\?\C: to any path on the docker-compose.yml context, resulting in errors like:
+...
+OSError: [Errno 22] Invalid argument: '\\\\?\\C:\\Users\\tumadeathayde\\Documents\\Ubuntu\\GCES_2020\\gces-backend-2020\\venv\\bin\\python'
+
+During handling of the above exception, another exception occurred:
+
+...
+OSError: Can not read file in context: \\?\C:\Users\tumadeathayde\Documents\Ubuntu\GCES_2020\gces-backend-2020\venv\bin\python
+I have tried setting the flag COMPOSE_FORCE_WINDOWS_PATHS on and off, as well as COMPOSE_FORCE_WINDOWS_HOST also on and off. My Docker for Windows is using Linux containers right now, but I also tried switching to Windows containers with no success.
+I have also tried different paths: releative, absolute, linux paths, windows paths, etc.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.4
+ API version:       1.40
+ Go version:        go1.12.10
+ Git commit:        9013bf583a
+ Built:             Fri Oct 18 15:54:09 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea
+  Built:            Wed Nov 13 07:29:19 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  api:
+    build:
+      context: C:\Users\tumadeathayde\Documents\Ubuntu\GCES_2020\gces-backend-2020
+      dockerfile: ./etc/docker/Dockerfile
+    container_name: api
+    depends_on:
+    - db
+    environment:
+      PRODUCTION: "false"
+    ports:
+    - 8000:8000/tcp
+    restart: always
+    volumes:
+    - /c/Users/tumadeathayde/Documents/Ubuntu/GCES_2020/gces-backend-2020/etc:/etc/gces/:rw
+    - /home/mariana/gces/logs:/srv/logs/:rw
+    - /home/mariana/gces/media:/srv/media/:rw
+    - /home/mariana/gces/static:/srv/static/:rw
+    - /c/Users/tumadeathayde/Documents/Ubuntu/GCES_2020/gces-backend-2020/gces:/var/www/gces/:rw
+  db:
+    command:
+    - mysqld
+    - --character-set-server=utf8mb4
+    - --collation-server=utf8mb4_unicode_ci
+    container_name: db
+    environment:
+      MYSQL_DATABASE: gces_db
+      MYSQL_PASSWORD: 0293rh3o4g0831hg
+      MYSQL_ROOT_PASSWORD: a298g3h4h031304
+      MYSQL_USER: gces_user
+    image: mysql:5.7
+    ports:
+    - 3336:3306/tcp
+    restart: always
+    volumes:
+    - /home/mariana/gces/mysql:/var/lib/mysql:rw
+version: '3.0'
+Steps to reproduce the issue
+I'm not sure how reproduceable this issue is. I have seen many people have problems with docker-compose looking for /mnt/c, which is solved by mounting /c there. For me, the following steps cause the issue
+On WSL, createa docker-compose.yml with any path in the context
+docker-compose.exe -f <file path> up build
+Errors listed above are thrown
+Observed result
+Docker-compose appends \\?\C: to the beginning of any path described in the context.
+Expected result
+Docker-compose uses path described in the context as-is, with no additions.
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "site-packages\docker\utils\build.py", line 96, in create_archive
+OSError: [Errno 22] Invalid argument: '\\\\?\\C:\\Users\\tumadeathayde\\Documents\\Ubuntu\\GCES_2020\\gces-backend-2020\\venv\\bin\\python'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 1085, in up
+  File "compose\cli\main.py", line 1081, in up
+  File "compose\project.py", line 527, in up
+  File "compose\service.py", line 344, in ensure_image_exists
+  File "compose\service.py", line 1084, in build
+  File "site-packages\docker\api\build.py", line 159, in build
+  File "site-packages\docker\utils\build.py", line 31, in tar
+  File "site-packages\docker\utils\build.py", line 100, in create_archive
+OSError: Can not read file in context: \\?\C:\Users\tumadeathayde\Documents\Ubuntu\GCES_2020\gces-backend-2020\venv\bin\python
+[18416] Failed to execute script docker-compose
+Additional information
+OS: Windows 10, build 18363.0
+WSL: Linux 4.4.0-18362-Microsoft #476-Microsoft Fri Nov 01 16:53:00 PST 2019 x86_64 x86_64 x86_64 GNU/Linux
+If there is any information missing, please let me know and I'll add it. I'm not well versed in Docker or WSL.

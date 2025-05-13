@@ -1,0 +1,22 @@
+rvernica commented on 22 Apr 2017
+There seems to be an issue with tmpfs or /dev/shm when re-creating containers.
+I have the following in the docker-compose.yml file:
+version: '3.1'
+services:
+  ...
+    tmpfs: /dev/shm:exec,size=1g
+    volumes:
+      - /dev/shm
+When I initially bring this up with docker-compose up it works fine. If I stop it and try to bring it up while also rebuilding the images I get:
+> docker-compose up --build
+Building ...
+...
+Successfully built 9a694583ae45
+Recreating f2ead6bb4fb2_..._1
+
+ERROR: for ...  Cannot create container for service ...: Duplicate mount point '/dev/shm'
+ERROR: Encountered errors while bringing up the project.
+> docker-compose --version
+docker-compose version 1.11.2, build dfed245
+> docker --version
+Docker version 17.03.0-ce, build 60ccb22

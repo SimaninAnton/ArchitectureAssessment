@@ -1,0 +1,27 @@
+khaale commented on 6 Oct 2016
+Hi, I have an issue while running docker-compose on Windows 10 with Russian language pack:
+Creating network "docker_default" with the default driver
+Traceback (most recent call last):
+File "logging__init__.py", line 861, in emit
+File "logging__init__.py", line 734, in format
+File "compose\cli\formatter.py", line 48, in format
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 24: ordinal not in range(128)
+Logged from file errors.py, line 71
+I don't have any non-ascii characters on my docker-compose.yml, but suppose that something like network interface name may contain non-ascii characters.
+docker-compose --version
+docker-compose version 1.8.1, build 004ddae
+docker-compose.yml
+version: '2'
+services:
+consul:
+image: khaale/consul-nano
+container_name: consul_agent
+networks:
+default:
+aliases:
+- consul-agent
+awl-is:
+image: khaale/awl-is
+container_name: integration_service
+links:
+- consul

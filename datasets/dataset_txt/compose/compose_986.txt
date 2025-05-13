@@ -1,0 +1,20 @@
+ronaldpetty commented on 26 Dec 2017
+Docker 17.09
+Compose 1.8
+Host Ubuntu 16.04
+Hi,
+Is there a tool that anyone is aware of that takes a compose file and does the following?
+Is it validate?
+What is the minimum supported Composer and Docker for this version of the file?
+What is the maximum supported Composer and Docker for this version of the file?
+Show what is right for a given error message.
+Ex. Using dc 1.8 this seems invalid:
+version: "2.1"
+and
+version: "3"
+but
+version: "2" worked. However the particular error didn't give a pointer to the version matrix or the regex that would work (in fact, I didn't find a reason why 3 wouldn't work).
+It is getting a little challenging to remember what is valid and what is not between versions.
+Ideally Compose would be able to do this, but an external tool is great as well. If no one knows of one (I could not find one) maybe I can do it.
+Happy new year!
+Ron

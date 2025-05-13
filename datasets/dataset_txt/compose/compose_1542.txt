@@ -1,0 +1,3 @@
+jleaders commented on 6 Apr 2017
+This stackoverflow has 13,000 views. I think the error message when running without permissions should state that when it can't connect, it may be a permissions issue.
+http://stackoverflow.com/questions/34532696/docker-compose-cant-connect-to-docker-daemon

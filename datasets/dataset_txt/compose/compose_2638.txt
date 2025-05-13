@@ -1,0 +1,161 @@
+pryorda commented on 13 Mar 2016
+When doing a docker-compose up -d with a docker-compose.yml, I noticed that some of my volumes get created via the local driver instead of the glusterfs driver.
+Example:
+docker-compose up -d alphaapps
+Creating volume "dockercomposeimagesonly_dbdatamych" with glusterfs driver
+Creating volume "dockercomposeimagesonly_redisdata" with glusterfs driver
+Creating volume "dockercomposeimagesonly_esdata" with glusterfs driver
+Creating volume "dockercomposeimagesonly_deltafile" with glusterfs driver
+Creating volume "dockercomposeimagesonly_alphafile" with glusterfs driver
+Creating volume "dockercomposeimagesonly_dbdataalpha" with glusterfs driver
+Creating volume "dockercomposeimagesonly_dbdatadelta" with glusterfs driver
+Creating dockercomposeimagesonly_dbalpha_1
+Creating dockercomposeimagesonly_dbdelta_1
+Creating dockercomposeimagesonly_mailcatcher_1
+Creating dockercomposeimagesonly_alphaapps_1
+
+(1:924)$ docker volume ls
+DRIVER              VOLUME NAME
+local               swarm-demo-0/c6ca5dea153b473ccb6eb49a7a5b6f2bd491f4f3f558f572850cfa85102c9a5a
+local               swarm-demo-0/19170c647243151a03d15bad0b6af95e0c3322afc758e60f863404d1cc1c740a
+local               swarm-demo-0/80782ec228a00b112a8daeb1ff538965592b79a03e00704f1147e52686f66e08
+glusterfs           dockercomposeimagesonly_dbdataalpha
+local               swarm-demo-2/e748c42e89c6ca29d552938e45f9e14c57a36fb0a0c1027f8d80bde48fb71950
+local               swarm-demo-2/5440db66ebca3f33d7c696e83f43957488993a6408519f3d5b08ac05d983b826
+local               swarm-demo-2/f9764a8dec79f4246b3833fd4b32b45900faa637f707212b738b1f8b3c817e40
+local               swarm-demo-2/dockercomposeimagesonly_dbdatadelta
+local               swarm-demo-1/2c161642f2d9187c6ab7ff943b00c8795913e21ea77e6b383c1a2eb760567f75
+local               swarm-demo-1/dockercomposeimagesonly_alphafile
+local               swarm-demo-1/42e459075a5d816bf782e270ae5d236de8ebd21324bf0234480336292f0d9b08
+local               swarm-demo-1/a059fca2f0a94249150a000e27b3d916606cac1ccdcd5947cc6192d7ba04a74d
+Same docker-compose file few seconds later after deleting those volumes:
+(1:928)$ docker-compose.exe up -d alphaapps
+Creating volume "dockercomposeimagesonly_dbdatamych" with glusterfs driver
+Creating volume "dockercomposeimagesonly_redisdata" with glusterfs driver
+Creating volume "dockercomposeimagesonly_esdata" with glusterfs driver
+Creating volume "dockercomposeimagesonly_deltafile" with glusterfs driver
+Creating volume "dockercomposeimagesonly_alphafile" with glusterfs driver
+Creating volume "dockercomposeimagesonly_dbdataalpha" with glusterfs driver
+Creating volume "dockercomposeimagesonly_dbdatadelta" with glusterfs driver
+Creating dockercomposeimagesonly_dbalpha_1
+Creating dockercomposeimagesonly_dbdelta_1
+Creating dockercomposeimagesonly_mailcatcher_1
+Creating dockercomposeimagesonly_alphaapps_1
+
+(1:933)$ docker info
+Containers: 26
+ Running: 24
+ Paused: 0
+ Stopped: 2
+Images: 58
+Server Version: swarm/1.1.3
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 3
+ swarm-demo-0: 172.20.7.126:2376
+  └ Status: Healthy
+  └ Containers: 9
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 4.053 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.19.0-49-generic, operatingsystem=Ubuntu 14.04.3 LTS, storagedriver=devicemapper
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-13T08:08:58Z
+ swarm-demo-1: 172.20.7.128:2376
+  └ Status: Healthy
+  └ Containers: 8
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 4.053 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.19.0-49-generic, operatingsystem=Ubuntu 14.04.3 LTS, storagedriver=devicemapper
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-13T08:09:24Z
+ swarm-demo-2: 172.20.7.127:2376
+  └ Status: Healthy
+  └ Containers: 9
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 4.053 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.19.0-49-generic, operatingsystem=Ubuntu 14.04.3 LTS, storagedriver=devicemapper
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-13T08:09:22Z
+Plugins:
+ Volume:
+ Network:
+Kernel Version: 3.19.0-49-generic
+Operating System: linux
+Architecture: amd64
+CPUs: 6
+Total Memory: 12.16 GiB
+Name: a84ffcda9bdf
+
+Local docker client version
+(1:934)$ docker version
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 22:37:33 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      swarm/1.1.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   7e9c6bd
+ Built:        Wed Mar  2 00:15:12 UTC 2016
+ OS/Arch:      linux/amd64
+10273/16289MB   0.00 0.00 0.00 1/4
+
+Server Version:
+ubuntu@swarm-demo-0:~$ docker info
+Containers: 9
+ Running: 8
+ Paused: 0
+ Stopped: 1
+Images: 24
+Server Version: 1.10.3
+Storage Driver: devicemapper
+ Pool Name: docker-253:1-393230-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: ext4
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 10.7 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 28.97 GB
+ Metadata Space Used: 16.61 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.131 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.77 (2012-10-15)
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins:
+ Volume: glusterfs local
+ Network: overlay null host bridge
+Kernel Version: 3.19.0-49-generic
+Operating System: Ubuntu 14.04.3 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 3.86 GiB
+Name: swarm-demo-0
+ID: 6SWP:PWMY:BDCK:BAML:PN5C:EZJG:CXKA:QNTR:LG7Z:DGIZ:PPWX:NTOZ
+WARNING: No swap limit support
+Cluster store: consul://127.0.0.1:8500
+Cluster advertise: 172.20.7.126:2376
+ubuntu@swarm-demo-0:~$
+
+(1:936)$ docker-compose version
+docker-compose version 1.6.2, build e80fc83
+docker-py version: 1.7.2
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+10273/16289MB   0.00 0.00 0.00 1/4

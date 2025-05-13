@@ -1,0 +1,19 @@
+rivaros commented on 19 Apr 2017 •
+edited
+Suppose I have the following config (simplified):
+  src:
+    build:
+      context: deploy/src
+    image: myname/base
+
+  fpm:
+    build:
+      context: deploy/fpm
+    image: myname/fpm
+Dockerfile for fpm is located in deploy/fpm, Dockerfile for src is located in deploy/src
+Dockerfile for myname/fpm image extends from myname/base image
+FROM myname/base
+Therefore I need to include both services (src & fpm), and make containers from them.
+Is it possible to specify that src service is for build only.
+So it first builds myname/base image and then myname/fpm image.
+If I omit src it will not be able to find myname/base image since it was not build yet.

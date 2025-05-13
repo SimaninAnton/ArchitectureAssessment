@@ -1,0 +1,36 @@
+david-sauvage commented on 21 Feb 2018
+Hello everyone,
+I'm a newbie in docker and I met a problem that seems weird to me.
+Here is my docker compose :
+version: '2'
+
+services:
+  jekyll:
+    image: .
+    volumes:
+      - .:/site
+    ports:
+      - '80:4000'
+I have a dockerfile in the directory where I execute the command docker-compose up and the result is this error :
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 124, in perform_command
+  File "compose\cli\main.py", line 959, in up
+  File "compose\project.py", line 453, in up
+  File "compose\project.py", line 514, in _get_convergence_plans
+  File "compose\service.py", line 351, in convergence_plan
+  File "compose\service.py", line 366, in _containers_have_diverged
+  File "compose\service.py", line 602, in config_hash
+  File "compose\service.py", line 607, in config_dict
+TypeError: list indices must be integers, not unicode
+Failed to execute script docker-compose
+My docker version :
+docker-compose version 1.18.0, build 8dd22a96
+docker-py version: 2.6.1
+CPython version: 2.7.14
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+The error is that I used "image" instead of "build" in the docker compose but when I look the error on the internet it points out to list in yaml so I was focused for awhile on the "volumes" part.
+Maybe you could improve the error in order to be more explicit.
+I know it's really minor but maybe this can help others :)
+Have fun !

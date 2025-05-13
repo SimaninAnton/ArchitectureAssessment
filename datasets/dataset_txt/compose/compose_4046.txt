@@ -1,0 +1,4 @@
+cosminonnet commented on 14 Dec 2014
+Hi,
+I would like to use the newly added "restart_policy" parameter (see #712 (comment)). When is the next release of Fig scheduled? (I suppose version 1.0.2 is next).
+Thanks

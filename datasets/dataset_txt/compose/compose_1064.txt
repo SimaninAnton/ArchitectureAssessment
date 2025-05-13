@@ -1,0 +1,6 @@
+Contributor
+summergirl21 commented on 23 Nov 2017
+Some of the examples in CONTRIBUTING.md showing how to run individual tests are invalid.
+$ script/test/default tests/unit/config_test.py::ConfigTest
+$ script/test/default tests/unit/config_test.py::ConfigTest::test_load
+tests/unit/config_test.py is not a valid file, this files is in tests/unit/config/config_test.py

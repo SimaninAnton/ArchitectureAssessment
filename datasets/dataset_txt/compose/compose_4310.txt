@@ -1,0 +1,2 @@
+lcheng61 commented on 6 Jun 2014
+How can I specify the memory/cpu limit to the container at fig.yml file ? I think maybe I missed a manual doc. Can someone point to me the complete syntax of fig.yml file ?

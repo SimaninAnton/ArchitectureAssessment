@@ -1,0 +1,4 @@
+paulvanbladel commented on 19 Jan 2018
+Docker-compose build writes by default "Building MyImage" to STDERR where MyImage is the image I'm building.
+That makes integration with a build process quite difficult, since I want to capture real errors.
+Any workaround possible ?

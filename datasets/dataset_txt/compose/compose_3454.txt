@@ -1,0 +1,68 @@
+kadishmal commented on 20 Jul 2015
+I'm having issues with docker-compose connecting to a swarm cluster.
+I have a docker engine running locally on port 2375 and swarm running on port 2376. There are 3 physical machines in the cluster. The docker clients points to the swarm so, doing the following returns the cluster information.
+$ docker info
+Containers: 7
+Images: 28
+Role: primary
+Strategy: spread
+Filters: affinity, health, constraint, port, dependency
+Nodes: 3
+ swarm-1: 192.168.116.98:2375
+  ?? Containers: 2
+  ?? Reserved CPUs: 0 / 25
+  ?? Reserved Memory: 0 B / 132.3 GiB
+  ?? Labels: executiondriver=native-0.2, kernelversion=2.6.32-504.3.3.el6.x86_64, operatingsystem=<unknown>, storagedriver=devicemapper
+ swarm-2: 192.168.116.99:2375
+  ?? Containers: 2
+  ?? Reserved CPUs: 0 / 25
+  ?? Reserved Memory: 0 B / 132.3 GiB
+  ?? Labels: executiondriver=native-0.2, kernelversion=2.6.32-504.3.3.el6.x86_64, operatingsystem=<unknown>, storagedriver=devicemapper
+ swarm-3: 192.168.116.100:2375
+  ?? Containers: 3
+  ?? Reserved CPUs: 0 / 25
+  ?? Reserved Memory: 0 B / 132.3 GiB
+  ?? Labels: executiondriver=native-0.2, kernelversion=2.6.32-504.3.3.el6.x86_64, operatingsystem=<unknown>, storagedriver=devicemapper
+CPUs: 75
+Total Memory: 396.9 GiB
+My DOCKER_HOST=tcp://127.0.0.1:2376 points to swarm now.
+I can do docker ps and docker info to see the cluster status, however docker-compose up complains saying:
+$ docker-compose --verbose up -d
+Compose version 1.3.3
+Docker base_url: http://127.0.0.1:2376
+Docker version: KernelVersion=, Arch=amd64, ApiVersion=1.16, Version=swarm/0.3.0, GitCommit=28cd51b, Os=linux, GoVersion=go1.3.3
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=dockerengine', u'com.docker.compose.service=redis', u'com.docker.compose.oneoff=False']})
+Couldn't connect to Docker daemon at http://127.0.0.1:2376 - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+What could be the problem?
+I can even do docker run --rm -it centos bash and Swarm will start the container and put me into the bash session.
+So Swarm is working fine, but docker-compose version 1.3.3 cannot connect to Swarm
+Can anybody suggest any ideas?
+My docker-compose.yml is simple for testing purpose:
+mongo:
+  image: mongo:3.0.4
+  ports:
+   - "27017:27017"
+redis:
+  image: redis:2.8
+  ports:
+   - "6379:6379"
+
+$ docker version
+Client version: 1.7.1
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 786b29d
+OS/Arch (client): linux/amd64
+Server version: swarm/0.3.0
+Server API version: 1.16
+Go version (server): go1.3.3
+Git commit (server): 28cd51b
+OS/Arch (server): linux/amd64
+
+$ cat /etc/redhat-release
+CentOS release 6.6 (Final)
+
+$ uname -a
+Linux xseed120.kdev 2.6.32-504.3.3.el6.x86_64 #1 SMP Wed Dec 17 01:55:02 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux

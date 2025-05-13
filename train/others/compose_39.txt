@@ -1,0 +1,7 @@
+rizplate commented on 9 Dec 2019 •
+edited
+docker-compose status hangs when making any http call to docker daemon. It was fine using macOS Mojave, I upgraded to Catalina and not it is very slow
+I tried all the solutions mentioned above, new docker-compose , using mac binaries etc.
+docker compose is very slow on mac catalina, please provide fix
+I have installed latest version of docker on mac, and also checked other fixes and bug reports i.e. #7010 and #6956
+No fixes are working, it is still very slow

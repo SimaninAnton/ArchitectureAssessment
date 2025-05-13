@@ -1,0 +1,15 @@
+akatrevorjay commented on 11 Aug 2017 •
+edited
+Hi. A common pattern I use is like so:
+[child.svc] inherits [parent.svc] inherits [parent.basesvc]
+This equates to:
+docker-compose.yml:web              # web (contains environment specifics for local dev)
+  ^ extends compose/apps.yml:web    # base web service that is also inherited in other places, for say tests
+    ^ extends compose/apps.yml:app  # base service that is inherited for all app containers
+But this is broken with 1.15. For now I have downgraded to 1.14.
+I haven't had much time to look into it yet, but it appears it may be an issue in dependency resolution?
+Error below:
+ERROR: Cannot extend service 'app' in PROJECT/compose/apps.yml: Service not found
+I'm seeing this using version 2.1 of the compose file format, but it may affect others.
+Ty!
+Trevor

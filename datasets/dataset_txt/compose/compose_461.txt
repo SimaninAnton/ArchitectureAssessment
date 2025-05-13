@@ -1,0 +1,6 @@
+inl-pd-autotest commented on 9 Oct 2018
+Related to #2268
+Docker throws errors when it tries to bind A:B where A's and B's types do not match: they both have to be either files or dirs.
+When user starts a container with such a mount and A doesn't exist yet - docker creates it always as a dir, so if your B is a file - you'll get an error.
+The only solution now is to do touch A beforehand, but I'd like docker to be able to do that for me via an option that I could specify somehow.
+Personally I'd prefer relying on the presence/absence of a / at the end of the path, so that A:B would be a file:file mount and A/:B/ would be a dir:dir mount.

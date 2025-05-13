@@ -1,0 +1,7 @@
+tarunlalwani commented on 26 Aug 2015
+Hi,
+This is more of a question rather than issue. I run some containers the only job of those containers is to keep running and people can exec into it and execute some commands. To keep the containers running as of now i use below
+command: top -b
+This works great and keeps container running but also floods the log. I wanted to know if there is a better way to do this?
+Regards,
+Tarun

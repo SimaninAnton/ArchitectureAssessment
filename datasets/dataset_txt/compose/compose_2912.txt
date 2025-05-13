@@ -1,0 +1,3 @@
+emilebosch commented on 17 Jan 2016
+Overlay networking /w swarm uses and modifies /etc/hosts in order to do container discovery and update the containers , when boot order isn't honored ts means that the web container can be booted before the db, and then can never reach the DB. (Because swarm didn't update the /etc/hosts because it aint booted yet).
+In other words. docker swarm just made boot order important, links are of no use in a swarm so lets fix this for once. I've seen many duplicates on this. But not regarding swarm.

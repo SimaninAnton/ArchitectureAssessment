@@ -1,0 +1,37 @@
+airtonix commented on 17 Dec 2016
+Unless I use double quotes in my dockerfile, the ENTRYPOINT and CMD do not behave as documented.
+...
+ENTRYPOINT ['/entrypoint.sh']
+CMD ['php', '-S', 'localhost:8000']
+$ docker-compose build && docker-compose up
+.. builds fine, fails to come up.
+$ docker inspect dockermagento1_app_1
+[
+    {
+        "Id": "e665bb841f7a0a39115f78aa47494f5ba2c728315f093f51a5da4ebf5dc33e0b",
+        "Created": "2016-12-17T10:56:52.317211767Z",
+        "Path": "/bin/sh",
+        "Args": [
+            "-c",
+            "['/entrypoint.sh']",
+            "/bin/sh",
+            "-c",
+            "['php', '-S', 'localhost:8000']"
+        ],
+...
+Change the Docker file to:
+...
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php", "-S", "localhost:8000"]
+and then the result is :
+$ docker inspect dockermagento1_app_1
+[
+    {
+        "Id": "730d3c1984937745640d262abc0e9c16f3255ee7119ab1486fa88f0859cf055b",
+        "Created": "2016-12-17T11:05:19.63167817Z",
+        "Path": "/entrypoint.sh",
+        "Args": [
+            "php",
+            "-S",
+            "localhost:8000"
+        ],

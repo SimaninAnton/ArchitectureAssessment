@@ -1,0 +1,5 @@
+alewaros commented on 4 Aug 2017
+Hello
+I'm having an issue in which my project generates a bundled file during buildtime with a RUN command in the Dockerfile but at the moment of running the project, a volume was inserted over all the project which hid the bundled file.
+The solution to allow the container to see the image's bundled file was adding a volume in the /dist directory and it worked when running the container. The problem is that when I change my code and rebuild the image so webpack can bundle the new changes, the bundled file remains the same as in the first try. In other words, this only works the first time I use it.
+Is this a bug or normal behavior?

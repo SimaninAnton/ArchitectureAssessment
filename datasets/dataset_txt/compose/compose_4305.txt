@@ -1,0 +1,33 @@
+hackzilla commented on 20 Jun 2014
+root@dev-stats-web:~# fig up
+Recreating root_statssymfony_1...
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.4.2', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 31, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 50, in perform_command
+    return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 306, in up
+    to_attach = self.project.up(service_names=options['SERVICE'])
+  File "/usr/local/lib/python2.7/dist-packages/fig/project.py", line 131, in up
+    for (_, new) in service.recreate_containers():
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 173, in recreate_containers
+    tuples.append(self.recreate_container(c, **override_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 195, in recreate_container
+    self.start_container(new_container, volumes_from=intermediate_container.id)
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 225, in start_container
+    external_dir, internal_dir = volume.split(':')
+ValueError: too many values to unpack
+Took me a while to figure out I'd added :rw to the fig.yml
+  volumes:
+   - stats-symfony/logs:/var/log/nginx:rw
+Would be good idea to add a warning, or support it.

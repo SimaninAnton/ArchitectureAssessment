@@ -1,0 +1,19 @@
+thomas15v commented on 16 Feb 2017 •
+edited
+For people that just are getting started with compose, the command docker-compose down can be confusing at first. We had an encounter where we did docker-compose down to stop the service. Which ended catastrophically. It would be nice if the command gave us a warning like:
+$ docker-compose down
+Warning this action will delete the following containers and volumes:
+ - production_odoo
+ - production_db
+ - production_nginx
+Are you sure you want to continue (Yes/No): N
+$ docker-compose down -y
+Stopping production_odoo
+Stopping production_db
+Stopping production_nginx
+Removing production_odoo
+Removing production_db
+Removing production_nginx
+Removing network production_default
+And yes I know that our containers should be stateless, but sadly enough we had to learn that the hard way. It would be nice that we could warn those poor souls out there that will encounter the same thing we did.
+2

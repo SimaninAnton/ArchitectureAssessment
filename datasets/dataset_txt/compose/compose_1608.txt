@@ -1,0 +1,55 @@
+kuhnroyal commented on 11 Mar 2017
+I have a running docker-compose stack with external volumes. I executed a docker system prune and afterwards a docker-compose down -v. After that my external volumes were gone. Docker said it didn't remove the volumes and docker-compose said it skipped them as well, but they are gone...
+foobar@foobar:~/docker/crowd$ docker system prune
+WARNING! This will remove:
+ - all stopped containers
+ - all volumes not used by at least one container
+ - all networks not used by at least one container
+ - all dangling images
+Are you sure you want to continue? [y/N] y
+Deleted Volumes:
+294b0dce0c73dd6c2d3097c8677a38590c205e3ef8b90d499ad4910ae380896d
+45a9daf577fa6a105dce8cc8c7e1b53643ff14aef14c5b1d32772dffd0af5231
+49ef85bc036cee5d3386b9d05cd665384de728299e4d9622693d2edb86cc8f5e
+fe7d527e1290020d76e142f5380be52354e6de3dc60d913ecd5c4308782adf1c
+084b1d71d22f777141a89d23532e7f3ab54053654261656e43f3782e6f088441
+62c18114a75de15b8da4bb76c6be6452ba59cc04ec685420521cfbcbcefd0e4a
+8ee630f073ac643e998443fb2480995c6c8f65708b03633a385945b030108902
+
+Deleted Networks:
+dns_default
+
+Deleted Images:
+deleted: sha256:12217acf8d40d63aa23af5173b4beb5780d3b473ff184ebe36f46ddff2b90c01
+deleted: sha256:91311e88ecc831bd8cd55b631083072bbb5e318e43c3fbfae2760fbe62afae97
+deleted: sha256:be833f46cdbf17c021e280c7f21438f8e2f6e9dee93781335323920cfe5a80ad
+
+Total reclaimed space: 235.7 MB
+foobar@foobar:~/docker/crowd$ docker volume ls
+DRIVER              VOLUME NAME
+local               c42575814192f41ee93eaf569434e011230b03cb921d79518b2fb4e78ddccb6e
+local               crowd_mysql_data
+local               crowd_web_data
+local               ldap_data
+local               ldap_slapd_data
+
+foobar@foobar:~/docker/crowd$ docker-compose down -v
+Stopping crowd_web ... done
+Stopping crowd_mysql ... done
+Removing crowd_web ... done
+Removing crowd_mysql ... done
+Network crowd is external, skipping
+Volume crowd_web_data is external, skipping
+Volume crowd_mysql_data is external, skipping
+foobar@foobar:~/docker/crowd$ docker-compose up -d
+ERROR: Volume crowd_web_data declared as external, but could not be found. Please create the volume manually using `docker volume create --name=crowd_web_data` and try again.
+foobar@foobar:~/docker/crowd$ docker volume ls
+DRIVER              VOLUME NAME
+local               c42575814192f41ee93eaf569434e011230b03cb921d79518b2fb4e78ddccb6e
+local               ldap_data
+local               ldap_slapd_data
+Versions:
+foobar@foobar:~/docker/crowd$ docker -v
+Docker version 17.03.0-ce, build 60ccb22
+foobar@foobar:~/docker/crowd$ docker-compose -v
+docker-compose version 1.11.2, build dfed245

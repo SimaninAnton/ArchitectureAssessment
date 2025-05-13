@@ -1,0 +1,28 @@
+appcoreopc commented on 8 Apr 2019 •
+edited
+Hi all, I am having problem trying to get configs to be deployed together with my running containers. I would expect settings to appear on the root like C:\settings. However, I don't seem to see it.
+Here is a copy of my docker-compose.yml. Any help would be great Thanks.
+Command used :-
+docker stack deploy --compose-file docker-compose.yml mycontainerWithSettings
+docker-compose.yml
+version: "3.3"
+services:
+webapi:
+image: mylocalrepository-image:0.1.0-image-tagging0293
+configs:
+- source: appsetting
+target: C:\settings\mysettings.shared.default.yml
+environment:
+- ENVIRONMENT.CATEGORY=DEV
+- ENVIRONMENT.INSTANCE=MYMACHINE
+- SETTINGS.SHAREDPATH=C:\settings\mysettings.shared.default.yml
+ports:
+- "5000:5000"
+configs:
+appsetting:
+file : mysettings.shared.default.yml
+Docker windows version :
+docker-compose version 1.23.2, build 1110ad0
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o 27 Mar 2018

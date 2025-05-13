@@ -1,0 +1,1 @@
+Basic compose file, container can't access to another container

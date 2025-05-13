@@ -1,0 +1,23 @@
+dirkschneemann commented on 24 Mar 2017
+With regular Docker commands, I can do:
+docker build --no-cache .
+or
+docker build --no-cache=true .
+In docker-compose, however, this one works
+docker-compose build --no-cache
+while this one
+docker-compose build --no-cache=true
+fails with
+Build or rebuild services.
+
+Services are built once and then tagged as `project_service`,
+e.g. `composetest_db`. If you change a service's `Dockerfile` or the
+contents of its build directory, you can run `docker-compose build` to rebuild it.
+
+Usage: build [options] [SERVICE...]
+
+Options:
+    --force-rm  Always remove intermediate containers.
+    --no-cache  Do not use cache when building the image.
+    --pull      Always attempt to pull a newer version of the image.
+Is there a specific reason for this inconsistency? Using the more explicit form would be useful for me in the context of a Jenkins job with a "boolean parameter" which is a checkbox, setting a bash variable to "true" or "false".

@@ -1,0 +1,1 @@
+Can fig build an image with no service/container associated ?

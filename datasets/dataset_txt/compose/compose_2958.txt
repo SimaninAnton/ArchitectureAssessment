@@ -1,0 +1,97 @@
+ava-miket commented on 31 Dec 2015
+Launching this container manually works:
+$ docker run -it --security-opt 'apparmor:docker-ptrace' conversica/integrations-build /bin/bash
+Launching from docker-compose fails. Here's the config file:
+integrations:
+restart: always
+image: conversica/integrations-build
+security_opt:
+- apparmor:docker-ptrace
+Note that if I remove security_opt from the compose config then the container will launch OK.
+Here's the failed output:
+(docker1):~/Documents/ansible/roles/docker/files$ docker-compose --verbose up integrations
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Trying /home/xxx/.docker/config.json
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'https://index.docker.io/v1/', username=u'xxx')
+compose.cli.command.get_client: docker-compose version 1.5.2, build 7240ff3
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=3.13.0-73-generic, Os=linux, BuildTime=Fri Nov 20 13:12:04 UTC 2015, ApiVersion=1.21, Version=1.9.1, GitCommit=a34a1d5, Arch=amd64, GoVersion=go1.4.2
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=files', u'com.docker.compose.service=integrations', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True)
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 5 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=files', u'com.docker.compose.service=integrations', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True)
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 5 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('conversica/integrations-build')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+u'Author': u'',
+u'Comment': u'',
+u'Config': {u'AttachStderr': False,
+u'AttachStdin': False,
+u'AttachStdout': False,
+u'Cmd': [u'/bin/bash'],
+u'Domainname': u'',
+u'Entrypoint': [u'/sbin/my_init'],
+u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=files', u'com.docker.compose.service=integrations', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('conversica/integrations-build')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+u'Author': u'',
+u'Comment': u'',
+u'Config': {u'AttachStderr': False,
+u'AttachStdin': False,
+u'AttachStdout': False,
+u'Cmd': [u'/bin/bash'],
+u'Domainname': u'',
+u'Entrypoint': [u'/sbin/my_init'],
+u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+...
+compose.service.build_container_labels: Added config hash: 8b9752a0595711976eb2fa50ce69a7c9ef75182035248de15aa8d623c10c9d42
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (memswap_limit=None, links=[], dns_search=None, pid_mode=None, log_config={'Type': u'', 'Config': {}}, read_only=None, dns=None, volumes_from=[], port_bindings={}, security_opt=['apparmor:docker-ptrace'], extra_hosts=None, cgroup_parent=None, network_mode=None, cap_add=None, restart_policy={u'MaximumRetryCount': 0, u'Name': u'always'}, devices=None, privileged=False, binds=[], ipc_mode=None, mem_limit=None, cap_drop=None, ulimits=None)
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': [],
+'Links': [],
+'LogConfig': {'Config': {}, 'Type': u''},
+'PortBindings': {},
+'RestartPolicy': {u'MaximumRetryCount': 0, u'Name': u'always'},
+'SecurityOpt': ['apparmor:docker-ptrace'],
+'VolumesFrom': []}
+compose.service.create_container: Creating files_integrations_1
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name=u'files_integrations_1', image='conversica/integrations-build', labels={u'com.docker.compose.service': u'integrations', u'com.docker.compose.project': u'files', 'com.docker.compose.config-hash': '8b9752a0595711976eb2fa50ce69a7c9ef75182035248de15aa8d623c10c9d42', 'com.docker.compose.version': u'1.5.2', u'com.docker.compose.oneoff': u'False', 'com.docker.compose.container-number': '1'}, host_config={'Links': [], 'PortBindings': {}, 'SecurityOpt': ['apparmor:docker-ptrace'], 'Binds': [], 'RestartPolicy': {u'MaximumRetryCount': 0, u'Name': u'always'}, 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment={}, detach=True)
+compose.cli.verbose_proxy.proxy_callable: docker create_container -> {u'Id': u'264950c4f51ed803bf1eeca6777279354878cac88300e13285aa1ab74e144956',
+u'Warnings': None}
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'264950c4f51ed803bf1eeca6777279354878cac88300e13285aa1ab74e144956')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'docker-ptrace',
+u'Args': [u'/bin/bash'],
+u'Config': {u'AttachStderr': False,
+u'AttachStdin': False,
+u'AttachStdout': False,
+u'Cmd': [u'/bin/bash'],
+u'CpuShares': 0,
+u'Cpuset': u'',
+u'Domainname': u'',
+u'Entrypoint': [u'/sbin/my_init'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'264950c4f51ed803bf1eeca6777279354878cac88300e13285aa1ab74e144956')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'docker-ptrace',
+u'Args': [u'/bin/bash'],
+u'Config': {u'AttachStderr': False,
+u'AttachStdin': False,
+u'AttachStdout': False,
+u'Cmd': [u'/bin/bash'],
+u'CpuShares': 0,
+u'Cpuset': u'',
+u'Domainname': u'',
+u'Entrypoint': [u'/sbin/my_init'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'264950c4f51ed803bf1eeca6777279354878cac88300e13285aa1ab74e144956', stderr=True, stream=True, stdout=True)
+compose.cli.verbose_proxy.proxy_callable: docker attach -> <generator object _multiplexed_response_stream_helper at 0x7fb8471600a0>
+compose.cli.verbose_proxy.proxy_callable: docker start <- (u'264950c4f51ed803bf1eeca6777279354878cac88300e13285aa1ab74e144956')
+ERROR: compose.cli.main.main: Cannot start container 264950c4f51ed803bf1eeca6777279354878cac88300e13285aa1ab74e144956: [8] System error: no such file or directory

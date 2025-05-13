@@ -1,0 +1,1 @@
+Allow logging to be set as top level configuration

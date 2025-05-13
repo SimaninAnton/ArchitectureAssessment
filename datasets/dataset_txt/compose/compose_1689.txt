@@ -1,0 +1,33 @@
+vmrob commented on 14 Feb 2017 •
+edited
+Per the docker-compose docs, docker-compose run -e FOO service should expose the environment variable FOO from the host to the service. This works on macOS:
+$ docker --version
+Docker version 1.13.1, build 092cba3
+$ docker-compose --version
+docker-compose version 1.11.1, build 7c5d5e4
+$ cat docker-compose.yml
+version: '2'
+services:
+    foobar:
+        image: ubuntu:16.04
+$ export FOO=asdf
+$ docker-compose run --rm -e FOO foobar
+root@e3d159a32d22:/# echo $FOO
+asdf
+The latest on Ubuntu does not produce the same behavior:
+$ docker --version
+Docker version 1.13.1, build 092cba3
+$ docker-compose --version
+docker-compose version 1.11.1, build 7c5d5e4
+$ cat docker-compose.yml
+version: '2'
+services:
+    foobar:
+        image: ubuntu:16.04
+$ export FOO=asdf
+$ docker-compose run --rm -e FOO foobar
+Creating network "temp_default" with the default driver
+root@8ddf7da98a76:/# echo $FOO
+Both work if I set the variable manually with -e FOO=asdf.
+I'm running Ubuntu 16.04 from Amazon (ami-40d28157)
+I believe I've also seen issues using .env, but I'm not sure enough to put together a minimal repro.

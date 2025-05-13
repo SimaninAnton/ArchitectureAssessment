@@ -1,0 +1,7 @@
+stlouisn commented on 20 Mar 2018
+getting the following error messages:
+docker-compose -v
+/bin/sh: /tmp/_MEI1e1GVG/libtinfo.so.5: no version information available (required by /bin/sh)
+docker-compose version 1.20.0, build ca8d3c6
+uname -a
+Linux ***. 4.9.0-6-amd64 #1 SMP Debian 4.9.82-1+deb9u3 (2018-03-02) x86_64 GNU/Linux

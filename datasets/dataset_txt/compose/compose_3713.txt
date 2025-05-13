@@ -1,0 +1,2 @@
+hesonglin006 commented on 17 Apr 2015
+Using docker-compose to start several nginx servers,what I want to achieve is when I access to the nginx host,it can be distributed to the containers created by nginx image.now the port of the host is 80,so I want to map the host's port the the container's random port.I will really be appreciated for your response!

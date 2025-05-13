@@ -1,0 +1,16 @@
+wernight commented on 26 Mar 2015
+Before being able to run a service there are often build steps. Example: Minimizing CSS/JS, compiling locales, aggregating static files... I'm considering websites with frequent docker-compose build && docker-compose up to push new changes.
+There are two possibilities currently which fail short in some cases, even more with docker-compose:
+Make a Dockerfile and use ADD to include your code, then do those operations during docker-compose build
+Pro: Allows for example to give write access to www-data even if there is no such user/group in the host.
+Pro: Doesn't pollute or even affect the host directory, which is usually really good during production.
+Pro: Allow zero-downtime deployment (good for production).
+Use a Docker image with writable mounted volumes, then do those operations during docker-compose run --rm ....
+Pro: Changing a file locally and refreshing is usually enough, which is required during development!
+Pro: Backing up modified data is easy as files are changed locally, which is good during development.
+Using option (2) during development is good, and option (1) during production releases. However it's not just a flag to switch between both (unless you build an entire system). Which means that you would have to maintain two versions and break one or the other sooner or later (i.e., having something working if you run using (2) but breaking if you run via (1)).
+Issues that could help:
+docker-compose should allow to tell which Docker running instance is used for a given service. This would allow to mix docker-compose and pure docker commands. To do for example: docker commit ... to that one could do option (2) (mount volumes, run some commands), and commit changes as a new image (that last step may be used only during production to fall to option (1)). So you may run all system tests and once everything's fine, commit as a new image and start that one on deployment ports. Also it'd simplify docker cp ... to retrieve data and make backups for example.
+docker-compose run and up should allow -v to mount during development only, allowing to setup option (1) but mount volumes only during development without changing the docker-compose.
+docker-compose.yml could have some for of conditional elements for example to have the ports assigned a bit differently during deployment than during development, or some folders not mounted...
+1

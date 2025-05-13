@@ -1,0 +1,24 @@
+barrachri commented on 23 Jan 2015 •
+edited
+Hi people,
+I'm trying docker-compose 1.10-rc1 on Fedora 21.
+python:
+  restart: always
+  build: ./backend/
+  environment:
+   - APP_CONFIG=config.Production
+nodejs:
+  restart: always
+  build: ./node_app/
+nginx:
+    restart: always
+    build: ./deploy/nginx/
+    ports:
+        - "80:80"
+        - "443:443"
+    links:
+        - python:pythonapp
+        - nodejs:nodejs
+But after a simple # reboot containers don't start again.
+Maybe I miss something ?
+1

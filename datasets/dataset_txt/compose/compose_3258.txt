@@ -1,0 +1,27 @@
+rosskevin commented on 29 Sep 2015
+For performance reasons (2x less time), I want to copy my source directory into my web container, and following the run, I'm extracting test results afterwards. I do not want to share a host volume (due to 2x the performance time, and permissions issues). After the execution, I don't care for the volume or container to stick around (I'm using this for continuous integration), so I'll remove the container, any volumes, and any images that wouldn't be useful for the next build.
+My understanding is that I want to use something like VOLUME to bypass the union file system, and COPY to get my host files into the container.
+Currently, my Dockerfile looks like:
+FROM atlashealth/ruby:2.2.2
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# For building, nokogiri support, capybara-webkit, mysql client
+# Clean up APT when done.
+RUN apt-get update -qq && \
+    apt-get install -qy build-essential libxml2-dev libxslt1-dev \
+            g++ qt5-default libqt5webkit5-dev xvfb dbus \
+            libmysqlclient-dev \
+            mysql-client sysbench && \
+
+    # cleanup
+    apt-get clean && \
+    cd /var/lib/apt/lists && rm -fr *Release* *Sources* *Packages* && \
+    truncate -s 0 /var/log/*log
+
+# https://github.com/docker/docker/issues/4032
+ENV DEBIAN_FRONTEND newt
+
+VOLUME /project
+COPY . /project
+If I didn't have the COPY in there, it would be my universal web container image for any build. While VOLUME can be defined in the compose.yml, is there a COPY equivalent? Any other thoughts on this approach to get the best performance?

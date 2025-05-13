@@ -1,0 +1,4 @@
+WadeWaldron commented on 16 Jun 2016
+When running docker-compose with the scale command, there is no way to specify which instances should be removed when scaling down.
+For example. Suppose we want to implement a rolling deployment strategy. To do this we might scale up the number of instances. We start with 3 instances of v1, and then we scale up with 3 more instances of v2. Then, once v2 is up and everything has been switched over, we want to scale back down to 3 instances total. However the scale command always selects the newest instances to remove, leaving the older instances behind. This means our v1 instances will always get left behind and our v2 instances will always be terminated.
+Ideally we would be able to filter this in some way to tell it to scale down only instances with a specific tagged version, or perhaps removing the oldest instances instead of the newer ones.

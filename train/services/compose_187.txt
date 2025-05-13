@@ -1,0 +1,57 @@
+mkdreams commented on 10 May 2019 •
+edited
+docker -v
+Docker version 18.09.0
+docker-compose
+docker-compose version 1.18.0
+yml(Part of the configuration):
+xx:
+network_mode: host
+image: xx
+container_name: xx
+ulimits:
+core:
+soft:0
+run:
+docker-compose -f xx.yml restart
+get error:
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 9, in
+load_entry_point('docker-compose==1.18.0', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python3.4/site-packages/compose/cli/main.py", line 71, in main
+command()
+File "/usr/lib/python3.4/site-packages/compose/cli/main.py", line 121, in perform_command
+project = project_from_options('.', options)
+File "/usr/lib/python3.4/site-packages/compose/cli/command.py", line 37, in project_from_options
+override_dir=options.get('--project-directory'),
+File "/usr/lib/python3.4/site-packages/compose/cli/command.py", line 91, in get_project
+config_data = config.load(config_details)
+File "/usr/lib/python3.4/site-packages/compose/config/config.py", line 375, in load
+for config_file in config_details.config_files
+File "/usr/lib/python3.4/site-packages/compose/config/config.py", line 375, in
+for config_file in config_details.config_files
+File "/usr/lib/python3.4/site-packages/compose/config/config.py", line 506, in process_config_file
+environment)
+File "/usr/lib/python3.4/site-packages/compose/config/config.py", line 497, in interpolate_config_section
+environment
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 44, in interpolate_environment_variables
+for name, config_dict in config.items()
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 44, in
+for name, config_dict in config.items()
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 39, in process_item
+for key, val in (config_dict or {}).items()
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 39, in
+for key, val in (config_dict or {}).items()
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 54, in interpolate_value
+return recursive_interpolate(value, interpolator, get_config_path(config_key, section, name))
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 74, in recursive_interpolate
+for (key, val) in obj.items()
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 74, in
+for (key, val) in obj.items()
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 70, in recursive_interpolate
+return converter.convert(config_path, interpolator.interpolate(obj))
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 184, in convert
+return self.maprexp
+File "/usr/lib/python3.4/site-packages/compose/config/interpolation.py", line 141, in to_int
+return int(s, base=0)
+ValueError: invalid literal for int() with base 0: 'soft:0'

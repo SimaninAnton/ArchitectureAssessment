@@ -1,0 +1,1 @@
+Handle failing attempt to scale a service, e.g. rollback scale after a port collision issue

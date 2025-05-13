@@ -1,0 +1,34 @@
+JonasVautherin commented on 16 Nov 2016
+I have been running a webserver without problems for months with the following docker-compose.yml:
+version: '2'
+services:    
+        my-container:
+                restart: always
+                build: ../my-container
+                ports:
+                        - "80:8080"
+For some reasons, I decided to use macvlan for the network setup, as follows:
+version: '2'
+services:
+        my-container:
+                restart: always
+                build: ../my-container
+                ports:
+                        - "80:8080"
+                networks:
+                        mynetwork:
+                                ipv4_address: "10.12.1.22"
+
+networks:
+        mynetwork:
+                driver: macvlan
+                ipam:
+                        driver: default
+                        config:
+                                - subnet: "10.12.0.0/16"
+                                  gateway: "10.12.0.1"
+                                  ip_range: "10.12.1.0/24"
+                driver_opts:
+                        parent: "eth0"
+The network is working fine, but the 80:8080 port mapping is ignored: I can successfully access my webpage on port 8080, but not on port 80. If I remove the networks again, then the port mapping works.
+Am I missing something in the docker-compose.yml? Should I define the port mapping differently when using networks?

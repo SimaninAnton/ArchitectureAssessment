@@ -1,0 +1,17 @@
+anacrolix commented on 9 Feb 2017 •
+edited
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 64, in main
+  File "compose/cli/main.py", line 116, in perform_command
+  File "compose/cli/main.py", line 848, in up
+  File "compose/project.py", line 389, in up
+  File "compose/service.py", line 318, in ensure_image_exists
+  File "compose/service.py", line 786, in build
+  File "site-packages/docker/api/build.py", line 131, in build
+TypeError: You must specify a directory to build in path
+docker-compose returned -1
+I think this occurred when docker-compose's working directory moved.
+some/dir$ docker-compose up
+Meanwhile elsewhere:
+$ mv some/dir elsewhere

@@ -1,0 +1,4 @@
+japrescott commented on 27 May 2014
+Hi, I didn't find this in your docs and thought it would be definitely worth it, if fig were able to keep the docker containers running (restarting) if one dives. If you think, thats not the work of fig, it would be cool if you could add some instructions how to do it for instance with supervisord.
+I can imagine defining rules for supervisor with the command 'fig up [containerName]' and have it restart as soon as it faults but I assume that I would loose the power of fig that way..
+what do you think of the idea?

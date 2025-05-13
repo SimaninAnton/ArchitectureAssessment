@@ -1,0 +1,30 @@
+presich commented on 11 Feb 2019
+Description of the issue
+When I run docker-compose -f /home/user/my_symlink/docker-compose.yml ps I got an empty list. (Containers are running at that point).
+After the investigation I found, that with "-f" parameter, docker-compose looks for a containers with a label -> com.docker.compose.project=my_symlink, where project = my_symlink, instead of the project = directory, where my_symlink points to (containers were started from that directory originally).
+If I run the same from project directory cd /home/user/my_symlink && docker-compose ps - It works fine and looks for proper label.
+Output of docker-compose -f /home/user/symlink/docker-compose.yml ps
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Version=17.06.2-ce, ApiVersion=1.30, MinAPIVersion=1.12, GitCommit=cec0b72, GoVersion=go1.8.3, Os=linux, Arch=amd64, KernelVersion=3.10.0-862.14.4.el7.x86_64, BuildTime=2017-09-05T20:00:25.777242273+00:00
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=my_symlink', 'com.docker.compose.oneoff=False']})
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+Output of docker version
+Docker version 17.06.2-ce, build cec0b72
+Output of docker-compose config
+Any config
+Steps to reproduce the issue
+Create directory "Dir" with a docker-compose.yml file, start containers by docker-compose up -d
+Make symlink to directory "Dir"
+Run docker-compose -f symlink/docker-compose.yml ps
+Observed result
+Empty list
+Expected result
+List of running containers as in the output of the command docker-compose -f Dir/docker-compose.yml
+Stacktrace / full error message
+N/A
+Additional information
+Workarounds:
+use -p flag when start and run docker-compose commands
+use child directory under symlink, so that containers are labeled with that child directory name

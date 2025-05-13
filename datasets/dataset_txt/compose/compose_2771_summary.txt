@@ -1,0 +1,1 @@
+add values to an existing environment variable during service starting

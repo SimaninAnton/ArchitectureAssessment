@@ -1,0 +1,31 @@
+kavehv commented on 5 Sep 2018
+Description of the issue
+Using multiple compose files on the command line (i.e. docker-compose -f compose1.yml -f compose2.yml) seems to always cause compose to recreate the container despite no change to either file.
+Context information (for bug reports)
+Output of "docker-compose version"
+$ docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+Output of "docker version"
+$ docker version
+Client:
+Version: 18.06.0-ce
+API version: 1.38
+Go version: go1.10.3
+Git commit: 0ffa825
+Built: Wed Jul 18 19:10:22 2018
+OS/Arch: linux/amd64
+Experimental: false
+Server:
+Engine:
+Version: 18.06.0-ce
+API version: 1.38 (minimum version 1.12)
+Go version: go1.10.3
+Git commit: 0ffa825
+Built: Wed Jul 18 19:08:26 2018
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+Not posting here as it might have some proprietary paths/names.

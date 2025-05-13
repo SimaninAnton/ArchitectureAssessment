@@ -1,0 +1,20 @@
+do3cc commented on 27 Nov 2015
+This is a terrible subject but I am not sure how to phrase it better.
+I am using docker-compose, together with data-only containers.
+This is my relevant part:
+solr:
+  image: some_solr
+  volumes_from:
+    - solr_data
+solr_data:
+  image: some_solr
+  volumes:
+    - /var/solr:/var/solr:z
+My CI Server logs in, does a docker pull for all images, then runs docker-compose up.
+I expected that all containers based on old images get deleted and recreated and everything is fine.
+Instead I get a warning that now my external volumes aren't used any more.
+I am now not sure,
+Is the warning wrong?
+Should this be better handled by docker-compose up so that masking won't happen
+Should I declare some dependency between the two containers to avoid this
+Should I rm the containers?

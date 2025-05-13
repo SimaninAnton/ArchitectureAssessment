@@ -1,0 +1,136 @@
+twang2218 commented on 30 Jul 2016 •
+edited
+I have a swarm and try to use docker-compose to build and push the images to registry, and pull to the swarm. My current environment is swarm:
+eval $(docker-machine env --swarm master)
+Then, what every command I run with docker-compose, I received the following error:
+$ docker-compose push                                                                                                                                                              [68fde37] 
+Pushing mysql (twang2218/lnmp-mysql:latest)...
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.8.0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 61, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 113, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 601, in push
+    ignore_push_failures=options.get('--ignore-push-failures')
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 447, in push
+    service.push(ignore_push_failures)
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 836, in push
+    output = self.client.push(repo, tag=tag, stream=True)
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/image.py", line 238, in push
+    u, None, headers=headers, stream=stream, params=params
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 198, in _post_json
+    return self._post(url, data=json.dumps(data2), **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/docker/utils/decorators.py", line 47, in inner
+    return f(self, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 136, in _post
+    return self.post(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 508, in post
+    return self.request('POST', url, data=data, json=json, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 465, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 573, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/adapters.py", line 370, in send
+    timeout=timeout
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/connectionpool.py", line 544, in urlopen
+    body=body, headers=headers)
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/connectionpool.py", line 341, in _make_request
+    self._validate_conn(conn)
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/connectionpool.py", line 761, in _validate_conn
+    conn.connect()
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/connection.py", line 253, in connect
+    match_hostname(cert, self.assert_hostname or hostname)
+  File "/usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/__init__.py", line 151, in match_hostname
+    % (hostname, dnsnames[0]))
+backports.ssl_match_hostname.CertificateError: hostname '192.168.99.101' doesn't match 'localhost'
+I'm using the latest version 1.12 of docker, and docker-compose 1.8.0:
+$ docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 22:11:10 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.2.4
+ API version:  1.22
+ Go version:   go1.5.4
+ Git commit:   5d5f7f0
+ Built:        Thu Jul 28 19:52:54 UTC 2016
+ OS/Arch:      linux/amd64
+
+$ docker-compose version
+docker-compose version 1.8.0, build 94f7016
+docker-py version: 1.9.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g-fips  1 Mar 2016
+Here is the docker info:
+$ docker info
+Containers: 8
+ Running: 8
+ Paused: 0
+ Stopped: 0
+Images: 36
+Server Version: swarm/1.2.4
+Role: primary
+Strategy: spread
+Filters: health, port, containerslots, dependency, affinity, constraint
+Nodes: 4
+ master: 192.168.99.101:2376
+  └ ID: U4UG:Z4CH:YRFR:64VM:XV67:JRLO:N4V4:LICU:MP3T:NHBG:532P:CEVU
+  └ Status: Healthy
+  └ Containers: 2 (2 Running, 0 Paused, 0 Stopped)
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: kernelversion=4.4.16-boot2docker, operatingsystem=Boot2Docker 1.12.0 (TCL 7.2); HEAD : e030bab - Fri Jul 29 00:29:14 UTC 2016, provider=virtualbox, storagedriver=aufs
+  └ UpdatedAt: 2016-07-30T06:41:03Z
+  └ ServerVersion: 1.12.0
+ node1: 192.168.99.103:2376
+  └ ID: LHOF:XV72:W35G:BTBO:3OMK:L77C:MGX4:XXHT:RH64:SQWH:VMQO:WUT3
+  └ Status: Healthy
+  └ Containers: 2 (2 Running, 0 Paused, 0 Stopped)
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: kernelversion=4.4.16-boot2docker, operatingsystem=Boot2Docker 1.12.0 (TCL 7.2); HEAD : e030bab - Fri Jul 29 00:29:14 UTC 2016, provider=virtualbox, storagedriver=aufs
+  └ UpdatedAt: 2016-07-30T06:41:43Z
+  └ ServerVersion: 1.12.0
+ node2: 192.168.99.102:2376
+  └ ID: 2DXP:RKTZ:YN3E:QJ3D:3W7N:RAWN:BQWZ:SEZ7:7NFL:UHFK:2GPJ:UBFQ
+  └ Status: Healthy
+  └ Containers: 2 (2 Running, 0 Paused, 0 Stopped)
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: kernelversion=4.4.16-boot2docker, operatingsystem=Boot2Docker 1.12.0 (TCL 7.2); HEAD : e030bab - Fri Jul 29 00:29:14 UTC 2016, provider=virtualbox, storagedriver=aufs
+  └ UpdatedAt: 2016-07-30T06:41:18Z
+  └ ServerVersion: 1.12.0
+ node3: 192.168.99.104:2376
+  └ ID: C47F:MCMG:JCMJ:BK6X:ZCGH:W6N3:SDC6:HAQ3:JFKD:5JIN:ZUL7:XLLR
+  └ Status: Healthy
+  └ Containers: 2 (2 Running, 0 Paused, 0 Stopped)
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: kernelversion=4.4.16-boot2docker, operatingsystem=Boot2Docker 1.12.0 (TCL 7.2); HEAD : e030bab - Fri Jul 29 00:29:14 UTC 2016, provider=virtualbox, storagedriver=aufs
+  └ UpdatedAt: 2016-07-30T06:41:31Z
+  └ ServerVersion: 1.12.0
+Plugins:
+ Volume: 
+ Network: 
+Swarm: 
+ NodeID: 
+ Is Manager: false
+ Node Address: 
+Security Options:
+Kernel Version: 4.4.16-boot2docker
+Operating System: linux
+Architecture: amd64
+CPUs: 4
+Total Memory: 4.085 GiB
+Name: e24d06f7f2b5
+Docker Root Dir: 
+Debug Mode (client): false
+Debug Mode (server): false
+WARNING: No kernel memory limit support

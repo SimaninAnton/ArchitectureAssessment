@@ -1,0 +1,1 @@
+Service in extends option should be optional

@@ -1,0 +1,31 @@
+mbentley commented on 28 Feb 2015
+I am having issue where a CTRL+c to a session running fig up is just exiting with Aborting. using docker-compose 1.1.0. I am just doing a fig up, my containers start up as expected but when I go to do a CTRL+c, it aborts and leaves my containers running. If code is needed to replicate, I am using this >> https://github.com/mbentley/docker-db_bootstrap
+$ docker-compose up
+Found multiple config files with supported names: docker-compose.yml, fig.yml
+Using docker-compose.yml
+
+Creating dockerdbbootstrap_db_1...
+Creating dockerdbbootstrap_bootstrap_1...
+Creating dockerdbbootstrap_web_1...
+Attaching to dockerdbbootstrap_db_1, dockerdbbootstrap_bootstrap_1, dockerdbbootstrap_web_1
+db_1        | Running mysql_install_db ...
+db_1        | 2015-02-27 21:11:45 13 [Note] InnoDB: Using atomics to ref count buffer pool pages
+bootstrap_1 | Unable to connect to MySQL, retrying...
+db_1        | 2015-02-27 21:11:45 13 [Note] InnoDB: The InnoDB memory heap is disabled
+db_1        | 2015-02-27 21:11:45 13 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+db_1        | 2015-02-27 21:11:45 13 [Note] InnoDB: Memory barrier is not used
+...
+bootstrap_1 | Post import databases:
+bootstrap_1 | +--------------------+
+bootstrap_1 | | Database           |
+bootstrap_1 | +--------------------+
+bootstrap_1 | | information_schema |
+bootstrap_1 | | classicmodels      |
+bootstrap_1 | | mysql              |
+bootstrap_1 | | performance_schema |
+bootstrap_1 | +--------------------+
+bootstrap_1 |
+bootstrap_1 | Database bootstrap complete!
+^C
+Aborting.
+Not sure if I am doing something wrong or what but I can reproduce it consistently.

@@ -1,0 +1,1 @@
+`extends` with both `image` and `build` now work: update `extends` doc

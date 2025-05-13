@@ -1,0 +1,10 @@
+joernheissler commented on 18 Apr 2017
+Hi,
+small feature suggestion:
+It would be nice if the configuration (docker-compose.yaml) could be created dynamically on the fly.
+Currently I've got a script that dumps the file to the file system, and docker-compose loads it.
+I'd like it if docker-compose could run my script directly to get the configuration.
+Two ways to do it:
+when docker-compose.yaml file is executable, it's executed and the output loaded with yaml.load.
+add a new .env / CLI environment variable for the purpose.
+Cheers

@@ -1,0 +1,1 @@
+Make https://hub.docker.com/r/docker/compose/ more usable

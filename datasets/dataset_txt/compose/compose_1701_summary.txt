@@ -1,0 +1,1 @@
+Bug: docker-compose scale returns exit code 0 on errors

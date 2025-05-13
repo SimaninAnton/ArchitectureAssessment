@@ -1,0 +1,9 @@
+arturozv commented on 19 Mar 2015
+Hi,
+I was trying to pull some images from a private repository with a problem in .dockercfg and besides it was failing pull command always returns 0 and gives no feedback.
+Normal output:
+Pulling someservice (company/someservice:latest)...
+Output using --verbose
+Pulling someservice (company/someservice:latest)...
+docker pull <- (u'company/someservice:latest', insecure_registry=False)
+docker pull -> u'{"status":"Pulling repository company/someservice"}\r\n{"errorDetail":{"message":"Error: image company/someservice:latest not found"},"error":"Error: image company/someservice:latest not found"}\r\n' 

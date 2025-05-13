@@ -1,0 +1,72 @@
+JimFawkes commented on 22 Jun 2018
+Description of the issue
+I got an error when trying to build my images using
+docker-compose -f production.yml build
+[20714] Failed to execute script docker-compose
+I ran the build command on my machine several times today with success. I am not sure what has changed since the last successful build.
+Restarting docker does not change anything. I found this issue: docker/docker-credential-helpers#82
+A commenter suggested to uncheck and re-check the "Securely store Docker logins in macOS keychain" option in Docker -> Preferences -> General.
+Doing this resolved the problem and allowed me to build my images. However this still seems to be a Bug so I am opening this Issue.
+I was at no point prompted to enter a password or username. The Keychain has one docker-related entry for aws ecr access.
+Here are two screenshots of the Keychain entry:
+
+Please let me know if you need more information or if this should be addressed at a different location.
+Context information (for bug reports)
+Output of "docker-compose version"
+
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Traceback (most recent call last):
+  File site-packages/dockerpycreds/store.py, line 71, in _execute
+  File subprocess.py, line 336, in check_output
+  File subprocess.py, line 418, in run
+subprocess.CalledProcessError: Command '['/usr/local/bin/docker-credential-osxkeychain', 'get']' returned non-zero exit status 1.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File site-packages/docker/auth.py, line 126, in _resolve_authconfig_credstore
+  File site-packages/dockerpycreds/store.py, line 33, in get
+  File site-packages/dockerpycreds/store.py, line 84, in _execute
+dockerpycreds.errors.StoreError: Credentials store docker-credential-osxkeychain exited with The user name or passphrase you entered is not correct..
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File docker-compose, line 6, in <module>
+  File compose/cli/main.py, line 71, in main
+  File compose/cli/main.py, lin  File compose/cli/main.py, linc File compose/cli/main.py, lin File compose/cli/main.pyct.py, line 373, in build
+  File compose/service.py, line 1047, in build
+  File site-packages/docker/api/build.py, line 251, in build
+  File site-packages/docker/api/build.py, line 305, in _set_auth_headers
+  File site-packages/docker/auth.py, line 94, in resolve_authconfig
+  File site-packages/docker/auth.py, line 143, in _resolve_authconfig_credstore
+docker.errors.DockerException: Credentials store error: StoreError('Credentials store docker-credential-osxkeychain exited with The user name or passphrase you entered is not correct..',)
+[20714] Failed to execute script docker-compose
+Additional information
+Mac Book with macOS 10.13.5
+Default python 2.7.15
+Installation via Homebrew

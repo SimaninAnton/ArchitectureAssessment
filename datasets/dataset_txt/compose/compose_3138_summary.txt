@@ -1,0 +1,1 @@
+Invalid config in override files isn’t checked

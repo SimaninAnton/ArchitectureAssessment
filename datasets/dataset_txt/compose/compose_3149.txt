@@ -1,0 +1,5 @@
+Contributor
+dnephin commented on 3 Nov 2015
+See docker/swarm#1310 for the new feature (not sure if there are docs yet)
+Using this feature, I believe we can use build_args to set an affinity for where the image gets built.
+1

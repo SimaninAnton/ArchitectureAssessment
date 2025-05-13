@@ -1,0 +1,29 @@
+decoomanj commented on 29 Jun 2016 •
+edited
+On one hand, I have created a microservice in one Docker container, containing the business logic. On the other hand, I have a consul-agent container, taking care of the registration in Consul. They make up an application when they share the same network-namespace. They can both run independently, but when they run together, they are _one_ service to the outside world. A very nice thing to achieve since you can divide responsibilities across containers and bring them together during runtime.
+It looks like this in my composer YML:
+token:
+image: token-service:local
+image: xxxx/token-service:latest
+token-consul:
+image: xxxx/token-consul:latest
+network_mode: "service:token"
+depends_on: [token]
+Now, when I scale token and token-consul to 3 instances, the token-consul is not always bound to a new instance of token. Even when I scale them separately, the outcome is semi-random. Sometimes they run together, sometimes not. As @aanand already pointed out in another issue, this cannot be avoided with the current (?) API of Docker. On production, it runs as a pod, and then there is no problem to scale it.
+I've tried work-around with depends_on but this doesn't really work during scale.
+It is very annoying that I cannot scale my service correctly with docker-compose (locally and in the pipeline). When I want to test my service, I want to scale it to multiple instances in a correct way to see if my service is actually working correctly. For now, I'm hitting this issue really hard.
+I understand that docker-compose has no concept of "pods" right now. It very hard to find out what the current status on this topic is. Maybe I'm overlooking something trivial, or it has been solved in another way. I would be glad to receive some hints.
+Maybe a construction like this may help to address this issue:
+token:
+image: token-service:local
+image: xxxx/token-service:latest
+_scale_group: "my-scale-group"_
+token-consul:
+image: xxxx/token-consul:latest
+network_mode: "service:token"
+depends_on: [token]
+_scale_group: "my-scale-group"_
+When you issue the scale command, you could always scale everything to the same number when it belongs to this group. Maybe you could set extra properties on scale-groups too (min, max, whatever).
+This would also work for volumes, I suppose.
+Thanks,
+Jan

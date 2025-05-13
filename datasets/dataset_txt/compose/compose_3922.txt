@@ -1,0 +1,7 @@
+Contributor
+IanVS commented on 14 Feb 2015
+It is not possible to execute fig run [-e KEY=VAL...] SERVICE if there are any environment variables defined in the fig.yaml file. Here's the end of the stack trace:
+File "/fig/fig/cli/main.py", line 315, in run
+    service.options['environment'][k] = v
+TypeError: list indices must be integers, not unicode
+This is on 1.0.1, but the same thing happens with the current version. It seems that service.options['environment'] is instantiated as a list from the fig.yaml and main.py attempts to use it as a dictionary. Probably the right thing to do would be to convert service.options['environment'] to a dictionary if it already exists, and then replace values if needed, or add new key/value pairs if they don't conflict. I'm not really proficient enough in python to make a good PR, but if anyone wants I can give it a try.

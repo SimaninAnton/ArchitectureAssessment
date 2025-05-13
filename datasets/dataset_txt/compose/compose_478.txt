@@ -1,0 +1,3 @@
+hktalent commented on 27 Sep 2018
+how use tty.Bluetooth* or /dev/tty.* and /dev/cu.* in mac os
+docker run -it --cap-add=SYS_ADMIN --cap-add=NET_ADMIN --cap-add=ALL  --net=host --expose 80-65530 -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/cu.Bluetooth-Incoming-Port --device /dev/tty.Bluetooth-Incoming-Port --privileged  --name='kali-linux2018091d' m.t.x_kali-linux20180926_2332 /bin/bash

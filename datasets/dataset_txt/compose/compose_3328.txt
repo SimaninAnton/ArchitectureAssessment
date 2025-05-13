@@ -1,0 +1,9 @@
+Contributor
+mnowster commented on 3 Sep 2015
+We can run script/test tests.unit.config_test:ConfigTest no problem. However, if you want to run an individual test, which I do frequently during development, it produces a file not found error.
+To reproduce, try and run any test individually, eg:
+script/test tests.unit.config_test:ConfigTest.test_load
+and you'll get:
+ERROR: file not found: tests.unit.config_test:ConfigTest.test_load Coverage.py warning: No data was collected. ERROR: InvocationError: '/code/.tox/py34/bin/py.test -v --cov=compose --cov-report html --cov-report term --cov-config=tox.ini tests.unit.config_test:ConfigTest.test_load'
+Do our docs also need updating, as we're using tox now to run these?
+https://github.com/docker/compose/blame/master/CONTRIBUTING.md#L62

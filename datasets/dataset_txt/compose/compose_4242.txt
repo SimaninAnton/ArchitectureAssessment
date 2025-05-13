@@ -1,0 +1,22 @@
+Contributor
+d11wtq commented on 8 Aug 2014
+Can decipher the anagram to guess what we were trying to mount? :)
+    "VolumesRW": {
+        ".": true,
+        "/": true,
+        "/container/log": true,
+        "a": true,
+        "c": true,
+        "d": true,
+        "e": true,
+        "k": true,
+        "n": true,
+        "o": true,
+        "r": true,
+        "s": true,
+        "u": true,
+        "v": true
+    }
+}
+]vagrant@gentoo ~/projects/environments/rea/test $ ls
+a  b  container  d  dev  e  fig.yml  k  n  o  r  s  u  v

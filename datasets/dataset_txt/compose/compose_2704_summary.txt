@@ -1,0 +1,1 @@
+Build arguments with only a key don't work with object syntax, contradicting documentation

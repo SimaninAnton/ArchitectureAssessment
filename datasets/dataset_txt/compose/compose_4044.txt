@@ -1,0 +1,23 @@
+evgenyneu commented on 16 Dec 2014
+Hi, thanks for very useful tool. How can I deploy updates to my rails app on production with zero downtime.
+Currently I run the following on production, but it causes about 10 seconds of downtime.
+sudo fig pull web
+sudo fig up -d web
+My production fig.yml:
+db:
+  image: postgres:9.3
+  volumes_from:
+    - db-data
+  ports:
+    - 5432
+web:
+  image: myaccount/my_private_repo
+  command: bundle exec unicorn -p 3000 -c ./config/unicorn.rb
+  volumes_from:
+    - gems-2.1
+  ports:
+    - "80:3000"
+  links:
+    - db
+Thanks
+1

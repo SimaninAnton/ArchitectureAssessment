@@ -1,0 +1,32 @@
+nevergone commented on 1 Aug 2016 •
+edited
+Docker version 1.12.0, build 8eab29e
+docker-compose version 1.8.0, build f3628c7
+I have a git server, run as custom port: 443
+~/.ssh/config contain:
+Host foobar
+    Port 443
+docker build is success:
+$ docker build git@foobar:docker/test#:con1
+Sending build context to Docker daemon 2.048 kB
+…
+Successfully built 89ca000d8ab5
+But Docker compose failed.
+docker-compose.yml contain:
+version: '2'
+services:
+  web:
+    build:
+      context: git@foobar:docker/test#:con1
+$ docker-compose up
+Building web
+ERROR: Error trying to use git: exit status 128 (Cloning into '/var/lib/docker/tmp/docker-build-git734878426'...
+ssh: connect to host foobar port 22: Connection refused
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+)
+PS:
+context: git@foobar:443:docker/test#:con1
+don't work

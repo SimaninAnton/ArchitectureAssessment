@@ -1,0 +1,15 @@
+akve17 commented on 30 Oct 2017
+Helo Everyone,
+I am getting an error as follows
+ruby@ruby-HP-15-Notebook-PC:/balrog$ cd ..
+ruby@ruby-HP-15-Notebook-PC:$ cd Desktop
+ruby@ruby-HP-15-Notebook-PC:/Desktop$ cd balrog
+ruby@ruby-HP-15-Notebook-PC:/Desktop/balrog$ docker-compose up
+Starting balrog_balrogdb_1
+Starting balrog_balrogadmin_1
+Starting balrog_balrogpub_1
+Starting balrog_balrogagent_1
+ERROR: for balrogui Container "912cb21d513d" is unhealthy.
+ERROR: Encountered errors while bringing up the project.
+I have searched a lot about the above error but dont seem to find anything
+related to this.Can somebody please help me out here

@@ -1,0 +1,1 @@
+Add `copy` to the yaml configuration

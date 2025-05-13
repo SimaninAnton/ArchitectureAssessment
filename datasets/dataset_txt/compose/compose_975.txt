@@ -1,0 +1,11 @@
+malkani-kamal commented on 1 Jan 2018
+Hi
+I have installed cURL, Node.js, docker toolbox on windows 7 and now i am trying to build the hyperledger sawtooth image using
+docker-compose -f sawtooth-default.yaml up
+This command is not at all completing. It is stuck at the last stage
+sawtooth-validator-default : Now building on top of block ........
+I tried waiting till long long hours but still not completing.
+I tried using
+docker-compose -f sawtooth-default.yaml down
+docker-compose -f sawtooth-default.yaml up --force-recreate
+Can anyone let me know why not able to build the sawtooth image.

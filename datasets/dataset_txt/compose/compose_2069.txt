@@ -1,0 +1,7 @@
+Fattaf commented on 13 Sep 2016
+Hey guys, didn't find similar issue, so sorry if duplicating.
+But it seems like docker-compose down does not clean networks...
+It would be pretty helpfull stuff in my case.
+Thanks.
+Docker version 1.12.1, build 23cf638
+docker-compose version 1.8.0, build 94f7016

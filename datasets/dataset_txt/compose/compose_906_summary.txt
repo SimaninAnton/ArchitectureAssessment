@@ -1,0 +1,1 @@
+Build context is wrong when COMPOSE_FILE is being used

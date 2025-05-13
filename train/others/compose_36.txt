@@ -1,0 +1,55 @@
+alandrees commented on 18 Dec 2019
+Description of the issue
+Attemping to build on armhf yields a binary which doesn't seem to run on the host OS.
+Context information (for bug reports)
+Raspberry pi4
+Raspbian Buster
+Built using the Dockerfile, not the Dockerfile.armhf (although both seem to produce binaries which have similar issues)
+Output of docker-compose version
+$ docker-compose --version
+-bash: /usr/local/bin/docker-compose: No such file or directory
+Output of docker version
+$ docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 06:18:36 2019
+ OS/Arch:           linux/arm
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 06:12:41 2019
+  OS/Arch:          linux/arm
+  Experimental:     false
+ containerd:
+  Version:          1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+$ docker-compose config
+-bash: /usr/local/bin/docker-compose: No such file or directory
+Steps to reproduce the issue
+docker build -f Dockerfile .
+docker cp container:/usr/local/bin/docker-compose ./
+run the copied version of docker-compose ./docker-compose
+Observed result
+-bash: /usr/local/bin/docker-compose: No such file or directory
+Expected result
+Fully functioning docker-compose
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.

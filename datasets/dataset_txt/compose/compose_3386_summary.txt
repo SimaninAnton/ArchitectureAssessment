@@ -1,0 +1,1 @@
+container_name directive doesn't affect entries in docker-compose logs

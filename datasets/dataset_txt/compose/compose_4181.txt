@@ -1,0 +1,173 @@
+billsmith commented on 29 Sep 2014
+Is scripts/build-linux supposed to work?
+bsmith@bsmith:~/software/fig$ script/build-linux 
++ pwd
++ mkdir -p /home/bsmith/software/fig/dist
++ pwd
++ chmod 777 /home/bsmith/software/fig/dist
++ docker build -t fig .
+Sending build context to Docker daemon 27.58 MB
+Sending build context to Docker daemon 
+Step 0 : FROM ubuntu:14.04
+ ---> c3d5614fecc4
+Step 1 : RUN apt-get update -qq && apt-get install -qy python python-pip python-dev git
+ ---> Using cache
+ ---> 2d942a66f71c
+Step 2 : WORKDIR /code/
+ ---> Using cache
+ ---> 2f7a33708f37
+Step 3 : ADD requirements.txt /code/
+ ---> Using cache
+ ---> bb3229192350
+Step 4 : RUN pip install -r requirements.txt
+ ---> Using cache
+ ---> 0bd1f27f8c03
+Step 5 : ADD requirements-dev.txt /code/
+ ---> Using cache
+ ---> edc4853baf6c
+Step 6 : RUN pip install -r requirements-dev.txt
+ ---> Using cache
+ ---> 61532dd4f819
+Step 7 : ADD . /code/
+ ---> 6323b6e2fe8e
+Removing intermediate container 05a8eab31926
+Step 8 : RUN python setup.py install
+ ---> Running in dc1e2315cec7
+running install
+running bdist_egg
+running egg_info
+writing requirements to fig.egg-info/requires.txt
+writing fig.egg-info/PKG-INFO
+writing top-level names to fig.egg-info/top_level.txt
+writing dependency_links to fig.egg-info/dependency_links.txt
+writing entry points to fig.egg-info/entry_points.txt
+reading manifest file 'fig.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no previously-included files matching '*' found under directory 'tests'
+warning: no previously-included files matching '*.pyc' found anywhere in distribution
+warning: no previously-included files matching '*.pyo' found anywhere in distribution
+warning: no previously-included files matching '*.un~' found anywhere in distribution
+writing manifest file 'fig.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build
+creating build/lib.linux-x86_64-2.7
+creating build/lib.linux-x86_64-2.7/fig
+copying fig/project.py -> build/lib.linux-x86_64-2.7/fig
+copying fig/container.py -> build/lib.linux-x86_64-2.7/fig
+copying fig/service.py -> build/lib.linux-x86_64-2.7/fig
+copying fig/__init__.py -> build/lib.linux-x86_64-2.7/fig
+copying fig/progress_stream.py -> build/lib.linux-x86_64-2.7/fig
+creating build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/main.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/utils.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/errors.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/colors.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/log_printer.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/multiplexer.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/command.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/__init__.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/verbose_proxy.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/formatter.py -> build/lib.linux-x86_64-2.7/fig/cli
+copying fig/cli/docopt_command.py -> build/lib.linux-x86_64-2.7/fig/cli
+creating build/bdist.linux-x86_64
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/fig
+copying build/lib.linux-x86_64-2.7/fig/project.py -> build/bdist.linux-x86_64/egg/fig
+copying build/lib.linux-x86_64-2.7/fig/container.py -> build/bdist.linux-x86_64/egg/fig
+copying build/lib.linux-x86_64-2.7/fig/service.py -> build/bdist.linux-x86_64/egg/fig
+copying build/lib.linux-x86_64-2.7/fig/__init__.py -> build/bdist.linux-x86_64/egg/fig
+creating build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/main.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/utils.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/errors.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/colors.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/log_printer.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/multiplexer.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/command.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/__init__.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/verbose_proxy.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/formatter.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/cli/docopt_command.py -> build/bdist.linux-x86_64/egg/fig/cli
+copying build/lib.linux-x86_64-2.7/fig/progress_stream.py -> build/bdist.linux-x86_64/egg/fig
+byte-compiling build/bdist.linux-x86_64/egg/fig/project.py to project.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/container.py to container.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/service.py to service.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/__init__.py to __init__.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/main.py to main.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/utils.py to utils.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/errors.py to errors.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/colors.py to colors.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/log_printer.py to log_printer.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/multiplexer.py to multiplexer.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/command.py to command.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/__init__.py to __init__.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/verbose_proxy.py to verbose_proxy.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/formatter.py to formatter.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/cli/docopt_command.py to docopt_command.pyc
+byte-compiling build/bdist.linux-x86_64/egg/fig/progress_stream.py to progress_stream.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+copying fig.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying fig.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying fig.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying fig.egg-info/entry_points.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying fig.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying fig.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+zip_safe flag not set; analyzing archive contents...
+creating 'dist/fig-0.5.2-py2.7.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing fig-0.5.2-py2.7.egg
+Copying fig-0.5.2-py2.7.egg to /usr/local/lib/python2.7/dist-packages
+Adding fig 0.5.2 to easy-install.pth file
+Installing fig script to /usr/local/bin
+
+Installed /usr/local/lib/python2.7/dist-packages/fig-0.5.2-py2.7.egg
+Processing dependencies for fig==0.5.2
+Searching for six==1.7.3
+Best match: six 1.7.3
+Adding six 1.7.3 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Searching for docker-py==0.5.0
+Best match: docker-py 0.5.0
+Adding docker-py 0.5.0 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Searching for dockerpty==0.2.3
+Best match: dockerpty 0.2.3
+Adding dockerpty 0.2.3 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Searching for websocket-client==0.11.0
+Best match: websocket-client 0.11.0
+Adding websocket-client 0.11.0 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Searching for texttable==0.8.1
+Best match: texttable 0.8.1
+Adding texttable 0.8.1 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Searching for requests==2.2.1
+Best match: requests 2.2.1
+Adding requests 2.2.1 to easy-install.pth file
+
+Using /usr/lib/python2.7/dist-packages
+Searching for PyYAML==3.10
+Best match: PyYAML 3.10
+Adding PyYAML 3.10 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Searching for docopt==0.6.1
+Best match: docopt 0.6.1
+Adding docopt 0.6.1 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Finished processing dependencies for fig==0.5.2
+ ---> 5d7ccf79ba9e
+Removing intermediate container dc1e2315cec7
+Successfully built 5d7ccf79ba9e
++ pwd
++ docker run -v /home/bsmith/software/fig/dist:/code/dist fig pyinstaller -F bin/fig
+8 ERROR: You are running PyInstaller as user root. This is not supported.

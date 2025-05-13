@@ -1,0 +1,123 @@
+demyxco commented on 27 Apr 2019
+Description of the issue
+I have written a script that automates WordPress creation/destruction. Frequently, not all the time, the containers do not stop when using either docker-compose down/kill. The running container, that is supposed to be stopped, prevents the script from destroying old volumes.
+Reference at https://github.com/demyxco/demyx/blob/master/demyx.sh#L953
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+Output of docker version
+Client:
+ Version:           18.09.5
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        e8ff056
+ Built:             Thu Apr 11 04:43:57 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       e8ff056
+  Built:            Thu Apr 11 04:10:53 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  traefik:
+    name: traefik
+services:
+  db_c7e59d51:
+    environment:
+      MARIADB_BINLOG_FORMAT: mixed
+      MARIADB_CHARACTER_SET_SERVER: utf8
+      MARIADB_COLLATION_SERVER: utf8_general_ci
+      MARIADB_DATABASE: example_com
+      MARIADB_DEFAULT_CHARACTER_SET: utf8
+      MARIADB_INNODB_BUFFER_POOL_SIZE: 32M
+      MARIADB_INNODB_DATA_FILE_PATH: ibdata1:10M:autoextend
+      MARIADB_INNODB_FLUSH_LOG_AT_TRX_COMMIT: '1'
+      MARIADB_INNODB_LOCK_WAIT_TIMEOUT: '50'
+      MARIADB_INNODB_LOG_BUFFER_SIZE: 8M
+      MARIADB_INNODB_LOG_FILE_SIZE: 5M
+      MARIADB_INNODB_USE_NATIVE_AIO: '1'
+      MARIADB_KEY_BUFFER_SIZE: 32M
+      MARIADB_LOG_BIN: mysql-bin
+      MARIADB_MAX_ALLOWED_PACKET: 16M
+      MARIADB_MAX_CONNECTIONS: '100'
+      MARIADB_MYISAM_SORT_BUFFER_SIZE: 32M
+      MARIADB_NET_BUFFER_SIZE: 4M
+      MARIADB_PASSWORD: 3Iv7mwVSL4hLCcaN0LFO8issAqSw5hutynXu1iDKs0xLbrav8M
+      MARIADB_READ_BUFFER: 2M
+      MARIADB_READ_BUFFER_SIZE: 2M
+      MARIADB_READ_RND_BUFFER_SIZE: 1M
+      MARIADB_ROOT_PASSWORD: fe5KiQqIdm3YYzedCDFDuVRmobyXLQpv3U0rgB9EIFuZMm07x5
+      MARIADB_SERVER_ID: '1'
+      MARIADB_SORT_BUFFER_SIZE: 4M
+      MARIADB_TABLE_OPEN_CACHE: '2000'
+      MARIADB_USERNAME: example_com
+      MARIADB_WRITE_BUFFER: 2M
+      TZ: America/Los_Angeles
+    image: demyx/mariadb
+    networks:
+      traefik: null
+    restart: unless-stopped
+    volumes:
+    - db_c7e59d51:/var/lib/mysql:rw
+  wp_c7e59d51:
+    environment:
+      TZ: America/Los_Angeles
+      WORDPRESS_DB_HOST: db_c7e59d51
+      WORDPRESS_DB_NAME: example_com
+      WORDPRESS_DB_PASSWORD: 3Iv7mwVSL4hLCcaN0LFO8issAqSw5hutynXu1iDKs0xLbrav8M
+      WORDPRESS_DB_USER: example_com
+    image: demyx/nginx-php-wordpress
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.redirect.regex: ^www.example.com/(.*)
+      traefik.frontend.redirect.replacement: example.com/$$1
+      traefik.frontend.rule: Host:example.com,www.example.com
+      traefik.port: '80'
+    networks:
+      traefik: null
+    restart: unless-stopped
+    volumes:
+    - /srv/demyx/apps/example.com/conf/nginx.conf:/etc/nginx/nginx.conf:rw
+    - /srv/demyx/apps/example.com/conf/php.ini:/usr/local/etc/php/php.ini:rw
+    - /srv/demyx/apps/example.com/conf/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw
+    - wp_c7e59d51:/var/www/html:rw
+    - /srv/demyx/logs/example.com.access.log:/var/log/demyx/example.com.access.log:rw
+    - /srv/demyx/logs/example.com.error.log:/var/log/demyx/example.com.error.log:rw
+version: '3.7'
+volumes:
+  db_c7e59d51:
+    name: db_c7e59d51
+  wp_c7e59d51:
+    name: wp_c7e59d51
+Steps to reproduce the issue
+Install my script on a new server
+demyx wp --dom=example.com --run
+demyx wp --dom=example.com --remove
+Repeat until the error shows up.
+Observed result
+[CRITICAL] Removing example.com
+Killing examplecom_db_a2050b0f_1 ... done
+Killing examplecom_wp_a2050b0f_1 ... done
+Going to remove examplecom_db_a2050b0f_1
+Removing examplecom_db_a2050b0f_1 ... done
+Error response from daemon: remove wp_a2050b0f: volume is in use - [9265c2ac6210b2041f4dc74d4206790f1d4a8bf83ed077593f148c3eb8ebe8c9]
+Expected result
+[CRITICAL] Removing example.com
+Killing examplecom_db_c7e59d51_1 ... done
+Killing examplecom_wp_c7e59d51_1 ... done
+Going to remove examplecom_db_c7e59d51_1, examplecom_wp_c7e59d51_1
+Removing examplecom_db_c7e59d51_1 ... done
+Removing examplecom_wp_c7e59d51_1 ... done
+Deleting data volume ... done
+Deleting db volume ... done
+Deleting logs ... done
+Deleting directory ... done
+Additional information
+Linux semver 4.15.0-47-generic #50-Ubuntu SMP Wed Mar 13 10:44:52 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux

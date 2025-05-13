@@ -1,0 +1,13 @@
+Contributor
+abesto commented on 11 Mar 2015
+We hit this issue when using docker-compose run on Jenkins to run integration tests.
+echo -e "main:\n  image: hello-world" > docker-compose.yml
+docker-compose run main < /dev/null
+produces no output at all. Adding -T makes no difference.
+A hack to work around the issue (on OSX), sometimes prints only a character "H", sometimes the proper output:
+echo -e "main:\n  image: hello-world" > docker-compose.yml
+script -q /dev/null docker-compose run main < /dev/null
+The same on Linux:
+echo -e "main:\n  image: hello-world" > docker-compose.yml
+script -q -c "docker-compose run main" /dev/null < /dev/null
+1

@@ -1,0 +1,22 @@
+The-Compiler commented on 4 Mar 2016
+I tried docker compose up with this config:
+version: '2'
+
+services:
+  beh-myodoo-$SUFFIX:
+    build: beh-myodoo
+    ports:
+     - "$PORT:$PORT"
+    links:
+     - beh-db-$SUFFIX:db
+
+  beh-db-$SUFFIX:
+    image: postgres:9.4
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+However that doesn't seem to work:
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+Invalid service name 'beh-myodoo-${SUFFIX}' - only [a-zA-Z0-9\._\-] characters are allowed
+I think variable substitution should work there as well.
+5

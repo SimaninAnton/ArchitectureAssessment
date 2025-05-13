@@ -1,0 +1,1 @@
+Add option to list non-running containers

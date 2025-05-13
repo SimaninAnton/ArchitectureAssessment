@@ -1,0 +1,3 @@
+andrismudiayi commented on 20 Aug 2019 •
+edited
+im using docker for windows, with linux containers and I have a docker-compose file that spins up some microservices attached to redis instances, with EFK for logging, the containers all spin up nicely, but 'docker-compose down' command hangs, forcing me to reset docker to factory settings, no other remedy works..any idea what could be the cause? The docker log output is : 'msg="DNS failure: fluentd.\tIN\t A: errno 9002: DnsQuery: DNS server failure." '

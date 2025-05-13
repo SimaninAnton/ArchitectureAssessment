@@ -1,0 +1,64 @@
+stefanotorresi commented on 23 Nov 2018
+Description of the issue
+Configuration merge doesn't seem to merge network subsections correctly.
+Probably related to #2851.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build unknown
+docker-py version: 3.5.1
+CPython version: 3.7.1
+OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
+Output of docker version
+Client:
+ Version:           18.09.0-ce
+ API version:       1.39
+ Go version:        go1.11.2
+ Git commit:        4d60db472b
+ Built:             Fri Nov  9 00:05:34 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.0-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.11.2
+  Git commit:       4d60db472b
+  Built:            Fri Nov  9 00:05:11 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Steps to reproduce the issue
+Set an alias on a service network.
+Add an ip_address on the override file.
+Observed result
+The alias is removed
+Expected result
+Both the alias and the ip_address are set.
+Example
+// docker-compose.yml
+version: '3.7'
+services:
+  foo:
+    image: scratch
+    networks:
+      default:
+        aliases:
+          - foo.bar
+// docker-compose.override.yml
+version: '3.7'
+services:
+  foo:
+    networks:
+      default:
+        ipv4_address: 123.234.123.234
+$: docker-compose config
+services:
+  foo:
+    image: scratch
+    networks:
+      default:
+        ipv4_address: 123.234.123.234
+version: '3.7'
+Additional information
+OS: Manjaro Linux (kernel 4.18.19-1-MANJARO)
+docker-compose install method: distro package manager

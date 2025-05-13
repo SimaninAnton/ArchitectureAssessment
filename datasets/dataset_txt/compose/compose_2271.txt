@@ -1,0 +1,2 @@
+breezykermo commented on 28 Jun 2016
+It looks like docker tag -f image/name newImage/name has changed to docker tag image/name newImage/name in the beta version of Docker 1.12.x. Just raising this as an issue because it prevented me from running any docker-compose.yml files, as it automatically overwrites the tag with the name of the current directory.

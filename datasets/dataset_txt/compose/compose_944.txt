@@ -1,0 +1,11 @@
+vngrv commented on 11 Jan 2018
+Hello there! In my docker-compose file i have many images and i want make two host folder named db and public with css and js files.
+in first image with db:
+    volumes:
+        - './db/:/usr/local/var/lib/db'
+Its ok! Create folder with name db with all files inside from image!
+But second image dont do that. I do:
+    volumes:
+        - './public/:/app/public'
+Folder creates but all files dont input on host and delete all files in image.
+I use version: "2". What iam doing wrong?

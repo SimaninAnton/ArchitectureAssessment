@@ -1,0 +1,61 @@
+JamJar00 commented on 12 May 2019
+Description of the issue
+When running docker-compose up over an SSH connection, i.e. DOCKER_HOST is set to ssh://user@my-site.com, the .env file is not used.
+For example when using the compose file
+version: '2'
+services:
+  mail:
+    image: tvial/docker-mailserver:latest
+    hostname: ${HOSTNAME}
+    domainname: ${DOMAINNAME}
+    container_name: ${CONTAINERNAME}
+    ports:
+    - "25:25"
+    - "143:143"
+    - "587:587"
+    - "993:993"
+    environment:
+    - DMS_DEBUG=${DMS_DEBUG}
+and a .env file
+HOSTNAME=my-host
+DOMAINNAME=my-domain.com
+CONTAINER_NAME=mail
+DMS_DEBUG=0
+all values sourced from the .env file will be empty strings and docker-compose up logs out
+The HOSTNAME variable is not set. Defaulting to a blank string.
+The DOMAINNAME variable is not set. Defaulting to a blank string.
+The CONTAINER_NAME variable is not set. Defaulting to a blank string.
+The DMS_DEBUG variable is not set. Defaulting to a blank string.
+This worked fine before moving to an SSH deployment.
+Context information (for bug reports)
+Output of docker-compose version
+Using image docker/compose:1.24.0 on CI server.
+Output of docker version
+Client:
+ Version:           18.09.6
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        481bc77
+ Built:             Sat May  4 02:35:57 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.6
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       481bc77
+  Built:            Sat May  4 01:59:36 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+As this is on a CI server I can't get this easily I'm afraid.
+Steps to reproduce the issue
+Create a simple docker-compose file and .env file that sets an environment variable from the .env file.
+Run docker-compose up on the file over an SSH connection to a remote server.
+Exec into the container and examine the contents of the environment variable.
+Observed result
+The environment variable is empty.
+Expected result
+The environment variable contains the contents specified in the .env file.

@@ -1,0 +1,1 @@
+docker-compose up,down,start,restart fail if container dead

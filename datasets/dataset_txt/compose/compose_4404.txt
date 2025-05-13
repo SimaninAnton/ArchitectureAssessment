@@ -1,0 +1,5 @@
+schickling commented on 16 Feb 2014
+First of all, thanks a lot for this awesome package and all the time you guys put into building it. I appreciate that a lot!
+I'm aware my suggestion is kinda daring, nonetheless I want to put it up for discussion. Almost all docker related projects (and of course docker itself) are written in go-lang. boot2docker for example also takes this step. I think I don't have to list the advantages you have using go. But the main advantage in my opinion is that you don't have any dependencies such as pip.
+As I said, this is just a suggestion. If you don't consider a rewrite in go, simply close this issue. I won't be sad
+1

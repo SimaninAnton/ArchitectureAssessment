@@ -1,0 +1,1 @@
+env_file setting env variable for root user only

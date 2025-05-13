@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 29 Oct 2015
+Our docs (https://github.com/docker/compose/blob/master/docs/networking.md#custom-container-network-modes) claim that we only create the network if it's going to be used, but currently we always create the network when --x-networking is set.
+We should only be creating it if at least one container uses the default network.

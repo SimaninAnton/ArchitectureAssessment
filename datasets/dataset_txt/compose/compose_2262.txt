@@ -1,0 +1,30 @@
+heroandtn3 commented on 1 Jul 2016
+Scenario: I have two compose files
+The base one is docker-compose.yml:
+version: '2'
+
+services:
+  webapp:
+    image: hello-world
+  redis:
+    image: redis:latest
+The extended one is docker-compose.override.yml to override webapp service with build option:
+version: '2'
+
+services:
+
+  webapp:
+    extends:
+      file: docker-compose.yml
+      service: webapp
+    build:
+      context: .
+  redis:
+    extends:
+      file: docker-compose.yml
+      service: redis
+The command I run:
+docker-compose -f docker-compose.override.yml pull
+Actualy result: both hello-world and redis images are pulled
+Expected result: only redis image is pulled because the hello-world image is eventually built later with docker-compose build.
+1

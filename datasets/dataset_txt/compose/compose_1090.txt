@@ -1,0 +1,14 @@
+lmakarov commented on 9 Nov 2017
+Having the following sample docker-compose.yml
+{ myproject }  » cat docker-compose.yml
+version: '2.1'
+
+services:
+  myservice:
+    build: /c/projects/myproject
+I get the following error from docker-compose:
+{ myproject }  » docker-compose config
+ERROR: build path C:\c\projects\myproject either does not exist, is not accessible, or is not a valid URL.
+Windows 10 Pro, Cygwin (Babun), docker-compose version 1.17.1, build 6d101fb
+If the path is relative, then this does not matter. Unfortunately, I do need to use an absolute path in Linux notation (for cross-platform compatibility).
+I'm using the same absolute Linux style paths with volume directives and they work just fine.

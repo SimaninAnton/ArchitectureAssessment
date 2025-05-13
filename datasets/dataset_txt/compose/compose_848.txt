@@ -1,0 +1,18 @@
+lig commented on 26 Feb 2018
+I have the following in docker-compose.yml:
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      target: app
+I'm using docker-compose version 1.19.0, build 9e633ef installed via pip3.
+After running docker-compose build the expected result is to have the container for app service build with --target docker argument set to app.
+The actual result is
+ERROR: The Compose file './docker-compose.yml' is invalidbecause:
+services.app.build contains unsupported option: 'target'
+Related issues
+I've found this issue #5322 which states in comments that the build target is supported since 1.17.
+Also, I've found this issue docker/docker.github.io#6036 which states that the syntax is the same as for 2.x compose file version.
+5
+2

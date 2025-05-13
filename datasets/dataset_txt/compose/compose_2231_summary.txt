@@ -1,0 +1,1 @@
+Truncated output with 'docker-compose run' in jenkins jobs

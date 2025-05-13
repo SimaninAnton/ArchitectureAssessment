@@ -1,0 +1,63 @@
+aboltart commented on 1 Dec 2015
+Run command
+docker-compose -f projects/docker/compose/development/definitions/convert.yml --x-network-driver run --rm convert_console bin/rails console
+Result
+Define and run multi-container applications with Docker.
+
+Usage:
+  docker-compose [-f=<arg>...] [options] [COMMAND] [ARGS...]
+  docker-compose -h|--help
+
+Options:
+  -f, --file FILE           Specify an alternate compose file (default: docker-compose.yml)
+  -p, --project-name NAME   Specify an alternate project name (default: directory name)
+  --x-networking            (EXPERIMENTAL) Use new Docker networking functionality.
+                            Requires Docker 1.9 or later.
+  --x-network-driver DRIVER (EXPERIMENTAL) Specify a network driver (default: "bridge").
+                            Requires Docker 1.9 or later.
+  --verbose                 Show more output
+  -v, --version             Print version and exit
+
+Commands:
+  build              Build or rebuild services
+  help               Get help on a command
+  kill               Kill containers
+  logs               View output from containers
+  pause              Pause services
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pulls service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  unpause            Unpause services
+  up                 Create and start containers
+  migrate-to-labels  Recreate containers to add labels
+  version            Show the Docker-Compose version information
+Docker Engine version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:25:01 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:25:01 UTC 2015
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Without --x-network-driver flag all working as expected
+docker-compose -f projects/docker/compose/development/definitions/convert.yml run --rm convert_console bin/rails console
+Loading development environment (Rails 4.2.4)

@@ -1,0 +1,1 @@
+Adding external volume results in invalid yml produced by config

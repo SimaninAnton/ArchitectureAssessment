@@ -1,0 +1,4 @@
+Contributor
+jyapayne commented on 21 Feb 2017
+Blocking: #4514
+cache_from command is not available for the current version which is 1.8.3 in the Dockerfile

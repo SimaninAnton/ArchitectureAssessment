@@ -1,0 +1,14 @@
+pydolan commented on 18 Aug 2015
+I'm running into a problem with using pip and npm on the same container to install some packages from each. Whichever runs second causes the other's install contents in /usr/local/bin to disappear.
+I've detailed this problem in a Stackoverflow post, but I haven't gotten any feedback, so I'm unsure if the problem is with my configuration or if this is a bug with either docker-compose, the official node image, or the official python image.
+Here's my Dockerfile:
+FROM python:3.4.3
+RUN mkdir /code
+WORKDIR /code
+ADD ./requirements/ /code/requirements/
+RUN pip install -r /code/requirements/docker.txt
+ADD ./ /code/
+
+FROM node:0.12.7
+RUN npm install bower
+Any thoughts on why this happens or how I can go about debugging?

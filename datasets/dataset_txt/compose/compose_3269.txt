@@ -1,0 +1,3 @@
+MRylander commented on 25 Sep 2015
+docker-compose up used to display all the output by default, it no-longer does.
+affects Version 1.4.1

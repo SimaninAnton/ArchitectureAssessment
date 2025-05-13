@@ -1,0 +1,14 @@
+dunk commented on 22 Jul 2015
+When using the container_name syntax added in #1711 "docker-compose run" fails with a message like the following:
+Conflict. The name "myservice" is already in use by container bc5601faea86. You have to delete (or rename) that container to be able to reuse that name.
+Example docker-compose.yml:
+myservice:
+    container_name: myservice_name
+    image: ubuntu:latest
+    command: tail -f /dev/null
+Commands run:
+docker-compose up -d
+docker-compose run --rm myservice /bin/sleep 3
+"docker-compose run" is using the same directive to name its container, as can be verified by changing the container_name in docker-compose.yml after starting the service, and running:
+docker-compose run -d myservice tail -f /dev/null
+I changed the service name to "myservice_name_another", which became the instantiated container's name.

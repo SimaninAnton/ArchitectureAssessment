@@ -1,0 +1,1 @@
+Crash: TypeError: Unicode-objects must be encoded before hashing

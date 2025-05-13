@@ -1,0 +1,87 @@
+mcctomsk commented on 24 Jun 2019
+Description of the issue
+We have two formats to pass environment into container:
+https://docs.docker.com/compose/compose-file/#environment
+If use RACK_ENV: development format and Extension fields in docker-compose.yml file docker-compose up command works, if use - RACK_ENV=development format and Extension fields in the same file the command doesn't work
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.21.2, build a133471
+Output of docker version
+Client:
+ Version:           18.09.6
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        481bc77
+ Built:             Sat May  4 02:35:27 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.6
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       481bc77
+  Built:            Sat May  4 01:59:36 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Steps to reproduce the issue
+Put next docker-compose.yml file in test folder
+version: '3.4'
+
+x-environment: &environment
+  - WEB_GLOBAL=global
+
+x-defaults: &defaults
+  restart: unless-stopped
+  image: nginx:latest
+  environment:
+    <<: *environment
+    - WEB_DEFAULTS=default
+
+services:
+  web1:
+    <<: *defaults
+    environment:
+      <<: *environment
+      - WEB_LOCAL=local
+  web2:
+    <<: *defaults
+docker-compose up -d
+Observed result
+$ docker-compose up -d
+ERROR: yaml.parser.ParserError: while parsing a block mapping
+  in "./docker-compose.yml", line 10, column 5
+expected <block end>, but found '-'
+  in "./docker-compose.yml", line 11, column 5
+Expected result
+$ docker inspect test_web1_1 | grep WEB
+                "WEB_GLOBAL=global",
+                "WEB_LOCAL=local",
+$ docker inspect test_web2_1 | grep WEB
+                "WEB_GLOBAL=global",
+                "WEB_DEFAULTS=default",
+the same result as, if docker-compose.yml file would be next:
+version: '3.4'
+
+x-environment: &environment
+  WEB_GLOBAL: global
+
+x-defaults: &defaults
+  restart: unless-stopped
+  image: nginx:latest
+  environment:
+    <<: *environment
+    WEB_DEFAULTS: default
+
+services:
+  web1:
+    <<: *defaults
+    environment:
+      <<: *environment
+      WEB_LOCAL: local
+  web2:
+    <<: *defaults
+Additional information
+OS version:
+Ubuntu 16.04.6 LTS (Xenial Xerus)

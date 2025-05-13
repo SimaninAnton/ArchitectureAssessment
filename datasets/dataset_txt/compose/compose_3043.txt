@@ -1,0 +1,3 @@
+arun-gupta commented on 29 Nov 2015
+Docker Compose has only --x-networking and --x-network-driver options. --x-networking creates a new bridge or overlay network depending upon where the application is targeted to.
+It would be useful to have an option, similar to --net that would allow to target the entire Compose file to a pre-created network. Otherwise existing Compose files will have to be changed.

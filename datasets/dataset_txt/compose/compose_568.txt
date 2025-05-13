@@ -1,0 +1,62 @@
+etc0de commented on 20 Jul 2018 •
+edited
+Description of the issue
+The error "ERROR: network network_main_net id ... has active endpoints" isn't particularly useful and blocks docker-compose down.
+Details
+I have multiple docker-compose.yml files that look like this:
+version: '2.3'
+services:
+  someservice:
+    networks:
+    - networks_main_net
+    ...
+
+networks:
+  network_main_net:
+    name: network_main_net
+So far, this is the only way to have a shared network over multiple docker-compose.yml groups which doesn't involve some hackery with a special network-owning folder that needs to be uped first.
+However, for all of those containers, docker-compose down && docker-compose up -d is broken:
+# docker-compose down && docker-compose up -d
+Stopping mail ... done
+Removing mail ... done
+Removing network network_main_net
+ERROR: network network_main_net id 6aaf7ec207e435452261aa3f408813c1197d5a5080288d70e4886373427c9fe7 has active endpoints
+Since the error isn't actually useful to me and certainly not something I would want it to abort over (of course there are still active endpoints - that's the point of sharing the network!) I suggest that it is converted into a warning.
+Context information (for bug reports)
+# docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+# docker version
+Client:
+ Version: 17.12.1-ce
+ API version: 1.35
+ Go version: go1.10.1
+ Git commit: 7390fc6
+ Built: Wed Apr 18 01:23:11 2018
+ OS/Arch: linux/amd64
+
+Server:
+ Engine:
+  Version: 17.12.1-ce
+  API version: 1.35 (minimum version 1.12)
+  Go version: go1.10.1
+  Git commit: 7390fc6
+  Built: Wed Feb 28 17:46:05 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+Steps to reproduce the issue
+Use shared network alike to networks.some_name.name: some_name (used by a container as services.myservice.networks: ["some_name"] as shown above)
+Set up 2+ docker-compose.yml groups that all share this same network name
+Do docker-compose up -d for all the groups sharing this network
+Do docker-compose down on one of them
+Observed result
+error message that isn't particularly surprising or relevant, and exit code non-zero
+Expected result
+warning (or no network-related output at all) and exit code 0
+Stacktrace / full error message
+Removing network network_main_net
+ERROR: network network_main_net id 6aaf7ec207e435452261aa3f408813c1197d5a5080288d70e4886373427c9fe7 has active endpoints
+Additional information
+Ubuntu 18.04 LTS

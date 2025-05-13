@@ -1,0 +1,1 @@
+docker-compose.yml should support the --pid option

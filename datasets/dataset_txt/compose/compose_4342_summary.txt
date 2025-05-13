@@ -1,0 +1,1 @@
+'fig run' could pass along the exit code

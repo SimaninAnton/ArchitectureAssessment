@@ -1,0 +1,4 @@
+208rishabh commented on 24 Sep 2015
+Hi,
+This might be a general docker problem but since my use-case is docker-compose, I am posting it here:
+I need to pass my machine's hostname as an environment variable to a container which would be created through docker-compose. That particular container uses a Dockerfile and uses "cmd" flag in it. The command in "cmd" uses this environment variable. Can someone please help?

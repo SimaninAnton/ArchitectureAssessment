@@ -1,0 +1,13 @@
+codezomb commented on 27 Jul 2016
+TL;DR - an empty string is not the same thing as undefined, and shouldn't be treated as such.
+---
+version: '2'
+services:
+  app:
+    image: myrailsapplication
+    build: .
+    environment:
+      - RAILS_ENV=${RAILS_ENV}
+Considering the above docker-compose.yml file, If RAILS_ENV is not defined, it should not be set to an empty string. This actually causes complications within the application (development, for example), as the running code will check for an unset value, and apply certain development related settings. However, in other environments it's desirable to explicitly set this.
+Sure, I could use an docker-compose.override.yml, but that's seems quite overkill. For example having to specify and maintain multiple files for a single variable setting.
+2

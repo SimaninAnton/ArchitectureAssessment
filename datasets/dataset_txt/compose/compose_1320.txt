@@ -1,0 +1,5 @@
+sneibar commented on 13 Jul 2017 •
+edited
+Docker compose 3.0 does not tag images pulled from Docker Trusted Registry even though the documentation states "If the image does not exist, Compose attempts to pull it, unless you have also specified build, in which case it builds it using the specified options and tags it with the specified tag."
+If you deploy a stack, and the image replicates to a swarm worker node that doesn't have the image, it's pulled, deployed, and then the local repository has <none> for the tag as shown below. I recreated this problem with engine 17.03.2-ee-4, and Docker Trusted Registry 2.1.4.
+192.168.1.14/ucpadmin/httpd <none> 42302c1a5e9b About an hour ago 251 MB

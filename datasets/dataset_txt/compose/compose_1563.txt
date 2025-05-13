@@ -1,0 +1,58 @@
+whitecolor commented on 28 Mar 2017 •
+edited
+There is a case: 20 named volumes, one service installs dependencies on them, other multiple services use/attach those volumes, how this should be implemented in compose version 3?
+version '2'
+
+volumes:
+  - node_modules
+  - nested_node_modules
+  - another_nested_node_modules
+  # .. then another 20 common volumes
+
+services:
+   deps-install:
+     volumes:
+        - node_modules: /app/node_modules
+        - nested_node_modules: /app/nested/node_modules
+     # then 20 mappings to named volumes
+
+  # then go multiple packages that use all the volumes 
+  # that `deps-install` service installs dependencies on on
+   package1-service:
+       volumes_from: 
+           - deps-install
+
+   package20-service:
+       volumes_from: 
+           - deps-install 
+What should be done in v3?
+version '3'
+
+volumes:
+  - node_modules
+  - nested_node_modules
+  - another_nested_node_modules
+  # .. then another 20 common volumes
+
+services:
+   deps-install:
+     volumes:
+        - node_modules: /app/node_modules
+        - nested_node_modules: /app/nested/node_modules
+     # then 20 mappings to named volumes
+
+  # then go multiple packages that use all the volumes 
+  # that `deps-install` service installs dependencies on on
+   package1-service:
+     volumes:
+        - node_modules: /app/node_modules
+        - nested_node_modules: /app/nested/node_modules
+     # then 20 mappings to named volumes
+
+   package2-service:
+     volumes:
+        - node_modules: /app/node_modules
+        - nested_node_modules: /app/nested/node_modules
+     # then 20 mappings to named volumes
+To each service I need to add 20 named volumes mappings instead of one volumes_from?
+7

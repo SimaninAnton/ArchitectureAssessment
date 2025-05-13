@@ -1,0 +1,6 @@
+Contributor
+johnharris85 commented on 4 Jan 2018
+Trying to submit a PR (as have done a couple times before) and now I'm getting pre-commit hook failures:
+usage: pre-commit [-h] [-V] {install,uninstall,clean,autoupdate,run,help} ...
+pre-commit: error: unrecognized arguments: --config
+Anyone else seeing anything similar?

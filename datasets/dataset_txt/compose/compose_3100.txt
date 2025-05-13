@@ -1,0 +1,4 @@
+antonydevanchi commented on 12 Nov 2015
+Hi there.
+How i can bind container to specific IP with --publish-all=true?
+Thanks.

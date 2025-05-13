@@ -1,0 +1,1 @@
+Default timeout per service in yaml

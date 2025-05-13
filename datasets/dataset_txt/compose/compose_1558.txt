@@ -1,0 +1,40 @@
+madheshr commented on 29 Mar 2017
+Hi
+I am trying to dockerize an application and facing some issues with the DNS entries and docker network setup. The application itself is a simple webapp that talks to a MySQL db. The only thing is we use certain specific DNS hosts entries to route some requests. On a "non-docker" environment, we do this by manually adding entries to /etc/hosts. I have tried different options to achieve the same result in a dockerized environment. As a last attempt, i tried to run a DNS server on a separate container. I added the specific DNS hosts entries using the DNS server web admin console.
+However i cannot get the app container to talk to the DNS container. I am not sure if i need to set up a custom network. Here's the docker-compose file that i am using
+version: '3'
+services:
+   db:
+    build: authdb
+    environment:  
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    image:  authdb_docker_host
+    ports:     
+      - "3306:3306"
+   app:
+    build:
+      context:  ./platform    
+    ports:  
+      - "8080:8080"
+    depends_on:
+      - db
+      - bind
+    command: ["/usr/local/bin/wait-for-it.sh", "db:3306","-s","-t","0","--","catalina.sh", "run"]
+    links:
+      - "db:authdb_docker_host"
+    dns:
+      - 127.0.0.1:53
+
+#DNS Server
+   bind:
+    image: sameersbn/bind:latest
+#Tried with various entries like 127.0.0.1. This is the IP assigned to the bind container
+    dns: 172.18.0.2
+    environment:
+      - ROOT_PASSWORD=SecretPassword
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+      - "10000:10000/tcp"
+    volumes:
+      - /tmp/:/data      

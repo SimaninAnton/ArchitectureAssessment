@@ -1,0 +1,109 @@
+arcadia168 commented on 26 Nov 2018 •
+edited
+Description of the issue
+Issue Summary
+When using docker compose and putting nginx containers on a docker network, the nginx .conf file seems to require the full container name, with added GUID such as my_server_container_1_2478f2b3aca0 instead of the usual my_server_container_1
+In the location block for the proxy_pass property.
+nginx container fails to boot with errors nginx: [emerg] host not found in upstream and exited with code 1
+Additional Error Information
+In the Nginx .conf file, in the past, just putting the container name of the host upstream, such as my-server-container_1 would work, now it has to be my_server_container_1_2478f2b3aca0, as listed in the output from the command docker network inspect my-special-docker-network.
+Additionally, I set the restart option for the nginx container to always in my docker-compose.yml file to force the restart and not just crash out on loading error, although this may not be necessary.
+Without this, and just using the container name, as listed in the docker-compose.yml file, the nginx container errors on instantiation with:
+nginx: [emerg] host not found in upstream 
+Then fails to load and crashes with error: exited with code 1.
+I believe this is as a result of updating to newer versions of the 'Docker Nginx' image, perhaps some time around 1.15.6 update.
+I'm not sure if this is due to some change in the Docker Nginx image, or in Docker Compose. I'll raise the issue in both places.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018  
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:43 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  my-special-network:
+    driver: bridge
+services:
+  grandcentral:
+    build:
+      context: /Users/<<REDACTED>>/Documents/Development_Projects/website
+    command: pm2-dev start /usr/src/app/ecosystem.config.js
+    depends_on:
+    - redis
+    environment:
+      APP_ENV: docker-local
+      AWS_ACCESS_KEY_ID: <<REDACTED>>
+      AWS_SECRET_ACCESS_KEY: <<REDACTED>>
+      NODE_ENV: development
+    hostname: website
+    networks:
+      my-special-network: null
+    ports:
+    - 3000:3000/tcp
+    - 9229:9229/tcp
+    - 8080:8080/tcp
+    volumes:
+    - /Users/<<REDACTED>>/Documents/Development_Projects/website:/usr/src/app:rw
+  nginx:
+    command: /bin/bash -c "nginx -g 'daemon off;'"
+    environment:
+      NGINX_HOST: local.someonedrive.me
+      NGINX_PORT: '5000'
+    image: nginx
+    links:
+    - grandcentral
+    networks:
+      my-special-network: null
+    ports:
+    - 5000:5000/tcp
+    - 5001:5001/tcp
+    restart: always
+    volumes:
+    - /Users/<<REDACTED>>/Documents/Development_Projects/website/public:/var/www/my-special-network
+    - /Users/<<REDACTED>>/Documents/Development_Projects/website/nginx/certs:/etc/nginx/certs:rw
+    - /Users/<<REDACTED>>/Documents/Development_Projects/website/nginx/my-special-network.local.conf:/etc/nginx/conf.d/my-special-network.local.conf:rw
+    - /Users/<<REDACTED>>/Documents/Development_Projects/website/nginx/logging.conf:/etc/nginx/logging.conf:rw
+  redis:
+    hostname: redis
+    image: redis
+    networks:
+      my-special-network: null
+    ports:
+    - 6379:6379/tcp
+version: '2.0'
+Steps to reproduce the issue
+Try to configure your own docker network in the docker-compose.yml file, with the nginx container from the official Docker nginx image relying on a server container of your own (ours is a Node/Express server inside a docker container that runs on port 8080)
+, that lives on a port that the nginx container needs to hit.
+Set the name of your own server container, in the .conf file that you pass into the nginx container to the same name for that container as defined in your docker-compose.yml
+Try to run docker-compose up
+You should see the host not found in upstream and exit with code 1 error messages from the nginx container.
+Observed result
+nginx container can't find the upstream server container and crashes with exit code 1 and never recovers.
+Expected result
+nginx container boots successfully, connects to the available port on the server container on the same docker network and runs.
+Stacktrace / full error message
+nginx: [emerg] host not found in upstream 
+nginx: exited with code 1
+Additional information
+OS version / distribution, docker-compose install method, etc.:
+* macOs High Sierra 10.13.6

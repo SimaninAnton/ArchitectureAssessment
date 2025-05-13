@@ -1,0 +1,1 @@
+volumes-from doesn't work when volumes declared in dockerfile

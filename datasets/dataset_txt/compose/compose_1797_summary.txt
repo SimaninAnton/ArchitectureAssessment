@@ -1,0 +1,1 @@
+`docker-compose logs -f SERVICE_NAME` streams logs from non-specified containers

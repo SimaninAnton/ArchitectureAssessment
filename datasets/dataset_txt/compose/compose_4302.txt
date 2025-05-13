@@ -1,0 +1,6 @@
+Contributor
+d11wtq commented on 22 Jun 2014
+Just raising this as an issue because I'm working on it now, but probably can't merge in the short term.
+Fig is bundling an older, patched version of docker inside the source tree (along with six). This is obviously not a sustainable solution, as the source trees diverge and it makes it difficult for contributors to use their additions/fixes to the official docker-py in fig. This happened yesterday when I submitted a PR to docker-py to add resize() for the TTY resizing, but fig will not be able to use it.
+I've removed the fig/packages directory, added the official docker-py to requirements.txt and adjusted imports accordingly. With some minor changes to fig (camel-casing in the JSON for Id instead of ID, as per changes made in Docker 0.12.0, and only passing volumes_from=x in the start() call), fig "just works". The problem right now is that it doesn't work with 0.3.1, which seems to be the most recent release of docker-py. It only works against docker-py @ master (0.3.2-dev). This is due to the docker.errors module not existing in 0.3.1.
+I'll check in with the docker guys to see when they're likely to make a new release, then send through my changes as a PR once a new release is out.

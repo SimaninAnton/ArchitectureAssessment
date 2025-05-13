@@ -1,0 +1,73 @@
+tsunammis commented on 15 Jun 2016
+Hello.
+Context
+I created an overlay network called "global", I'm using it as a default network on my docker-compose.yml configuration file.
+When I launch the service web with this command docker-compose --verbose up web I get this stacktrace.
+...
+...
+compose.service.create_container: Creating root_web_1
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name=u'root_web_1', image='ehazlett/docker-demo:latest', labels={u'com.docker.compose.service': u'web', u'com.docker.compose.project': u'root', u'com.docker.compose.config-hash': 'e4636ca0e3a4d6ad5a4e06885e7373fdc5860fc28364634ae21b7acc1f364573', u'com.docker.compose.version': u'1.7.1', u'com.docker.compose.oneoff': u'False', u'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': 'net', 'Links': [], 'PortBindings': {}, 'Binds': [], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment=[], volumes={}, detach=True, networking_config={u'EndpointsConfig': {'net': {u'IPAMConfig': {}, u'Aliases': ['web']}}})
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.cli.verbose_proxy.proxy_callable: docker create_container -> {u'Id': u'c8e5e3926809e16e16c8943bdcaaa116fc25d76a8114915400da847d0ddde829'}
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'c8e5e3926809e16e16c8943bdcaaa116fc25d76a8114915400da847d0ddde829')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'-listen=:8080'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'-listen=:8080'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'/bin/docker-demo'],
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'],
+             u'ExposedPorts': {u'8080/tcp': {}},
+...
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'c8e5e3926809e16e16c8943bdcaaa116fc25d76a8114915400da847d0ddde829', stderr=True, stream=True, stdout=True)
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.cli.verbose_proxy.proxy_callable: docker attach -> <generator object _multiplexed_response_stream_helper at 0x7f11b3b59fa0>
+compose.cli.verbose_proxy.proxy_callable: docker disconnect_container_from_network <- (u'c8e5e3926809e16e16c8943bdcaaa116fc25d76a8114915400da847d0ddde829', 'net')
+compose.parallel.parallel_execute_iter: Failed: <Service: web>
+compose.parallel.feed_queue: Pending: set([])
+
+ERROR: for web  404 page not found
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 63, in main
+AttributeError: 'ProjectError' object has no attribute 'msg'
+docker-compose returned -1
+It works fine when I don't use a pre-existing overlay network.
+Below my configuration.
+Configuration
+Client / Server
+Client:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:43:49 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.2.2
+ API version:  1.22
+ Go version:   go1.5.4
+ Git commit:   34e3da3
+ Built:        Mon May  9 17:03:22 UTC 2016
+ OS/Arch:      linux/amd64
+docker-compose
+docker-compose version 1.7.1, build 0a9ab35
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+version: '2'
+services:
+  web:
+    image: "ehazlett/docker-demo:latest"
+
+networks:
+  default:
+    external:
+      name: global

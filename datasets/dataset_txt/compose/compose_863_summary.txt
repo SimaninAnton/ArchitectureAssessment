@@ -1,0 +1,1 @@
+docker-compose using json-file logger doesn't close log file on windows, prevents container from being removed.

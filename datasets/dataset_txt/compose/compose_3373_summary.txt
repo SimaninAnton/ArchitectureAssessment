@@ -1,0 +1,1 @@
+Combined command to kill and remove containers

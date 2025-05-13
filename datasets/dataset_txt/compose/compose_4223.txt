@@ -1,0 +1,4 @@
+helderco commented on 22 Aug 2014
+I want to reuse a database container between some projects. In order to link it with fig only way I know how is to use only one fig.yml for all projects that share any services.
+That's because I have no control over the containers' and images' names.
+What are your thoughts about this?

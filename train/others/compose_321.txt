@@ -1,0 +1,8 @@
+HRK44 commented on 17 Jan 2019 •
+edited
+Is your feature request related to a problem? Please describe.
+When using docker-compose down -v, it removes the volumes which most of the time can contain some critical data (like a DB or something else).
+Describe the solution you'd like
+I think it would be wise to add a warning, something like "Are you sure you want to delete the volumes associated with this services? You might lose data etc... [y/N] : ".
+Describe alternatives you've considered
+Maybe hide this warning when the command is used with --force.

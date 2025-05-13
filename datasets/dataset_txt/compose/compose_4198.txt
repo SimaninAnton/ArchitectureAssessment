@@ -1,0 +1,2 @@
+phuongnd08 commented on 2 Sep 2014
+Instead of limit the memory of container, I'd like to restart the container if its memory usage goes beyond a limit. Could that be done? This is because some (web) applications have memory leak and need to be restarted when the leak grow too much. But simply limit the memory will raise a lot of errors inside the app

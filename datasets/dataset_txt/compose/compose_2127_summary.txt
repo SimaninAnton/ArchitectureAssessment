@@ -1,0 +1,1 @@
+docker-compose cannot handle unicode file paths on Windows

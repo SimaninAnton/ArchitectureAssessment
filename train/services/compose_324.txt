@@ -1,0 +1,107 @@
+justinmchase commented on 16 Jan 2019
+Description of the issue
+I have a docker-compose.yml file where I have multiple services built from the same file but which have different commands. I don't want to build the same image multiple times every time I do a docker-compose build so I am setting both an image and a build on the service, per the documentation:
+If the image does not exist, Compose attempts to pull it, unless you have also specified build, in which case it builds it using the specified options and tags it with the specified tag.
+Related to:
+#2092
+#3853
+Example docker-compose.yml
+version: "3"
+services:
+  build:
+    image: example
+    build: .
+    command: npx tsc
+  test
+    image: example
+    command: npx mocha
+Example Dockerfile
+FROM node:8
+WORKDIR /app
+build works fine...
+$ docker-compose build
+test uses an image, skipping
+Building build
+Step 1/2 : FROM node:8
+ ---> 62ba2b48bf28
+Step 2/2 : WORKDIR /app
+ ---> Using cache
+ ---> c05a29354b96
+Successfully built c05a29354b96
+Successfully tagged example:latest
+up works fine...
+$ docker-compose up
+Creating network "test_default" with the default driver
+Creating test_test_1  ... done
+Creating test_build_1 ... done
+Attaching to test_test_1, test_build_1
+test_1   | from test
+build_1  | from build
+test_test_1 exited with code 0
+test_build_1 exited with code 0
+pull fails, it erroneously tries to pull example from dockerhub
+$ docker-compose pull
+Pulling build ... error
+Pulling test  ... error
+
+ERROR: for test  pull access denied for example, repository does not exist or may require 'docker login'
+
+ERROR: for build  pull access denied for example, repository does not exist or may require 'docker login'
+ERROR: pull access denied for example, repository does not exist or may require 'docker login'
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:43 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+services:
+  build:
+    build:
+      context: /Users/justin/code/test
+    command: echo "from build"
+    image: example
+  test:
+    command: echo "from test"
+    image: example
+version: '3.0'
+Steps to reproduce the issue
+Copy docker-compose.yml and Dockerfile example files above to local machine
+In same folder with both files run docker-compose pull
+Observed result
+It attempts to pull images from a remote and reports errors (e.g. ERROR: pull access denied for example)
+Expected result
+There are two errors as far as I can tell, I expect neither to happen:
+A service which has both an image and a build should not attempt to pull an image, it should be skipped.
+A service which references an image which was built from another service which has an image and a build should not be pulled, it should be skipped.
+Stacktrace / full error message
+$ docker-compose pull
+Pulling build ... error
+Pulling test  ... error
+
+ERROR: for test  pull access denied for example, repository does not exist or may require 'docker login'
+
+ERROR: for build  pull access denied for example, repository does not exist or may require 'docker login'
+ERROR: pull access denied for example, repository does not exist or may require 'docker login'
+Additional information
+Darwin, downloaded docker from docker.com/get-started
+2

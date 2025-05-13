@@ -1,0 +1,36 @@
+chrissound commented on 27 Jul 2018
+dkrc up
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/site-packages/jsonschema/_format.py", line 206, in <module>
+    import strict_rfc3339
+ModuleNotFoundError: No module named 'strict_rfc3339'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.21.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 476, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2700, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2318, in load
+    return self.resolve()
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2324, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 22, in <module>
+    from ..bundle import get_image_digests
+  File "/usr/lib/python3.6/site-packages/compose/bundle.py", line 12, in <module>
+    from .config.serialize import denormalize_config
+  File "/usr/lib/python3.6/site-packages/compose/config/__init__.py", line 6, in <module>
+    from .config import ConfigurationError
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 49, in <module>
+    from .validation import match_named_volumes
+  File "/usr/lib/python3.6/site-packages/compose/config/validation.py", line 12, in <module>
+    from jsonschema import Draft4Validator
+  File "/usr/lib/python3.6/site-packages/jsonschema/__init__.py", line 15, in <module>
+    from jsonschema._format import (
+  File "/usr/lib/python3.6/site-packages/jsonschema/_format.py", line 213, in <module>
+    @_checks_drafts("date-time", raises=(ValueError, isodate.ISO8601Error))
+AttributeError: module 'isodate' has no attribute 'ISO8601Error'
+docker-compose --version also outputs the above. According to my package manager: docker-compose-1.21.2-1

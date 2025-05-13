@@ -1,0 +1,1 @@
+Containers created through compose miss IP-address in docker inspect

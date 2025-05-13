@@ -1,0 +1,1 @@
+Can't pass Environment variables from docker-compose.yml to Dockerfile

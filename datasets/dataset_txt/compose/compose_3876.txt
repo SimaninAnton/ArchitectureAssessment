@@ -1,0 +1,3 @@
+sourav82 commented on 3 Mar 2015
+I would like to target docker-compose to docker swarm host but looks like there is no -H option to specify with docker-compose.
+If I could specify the docker host with docker-compose, I do not need to change the docker config file. Docker-compose may target swarm but other tools (say docker CLI itself) can use regular local unix socket.

@@ -1,0 +1,41 @@
+Goatmaster commented on 22 Nov 2018 •
+edited
+Hey,
+I have a server with three network interfaces (eth0, eth1, eth2). Now I want to run two container with help of docker-compose (nginx, php). The nginx should only be available with the ip of eth1 but when I start the container with the docker-compose up -d command the nginx is available on all three ip's (eht0, eth1, eht2).
+I created the docker network before.
+docker network create -d bridge -o parent=eth1 eth1
+Here is my docker-compose.yml fiel.
+version: '2'
+
+services:
+    web:
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - "80:80"
+        volumes:
+            - ./code:/code
+            - ./site.conf:/etc/nginx/conf.d/default.conf
+        links:
+            - php
+        networks:
+            - eth1
+
+    php:
+        build: .
+        container_name: php
+        volumes:
+            - ./code:/code
+            - ./log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+        networks:
+            - eth1
+
+networks:
+  eth1:
+    external: true
+Docker and docker-compose version
+docker -v
+Docker version 17.06.0-ce
+docker-compose -v
+docker-compose version 1.23.1
+Any ideas how to fix this problem?

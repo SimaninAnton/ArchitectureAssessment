@@ -1,0 +1,10 @@
+ionelmc commented on 27 May 2016
+Looks like 1.7.1 brought a bunch of regressions:
+ERROR: for pg  Unable to remove filesystem for d14da9becdf31148235d00c8cd2c8a57a6cedca8bad9d45c734905ff33ea1849: remove /var/lib/docker/containers/d14da9becdf31148235d00c8cd2c8a57a6cedca8bad9d45c734905ff33ea1849/shm: device or resource busy
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 63, in main
+    log.error(e.msg)
+AttributeError: 'ProjectError' object has no attribute 'msg'
+1.7.0 works fine.

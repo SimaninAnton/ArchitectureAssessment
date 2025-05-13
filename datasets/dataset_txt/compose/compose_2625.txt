@@ -1,0 +1,18 @@
+krisskross commented on 15 Mar 2016
+I have a docker volume container that define SPARK_HOME as a environment variable. I want to set this variable automatically in containers that mount this spark volume container. What's the best way to achieve this?
+I tried the following but the shell does not expand the variable when the app container is started.
+spark:
+    image: spark
+app:
+    image: app
+    hostname: airflow-accept
+    restart: always
+    volumes_from:
+        - spark
+    environment:
+        - SPARK_HOME="$$SPARK_ENV_SPARK_HOME"
+    links:
+        - spark
+Also tried with $SPARK_ENV_SPARK_HOME but this expands the variable on the machine that invoked docker-compose, not the running app container.
+Cheers,
+-Kristoffer

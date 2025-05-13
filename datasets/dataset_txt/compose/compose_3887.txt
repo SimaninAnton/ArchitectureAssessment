@@ -1,0 +1,5 @@
+toli commented on 28 Feb 2015
+When following the Compose example at http://docs.docker.com/compose/#installation-and-set-up in the /tmp/composetest directory on a Mac, i'm seeing the following error:
+web_1   | python: can't open file 'app.py': [Errno 2] No such file or directory
+On a Mac, /tmp/ is actually in /private/tmp/.
+If i move the underlying /tmp/composetest to any other location (ie /Users/toli/dev/composetest), the example works without any changes.

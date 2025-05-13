@@ -1,0 +1,1 @@
+`fig up` exits if container exits normally, but only first time

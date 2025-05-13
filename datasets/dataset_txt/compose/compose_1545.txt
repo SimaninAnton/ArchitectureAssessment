@@ -1,0 +1,30 @@
+boying52 commented on 5 Apr 2017 •
+edited by shin-
+version: "3.0"
+
+services:
+  ctm-web:
+    image: 'centaline.docker.io:5000/ctm-web:1.0.0.0'
+    restart: always
+    hostname: 'ctm-web'
+    networks:
+      - nat
+    expose:
+      - "8080"
+    ports:
+      - "80:8080"
+    volumes:
+      - C:\Config:C:\CTMConfig
+    extra_hosts:
+      - "redis.centaline.com:10.4.19.105"
+      - "sso.centaline.com:10.4.19.105"
+    environment:
+      - VIRTUAL_HOST=ctm.centaline.com
+    logging:
+      options:
+        max-size: 50m
+networks:
+  nat:
+    external:
+      name: nat
+it's not work

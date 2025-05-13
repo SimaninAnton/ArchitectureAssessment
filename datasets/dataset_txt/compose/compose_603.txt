@@ -1,0 +1,78 @@
+peterkappelt commented on 30 Jun 2018
+Description of the issue
+docker-compose outputs an misleading/ wrong error message, if an invalid image name is specified for an service (e.g. with an uppercase letter in the repository name).
+For an invalid name, like
+image: pkap/gBridge-redis-worker:latest   #note the uppercase 'B'
+docker-compose build outputs:
+[...]
+Building redis-worker
+ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+The build succeeds for
+image: pkap/gbridge-redis-worker:latest   #note the lowercase 'b'
+This error message seems to be somehow unrelated to the actual issue. Though this is not critical, I'd like to draw attention to this behaviour.
+Since I'm a total Docker beginner (and didn't know about image naming conventions), it took me some time to figure out the problem.
+Context information (for bug reports)
+peter@dev01:~/gBridge-docker$ docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+peter@dev01:~/gBridge-docker$ docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:14 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:24 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+peter@dev01:~/gBridge-docker$ docker-compose config
+networks:
+  backend:
+    driver: bridge
+  web_frontend:
+    driver: bridge
+services:
+ [...]
+  redis-worker:
+    build:
+      context: /home/peter/gBridge-docker
+      dockerfile: ./docker-redis-worker/Dockerfile
+    depends_on:
+    - cache
+    environment:
+      GBRIDGE_REDISWORKER_HOMEGRAPHKEY: ''
+      GBRIDGE_REDISWORKER_MQTT: mqtt://
+      GBRIDGE_REDISWORKER_REDIS: redis://cache:6379
+    image: pkap/g*B*ridge-redis-worker:latest
+    links:
+    - cache
+    networks:
+      backend: null
+    restart: always
+  [...]
+version: '3.0'
+Steps to reproduce the issue
+Use docker-compose.yml with invalid image name:
+image: pkap/gBridge-redis-worker:latest   #note the uppercase 'B'
+Observed result
+[...]
+Building redis-worker
+ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+Expected result
+(Analogous to) "Error: Image name does not comply with the naming restrictions"

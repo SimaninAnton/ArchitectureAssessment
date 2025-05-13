@@ -1,0 +1,28 @@
+anentropic commented on 5 Dec 2014
+This may be a problem with my image but I wonder what to look for
+I have these services defined:
+postgres:
+  image: kartoza/postgis
+  volumes_from:
+    - postgresdata
+  expose:
+    - 5432
+
+postgresdata:
+  image: dockerfile/ubuntu
+  volumes:
+    - /var/lib/postgresql
+I fig up... all good
+$ fig restart postgres
+Restarting anentropic_postgres_1...
+all good. nothing logged in the fig up window
+$ fig restart postgres
+Restarting anentropic_postgres_1...
+this time in the other window I see:
+anentropic_postgres_1 exited with code -1
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping anentropic_nginx_1...
+Stopping anentropic_dpm_1...
+Stopping anentropic_postgres_1...
+happens repeatably if I fig up again
+it seems to me if it was something going wrong in the CMD then it should happen the first time you restart as well

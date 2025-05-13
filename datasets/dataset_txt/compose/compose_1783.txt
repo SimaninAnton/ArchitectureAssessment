@@ -1,0 +1,22 @@
+Contributor
+kinghuang commented on 19 Jan 2017
+Description
+services.service.deploy.replicas in Compose file version 3 with Docker Compose 1.10-rc2 doesn't seem to work with environment variables. If a variable instead of a literal integer is used, then Docker Compose says it contains an invalid type
+Steps to reproduce the issue:
+Create a compose file where the value for replicas is a variable instead of a literal integer, like the following.
+version: '3'
+services:
+  node-chrome:
+    image: selenium/node-chrome:3.0.1
+    deploy:
+      replicas: $NUM_NODES_CHROME
+Define a value for NUM_NODES_CHROME. In my case, I declared NUM_NODES_CHROME=2 in a .env file.
+Describe the results you received:
+Docker Compose says that replicas contains an invalid type.
+ERROR: The Compose file './selenium.yml' is invalid because:
+services.node-chrome.deploy.replicas contains an invalid type, it should be an integer
+Describe the results you expected:
+Docker Compose should substitute $NUM_NODES_CHROME with 2, treating the value as an integer.
+Output of docker-compose --version:
+docker-compose version 1.10.0-rc2, build fb241d0
+22

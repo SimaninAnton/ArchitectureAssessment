@@ -1,0 +1,1 @@
+When using multiple compose files isolation and storage_opt parameters are ignored

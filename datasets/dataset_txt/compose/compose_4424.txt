@@ -1,0 +1,7 @@
+Contributor
+bfirsh commented on 24 Jan 2014
+There are a bunch of things we could do:
+build -rm by default
+run -rm by default when doing fig run
+maybe remove containers by default if they don't have volumes?
+pull latest tag by default #716

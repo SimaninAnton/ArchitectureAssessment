@@ -1,0 +1,23 @@
+ronag commented on 5 Jun 2015
+I'm trying to use docker compose with docker-consul, however without success.
+I'm not sure what the difference here is?
+This works:
+docker run --name consul -h host1 -p 8300:8300 -p 8301:8301     -p 8301:8301/udp -p 8302:8302 -p 8302:8302/udp -p 8400:8400 -p 8500:8500 -p 172.17.42.1:53:53 -p 172.17.42.1:53:53/udp -d progrium/consul  -join 192.168.99.100
+This doesn't:
+consul:
+  hostname: host1
+  image: progrium/consul
+  command: -join 192.168.99.100
+  ports:
+  - "8300:8300"
+  - "8301:8301"
+  - "8301:8301/udp"
+  - "8302:8302"
+  - "8302:8302/udp"
+  - "8400:8400"
+  - "8500:8500"
+  - "172.17.42.1:53:53"
+  - "172.17.42.1:53:53/udp"
+docker-compose up
+Seems to be something with the ports since I'm getting lots of weird network related errors: gliderlabs/docker-consul#88
+A bug or am I doing something wrong?

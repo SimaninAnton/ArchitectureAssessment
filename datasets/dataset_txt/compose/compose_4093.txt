@@ -1,0 +1,3 @@
+zwily commented on 19 Nov 2014
+Whenever I do a fig run command that returns many lines of output, the output is either truncated, or weirdly garbled. This typically happens when running fig run web rake routes. The output will typically come back missing 3-5 lines of output (randomly). docker run -it --rm $IMAGE rake routes works just fine.
+Using fig 1.0.1.

@@ -1,0 +1,35 @@
+etc0de commented on 6 Sep 2015
+Installing docker-compose through pip will sometimes(?) not upgrade websocket to required version. This means:
+User uses pip install docker-compose.
+User tries to use it. This error appears:
+[root@localhost Server]# docker-compose
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.4.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 558, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2682, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2355, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2361, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 10, in <module>
+    from docker.errors import APIError
+  File "/usr/lib/python2.7/site-packages/docker/__init__.py", line 20, in <module>
+    from .client import Client, AutoVersionClient # flake8: noqa
+  File "/usr/lib/python2.7/site-packages/docker/client.py", line 23, in <module>
+    from . import clientbase
+  File "/usr/lib/python2.7/site-packages/docker/clientbase.py", line 7, in <module>
+    import websocket
+  File "/usr/lib/python2.7/site-packages/websocket/__init__.py", line 22, in <module>
+    from ._core import *
+  File "/usr/lib/python2.7/site-packages/websocket/_core.py", line 41, in <module>
+    from ._url import *
+  File "/usr/lib/python2.7/site-packages/websocket/_url.py", line 23, in <module>
+    from six.moves.urllib.parse import urlparse
+ImportError: No module named urllib.parse
+[root@localhost Server]#
+3 . User needs to google around and dig for this error to find out that this is required to make things work: sudo pip install -U websocket
+This is not exactly how the install experience is supposed to be. Why does this not work properly per default? Also check out #1288 to see that it's a quite a large amount of people affected.
+Please figure out why pip isn't properly installing the required websocket dependency, and make it work per default for all users.

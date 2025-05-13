@@ -1,0 +1,1 @@
+up does not establish links to running subset of service

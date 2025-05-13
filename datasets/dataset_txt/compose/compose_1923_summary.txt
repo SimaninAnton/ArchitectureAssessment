@@ -1,0 +1,1 @@
+Audit logs for docker-compose CLI

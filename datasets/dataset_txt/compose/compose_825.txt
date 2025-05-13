@@ -1,0 +1,23 @@
+robsonpeixoto commented on 2 Mar 2018
+docker-compose.yaml:
+version: '3'
+services:
+  postgres:
+    image: postgres:10-alpine
+    ports:
+      - 5432:5432
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:4-alpine
+    ports:
+      - 6379:6379
+Open a shell using the postgres service.
+docker-compose run --rm postgres sh
+In another shell, list all containers:
+CONTAINER ID        IMAGE                COMMAND                  CREATED              STATUS              PORTS                    NAMES
+b60b456d7242        postgres:10-alpine   "docker-entrypoint.s…"   About a minute ago   Up About a minute   5432/tcp                 o_postgres_run_1
+5ee1fb5f8942        redis:4-alpine       "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:6379->6379/tcp   o_redis_1
+IMHO, docker-compose run should not open ports.
+1

@@ -1,0 +1,17 @@
+joemewes commented on 5 Jan 2017 •
+edited
+Im not sure why/what is going wrong with this, but Im trying to refactor some docker exec commands I use to docker-compose exec so I don't have to rely on grep name workaround for dynamic container names.
+example OLD docker exec command I use is -
+docker exec -i $(docker ps --format {{.Names}} | grep db) mysql -u dev -pDEVPASSWORD dev_db < latest.sql
+An example docker-compose exec command that IS working is -
+docker-compose exec -T db mysql -u dev -pDEVPASSWORD -Bse "create database dev_db;"
+But when I try to execute the standard mysql import nothing happens -
+docker-compose exec -T db mysql -u dev -pDEVPASSWORD dev_db < latest.sql
+It just hangs. thing only things that show in the mysql.log for the last command is the rolling -
+170104 19:50:37    82 Connect dev@localhost as anonymous on dev_db
+     82 Query select @@version_comment limit 1
+thoughts? ideas?
+Am I missing something?
+Happy to provide any more info or run any tests that may help diagnose if this even is an issue.
+thanks
+7

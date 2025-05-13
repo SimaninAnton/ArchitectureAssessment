@@ -1,0 +1,50 @@
+rpwashburn commented on 14 Sep 2015
+Starting with a docker-compose file with an apache container specified:
+apache:
+  image: apache
+  ports:
+    - "80:80"
+After I initially docker-compose up on this file, if I go back in and make the docker-compose file look like this:
+apache:
+  image: apache
+  ports:
+    - "80:80"
+  links:
+    - "reviewservice"
+  volumes:
+    - ./hosts:/etc/apache2/sites-enabled
+
+reviewservice:
+  image: reviewservice
+  ports:
+    - "3000:3000"
+If I exec into the apache container after stopping apache then docker-compose up, I do not see an entry for reviewservice in the /etc/hosts, only entries for docker compose generated names.
+172.17.0.46 5dabc584af18
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.17.0.44 cosmos_reviewservice_1 0e0e53f405a2
+172.17.0.46 cosmos_apache_1
+172.17.0.46 cosmos_apache_1.bridge
+172.17.0.44 cosmos_reviewservice_1
+172.17.0.44 cosmos_reviewservice_1.bridge
+There is no entry for just reviewservice, which is how my code in the apache container is expecting to reference my review service.
+However, if I docker-compose rm apache, then docker-compose up and check the /etc/host, the entry for reviewservice is there and everything works.
+172.17.0.46 5dabc584af18
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.17.0.44 reviewservice_1 0e0e53f405a2 cosmos_reviewservice_1
+172.17.0.44 cosmos_reviewservice_1 0e0e53f405a2
+172.17.0.44 reviewservice 0e0e53f405a2 cosmos_reviewservice_1
+172.17.0.46 cosmos_apache_1
+172.17.0.46 cosmos_apache_1.bridge
+172.17.0.44 cosmos_reviewservice_1
+172.17.0.44 cosmos_reviewservice_1.bridge
+I'm assuming that i should not have to rm the apache image everytime I update a new link in the yml file.

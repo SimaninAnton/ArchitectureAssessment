@@ -1,0 +1,23 @@
+VolkerK commented on 26 Aug 2016 •
+edited
+I'm using the following command in my shell script to wait for a docker container to startup
+docker logs -f myContainer | grep -qe "Server startup complete"
+When doing the same with compose, it still works, but I get this nasty Traceback.
+docker-compose logs -f --no-color myContainer | grep -qe "Server startup complete"
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 61, in main
+File "compose/cli/main.py", line 113, in perform_command
+File "compose/cli/main.py", line 507, in logs
+File "compose/cli/log_printer.py", line 98, in run
+IOError: [Errno 32] Broken pipe
+docker-compose returned -1
+Would be nice to handle that!
+Thanks
+$ docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+$ docker --version
+Docker version 1.12.1, build 23cf638

@@ -1,0 +1,28 @@
+roytruelove commented on 1 Oct 2015
+(docker-compose v1.4.2, docker v1.8.2, ubuntu trusty)
+I was seeing situations where a command, while in one directory, would affect containers reference by the .yml in another directory. I realized that this occurs when the directories have the same name.
+For instance, I've got this directory structure. Note that the root dirs for the projects are both called config
+- A
+     - config
+          - docker-compose.yml
+- B
+     - config
+          - docker-compose.yml
+And the .yml files are the same except for the container name:
+redis:
+  image:  redis
+  container_name: redis_container_(A or B)
+If I start A then go to B and start that, B doesn't start, it recreates A. Here's the flow:
+/tmp/dockerComposeTest/A/config$ docker-compose up -d
+Creating redis_container_A...
+/tmp/dockerComposeTest/A/config$ cd ../../B/config/
+/tmp/dockerComposeTest/B/config$ docker-compose up -d
+Recreating redis_container_A...                                                   # !!!
+/tmp/dockerComposeTest/B/config$
+I've seen this with stop, kill, etc.
+This will NOT happen with the following dir structure, presumably because the root directory names are different.
+- A
+     - docker-compose.yml
+- B
+     - docker-compose.yml
+3

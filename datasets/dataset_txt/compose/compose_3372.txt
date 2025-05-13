@@ -1,0 +1,7 @@
+darrenhaken commented on 16 Aug 2015
+I have created a docker image using ubuntu trusty as the base.
+The image is configured to run a Ruby application locally using the Ruby web server Thin.
+Whenever I run docker-compose up I get the message in the subject constantly printing out along with stdout from the Ruby process.
+This does not happen when I run a container from the save image using 'docker run'
+Anyone got any ideas to fix this?
+2

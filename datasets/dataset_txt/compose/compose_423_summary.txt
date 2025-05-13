@@ -1,0 +1,1 @@
+docker-compose fails with TypeError: argument of type 'NoneType' is not iterable

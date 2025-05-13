@@ -1,0 +1,1 @@
+Variable substitution by stdin

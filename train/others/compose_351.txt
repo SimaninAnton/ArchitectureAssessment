@@ -1,0 +1,57 @@
+maxt commented on 20 Dec 2018
+Description of the issue
+Hello. I would like to scale my service, so I specified port range in docker-compose.yml, like this:
+version: '2.2'
+  
+services:
+ webserver:
+  image: httpd
+  ports:
+   - "8000-8010:80"
+The point is that each time I repeat
+docker-compose up -d 
+docker-compose down
+I have different port on host machine: it is 8000 for the first attempt, 8001 for the second and then 8002, 8003 and so on.
+Context information
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:43 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  webserver:
+    image: httpd
+    ports:
+    - 8000-8010:80/tcp
+version: '2.2'
+Steps to reproduce the issue
+docker-compose up -d
+Check that port is 8000
+docker-compose down
+docker-compose up -d
+Check that port is 8001 (unexpected!)
+docker-compose down
+Observed result
+Port increments each time I do docker-compose up
+Expected result
+The initial port should be the first port from specified range
+Stacktrace / full error message
+There was not any error messages

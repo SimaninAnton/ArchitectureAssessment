@@ -1,0 +1,11 @@
+Contributor
+shin- commented on 8 Jan 2016
+See: #2421 (comment)
+## Service configuration reference I would most likely put under this heading a paragraph about the fact there are multiple versions. Then put a cross -reference to the version section to follow.
+Then move ## Versioning to follow the main body of configuration material
+This section would need to answer:
+define whether the configuration version matches the product version
+under what conditions can I use a different version; for example does the version of the configuration file match or differ from the Compose version
+can I mix syntax in the same config file (prob not but should say)
+can I use two config files that use differing versions of the syntax (I'm thinking also of how the override files interact with the main config under the version conditions)
+provide some guidance to the reader under what circumstances this version mixing is useful

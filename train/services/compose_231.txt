@@ -1,0 +1,138 @@
+bscheshirwork commented on 2 Apr 2019
+Description of the issue
+I will try to use -a
+docker-compose ps --all
+Traceback (most recent call last):
+File "bin/docker-compose", line 6, in
+File "compose/cli/main.py", line 71, in main
+File "compose/cli/main.py", line 127, in perform_command
+File "compose/cli/main.py", line 712, in ps
+TypeError: '<' not supported between instances of 'Container' and 'Container'
+[31001] Failed to execute script docker-compose
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose -v
+docker-compose version 1.24.0, build 0aa59064
+Output of docker version
+docker -v
+Docker version 18.09.4, build d14af54266
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+docker-compose config
+services:
+  db:
+    depends_on:
+    - mysql
+    environment:
+      LOG_FILE: /opt/mysql-proxy/logs/mysql.log
+      LUA_SCRIPT: /opt/mysql-proxy/conf/log.lua
+      PROXY_DB_HOST: null
+      PROXY_DB_PORT: 3306
+      REMOTE_DB_HOST: mysql
+      REMOTE_DB_PORT: 3306
+      TZ: Europe/Moscow
+    expose:
+    - '3306'
+    image: bscheshir/mysql-proxy:0.8.5
+    ports:
+    - 3308:3306/tcp
+    restart: always
+    volumes:
+    - /home/dev/projects/docker-yii2-app-advanced-kit/mysql-proxy-conf:/opt/mysql-proxy/conf:rw
+    - /home/dev/projects/docker-yii2-app-advanced-kit/mysql-proxy-logs:/opt/mysql-proxy/logs:rw
+  mysql:
+    entrypoint:
+    - /entrypoint.sh
+    - --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: yii2appadvancedkitdbhere
+      MYSQL_PASSWORD: yii2appadvancedkitpasswordhere
+      MYSQL_ROOT_PASSWORD: yii2appadvancedkitrootpasswordhere
+      MYSQL_USER: yii2advanced
+      TZ: Europe/Moscow
+    expose:
+    - '3306'
+    image: mysql:8.0.15
+    ports:
+    - 3307:3306/tcp
+    restart: always
+    volumes:
+    - /home/dev/projects/docker-yii2-app-advanced-kit/mysql-data/db:/var/lib/mysql:rw
+  nginx:
+    depends_on:
+    - php
+    environment:
+      TZ: Europe/Moscow
+    image: nginx:1.15.9-alpine
+    ports:
+    - 8080:8080/tcp
+    - 8081:8081/tcp
+    - 8083:8083/tcp
+    restart: always
+    volumes:
+    - /home/dev/projects/docker-yii2-app-advanced-kit/nginx-conf:/etc/nginx/conf.d:rw
+    - /home/dev/projects/docker-yii2-app-advanced-kit/nginx-logs:/var/log/nginx:rw
+    volumes_from:
+    - service:php:rw
+  node:
+    command: /bin/sh -c 'cd /var/www/html/ && npm i && npm run build'
+    image: node:8.15.1-alpine
+    volumes:
+    - /home/dev/projects/docker-yii2-app-advanced-kit/design-src:/var/www/html:rw
+    - /home/dev/projects/docker-yii2-app-advanced-kit/php-code/frontend/assets/global:/var/www/html/dist:rw
+  php:
+    depends_on:
+    - db
+    environment:
+      PHP_IDE_CONFIG: serverName=kit
+      TZ: Europe/Moscow
+      XDEBUG_CONFIG: remote_host=192.168.1.111 remote_port=9001 var_display_max_data=1024
+        var_display_max_depth=5
+    image: bscheshir/php:7.3.3-fpm-alpine-4yii2-xdebug
+    restart: always
+    volumes:
+    - /home/dev/projects/docker-yii2-app-advanced-kit/php-code:/var/www/html:rw
+    - /home/dev/.composer/cache:/root/.composer/cache:rw
+    - /home/dev/GeoIP:/usr/local/share/GeoIP:rw
+  php-supervisor:
+    depends_on:
+    - db
+    environment:
+      PHP_IDE_CONFIG: serverName=kit
+      TZ: Europe/Moscow
+      XDEBUG_CONFIG: remote_host=192.168.1.111 remote_port=9003 var_display_max_data=1024
+        var_display_max_depth=5
+    image: bscheshir/php:7.3.3-fpm-alpine-4yii2-supervisor-xdebug
+    restart: always
+    volumes:
+    - /home/dev/projects/docker-yii2-app-advanced-kit/php-code:/var/www/html:rw
+    - /home/dev/projects/docker-yii2-app-advanced-kit/supervisor-conf:/etc/supervisor/conf.d:rw
+    - /home/dev/projects/docker-yii2-app-advanced-kit/supervisor-logs:/var/log/supervisor:rw
+  redis:
+    command: redis-server /etc/redis/conf.d/redis.conf --requirepass yii2advancedredispasswordhere
+    depends_on:
+    - php-supervisor
+    environment:
+      TZ: Europe/Moscow
+    image: redis:5.0.3-alpine
+    ports:
+    - 6379/tcp
+    restart: always
+    volumes:
+    - /home/dev/projects/docker-yii2-app-advanced-kit/redis-data:/data:rw
+    - /home/dev/projects/docker-yii2-app-advanced-kit/redis-conf:/etc/redis/conf.d:rw
+version: '2.0'
+Steps to reproduce the issue
+update to latest
+check ps -a
+got a error
+Observed result
+Expected result
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+ubuntu 18.04
+curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s-uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+4

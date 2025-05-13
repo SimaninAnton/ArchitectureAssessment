@@ -1,0 +1,12 @@
+Contributor
+schmunk42 commented on 23 Jan 2016
+I created a shell script to detect the minimum version of docker-compose.
+I noticed that in 1.5.1 it looks like
+docker-compose --version
+docker-compose version: 1.5.1
+while in 1.5.2...
+docker-compose --version
+docker-compose version 1.5.2, build 7240ff3
+Which leads to a regex like
+if [[ $(docker-compose --version) =~ version[:]?\ (.*)[,]? ]]; then
+Is this platform dependent? Will the string format stay like in 1.5.2 future versions?

@@ -1,0 +1,4 @@
+ngpestelos commented on 9 Jul 2014
+Here's my fig.yml: https://gist.github.com/ngpestelos/dfab5bc20fde70cc04f0
+I'm trying to mount a /data directory inside a nginx container. I'm running fig on boot2docker, which runs docker 1.1.0.
+When I run docker inspect nginx_1 and look for VolumesFrom, Docker shows null.

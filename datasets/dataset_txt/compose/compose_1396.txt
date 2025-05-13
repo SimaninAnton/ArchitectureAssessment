@@ -1,0 +1,2 @@
+z3ntu commented on 11 Jun 2017
+On https://docs.docker.com/compose/compose-file/ the link to external_links is https://docs.docker.com/compose/compose-file/#externallinks even though it should be https://docs.docker.com/compose/compose-file/#external_links

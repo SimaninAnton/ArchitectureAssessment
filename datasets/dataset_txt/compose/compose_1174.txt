@@ -1,0 +1,17 @@
+BeOleg commented on 1 Oct 2017
+I seems that when the logging driver cannot attach to the host, the whole stack fails to bootstrap.
+Furthermore, if the stack is already running and the logging server hangs or disconnects, the stack fails and becomes unavailable.
+version: 2
+Error:
+Removing nexchange_redis_1
+Removing nexchange_postgis_1
+Starting 28fe887ac395_28fe887ac395_nexchange_redis_1 ... 
+Recreating 93808801a315_93808801a315_nexchange_postgis_1 ... 
+Recreating 93808801a315_93808801a315_nexchange_postgis_1
+Recreating 93808801a315_93808801a315_nexchange_postgis_1 ... error
+
+ERROR: for 93808801a315_93808801a315_nexchange_postgis_1  Cannot start service postgis: failed to initialize logging driver: dial tcp: lookup tcp on 67.207.67.2:53: no such host
+
+ERROR: for postgis  Cannot start service postgis: failed to initialize logging driver: dial tcp: lookup tcp on 67.207.67.2:53: no such host
+ERROR: Encountered errors while bringing up the project.
+Is there a way to fail silently when logging is not available for some reason?

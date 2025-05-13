@@ -1,0 +1,30 @@
+drgroot commented on 13 Apr 2017 •
+edited
+For some reason I cannot bind the port correctly. When I remove the port, it works. If i change the port to any other number, it still does not work
+version: '3'
+services:
+  rtorrent:
+    container_name: rtorrent
+    image: yusufali/rtorrent
+    privileged: true
+  web_nginx:
+    container_name: web_nginx
+    image: marvambass/nginx-ssl-secure
+    links:
+      - rtorrent:rtorrent
+    ports:
+      - "8800:80"
+However, run I run docker-com up -d, this does not work
+Creating network "docker_default" with the default driver
+Creating rtorrent
+Creating web_nginx
+
+ERROR: for web_nginx  Cannot create container for service web_nginx: invalid port specification: "None"
+ERROR: Encountered errors while bringing up the project.
+Useful info:
+# docker-compose --version
+docker-compose version 1.12.0, build b31ff33
+# docker --version
+Docker version 17.04.0-ce, build 4845c56
+# uname -a
+Linux gsad 4.4.30-mod-std-ipv6-64 #9 SMP Tue Nov 1 17:58:26 CET 2016 x86_64 GNU/Linux

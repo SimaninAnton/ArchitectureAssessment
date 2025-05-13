@@ -1,0 +1,1 @@
+net container:<service> option should combine host option

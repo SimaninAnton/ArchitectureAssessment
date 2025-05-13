@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 26 Aug 2015
+Now that we run the test suite on python3, we have to run it 2 x (num of docker versions we support).
+It would be nice to run all (or some) of these permutations in parallel (possibly as separate jenkins jobs?) so that we can get feedback about PRs much faster.

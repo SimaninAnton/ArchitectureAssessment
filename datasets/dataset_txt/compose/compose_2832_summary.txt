@@ -1,0 +1,1 @@
+links hostname not being set after upgrading to 1.6

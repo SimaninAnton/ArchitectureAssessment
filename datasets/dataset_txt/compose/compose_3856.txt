@@ -1,0 +1,87 @@
+Contributor
+funkyfuture commented on 9 Mar 2015
+whenever i run tests with docker run -v /var/run/docker.sock:/var/run/docker.sock --rm --entrypoint nosetests docker-compose, two tests are failing. from what i read i'd say that there's still a container listening to the same port that is tried to bound to.
+.....Estty: standard input: Inappropriate ioctl for device
+.stty: standard input: Inappropriate ioctl for device
+.stty: standard input: Inappropriate ioctl for device
+........E............................................................................................................................................................................
+======================================================================
+ERROR: test_port (tests.integration.cli_test.CLITestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/code/tests/integration/cli_test.py", line 379, in test_port
+    self.command.dispatch(['up', '-d'], None)
+  File "/code/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/code/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/code/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/code/compose/cli/main.py", line 443, in up
+    do_build=not options['--no-build'],
+  File "/code/compose/project.py", line 185, in up
+    do_build=do_build):
+  File "/code/compose/service.py", line 261, in recreate_containers
+    self.start_container(container)
+  File "/code/compose/service.py", line 342, in start_container
+    cap_drop=cap_drop,
+  File "/code/compose/container.py", line 121, in start
+    return self.client.start(self.id, **options)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 867, in start
+    self._raise_for_status(res)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 95, in _raise_for_status
+    raise errors.APIError(e, response, explanation=explanation)
+APIError: 500 Server Error: Internal Server Error ("Cannot start container 24396d264e8472ae0dc93c04ebd7cbd4b35f9b8f444d74701d720dc922433a34: Error starting userland proxy: listen tcp 0.0.0.0:9999: bind: address already in use")
+-------------------- >> begin captured logging << --------------------
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/json?all=1&limit=-1&trunc_cmd=1&size=0 HTTP/1.1" 200 None
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/images/json?only_ids=0&all=0 HTTP/1.1" 200 None
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/json?all=1&limit=-1&trunc_cmd=1&size=0 HTTP/1.1" 200 None
+compose.service: INFO: Creating portscomposefile_simple_1...
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/json?all=1&limit=-1&trunc_cmd=1&size=0 HTTP/1.1" 200 None
+requests.packages.urllib3.connectionpool: DEBUG: "POST /run/docker.sock/v1.14/containers/create?name=portscomposefile_simple_1 HTTP/1.1" 201 90
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/24396d264e8472ae0dc93c04ebd7cbd4b35f9b8f444d74701d720dc922433a34/json HTTP/1.1" 200 1798
+requests.packages.urllib3.connectionpool: DEBUG: "POST /run/docker.sock/v1.14/containers/24396d264e8472ae0dc93c04ebd7cbd4b35f9b8f444d74701d720dc922433a34/start HTTP/1.1" 500 174
+--------------------- >> end captured logging << ---------------------
+
+======================================================================
+ERROR: test_run_service_with_map_ports (tests.integration.cli_test.CLITestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/mock.py", line 1201, in patched
+    return func(*args, **keywargs)
+  File "/code/tests/integration/cli_test.py", line 276, in test_run_service_with_map_ports
+    self.command.dispatch(['run', '-d', '--service-ports', 'simple'], None)
+  File "/code/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/code/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/code/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/code/compose/cli/main.py", line 335, in run
+    service.start_container(container, ports=service_ports, one_off=True)
+  File "/code/compose/service.py", line 342, in start_container
+    cap_drop=cap_drop,
+  File "/code/compose/container.py", line 121, in start
+    return self.client.start(self.id, **options)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 867, in start
+    self._raise_for_status(res)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 95, in _raise_for_status
+    raise errors.APIError(e, response, explanation=explanation)
+APIError: 500 Server Error: Internal Server Error ("Cannot start container a9e06cc979404a680f8297cc4d5cfafb10a3697bd43910ef484260ec8bc3f9e9: Error starting userland proxy: listen tcp 0.0.0.0:9999: bind: address already in use")
+-------------------- >> begin captured logging << --------------------
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/json?all=1&limit=-1&trunc_cmd=1&size=0 HTTP/1.1" 200 None
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/images/json?only_ids=0&all=0 HTTP/1.1" 200 None
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/json?all=1&limit=-1&trunc_cmd=1&size=0 HTTP/1.1" 200 None
+requests.packages.urllib3.connectionpool: DEBUG: "POST /run/docker.sock/v1.14/containers/create?name=portscomposefile_simple_run_3 HTTP/1.1" 201 90
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/a9e06cc979404a680f8297cc4d5cfafb10a3697bd43910ef484260ec8bc3f9e9/json HTTP/1.1" 200 1802
+requests.packages.urllib3.connectionpool: DEBUG: "GET /run/docker.sock/v1.14/containers/json?all=0&limit=-1&trunc_cmd=1&size=0 HTTP/1.1" 200 1019
+requests.packages.urllib3.connectionpool: DEBUG: "POST /run/docker.sock/v1.14/containers/a9e06cc979404a680f8297cc4d5cfafb10a3697bd43910ef484260ec8bc3f9e9/start HTTP/1.1" 500 174
+--------------------- >> end captured logging << ---------------------
+
+----------------------------------------------------------------------
+Ran 189 tests in 365.103s
+
+FAILED (errors=2)
+this applies running on a Ubuntu Trusty with Docker 1.5.0 and compose's master branch but not on OS X Mavericks.
+has anyone an idea where to start diging?
+there are also quiet some leftover-containers after the test ran on all systems. but i'd guess that's not supposed to be?!

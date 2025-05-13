@@ -1,0 +1,82 @@
+rosskevin commented on 17 Sep 2015
+Yaml
+---
+web:
+  build: "."
+  working_dir: "/project/spec/dummy"
+  ports:
+  - '3000'
+  links:
+  - db
+  - elasticsearch
+  volumes_from:
+  - gems-2.2.2
+  environment:
+  - GEM_HOME=/gems/2.2.2
+  - RAILS_ENV=test
+  command: >
+    bash -c " echo 'Bundling gems' && bundle install --jobs 4 --retry 3
+    && echo 'Clearing logs and tmp dirs' && bundle exec rake log:clear tmp:clear
+    && echo 'Check and wait for database connection' && bundle exec docker-rails-db-check
+    && echo 'DB rebuild' && bundle exec rake db:rebuild_test
+    && echo 'Tests' && cd ../.. && xvfb-run -a bundle exec rake spec "
+db:
+  image: library/mysql:5.7.6
+  ports:
+  - '3306'
+  environment:
+  - MYSQL_ALLOW_EMPTY_PASSWORD=true
+elasticsearch:
+  image: library/elasticsearch:1.7
+  ports:
+  - '9200'
+OSX dev host
+I have setup on my dev machine using dinghy and compose 1.5. Running a single threaded rspec run on my macbook without docker takes 12 minutes 30 seconds, running it with docker takes 16 minutes 19 seconds. This isn't great (I'd love for it to be closer), but good enough for now.
+$ docker info
+Containers: 5
+Images: 148
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 158
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 4.0.9-boot2docker
+Operating System: Boot2Docker 1.8.1 (TCL 6.3); master : 7f12e95 - Thu Aug 13 03:24:56 UTC 2015
+CPUs: 8
+Total Memory: 3.858 GiB
+Name: dinghy
+ID: PNNP:PI3E:CRUK:27RI:IPHW:HROF:NQA2:XKV6:VGCZ:WT7B:BZ7R:USWD
+Debug mode (server): true
+File Descriptors: 17
+Goroutines: 27
+System Time: 2015-09-16T19:20:50.442190475Z
+EventsListeners: 1
+Init SHA1: 
+Init Path: /usr/local/bin/docker
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Labels:
+ provider=virtualbox
+Ubuntu host
+On the ubuntu host, I am running compose 1.4.1. The same single threaded rspec run took 47 minutes 29 seconds, 47 minutes! arguably on a machine better suited for such activity. It appears aufs is installed and that is the only thing I've found related to performance concerns.
+$ docker info
+Containers: 2
+Images: 73
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 77
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.16.0-49-generic
+Operating System: Ubuntu 14.04.2 LTS
+CPUs: 8
+Total Memory: 15.61 GiB
+Name: camacho
+ID: ZOYN:QGDO:UGMJ:TDDM:WEEM:ZEHJ:4OKB:V5WR:RGCL:NOKG:F5W5:SDEL
+WARNING: No swap limit support
+Question
+I monitored the build on ubuntu using glances, and nothing was yellow or red, the machine arguably was running at about 12-15% cpu the entire time.
+Where do I start looking for the bottleneck? What should I be seeing for iowait? Is something obviously misconfigured in my setup?

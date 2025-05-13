@@ -1,0 +1,14 @@
+babonet13 commented on 21 Oct 2018
+Hi Team,
+I have installed docker
+dev-box:/HelloWorld$ docker --version
+Docker version 18.06.1-ce, build d72f525745
+under a fresh Alpine 3.8.1. install
+and then I have installed docker-compose ...
+... but when I want to use it I got this error
+dev-box:/HelloWorld$ docker-compose
+Error relocating /usr/lib/libpython3.6m.so.1.0: getrandom: symbol not found
+What does it mean ? And how to solve it ?
+Best Regards
+Bernard
+1

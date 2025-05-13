@@ -1,0 +1,61 @@
+chia7712 commented on 21 Nov 2019
+Description of the issue
+in 1.24.x, we can call docker-compose -f xxx pull to download all images. After updating to 1.25.0, this function is not working.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0, build 0a186604
+docker-py version: 4.1.0
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea
+ Built:             Wed Nov 13 07:25:41 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea
+  Built:            Wed Nov 13 07:24:18 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+version: '3'
+
+services:
+  configurator:
+    image: oharastream/configurator:${TAG:-0.9.0-SNAPSHOT}
+    build:
+      context: .
+      dockerfile: configurator.dockerfile
+      args:
+        BRANCH: master
+        REPO: https://github.com/oharastream/ohara.git
+Steps to reproduce the issue
+docker-compose -f build.yml pull
+Observed result
+nothing
+Expected result
+start to pull all images defined in build.yml
+Stacktrace / full error message
+N/A
+Additional information
+OS version: Centos 7.7
+install method: download binary from github release page

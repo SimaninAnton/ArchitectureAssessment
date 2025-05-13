@@ -1,0 +1,24 @@
+jmarcos-cano commented on 27 Sep 2017 •
+edited
+hello guys I have a question regarding running docker commands inside a docker-compose service, here's my docker-compose snippet:
+services:
+
+  logger:
+    image: docker:17.06.0-ce
+    volumes:
+      - /tmp:/var/log
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    command:
+      - docker service ls
+
+
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+but I get the following error:
+Recreating logger_logger_1 ... done
+Attaching to logger_logger_1
+logger_1  | /usr/local/bin/docker-entrypoint.sh: exec: line 35: docker service ls: not found
+logger_logger_1 exited with code 127
+what am I missing ?

@@ -1,0 +1,1 @@
+Compose does not allow `build` to be supplied as an object

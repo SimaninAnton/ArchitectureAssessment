@@ -1,0 +1,1 @@
+Should docker-compose be wary of the current user $PATH?

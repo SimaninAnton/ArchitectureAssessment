@@ -1,0 +1,19 @@
+RichardJECooke commented on 28 Dec 2016
+I installed the latest version of docker-compose on my Ubuntu VM using Linux Brew (Homebrew) version 1.1.5.
+rje@ubuntu16vm:~/projects/wp$ brew list docker-compose
+/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/bin/docker-compose
+/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/etc/bash_completion.d/docker-compose
+/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/libexec/bin/ (17 files)
+/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/libexec/include/python2.7
+/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/libexec/lib/ (761 files)
+/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/libexec/pip-selfcheck.json
+/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/share/zsh/site-functions/_docker-compose
+When trying to run any command, e.g. docker-compose start I now get this error:
+rje@ubuntu16vm:~/projects/wp$ docker-compose up
+Traceback (most recent call last):
+  File "/home/rje/.linuxbrew/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/home/rje/.linuxbrew/Cellar/docker-compose/1.9.0/libexec/lib/python2.7/site-packages/pkg_resources/__init__.py", line 18, in <module>
+    from __future__ import absolute_import
+ImportError: No module named __future__
+1

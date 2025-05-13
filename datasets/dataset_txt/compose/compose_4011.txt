@@ -1,0 +1,2 @@
+willm commented on 6 Jan 2015
+the link in the curl script is a 404. I think the right one is https://github.com/docker/fig/releases/download/1.0.1/fig-Linux-x86_64 (but that obviously depends on you environment)

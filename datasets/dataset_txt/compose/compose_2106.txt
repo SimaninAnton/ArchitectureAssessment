@@ -1,0 +1,2 @@
+vsaraswat commented on 1 Sep 2016
+Docker Remote API 1.23 added the ability to add a label to a network during creation. It would be very useful for users to be able to add labels to networks when creating a Compose file in order to take advantage of this new feature.

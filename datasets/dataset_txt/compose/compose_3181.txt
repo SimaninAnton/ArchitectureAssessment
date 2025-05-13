@@ -1,0 +1,5 @@
+skelethan commented on 24 Oct 2015
+Per https://github.com/docker/compose/blob/0409b287ad3ede39282c199d611456aab15dca71/docs/networking.md
+However, what I am seeing is that the aliases are created with the full container name from compose e.g. context_web_1
+This eliminates the benefit of consistent aliases, as compose will dynamically assign network alias depending on number of containers & where they are run from.
+My simple test below.

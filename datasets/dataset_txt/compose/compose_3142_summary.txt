@@ -1,0 +1,1 @@
+UnicodeDecodeError exception on non-unicode character output (1.5.0)

@@ -1,0 +1,4 @@
+devotox commented on 20 Feb 2016
+My docker setup involves everything in its own container which has an nginx container sitting in front of it and reverse proxying to a database container running postgres, an api container running node, 2 frontend containers.
+The problem im having is that i am not able to run the tests on my API as it depends on the host name being correct but it cannot connect to that hostname within itself in the container.
+Would i need to set up a link from the api container to the nginx container. (I already have a link from the nginx container to the api container). and if so how would i do this in a way that i can still use the right host in my config file for the tests

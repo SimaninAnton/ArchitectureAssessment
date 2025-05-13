@@ -1,0 +1,23 @@
+justechn commented on 3 Mar 2016
+I am trying to setup a docker-compose but no matter what I do, I cannot get the volumes to work.
+Here is what my docker-compose.yml
+version: '2'
+
+services:
+    base:
+        build: ./base
+    ui:
+        build: ./ui
+        ports:
+            - "80:80"
+        volumes:
+            - ./ui:/src
+I have tried several different configurations of volume, but none have worked so far.
+If I run my image like this then the volume is mounted correctly
+docker run -it -v ui:/src 6d8e034c7fd4 /bin/bash
+If I change the docker-compose.yml volume to look like this
+volumes:
+    - ui:/src
+I get an error "Named volume "ui:/src:rw" is used in service "ui" but no declaration was found in the volumes section."
+I am using Docker version 1.10.1, build 9e83765 on Windows 7
+30

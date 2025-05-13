@@ -1,0 +1,1 @@
+Docker-compose run significantly slower than docker run

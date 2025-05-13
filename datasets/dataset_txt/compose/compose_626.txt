@@ -1,0 +1,668 @@
+Kisen-Chin commented on 15 Jun 2018 •
+edited
+Hi all, I'd like to run a java application on my server using docker which organized by docker compose.
+I started two docker-compose for user 'lipeng' and 'baifan'
+Attaching to lipeng-FMXSSIMT1, lipeng-FXMSSMS1, lipeng-FXMSSMG1, lipeng-FXMSSIMT2, lipeng-FXMSSMG2, lipeng-FXMSSMS2
+lipeng-FMXSSIMT1 | =============Using java at /home/fxmss/softwares/jdk1.7.0_79=============
+lipeng-FMXSSIMT1 | =============Java Version Check===============
+lipeng-FXMSSMS1 | starting new processor with pid = 13 succeed!
+lipeng-FXMSSIMT2 | =============Using java at /home/fxmss/softwares/jdk1.7.0_79=============
+lipeng-FXMSSIMT2 | =============Java Version Check===============
+lipeng-FXMSSMG1 | starting new processor with pid = 31 succeed!
+lipeng-FXMSSMG1 | Success
+lipeng-FXMSSMS1 | Success
+lipeng-FMXSSIMT1 | java version "1.7.0_79"
+lipeng-FMXSSIMT1 | Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+lipeng-FXMSSMG2 | starting new processor with pid = 31 succeed!
+lipeng-FXMSSIMT2 | java version "1.7.0_79"
+lipeng-FXMSSIMT2 | Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+lipeng-FMXSSIMT1 | Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+lipeng-FMXSSIMT1 | ==================================================
+lipeng-FMXSSIMT1 | 
+lipeng-FXMSSIMT2 | Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+lipeng-FXMSSMG2 | Success
+lipeng-FXMSSIMT2 | ==================================================
+lipeng-FXMSSIMT2 | 
+lipeng-FMXSSIMT1 | ===========imtserver is stopped================
+lipeng-FXMSSIMT2 | ===========imtserver is stopped================
+lipeng-FXMSSMS2 | starting new processor with pid = 13 succeed!
+lipeng-FXMSSMS2 | Success
+lipeng-FMXSSIMT1 | ===========imtserver process pid: 44 is running===============
+lipeng-FMXSSIMT1 | Success
+lipeng-FXMSSIMT2 | ===========imtserver process pid: 44 is running===============
+lipeng-FXMSSIMT2 | Success
+Attaching to baifan-FMXSSIMT1, baifan-FXMSSMG1, baifan-FXMSSMS2, baifan-FXMSSMS1, baifan-FXMSSIMT2, baifan-FXMSSMG2
+baifan-FXMSSMS2 | starting new processor with pid = 13 succeed!
+baifan-FMXSSIMT1 | =============Using java at /home/fxmss/softwares/jdk1.7.0_79=============
+baifan-FMXSSIMT1 | =============Java Version Check===============
+baifan-FXMSSMG1 | starting new processor with pid = 31 succeed!
+baifan-FMXSSIMT1 | java version "1.7.0_79"
+baifan-FMXSSIMT1 | Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+baifan-FMXSSIMT1 | Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+baifan-FXMSSMG1 | Success
+baifan-FXMSSMS2 | Success
+baifan-FMXSSIMT1 | ==================================================
+baifan-FMXSSIMT1 | 
+baifan-FXMSSMS1 | starting new processor with pid = 13 succeed!
+baifan-FXMSSMS1 | Success
+baifan-FMXSSIMT1 | ===========imtserver is stopped================
+baifan-FXMSSIMT2 | =============Using java at /home/fxmss/softwares/jdk1.7.0_79=============
+baifan-FXMSSIMT2 | =============Java Version Check===============
+baifan-FXMSSIMT2 | java version "1.7.0_79"
+baifan-FXMSSIMT2 | Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+baifan-FXMSSIMT2 | Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+baifan-FXMSSIMT2 | ==================================================
+baifan-FXMSSIMT2 | 
+baifan-FXMSSMG2 | starting new processor with pid = 31 succeed!
+baifan-FXMSSMG2 | Success
+baifan-FMXSSIMT1 | ===========imtserver process pid: 44 is running===============
+baifan-FMXSSIMT1 | Success
+baifan-FXMSSIMT2 | ===========imtserver is stopped================
+baifan-FXMSSIMT2 | ===========imtserver process pid: 44 is running===============
+baifan-FXMSSIMT2 | Success
+these two docker-compose runs correctly.
+But after I run docker-compose for third user liangzhenrong I got this error:
+Attaching to liangzhenrong-FMXSSIMT1, liangzhenrong-FXMSSIMT2, liangzhenrong-FXMSSMS2, liangzhenrong-FXMSSMG2, liangzhenrong-FXMSSMG1, liangzhenrong-FXMSSMS1
+liangzhenrong-FMXSSIMT1 | =============Using java at /home/fxmss/softwares/jdk1.7.0_79=============
+liangzhenrong-FMXSSIMT1 | =============Java Version Check===============
+liangzhenrong-FMXSSIMT1 | java version "1.7.0_79"
+liangzhenrong-FMXSSIMT1 | Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+liangzhenrong-FXMSSIMT2 | =============Using java at /home/fxmss/softwares/jdk1.7.0_79=============
+liangzhenrong-FXMSSIMT2 | =============Java Version Check===============
+liangzhenrong-FXMSSIMT2 | java version "1.7.0_79"
+liangzhenrong-FXMSSIMT2 | Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+liangzhenrong-FXMSSIMT2 | Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+liangzhenrong-FXMSSMG2 | starting new processor with pid = 31 succeed!
+liangzhenrong-FMXSSIMT1 | Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+liangzhenrong-FXMSSMS2 | starting new processor with pid = 13 succeed!
+liangzhenrong-FMXSSIMT1 | ==================================================
+liangzhenrong-FMXSSIMT1 | 
+liangzhenrong-FXMSSMG1 | starting new processor with pid = 31 succeed!
+liangzhenrong-FXMSSMG2 | Success
+liangzhenrong-FXMSSMS2 | Success
+liangzhenrong-FXMSSIMT2 | ==================================================
+liangzhenrong-FXMSSIMT2 | 
+liangzhenrong-FXMSSMG1 | Success
+liangzhenrong-FMXSSIMT1 | ===========imtserver is stopped================
+liangzhenrong-FXMSSIMT2 | ===========imtserver is stopped================
+liangzhenrong-FXMSSMS1 | starting new processor with pid = 13 succeed!
+liangzhenrong-FXMSSMS1 | Success
+liangzhenrong-FMXSSIMT1 | ===========imtserver process pid: 44 is running===============
+liangzhenrong-FMXSSIMT1 | Success
+liangzhenrong-FXMSSIMT2 | ===========imtserver process pid: 44 is running===============
+liangzhenrong-FXMSSIMT2 | Success
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.HERALogFileLogDownloadProcessor.<init>(HERALogFileLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.HERA1LogFileLogDownloadProcessor.<init>(HERA1LogFileLogDownloadProcessor.java:20)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-121" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.RFQLogFileLogDownloadProcessor.<init>(RFQLogFileLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.RFQ1LogFileLogDownloadProcessor.<init>(RFQ1LogFileLogDownloadProcessor.java:20)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-122" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.GatewayLogFileLogDownloadProcessor.<init>(GatewayLogFileLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.GatewayAPILogFileLogDownloadProcessor.<init>(GatewayAPILogFileLogDownloadProcessor.java:20)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-123" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.LPALogFileLogDownloadProcessor.<init>(LPALogFileLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.LPA2LogFileLogDownloadProcessor.<init>(LPA2LogFileLogDownloadProcessor.java:20)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-124" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.GatewayLogFileLogDownloadProcessor.<init>(GatewayLogFileLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.GatewayGUILogFileLogDownloadProcessor.<init>(GatewayGUILogFileLogDownloadProcessor.java:20)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-125" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.CEServerLogDownloadProcessor.<init>(CEServerLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-126" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.LPALogFileLogDownloadProcessor.<init>(LPALogFileLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.LPA1LogFileLogDownloadProcessor.<init>(LPA1LogFileLogDownloadProcessor.java:20)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-127" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.BaseLogDownloadTaskProcessor.<init>(BaseLogDownloadTaskProcessor.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.RFQLogFileLogDownloadProcessor.<init>(RFQLogFileLogDownloadProcessor.java:23)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.lpa.download.impl.RFQ2LogFileLogDownloadProcessor.<init>(RFQ2LogFileLogDownloadProcessor.java:20)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-128" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.set(Configuration.java:446)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.setUUID(FxmssConfiguration.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.FxmssConfiguration.create(FxmssConfiguration.java:35)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.dis.DISHelper.<clinit>(DISHelper.java:17)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.dis.processor.CreditUtilizationUpdateImtProcessor.<init>(CreditUtilizationUpdateImtProcessor.java:50)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBean(DefaultListableBeanFactory.java:273)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1127)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.util.spring.SpringContextAware.getBean(SpringContextAware.java:33)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.util.spring.SpringContextFactory.getSpringBean(SpringContextFactory.java:69)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.dis.rest.CreditUtilizationUpdateRest.<init>(CreditUtilizationUpdateRest.java:38)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-129" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+liangzhenrong-FXMSSMS1 | java.io.IOException: Too many open files
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:61)
+liangzhenrong-FXMSSMS1 |  at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.init(WatchDirectoryService.java:37)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.<init>(WatchDirectoryService.java:30)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.backgroundProcess(Configuration.java:392)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.initConf(Configuration.java:265)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.loadResources(Configuration.java:253)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getProps(Configuration.java:237)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.impl.Configuration.getString(Configuration.java:154)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.dis.processor.CreditUtilizationUpdateImtProcessor.<init>(CreditUtilizationUpdateImtProcessor.java:50)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBean(DefaultListableBeanFactory.java:273)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1127)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.util.spring.SpringContextAware.getBean(SpringContextAware.java:33)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.util.spring.SpringContextFactory.getSpringBean(SpringContextFactory.java:69)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.u.dis.rest.CreditUtilizationUpdateRest.<init>(CreditUtilizationUpdateRest.java:38)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+liangzhenrong-FXMSSMS1 |  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+liangzhenrong-FXMSSMS1 |  at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:148)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:87)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1032)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:985)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:487)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:458)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+liangzhenrong-FXMSSMS1 |  at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:636)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:934)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:479)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:140)
+liangzhenrong-FXMSSMS1 |  at org.springframework.context.support.FileSystemXmlApplicationContext.<init>(FileSystemXmlApplicationContext.java:94)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.init(GenericProcess.java:97)
+liangzhenrong-FXMSSMS1 |  at com.cfets.cwap.s.daemon.GenericProcess.initAndStart(GenericProcess.java:46)
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.dp.job.MainProcess.main(MainProcess.java:13)
+liangzhenrong-FXMSSMS1 | Exception in thread "Thread-130" java.lang.NullPointerException
+liangzhenrong-FXMSSMS1 |  at com.cfets.fxmss.s.config.reload.WatchDirectoryService.run(WatchDirectoryService.java:47)
+liangzhenrong-FXMSSMS1 |  at java.lang.Thread.run(Thread.java:745)
+I think this should be the ulimit related issues. So I changed ulimit values for my server .
+Now the ulimit values are like:
+[support@DFMSAPP02 ~]$ ulimit -n
+65536
+[support@DFMSAPP02 ~]$ ulimit -a
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 63415
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 65536
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 4096
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+[support@DFMSAPP02 ~]$ cat /etc/security/limits.conf 
+# /etc/security/limits.conf
+#
+#This file sets the resource limits for the users logged in via PAM.
+#It does not affect resource limits of the system services.
+#
+#Also note that configuration files in /etc/security/limits.d directory,
+#which are read in alphabetical order, override the settings in this
+#file in case the domain is the same or more specific.
+#That means for example that setting a limit for wildcard domain here
+#can be overriden with a wildcard setting in a config file in the
+#subdirectory, but a user specific setting here can be overriden only
+#with a user specific setting in the subdirectory.
+#
+#Each line describes a limit for a user in the form:
+#
+#<domain>        <type>  <item>  <value>
+#
+#Where:
+#<domain> can be:
+#        - a user name
+#        - a group name, with @group syntax
+#        - the wildcard *, for default entry
+#        - the wildcard %, can be also used with %group syntax,
+#                 for maxlogin limit
+#
+#<type> can have the two values:
+#        - "soft" for enforcing the soft limits
+#        - "hard" for enforcing hard limits
+* soft nofile 65536
+* hard nofile 65536
+#<item> can be one of the following:
+#        - core - limits the core file size (KB)
+#        - data - max data size (KB)
+#        - fsize - maximum filesize (KB)
+#        - memlock - max locked-in-memory address space (KB)
+#        - nofile - max number of open file descriptors
+#        - rss - max resident set size (KB)
+#        - stack - max stack size (KB)
+#        - cpu - max CPU time (MIN)
+#        - nproc - max number of processes
+#        - as - address space limit (KB)
+#        - maxlogins - max number of logins for this user
+#        - maxsyslogins - max number of logins on the system
+#        - priority - the priority to run user process with
+#        - locks - max number of file locks the user can hold
+#        - sigpending - max number of pending signals
+#        - msgqueue - max memory used by POSIX message queues (bytes)
+#        - nice - max nice priority allowed to raise to values: [-20, 19]
+#        - rtprio - max realtime priority
+#
+#<domain>      <type>  <item>         <value>
+#
+
+#*               soft    core            0
+#*               hard    rss             10000
+#@student        hard    nproc           20
+#@faculty        soft    nproc           20
+#@faculty        hard    nproc           50
+#ftp             hard    nproc           0
+#@student        -       maxlogins       4
+
+# End of file
+But it seems still not working.
+So could any one figure how or what should I do to debug/resolve such problems?
+other informations are here:
+[root@DFMSAPP02 ~]# docker --version
+Docker version 18.05.0-ce, build f150324
+[root@DFMSAPP02 ~]# docker info
+Containers: 18
+ Running: 18
+ Paused: 0
+ Stopped: 0
+Images: 138
+Server Version: 18.05.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: xfs
+ Supports d_type: true
+ Native Overlay Diff: false
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 773c489c9c1b21a6d78b5c538cd395416ec50f88
+runc version: 4fc53a81fb7c994640722ac585fa9ca548971871
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 3.10.0-514.el7.x86_64
+Operating System: Red Hat Enterprise Linux Server 7.3 (Maipo)
+OSType: linux
+Architecture: x86_64
+CPUs: 16
+Total Memory: 15.51GiB
+Name: DFMSAPP02
+ID: O5GC:TIAL:JPH2:KHG4:X6SS:POR7:X6U6:ERVP:HHFF:4LLS:TXIQ:LK4F
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled
+[root@DFMSAPP02 ~]# docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+[root@DFMSAPP02 ~]# 
+1

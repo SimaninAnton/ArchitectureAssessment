@@ -1,0 +1,11 @@
+taiidani commented on 27 Mar 2017
+When using Docker Compose on local with a v3 docker-compose.yml file that has a deploy key set in one of its services, we get the following warning emitting on a number of commands:
+`WARNING: Some services (queue_crawler) use the 'deploy' key, which will be ignored. Compose does not support deploy configuration - use `docker stack deploy` to deploy to a swarm.
+Is there a way to mute this warning?
+Use cases
+Dev/Prod parity
+We are trying to use the YML file on local to communicate changes to the DevOps team which, at the moment, maintains a separate YML file. Having deploy declared at the development level is the perfect way for specifying these attributes such as the number of replicas to run. As a poor man's workaround right now we must use comments which DevOps reads and applies manually to the production configuration.
+# Queue workers for crawlers. 3 workers are run in Production
+Ad-hocs in Production
+We get the same warning in production any time we run a cron. Our cron setup uses a docker-compose run command off the same file which docker stack deploy used so that we have consistency between the two behaviors.
+At the moment we have no workaround for this. We get the warning output at the top of all of our cron runs, and it propagates into our log aggregator.

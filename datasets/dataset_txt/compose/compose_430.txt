@@ -1,0 +1,68 @@
+Contributor
+hartwork commented on 26 Oct 2018 •
+edited
+Hi!
+I like docker-compose a lot, many thanks for it!
+Description of the issue
+I ran into an issue with restart: unless-stopped earlier today that seems like bug in docker-compose to me. The issue is that for a service that has restart: unless-stopped in docker-compose.yml, if I run one-off commands using docker-compose run SERVICE [COMMAND] [ARGS...] there are containers of state Restarting left behind, one per call. Since it does not occur with restart: "no", I think that's rather unexpected undesired behaviour confliciting with the documented "one-off" nature of the run command.
+Please see below for a full shell session to demonstrate the issue.
+I image a fix could be to have docker-compose send restart: "no" to the Docker daemon instead, when using the run command. What do you think?
+Context information
+# docker-compose --version
+docker-compose version 1.22.0, build unknown
+
+# docker --version
+Docker version 18.06.1-ce, build e68fc7a
+Steps to reproduce the issue
+# echo $SHELL
+/bin/bash
+
+# echo $'version: "3"\nservices:\n  alpine:\n    image: alpine:latest\n    restart: "no"' | tee docker-compose.yml                                       
+version: "3"
+services:
+  alpine:
+    image: alpine:latest
+    restart: "no"
+
+# docker ps                      
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+# docker-compose run alpine sh -c 'echo Hello docker-compose'                         
+Creating network "tmpkcfk8wtdbf_default" with the default driver
+Hello docker-compose
+
+# docker ps                      
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+# sed 's,restart: .*,restart: unless-stopped,' -i docker-compose.yml ; cat docker-compose.yml 
+version: "3"
+services:
+  alpine:
+    image: alpine:latest
+    restart: unless-stopped
+
+# docker-compose run alpine sh -c 'echo Hello docker-compose'
+Hello docker-compose
+
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                                  PORTS               NAMES
+e8d057dedb2e        alpine:latest       "sh -c 'echo Hello d…"   4 seconds ago       Restarting (0) Less than a second ago                       tmpkcfk8wtdbf_alpine_run_2
+
+# docker-compose run alpine sh -c 'echo Hello docker-compose'
+Hello docker-compose
+
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                                  PORTS               NAMES
+7a1cddda385b        alpine:latest       "sh -c 'echo Hello d…"   3 seconds ago       Restarting (0) Less than a second ago                       tmpkcfk8wtdbf_alpine_run_3
+e8d057dedb2e        alpine:latest       "sh -c 'echo Hello d…"   11 seconds ago      Restarting (0) Less than a second ago                       tmpkcfk8wtdbf_alpine_run_2
+
+# docker-compose down
+Stopping tmpkcfk8wtdbf_alpine_run_3 ... done
+Stopping tmpkcfk8wtdbf_alpine_run_2 ... done
+Removing tmpkcfk8wtdbf_alpine_run_3 ... done
+Removing tmpkcfk8wtdbf_alpine_run_2 ... done
+Removing tmpkcfk8wtdbf_alpine_run_1 ... done
+Removing network tmpkcfk8wtdbf_default
+Additional information
+Gentoo Linux with system-wide stock docker-compose 1.22.0-r1 package installed through portage, not pip
+2

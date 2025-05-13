@@ -1,0 +1,4 @@
+buster commented on 30 Sep 2015
+I have a setup with "docker machine" and 3 VirtualBox docker hosts.
+When i run "docker-compose up" on my YML file which starts a web server in port 443 everything works as expected. BUT when i stop the containers and run "docker-compose up" again i get the mentioned error message.
+The only fix seems to be to remove the container. But i actually want to restart just that container and not remove it...

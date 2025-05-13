@@ -1,0 +1,2 @@
+chris-martin commented on 23 Dec 2015
+I always use --rm with docker-compose run to clean up containers, but it adds several seconds of delay after running the command to remove the container. Is there a reason this removal must take place in the foreground, or could it happen in the background to return control back to me quicker?

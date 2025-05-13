@@ -1,0 +1,10 @@
+Contributor
+dnephin commented on 29 Jan 2016
+Related to: #2593 and #943
+Copied from: #2568, #2184
+One-off containers created by docker-compose run are not removed by default, and aren't removed by docker-compose rm.
+We should do at least one of the following:
+#943 - make --rm the default for run
+add a flag to rm to include one-off containers
+remove one-off containers as part of rm by default
+4

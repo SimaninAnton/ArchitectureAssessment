@@ -1,0 +1,11 @@
+Contributor
+dnephin commented on 16 Jan 2016
+cli args:
+  --tls=false                        Use TLS; implied by --tlsverify
+  --tlscacert=~/.docker/ca.pem       Trust certs signed only by this CA
+  --tlscert=~/.docker/cert.pem       Path to TLS certificate file
+  --tlskey=~/.docker/key.pem         Path to TLS key file
+  --tlsverify=false                  Use TLS and verify the remote
+environment variables ref (already supported):
+DOCKER_TLS_VERIFY
+DOCKER_CERT_PATH

@@ -1,0 +1,21 @@
+psychok7 commented on 27 Apr 2016 •
+edited
+Not sure if it is related to #3341 but i upgraded my Host to Ubuntu 16.04 (clean install), reinstalled docker 1.11.0 and docker-compose 1.7.0 and i started getting the following error when crawling a website:
+Inside my docker containers i am using python3 and crawling a website. After succefully crawling about 5% of my content this error happens and the containers/services get killed.
+Any ideas?
+mongo_1         | 2016-04-26T19:52:53.676+0000 I NETWORK  [initandlisten] connection accepted from 172.19.0.9:60772 #4 (4 connections now open)
+Exception in thread Thread-13:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "/usr/lib/python2.7/threading.py", line 754, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/log_printer.py", line 190, in watch_events
+    for event in event_stream:
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 343, in events
+    decode=True
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 225, in _stream_helper
+    data = reader.read(1)
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/response.py", line 271, in read
+    raise ProtocolError('Connection broken: %r' % e, e)
+ProtocolError: ('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))

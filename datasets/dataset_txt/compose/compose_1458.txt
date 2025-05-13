@@ -1,0 +1,6 @@
+veris-neerajdhiman commented on 17 May 2017
+I have an django app which uses a git fork package (I have installed Git fork lib).
+usually I have installed it using
+git+git://github.com/my-pkg.git@7f323a3682ddede83a7bf53cdc8d24bcc24d096c
+But when I tried setup my project with Docker, package is installed from requirement file but when I ran my container , I got got an error that ImportError: No module named 'my-pkg'
+Its may be because pkg installed from git fork doesn't got to site-packages ? May be their can be another reason .

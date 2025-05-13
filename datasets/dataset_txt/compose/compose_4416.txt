@@ -1,0 +1,24 @@
+Contributor
+mauvm commented on 31 Jan 2014
+The first time I ran fig up it worked perfectly. Now, for some strange reason it gives me:
+Couldn't connect to Docker daemon at http://172.16.42.43:4243 - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+The VM is running and pinging 172.16.42.43 works fine. I've tried:
+Rebooting
+Removing the entry from my hosts file
+Reinstalling fig
+Rebuilding the OSX VM
+sudo netstat -nltp on the VM itself, which gives me:
+vagrant@packer-virtualbox:~$ sudo netstat -nltp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      676/rpcbind     
+tcp        0      0 10.0.3.1:53             0.0.0.0:*               LISTEN      992/dnsmasq     
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      4389/sshd       
+tcp        0      0 0.0.0.0:36730           0.0.0.0:*               LISTEN      710/rpc.statd   
+tcp6       0      0 :::51915                :::*                    LISTEN      710/rpc.statd   
+tcp6       0      0 :::111                  :::*                    LISTEN      676/rpcbind     
+tcp6       0      0 fe80::fcf4:8eff:fed6:53 :::*                    LISTEN      992/dnsmasq     
+tcp6       0      0 :::22                   :::*                    LISTEN      4389/sshd 
+No exposed 4243 port. Anything obvious I'm missing? Something wrong with my conFIGuration?

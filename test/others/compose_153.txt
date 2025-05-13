@@ -1,0 +1,29 @@
+pmonty commented on 21 Jun 2019 •
+edited
+Issue
+So I have a dockerfile below
+FROM cc-tokenizer-client as signup-component
+LABEL anex="true"
+ARG CONFIGURATION="Release"
+WORKDIR /solution/ANEX.Website.Osu/signup-component/
+COPY ./ANEX.Website.Osu/signup-component/. ./
+COPY --from=common /solution/ANEX.Website.Common/dist-esm/. /solution/ANEX.Website.Common/dist-esm
+RUN sed -i -e 's~yarn --cwd ../../ANEX.CcTokenizer.Client build-esm &&~~g' ./package.json
+RUN sed -i -e 's~yarn --cwd ../../ANEX.Website.Common build-esm &&~~g' ./package.json
+RUN yarn build-esm
+cc-tokenizer-client and common are in there own dockerfiles I have a multi from pattern here.
+When I try build everything the result i get is below...
+Observed result
+#61 0.842 $   tsc -p ./src/tsconfig.esm.json
+#61 9.344 src/common/Utils.tsx(1,22): error TS2307: Cannot find module '@anex/common'.
+The result above is the inverse where it explains about @anex/cc-tokenizer-client if I invert the FROMs and do FROM common and COPY --from=cc-tokenizer-client
+So it feels like COPY doesn't work on images in other dockerfiles. The strange thing though is when i log the solution folder the stuff is there and files actually have content.
+Expected result
+Expect it to work. Really strange that switching the FROMs causes the inverse issue. Maybe with COPY instructions you need to import the dockerfile? If that is possible? Kind of new to Docker.
+Additional information
+docker-compose version 1.23.2, build 1110ad01
+docker-compose version 1.24.0, build 0aa59064
+Docker version 18.09.1, build 4c52b90
+macOS Mojave 10.14.5
+EDIT:
+So if this question is more appropriate for moby/moby let me know and will ask over there instead.

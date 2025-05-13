@@ -1,0 +1,9 @@
+ilovezfs commented on 8 Feb 2018
+==> bash -c 'source /usr/local/Cellar/docker-compose-completion/1.19.0/etc/bash_completion.d/docker-compose && complete -p docker-compose'
+/usr/local/Cellar/docker-compose-completion/1.19.0/etc/bash_completion.d/docker-compose: line 73: syntax error in conditional expression: unexpected token `('
+/usr/local/Cellar/docker-compose-completion/1.19.0/etc/bash_completion.d/docker-compose: line 73: syntax error near `@($'
+/usr/local/Cellar/docker-compose-completion/1.19.0/etc/bash_completion.d/docker-compose: line 73: `        [[ ${words[$glob_pos]} == @($glob) ]] && echo "$key"'
+bash-3.2$ /bin/bash --version
+GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin15)
+Copyright (C) 2007 Free Software Foundation, Inc.
+bash-3.2$ 

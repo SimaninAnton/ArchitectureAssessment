@@ -1,0 +1,1 @@
+allow using variables from docker-compose.env in volume paths (and other configs in docker-compose.yml)

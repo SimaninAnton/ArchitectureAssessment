@@ -1,0 +1,12 @@
+Contributor
+denismakogon commented on 23 May 2016 •
+edited
+It seems like nothing much has been done within past year in the direction of making docker-compose a framework with CLI tool instead of just a CLI tool. Related issues were summarized in #230 but it is irrelevant to build RESTful framework within D-compose since there are too many frameworks to do that and there would be too large discussion with no consensus.
+Here's plan to make docker-compose a library:
+Define contract between compose core components and CLI.
+Implement abstraction layer between compose core and CLI.
+Refactor compose core code into its own module (compose/core).
+Refactor compose CLI code into its own module (compose/cli).
+Provide compose core API tests.
+Provide compose core API reference documentation.
+1

@@ -1,0 +1,13 @@
+Contributor
+aanand commented on 4 Nov 2015
+I have a docker-compose.yml:
+redis:
+  image: redis
+  volumes_from: ["data"]
+data:
+  image: tianon/true
+  volumes: ["/data"]
+If I start the app with up -d and then change the volumes_from line to add a mode (e.g. volumes_from: ["data:ro"]), the redis service isn't recreated when I run up -d again:
+$ docker-compose up -d
+Starting counter_data_1
+counter_redis_1 is up-to-date

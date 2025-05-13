@@ -1,0 +1,1 @@
+docker-compose 1.5.1 "contains an invalid type, it should be an array"

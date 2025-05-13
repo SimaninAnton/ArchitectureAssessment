@@ -1,0 +1,38 @@
+ostretsov commented on 26 Jan 2016
+The last line in the following listing might describe my issue:
+dnsdock:
+  image: tonistiigi/dnsdock
+  volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# other stuff ...
+
+php:
+  build: ./docker/php
+  expose:
+    - 9000
+  ports:
+    - "8080:8080"
+    - "10050:10050"
+  volumes_from:
+    - code
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ./var/logs/supervisor:/var/log/supervisor
+    - ./docker/php/supervisor:/etc/supervisor/conf.d
+    - ./docker/php/boot:/etc/my_init.d
+    - ./docker/php/mods/xdebug.ini:/etc/php5/mods-available/xdebug.ini:ro
+    - ./docker/php/zabbix/zabbix_agentd.conf:/etc/zabbix/zabbix_agentd.conf
+    - ./docker/php/pool.d/symfony.pool.conf:/etc/php5/fpm/pool.d/symfony.pool.conf
+    - ./docker/home/.bashrc:/var/www/.bashrc:ro
+    - ./data/.bash_history:/var/www/.bash_history
+  links:
+    - postgres
+    - redis
+    - rabbitmq
+    - elasticsearch
+    - mailcatcher
+    - dnsdock
+  dns:
+    - dnsdock # it's the container name, but now it doesn't work properly
+Unfortunately now it's impossible to specify container name in "dns" section. docker-compose will just insert "nameserver dnsdock" into /etc/resolv.conf.

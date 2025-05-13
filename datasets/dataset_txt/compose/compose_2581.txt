@@ -1,0 +1,7 @@
+Contributor
+albers commented on 24 Mar 2016
+From the output of docker-compose help run
+   -u, --user=""         Run as specified username or uid
+From the output of docker-compose help exec
+ --user USER       Run the command as this user.
+For symmetry reasons, exec should also support -u. The help messages should be identical, too.

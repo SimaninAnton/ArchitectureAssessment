@@ -1,0 +1,7 @@
+vpillac commented on 6 Jan 2016
+docker-compose files stopped working after updating to docker-compose version 1.5.2 (from MacOS Docker Toolbox 1.9.1g).
+Service 'xxx' configuration key 'expose' '0' is invalid: should be of the format 'PORT[/PROTOCOL]'
+While the file contains:
+  expose:
+  - "8200-8219"
+Replacing the range by a single port "resolves" the issue, or reverting to docker-compose version: 1.5.1.

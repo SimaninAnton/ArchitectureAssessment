@@ -1,0 +1,24 @@
+rajiff commented on 8 Mar 2018 •
+edited
+This might be a new enhancement request not a bug
+Support for specifying or passing docker-compose build options from docker-compose.yml
+The build in docker-compose should support way to pass any build command arguments or options in the build section, similar to what we pass on command line
+In general, It is super convenient if we can pass any build options we use on command line in docker-compose file itself
+Also these options can be global and specific to each service
+Consider this scenario
+docker-compose has 5 services (or container definitions), each is built using its corresponding Dockerfile
+One among those 5 services has to be built without caching (whatever may be the reason)
+Currently to solve this we run command docker-compose --no-cache build
+Problem with this is it rebuilds without cache all 5 services
+Instead if the options can also be specified from docker-compose file and options can be global or specific service, only the specific service which needs to be built without cache can specify that option
+Alternatively --no-cache can also take a comm separate string to avoid cache for specific service only
+i.e., in docker-compose it can be like below
+services:
+  volatile-container
+    build:
+      context: ./
+      target: sample
+    options:
+     - '--no-cache'
+However if those options were specified form command line, they take the higher precedence
+Can we please discuss this, may be I am not articulating clearly but I can see a scope and use

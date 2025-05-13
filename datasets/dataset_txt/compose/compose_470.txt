@@ -1,0 +1,17 @@
+marcospgp commented on 1 Oct 2018 •
+edited
+Description of the issue
+When Docker for Windows has not been initialized, and docker-compose up is run, the error message is not descriptive.
+Steps to reproduce the issue
+Do not start docker
+Run docker-compose up in your project root
+Observe
+Observed result
+ERROR: for Cannot create container for service postgres: b'open \\.\pipe\docker_d4w_systray: The system cannot find the file specified.'
+Expected result
+ERROR: for postgres Cannot create container for service postgres: b'open \\.\pipe\docker_d4w_systray: The system cannot find the file specified.'
+Please make sure Docker has been initialized in this system.
+Additional information
+Windows 10 Professional, Docker for Windows
+Edit: Okay actually I'm not even sure the issue was related to Docker not having started. I tried a bunch of things, kept getting different errors (even "Are you trying to mount a directory onto a file (or vice-versa)?"), restarted Docker a few times.
+In the end, I ran docker-compose down -v and on the next start it seemed fine!

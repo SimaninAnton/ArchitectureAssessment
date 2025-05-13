@@ -1,0 +1,5 @@
+japrescott commented on 22 Oct 2014
+I've updated docker to 1.3 and fig to 1.0 and suddently am getting strange "invalid service name" and "invalid repository name" errors and I am going apeshit finding a suitable approach. I like to camelCase things (e.g nodeWorker, or master_nodeWorker -> master is the folder name).
+After getting the error that only [a-z0-9-_.] are supported, I changed to node.worker. Then it (I think its fig) says that it only accepts [a-zA-Z0-9]. After I changed that to node4worker, it complained about the _ in master_node4worker.
+As these names were considered constants and are spread over many files, changing them is a real pain. Thus, I would be soooo greatful if you could please tell me HOW I should name my service/tag from 1.0< so that 1) fig doesnt blow 2) docker doesnt blow and 3) I can return to sanity
+thanks for any tipps

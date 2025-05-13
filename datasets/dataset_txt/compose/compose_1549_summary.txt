@@ -1,0 +1,1 @@
+Compose file version 3.2 is unsupported - v1.12.0-rc2

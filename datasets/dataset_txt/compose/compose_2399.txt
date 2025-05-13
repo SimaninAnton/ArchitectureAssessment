@@ -1,0 +1,28 @@
+dansteen commented on 12 May 2016 •
+edited
+Given the following config file:
+version: '2'
+services:
+  # spin up our app
+  org-api.app.local:
+    image: org-api:composer
+    volumes:
+      - ./logs:/var/log/orgs
+
+  build-org-api.app.local:
+    extends: org-api.app.local
+    image: org-api:composer
+    build:
+      context: .
+      args:
+        - VAULT_TOKEN
+        - APP_VERSION
+This works:
+ docker-compose -f /tmp/test build
+But this:
+cat /tmp/test | docker-compose -f - build
+results in the following error:
+ERROR: Invalid 'extends' configuration for build-org-api.app.local: you need to specify a 'file', e.g. 'file: something.yml'
+That surprised me as I would expect it to treat the two the same as far as requiring "file" goes.
+Thanks!
+1

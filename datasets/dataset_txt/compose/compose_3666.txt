@@ -1,0 +1,8 @@
+runningman84 commented on 3 May 2015
+Why am I not allowed to use these names?
+~/dev/docker/project$ docker-compose up 
+Invalid service name "piwik_data" - only [a-zA-Z0-9] are allowed
+~/dev/docker/project$ docker-compose up 
+Invalid service name "mysql-data" - only [a-zA-Z0-9] are allowed
+~/dev/docker/project$ docker-compose up 
+Invalid service name "piwik_data" - only [a-zA-Z0-9] are allowed

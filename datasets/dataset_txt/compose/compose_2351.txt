@@ -1,0 +1,4 @@
+Contributor
+denismakogon commented on 27 May 2016
+In method get_project Environment class is being initialized with some config options and os.environ content, right after that code does next thing.
+So, logic is being duplicated since Environment class already have a copy of all values from os.environ, compose API version can be taken directly from Environment instance.

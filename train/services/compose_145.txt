@@ -1,0 +1,12 @@
+IAMtheIAM commented on 28 Jun 2019 •
+edited
+Problem. docker-compose logs doesnt work for services started with docker-compose run
+Docker version 18.09.6, build 481bc77
+docker-compose version 1.22.0, build f46880f
+Reproduce:
+Start a service with detached mode
+docker-compose run -d service1
+Now try to view the logs
+docker-compose logs service1_generated_name
+Results in ERROR: No such service:
+How do we get logs for this kind of service?

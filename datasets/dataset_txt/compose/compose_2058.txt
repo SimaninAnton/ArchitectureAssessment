@@ -1,0 +1,11 @@
+SamMousa commented on 19 Sep 2016
+From the docs:
+You can use a $$ (double-dollar sign) when your configuration needs a literal dollar sign. This also prevents Compose from interpolating a value, so a $$ allows you to refer to environment variables that you don’t want processed by Compose.
+However this does not work when I need to use a container local environment variable inside a command.
+Suppose I have this config:
+  echo-service:
+    command: echo $SOME_VARIABLE
+    environment:
+      SOME_VARIABLE: some_value
+In this case $SOME_VARIABLE is set inside the container, but I can't use it in the command. Using $$ also doesn't work and results in echo the literal string: $SOME_VARIABLE.
+Note that in this example I use a environment variable defined in the same compose file, this does not necessarily have to be the case. The container could have environment variables built in or applied via the entry point command.

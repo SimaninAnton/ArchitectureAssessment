@@ -1,0 +1,40 @@
+jhmnieuwenhuis commented on 20 Jan 2017 •
+edited by shin-
+version: "3"
+
+services:
+
+  nexus:
+    build: ../docker4man-nexus-2.0/.
+    container_name: d4m-nexus
+    image: d4m-nexus
+    env_file: env-docker4man-nexus.txt
+    restart: "no"
+    ports:
+      - "8081:8081"
+      - "8443:8443"
+      - "18443:18443"
+      - "18444:18444"
+    volumes:
+      - "d4m-nexus-volume:/nexus-data"
+    networks:
+      - backend
+
+volumes :
+  d4m-nexus-volume:
+    external: true
+  nexus_30-volume:
+    external: true
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.1.0/24
+          gateway: 172.20.1.1
+docker-compose up gives error :
+ERROR: The Compose file './yaml-docker4man-nexus-2.0/docker4man-nexus.yml' is invalid because:
+networks.backend.ipam.config value Additional properties are not allowed ('gateway' was unexpected)
+Is this a bug ?
+If I change version from 3 to 2, there is no error.

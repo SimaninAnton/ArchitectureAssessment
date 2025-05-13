@@ -1,0 +1,21 @@
+mightyuser commented on 15 Dec 2016 •
+edited
+I am trying to run docker-compose -f abc.yml up –d command, which throws below error.
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 56, in main
+File "compose/cli/docopt_command.py", line 23, in sys_dispatch
+File "compose/cli/docopt_command.py", line 26, in dispatch
+File "compose/cli/main.py", line 191, in perform_command
+File "compose/cli/main.py", line 657, in up
+File "compose/project.py", line 308, in up
+File "compose/project.py", line 156, in get_services_without_duplicate
+File "compose/project.py", line 144, in get_services
+File "compose/project.py", line 115, in get_service
+File "compose/project.py", line 416, in init
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+Initially I thought this may be due to Unicode characters in the compose files. However, all of them use the ASCII charset and could not find the â character (0xe2) specified in the error message above.
+I did find similar issues already reported but in some threads users suggested to upgrade docker compose to 1.1, etc. while in other threads they mentioned Unicode characters in filenames as the culprit, which doesn't seem to be the issue in this case.
+I have docker-compose 1.6.2 and both 2.x (2.7.6) and 3.x (3.4.3) versions of Python on machine.
+Python 2.x uses ascii encoding by default whereas Python 3.x uses the utf-8 encoding. I changed the default ascii encoding in Python 2.x by updating sitecustomize.py and now both are using utf-8 encoding but that didn't resolve the issue either.
+It may be noteworthy that I am running this via SSH.

@@ -1,0 +1,163 @@
+ozars commented on 22 Nov 2018
+Description of the issue
+DNS name resolution by service name fails arbitrarily.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f130
+docker-py version: 3.5.1
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:48:57 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  host1:
+    build:
+      context: /home/omer/Desktop/projects/overnet/tmp
+      dockerfile: Dockerfile-host
+    environment:
+      all_hostnames: host1,host2,host3,host4
+  host2:
+    build:
+      context: /home/omer/Desktop/projects/overnet/tmp
+      dockerfile: Dockerfile-host
+    environment:
+      all_hostnames: host1,host2,host3,host4
+  host3:
+    build:
+      context: /home/omer/Desktop/projects/overnet/tmp
+      dockerfile: Dockerfile-host
+    environment:
+      all_hostnames: host1,host2,host3,host4
+  host4:
+    build:
+      context: /home/omer/Desktop/projects/overnet/tmp
+      dockerfile: Dockerfile-host
+    environment:
+      all_hostnames: host1,host2,host3,host4
+version: '3.4'
+Output of cat Dockerfile-host
+FROM debian:stable
+RUN apt-get update
+RUN apt-get install -y dnsutils
+ARG all_hostnames
+CMD \
+sleep 1; \
+for host in `echo ${all_hostnames} | sed -n 1'p' | tr ',' ' '`; do \
+    nslookup $host | tr '\n' ' ' | sed 's/\s\+/ /g' && echo; \
+done
+Steps to reproduce the issue
+sudo docker-compose build
+sudo docker-compose up
+Observed result
+Name lookups for service names fail arbitrarily.
+Expected result
+They should succeed per https://docs.docker.com/compose/networking/.
+Stacktrace / full error message
+Output of second step:
+Starting tmp_host3_1 ... done
+Starting tmp_host2_1 ... done
+Starting tmp_host4_1 ... done
+Starting tmp_host1_1 ... done
+Attaching to tmp_host3_1, tmp_host1_1, tmp_host2_1, tmp_host4_1
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.3 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.3 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host2 Address: 172.18.0.4 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host1: NXDOMAIN 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host3 Address: 172.18.0.2 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host2 Address: 172.18.0.4 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host2 Address: 172.18.0.4 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host3: NXDOMAIN 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host3 Address: 172.18.0.2 
+tmp_host3_1 exited with code 0
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+tmp_host1_1 exited with code 0
+tmp_host2_1 exited with code 0
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host1: NXDOMAIN 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host2: NXDOMAIN 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host3: NXDOMAIN 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+tmp_host4_1 exited with code 0
+Running again:
+Starting tmp_host1_1 ... done
+Starting tmp_host2_1 ... done
+Starting tmp_host4_1 ... done
+Starting tmp_host3_1 ... done
+Attaching to tmp_host2_1, tmp_host1_1, tmp_host3_1, tmp_host4_1
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.3 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host2 Address: 172.18.0.2 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.3 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host3 Address: 172.18.0.4 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host2 Address: 172.18.0.2 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host3 Address: 172.18.0.4 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.3 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host2: NXDOMAIN 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host3 Address: 172.18.0.4 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+tmp_host2_1 exited with code 0
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host1: NXDOMAIN 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host2: NXDOMAIN 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host3 Address: 172.18.0.4 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.5 
+tmp_host1_1 exited with code 0
+tmp_host3_1 exited with code 0
+tmp_host4_1 exited with code 0
+Again:
+Starting tmp_host3_1 ... done
+Starting tmp_host4_1 ... done
+Starting tmp_host2_1 ... done
+Starting tmp_host1_1 ... done
+Attaching to tmp_host3_1, tmp_host2_1, tmp_host4_1, tmp_host1_1
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.5 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.5 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host2 Address: 172.18.0.3 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host3: NXDOMAIN 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host2 Address: 172.18.0.3 
+host2_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.4 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host3 Address: 172.18.0.2 
+host3_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.4 
+tmp_host3_1 exited with code 0
+tmp_host2_1 exited with code 0
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.5 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host2: NXDOMAIN 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host3: NXDOMAIN 
+host4_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.4 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host1 Address: 172.18.0.5 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host2: NXDOMAIN 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 ** server can't find host3: NXDOMAIN 
+host1_1  | Server: 127.0.0.11 Address: 127.0.0.11#53 Non-authoritative answer: Name: host4 Address: 172.18.0.4 
+tmp_host4_1 exited with code 0
+tmp_host1_1 exited with code 0
+Additional information
+ ➜ pip list | grep docker
+docker                        3.5.1                 
+docker-compose                1.23.1                
+docker-pycreds                0.3.0                 
+dockerpty                     0.4.1         
+ ➜ uname -a
+Linux omer 4.4.0-139-generic #165-Ubuntu SMP Wed Oct 24 10:58:50 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+ ➜ dpkg -l | grep docker
+ii  docker-ce                                   5:18.09.0~3-0~ubuntu-xenial                   amd64        Docker: the open-source application container engine
+ii  docker-ce-cli                               5:18.09.0~3-0~ubuntu-xenial                   amd64        Docker CLI: the open-source application container engine

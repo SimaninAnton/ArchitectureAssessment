@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 6 Sep 2015
+Entrypoint as string
+web:
+    image: alpine:edge
+    entrypoint: 'sh'
+Service 'web' configuration key 'entrypoint' contains an invalid type, it should be an array
+I think string should be valid.

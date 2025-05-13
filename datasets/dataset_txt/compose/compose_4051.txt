@@ -1,0 +1,8 @@
+lwoodson commented on 12 Dec 2014
+Discussed this with @dnephin in IRC this evening, and he said it would be worth an issue here:
+Allow a range of host ports to use when auto-assigning port forwarding to containers. For example, "5000..5100:80" would indicate that the ports 5000 to 5100 should be chosen from when scaling containers.
+When scaling, pick the lowest available port in the range.
+When no more ports are available in the range, fail to spawn new containers via scale.
+When containers are spun down via scale, reclaim their ports for future use.
+Why: I would like to set up haproxy in front of X hosts that manage Y containers via fig, and be able to have a predictable range of ports on each host that will forward to containers. This way, I could use haproxy's health check configuration to determine what ports should be routed to on what hosts.
+13

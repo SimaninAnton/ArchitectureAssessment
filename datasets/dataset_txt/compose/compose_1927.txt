@@ -1,0 +1,17 @@
+maltefiala commented on 15 Nov 2016
+Foreword
+Tested with 1.8.1 and 1.9.0-rc4
+Not Working
+volumes:
+  - "$MYSQL_DIRECTORY:/var/lib/mysql"
+and
+volumes:
+  - "${MYSQL_DIRECTORY}:/var/lib/mysql"
+export MYSQL_DIRECTORY="/foo"
+ERROR: compose.cli.main.main: Named volume ""/foo":/var/lib/mysql:rw" is used in service "mysql" but no declaration was found in the volumes section.`
+Working
+volumes:
+  - "${MYSQL_DIRECTORY}:/var/lib/mysql"
+export MYSQL_DIRECTORY=/foo
+Suggestion
+docker-compose should treat quoted absolute paths as paths

@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 3 Mar 2014
+See #115. Blocked by docker/docker-py#166.

@@ -1,0 +1,6 @@
+Contributor
+bfirsh commented on 18 Jan 2014
+web links to db.
+$ fig up web
+$ fig run web ./manage.py shell
+These things should start the db service.

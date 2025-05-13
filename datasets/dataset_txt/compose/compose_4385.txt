@@ -1,0 +1,6 @@
+Contributor
+sebastianneubauer commented on 2 Mar 2014
+If one scales down an app, containers will be stopped in order to achive that.
+If one restarts everything, the app starts all existing containers, and therefore the downscaling has no effect. At least is doesn't survive a restart, whereas an upscaling a restart survives.
+Suggestion:
+The scaling function should not only stop the containers, but also remove them.

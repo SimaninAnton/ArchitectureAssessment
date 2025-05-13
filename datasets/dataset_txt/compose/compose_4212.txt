@@ -1,0 +1,70 @@
+dancrumb commented on 25 Aug 2014
+I'm seeing an issue whereby a local directory that I mount to a container is, intermittently, not actually mounted.
+Dockerfile
+FROM busybox
+MAINTAINER Dan Rumney <email>
+
+ADD loadsnapshot.sh /loadsnapshot.sh
+RUN ["chmod", "u+x", "/loadsnapshot.sh"]
+
+VOLUME ["/snapshot"]
+
+ENTRYPOINT ["/loadsnapshot.sh"]
+loadsnapshot.sh
+#!/bin/sh
+
+if [ "$( ls -A /snapshot)" ]; then
+  echo "Loading snapshot..."
+  # Do stuff
+else
+  echo "No snapshot to load"
+fi
+fig.yml
+pdsvol:
+ image: busybox
+ volumes:
+ - "/opt/alfresco/alf_data"
+ - "/data"
+ - "/mysqlbackup"
+ - "/ldapbackup"
+loader:
+ image: "docker.myregistry.com/snapshot.loader:3.5.0"
+ volumes_from: 
+ - pdsvol
+ volumes:
+ - "/opt/snapshots/pepper-demo-site/:/snapshot/"
+The goal here (which may be obvious) is to start up a data container (pdsvol) and then populate it with some data that's running on my machine. pdsvol is then shared by a bunch of other containers.
+The way I run this is to call
+fig up pdsvol
+and then
+fig run --rm loader
+What I expect to see is
+builder@beast:/opt/docker-vm$ fig run --rm loader
+Loading snapshot...
+... stuff ...
+Removing dockervm_loader_run_1...
+and, sometimes I do. However, sometimes I see:
+builder@beast:/opt/docker-vm$ fig run --rm loader
+No snapshot to load
+Removing dockervm_loader_run_1...
+After a lot of debug effort, I was able to run my command without the --rm and then inspect the remaining containers.
+When I diffed the results I saw::
+Successful
+"Volumes": {
+        "/data": "/var/lib/docker/vfs/dir/6c28277cadd21ce4696a8efd122219dcd5c5a7379f77fcff4e5b68f178c1e069",
+        "/ldapbackup": "/var/lib/docker/vfs/dir/b45d3ac4989c6748cb62c52c89002ea67952696c40916a3dc7fb1574836080a5",
+        "/mysqlbackup": "/var/lib/docker/vfs/dir/3b7eaaae588970cbf54373d14422aaa4167c5c74c52719d5b07f373b68fc92b4",
+        "/opt/alfresco/alf_data": "/var/lib/docker/vfs/dir/54a74ac4dce9515e6635b2da0516c76762c43526a1ad207fcfa8e9b49ab4201f",
+        "/snapshot": "/opt/snapshots/pepper-demo-site"
+    },
+Failed
+"Volumes": {
+        "/data": "/var/lib/docker/vfs/dir/6c28277cadd21ce4696a8efd122219dcd5c5a7379f77fcff4e5b68f178c1e069",
+        "/ldapbackup": "/var/lib/docker/vfs/dir/b45d3ac4989c6748cb62c52c89002ea67952696c40916a3dc7fb1574836080a5",
+        "/mysqlbackup": "/var/lib/docker/vfs/dir/3b7eaaae588970cbf54373d14422aaa4167c5c74c52719d5b07f373b68fc92b4",
+        "/opt/alfresco/alf_data": "/var/lib/docker/vfs/dir/54a74ac4dce9515e6635b2da0516c76762c43526a1ad207fcfa8e9b49ab4201f",
+        "/snapshot": "/var/lib/docker/vfs/dir/edd43cd06f2384c18340ee100debee85a2dd4b46c03cf9ad6e141addbbf67e18"
+    },
+So, it appears that the wrong volume is being mounted at /snapshot
+I see this very regularly. If I run my command 10 times, I'll see it a couple of times.
+If I run the docker equivalent, I never see this issue.

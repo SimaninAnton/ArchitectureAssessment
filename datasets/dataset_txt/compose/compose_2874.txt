@@ -1,0 +1,5 @@
+Contributor
+aanand commented on 27 Jan 2016
+If the user specifies version: 1, they've misunderstood how versioning works and we should show a helpful error. Right now, we show this:
+ERROR: In file './docker-compose.yml' service 'version' doesn't have any configuration options. All top level keys in your docker-compose.yml must map to a dictionary of configuration options.
+When the user specifies a version that we don't support (e.g. 2.1), we should perhaps show an error along the lines of "version 2.1 of the file format isn't supported by this version of Compose", so that we're a little more future-proof. The downside is that old code can't know if the version the user has specified is an actual version that exists or is just mistyped. Thoughts?

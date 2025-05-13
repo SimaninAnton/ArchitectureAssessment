@@ -1,0 +1,2 @@
+gnoymmij commented on 14 Aug 2015
+When the net: "host" options is used in docker-compose.yml, doing a docker-compose ps does not show which ports are used. Is this an expected behaviour?

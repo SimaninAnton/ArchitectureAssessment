@@ -1,0 +1,1 @@
+docker-compose file doesn't handle YAML in flow mode (where tabs are valid)

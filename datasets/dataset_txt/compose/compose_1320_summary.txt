@@ -1,0 +1,1 @@
+Docker compose 3.0 does not tag images pulled from Docker Trusted Registry

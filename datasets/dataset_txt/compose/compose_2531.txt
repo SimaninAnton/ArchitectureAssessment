@@ -1,0 +1,20 @@
+datacarl commented on 6 Apr 2016
+./run.sh --tlsverify --tlscacert=/path/ca.pem --tlscert=/path/client-cert.pem --tlskey=/path/client-key.pem up
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.0rc1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 57, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 105, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 30, in project_from_options
+    tls_config=tls_config_from_options(options),
+  File "/usr/lib/python2.7/site-packages/compose/cli/docker_client.py", line 37, in tls_config_from_options
+    hostname or not options.get('--skip-hostname-check', False)
+  File "/usr/lib/python2.7/site-packages/docker/tls.py", line 47, in __init__
+    'Path to a certificate and key files must be provided'
+docker.errors.TLSParameterError: Path to a certificate and key files must be provided through the client_config param. TLS configurations should map the Docker CLI client configurations. See https://docs.docker.com/engine/articles/https/ for API details.
+./run.sh -v
+docker-compose version 1.7.0rc1, build 1ad8866
+Running on CentOS 7.
+Happy to provide more info as necessary.

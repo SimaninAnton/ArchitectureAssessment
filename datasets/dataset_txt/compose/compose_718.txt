@@ -1,0 +1,7 @@
+jon-m-c commented on 25 Apr 2018
+Description of the issue
+In Release 1.20.0 an new feature was added
+"Proxy configuration found in the ~/.docker/config.json file now populates environment and build args for containers created by Compose"
+It should be possible to disable this feature at runtime, for example, with a flag
+docker-compose up --no-proxy-import ......
+The reason for this is that you may wish to use the proxy for docker builds, but not for all run time containers. Currently, if there is a proxy set in the config.json, it is always set in the running containers.

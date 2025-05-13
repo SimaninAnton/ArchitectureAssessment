@@ -1,0 +1,13 @@
+akiellor commented on 27 Jul 2016
+Scenario:
+Let A and B be services where A depends on B with image versions A1 and B1
+$ docker-compose run A # starts A1 and B1
+Exit container # A1 stops B1 remains running
+Bump version of service B to B2 in docker-compose.yml
+$ docker-compose run A # starts A1, doesn't restart B as B1 is running
+This behaviour causes a bit of a 'gotcha', where users of docker-compose will need to be aware of when versions of images in docker-compose.yml change and restart the effected services. In reality this presents itself through the service set behaving in undefined ways and users having to know that this is an issue that can happen.
+Some alternatives which would alleviate this 'gotcha' may be:
+Restart services already running when an existing old version exists automatically
+Add a flag to run to do 1.
+Add warnings to the output that the user is running with old versions of dependent services running.
+I'm happy to have a look at a fix for this, but some direction on solution options would be great.

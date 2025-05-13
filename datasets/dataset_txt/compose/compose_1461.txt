@@ -1,0 +1,5 @@
+mrname commented on 16 May 2017
+I just want to make sure I am not missing anything in regards to how health checks and restart policies work together. It would seem that when a container is marked as "unhealthy" by a health check, there is no way to instruct compose to restart the container. This is because restart policies only take effect based on the exit code of the container itself.
+Is there some way to instruct docker compose to restart an unhealthy container? If not, can anybody suggest an appropriate workaround?
+Please note that I understand that orchestration tools like kubernetes can handle these situations. The use case here is for lightweight offline deployments using docker compose up -d, without the need for robust orchestration like kubernetes.
+3

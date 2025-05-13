@@ -1,0 +1,1 @@
+[compose+swarm] docker-compose up -d will recreate containers

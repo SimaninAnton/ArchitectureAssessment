@@ -1,0 +1,3 @@
+mollrow commented on 23 Dec 2014
+Using ruby:2.1.5 and rails ~> 4.2.0
+When I fig up I can't access the rails app on 192.168.59.103:3000 (using boot2docker)

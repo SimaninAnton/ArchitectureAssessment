@@ -1,0 +1,1 @@
+Conflict with REQUESTS_CA_BUNDLE environment variable.

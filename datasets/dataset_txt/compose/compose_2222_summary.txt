@@ -1,0 +1,1 @@
+Feature idea: Interpolate config params in compose file

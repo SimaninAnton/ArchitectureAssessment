@@ -1,0 +1,81 @@
+Mimuni commented on 19 Sep 2017
+Hello,
+I'm trying to compile docker-compose on a rock64 board (ARM, RK3328). The docker image I successfully could generate, but when producing the binary comes following errors.
+root@rock64:~/docker-compose/compose# docker run --rm --entrypoint="script/build/linux-entrypoint" -v $(pwd)/dist:/code/dist -v $(pwd)/.git:/code/.git "docker-compose:armhf"
+++ uname -s
+++ uname -m
++ TARGET=dist/docker-compose-Linux-aarch64
++ VENV=/code/.tox/py27
+++ pwd
++ mkdir -p /code/dist
+++ pwd
++ chmod 777 /code/dist
++ /code/.tox/py27/bin/pip install -q -r requirements-build.txt
++ ./script/build/write-git-sha
++ su -c '/code/.tox/py27/bin/pyinstaller docker-compose.spec' user
+133 INFO: PyInstaller: 3.2.1
+133 INFO: Python: 2.7.9
+136 INFO: Platform: Linux-4.4.77-rockchip-ayufan-118-aarch64-with-debian-8.7
+153 INFO: UPX is not available.
+159 INFO: Extending PYTHONPATH with paths
+['/code/bin', '/code']
+160 INFO: checking Analysis
+161 INFO: Building Analysis because out00-Analysis.toc is non existent
+162 INFO: Initializing module dependency graph...
+172 INFO: Initializing module graph hooks...
+439 INFO: running Analysis out00-Analysis.toc
+516 INFO: Caching module hooks...
+530 INFO: Analyzing bin/docker-compose
+6197 INFO: Processing pre-find module path hook   distutils
+6220 INFO: distutils: retargeting to non-venv dir '/usr/lib/python2.7/distutils'
+22913 INFO: Processing pre-safe import module hook   six.moves
+26274 INFO: Processing pre-safe import module hook   _xmlplus
+30289 INFO: Loading module hooks...
+30290 INFO: Loading module hook "hook-distutils.py"...
+30298 INFO: Loading module hook "hook-xml.py"...
+30643 INFO: Loading module hook "hook-httplib.py"...
+30646 INFO: Loading module hook "hook-jsonschema.py"...
+30654 INFO: Loading module hook "hook-encodings.py"...
+32845 INFO: Loading module hook "hook-requests.py"...
+32892 INFO: Loading module hook "hook-certifi.py"...
+32978 INFO: Looking for ctypes DLLs
+33107 INFO: Analyzing run-time hooks ...
+33184 INFO: Looking for dynamic libraries
+34164 INFO: Looking for eggs
+34165 INFO: Python library not in binary depedencies. Doing additional searching...
+34260 INFO: Using Python library /usr/lib/arm-linux-gnueabihf/libpython2.7.so.1.0
+34283 INFO: Warnings written to /code/build/docker-compose/warndocker-compose.txt
+34894 INFO: checking PYZ
+34894 INFO: Building PYZ because out00-PYZ.toc is non existent
+34896 INFO: Building PYZ (ZlibArchive) /code/build/docker-compose/out00-PYZ.pyz
+37837 INFO: Building PYZ (ZlibArchive) /code/build/docker-compose/out00-PYZ.pyz completed successfully.
+38404 INFO: checking PKG
+38405 INFO: Building PKG because out00-PKG.toc is non existent
+38405 INFO: Building PKG (CArchive) out00-PKG.pkg
+42192 INFO: Building PKG (CArchive) out00-PKG.pkg completed successfully.
+42250 INFO: Bootloader /code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/bootloader/Linux-32bit/run
+42251 INFO: checking EXE
+42252 INFO: Building EXE because out00-EXE.toc is non existent
+42253 INFO: Building EXE from out00-EXE.toc
+42256 INFO: Appending archive to ELF section in EXE /code/dist/docker-compose
+Traceback (most recent call last):
+  File "/code/.tox/py27/bin/pyinstaller", line 11, in <module>
+    sys.exit(run())
+  File "/code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/__main__.py", line 90, in run
+    run_build(pyi_config, spec_file, **vars(args))
+  File "/code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/__main__.py", line 46, in run_build
+    PyInstaller.building.build_main.main(pyi_config, spec_file, **kwargs)
+  File "/code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/building/build_main.py", line 788, in main
+    build(specfile, kw.get('distpath'), kw.get('workpath'), kw.get('clean_build'))
+  File "/code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/building/build_main.py", line 734, in build
+    exec(text, spec_namespace)
+  File "<string>", line 81, in <module>
+  File "/code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/building/api.py", line 411, in __init__
+    self.__postinit__()
+  File "/code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/building/datastruct.py", line 161, in __postinit__
+    self.assemble()
+  File "/code/.tox/py27/local/lib/python2.7/site-packages/PyInstaller/building/api.py", line 570, in assemble
+    raise SystemError("objcopy Failure: %s" % stderr)
+SystemError: objcopy Failure: objcopy: Unable to recognise the format of the input file `/code/dist/docker-compose'
+As a kernel I use the following: "Linux rock64 4.4.77-rockchip-ayufan-118 # 1 SMP Thu Sep 14 21:59:24 UTC 2017 aarch64 aarch64 aarch64 GNU / Linux" on a "Ubuntu Xenial"
+Unfortunately, I do not have so much experience with Python and can not interpret the error message. Does anyone have an idea of what it can be?

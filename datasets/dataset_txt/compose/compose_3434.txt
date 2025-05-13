@@ -1,0 +1,5 @@
+victorliun commented on 27 Jul 2015
+Hi
+Is there something like "docker-compose login <container_name>", so I don't have to run "docker exec -it container_name bash" manually?
+Thanks
+Victor Liu

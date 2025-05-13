@@ -1,0 +1,5 @@
+c0b commented on 13 Jul 2017
+moby/moby#34019 (comment)
+docker run support ipv6 port mapping in the notation of -p [::1]:3000:3000/tcp; however docker-compose (version 1.14.0, build c7bdf9e) does not recognize that:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.my-service.ports is invalid: Invalid port "[::1]:3000:3000/tcp", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]

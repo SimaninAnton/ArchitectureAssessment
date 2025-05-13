@@ -1,0 +1,3 @@
+gastonmorixe commented on 30 Mar 2015
+Docker Compose builds the ultimate layer on top of docker/swarm for controlling. It'd be awesome if we can give it a GUI.
+I am thinking, could docker-compose become a (json) API too?

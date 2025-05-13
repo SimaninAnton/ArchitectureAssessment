@@ -1,0 +1,2 @@
+flamusdiu commented on 30 Oct 2016
+From what I can tell, is there seems to be zero way to disable TLS verification in Windows 10. If I set the options from the Docker for Windows GUI by adding: "tlsverify": false, the whole processes freezes then there is ZERO ways for me to fix that without a complete reinstall. I have some small projects that I am testing in docker due to not having Linux on a laptop that I am currently using.

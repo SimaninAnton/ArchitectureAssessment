@@ -1,0 +1,1 @@
+bash completions fail with macOS's bash 3.2.57

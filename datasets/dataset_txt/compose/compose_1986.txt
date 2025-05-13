@@ -1,0 +1,47 @@
+lofgrenfredrik commented on 25 Oct 2016
+After updating docker-compose from 1.8.0 to 1.8.1, I ran into an issue. The logs seems to lag behind in some situations, as demonstrated below.
+Dockerfile
+FROM node:onbuild
+EXPOSE 3000
+build.sh
+#!/bin/sh
+
+docker build -t logs-lag:latest .
+docker-compose.yml
+app:
+  image: logs-lag:latest
+  ports:
+    - "3000:3000"
+package.json
+{
+ "name": "logslag",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "express": "4.14.0"
+ },
+  "scripts": {
+    "start": "NODE_ENV=production node server.js"
+  }
+}
+server.js
+const express = require('express');
+const app = express();
+
+
+app.get('/', function(req, res, next) {
+    console.log('GET');
+    res.status(200).send('OK');
+})
+
+app.listen(3000, function() {
+    console.log('SERVER RUNNING');
+})
+console.log('SERVER END');
+Build image with build.sh
+Run docker-compose up app
+Run curl <ip of machine>:3000
+Note the log output
+On start it should be SERVER END SERVER RUNNING
+On every request it should be a new message GET
+Running docker-compose up -d app the logs with docker-compose -f logs app shows correctly

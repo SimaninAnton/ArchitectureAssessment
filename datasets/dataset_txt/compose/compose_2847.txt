@@ -1,0 +1,3 @@
+wikier commented on 3 Feb 2016
+Even if the source contains completion capabilities for both bash and zsh, completion does not work when installing compose.
+Debugging the issue I say the scripts are properly bundled via MANIFEST.in, but not moved to where expected (/etc/bash_completion.d/docker-compose in the vase of bash) during setup.

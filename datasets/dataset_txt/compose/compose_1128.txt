@@ -1,0 +1,15 @@
+jcolebrand commented on 24 Oct 2017
+docker network create -d transparent --gateway 10.31.0.01 --subnet=10.31.0.0/16 -o com.docker.network.windowsshim.interface="Ethernet" backend
+
+docker network ls
+see it is there
+docker network rm backend
+fails with HSN failed with error : The parameter is incorrect.
+docker network ls 
+only see nat, null
+restart docker service
+docker network ls
+see a new random network with just the hash for the name (ex: b3631004b54cb3e6c36f004eee21d7a239357e23b84141f6085d37ae048c491d)
+try to re-add with the same above command and get that the network already exists
+Remove the network now by ID.
+can re-add

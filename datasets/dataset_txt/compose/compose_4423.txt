@@ -1,0 +1,3 @@
+pinouchon commented on 28 Jan 2014
+Is a support or tutorial planned for node and/or grunt apps ?
+I would love to see the same tutorial that we have for rails/django/wordpress (http://orchardup.github.io/fig/rails.html), but for node instead.

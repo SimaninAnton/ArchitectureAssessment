@@ -1,0 +1,1 @@
+To many environment variables prevents the execution of binaries on CentOS, compose creates a LOT of variables.

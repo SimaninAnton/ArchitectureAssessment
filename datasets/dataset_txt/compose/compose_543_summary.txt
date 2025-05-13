@@ -1,0 +1,1 @@
+When supplying Compose File via stdin, `-f` should still work.

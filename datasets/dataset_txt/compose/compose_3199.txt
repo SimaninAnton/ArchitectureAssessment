@@ -1,0 +1,51 @@
+Mobius5150 commented on 19 Oct 2015
+I recently found that docker compose creates entries in the hosts file for containers that are not supposed to be linked.
+E.g. for this docker-compose.yml:
+lb:
+  image: eeacms/haproxy
+  ports:
+    - "80:80"
+  links:
+    - web
+web:
+  build: web
+  ports:
+    - "80"
+  links:
+    - rest
+ci:
+  build: ci
+  ports:
+    - "8888:80"
+rest:
+  build: java
+  ports:
+    - "8080:8080"
+load_test:
+  build: load_test
+  links:
+    - lb:web
+I get this hosts file inside of the lb container, which should only be linked to the web role, of which I have three instances:
+172.17.0.173    13f3f32265f1
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.17.0.166    ci_1.bridge
+172.17.0.169    web_2
+172.17.0.173    dreamy_bhabha.bridge
+172.17.0.166    ci_1
+172.17.0.169    web_2.bridge
+172.17.0.170    web_1
+172.17.0.168    web_3
+172.17.0.170    web_1.bridge
+172.17.0.171    lb_1
+172.17.0.167    rest_1
+172.17.0.167    rest_1.bridge
+172.17.0.168    web_3.bridge
+172.17.0.171    lb_1.bridge
+172.17.0.173    dreamy_bhabha
+Again note that there are entries for each service defined in the docker-compose.yml despite the fact that the lb service should only be linked to the web service.
+I can't imagine this is desired behavior, as it seems you should have to manually link every host.

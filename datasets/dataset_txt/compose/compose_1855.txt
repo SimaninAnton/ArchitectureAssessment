@@ -1,0 +1,5 @@
+avindra commented on 14 Dec 2016
+DFM version:
+Checking for updates:
+$ docker-compose --version
+docker-compose version 1.8.1, build 878cff1

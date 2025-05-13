@@ -1,0 +1,27 @@
+brancz commented on 6 Aug 2015
+I wanted to try out the log-driver and log-opt added in #1388 and #1665.
+My docker-compose.yml looks like this:
+web:
+  image: flowerpot/goif
+  ports:
+    - "8080:8080"
+  log_driver: "syslog"
+  log_opt:
+    address: "udp://syslog-server:514"
+However, when I do docker-compose up I get the following error:
+Failed to initialize logging driver: Unix syslog delivery error
+Which is weird because this works:
+docker run --rm -p 8080:8080 --log-driver=syslog --log-opt syslog-address=udp://syslog-server:514 flowerpot/goif
+Shouldn't that be equivalent?
+Versions:
+docker-compose version: 1.4.0rc3
+Client version: 1.7.1
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 786b29d
+OS/Arch (client): darwin/amd64
+Server version: 1.7.1
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 786b29d
+OS/Arch (server): linux/amd64

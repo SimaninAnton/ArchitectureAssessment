@@ -1,0 +1,3 @@
+midnightconman commented on 22 Jul 2016
+Is it possible for the depends_on parameter to wait for a service to be in a "Healthy" state before starting services, if a healthcheck exists for the container? At the moment in 1.8.0-rc2 the depends_on parameter only verifies that the container is in a running state, via {{ State.Status.running }}. This would allow for better dependency management in docker-compose.
+46

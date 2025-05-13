@@ -1,0 +1,4 @@
+FoxKyong commented on 20 May 2015
+I found a problem with timezone when viewing logs with 'docker-compose logs'. I have added
+volumes: - /etc/localtime:/etc/localtime:ro
+into docker-composy.yml as I found as best solution. This works. Date and time is right on both host and in the container. It's bad only when I am viewing logs with docker-compose logs and I didn't find anything to it on google. Just for timezone inside of containers which works fine for me.

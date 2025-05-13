@@ -1,0 +1,1 @@
+Docker-compose build writes by default "Building ..." to STDERR.

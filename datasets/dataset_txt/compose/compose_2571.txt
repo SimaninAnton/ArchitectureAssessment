@@ -1,0 +1,6 @@
+kvramana commented on 28 Mar 2016
+I am on Mac OS X running docker version 1.10.3, build 20f81dd and docker-compose version 1.6.2, build 4d72027.
+In my YML file, i have two services. The first is a data only container service which is referenced from a second container (mongodb) service using volumes_from directive. I do some operations in the second container (mongodb) service. I connect to mongodb container service, and it correctly shows data from my operations.
+Now i do a docker-compose down, wait few minutes, and then docker-compose up command. I was expecting to not lose data from previous operations but it is lost. If i do a docker stop followed by docker start, i see data from prior operations and don't lose it though.
+Is this a known bug and is there a work around for this bug please?
+2

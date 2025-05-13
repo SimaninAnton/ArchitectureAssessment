@@ -1,0 +1,8 @@
+Contributor
+hartwork commented on 12 Nov 2018 •
+edited
+I was playing with Docker Configs in docker-compose and was surprised that the file would not show up despite no display of any error. docker config ls helped find out what is going on:
+# docker config ls
+Error response from daemon: This node is not a swarm manager. Use "docker swarm init" or "docker swarm join" to connect this node to swarm and try again.
+It would be nice, if docker-compose could detect lack of swarm mode and show a(n error or) warning that Docker Configs require swarm mode.
+Thanks for your consideration!

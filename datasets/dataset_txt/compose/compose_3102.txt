@@ -1,0 +1,83 @@
+kiliit commented on 12 Nov 2015
+Copied from http://stackoverflow.com/questions/33660145/docker-compose-makes-tripple-link
+I have a problem with docker compose links.
+gogs:
+  image: kiliit/gogs
+  ports:
+   - "13000:3000"
+  links:
+   - data-gogs:mysql
+  volumes:
+   - ~/gogs://data
+   - ~/gogs/logs://data
+
+nodebbb:
+  image: kiliit/nodebbb
+  ports:
+   - "13001:3000"
+
+data-gogs:
+  image: mysql
+  environment:
+   - MYSQL_DATABASE=gogs
+   - MYSQL_ROOT_PASSWORD=gogs
+  volumes:
+   - ~/gogs/mysql://var/lib/mysql
+Then the link creates itself too many times. At least that is what I understand from the log:
+...
+←[36mdata-gogs_1 | ←[0m2015-11-11T21:07:25.292204Z 0 [Note] Server hostname (bind-address): '*'; port: 3306
+←[36mdata-gogs_1 | ←[0m2015-11-11T21:07:25.294599Z 0 [Note] IPv6 is available.
+←[36mdata-gogs_1 | ←[0m2015-11-11T21:07:25.296023Z 0 [Note]   - '::' resolves to '::';
+←[36mdata-gogs_1 | ←[0m2015-11-11T21:07:25.296763Z 0 [Note] Server socket created on IP: '::'.
+←[33mgogs_1      | ←[0m2015/11/11 21:07:25 socat[43] E bind(5, {AF=2 0.0.0.0:3306}, 16): Address in use
+←[33mgogs_1      | ←[0m2015/11/11 21:07:25 socat[44] E bind(5, {AF=2 0.0.0.0:3306}, 16): Address in use 
+...
+And the Address in use just continues.
+$ docker exec -it folder_gogs_1 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=dc9c9e91d843
+FOLDER_DATA_GOGS_1_PORT=tcp://172.17.0.2:3306
+FOLDER_DATA_GOGS_1_PORT_3306_TCP=tcp://172.17.0.2:3306
+FOLDER_DATA_GOGS_1_PORT_3306_TCP_ADDR=172.17.0.2
+FOLDER_DATA_GOGS_1_PORT_3306_TCP_PORT=3306
+FOLDER_DATA_GOGS_1_PORT_3306_TCP_PROTO=tcp
+FOLDER_DATA_GOGS_1_NAME=/folder_gogs_1/folder_data-gogs_1
+FOLDER_DATA_GOGS_1_ENV_MYSQL_ROOT_PASSWORD=gogs
+FOLDER_DATA_GOGS_1_ENV_MYSQL_DATABASE=gogs
+FOLDER_DATA_GOGS_1_ENV_MYSQL_MAJOR=5.7
+FOLDER_DATA_GOGS_1_ENV_MYSQL_VERSION=5.7.9-1debian8
+DATA_GOGS_1_PORT=tcp://172.17.0.2:3306
+DATA_GOGS_1_PORT_3306_TCP=tcp://172.17.0.2:3306
+DATA_GOGS_1_PORT_3306_TCP_ADDR=172.17.0.2
+DATA_GOGS_1_PORT_3306_TCP_PORT=3306
+DATA_GOGS_1_PORT_3306_TCP_PROTO=tcp
+DATA_GOGS_1_NAME=/folder_gogs_1/data-gogs_1
+DATA_GOGS_1_ENV_MYSQL_ROOT_PASSWORD=gogs
+DATA_GOGS_1_ENV_MYSQL_DATABASE=gogs
+DATA_GOGS_1_ENV_MYSQL_MAJOR=5.7
+DATA_GOGS_1_ENV_MYSQL_VERSION=5.7.9-1debian8
+MYSQL_PORT=tcp://172.17.0.2:3306
+MYSQL_PORT_3306_TCP=tcp://172.17.0.2:3306
+MYSQL_PORT_3306_TCP_ADDR=172.17.0.2
+MYSQL_PORT_3306_TCP_PORT=3306
+MYSQL_PORT_3306_TCP_PROTO=tcp
+MYSQL_NAME=/folder_gogs_1/mysql
+MYSQL_ENV_MYSQL_ROOT_PASSWORD=gogs
+MYSQL_ENV_MYSQL_DATABASE=gogs
+MYSQL_ENV_MYSQL_MAJOR=5.7
+MYSQL_ENV_MYSQL_VERSION=5.7.9-1debian8
+GOGS_CUSTOM=/data/gogs
+HOME=/root
+And inspection of links:
+$ docker inspect -f "{{ .HostConfig.Links }}" folder_gogs_1
+[/folder_data-gogs_1:/folder_gogs_1/folder_data-gogs_1 /folder_data-gogs_1:/folder_gogs_1/data-gogs_1 /folder_data-gogs_1:/folder_gogs_1/mysql]
+Why is the link created three times?
+It jsut tried renaming the link from mysql to db. I thought it maybe confused by the name coincidence, but even with db it creates 3 links.
+docker-compose 1.5.0
+docker 1.8.1, build d12ea79
+Windows 7
+When the link is created from a script it works as expected.
+#!/usr/bin/env bash
+docker run --name gogs-mysql -e MYSQL_DATABASE=gogs -e MYSQL_ROOT_PASSWORD=gogs -v ~/gogs/mysql://var/lib/mysql -d mysql
+docker run --name gogs --link gogs-mysql:mysql -v ~/gogs://data -p 13000:3000 -d kiliit/gogs
+docker run --name nodebbb -p 13001:3000 -d kiliit/nodebbb

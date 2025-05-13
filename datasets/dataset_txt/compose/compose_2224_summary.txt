@@ -1,0 +1,1 @@
+Bundle should support the volumes key

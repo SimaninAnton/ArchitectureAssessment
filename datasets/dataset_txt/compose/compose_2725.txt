@@ -1,0 +1,4 @@
+wernight commented on 22 Feb 2016
+https://github.com/docker/compose/releases states:
+You can now specify both a build and an image key if you're using the new file format. docker-compose build will build the image and tag it with the name you've specified, while docker-compose pull will attempt to pull it.
+It doesn't state if a docker-compose build --pull will attempt to pull the base image and then build and tag it. I'd suggest adding that to the release notes.

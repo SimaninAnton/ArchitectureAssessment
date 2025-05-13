@@ -1,0 +1,1 @@
+Add upgrading instructions to install docs

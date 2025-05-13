@@ -1,0 +1,8 @@
+andres-root commented on 27 Aug 2014
+I'm trying to create a volume using an environment variable I previously set up in my Dockerfile. However when I ran the project, fig created a folder with the name of my environment variable, instead of assign its value. I put the code below:
+web:
+build: .
+volumes:
+- ${WORKSPACES_HOME}/logs:/webapp/myapp/logs/
+I used to do it in docker with the next sintax:
+docker run -v ${WORKSPACES_HOME}/logs:/webapp/myapp/logs

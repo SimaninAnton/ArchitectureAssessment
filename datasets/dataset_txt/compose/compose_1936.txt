@@ -1,0 +1,17 @@
+jamshid commented on 13 Nov 2016
+docker-compose 1.9.0-rc4 seems to require SSL now. Previously it honored DOCKER_TLS_VERIFY and, like the docker client itself, talked to a non-SSL docker server, e.g. one created with
+$ docker run -d --restart always -p 2375:2375 --volume=/var/run/docker.sock:/var/run/docker.sock --name=docker-http sequenceiq/socat
+$ export DOCKER_HOST=tcp://docker.example.com:2375
+$ export DOCKER_TLS_VERIFY=
+$ docker ps 
+(...works fine...)
+
+$ docker-compose --version
+docker-compose version 1.9.0-rc4, build 181a4e9
+$ docker-compose ps
+ERROR: SSL error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:590)
+
+$ docker-compose.backup --version
+docker-compose version 1.8.0, build f3628c7
+$ docker-compose.backup ps
+(...works fine...)

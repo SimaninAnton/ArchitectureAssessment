@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 9 Jan 2014
+We don't have any coverage for the CLI.

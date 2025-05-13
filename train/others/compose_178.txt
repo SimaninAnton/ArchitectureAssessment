@@ -1,0 +1,12 @@
+jorymorrison commented on 14 May 2019
+Is your feature request related to a problem? Please describe.
+I am running docker engine on Windows 10. I am using the docker and compose CLI on Windows Subsystem for Linux ("Bash for Windows"). I am behind a corporate proxy and have http_proxy and https_proxy set appropriately.
+Docker functions fine connecting to the engine at localhost:2375. However, docker-compose attempts to go through the corporate proxy before connecting to the engine. This obviously doesn't work.
+http_proxy, https_proxy, and docker_host are set accordingly.
+urllib3.connectionpool._new_conn: Starting new HTTP connection (1): proxy.company.org:80 urllib3.connectionpool._make_request: http://proxy.company.org:80 "GET http://localhost:2375/v1.25/version HTTP/1.1" 504 3676
+Describe the solution you'd like
+Docker-Compose should have a means of ignoring proxy for daemon connections.
+Describe alternatives you've considered
+In the mean time I could use direnv to unset http_proxy for my docker-compose project directories. Or I could run a local proxy that is intelligent enough to determine what should get forwarded on to the corporate proxy or to the daemon.
+Additional context
+This guide describes my setup: https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly

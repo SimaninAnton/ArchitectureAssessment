@@ -1,0 +1,1 @@
+Use of "/bin/echo" when restarting containers fails for containers that do not contain /bin/echo

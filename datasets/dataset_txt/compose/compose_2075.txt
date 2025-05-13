@@ -1,0 +1,37 @@
+CarstenHoyer commented on 11 Sep 2016 •
+edited
+Trying to setup a dev environment as per the contrib document, I am running 'python setup.py develop' and I get this error:
+error: [Errno 2] No such file or directory: './test-requirements.txt'
+python setup.py develop
+/usr/local/lib/python2.7/site-packages/setuptools/dist.py:285: UserWarning: Normalizing '1.9.0dev' to '1.9.0.dev0'
+  normalized_version,
+running develop
+running egg_info
+writing requirements to docker_compose.egg-info/requires.txt
+writing docker_compose.egg-info/PKG-INFO
+writing top-level names to docker_compose.egg-info/top_level.txt
+writing dependency_links to docker_compose.egg-info/dependency_links.txt
+writing entry points to docker_compose.egg-info/entry_points.txt
+reading manifest file 'docker_compose.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no files found matching 'README.rst'
+warning: no files found matching 'compose/GITSHA'
+warning: no previously-included files matching '*.pyc' found anywhere in distribution
+warning: no previously-included files matching '*.pyo' found anywhere in distribution
+warning: no previously-included files matching '*.un~' found anywhere in distribution
+writing manifest file 'docker_compose.egg-info/SOURCES.txt'
+running build_ext
+Creating /usr/local/lib/python2.7/site-packages/docker-compose.egg-link (link to .)
+docker-compose 1.9.0.dev0 is already the active version in easy-install.pth
+Installing docker-compose script to /usr/local/bin
+
+Installed /Users/carstenhoyer/Workspace/compose
+Processing dependencies for docker-compose==1.9.0.dev0
+Searching for docker-pycreds>=0.2.0
+Reading https://pypi.python.org/simple/docker-pycreds/
+Best match: docker-pycreds 0.2.0
+Downloading https://pypi.python.org/packages/67/74/e73c8f8f2e84859938c30193bf12ffaae6805f37f8d8171082df76a951a8/docker-pycreds-0.2.0.tar.gz#md5=a39268529154a53f0635a613ded3b4d5
+Processing docker-pycreds-0.2.0.tar.gz
+Writing /var/folders/qk/vtzjsgs13yjcx6s1_7b82j3c0000gn/T/easy_install-67QtFZ/docker-pycreds-0.2.0/setup.cfg
+Running docker-pycreds-0.2.0/setup.py -q bdist_egg --dist-dir /var/folders/qk/vtzjsgs13yjcx6s1_7b82j3c0000gn/T/easy_install-67QtFZ/docker-pycreds-0.2.0/egg-dist-tmp-cE9ZtE
+error: [Errno 2] No such file or directory: './test-requirements.txt'` 

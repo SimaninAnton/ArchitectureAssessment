@@ -1,0 +1,1 @@
+SELinux/Fedora/CentOS - autolabel if path is under current repository tree

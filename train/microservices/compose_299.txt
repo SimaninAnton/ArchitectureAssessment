@@ -1,0 +1,106 @@
+fmuelle1 commented on 4 Feb 2019 •
+edited
+Description of the issue
+I have a compose file in compose version 2.1 that uses an externally defined Docker network.
+version: '2.1'
+services:
+  db:
+    image: postgres:latest
+  redis:
+    image: redis:latest
+    networks:
+        default:
+          aliases:
+            - redis-${NETWORK}
+networks:
+  default:
+    external:
+      name: ${NETWORK}
+The name of the network is handed into the compose run via environment variable NETWORK.
+I used the following command to test the compose file:
+docker-compose -p myComposeID pull
+If that env variable is not set at all or if it is an empty string, the following happen:
+Up to Docker compose version 1.15 it works and shows the following output:
+docker -v
+Docker version 18.06.1-ce, build e68fc7a215d7133c34aa18e3b72b4a21fd0c6136
+
+docker-compose -v
+docker-compose version 1.15.0, build e12f3b9
+
+docker-compose -p myComposeID up -d
+The NETWORK variable is not set. Defaulting to a blank string.
+Creating network "mycomposeid_default" with the default driver
+Pulling redis (redis:latest)...
+latest: Pulling from library/redis
+
+Digest: sha256:b950de29d5d4e4ef9a9d2713aa1213f76486dd8f9c0a43e9e8aac72e2cfc3827
+Status: Downloaded newer image for redis:latest
+Pulling db (postgres:latest)...
+latest: Pulling from library/postgres
+
+Digest: sha256:4b8d2a83873b0721a09bed00ba7aa1a45569ac1d763ca6873460626a6e8bd1a5
+Status: Downloaded newer image for postgres:latest
+
+Creating mycomposeid_redis_1 ... 
+Creating mycomposeid_db_1 ...
+
+Creating mycomposeid_redis_1 ... done
+Creating mycomposeid_db_1 ... done
+
+docker network ls
+NETWORK ID          NAME                  DRIVER              SCOPE
+251c6f977eab        bridge                bridge              local
+0e5fabcbdd20        host                  host                local
+d77b71b487fe        mycomposeid_default   bridge              local
+1e6af3c3a339        none                  null                local
+
+
+docker-compose -p myComposeID down
+The NETWORK variable is not set. Defaulting to a blank string.
+Stopping mycomposeid_db_1    ... 
+Stopping mycomposeid_redis_1 ... 
+
+Stopping mycomposeid_redis_1 ... done
+Stopping mycomposeid_db_1    ... done
+
+Removing mycomposeid_db_1    ... 
+Removing mycomposeid_redis_1 ... 
+
+Removing mycomposeid_db_1    ... done
+Removing mycomposeid_redis_1 ... done
+Removing network mycomposeid_default
+The compose command creates a default network and connects the 2 container to the network. I was able to verify that the network is there and used by the container.
+From Docker compose version 1.15 and higher the same compose file with the same command fails with a stack trace:
+docker -v
+Docker version 18.06.1-ce, build e68fc7a215d7133c34aa18e3b72b4a21fd0c6136
+
+docker-compose -v
+docker-compose version 1.23.1, build b02f1306
+
+docker-compose -p myComposeID pull
+The NETWORK variable is not set. Defaulting to a blank string.
+[6969] Failed to execute script docker-compose
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 42, in project_from_options
+  File "compose/cli/command.py", line 128, in get_project
+  File "compose/project.py", line 100, in from_config
+  File "compose/network.py", line 320, in get_networks
+  File "compose/network.py", line 125, in true_name
+  File "compose/network.py", line 146, in _set_legacy_flag
+  File "compose/network.py", line 106, in inspect
+  File "site-packages/docker/utils/decorators.py", line 17, in wrapped
+docker.errors.NullResource: Resource ID was not provided
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.15.0
+docker-compose version 1.23.2
+Output of docker version
+Docker version 18.06.1-ce
+Additional information
+OS version / distribution:
+Amazon ECS-optimized Amazon Linux AMI 2017.09.g
+Amazon ECS container agent version 1.16.2
+2

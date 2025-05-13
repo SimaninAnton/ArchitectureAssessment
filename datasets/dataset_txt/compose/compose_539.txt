@@ -1,0 +1,49 @@
+ulope commented on 9 Aug 2018
+Description of the issue
+Context information (for bug reports)
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:05:26 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:13:46 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+services:
+  one:
+    command: python -c 'import time; time.sleep(5); from http import server; server.test(server.SimpleHTTPRequestHandler,
+      bind="0.0.0.0")'
+    healthcheck:
+      test: curl -s --fail -o /dev/null http://localhost:8000 || exit 1
+    image: python:3.6
+  two:
+    command: python -c 'import time; import urllib.request; [print(urllib.request.urlopen("http://one:8000/").read().decode(),
+      time.sleep(1)) for _ in range(100)]'
+    depends_on:
+      one:
+        condition: service_healthy
+    image: python:3.6
+version: '2.3'
+Steps to reproduce the issue
+Start with docker-compose up -d
+After services are started inspect logs, see that requests from two to one are successfull
+Restart with docker-compose restart
+After restart inspect logs
+Observed result
+After the restart the services aren't brought up in the correct order. In two's log you will see errors since one wasn't finished starting.
+Expected result
+For the restart command to behave the same way as up in regards to respecting startup order and healthchecks.

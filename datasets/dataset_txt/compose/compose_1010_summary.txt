@@ -1,0 +1,1 @@
+KAFKA_CREATE_TOPICS only creates one topic with 1 partition

@@ -1,0 +1,1 @@
+recreate container when image or dockerfile is updated

@@ -1,0 +1,3 @@
+ebmeierj commented on 7 Mar 2016
+We currently have our docker images being built on commit and downloaded to a staging server where we run tests/qa them. When running tests it would be ideal if we could specify --no-build to ensure that all relevant dependencies have been built and retrieved successfully and to ensure that none are built locally.
+Is there a reason this option does not already exist?

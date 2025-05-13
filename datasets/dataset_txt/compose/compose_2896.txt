@@ -1,0 +1,18 @@
+mustafaakin commented on 20 Jan 2016
+test.yml
+web:
+  image: bfirsh/compose-mongodb-demo
+  environment:
+    - "MONGO_HOST=counter_mongo_1"
+    - "constraint:node==pc3"
+  ports:
+    - "80:5000"
+
+mongo:
+  image: mongo
+$ DOCKER_HOST=pc0:2376 docker-compose -p counter -f test.yml --x-networking --x-network-driver overlay up 
+Works fine first time. However, when I change contraint:node==pc3 to some other node, it fails:
+$ DOCKER_HOST=pc0:2376 docker-compose -p counter -f test.yml --x-networking --x-network-driver overlay up
+Recreating counter_web_1
+ERROR: unable to find a node that satisfies container==36fddea9aa8601763b4c1e42ea8db924e4444c185e4d0b3bbd63e4e698fb300b
+I need to delete the container on my own since I changed the host constraint, docker-compose rm does not delete the web container gracefully.

@@ -1,0 +1,53 @@
+hawkhsieh commented on 28 May 2018
+Description of the issue
+This issue can not always be reproduced in my production environment
+I have a daemon to serve a business. It runs in a container and listens a port. I wrote a docker-compose and use this option:
+privileged: true
+network_mode: host
+It’s work find, until the port cant be exposed normally just after my daemon restart while this container
+is not restarting.
+I have never saw this problem before I use docker-compose for using docker two years. I used to run containers by docker run.
+Now, every time this problem happens, I need to docker-compose down and docker-compose up -d, so that the port will start to listen and accept normally.
+But, I wouldn’t like to recreate container after my daemon restart. Is this a bug in docker compose or anything I missing about docker or docker compose?
+Context information (for bug reports)
+The port 3492 is listened by my daemon. Normally this port holds up to 400 persistent connection. After daemon restart in the same container. All the client disconnect and reconnect back on expect, if normally. If the problem present, the netstat show this result, about 20 sockets stuck in SYN_RECV state and no more socket can be established.
+➜  ~ netstat -ant|grep SYN_RECV
+tcp        0      0 10.0.0.131:3492             46.196.10.222:46946         SYN_RECV    
+tcp        0      0 10.0.0.131:3492             86.181.72.176:37437         SYN_RECV    
+tcp        0      0 10.0.0.131:3492             213.220.157.208:52391       SYN_RECV    
+tcp        0      0 10.0.0.131:3492             90.253.78.241:46401         SYN_RECV    
+tcp        0      0 10.0.0.131:3492             85.179.48.203:51201         SYN_RECV    
+tcp        0      0 10.0.0.131:3492             95.90.192.24:39782          SYN_RECV    
+tcp        0      0 10.0.0.131:3492             91.61.202.109:38890         SYN_RECV    
+tcp        0      0 10.0.0.131:3492             84.57.215.95:48533          SYN_RECV    
+tcp        0      0 10.0.0.131:3492             87.214.171.74:57726         SYN_RECV    
+tcp        0      0 10.0.0.131:3492             213.3.31.42:39727           SYN_RECV    
+tcp        0      0 10.0.0.131:3492             77.177.160.107:58305        SYN_RECV    
+tcp        0      0 10.0.0.131:3492             207.232.13.194:47120        SYN_RECV    
+tcp        0      0 10.0.0.131:3492             37.201.225.38:10493         SYN_RECV    
+tcp        0      0 10.0.0.131:3492             92.220.72.25:40092          SYN_RECV    
+tcp        0      0 10.0.0.131:3492             62.216.206.238:11270        SYN_RECV    
+At client computer, I use
+telnet $host 3492
+Meanwhile, only see the SYN tcp package in tcpdump result. and client is retry many times and abort connection.
+The tcpdump shows the [SYN] from client can reach to host but host is no response [SYN,ACK] to client.
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:      17.03.2-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   7392c3b/17.03.2-ce
+ Built:        Wed Aug  9 22:45:09 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.2-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   7392c3b/17.03.2-ce
+ Built:        Wed Aug  9 22:45:09 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

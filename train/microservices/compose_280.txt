@@ -1,0 +1,59 @@
+t3easy commented on 18 Feb 2019
+Description of the issue
+Since the update to 1.24.0-rc1 during docker desktop update to 2.0.2.1 my docker-compose stack https://github.com/t3easy/docker-typo3 dosn't work anymore.
+The stack uses .env with multible compose files.
+docker-compose config
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 339, in config
+  File "compose/cli/command.py", line 70, in get_config_from_options
+  File "compose/config/config.py", line 404, in load
+  File "compose/config/config.py", line 502, in load_services
+  File "compose/config/config.py", line 493, in merge_services
+  File "compose/config/config.py", line 493, in <dictcomp>
+  File "compose/config/config.py", line 996, in merge_service_dicts_from_files
+  File "compose/config/config.py", line 1064, in merge_service_dicts
+  File "compose/config/config.py", line 1020, in merge_field
+  File "compose/config/config.py", line 1176, in merge_networks
+  File "compose/config/config.py", line 1015, in merge_field
+  File "compose/config/config.py", line 1012, in needs_merge
+TypeError: argument of type 'NoneType' is not iterable
+[1981] Failed to execute script docker-compose
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+Output of docker version
+Docker version 18.09.2, build 6247962
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+TypeError: argument of type 'NoneType' is not iterable
+[1981] Failed to execute script docker-compose
+Steps to reproduce the issue
+Clone https://github.com/t3easy/docker-typo3
+mv .env.dev .env
+docker-compose config
+Observed result
+Error
+Expected result
+Get config
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 339, in config
+  File "compose/cli/command.py", line 70, in get_config_from_options
+  File "compose/config/config.py", line 404, in load
+  File "compose/config/config.py", line 502, in load_services
+  File "compose/config/config.py", line 493, in merge_services
+  File "compose/config/config.py", line 493, in <dictcomp>
+  File "compose/config/config.py", line 996, in merge_service_dicts_from_files
+  File "compose/config/config.py", line 1064, in merge_service_dicts
+  File "compose/config/config.py", line 1020, in merge_field
+  File "compose/config/config.py", line 1176, in merge_networks
+  File "compose/config/config.py", line 1015, in merge_field
+  File "compose/config/config.py", line 1012, in needs_merge
+Additional information
+macOS 10.13.6 Docker Desktop edge channel

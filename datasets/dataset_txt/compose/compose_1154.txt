@@ -1,0 +1,9 @@
+maxehmookau commented on 12 Oct 2017
+I'm trying to run docker-compose up on a project I've used hundreds of times before. Except now starting the containers takes up to half an hour just to get running and then the web server inside the containers runs very very slowly when it does work.
+Running docker-compose --verbose up gives me a loop of this thousands of times:
+compose.parallel.feed_queue: Pending: set([])
+However, when I specify a single service inside the config file to start, this works as fast as normal. The issue only occurs when attempting to run multiple containers.
+Using docker on its own in the CLI works as before.
+Diagnostic ID: 66FA4AD4-2FBC-486C-8FA7-200F103D9222
+I'm running Docker 17.09.0-ce-mac35, and docker-compose version 1.16.1, build 6d1ac21 and MacOS High Sierra.
+I've attempted to reinstall, rebuild and using docker edge to no avail :(

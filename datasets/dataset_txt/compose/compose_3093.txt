@@ -1,0 +1,10 @@
+krasi-georgiev commented on 15 Nov 2015
+The current option -f is great but error prone when deploying in production.
+how about using a environment variable - something like
+$DOCKER-COMPOSER-ENV=prod
+if not set use docker-compose.yml and show a warning no env set so using only the main file .....
+if set use docker-compose.yml and extend using a file based on the env
+docker-compose-$DOCKER-COMPOSER-ENV.yml
+$DOCKER-COMPOSER-ENV=prod
+will run:
+docker-compose -f docker-compose.yml -f docker-compose-prod.yml

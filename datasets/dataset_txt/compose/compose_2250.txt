@@ -1,0 +1,27 @@
+reypm commented on 5 Jul 2016
+I am trying to run the command docker-compose up and I am getting the following issue:
+$ docker-compose up
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 547, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2720, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2380, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2386, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 14, in <module>
+    from . import errors
+  File "/usr/lib/python2.7/site-packages/compose/cli/errors.py", line 9, in <module>
+    from docker.errors import APIError
+  File "/usr/lib/python2.7/site-packages/docker/__init__.py", line 20, in <module>
+    from .client import Client, AutoVersionClient, from_env # flake8: noqa
+  File "/usr/lib/python2.7/site-packages/docker/client.py", line 19, in <module>
+    import requests
+  File "/usr/lib/python2.7/site-packages/requests/__init__.py", line 61, in <module>
+    from .packages.urllib3.exceptions import DependencyWarning
+ImportError: cannot import name DependencyWarning
+Why? What's wrong? I am using Fedora 24 4.6.3-300.fc24.x86_64 and Docker Docker version 1.11.2, build b9f10c9, any advice?
+3

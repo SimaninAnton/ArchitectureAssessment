@@ -1,0 +1,75 @@
+jeanpralo commented on 14 Mar 2016
+Hi there,
+Considering two docker-compose files:
+/tmp/dc1/docker-compose.yml:
+version: "2"
+
+services:
+  foo:
+    image: busybox
+    command: sleep 600
+    networks:
+      default:
+        aliases:
+          - foo1
+and /tmp/dc2/docker-compose.yml:
+version: '2'
+
+services:
+  bar:
+    image: busybox
+    command: sleep 600
+
+networks:
+  default:
+   external:
+     name: dc1_default
+So my app dc2 wants to use the default network of my app dc1, if i try to resolve foo and foo1 from bar I have no problem.
+Now I want to add an alias foo2 to foo, so I update my dc1 docker-compose.yml file which looks like that:
+version: "2"
+
+services:
+  foo:
+    image: busybox
+    command: sleep 600
+    networks:
+      default:
+        aliases:
+          - foo1
+          - foo2
+And I run a docker-compose up -d in the directory:
+docker-compose up -d
+dc1_foo_1 is up-to-date
+If I try to resolve foo2 from dc2_bar_1 it does not work, I need to delete dc1_foo_1 and re-create it.
+# docker info
+Containers: 12
+ Running: 12
+ Paused: 0
+ Stopped: 0
+Images: 300
+Server Version: 1.10.2
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 344
+ Dirperm1 Supported: false
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins: 
+ Volume: local
+ Network: host bridge null
+Kernel Version: 3.13.0-74-generic
+Operating System: Ubuntu 14.04.3 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 5.866 GiB
+Name: docker-test
+ID: AU4I:XZNC:YDYP:XJI2:EJRB:HS55:5DTD:2LS5:U3QT:3OE4:2GAA:4CBQ
+WARNING: No swap limit support
+
+# docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

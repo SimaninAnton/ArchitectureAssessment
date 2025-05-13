@@ -1,0 +1,25 @@
+chazer commented on 31 Mar 2016
+Hi, I am wanted to use this command to generate a configuration file from a template, but something went wrong.
+$ cat > tpl.yml <<'EOF'
+version: '2'
+services:
+  test:
+    image: $IMG
+    restart: always
+EOF
+$ IMG=alpine:latest docker-compose -f tpl.yml config >out.yml
+$ docker-compose -f out.yml config
+ERROR: Validation failed in file './b.yml', reason(s):
+services.test.restart contains an invalid type, it should be a string
+Content of out.yml file:
+networks: {}
+services:
+  test:
+    image: alpine:latest
+    restart:
+      MaximumRetryCount: 0
+      Name: always
+version: '2.0'
+volumes: {}
+The 'restart' option should be serialized back to string. Like 'always:0' i think
+Thanks!

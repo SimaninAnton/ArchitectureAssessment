@@ -1,0 +1,9 @@
+Contributor
+jbalonso commented on 6 Nov 2014
+I'm starting to see this:
+Invalid registry endpoint https://---REDACTED---/v1/: Get https://---REDACTED---/v1/_ping: EOF. If this
+private registry supports only HTTP or HTTPS with an unknown CA certificate, please add `--insecure-
+registry ---REDACTED---` to the daemon's arguments. In the case of HTTPS, if you have access to
+the registry's CA certificate, no need for the flag; simply place the CA certificate at /etc/docker/certs.d/
+---REDACTED---/ca.crt
+I'm sad to see the efforts of #573 and #490 stumble here.

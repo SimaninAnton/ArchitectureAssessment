@@ -1,0 +1,21 @@
+WillaLuo commented on 29 Dec 2016
+Can any body have a look at this please? Thanks!
+-bash-4.1$ docker -v
+Docker version 1.12.0, build b9264d4
+-bash-4.1$ docker-compose -v
+docker-compose version 1.9.0, build 2585387
+docker-compose -f logstash.yaml up -d logstash
+Removing logstash
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 65, in main
+File "compose/cli/main.py", line 117, in perform_command
+File "compose/cli/main.py", line 849, in up
+File "compose/project.py", line 383, in up
+File "compose/project.py", line 435, in _get_convergence_plans
+File "compose/service.py", line 339, in convergence_plan
+File "compose/service.py", line 354, in _containers_have_diverged
+File "compose/service.py", line 508, in config_hash
+File "compose/service.py", line 513, in config_dict
+TypeError: list indices must be integers, not unicode
+Thanks!

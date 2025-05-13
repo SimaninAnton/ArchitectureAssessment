@@ -1,0 +1,22 @@
+linux-china commented on 23 Apr 2014
+I use boot2docker to start docker on Mac, and Docker version is 0.10.0. After I install fig and I cannot run fig, error as following:
+➜ ~ fig --version
+[1] 73119 illegal hardware instruction fig --version
+➜ ~ echo $DOCKER_HOST
+tcp://localhost:4243
+➜ ~ docker images
+REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
+ubuntu 12.10 0232356d9a18 15 hours ago 171.3 MB
+ubuntu quantal 0232356d9a18 15 hours ago 171.3 MB
+ubuntu 13.10 9d076f5398dd 15 hours ago 179.9 MB
+ubuntu saucy 9d076f5398dd 15 hours ago 179.9 MB
+ubuntu 14.04 c1bd2f6276a1 15 hours ago 266 MB
+ubuntu latest c1bd2f6276a1 15 hours ago 266 MB
+ubuntu trusty c1bd2f6276a1 15 hours ago 266 MB
+ubuntu 13.04 2e68994ad893 15 hours ago 169.4 MB
+ubuntu raring 2e68994ad893 15 hours ago 169.4 MB
+ubuntu 12.04 1edb91fcb5b5 15 hours ago 209.4 MB
+ubuntu precise 1edb91fcb5b5 15 hours ago 209.4 MB
+ubuntu 10.04 3db9c44f4520 42 hours ago 183 MB
+ubuntu lucid 3db9c44f4520 42 hours ago 183 MB
+busybox latest 769b9341d937 11 weeks ago 2.489 MB

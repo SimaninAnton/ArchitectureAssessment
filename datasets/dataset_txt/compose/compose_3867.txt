@@ -1,0 +1,7 @@
+Contributor
+bfirsh commented on 5 Mar 2015
+Labels are likely going to land in Docker 1.6: moby/moby#9882
+If we used these to specify what project and service a container is part of, a whole load of stuff becomes a lot simpler. We don't have to do gross things like project, service, n = container_name.split("_", 3).
+Questions:
+Do we still want to give containers names? It's useful to be able to reference containers like that (docker exec project_web_1) and we want something useful to show up in docker ps
+Do we still want to give containers integer references of some kind? It's pretty handy to be able to have a human readable reference to a container

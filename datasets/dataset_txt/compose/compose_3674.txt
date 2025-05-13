@@ -1,0 +1,17 @@
+kxxoling commented on 29 Apr 2015
+Found what get error is here: https://github.com/docker/compose/blob/master/compose%2Fservice.py#L418 , but in my version(1.2.0), the line number is 414.
+How can I get more information about where is the wrong done?
+Dockerfile:
+FROM python:2.7
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+ADD requirements.txt /code/
+RUN pip install -r requirements.txt
+docker-compose.yml:
+web:
+  volumes:
+    - .:/code
+  command: python run.py
+  ports:
+    - "5000:5000"

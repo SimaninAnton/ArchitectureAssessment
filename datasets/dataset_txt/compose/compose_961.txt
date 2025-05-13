@@ -1,0 +1,27 @@
+srghma commented on 7 Jan 2018
+from https://docs.docker.com/compose/compose-file/#extension-fields
+version: '2.1'
+x-logging:
+  &default-logging
+  options:
+    max-size: '12m'
+    max-file: '5'
+  driver: json-file
+
+services:
+  db:
+    image: mysql:latest
+    logging: *default-logging
+ ✘  ~/projects/vd-rails-deploy/runner   master ●✚  docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Additional properties are not allowed ('x-logging' was unexpected)
+
+You might be seeing this error because you're using the wrong Compose file version. Either specify a supported version (e.g "2.2" or "3.3") and place your service definitions under the `services` key, or omit the `version` key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+same result for version: '2.2' and version: '3'
+ ✘  ~/projects/vd-rails-deploy/runner   master ●✚  docker-compose --version
+docker-compose version 1.15.0, build e12f3b9
+ ~/projects/vd-rails-deploy/runner   master ●✚  docker --version
+Docker version 17.09.1-ce, build 19e2cf6259bd7f027a3fff180876a22945ce4ba8
+ ~/projects/vd-rails-deploy/runner   master ●✚  uname -a
+Linux machine 4.9.71 #1-NixOS SMP Wed Dec 20 09:07:34 UTC 2017 x86_64 GNU/Linux

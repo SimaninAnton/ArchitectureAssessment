@@ -1,0 +1,11 @@
+sflxn commented on 22 Mar 2017 •
+edited
+Using compose, if I set
+COMPOSE_TLS_VERSION
+DOCKER_TLS_VERIFY
+DOCKER_CERT_PATH
+docker-compose works fine and gives me no errors. If I decide to use command line argument instead of these environment variables, I have no way to set which version of TLS I want to use. For servers that do not support TLS version 1, I get the following errors:
+ERROR: SSL error: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:590)
+Setting the COMPOSE_TLS_VERSION environment variable and using compose with TLS arguments doesn't seem to work. Compose seems to ignore it if TLS cmdline options are used.
+docker-compose binary version 1.9.0 and 1.11.2
+1

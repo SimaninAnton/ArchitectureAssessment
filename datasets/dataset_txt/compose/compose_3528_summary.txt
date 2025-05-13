@@ -1,0 +1,1 @@
+Docker-compose unable to restart its container if the master docker has been restarted

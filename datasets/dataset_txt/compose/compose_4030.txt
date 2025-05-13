@@ -1,0 +1,13 @@
+paweloczadly commented on 23 Dec 2014
+Would it be possible to create a shortcut for fig rm --force? That would be cool to type four letters less :)
+Currently, the output looks as follows:
+$ fig rm -f
+Remove stopped service containers.
+
+Usage: rm [options] [SERVICE...]
+
+Options:
+    --force   Don't ask to confirm removal
+    -v        Remove volumes associated with containers
+Thanks,
+Pawel

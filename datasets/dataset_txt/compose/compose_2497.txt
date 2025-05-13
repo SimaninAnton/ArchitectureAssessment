@@ -1,0 +1,44 @@
+iamjoshd commented on 14 Apr 2016
+I have a scenario where I have a base set of services that I want to start, but I have a large (a dozen or so) number of environments that each get configured differently.
+The base configuration looks like:
+services:
+  A:
+    image: a
+    volumes:
+      ./env-specific-config
+  B:
+    image: b
+    volumes:
+      ./env-specific-config
+  C:
+    image: c
+Then I have a set of directories for each environment (customerA, customerB, etc.) each with it's own compose file which might look something like:
+services:
+  testA:
+    image: env-specific-image
+    volumes:
+      ./env-specific-test-values
+where the directory structure has the base in the parent and then a folder for each environment and looks something like:
+  ./base-compose.yml
+  ./env1/
+    ./env-specific-compose.yml
+    ./env-specific-config/
+  ./env2/
+    ./env-specific-compose.yml
+    ./env-specific-config
+  ./env3/
+    ...
+  ./env4/
+    ...
+I'd like to do something like:
+docker-compose -f ../base-compose.yml -f env-specific-compose.yml up -d
+But the problem there is that the volume mounts are relative to the docker-compose file so the base-compose.yml file can't load the './env-specific-config' directory since it only exists in the child.
+My current options:
+Duplicate the file into each child directory
+-- terrible solution. Difficult to update and keep consistent between environments.
+Copy the file into the appropriate directory before running it.
+-- not a terrible solution. Would have to write docker-compose wrapper script(s) to set up the environments before running them. I think this sort of flies in the face of the spirit of docker-compose being a simple one-stop solution that gets checked into the repo at the location.
+Feature enhancement to specify the base-directory of the docker-compose environment rather than hardcoding it to the docker-compose file itself.
+-- this seems like a really good thing to do in general and I couldn't find it already existing on the docker-compose up call
+I might be able to do something like using Variable Substitution to set an env-var and then reference the volume in a path like .${env}/env-specific-config and then pass that in prior to invoking the compose file.
+-- this might work (I'm not even sure if it will), but it feels really hacky

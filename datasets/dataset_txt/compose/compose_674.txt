@@ -1,0 +1,40 @@
+snkshukla commented on 14 May 2018 •
+edited
+Description of the issue
+Recently, docker-compose pull has stopped showing the progress. For big images, it just takes forever to download, the progress is really helpful.
+I remember that this should only happen when you use --quiet flag with the command.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o 27 Mar 2018
+Output of "docker version"
+Client:
+Version: 18.05.0-ce-rc1
+API version: 1.37
+Go version: go1.9.5
+Git commit: 33f00ce
+Built: Thu Apr 26 00:58:56 2018
+OS/Arch: darwin/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.05.0-ce-rc1
+API version: 1.37 (minimum version 1.12)
+Go version: go1.10.1
+Git commit: 33f00ce
+Built: Thu Apr 26 01:06:49 2018
+OS/Arch: linux/amd64
+Experimental: true
+Steps to reproduce the issue
+run docker-compose pull
+Observed result
+Expected result
+It should show the progress, something like this:
+Stacktrace / full error message
+Additional information
+OS version / distribution, docker-compose install method, etc.
+macOS High Seirra version 10.13.4, docker-compose install method brew
+52

@@ -1,0 +1,3 @@
+bencevans commented on 14 Mar 2014
+Hi,
+We're using docker-osx however the port isn't then forwarded to the localhost:3800 of the physical machine. is there a way to do this automatically?

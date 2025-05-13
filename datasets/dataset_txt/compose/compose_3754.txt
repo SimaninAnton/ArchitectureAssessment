@@ -1,0 +1,3 @@
+stephengfriend commented on 3 Apr 2015
+I've spent the last couple of days dockering my app, building out docker-compose.yml and extending it in my docker-compose.dev.yml just to find out that extends isn't in the current stable version, when I tried to run the dev.yml.
+I think the most up-to-date docs should be for the most up-to-date stable release. It would help to at least clarify the version of the docs or at least mark the things that are part of the current release candidate as being such.

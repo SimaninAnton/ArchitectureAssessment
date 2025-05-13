@@ -1,0 +1,237 @@
+sevenmaxis commented on 23 Sep 2018 •
+edited
+Description of the issue
+Environment variables are not applied on container on production server but it applies to development server.
+Context information (for bug reports)
+Development server: 
+Linux desktop 4.14.70-1-MANJARO #1 SMP PREEMPT Sat Sep 15 20:38:15 UTC 2018 x86_64 GNU/Linux
+Production server:
+Linux vs03 4.4.0-112-generic #135-Ubuntu SMP Fri Jan 19 11:48:36 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+Output of "docker-compose version" 
+Development server: 
+docker-compose version 1.22.0, build unknown
+docker-py version: 3.5.0
+CPython version: 3.7.0
+OpenSSL version: OpenSSL 1.1.0i  14 Aug 2018
+ 
+Production server:
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of "docker version"
+
+Development server:
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.11
+ Git commit:        e68fc7a215
+ Built:             Fri Sep  7 11:26:59 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.11
+  Git commit:       e68fc7a215
+  Built:            Fri Sep  7 11:26:11 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+
+Production server:
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:56 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:21 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"
+
+Development server:
+services:
+  app:
+    build:
+      context: /home/megas/Work/CitrusDev/citrusdev
+      dockerfile: docker/Dockerfile-app
+    container_name: app
+    depends_on:
+    - db
+    environment:
+      DOCKER_MYSQL_ROOT_PASSWORD: xxxxxxxxxxxxxxxxx
+      DOCKER_NGINX_PORT: '3000'
+      DOCKER_RAILS_ENV: production
+      MYSQL_ROOT_PASSWORD: xxxxxxxxxxxxxxxxx
+      RAILS_ENV: production
+  db:
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: xxxxxxxxxxxxxxxxx
+    image: mysql:8.0.12
+    restart: always
+    volumes:
+    - db_data:/var/lib/mysql:rw
+  nginx:
+    build:
+      context: /home/megas/Work/CitrusDev/citrusdev
+      dockerfile: docker/Dockerfile-nginx
+    container_name: nginx
+    depends_on:
+    - app
+    ports:
+    - published: 3000
+      target: 80
+version: '3.7'
+volumes:
+  db_data: {}
+
+Production server:
+services:
+  app:
+    build:
+      context: /home/ruby/www/docker-yyyyyy.com.ua
+      dockerfile: docker/Dockerfile-app
+    container_name: app
+    depends_on:
+    - db
+    environment:
+      DOCKER_MYSQL_ROOT_PASSWORD: xxxxxxxxxxxxxxxxx
+      DOCKER_NGINX_PORT: '3000'
+      DOCKER_RAILS_ENV: production
+      MYSQL_ROOT_PASSWORD: xxxxxxxxxxxxxxxxx
+      RAILS_ENV: production
+  db:
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: xxxxxxxxxxxxxxxxx
+    image: mysql:8.0.12
+    restart: always
+    volumes:
+    - db_data:/var/lib/mysql:rw
+  nginx:
+    build:
+      context: /home/ruby/www/docker-yyyyy.com.ua
+      dockerfile: docker/Dockerfile-nginx
+    container_name: nginx
+    depends_on:
+    - app
+    ports:
+    - published: 3000
+      target: 80
+version: '3.7'
+volumes:
+  db_data: {}
+docker-compose.yml
+version: '3.7'
+
+volumes:
+  db_data:
+
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-app
+    environment:
+      RAILS_ENV: ${DOCKER_RAILS_ENV}
+      MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - db
+    container_name: app
+    env_file: .env
+
+  db:
+    image: mysql:8.0.12
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    container_name: db
+
+  nginx:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-nginx
+    depends_on:
+      - app
+    ports:
+      - ${DOCKER_NGINX_PORT}:80
+    container_name: nginx
+Steps to reproduce the issue
+I have working a docker application on my development server, then I switched to production server.
+Initially I had an .env file on production server like this:
+# Nginx
+DOCKER_NGINX_PORT=3000
+
+# Database
+DOCKER_MYSQL_ROOT_PASSWORD=<put password here>
+
+# Rails
+DOCKER_RAILS_ENV=production
+I launched docker-compose up on production server, app service didn't work, I realised that I didn't put the password, put it in. But since then I couldn't make the docker work, the environment variables are not applied to container.
+Observed result
+From production server:
+app service: printenv
+RUBYGEMS_VERSION=2.7.7
+BUNDLER_VERSION=1.16.5
+HOSTNAME=bf3f021d8e68
+RUBY_VERSION=2.5.1
+GEM_HOME=/usr/local/bundle
+RAILS_ROOT=/var/www/citrus
+PWD=/var/www/citrus
+HOME=/root
+BUNDLE_PATH=/usr/local/bundle
+BUNDLE_APP_CONFIG=/usr/local/bundle
+TERM=xterm
+BUNDLE_SILENCE_ROOT_WARNING=1
+RUBY_MAJOR=2.5
+SHLVL=1
+RUBY_DOWNLOAD_SHA256=886ac5eed41e3b5fc699be837b0087a6a5a3d10f464087560d2d21b3e71b754d
+PATH=/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+_=/usr/bin/printenv
+Expected result
+From development server:
+app service: printenv
+DOCKER_NGINX_PORT=3000
+RUBYGEMS_VERSION=2.7.7
+BUNDLER_VERSION=1.16.5
+HOSTNAME=31ea7ee7ba3c
+DOCKER_RAILS_ENV=production
+RUBY_VERSION=2.5.1
+GEM_HOME=/usr/local/bundle
+RAILS_ROOT=/var/www/citrus
+DOCKER_MYSQL_ROOT_PASSWORD=xxxxxxxxxxxxxxxxxxxxxx
+MYSQL_ROOT_PASSWORD=xxxxxxxxxxxxxxxxxxxxx
+PWD=/var/www/citrus
+HOME=/root
+BUNDLE_PATH=/usr/local/bundle
+BUNDLE_APP_CONFIG=/usr/local/bundle
+RAILS_ENV=production
+TERM=xterm
+BUNDLE_SILENCE_ROOT_WARNING=1
+RUBY_MAJOR=2.5
+SHLVL=1
+RUBY_DOWNLOAD_SHA256=886ac5eed41e3b5fc699be837b0087a6a5a3d10f464087560d2d21b3e71b754d
+PATH=/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+_=/usr/bin/printenv
+As you can see the environment variables are not applied to production server.
+My explanation is that wrong .env file somehow broke the docker and since then it can't receive environment variables.
+I've tried to reinstall docker, remove all images but all of these didn't make anything.

@@ -1,0 +1,1 @@
+Bind mounted secrets only updates with lenght of binded file

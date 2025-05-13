@@ -1,0 +1,15 @@
+ghost commented on 21 Jul 2016 •
+edited by ghost
+Im using docker-compose version 1.7.1, build 0a9ab35 to run my Rails application with docker-compose up. I notice that after some time, i get the following error in the logs.
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 58, in main
+  File "compose/cli/main.py", line 109, in perform_command
+  File "compose/cli/main.py", line 420, in logs
+  File "compose/cli/log_printer.py", line 86, in run
+  File "compose/cli/log_printer.py", line 222, in consume_queue
+ssl.SSLError: ('The read operation timed out',)
+docker-compose returned -1
+The logs stop after this but the application continues to run in the container. I have tried running my application with docker-compose up -d --timeout 3600 and then doing docker-compose logs -f, but the same thing happens. Is there any way to fix this ?
+Thanks
+2

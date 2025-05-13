@@ -1,0 +1,7 @@
+juntacorp commented on 18 Nov 2015
+We recently upgraded to docker 1.5.1 from 1.5.0. Upon doing so, our deployments are having issues. One of the immediately problems is environment vars defined in a env-file are not loaded properly when the docker-compose.yml contains an extends declaration.
+Example files attached, all of which work fine in 1.5.0.
+docker-compose-broken.yml.txt
+docker-compose-working.yml.txt
+phusion.list.txt
+phusion_image.yml.txt

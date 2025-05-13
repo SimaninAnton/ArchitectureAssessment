@@ -1,0 +1,21 @@
+ebuildy commented on 29 Mar 2016
+Consider docker-compose.yml (1.6):
+  dns:
+    image: quay.io/jpillora/dnsmasq-gui:latest
+    ports:
+    - "9053:53/udp"
+    - "9053:53"
+    - 8080:8080
+    extra_hosts:
+      - "rabbitmq: 172.28.0.3"
+      - "rabbitmq: 172.28.0.4"
+I would like to achieve a DNS round-robin for "rabbitmq", but after docker-compose up dns, here the /etc/hosts content:
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.28.0.4  rabbitmq
+172.28.5.0  c74fcb1f34ef
+I guess extra_hosts entries are de-duplicated?

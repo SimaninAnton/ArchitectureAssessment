@@ -1,0 +1,45 @@
+EvgenyOrekhov commented on 28 Apr 2018
+Description of the issue
+Docker Compose 1.21.1 installed as a container doesn't work.
+Context information (for bug reports)
+Output of "docker-compose version"
+
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "exec: \"docker-compose\": executable file not found in $PATH": unknown.
+Output of "docker version"
+
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:38 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:45 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "exec: \"docker-compose\": executable file not found in $PATH": unknown.
+Steps to reproduce the issue
+Install Docker Compose 1.21.1 as a container
+$ sudo curl -L --fail https://github.com/docker/compose/releases/download/1.21.1/run.sh -o /usr/local/bin/docker-compose
+$ sudo chmod +x /usr/local/bin/docker-compose
+Run docker-compose version
+Observed result
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "exec: \"docker-compose\": executable file not found in $PATH": unknown.
+Expected result
+1.21.1
+Stacktrace / full error message
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "exec: \"docker-compose\": executable file not found in $PATH": unknown.
+Additional information
+OS version / distribution: Ubuntu 17.10
+docker-compose install method: as a container

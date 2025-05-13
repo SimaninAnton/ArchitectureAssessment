@@ -1,0 +1,75 @@
+m-a-v commented on 11 Dec 2018 •
+edited
+Description of the issue
+There is an inconsistent behaviour between my current installed and a newer docker-compose version when using defined environment variables inside of an .env file.
+Context information (for bug reports)
+Here is the sample .env file i used.
+SERVICE_NAME=foo
+DOMAIN_NAME=docker.com
+VIRTUAL_HOST=${SERVICE_NAME}.${DOMAIN_NAME}
+Output of docker-compose version (current version)
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.2.1
+CPython version: 2.7.3
+OpenSSL version: OpenSSL 1.0.1 14 Mar 2012
+Output of docker-compose version (new version)
+docker-compose version 1.17.1, build unknown
+docker-py version: 2.5.1
+CPython version: 2.7.15rc1
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+Output of docker version (current version)
+Client:
+ Version:      17.04.0-ce
+ API version:  1.28
+ Go version:   go1.7.5
+ Git commit:   4845c56
+ Built:        Mon Apr  3 17:54:19 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.04.0-ce
+ API version:  1.28 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   4845c56
+ Built:        Mon Apr  3 17:54:19 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Output of docker version (new version)
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config (current version)
+    ...
+    environment:
+      VIRTUAL_HOST: ${SERVICE_NAME}.${DOMAIN_NAME}
+    ...
+Output of docker-compose config (new version)
+    ...
+    environment:
+      VIRTUAL_HOST: $${SERVICE_NAME}.$${DOMAIN_NAME}
+    ...
+Steps to reproduce the issue
+run docker-compose config with the .env file.
+Observed result
+run docker-compose config with the .env file.
+The older docker-compose version creates a docker-compose.yml file with the following, desired content: VIRTUAL_HOST: foo.docker.com. The newer version instead outputs the following environment variable: VIRTUAL_HOST: $${SERVICE_NAME}.$${DOMAIN_NAME}
+Expected result
+docker-compose config should create resolve the variable.
+Additional information
+Current version installed on Ubuntu 12.04
+New version installed on Ubuntu 18.04

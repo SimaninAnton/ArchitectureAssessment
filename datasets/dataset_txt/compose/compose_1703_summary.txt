@@ -1,0 +1,1 @@
+docker-compose fails if using secrets file

@@ -1,0 +1,146 @@
+Basserra commented on 30 Jul 2019 •
+edited
+I am relatively new to Linux & Docker and today is the first time I've used Docker-Compose, so please bear with me. I started using Docker-Compose today because I've been pulling my hair out trying to get ports working correctly for weeks, and it's helped. However, it is not passing a single port correctly for some reason that I don't know. I've used -p 25:25 the same format as every other port, but this one does not pass. I also noticed in my docker-compose config output, the line - 1525/tcp is very curious/alarming to me, but I don't know how this is happening. The .yml file is based off of jc21's examples, with my added "Mail Ports" and I have the config.json in the directory.
+All other reports/issues/googleSearches turn up with all ports not working or they are using only a single port. Not the same issue I'm having.
+Output of docker-compose version
+root@ubuntu0:~# docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+root@ubuntu0:~# docker version
+Client: Docker Engine - Community
+ Version:           19.03.1
+ API version:       1.40
+ Go version:        go1.12.5
+ Git commit:        74b1e89
+ Built:             Thu Jul 25 21:21:05 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.1
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.5
+  Git commit:       74b1e89
+  Built:            Thu Jul 25 21:19:41 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+root@ubuntu0:/docker/compose/proxymanager# docker-compose config
+services:
+  app:
+    depends_on:
+    - db
+    environment:
+      FORCE_COLOR: '1'
+    image: jc21/nginx-proxy-manager:latest
+    ports:
+    - 80:80/tcp
+    - 443:443/tcp
+    - 81:81/tcp
+    - 1525/tcp
+    - 143:143/tcp
+    - 465:465/tcp
+    - 587:587/tcp
+    - 993:993/tcp
+    restart: always
+    volumes:
+    - /docker/compose/proxymanager/config.json:/app/config/production.json:rw
+    - /docker/compose/proxymanager/data:/data:rw
+    - /docker/compose/proxymanager/letsencrypt:/etc/letsencrypt:rw
+  db:
+    environment:
+      MYSQL_DATABASE: npm
+      MYSQL_PASSWORD: npm
+      MYSQL_ROOT_PASSWORD: npm
+      MYSQL_USER: npm
+    image: mariadb:latest
+    restart: always
+    volumes:
+    - /docker/compose/proxymanager/data/mysql:/var/lib/mysql:rw
+version: '3.0'
+docker-compose.yml I used
+version: "3"
+services:
+  app:
+    image: jc21/nginx-proxy-manager:latest
+    restart: always
+    ports:
+    # Public HTTP(S) Ports:
+      - 80:80
+      - 443:443
+    # Admin Web Port:
+      - 81:81
+    # Mail Ports:
+      - 25:25
+      - 143:143
+      - 465:465
+      - 587:587
+      - 993:993
+    volumes:
+    # Make sure this config.json file exists as per instructions above:
+      - ./config.json:/app/config/production.json
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - db
+    environment:
+    # if you want pretty colors in your docker logs:
+    - FORCE_COLOR=1
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "npm"
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "npm"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+This is on newly spun up VMs on both KVM & Xen, Ubuntu Server 18.04 LTS.
+I chose all default options during install. Did update/full-upgrade. Installed openssh-server. Installed Docker-CE & Docker-Compose following these instructions. Then created the project directory @/docker/compose/proxymanager with said .yml & .json files. Also, I've been using netstat -tulpn for checking the host, as well as a port scanner from my phone; clearly port 25 is the only one missing.
+root@ubuntu0:~# cat /etc/*-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=18.04
+DISTRIB_CODENAME=bionic
+DISTRIB_DESCRIPTION="Ubuntu 18.04.2 LTS"
+NAME="Ubuntu"
+VERSION="18.04.2 LTS (Bionic Beaver)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.04.2 LTS"
+VERSION_ID="18.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=bionic
+UBUNTU_CODENAME=bionic
+root@ubuntu0:~# netstat -tulpn
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      763/systemd-resolve
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      897/sshd
+tcp6       0      0 :::143                  :::*                    LISTEN      12527/docker-proxy
+tcp6       0      0 :::80                   :::*                    LISTEN      12553/docker-proxy
+tcp6       0      0 :::81                   :::*                    LISTEN      12540/docker-proxy
+tcp6       0      0 :::465                  :::*                    LISTEN      12488/docker-proxy
+tcp6       0      0 :::22                   :::*                    LISTEN      897/sshd
+tcp6       0      0 :::443                  :::*                    LISTEN      12514/docker-proxy
+tcp6       0      0 :::993                  :::*                    LISTEN      12463/docker-proxy
+tcp6       0      0 :::32770                :::*                    LISTEN      12501/docker-proxy
+tcp6       0      0 :::587                  :::*                    LISTEN      12475/docker-proxy
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           763/systemd-resolve
+udp        0      0 10.10.10.220:68         0.0.0.0:*                           740/systemd-network

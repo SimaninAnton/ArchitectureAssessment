@@ -1,0 +1,4 @@
+eriksenonline commented on 26 Dec 2018
+Symfony just made a change to their .env file structure. They use .env and .env.local The .env.local is not added to git and it used for local settings/overrides.
+As you do with the docker-compose-override.yml you could make a .env.override file to. This is much simpler for users to manage compared to for example using docker-compose-override.yml for local changes.
+Many developers need to change local IP, port etc to make the containers run on their machine and this would help a lot. I think the way symfony did it is pretty ok.

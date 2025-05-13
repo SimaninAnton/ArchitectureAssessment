@@ -1,0 +1,4 @@
+melissachang commented on 11 Sep 2018
+I'm trying to pass an environment variable into docker-compose up.
+The documention mentions docker-compose run -e. But the FAQ says we should use up not run. docker-compose up -e isn't supported.
+@malathi13

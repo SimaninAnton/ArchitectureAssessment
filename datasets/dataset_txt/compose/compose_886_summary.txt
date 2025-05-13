@@ -1,0 +1,1 @@
+"Couldn't find `docker` binary" when using run.sh 1.19.0

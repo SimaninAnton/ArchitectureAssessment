@@ -1,0 +1,1 @@
+tests.integration.service_test test_scale_with_custom_container_name_outputs_warning

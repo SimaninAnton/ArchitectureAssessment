@@ -1,0 +1,1 @@
+docker-compose complains about invalid TLS configuration

@@ -1,0 +1,44 @@
+antony commented on 19 Jan 2018
+➜  projectname docker-compose -v
+docker-compose version 1.18.0, build 8dd22a9
+Having a strange problem when simply changing a volume's mount name.
+My configuration looks like this:
+version: '3.4'
+services:
+  cygnetise:
+    image: someorg/projectname
+    volumes:
+      - type: volume
+        source: projectname_client
+        target: /app
+  nginx:
+    image: someorg/projectname-nginx
+    ports:
+      - target: 80
+        published: 8080
+    volumes:
+      - type: volume
+        source: projectname_client
+        target: /mnt/projectname_client
+        read_only: true
+volumes:
+  projectname_client:
+  projectname_admin:
+If I change the nginx application's target location to /home/app/projectname_client I get the following error:
+➜  projectname docker-compose -f docker-compose.local.yml up
+Recreating 12396073747d_projectname_nginx_1 ... 
+projectname_projectname_1 is up-to-date
+
+ERROR: for 12396073747d_projectname_nginx_1  'NoneType' object has no attribute 'get'
+
+ERROR: for nginx  'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/main.py", line 959, in up
+  File "compose/project.py", line 479, in up
+  File "compose/parallel.py", line 80, in parallel_execute
+AttributeError: 'NoneType' object has no attribute 'get'
+Failed to execute script docker-compose
+Not sure why this would happen, and the error message doesn't really provide any useful pointers unfortunately.

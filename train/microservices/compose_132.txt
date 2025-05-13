@@ -1,0 +1,382 @@
+error10 commented on 10 Jul 2019
+Description of the issue
+Several unit tests fail with an error regarding deprecated and removed functionality in pytest 4. It is not currently possible to run some tests with pytest 4 or later.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896
+Output of docker version
+Not applicable
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+Not applicable
+Steps to reproduce the issue
+Create new virtualenv with python 3.7, pip install -r requirements.txt
+Run pip install pytest
+Run py.test --verbose tests/unit
+Observed result
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+Expected result
+These tests should pass.
+Stacktrace / full error message
+=================================== FAILURES ===================================
+________________ ConfigTest.test_load_mixed_extends_resolution _________________
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+____ ConfigTest.test_load_with_multiple_files_and_extends_in_override_file _____
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+______________________ ConfigTest.test_load_yaml_with_bom ______________________
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+__________________ ConfigTest.test_load_yaml_with_yaml_error ___________________
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+_____________ ExtendsTest.test_extends_with_defined_version_passes _____________
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+___________________ ExtendsTest.test_extends_with_depends_on ___________________
+tests/unit/config/config_test.py:4774: in test_extends_with_depends_on
+    tmpdir = py.test.ensuretemp('test_extends_with_depends_on')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+___________ ExtendsTest.test_extends_with_environment_and_env_files ____________
+tests/unit/config/config_test.py:4664: in test_extends_with_environment_and_env_files
+    tmpdir = py.test.ensuretemp('test_extends_with_environment')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4774: in test_extends_with_depends_on
+    tmpdir = py.test.ensuretemp('test_extends_with_depends_on')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+____________ ExtendsTest.test_extends_with_mixed_versions_is_error _____________
+tests/unit/config/config_test.py:4728: in test_extends_with_mixed_versions_is_error
+    tmpdir = py.test.ensuretemp('test_extends_with_mixed_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+/usr/lib64/python3.7/unittest/mock.py:1621: in _inner
+    return f(*args, **kw)
+tests/unit/config/config_test.py:4664: in test_extends_with_environment_and_env_files
+    tmpdir = py.test.ensuretemp('test_extends_with_environment')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4774: in test_extends_with_depends_on
+    tmpdir = py.test.ensuretemp('test_extends_with_depends_on')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+_____________________ ExtendsTest.test_extends_with_ports ______________________
+tests/unit/config/config_test.py:4807: in test_extends_with_ports
+    tmpdir = py.test.ensuretemp('test_extends_with_ports')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4728: in test_extends_with_mixed_versions_is_error
+    tmpdir = py.test.ensuretemp('test_extends_with_mixed_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+/usr/lib64/python3.7/unittest/mock.py:1621: in _inner
+    return f(*args, **kw)
+tests/unit/config/config_test.py:4664: in test_extends_with_environment_and_env_files
+    tmpdir = py.test.ensuretemp('test_extends_with_environment')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4774: in test_extends_with_depends_on
+    tmpdir = py.test.ensuretemp('test_extends_with_depends_on')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+__________________ ExtendsTest.test_extends_with_security_opt __________________
+tests/unit/config/config_test.py:4829: in test_extends_with_security_opt
+    tmpdir = py.test.ensuretemp('test_extends_with_ports')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4807: in test_extends_with_ports
+    tmpdir = py.test.ensuretemp('test_extends_with_ports')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4728: in test_extends_with_mixed_versions_is_error
+    tmpdir = py.test.ensuretemp('test_extends_with_mixed_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+/usr/lib64/python3.7/unittest/mock.py:1621: in _inner
+    return f(*args, **kw)
+tests/unit/config/config_test.py:4664: in test_extends_with_environment_and_env_files
+    tmpdir = py.test.ensuretemp('test_extends_with_environment')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4774: in test_extends_with_depends_on
+    tmpdir = py.test.ensuretemp('test_extends_with_depends_on')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+_________________ EnvironmentTest.test_env_vars_from_file_bom __________________
+tests/unit/config/environment_test.py:49: in test_env_vars_from_file_bom
+    tmpdir = pytest.ensuretemp('env_file')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4829: in test_extends_with_security_opt
+    tmpdir = py.test.ensuretemp('test_extends_with_ports')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4807: in test_extends_with_ports
+    tmpdir = py.test.ensuretemp('test_extends_with_ports')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4728: in test_extends_with_mixed_versions_is_error
+    tmpdir = py.test.ensuretemp('test_extends_with_mixed_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+/usr/lib64/python3.7/unittest/mock.py:1621: in _inner
+    return f(*args, **kw)
+tests/unit/config/config_test.py:4664: in test_extends_with_environment_and_env_files
+    tmpdir = py.test.ensuretemp('test_extends_with_environment')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4774: in test_extends_with_depends_on
+    tmpdir = py.test.ensuretemp('test_extends_with_depends_on')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+______________ EnvironmentTest.test_env_vars_from_file_whitespace ______________
+tests/unit/config/environment_test.py:58: in test_env_vars_from_file_whitespace
+    tmpdir = pytest.ensuretemp('env_file')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/environment_test.py:49: in test_env_vars_from_file_bom
+    tmpdir = pytest.ensuretemp('env_file')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4829: in test_extends_with_security_opt
+    tmpdir = py.test.ensuretemp('test_extends_with_ports')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4807: in test_extends_with_ports
+    tmpdir = py.test.ensuretemp('test_extends_with_ports')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4728: in test_extends_with_mixed_versions_is_error
+    tmpdir = py.test.ensuretemp('test_extends_with_mixed_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+/usr/lib64/python3.7/unittest/mock.py:1621: in _inner
+    return f(*args, **kw)
+tests/unit/config/config_test.py:4664: in test_extends_with_environment_and_env_files
+    tmpdir = py.test.ensuretemp('test_extends_with_environment')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4774: in test_extends_with_depends_on
+    tmpdir = py.test.ensuretemp('test_extends_with_depends_on')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:4750: in test_extends_with_defined_version_passes
+    tmpdir = py.test.ensuretemp('test_extends_with_defined_version')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1744: in test_load_yaml_with_yaml_error
+    tmpdir = py.test.ensuretemp('invalid_yaml_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:1757: in test_load_yaml_with_bom
+    tmpdir = py.test.ensuretemp('bom_yaml')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:759: in test_load_with_multiple_files_and_extends_in_override_file
+    tmpdir = py.test.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+tests/unit/config/config_test.py:794: in test_load_mixed_extends_resolution
+    tmpdir = pytest.ensuretemp('config_test')
+venv/lib/python3.7/site-packages/_pytest/tmpdir.py:98: in ensuretemp
+    warnings.warn(PYTEST_ENSURETEMP, stacklevel=2)
+E   pytest.RemovedInPytest4Warning: pytest/tmpdir_factory.ensuretemp is deprecated, 
+E   please use the tmp_path fixture or tmp_path_factory.mktemp
+Additional information
+Tested on Fedora 30, with docker-compose built from source tarball. This issue surfaced when attempting to package the latest version for Fedora 31 which uses a later version of pytest than is listed in requirements-dev.txt.

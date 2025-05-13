@@ -1,0 +1,1 @@
+regression in 1.5.2 Ctrl+C force stop is not working

@@ -1,0 +1,1 @@
+docker-compose scale - how to get scale # in YAML file?

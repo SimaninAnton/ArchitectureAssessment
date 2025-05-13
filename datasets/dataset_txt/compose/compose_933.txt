@@ -1,0 +1,9 @@
+adamwalach commented on 17 Jan 2018
+Hi
+I noticed that the pid option in version 3 of compose file has only one allowed value "host":
+https://docs.docker.com/compose/compose-file/#pid
+In ver2 (https://docs.docker.com/compose/compose-file/compose-file-v2/#pid) it is possibile to use "container" and "service" as well.
+I created ver3 compose file and I see that it's still possible to use "pid: "service:foobar"" - it works exactly the same as in ver2.
+The question is: are the "container" and "service" keywords still supported and this is just a problem with the documentation or is this functionality deprecated?
+docker: 17.12.0-ce
+docker-compose version 1.18.0, build 8dd22a9

@@ -1,0 +1,1 @@
+[Usability/Feature Request] Do something better than failing with a cryptic ImportError backtrace when websocket package conflicts with distribution package

@@ -1,0 +1,33 @@
+dw72 commented on 13 Mar 2015 •
+edited
+When i do docker-compose up:
+Creating kurs_mysql_1...
+Traceback (most recent call last):
+File "", line 3, in
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 445, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 184, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 259, in recreate_containers
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 227, in create_container
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 453, in _get_container_create_options
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 642, in merge_environment
+ValueError: dictionary update sequence element #0 has length 1; 2 is required
+My docker-compose.yml file:
+mysql:
+image: mysql
+expose:
+- "3306"
+environment:
+MYSQL_ROOT_PASSWORD=qwerqwer
+wp:
+image: wordpress
+links:
+- mysql:mysql
+ports:
+- "80:80"
+volumes:
+- ./html:/var/www/html

@@ -1,0 +1,6 @@
+Contributor
+chernjie commented on 29 Apr 2015
+https://test.docker.com/builds/Linux/x86_64/docker-1.6.0-rc4 returns 404
+Jenkins is failing again at
+Step 3 : RUN set -ex;     curl https://test.docker.com/builds/Linux/x86_64/docker-1.6.0-rc4 -o /usr/local/bin/docker-1.6.0-rc4;     chmod +x /usr/local/bin/docker-1.6.0-rc4
+It was working before on https://jenkins.dockerproject.com/job/Compose-PRs/

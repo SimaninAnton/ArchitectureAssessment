@@ -1,0 +1,12 @@
+tomwidmer commented on 15 Sep 2017 •
+edited
+Currently, when specifying a build in a compose file there's no way (that I know of) to reference a particular target in a multi-stage build.
+You might want to do this if you are using compose for running a local development stack. If an early stage of your build pipeline sets up an image that is suitable for live-development purposes (as well as build), but the later stage(s) crunch it down to a minimal production image, so you can't use the Dockerfile for your live-dev image. Currently, you might instead create 2 docker files, which is more complex and worse to manage.
+Adding a 'target' yml arg to build would resolve this, as per docker build. e.g.
+Dockerfile:
+FROM debian AS build-env
+...
+docker-compose.yml:
+myservice:
+  build: .
+    target: build-env

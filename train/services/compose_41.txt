@@ -1,0 +1,46 @@
+jessesimpson36 commented on 5 Dec 2019
+Description of the issue
+version 1.25.0 docker-compose pull only pulls 3 out of the 5 images in my docker-compose file. Version 1.24.0 does not have this issue.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0, build b42d419
+docker-py version: 4.1.0
+CPython version: 2.7.15+
+OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
+Output of docker version
+Client:
+ Version:           18.06.3-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        d7080c1
+ Built:             Wed Feb 20 02:29:24 2019
+ OS/Arch:           linux/ppc64le
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.3-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       d7080c1
+  Built:            Wed Feb 20 02:27:31 2019
+  OS/Arch:          linux/ppc64le
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+Cannot provide this. This includes private repositories, passwords, environment variables, and lists of exposed ports.
+Steps to reproduce the issue
+write a docker-compose file of 5 images
+run docker-compose pull
+the Pulling <service>... dialogue may ignore images. If it does, this error is successfully reproduced.
+Observed result
+3 out of 5 images are pulled
+Expected result
+All images are pulled
+Stacktrace / full error message
+None,  docker-compose pull does not pull all of the images I need.
+Additional information
+When I run docker-compose pull <ignored-service-name>, the image is pulled successfully. without that argument, it is not.
+docker-compose config --services prints all of the service names, and docker-compose config does not produce any errors, and v1.24.0 does not have this issue, so my docker-compose file should still be valid.
+OS version / distribution, docker-compose install method, etc.
+apt install docker-compose

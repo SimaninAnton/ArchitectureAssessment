@@ -1,0 +1,1 @@
+Duplicate logging on docker-compose up

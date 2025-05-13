@@ -1,0 +1,27 @@
+yashgt commented on 26 Nov 2016 •
+edited by shin-
+I can define a service with a volume section as:
+my_server_1:
+  image: yashgt/proc1
+  volumes:
+    - serverlog:/log
+At the top level I have :
+volumes:
+  serverlog:
+    driver: local
+The physical files go to /var/lib/.... If I want to the files to go to a fixed location on the VM, I need to provide it under the volumes sections of the service as :
+my_server_1:
+  image: yashgt/proc1
+  volumes:
+    - /mydata/serverlog:/log
+For each new service that wants to write to the same directory, I need to repeat the path:
+my_server_2:
+  image: yashgt/proc1
+  volumes:
+    - /mydata/serverlog:/log
+It will help if we are allowed to provide the path at the top level volume definition such as :
+volumes:
+  serverlog:
+    driver: local
+    path : /mydata/serverlog
+1

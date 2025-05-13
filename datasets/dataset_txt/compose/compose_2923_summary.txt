@@ -1,0 +1,1 @@
+Logs still written to stdout even when alternate driver specified

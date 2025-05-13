@@ -1,0 +1,1 @@
+concurrent calls to docker-compose with different services creates disjoint network for each service

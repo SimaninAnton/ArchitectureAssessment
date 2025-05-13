@@ -1,0 +1,4 @@
+dexterddit commented on 19 Feb 2016
+Hi ,
+I`m trying to create persistent volumes in a docker-compose file using a bunch of folders on the host system .
+Is this possible ? If yes could someone tell me how to do it ?

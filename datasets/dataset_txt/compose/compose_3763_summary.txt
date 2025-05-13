@@ -1,0 +1,1 @@
+`extends` to not require separate file

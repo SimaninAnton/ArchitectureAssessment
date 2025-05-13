@@ -1,0 +1,2 @@
+sourav82 commented on 2 Feb 2015
+I have a Swarm cluster and want to make use of docker-compose to run containers across the cluster. I need to pass the Swarm manager node using -H with docker-compose. Is there any such option with docker-compose?

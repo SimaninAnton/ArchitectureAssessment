@@ -1,0 +1,1 @@
+Why does the v3 format apparently cripple the use of limits when not using docker stack?

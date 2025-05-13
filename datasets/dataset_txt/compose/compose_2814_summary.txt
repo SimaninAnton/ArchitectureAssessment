@@ -1,0 +1,1 @@
+SWARM.md should mention overlays

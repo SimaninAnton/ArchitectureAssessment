@@ -1,0 +1,63 @@
+scirlig-ellation commented on 17 Jan 2019
+It's always annoying when I want to create a bind mount in order to synchronize local source code I'm editing, with code from docker container and all of the generated files.
+Whether it's vendor directory or a binary file which eventually is used as an ENTRYPOINT or CMD they are getting removed when the bind mount is done. And since these files/directories are not available on local machine to avoid copying different binaries for different OS & ARCH inside linux container, docker removes them inside container as well when binding the source from local with the one from container
+A solution to this might be to to do the bind mount first then use the snapshot fs which was created when the image was build, which will first bind mount the sources then allow the scripts which generate the binaries/directories to execute without being removed
+Another solution would be to indicate in the volumes section some sort of exclude list when binding mount for the first time, somethings that would look like this:
+volumes:
+      - .:/usr/app:
+          exclude:
+            - fileA
+            - fileB
+            - dirA/
+As a workaround to avoid this situation with volumes instead of running the generated binary in CMD or ENTRYPOINT we run some sort of shell script which generates again the binary and then executes the binary and now the CMD/ENTRYPOINT is referencing the shell script.
+However would be a nice option with for initial bind mount some files which we choose would not be overwritten/removed in order to sync with local source code
+docker-compose.yaml
+version: "3.7"
+
+services:
+  redis:
+    image: redis
+    restart: always
+    volumes:
+      - redis-data:/data
+    networks:
+      - visits
+    command: redis-server --appendonly yes
+  visits-app:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/usr/app
+    networks:
+      - visits
+    
+
+    # if this custom command is missing then we get an error that there is no node_modules
+    # but in Dockerfile we indeed genereated node_modules by running npm install
+    command: sh /usr/app/init.sh
+
+networks:
+  visits:
+
+volumes:
+  redis-data:
+init.sh
+npm install
+npm start
+Dockerfile
+FROM node:alpine
+
+ENV PORT 8080
+
+EXPOSE $PORT
+
+WORKDIR /usr/app
+
+COPY ./package.json ./
+RUN npm install
+COPY . .
+
+CMD npm start
+Thank you for the awesome project and let me know if such a feature is a valid one and does not come against docker philosophy or if you need any help in implementing it

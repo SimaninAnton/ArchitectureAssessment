@@ -1,0 +1,120 @@
+derakhshanfar commented on 17 Jul 2019
+Description of the issue
+I have multiple docker-compose files and when I set restart policy on the original file, it doesn't work, but if I set on local compose work it works. I have the same issue with environment
+Context information (for bug reports)
+Output of docker-compose version
+1.17.1
+Output of docker version
+18.09.7
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+version: "3"
+services:
+  nginx:
+    build: "./nginx"
+    restart: always
+    links:
+      - web1:web1
+      - pgbackups:pgbackups
+      - api:api
+    ports:
+      - 80:80
+    depends_on:
+      - web1
+      - pgbackups
+      - api
+      - pgadmin
+    networks:
+      - wpsite
+  redis:
+    image: redis
+    command: redis-server --requirepass thisistheredispassword
+    networks:
+      - wpsite
+  api:
+    build: "./test"
+    restart: always  // this line will be ignore but if iset it on local file, it works
+    environment:
+      - TEST=test // this line will be ignore but if iset it on local file, it works
+    volumes:
+      - ./test:/var/www/test/
+      - /var/www/test/node_modules
+    expose:
+      - 12345
+    depends_on:
+      - redis
+      - db
+    networks:
+      - wpsite
+  web1:
+    build: "./test"
+    command: npm run build
+    links:
+      - api:api
+    volumes:
+      - ./test:/var/www/test/
+      - /var/www/test/node_modules
+    expose:
+      - 8080
+    depends_on:
+      - db
+    networks:
+      - wpsite
+  db:
+    image: postgres:11.2-alpine
+    restart: always
+    env_file:
+      - postgres.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    expose:
+      - 5432
+    networks:
+      - wpsite
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./pgadmin:/root/.pgadmin    
+    networks:
+      - wpsite
+    ports:
+      - "5050:80"
+  pgbackups:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    env_file:
+      - pgbackups.env
+    volumes:
+      - ./pgbackups:/backups
+    depends_on:
+      - db
+    networks:
+      - wpsite
+networks:
+  wpsite:
+volumes:
+  postgres:
+local config:
+version: "3"
+services:
+  api:
+    command: npm run dev
+    env_file:
+      - api.env
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "12345:12345"
+      - "9229:9229"
+  web1:    
+    env_file:
+      - web.env
+    ports:
+      - "9230:9229"
+    environment:
+      - NODE_ENV=development
+Additional information
+OS version / distribution, docker-compose install method, etc.

@@ -1,0 +1,53 @@
+alvinr commented on 8 Aug 2015
+Problem
+Its possible to exhaust system resources by doing something like
+$ docker-compose scale web=1000
+It appears that we try to execute this request in parallel, causing the system limit of open files (in this case) to be exceed.
+Exception in thread Thread-5:
+Traceback (most recent call last):
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 763, in run
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.utils", line 31, in inner_execute_function
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 220, in <lambda>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 173, in create_and_start
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 268, in create_container
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 579, in _get_container_create_options
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 464, in config_hash
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 469, in config_dict
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 295, in image
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.utils.decorators", line 20, in wrapped
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 489, in inspect_image
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 86, in _get
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 477, in get
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 465, in request
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 573, in send
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 370, in send
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.packages.urllib3.connectionpool", line 544, in urlopen
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.packages.urllib3.connectionpool", line 341, in _make_request
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.packages.urllib3.connectionpool", line 761, in _validate_conn
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.packages.urllib3.connection", line 238, in connect
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.packages.urllib3.util.ssl_", line 277, in ssl_wrap_socket
+IOError: [Errno 24] Too many open files
+Solution
+Possible solutions
+inspect the system limits and work within those limits
+limit the parallelization that compose uses
+Workaround
+Batch the scaling from the command line e.g. docker-compose scale web=10
+Environment
+$ docker-compose --version
+docker-compose version: 1.4.0rc3
+$ uname -a
+Darwin vero.local 14.4.0 Darwin Kernel Version 14.4.0: Thu May 28 11:35:04 PDT 2015; root:xnu-2782.30.5~1/RELEASE_X86_64 x86_64
+$ ulimit -a
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+file size               (blocks, -f) unlimited
+max locked memory       (kbytes, -l) unlimited
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 256
+pipe size            (512 bytes, -p) 1
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 709
+virtual memory          (kbytes, -v) unlimited

@@ -1,0 +1,4 @@
+vieux commented on 18 Feb 2016
+We currently have a bug in swarm + compose.
+It's going to be fixed in swarm but in the meantime I'm wondering why compose is sending the host config on container start.
+It has been deprecated a year ago, it should only be send on create now.

@@ -1,0 +1,20 @@
+igrcic commented on 23 May 2016
+Hi everyone,
+i am trying to start multiple containers on a 3 node docker swarm (bug1, bug2, bug3)
+Issuing "docker run" 3 times always places containers on three different nodes.
+docker run -d -p 3333:3333 --net swarm_network --restart=always image_name
+4th time I receive an error, which is logical while we cannot use the same ports twice:
+docker: Error response from daemon: Unable to find a node that satisfies the following conditions 
+[port 3333 (Bridge mode)].
+See 'docker run --help'.
+But docker-compose scale always tries to place 2 containers on the same node (always using just two nodes, and are always bug2 and bug3 nodes - bug1 is primary)
+Creating and starting app_app_1 ... done
+Creating and starting app_app_2 ... done
+Creating and starting app_app_3 ... error
+
+ERROR: for app_app_3  Error response from daemon: container 8ca37...976d: endpoint join on GW Network failed: driver failed programming external connectivity on endpoint gateway_8ca37ae08d32 (01b19...52974): Bind for 0.0.0.0:3333 failed: port is already allocated
+I still havent checked swarm filters and playing with affinites, but I have a feeling that docker run always does the right thing (spreading the containers over all nodes), while docker-compose scale always chooses the slave nodes.
+Is there a way one can influence container affinities relative to nodes?
+Thank you,
+Ivan
+3

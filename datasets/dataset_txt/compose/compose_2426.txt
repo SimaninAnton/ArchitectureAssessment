@@ -1,0 +1,13 @@
+ujovlado commented on 5 May 2016
+I think that the lookup for .env file should be really lookup for file, thus directory should be ignored.
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 57, in main
+  File "compose/cli/main.py", line 105, in perform_command
+  File "compose/cli/command.py", line 23, in project_from_options
+  File "compose/config/environment.py", line 57, in from_env_file
+  File "compose/config/environment.py", line 53, in _initialize
+  File "compose/config/environment.py", line 32, in env_vars_from_file
+  File ".tox/py27/lib/python2.7/codecs.py", line 878, in open
+IOError: [Errno 21] Is a directory: u'./.env'
+docker-compose returned -1

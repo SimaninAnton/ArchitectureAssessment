@@ -1,0 +1,8 @@
+Contributor
+aanand commented on 4 Dec 2015
+Right now we have log_driver and log_opt. It'd be cleaner to have them both under a logging key:
+logging:
+  driver: syslog
+  options:
+    syslog-address: "tcp://192.168.0.42:123"
+An additional advantage: overriding a service's logging option would be cleaner, as you only have to override a single key (you're never going to want to override log_driver but not log_opt, because options are driver-specific).

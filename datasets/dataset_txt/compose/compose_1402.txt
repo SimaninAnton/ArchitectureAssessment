@@ -1,0 +1,17 @@
+MarStarck commented on 8 Jun 2017
+I create a virtual env with requests 2.11.1 installed and activate it:
+$ which python
+/home/gg/libra/venv/bin/python
+$ which docker-compose
+/home/gg/libra/venv/bin/docker-compose
+but it still use packages in /usr/local/bin. The requests pkg is old:
+$ docker-compose up
+Traceback (most recent call last):
+File "/usr/local/bin/docker-compose", line 7, in
+from compose.cli.main import main
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 17, in
+from . import errors
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/errors.py", line 15, in
+from requests.packages.urllib3.exceptions import ReadTimeoutError
+ImportError: cannot import name ReadTimeoutError
+How can I fix this?

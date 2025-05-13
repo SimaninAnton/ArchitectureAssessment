@@ -1,0 +1,8 @@
+bobbydeveaux commented on 6 Jul 2016
+Having issues creating a bundle from docker compose. Can't use the top level networks parameter due to it being ignored.
+If I use a service level networks parameter it says the network doesn't exist...
+If I leave it out, it uses default and doesn't create and overlay network.
+I can create an overlay network, and start 2 services manually, but not with docker-compose bundle.
+How can I get the overlay network into the bundle file?
+How can I specify how many replicas in the docker-compose yml so that, too, goes into the bundle file?
+Will post my docker composer file shortly but if anyone has any tips in the meantime.. :) thanks

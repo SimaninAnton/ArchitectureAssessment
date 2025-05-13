@@ -1,0 +1,77 @@
+alcohol commented on 29 Aug 2017
+The CHANGELOG does not indicate any breaking changes introduced since 1.15.0, however it now chokes on our docker-compose.yml.
+rob@macbookpro.local > docker --version
+Docker version 17.07.0-ce-rc4, build fe143e3
+rob@macbookpro.local > docker-compose --version
+docker-compose version 1.16.0-rc1, build 9bea70a
+rob@macbookpro.local > docker-compose up --build -d
+Building app
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 119, in perform_command
+  File "compose/cli/main.py", line 936, in up
+  File "compose/project.py", line 430, in up
+  File "compose/service.py", line 301, in ensure_image_exists
+  File "compose/service.py", line 918, in build
+  File "site-packages/docker/api/build.py", line 148, in build
+  File "site-packages/docker/utils/build.py", line 13, in tar
+  File "site-packages/docker/utils/build.py", line 38, in exclude_paths
+  File "site-packages/docker/utils/build.py", line 113, in get_paths
+  File "site-packages/docker/utils/build.py", line 94, in should_check_directory
+  File "site-packages/docker/utils/build.py", line 60, in should_include
+  File "site-packages/docker/utils/build.py", line 143, in match_path
+  File "site-packages/docker/utils/fnmatch.py", line 44, in fnmatch
+  File "site-packages/docker/utils/fnmatch.py", line 56, in fnmatchcase
+  File "site-packages/docker/utils/fnmatch.py", line 78, in translate
+IndexError: string index out of range
+Failed to execute script docker-compose
+rob@macbookpro.local > cat docker-compose.yml
+version: '3.3'
+
+services:
+
+  # stores session cache, etc
+  redis:
+    image: redis:4.0-alpine
+    networks:
+      - backend
+
+  # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.1
+    networks:
+      - backend
+
+  # nginx static assets container
+  assets:
+    build: ./frontend/
+    networks:
+      - router
+      - frontend
+
+  # php-fpm container that runs the application code
+  app:
+    build: ./backend/
+    env_file: .env
+    volumes:
+      - ./backend:/opt/app
+    networks:
+      - router
+      - backend
+
+  # nginx container that routes traffic to either the assets or fpm container
+  router:
+    build: ./router/
+    env_file: .env
+    ports:
+      - "${ROUTER_PORT:-8081}:80"
+    volumes:
+      - ./backend:/opt/app
+    networks:
+      - router
+
+networks:
+  router:
+  frontend:
+  backend:

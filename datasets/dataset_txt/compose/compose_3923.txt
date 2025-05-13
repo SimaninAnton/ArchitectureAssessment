@@ -1,0 +1,10 @@
+philostler commented on 13 Feb 2015
+You are able to add a environment section to an image to assign environment variables to it.
+What I would like to be able to do is set a env var across all my containers, e.g.
+enviroment:
+  app_env: staging
+app:
+  image: app-one
+other:
+  image: app-other
+I guess this is a feature request as I believe this can't be done atm?

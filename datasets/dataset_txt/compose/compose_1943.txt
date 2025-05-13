@@ -1,0 +1,27 @@
+DhairyashilBhosale commented on 9 Nov 2016
+Hi I am beginner in elasticsearch, I am trying to run elasticsearch on ubuntu14.04 .
+elasticsearch-docker.yml
+`
+  version "2"
+  services:  
+    els:
+      image: elasticsearch:latest
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - "./config/elasticsearch.yml:/etc/elasticsearch/config/elasticsearch.yml"          
+    #command: bash -c "service elasticsearch start" # Command is now working in version 2
+    tty: true`
+As per above yml file without 'command' this is working, means without command it is pulling elastic search image if it is not there. $ docker-compose up working fine.
+$ docker pa -a
+CONTAINER ID COMMAND CREATED STATUS PORTS b5cb2s34d elasticsearch:latest 10 sec up 0.0.0.0:9200-->9200/tcp, 0.0.0.0:9300-->9300/tcp
+It showing all port forwarding is working fine.
+I didn't modified or made changes in /config/elasticsearch.yml
+but while testing it not working:
+http://localhost:9200 or using curl
+Its not working because elasticsearch service is not running inside docker container but whenever I coment out command tag in docker-compose.yml file i.e. command: bash -c "service elasticsearch start" then its set all port forwarding and up the container but service inside container i.e 'elasticsearch service' is not running.
+So how to Explicitly pass command i.e. command: bash -c "service elasticsearch start" in docker-compose.yml
+so how to run only Elasticsearch by using docker-compose.yml using version 2**?**
+Docker-compose version : 1.9
+Docker version: 1.12

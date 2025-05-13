@@ -1,0 +1,1 @@
+fig.yml reference should be clearer

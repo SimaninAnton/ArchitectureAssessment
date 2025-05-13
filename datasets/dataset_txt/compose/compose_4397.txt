@@ -1,0 +1,50 @@
+dduportal commented on 19 Feb 2014
+Hi, after some tries to install and run Fig on my centos 6 x64 box, i'm unable to run it on this box.
+Briefly, is my problem :
+[vagrant@centos-6-x64-docker ~]$ fig --version
+Traceback (most recent call last):
+  File "/usr/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.2.2', 'console_scripts', 'fig')()
+  File "/usr/lib/python2.6/site-packages/fig/cli/main.py", line 27, in main
+    console_handler = logging.StreamHandler(stream=sys.stderr)
+TypeError: __init__() got an unexpected keyword argument 'stream'
+My configuration :
+[vagrant@centos-6-x64-docker ~]$ cat /etc/system-release
+CentOS release 6.5 (Final)
+[vagrant@centos-6-x64-docker ~]$ python --version
+Python 2.6.6
+[vagrant@centos-6-x64-docker ~]$ docker -v
+Docker version 0.8.0, build cc3a8c8/0.8.0
+Install procedure :
+At first, i installed pip from standard yum, and then install fig from pip
+[vagrant@centos-6-x64-docker ~]$ sudo yum install -y python-pip
+....
+[vagrant@centos-6-x64-docker ~]$ pip --version
+pip 1.3.1 from /usr/lib/python2.6/site-packages (python 2.6)
+[vagrant@centos-6-x64-docker ~]$ sudo pip install -U fig
+...
+<Note that the log complains about libyaml not found>
+...
+[vagrant@centos-6-x64-docker ~]$ fig --version
+Traceback (most recent call last):
+  File "/usr/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.2.2', 'console_scripts', 'fig')()
+  File "/usr/lib/python2.6/site-packages/fig/cli/main.py", line 27, in main
+    console_handler = logging.StreamHandler(stream=sys.stderr)
+TypeError: __init__() got an unexpected keyword argument 'stream'
+Well, due to libyaml complains, i managed to reinstall the box and adding somme useful packages (python headers, libyaml and its headers to get rid of these messages and ensure all is fine, but same sad ending :
+[vagrant@centos-6-x64-docker ~]$ sudo yum -y install python-pip python-devel git libyaml libyaml-devel
+....
+[vagrant@centos-6-x64-docker ~]$ pip --version
+pip 1.3.1 from /usr/lib/python2.6/site-packages (python 2.6)
+[vagrant@centos-6-x64-docker ~]$ sudo pip install -U fig
+...
+[vagrant@centos-6-x64-docker ~]$ fig --version
+Traceback (most recent call last):
+  File "/usr/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.2.2', 'console_scripts', 'fig')()
+  File "/usr/lib/python2.6/site-packages/fig/cli/main.py", line 27, in main
+    console_handler = logging.StreamHandler(stream=sys.stderr)
+TypeError: __init__() got an unexpected keyword argument 'stream'
+So, is anyone reproducing this on CentOS ? Given i'm not a python guy, i don't have the background to judge what is missing (python version ? pip issue ? Fig dependencies broken ?), please help me :-)
+Thanks in advance for the work !

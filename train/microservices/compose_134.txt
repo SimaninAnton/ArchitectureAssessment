@@ -1,0 +1,56 @@
+Contributor
+schmunk42 commented on 8 Jul 2019
+Description of the issue
+docker-compose config fails with UnicodeEncodeError: 'ascii' codec can't encode character '\xe4' in position 46: ordinal not in range(128) when env contains an umlaut
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.6
+ API version:       1.24 (downgraded from 1.39)
+ Go version:        go1.10.8
+ Git commit:        481bc77
+ Built:             Sat May  4 02:33:34 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          swarm/1.2.8
+  API version:      1.22 (minimum version )
+  Go version:       go1.7.1
+  Git commit:       48d86b1
+  Built:            2017-07-11T17:45:23+0000
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 367, in config
+UnicodeEncodeError: 'ascii' codec can't encode character '\xe4' in position 46: ordinal not in range(128)
+[161] Failed to execute script docker-compose
+Steps to reproduce the issue
+Use the following docker-compose.yml
+version: '3'
+services:
+  web:
+    image: nginx
+    environment:
+      - FOO=bär
+Run docker-compose config
+See error
+Observed result
+Error above.
+Expected result
+Dump of the configuration.
+Stacktrace / full error message
+See above.
+Additional information
+Known to be working in docker-compose version 1.16.1

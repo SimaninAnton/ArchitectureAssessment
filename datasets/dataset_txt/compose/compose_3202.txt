@@ -1,0 +1,27 @@
+codablock commented on 16 Oct 2015
+I'm currently trying to use the new "multiple files" (#2051) feature and got stuck on extends not working anymore when used together.
+Example:
+# common.yml
+baseservice:
+  labels:
+    - "my.label=my-value"
+  environment:
+    MY_ENV: "MY_VALUE"
+
+# base.yml
+service1:
+  extends:
+    file: common.yml
+    service: baseservice
+...more stuff...
+
+# dev.yml
+service2:
+  extends:
+    file: common.yml
+    service: baseservice
+...more stuff...
+When started with:
+docker-compose -f base.yml -f dev.yml up
+the services do not include the labels and env vars from "baseservice".
+Just for testing purposes, I tried to use a random name for the extends/file field in dev.yml and it did not complain about not found files, which looks like it doesn't even try to open the file.

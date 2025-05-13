@@ -1,0 +1,36 @@
+AresDev commented on 2 Dec 2015
+I'm running docker-compose up using the configuration:
+couchbase-syncgateway:
+  image: couchbase/sync-gateway
+  command: /usr/local/bin/sync_gateway /config/config.json
+  volumes:
+  - ~/sync-gateway:/config
+  expose:
+  - "4984"
+  - "4985"
+  ports:
+  - "4984:4984"
+  - "4985:4985"
+I need to override the default command of the sync-gateway image because I need to provide a different config.json file, so I've put the file on a folder in my host and tried to override this default command pointing to the file using volumes, but when I execute docker-compose up, It fails with the mentioned error.
+What I'm missing? Thanks!
+docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:12:04 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:12:04 UTC 2015
+ OS/Arch:      linux/amd64
+docker-compopse version:
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

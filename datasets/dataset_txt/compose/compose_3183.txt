@@ -1,0 +1,12 @@
+nhooey commented on 23 Oct 2015
+The ports documentation makes no mention of the fact that the boot2docker VM is the node that forwards ports to the Docker container, instead of localhost as it does in Linux.
+So if you have a container that runs python -m SimpleHTTPServer 8000 with a docker-compose.yml file like this:
+mycontainer:
+    build: ./
+    ports:
+      - "8000:8000"
+On a Linux host, you could connect like this:
+curl 0.0.0.0:8000
+But on Mac OS, you have to connect like this:
+curl $(boot2docker ip):8000
+It would be helpful if this was mentioned in the documentation.

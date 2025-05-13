@@ -1,0 +1,67 @@
+webern commented on 20 Jul 2018
+docker-compose version 1.21.1, build 5a3f1a3
+My docker containers need to be started with environment variables (.env file) that specify the hostname for routing. For example if I have a proxy service and a web-ui service, the proxy service needs to know the name of the web-ui service.
+This causes me to specify these names in two places. Once in docker-compose.yml and once in .env.
+For example:
+In docker-compose.yml
+version: '3.5'
+networks:
+  default:
+    name: my-network
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.1.1.0/24
+services:
+  myproxy:
+    restart: unless-stopped
+    environment:
+      - WEB_SERVICE_NAME
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.proxy
+    env_file:
+      - ./.env
+    ports:
+     - "...:..."
+
+  webui:
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.webui
+    env_file:
+      - ./.env
+And again in .env
+WEB_SERVICE_NAME=webui
+If these two configuration items do not match, the system does not work.
+Having configuration in more than one place is not desirable. Is there some way for an environment variable to govern the service name, or for the service name to govern an environment variable?
+If not, then I would suggest the configuration would be better if it worked like this (forgive me if my yaml syntax isn't perfect).
+version: '4.0'
+networks:
+  default:
+    name: my-network
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.1.1.0/24
+services:
+  - name: proxy
+    restart: unless-stopped
+    environment:
+      - WEB_SERVICE_NAME
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.proxy
+    env_file:
+      - ./.env
+    ports:
+     - "...:..."
+
+  - name: ${WEB_SERVICE_NAME}
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.webui
+    env_file:
+      - ./.env

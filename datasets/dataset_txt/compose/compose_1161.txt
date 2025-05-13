@@ -1,0 +1,36 @@
+ComaVN commented on 9 Oct 2017
+Whenever I define a subnet for a network, docker-compose up is really slow, and seems to wait for ± 15 seconds on creating the network.
+example config:
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.17.0.0/28
+It doesn't matter what the network is called, or what the subnet actually is, and it doesn't conflict with anything.
+If I define multiple networks, creating each network takes about 15 seconds.
+PoC: https://github.com/ComaVN/docker-compose-network-slow
+$ docker-compose --version
+docker-compose version 1.11.2, build dfed245
+$ docker version
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:42:18 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:56 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+$ lsb_release -a
+LSB Version: core-9.20160110ubuntu0.2-amd64:core-9.20160110ubuntu0.2-noarch:security-9.20160110ubuntu0.2-amd64:security-9.20160110ubuntu0.2-noarch
+Distributor ID: Ubuntu
+Description: Ubuntu 16.04.3 LTS
+Release: 16.04
+Codename: xenial

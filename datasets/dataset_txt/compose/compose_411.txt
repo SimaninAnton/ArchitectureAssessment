@@ -1,0 +1,18 @@
+grhm commented on 7 Nov 2018 •
+edited
+Is your feature request related to a problem? Please describe.
+I'm always frustrated when running docker-compose up and having to remember to add the -d or --detach option.
+When I want to see the logs for a while, e.g. to check everything started ok - but not stop the containers nor lose the use of that terminal window, I have to run docker-compose up -d; docker-compose logs --follow
+Describe the solution you'd like
+I'd like to see the addition of a --follow switch that means the stack is created and logs display in the current terminal/console, but that pressing Ctrl-C ends the following of the logs, it doesn't stop the containers. (i.e. pretty much the same as docker-compose up -d; docker-compose logs --follow)
+I'd expect you'd want to add an --attach switch (i.e the same as the current docker-compose up)
+I'd then like to see the default if --attach/--detach/--follow aren't specified to be --follow. This means people currently doing docker-compose up --detach get what they expect, people doing docker-compose up without options get the log in their console as they expect - but will have to do a docker-compose stop after pressing Ctrl-C is they wanted to stop the containers. And anyone that actually wants the current functionality (does anyone?) can get it via an explicit --attach, and if they forget to add it, they can always issue a stop command to get to their desired state.
+Describe alternatives you've considered
+Trying to create a mess of aliases in the mixture of bash, powershell and cmd.exe on several hosts that is my working environment - but none are particularly effective - and it all sticking plasters over the real issue.
+Additional context
+Others are also trying to workaround the problem by requesting a way to get out of the attached state they didn't want - see #4560.
+It also looks like it been mentioned before #741 and #1210 - but those also state that everyone has to add -d most of the time
+#1210 (comment)
+I hope our new setup works well enough for you, and that adding -d in the case where you have many images isn't too much of a bother (I know I do that myself for basically every up I run!)
+If people are having to add it "basically every up I run" - isn't it actually the desired default?
+13

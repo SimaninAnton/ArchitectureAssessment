@@ -1,0 +1,28 @@
+k0pernikus commented on 5 Oct 2015
+When there is no docker-compose.yml then there is this nice error message:
+$ docker-compose up
+
+        Can't find a suitable configuration file in this directory or any parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml, fig.yml, fig.yaml
+Yet if one exists but is empty it produces this output:
+$ docker-compose up
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.4.2', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/command.py", line 57, in perform_command
+    verbose=options.get('--verbose'))
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/command.py", line 78, in get_project
+    config.load(config_details),
+  File "/usr/local/lib/python2.7/dist-packages/compose/config.py", line 138, in load
+    for service_name, service_dict in list(dictionary.items()):
+AttributeError: 'NoneType' object has no attribute 'items'
+This is very hard to debug and was already mentioned in #129 yet this still persists in docker-compose 1.4.2.

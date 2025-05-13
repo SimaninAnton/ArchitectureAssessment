@@ -1,0 +1,1 @@
+Trying to make 3 peer setup in marbles but failing any suggestion i am trying to use extend in docker file it is throwing error

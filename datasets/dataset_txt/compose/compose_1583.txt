@@ -1,0 +1,83 @@
+larsks commented on 21 Mar 2017 •
+edited
+The following report was produced using Docker version 17.03.0-ce and compose version docker-compose version 1.11.2, build dfed245.
+Given a docker-compose.yml that looks like this:
+version: "2"
+
+services:
+  server:
+    image: alpine
+    command: sleep 999
+    networks:
+      - nw0
+      - nw1
+      - nw2
+      - nw3
+
+networks:
+  nw0:
+  nw1:
+  nw2:
+  nw3:
+I would expect the networks to be assigned to interface in order, such that eth0 is attached to nw0, eth1 is attached to nw1, etc. This is exactly the behavior I see if I start a container using docker run and then attach additional networks with docker network connect.
+However, when using docker-compose and the above compose file, the ordering of networks and interfaces appears to be inconsistent. Assuming that the above compose file is in a directory named nwtest, this script will demonstrate the problem:
+#!/bin/sh
+
+docker-compose up -d
+
+for nw in 0 1 2 3; do
+ nw_cidr=$(docker network inspect -f '{{ (index .IPAM.Config 0).Subnet }}' \
+  nwtest_nw${nw})
+ if_cidr=$(docker exec -it nwtest_server_1 ip addr show eth${nw} |
+  awk '$1 == "inet" {print $2}')
+
+ nw_net=$(ipcalc -n $nw_cidr | cut -f2 -d=)
+ if_net=$(ipcalc -n $if_cidr | cut -f2 -d=)
+
+ echo "nw${nw} $nw_net eth${nw} ${if_net}"
+
+ if [ "$if_net" != "$nw_net" ]; then
+  echo "MISMATCH: nw${nw} = $nw_net, eth${nw} = $if_net" >&2
+ fi
+done
+
+docker-compose stop
+On my system, that produces as output:
+Starting nwtest_server_1
+nw0 192.168.32.0 eth0 192.168.32.0
+nw1 192.168.48.0 eth1 192.168.48.0
+nw2 192.168.64.0 eth2 192.168.80.0
+MISMATCH: nw2 = 192.168.64.0, eth2 = 192.168.80.0
+nw3 192.168.80.0 eth3 192.168.64.0
+MISMATCH: nw3 = 192.168.80.0, eth3 = 192.168.64.0
+Stopping nwtest_server_1 ... done
+For comparison, here is a script that performs the same test using docker run and manual attachment:
+#!/bin/sh
+
+docker rm -f nwtest_server_1
+docker run -d --name nwtest_server_1 --network nwtest_nw0 \
+ alpine sleep 999
+
+for nw in 1 2 3; do
+ docker network connect nwtest_nw${nw} nwtest_server_1
+done
+
+for nw in 0 1 2 3; do
+ nw_cidr=$(docker network inspect -f '{{ (index .IPAM.Config 0).Subnet }}' \
+  nwtest_nw${nw})
+ if_cidr=$(docker exec -it nwtest_server_1 ip addr show eth${nw} |
+  awk '$1 == "inet" {print $2}')
+
+ nw_net=$(ipcalc -n $nw_cidr | cut -f2 -d=)
+ if_net=$(ipcalc -n $if_cidr | cut -f2 -d=)
+
+ echo "nw${nw} $nw_net eth${nw} ${if_net}"
+
+ if [ "$if_net" != "$nw_net" ]; then
+  echo "MISMATCH: nw${nw} = $nw_net, eth${nw} = $if_net" >&2
+ fi
+done
+
+docker rm -f nwtest_server_1
+This always runs without error.
+2

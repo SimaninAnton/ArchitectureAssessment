@@ -1,0 +1,12 @@
+FFLSH commented on 25 Aug 2017
+With a compose file such as:
+version: '3'
+    services:
+        app:
+            image: nginx
+            environment:
+              - FINAL=${SPECIFIC:-http://${GLOBAL}/api}
+            command: echo $FINAL
+The echoed result is http://${GLOBAL}/api even after running export GLOBAL=http://app.com.
+The use case for this is that, in our project, by default we want the compose file to assume a certain setting, such as an API, based on global variables. For the majority of cases this suffices however sometimes an exception is made and we can override the default value by setting a SPECIFIC environment variable.
+I would like to contribute to include this functionality as this is hindering our move to docker, so would like to check that this is desired functionality.

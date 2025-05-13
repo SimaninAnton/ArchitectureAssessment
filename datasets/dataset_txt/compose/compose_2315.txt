@@ -1,0 +1,4 @@
+rreinurm commented on 9 Jun 2016
+docker-compose version 1.7.1, build 0a9ab35
+I am using docker-compose option -p to group containers which belong to same environment so I have visually easy naming convention in place like test_service_1. For example I have test environment where I run 50 projects meaning there can 50+ containers. Every project provides own container via docker-compose.yml file. If I execute docker-compose -p **test** up -d then docker-compose is busy to compare all those containers which were created from other 50 projects.
+18

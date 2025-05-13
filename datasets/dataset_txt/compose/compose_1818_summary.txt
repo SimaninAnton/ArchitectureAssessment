@@ -1,0 +1,1 @@
+Bug: Ignored file *does* exist, but is ignored.

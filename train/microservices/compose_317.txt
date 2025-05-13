@@ -1,0 +1,54 @@
+deni5n commented on 17 Jan 2019 •
+edited
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.8.0, build unknown
+docker-py version: 1.9.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Output of docker version
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:23 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:02:44 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks: {}
+services:
+  web:
+    build:
+      context: /home/deni5n/RubymineProjects/untitled
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    environment:
+      RAILS_ENV: production
+    ports:
+    - 3000:3000
+    volumes:
+    - /home/deni5n/RubymineProjects/untitled:/myapp:rw
+version: '2.0'
+volumes: {}
+Steps to reproduce the issue
+eval $(docker-machine env tmp)
+docker-compose up
+it`s all
+Observed result
+error (((
+Expected result
+start docker container
+Stacktrace / full error message
+ERROR: SSL error: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:590)

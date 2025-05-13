@@ -1,0 +1,41 @@
+Oza94 commented on 26 Mar 2015
+Hello all,
+First I have to specify that I use docker-compose through boot2docker on Windows 8 with the snippet of dduportal. I work in a folder under /c/Users so I can edit my files from Windows.
+Here is my problem, I have an app structured like this:
+workspace/
+-- docker-compose.yml
+-- api/
+---- Dockerfile
+And here is the content of my docker-compose.yml:
+api:
+  build: ./api
+  links:
+   - mongo
+   - redis
+  ports:
+   - "8010:8010"
+mongo:
+  image: mongo
+redis:
+  image: redis
+When I build the image of api/ alone, the build is successful. When I first built the app using docker-compose, it was successful too.
+Now I want to rebuild the app, docker-compose build fails:
+Building api...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 119, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 167, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 480, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 436, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.utils.utils", line 80, in tar
+  File "/code/build/docker-compose/out00-PYZ.pyz/tarfile", line 1975, in add
+  File "/code/build/docker-compose/out00-PYZ.pyz/tarfile", line 1847, in gettarinfo
+OSError: [Errno 2] No such file or directory: './api/node_modules/gulp-nodemon/node_modules/nodemon/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules/got/node_modules/duplexify/node_modules/end-
+of-stream/node_modules/once/LICENSE'
+However I can still build the image of api/ alone with docker build.
+I don't know if this is related to my project or docker, and google didn't help me.

@@ -1,0 +1,5 @@
+netroby commented on 24 Mar 2015
+docker compose can not link a exists running docker container.
+In our production servers, we already running containers. such as redis, memcached, mysqld
+But docker compose can not link exists docker container.
+so Use less for production environment.

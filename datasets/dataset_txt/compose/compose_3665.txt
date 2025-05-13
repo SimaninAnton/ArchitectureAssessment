@@ -1,0 +1,8 @@
+Contributor
+funkyfuture commented on 5 May 2015
+i think it'd be a good idea to define what local and original refer to in the paragraph related to the paragraph above. or use that same terminology there. though i can think of clearer distinctions than local vs. original. what about extended and extending? with a code-style-definition:
+extending:
+  extends: extended
+also, there's a sentence that may be good in a brochure, but rather disturbing in a technical documentation:
+You can extend indefinitely.
+i mean, that would need unlimted storage for configuration. or we have that yet?

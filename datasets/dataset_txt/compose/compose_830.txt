@@ -1,0 +1,37 @@
+etc0de commented on 2 Mar 2018 •
+edited
+jonas@cyberman:~/test$ cat docker-compose.yml 
+
+test:
+  tty: true
+  image: ubuntu
+  command: bash
+
+jonas@cyberman:~/test$ sudo docker-compose up
+Starting test_test_1 ... done
+Attaching to test_test_1
+ls
+ls
+I tried to use tty: true for an interactive container, but it simply doesn't work: it hangs. The ls is me trying to interact with the bash, but there's no reaction / response. I tried specifying stdin_open with both true and false in addition, neither changes anything.
+docker-compose version:
+1.19.0, build 9e633ef
+docker version:
+Client:
+ Version:         1.13.1
+ API version:     1.26
+ Package version: docker-1.13.1-44.git584d391.fc27.x86_64
+ Go version:      go1.9.1
+ Git commit:      caba767-unsupported
+ Built:           Thu Nov 23 21:17:26 2017
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.13.1
+ API version:     1.26 (minimum version 1.12)
+ Package version: docker-1.13.1-44.git584d391.fc27.x86_64
+ Go version:      go1.9.1
+ Git commit:      caba767-unsupported
+ Built:           Thu Nov 23 21:17:26 2017
+ OS/Arch:         linux/amd64
+ Experimental:    false
+I tried it on another machine with docker 17.12.0 (CE) and the same thing happens, it just gets stuck forever.

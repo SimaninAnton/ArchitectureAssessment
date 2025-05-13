@@ -1,0 +1,12 @@
+dkirrane commented on 11 May 2016
+I'm trying to assign the output of docker-compose run to a variable in bash.
+Currently docker-compose run can print to console stuff like:
+docker-compose run serviceabc ls
+WARNING: The MVN_OPT variable is not set. Defaulting to a blank string.
+Starting serviceabc
+dir1
+dir2
+dir3
+Can a -s --silent or -q --quiet option be added to docker-compose run avoid printing anything other than the command output.
+I guess this would also make sense for other docker-compose commands too.
+50

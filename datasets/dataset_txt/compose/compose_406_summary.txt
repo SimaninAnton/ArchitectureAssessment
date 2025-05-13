@@ -1,0 +1,1 @@
+Show columns and separate colorful builds logs when using `build --parallel`

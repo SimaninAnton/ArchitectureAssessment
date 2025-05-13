@@ -1,0 +1,2 @@
+cwolfinger commented on 29 Jan 2016
+In the latest release candidate for 1.6.0 the --tmpfs options is not available. Is it possible to add this to the service definition via some other mechanism.

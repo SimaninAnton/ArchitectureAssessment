@@ -1,0 +1,1 @@
+Compose breaks on python error "ValueError: insecure string pickle"

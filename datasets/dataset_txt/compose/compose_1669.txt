@@ -1,0 +1,11 @@
+bantl23 commented on 18 Feb 2017 •
+edited
+docker compose already allows for overriding Dockerfile CMD. It would also be nice if there was the ability to override the Dockerfile WORKDIR as well.
+For example:
+version: '3'
+services:
+  test:
+    build: .
+    workdir: /newworkdir
+    command: echo "hello"
+I believe this is possible because docker run takes --workdir as an option. I didn't see this as an option in the current version of the docker compose documentation.

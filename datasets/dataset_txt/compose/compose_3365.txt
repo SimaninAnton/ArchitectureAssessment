@@ -1,0 +1,71 @@
+je-al commented on 18 Aug 2015
+I'm using the latest master (6edc673 at the time of writing).
+Running:
+docker-compose build
+with a simple configuration, which uses environment variable interpolation (#1765):
+webserver:
+  build: nginx-fpm
+  ports:
+    - "${HOST_PORT}:80"
+which aren't being supplied (since they aren't necessary for the build process), fails with the following being thrown:
+The HOST_PORT variable is not set. Substituting a blank string.
+Traceback (most recent call last):
+  File "/home/jorge/.local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.5.0dev', 'console_scripts', 'docker-compose')()
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/cli/command.py", line 57, in perform_command
+    verbose=options.get('--verbose'))
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/cli/command.py", line 78, in get_project
+    config.load(config_details),
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/config/config.py", line 133, in load
+    validate_against_schema(config)
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/config/validation.py", line 148, in validate_against_schema
+    errors = [error for error in sorted(validation_output.iter_errors(config), key=str)]
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 98, in iter_errors
+    for error in errors:
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/_validators.py", line 16, in patternProperties
+    v, subschema, path=k, schema_path=pattern,
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 114, in descend
+    for error in self.iter_errors(instance, schema):
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 98, in iter_errors
+    for error in errors:
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/_validators.py", line 203, in ref
+    for error in validator.descend(instance, resolved):
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 114, in descend
+    for error in self.iter_errors(instance, schema):
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 98, in iter_errors
+    for error in errors:
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/_validators.py", line 291, in properties_draft4
+    schema_path=property,
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 114, in descend
+    for error in self.iter_errors(instance, schema):
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 98, in iter_errors
+    for error in errors:
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/_validators.py", line 42, in items
+    for error in validator.descend(item, items, path=index):
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 114, in descend
+    for error in self.iter_errors(instance, schema):
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 98, in iter_errors
+    for error in errors:
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/_validators.py", line 328, in oneOf_draft4
+    errs = list(validator.descend(instance, subschema, schema_path=index))
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 114, in descend
+    for error in self.iter_errors(instance, schema):
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/validators.py", line 98, in iter_errors
+    for error in errors:
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/_validators.py", line 150, in format
+    validator.format_checker.check(instance, format)
+  File "/home/jorge/.local/lib/python2.7/site-packages/jsonschema-2.5.1-py2.7.egg/jsonschema/_format.py", line 74, in check
+    result = func(instance)
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker_compose-1.5.0dev-py2.7.egg/compose/config/validation.py", line 33, in format_ports
+    split_port(instance)
+  File "/home/jorge/.local/lib/python2.7/site-packages/docker/utils/ports/ports.py", line 69, in split_port
+    if len(internal_range) != len(external_range):
+TypeError: object of type 'NoneType' has no len()

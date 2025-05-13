@@ -1,0 +1,1 @@
+docker compose file: how to write an environment variable in multiple lines

@@ -1,0 +1,1 @@
+Fig port with index not working with fig scale

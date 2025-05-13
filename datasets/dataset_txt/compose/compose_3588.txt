@@ -1,0 +1,29 @@
+ReactiveRaven commented on 5 Jun 2015
+While trying to emulate the upcoming 'networks' option by binding networks to a single container with the following docker-compose.yml:
+seleniumLocalhost:
+    image: ubuntu:14.04
+
+seleniumChrome:
+    image: selenium/node-chrome:2.45.0
+    links:
+        - seleniumHub:hub
+    net: container:seleniumLocalhost
+
+seleniumFirefox:
+    image: selenium/node-firefox:2.45.0
+    links:
+        - seleniumHub:hub
+    net: container:seleniumLocalhost
+
+seleniumHub:
+    image: selenium/hub:2.45.0
+I get the following output with docker-compose up:
+Creating dockerseleniumseed_seleniumLocalhost_1...
+Creating dockerseleniumseed_seleniumHub_1...
+Creating dockerseleniumseed_seleniumChrome_1...
+Warning: Service seleniumLocalhost is trying to use reuse the network stack of another service that is not running.
+Creating dockerseleniumseed_seleniumFirefox_1...
+Warning: Service seleniumLocalhost is trying to use reuse the network stack of another service that is not running.
+which results in only seleniumHub, seleniumChrome and seleniumFirefox actually being run. seleniumLocalhost is dropped.
+As seleniumLocalhost is not running a custom network option, the error message does not seem to make sense.
+It is possible I have misunderstood how this is intended to work. Any help is much appreciated.

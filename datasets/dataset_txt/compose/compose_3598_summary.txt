@@ -1,0 +1,1 @@
+docker-compose won't start a container if --iptables=false is set

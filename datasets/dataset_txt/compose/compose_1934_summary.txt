@@ -1,0 +1,1 @@
+Docker-compose.yml Is not working for elasticserch

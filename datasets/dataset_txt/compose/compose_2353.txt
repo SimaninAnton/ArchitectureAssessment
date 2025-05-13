@@ -1,0 +1,4 @@
+Contributor
+denismakogon commented on 27 May 2016
+Since Debian's and Ubuntu's latest LTS releases are having Python 3.5 as default it is necessary to support Python 3.5.
+1

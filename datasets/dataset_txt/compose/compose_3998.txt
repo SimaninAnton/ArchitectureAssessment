@@ -1,0 +1,4 @@
+ohord commented on 12 Jan 2015
+As new version of docker supports -f option (specifying another than Dockerfile filename for configuration moby/moby#9707) it's reasonable to add this support in fig too. For example:
+build: .
+buildfile: mydocker.file

@@ -1,0 +1,1 @@
+Docker 1.6 + Compose 1.2 : Unable to bind mount a file if it already exists in the image

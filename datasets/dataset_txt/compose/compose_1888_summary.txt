@@ -1,0 +1,1 @@
+How to render the effective docker-compose.yml

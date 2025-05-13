@@ -1,0 +1,18 @@
+mindnuts commented on 23 Dec 2014
+Hi,
+I am trying to move my containers to Fig. NSQD requires passing some options to Docker run command.
+http://nsq.io/deployment/docker.html
+Basically i should be able to pass these two options to be passed to Docker run options,
+--broadcast-address=172.17.42.1 --lookupd-tcp-address=172.17.42.1:4160
+Complete command:
+sudo docker run -d --name nsqd -p 4150:4150 -p 4151:4151 mindnuts/nsqd --broadcast-address=172.17.42.1 --lookupd-tcp-address=172.17.42.1:4160
+I tried to pass them like so, but it is not working. The nsqd container is not able to talk to the other container.
+nsqd:
+    build: ./Docker/nsqd
+    ports:
+        - "4150:4150"
+        - "4151:4151"
+    environment:
+        broadcast-address: "172.17.42.1"
+        lookupd-tcp-address: "172.17.42.1:4160"
+Any help would be appreciated. Cheers!

@@ -1,0 +1,3 @@
+fxdgear commented on 12 Nov 2014
+Has anyone gotten around to trying to use dnsmasq and Fig to create a "development" DNS name to help create an environment that's as close to a prod env as possible.
+I have 2 services that communicate to each other over HTTP. I would like to not have to use IP_ADDRESS:PORT as the urls for inter service communication, but rather just change the domain name to be https://dev.foo.bar just like my stage env is https://stage.foo.bar

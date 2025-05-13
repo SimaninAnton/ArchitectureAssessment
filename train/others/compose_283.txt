@@ -1,0 +1,28 @@
+infnada commented on 15 Feb 2019
+Is your feature request related to a problem? Please describe.
+Disclamer: Maybe this/similar feature already exists but can't find it.
+For performance improves or others, we use constraints.
+For example, we can force a DB container to run on SSD hosts but we can't provide a host alternative in case that the SSD host/s dies.
+Or we have nodes with 10G network and nodes with 1G network, we would prefere to run some containers on 10G network hosts but... what if all the 10G hosts dies?
+Or my case:
+We have an Active/Pasive datacenter located on different regions inter-connected by L2 (both datacenters acts like one).
+We want to run all nodes on the Active datacenter because it provides better network with less latency. This is easy, just provide a constraint like type==location1.
+What if all nodes in location1 dies?
+We want to automatically provision the containers on location2. We will have more latency, but "no service disrruption".
+Describe the solution you'd like
+I think that add constraint "weight/priority" should be "trivial" and will solve this cases.
+Example:
+placement:
+  constraints:
+    constraint: "node.type==location1"
+      weight: 10
+    constraint: "node.type==location2" (default weight)
+Containers will run on location1 if possible, if not on location2
+placement:
+  constraints:
+    constraint: "node.type==ssd"
+      weight: 10
+    constraint: "node.type==sas"
+      weight: 9
+    constraint: "node.type==worker" (default weight)
+Containers will run on SSD nodes if possible, if not on sas nodes, if not on any available werker node

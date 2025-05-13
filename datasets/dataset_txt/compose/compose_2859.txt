@@ -1,0 +1,6 @@
+unhashable commented on 31 Jan 2016
+Looks like --rm does not propagate to dependencies:
+docker-compose run mycontainer --rm # start container with links
+docker-compose ps # linked containers are still running
+Hoping this is not desirable functionality.
+1

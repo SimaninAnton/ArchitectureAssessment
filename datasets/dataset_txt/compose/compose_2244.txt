@@ -1,0 +1,34 @@
+pahaz commented on 7 Jul 2016 •
+edited
+How to reproduce:
+docker-compose-consul-test.yml
+version: '2'
+
+services:
+   tmp:
+     image: buildpack-deps:jessie
+     command: cat /etc/resolv.conf
+     dns_search: service.consul
+     dns: 8.8.8.8
+test1:
+$ docker-compose -f docker-compose-consul-test.yml up
+Starting infrastructure_tmp_1
+Attaching to infrastructure_tmp_1
+tmp_1  | search service.consul
+tmp_1  | nameserver 127.0.0.11
+tmp_1  | options ndots:0
+infrastructure_tmp_1 exited with code 0
+test2:
+$ docker run -it --dns 8.8.8.8 --dns-search service.consul --rm buildpack-deps:jessie cat /etc/resolv.conf
+search service.consul
+nameserver 8.8.8.8
+Compose ignore dns configuration!
+Info:
+$ docker --version
+Docker version 1.12.0-rc2, build 906eacd, experimental
+$ docker-compose --version
+docker-compose version 1.7.1, build 6c29830
+$ pip freeze | grep docker
+docker-compose==1.7.1
+docker-py==1.8.1
+dockerpty==0.4.1

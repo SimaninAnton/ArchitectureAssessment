@@ -1,0 +1,38 @@
+HaoHappen commented on 15 Feb 2017
+I want to manage my Swarm services using Docker Compose YAML format
+docker command:
+docker service create --name node-exporter \
+--mode global \
+--network proxy \
+--mount "type=bind,source=/proc,target=/host/proc" \
+--mount "type=bind,source=/sys,target=/host/sys" \
+--mount "type=bind,source=/,target=/rootfs" \
+--mount "type=bind,source=/etc/hostname,target=/etc/host_hostname" \
+-e HOST_HOSTNAME=/etc/host_hostname \
+basi/node-exporter:v0.1.1 \
+-collector.procfs /host/proc \
+-collector.sysfs /host/proc \
+-collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($|/)" \
+-collector.textfile.directory /etc/node-exporter/ \
+-collectors.enabled="conntrack,diskstats,entropy,filefd,filesystem,loadavg,m\
+dadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs"
+compose.yml:
+version: "3"
+services:
+  node-exporter:
+    image: basi/node-exporter:v0.1.1
+    networks:
+      - mm
+    volumes:
+      - /proc:/host/proc
+      - /sys:/host/sys
+      - /:/rootfs
+      - /etc/hostname:/etc/host_hostname
+    environment:
+      - HOST_HOSTNAME=/etc/host_hostname
+    command: [ -collector.procfs,/host/proc,-collector.sysfs=/host/proc,-collector.filesystem.ignored-mount-points,"^/(sys|proc|dev|host|etc)($|/)",-collector.textfile.directory,/etc/node-exporter/,-collectors.enabled="conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs"]
+    deploy:
+      mode: global
+But got an error:Invalid interpolation format for "command" option in service "node-exporter": "^/(sys|proc|dev|host|etc)($|/)"
+It seems that symbol $ caused. What format should I write it?
+8

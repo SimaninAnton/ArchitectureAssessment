@@ -1,0 +1,1 @@
+Mount relative path does not work with volumes in Docker compose file

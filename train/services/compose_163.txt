@@ -1,0 +1,38 @@
+ezl-13 commented on 31 May 2019
+Description of the issue
+Chrome needs to be manually connected to socket (by opening localhost) and Chrome does not close correctly when using Karma with Docker.
+Dockerfile_frontend-tests
+docker-compose_frontend-tests.yml
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:             18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:       6247962
+ Built:                  Sun Feb 10 04:12:31 2019
+ OS/Arch:           windows/amd64
+ Experimental:    false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:           18.09.2
+  API version:     1.39 (minimum version 1.12)
+  Go version:     go1.10.6
+  Git commit:     6247962
+  Built:                Sun Feb 10 04:13:06 2019
+  OS/Arch:         linux/amd64
+  Experimental:  false
+Observed result
+Running docker-compose -f docker-compose_frontend-tests up yields this when the script starts:
+
+The "connected on socket" line happens when I go into Chrome and open localhost:9876. Is this what I am supposed to do? Does Docker not automatically connect to the server?
+Also, once all 1241 tests are successfully completed, Chrome seems to be killed abruptly. Is there any way to fix this?
+Expected result
+Socket on localhost:9876 should be connected to automatically, without needing to manually go into Chrome and open localhost.
+The script should go to completion and Chrome shouldn't be abruptly killed.

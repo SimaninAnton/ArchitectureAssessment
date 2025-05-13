@@ -1,0 +1,89 @@
+Contributor
+aanand commented on 19 Feb 2015
+This proposal describes an enhancement to docker-compose.yml that will enable the importing of selected bits of configuration from other Compose configuration files, and the definition of ‘external’ or ‘dummy’ services. It is intended to serve three use cases:
+I deploy my app in multiple environments - development, staging, production. Some configuration is different in each environment; some services only need to exist in some environments. I want to maintain a configuration file for each environment without repeating myself.
+I have multiple apps which perform different tasks but re-use some services. I don’t want to repeat the definitions of those services in each app’s configuration.
+I have a defined dependency, such as a database, in my app. When I’m developing the app, I want Compose to spin up a local database container to link to from my other services. When running the app in production, I instead want to point my other services at an already-running, separately-managed database service, which may not be managed with Compose or even Docker.
+It is related to #495/#845, in that use case 1 is partially served by parameterisation of configuration values. It does not replace that functionality, but complements it.
+It is distinct from #318/#758, in that it does not serve this use case:
+I have two apps. App A has link dependencies on app B. When I type docker-compose up in app A’s directory, I want Compose to first spin up app B and then app A, with cross-app links in place.
+However, that use case could be served with an implementation that builds on the enhancements proposed here.
+Service types
+A new configuration key, type, can be specified on a service defined in docker-compose.yml. It’s optional, and its value defaults to "container". There are three possible types of value.
+"container"
+Denotes that this service consists of one or more homogenous Docker containers, configured using the options specified here. This is exactly how docker-compose.yml services are defined today.
+web:
+  type: container # optional
+  build: .
+  ports:
+    - 80:8000
+  links:
+    - db
+Path to another Compose file
+Denotes that this service is defined in another file. The file’s path, and the name of the service within that file, are supplied here.
+db:
+  type: common.yml#db
+Assuming common.yml defines a db service, this is equivalent to copying and pasting its configuration here.
+Configuration can also be overridden:
+db:
+  type: common.yml#db
+  environment:
+    POSTGRES_USER: devpass
+    POSTGRES_PASSWORD: devuser
+"external"
+Denotes an externally-defined service. Its location, and any other configuration, are supplied here.
+db:
+  type: external
+  host: 1.2.3.4
+  port: 5432
+  environment:
+    POSTGRES_USER: produser
+    POSTGRES_PASSWORD: prodpass
+This results in services which link to this service being furnished with hostnames and environment variables in exactly the same way as if they were linked to a Docker container:
+$ docker-compose run web cat /etc/hosts
+127.0.0.1  localhost
+1.2.3.4    db
+
+$ docker-compose run web env
+DB_PORT=tcp://1.2.3.4:5432
+DB_PORT_5432_TCP=tcp://1.2.3.4:5432
+DB_PORT_5432_TCP_ADDR=1.2.3.4
+DB_PORT_5432_TCP_PORT=5432
+DB_PORT_5432_TCP_PROTO=tcp
+DB_ENV_POSTGRES_USER=produser
+DB_ENV_POSTGRES_PASSWORD=prodpass
+In this way, the external keyword defines a “dummy” service.
+Usage example
+Pulling it all together, here’s an example 3-file setup:
+common.yml
+web:
+  build: .
+  ports:
+    - 80:8000
+  links:
+    - db
+db:
+  image: postgres
+development.yml
+web:
+  type: common.yml#web
+  environment:
+    - APP_ENV=development
+db:
+  type: common.yml#db
+production.yml
+web:
+  type: common.yml#web
+  environment:
+    - APP_ENV=production
+db:
+  type: external
+  host: 1.2.3.4
+  port: 5432
+  environment:
+    POSTGRES_USER: produser
+    POSTGRES_PASSWORD: prodpass
+Discussion: including transitive dependencies
+It would be useful to be able to pull in an externally-defined service and its own dependencies - for example, if db got its volumes from a dbdata container, it would be valuable from an encapsulation and DRY perspective for that to implicitly come along with it.
+However, it’s also important that transitive dependencies can be overwritten, such as in the example case above where web’s dependency on db is swapped out in production.
+The exact semantics of imports, and how to serve both use cases, need to be carefully worked out.

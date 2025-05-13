@@ -1,0 +1,1 @@
+docker container can not be started when I have CMD: "npm start " in last line of dockerfile

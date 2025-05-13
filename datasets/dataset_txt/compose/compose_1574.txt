@@ -1,0 +1,2 @@
+vditya commented on 22 Mar 2017
+Is there an effort to support GPU as another resource type within docker compose specification?

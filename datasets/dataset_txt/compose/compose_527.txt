@@ -1,0 +1,77 @@
+Contributor
+deivid-rodriguez commented on 21 Aug 2018 •
+edited
+Description of the issue
+If I follow the "Install as a container instructions" in https://docs.docker.com/compose/install/#install-compose, and then run
+docker-compose $(docker-machine config my_machine) ps
+It fails with
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 38, in project_from_options
+  File "compose/cli/docker_client.py", line 84, in tls_config_from_options
+  File "site-packages/docker/tls.py", line 81, in __init__
+docker.errors.TLSParameterError: Path to a certificate and key files must be provided through the client_config param. TLS configurations should map the Docker CLI client configurations. See https://docs.docker.com/engine/articles/https/ for API details.
+[6] Failed to execute script docker-compose
+If I install the "standard way", it works properly.
+Context information (for bug reports)
+$ docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+$ docker version
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:09:54 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:07:56 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+$ docker-compose config
+ERROR: 
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml
+        
+$ ls docker-compose.yml
+-rw-r--r-- 1 deivid deivid 849 ago 19 11:35 docker-compose.yml
+Steps to reproduce the issue
+Install docker-machine.
+Create a new machine.
+Run docker-compose $(docker-machine config my_new_machine) ps.
+Observed result
+Crash.
+Expected result
+Same as with the regular installation method.
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 38, in project_from_options
+  File "compose/cli/docker_client.py", line 84, in tls_config_from_options
+  File "site-packages/docker/tls.py", line 81, in __init__
+docker.errors.TLSParameterError: Path to a certificate and key files must be provided through the client_config param. TLS configurations should map the Docker CLI client configurations. See https://docs.docker.com/engine/articles/https/ for API details.
+Additional information
+$ uname -a
+Linux pantani 4.15.0-32-generic #35-Ubuntu SMP Fri Aug 10 17:58:07 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+$ cat /etc/lsb-release 
+DISTRIB_ID=LinuxMint
+DISTRIB_RELEASE=19
+DISTRIB_CODENAME=tara
+DISTRIB_DESCRIPTION="Linux Mint 19 Tara"
+OS version / distribution, `docker-compose` install method, etc.

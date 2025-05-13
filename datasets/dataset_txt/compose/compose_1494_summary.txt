@@ -1,0 +1,1 @@
+Adding external secrets results in invalid yml produced by config

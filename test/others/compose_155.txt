@@ -1,0 +1,20 @@
+Contributor
+hartwork commented on 18 Jun 2019 •
+edited
+Dear docker-compose team,
+setup.py has upper bound limits for all dependencies of docker-compose as of today, e.g. docopt >= 0.6.1, < 0.7 has an upper bound of < 0.7. While some bounds seem to follow semver logic (e.g. six >= 1.3.0, < 2), some don't and seem rather generic, e.g. texttable >= 0.9.0, < 0.10. In a context where you install nothing but docker-compose into a dedicated virtualenv, that approach might work well. Once there are neighbors involved, this approach becomes challenging.
+During the livetime of docker-compose version X, dependencies can do new releases, even multiple of them. If docker-compose keeps dependencies in the past artificially, the system around it can only be as up to date as docker-compose. If the system around it is a Linux distribution, that means that users cannot install things like jsonschema 3.0.1 (see #6347), pyyaml 5.1 (see #6619), texttable 1.6.1 or requests 2.22.0 (in the past, see #6717) without uninstalling or patching docker-compose. That has consequences regarding flexibility as well as security (see #6619).
+Because those upper limits are a problem, major Linux distributions need to patch them away:
+Debian does
+Fedora does
+Gentoo does
+Your favorite distro probably does, too
+In the interest of their users, distro packagers like me have two options:
+a) A static patch that needs manual adjustment for every version bump — compare 1 with 2 in Debian
+b) A mass-replacement a la sed 's/, < [0-9.]\+//' -i setup.py that is rather brittle
+What I'd like to ask for is this:
+Please drop all generic upper bounds and only re-add limits for dependencies that are known broken, a blacklist approach, not a whitelist one.
+The remaining list of upper bounds should be way shorter and expose actual bockers rather than artificial ones. Linux distros could then install unpatched setup.py files and users would be more up to date and more secure with their python packages.
+Thanks a lot in advance!
+Best
+Sebastian

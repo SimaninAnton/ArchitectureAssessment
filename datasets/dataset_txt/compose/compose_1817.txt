@@ -1,0 +1,3 @@
+brideo commented on 6 Jan 2017
+Enhancement
+When working with multiple projects, it would be really useful to have a --working-directory="/path/to/docker/compose/file".

@@ -1,0 +1,5 @@
+pahaz commented on 22 Aug 2014
+I have two projects.
+One /home/app1/source and /home/app2/source.
+And both containers have same name source_web_1, and after fig up start only one of them.
+How to fix it?

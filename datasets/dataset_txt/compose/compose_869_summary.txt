@@ -1,0 +1,1 @@
+docker-compose stop mounting volumes after I changed my Windows password

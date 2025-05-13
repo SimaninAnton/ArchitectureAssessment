@@ -1,0 +1,57 @@
+itsNikolay commented on 20 Apr 2015
+Ubuntu 14.04 x64
+$ docker --version                                                                                                                                                             
+Docker version 1.6.0, build 4749651
+$ docker-compose --version                                                                                                                                                           
+docker-compose 1.2.0
+Getting error on $ sudo docker-compose build
+$ sudo docker-compose build
+Building web...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 119, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 191, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 475, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 300, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.utils.utils", line 73, in tar
+  File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+  File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+  File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+  File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+  File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+  File "/code/build/docker-compose/out00-PYZ.pyz/os", line 284, in walk
+  File "/code/build/docker-compose/out00-PYZ.pyz/posixpath", line 80, in join
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 5: ordinal not in range(128)
+docker-compose.yml
+web:
+  build: .
+  command: gulp serve
+  ports:
+    - 3001:3001
+  volumes:
+    - .:/app
+    - /bower_components:./app/bower_components
+  volumes_from:
+    - bower_components
+Dockerfile
+FROM ubuntu:14.04
+
+ENV NVM_VERSION 0.24.1
+ENV NODE_VERSION 0.12.0
+ENV NPM_VERSION 2.5.1
+
+RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash \
+    && source ~/.bashrc \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && npm install -g npm@"$NPM_VERSION" gulp bower \
+
+WORKDIR /app
+
+CMD tail -f /dev/null
+1

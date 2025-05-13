@@ -1,0 +1,150 @@
+kvaps commented on 14 Nov 2016 •
+edited
+Description
+Steps to reproduce the issue:
+create docker network, set ipam aux_address
+start docker network
+inspect your network
+Describe the results you received:
+# cat docker-compose.yml 
+version: '2'
+services:
+  nginx:
+    image: nginx
+    networks:
+      - ipvlan111
+    privileged: true
+networks:
+  ipvlan111:
+    driver: ipvlan
+    driver_opts:
+      ipvlan_mode: l2
+      parent: ens18.111
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.111.0/24
+        iprange: 192.168.111.0/24
+        gateway: 192.168.111.1
+        aux_addresses:
+          nginx: 192.168.111.33
+
+# docker-compose up -d
+Creating network "test_ipvlan111" with driver "ipvlan"
+Creating test_nginx_1
+
+# docker network inspect test_ipvlan111
+[
+    {
+        "Name": "test_ipvlan111",
+        "Id": "a703136c1162055fca1b1781016059cd6b36e4cd0f9a863339ce4062df3e9b4d",
+        "Scope": "local",
+        "Driver": "ipvlan",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "192.168.111.0/24",
+                    "Gateway": "192.168.111.1",
+                    "AuxiliaryAddresses": {
+                        "nginx": "192.168.111.33"
+                    }
+                }
+            ]
+        },
+        "Internal": false,
+        "Containers": {
+            "abc6736a8aebd23a168eba14b9f36e2a46330bdbf167f0195c72eed8e0825b61": {
+                "Name": "test_nginx_1",
+                "EndpointID": "7d7cb1265427eb2ed8b18d3fa1a5527952b1583419f73e04467411026538fbf7",
+                "MacAddress": "",
+                "IPv4Address": "192.168.111.2/24",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "ipvlan_mode": "l2",
+            "parent": "ens18.111"
+        },
+        "Labels": {}
+    }
+]
+
+# docker-compose exec nginx ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+65: eth0@if64: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default 
+    link/ether 12:7c:7f:a1:8a:b4 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.2/24 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::107c:7fff:fea1:8ab4/64 scope link 
+       valid_lft forever preferred_lft forever
+Describe the results you expected:
+As I understand docker-compose need to rename nginx aux_address to test_nginx_1 like format.
+I thought that this could affect the not assigning the addresses to my docker container. Although probably not this case (see this bug), but check it is still worth...
+Output of docker version:
+Client:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 22:07:18 2016
+ OS/Arch:      linux/amd64
+ Experimental: true
+
+Server:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 22:07:18 2016
+ OS/Arch:      linux/amd64
+ Experimental: true
+Output of docker info:
+Containers: 2
+ Running: 1
+ Paused: 0
+ Stopped: 1
+Images: 3
+Server Version: 1.12.3
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 9
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: null overlay host bridge ipvlan
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: apparmor seccomp
+Kernel Version: 4.4.0-47-generic
+Operating System: Ubuntu 16.04.1 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 11.73 GiB
+Name: docker-host
+ID: CGPQ:Y3VE:ND64:K4TG:R7SJ:GDOP:4LAK:OZI6:SO5E:7O57:VNMO:RGTD
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Output of docker-compose version:
+docker-compose version 1.8.1, build 878cff1
+docker-py version: 1.10.3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

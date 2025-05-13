@@ -1,0 +1,26 @@
+simkim commented on 23 Aug 2016
+With :
+export DOCKER_HOST="tcp://myserver:2376/"
+All docker command work (build, run), all docker-compose action who read from docker work (info).
+But when an action is made (pulling, creating container) a POST request is done on //v1.21/... which is 301 moved permanently to /v1.21/... the POST is transformed to GET and a 404 Not Found is returned by docker.
+Docker compose should remove the trailing slash as done by the docker client.
+Docker compose might be more verbose on docker daemon error when run with --verbose
+Version used
+Client:
+Version: 1.12.1
+API version: 1.24
+Go version: go1.6.3
+Git commit: 23cf638
+Built: Thu Aug 18 05:02:53 2016
+OS/Arch: linux/amd64
+Server:
+Version: 1.12.1
+API version: 1.24
+Go version: go1.6.3
+Git commit: 23cf638
+Built: Thu Aug 18 05:02:53 2016
+OS/Arch: linux/amd64
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

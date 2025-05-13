@@ -1,0 +1,81 @@
+SamCB commented on 9 Jun 2016
+I've come across a problem where I can't connect to a certain container: test_b from test_a with the container's service name after calling docker-compose run test_b.
+I wrote a short python script that would automatically ping with the host names given in a file and write them to a given file.
+test_network/src/main.py
+import os
+import sys
+import datetime
+import time
+
+if __name__ == '__main__':
+    f_name = sys.argv[1]
+    hosts = sys.argv[2:]
+    with open(f_name, 'a+') as f:
+        f.write("=== {} ===\n".format(" ".join(sys.argv)))
+        for host in hosts:
+            response = os.system('ping -c 1 ' + host)
+            t = datetime.datetime.now().strftime('%Y%m%d-%H:%M:%S')
+            f.write("{}: {:20} - {}\n".format(t, host, response))
+
+        f.write("\n")
+
+    time.sleep(5)
+I.e. if I called python main.py results test localhost google.com it would try and ping the three hostnames, test, localhost and google.com each once and record the output.
+And had a few services set up in my test_network/docker-compose.yml
+version: '2'
+services:
+    db:
+        image: mongo:3.2
+    test:
+        build:
+            context: .
+        volumes:
+            - ./src:/usr/src
+    test_a:
+        extends:
+            service: test
+        depends_on:
+            - db
+        command: "python main.py results_a test_b testnetwork_test_b_run_1 db"
+        # testnetwork_test_b_run_1 should be the container name the first time we try this with `run`
+    test_b:
+        extends:
+            service: test
+        depends_on:
+            - test_a
+        command: "python main.py results_b test_a testnetwork_test_a_1 db"
+And of course, the Dockerfile:
+FROM python:3.5
+WORKDIR /usr/src/
+CMD bash
+I try running:
+docker-compose run test_b
+docker-compose down
+docker-compose up
+And the two text file outputs will look something like this:
+test_network/src/results_a
+# Output from docker-compose run test_b
+=== main.py results_a test_b testnetwork_test_b_run_1 db ===
+20160609-02:00:17: test_b               - 256
+20160609-02:00:17: testnetwork_test_b_run_1 - 0
+20160609-02:00:17: db                   - 0
+
+# Output from docker-compose up
+=== main.py results_a test_b testnetwork_test_b_run_1 db ===
+20160609-02:01:00: test_b               - 0
+20160609-02:01:15: testnetwork_test_b_run_1 - 256 # Expected here... Just to show problem above.
+20160609-02:01:15: db                   - 0
+test_network/src/results_b
+# Output from docker-compose run test_b
+=== main.py results_b test_a testnetwork_test_a_1 db ===
+20160609-02:00:12: test_a               - 0
+20160609-02:00:12: testnetwork_test_a_1 - 0
+20160609-02:00:12: db                   - 0
+
+# Output from docker-compose up
+=== main.py results_b test_a testnetwork_test_a_1 db ===
+20160609-02:01:00: test_a               - 0
+20160609-02:01:00: testnetwork_test_a_1 - 0
+20160609-02:01:00: db                   - 0
+My main question, is there any reason why the other container can't connect to the container started with run using the service name (test_b) while it can connect using the container name (testnetwork_test_b_run_1) and it can be connected to in reverse?
+I understand there are some differences between the purpose of run and up, but I was wondering why this in particular? There have been some cases where I want to start up a container using run and for dependant services to be able to communicate with it. Am I using the wrong tools here or am I doing something completely wrong?

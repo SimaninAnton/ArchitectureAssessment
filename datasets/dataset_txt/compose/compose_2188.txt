@@ -1,0 +1,35 @@
+jgzurano commented on 30 Jul 2016
+Hi,
+I'm trying to use docker-compose with docker 1.12 load balacing features.
+I want to run more than one container and load balance them on port 8080 of the host.
+This is my client and server versions:
+$ docker version
+Client:
+ Version:      1.12.0-rc5
+...
+Server:
+ Version:      1.12.0-rc5
+This is the compose file:
+version: '2'                                                                                                                                                                 
+services:
+
+  example:
+    image: xxx/yyy:latest
+    hostname: example
+    domainname: example.com
+    port:
+      - 8080:8080
+I get an error publishing the same port when scaling:
+$ docker-compose -f example.yml up -d
+$ docker-compose -f example.yml scale example=2
+
+are created on a single host, the port will clash.
+Creating and starting user_example_1 ... error
+Creating and starting user_example_2 ... error
+
+ERROR: for user_example_1  Cannot start service example: driver failed programming external connectivity on endpoint user_example_1 (5d0c531d7dc6712e2351cb9138b525afebe6a8c4916afe9d5bd0eabebd371d73): Bind for 0.0.0.0:8080 failed: port is already allocated
+
+ERROR: for user_example_2  Cannot start service example: driver failed programming external connectivity on endpoint user_example_2 (c1e94bed968999fd5c8c24f4dfbc48b55e4aef5e4e4a3410bb48a4def71d4d1f): Bind for 0.0.0.0:8080 failed: port is already allocated
+I have no problems creating this service with the docker service command and load balance all containers on port 8080. I want to get the same results with docker compose.
+Is there a way to define the load balancing on the compose file?
+2

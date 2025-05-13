@@ -1,0 +1,15 @@
+clintam commented on 9 Jan 2017 •
+edited
+When running docker-compose run --rm -d service the remove option is silently ignored. Rather, I expected to fail fast with a validation message similar to docker
+$ docker run --rm -d busybox
+Conflicting options: --rm and -d
+Steps to reproduce
+Create a simple docker compose:
+service:
+  image: busybox:latest
+  command: echo simple
+Run docker-compose run --rm -d service
+Observe that the container is not removed:
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                     PORTS               NAMES
+ceb2bdadd3f1        busybox:latest      "echo simple"            6 seconds ago       Exited (0) 5 seconds ago                       test_service_run_1

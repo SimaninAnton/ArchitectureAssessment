@@ -1,0 +1,13 @@
+mxlan commented on 7 Apr 2017
+(If there are priorities, this issue could be set to low)
+I don't believe that this:
+#4232
+networks being attachable are enabled version 2.1+
+is mentioned in the documentation.
+See:
+https://docs.docker.com/compose/networking/
+https://docs.docker.com/compose/compose-file/compose-file-v2/#network-configuration-reference
+https://docs.docker.com/compose/faq/
+Could this be added, or is it expected to search for features within the changelogs?
+I'd say a blurb / footnote under https://docs.docker.com/compose/compose-file/compose-file-v2/#network-configuration-reference is good enough
+From changelog: Networks created by Compose are now always made attachable (Compose files v2.1 and up).

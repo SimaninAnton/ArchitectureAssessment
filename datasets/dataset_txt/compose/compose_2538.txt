@@ -1,0 +1,3 @@
+mattupstate commented on 5 Apr 2016
+It'd be pretty nice to be able to run commands like you can with the regular docker client, so I don't have to always inject stuff into the shell environment. For example:
+$ docker-compose $(docker-machine config default) up -d web

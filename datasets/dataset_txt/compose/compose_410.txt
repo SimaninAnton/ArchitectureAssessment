@@ -1,0 +1,44 @@
+hugodes commented on 9 Nov 2018
+Description of the issue
+When I use the shm_size option in the compose file for a build it is being ignored.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  sut:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      shm_size: 2gb
+    command: 'bash -c "df -h"'
+version: '3.5'
+Steps to reproduce the issue
+Use this compose file with a generic linux image
+Observed result
+The output from the container command shows /dev/shm at 64m
+Expected result
+should be 2gb

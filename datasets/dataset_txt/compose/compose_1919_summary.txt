@@ -1,0 +1,1 @@
+Environment variables with folded-style string values contain a newline at the end

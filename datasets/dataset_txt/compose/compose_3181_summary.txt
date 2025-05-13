@@ -1,0 +1,1 @@
+Network aliases created with full container name & not short name

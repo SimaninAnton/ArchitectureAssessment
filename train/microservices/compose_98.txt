@@ -1,0 +1,94 @@
+Contributor
+lukas9393 commented on 24 Sep 2019
+Description of the issue
+Because the line 1790 asks for a flag
+command_builder.add_flag("--progress", self._progress)
+and not for an argument,
+command_builder.add_arg("--progress", self._progress)
+this stack trace is created.
+Possible Solution:
+Replace flag with arg and we will don't have a stack trace.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0dev, build d7c7e219
+docker-py version: 4.0.1
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.1c  28 May 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:26:49 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:32:21 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  redis:
+    image: redis:alpine
+  web:
+    build:
+      context: /Users/lukas.hettwer/workspace/compose
+    ports:
+    - 5000:5000/tcp
+version: '3.0'
+Steps to reproduce the issue
+COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build --progress tty
+Observed result
+redis uses an image, skipping
+WARNING: Native build is an experimental feature and could change at any time
+Building web
+"docker build" requires exactly 1 argument.
+See 'docker build --help'.
+
+Usage:  docker build [OPTIONS] PATH | URL | -
+
+Build an image from a Dockerfile
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+    command()
+  File "compose/cli/main.py", line 127, in perform_command
+    handler(command, command_options)
+  File "compose/cli/main.py", line 303, in build
+    progress=options.get('--progress'),
+  File "compose/project.py", line 396, in build
+    build_service(service)
+  File "compose/project.py", line 379, in build_service
+    service.build(no_cache, pull, force_rm, memory, build_args, gzip, rm, silent, cli, progress)
+  File "compose/service.py", line 1105, in build
+    platform=self.platform,
+  File "compose/progress_stream.py", line 25, in stream_output
+    for event in utils.json_stream(output):
+  File "compose/utils.py", line 61, in split_buffer
+    for data in stream_as_text(stream):
+  File "compose/utils.py", line 37, in stream_as_text
+    for data in stream:
+  File "compose/service.py", line 1808, in build
+    while p.poll() is None:
+FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/n4/8ll6pclx5j9glg4wn6478tjr0000gp/T/tmpkvkcguz1'
+[84845] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Darwin macbook-pro-092.local 18.7.0 Darwin Kernel Version 18.7.0: Tue Aug 20 16:57:14 PDT 2019; root:xnu-4903.271.2~2/RELEASE_X86_64 x86_64

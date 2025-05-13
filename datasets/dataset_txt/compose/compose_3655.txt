@@ -1,0 +1,4 @@
+Contributor
+TomasTomecek commented on 10 May 2015
+Since you are setting upper bounds for dependencies, it is hard to package your software in distributions. E.g. right now I can't update requests, because compose requires requests < 2.6.
+Is there some hard requirement behind those upper bounds?

@@ -1,0 +1,26 @@
+Contributor
+kevinsimper commented on 19 Apr 2015
+I get this error when trying to specify timeout
+kevinsimper$ compose --version
+docker-compose 1.2.0
+kevinsimper$ compose restart --help
+Restart running containers.
+
+Usage: restart [options] [SERVICE...]
+
+Options:
+  -t, --timeout TIMEOUT      Specify a shutdown timeout in seconds.
+                             (default: 10)
+kevinsimper$ compose restart -t 1 backend
+Restarting app_backend_1...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 418, in restart
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 186, in restart
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 115, in restart
+TypeError: restart() got an unexpected keyword argument 'timeout'

@@ -1,0 +1,63 @@
+HenrikBach1 commented on 28 Mar 2018 •
+edited
+Description of the issue
+docker-compose up doesn't work in Windows 10 Pro
+Context information (for bug reports)
+>docker-compose version
+docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+>docker version
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Wed Mar 21 23:06:28 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:14:32 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+>docker-compose config
+services:
+  redis:
+    image: redis:alpine
+  web:
+    build:
+      context: C:\tools\cygwin\home\hebh\projects\docker-compose-test\web-app
+    ports:
+    - 5000:5000/tcp
+version: '3.0'
+Steps to reproduce the issue
+>docker-machine.exe create --driver hyperv default
+...
+
+>docker-machine ls
+NAME      ACTIVE   DRIVER   STATE     URL                       SWARM   DOCKER        ERRORS
+default   -        hyperv   Running   tcp://192.168.0.45:2376           v18.03.0-ce
+
+>docker-compose.exe -H tcp://192.168.0.45:2376 up
+ERROR: Couldn't connect to Docker daemon - you might need to run ``docker-machine start default``.
+
+>docker-machine ls
+NAME      ACTIVE   DRIVER   STATE     URL                       SWARM   DOCKER        ERRORS
+default   -        hyperv   Running   tcp://192.168.0.45:2376           v18.03.0-ce
+Observed result
+ERROR: Couldn't connect to Docker daemon - you might need to run ``docker-machine start default``.
+Expected result
+Running services in the Docker Host Engine default...
+Additional information
+OS version / distribution, docker-compose install method, etc.
+>systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+OS Name:                   Microsoft Windows 10 Pro
+OS Version:                10.0.16299 N/A Build 16299

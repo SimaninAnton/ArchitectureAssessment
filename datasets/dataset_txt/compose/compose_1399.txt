@@ -1,0 +1,16 @@
+johanneswuerbach commented on 8 Jun 2017
+The terminal output seems to be missing line position resets when running an interactive terminal.
+Version 17.06.0-rc2-ce-mac14 (18280)
+Channel: edge
+e4067577a3
+docker-compose.yml
+version: '2'
+services:
+  test:
+    image: ubuntu:14.04
+And when running the test service and just pressing enter the following happens:
+docker-compose run --rm test bash
+root@aa30d9f1dbe8:/#
+                     root@aa30d9f1dbe8:/#
+                                          root@aa30d9f1dbe8:/#
+8

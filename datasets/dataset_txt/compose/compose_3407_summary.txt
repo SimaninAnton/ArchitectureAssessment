@@ -1,0 +1,1 @@
+Failed to initialize logging driver: Unix syslog delivery error

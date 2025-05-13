@@ -1,0 +1,1 @@
+docker-compose fails on windows with relative build context

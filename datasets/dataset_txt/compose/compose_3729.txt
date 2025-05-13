@@ -1,0 +1,5 @@
+linlinlinlin commented on 13 Apr 2015
+Is it possible to using the latest version of requests package? (2.6)
+Here is the release note for requests 2.6.
+http://docs.python-requests.org/en/latest/
+Cuz I saw the setup.py restrict it under 2.6.

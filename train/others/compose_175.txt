@@ -1,0 +1,6 @@
+zffocussss commented on 17 May 2019
+Hi team I use docker-compose to run my service .I have volume mount(/a/b/c) locally to remote
+but the subdirectory /a/b/c/d is mount from remote nfs (I use autofs locally).
+but sometimes I get errors when cd /a/b/c/d
+cd too many levels of symbolic links
+how can I resolve it?

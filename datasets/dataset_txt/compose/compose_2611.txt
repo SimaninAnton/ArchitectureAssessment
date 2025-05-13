@@ -1,0 +1,21 @@
+gaelduplessix commented on 17 Mar 2016
+In version 1.10, Docker added the ability to specify a custom ip for a container using docker run --ip.
+Is there any plan for integrating this option to docker-compose ?
+This would allow to do things like this:
+version: '2'
+
+services:
+    app:
+        build: ./
+        # Custom ipv4 address
+        ip: 192.168.42.84
+        networks:
+            - my_network
+
+networks:
+    my_network:
+        ipam:
+            config:
+                - subnet: 192.168.0.0/16
+                  ip_range: 192.168.0.0/16
+                  gateway: 192.168.0.1

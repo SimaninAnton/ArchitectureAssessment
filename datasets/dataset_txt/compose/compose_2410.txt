@@ -1,0 +1,28 @@
+overmike commented on 11 May 2016
+It is great to have variable substitution in compose file, but is that possible to have a pre-defined docker network as an variable in top level networks declaration?
+e.g. this compose file doesn't work, this gives service using undefined network
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+     - "5000:5000"
+    volumes:
+     - .:/code
+    networks:
+      - ${front}
+
+  redis:
+    image: redis
+    volumes:
+      - redis-data:/var/lib/redis
+    networks:
+      - ${back}
+volumes:
+  redis-data:
+    driver: local
+networks:
+  ${back}:
+    driver: external
+  ${front}:
+    driver: external

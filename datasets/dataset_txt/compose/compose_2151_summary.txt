@@ -1,0 +1,1 @@
+Compose throws an error when a container with a mapped volume is recreated with a modified docker-compose.yml file

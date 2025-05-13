@@ -1,0 +1,1 @@
+build for extends service sees it as image

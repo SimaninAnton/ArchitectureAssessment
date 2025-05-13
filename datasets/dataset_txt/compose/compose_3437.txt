@@ -1,0 +1,7 @@
+jamshid commented on 27 Jul 2015
+Would be nice if docker-compose run supported all docker run features like --volumes-from.
+E.g. I have a service defined in my docker-compose.yml that can backup a file system. I want to use it with arbitrary containers, not a static list of containers specified in docker-compose.yml's volumes_from.
+$ docker-compose --version
+docker-compose version: 1.3.2
+Sorry this might be a dup of #136, but that issue got closed with a fix that doesn't seem to affect docker-compose run.
+21

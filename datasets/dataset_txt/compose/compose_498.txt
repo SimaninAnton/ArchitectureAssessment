@@ -1,0 +1,29 @@
+hjanuschka commented on 14 Sep 2018 •
+edited
+Hey
+i docker-compose, i am trying to use extend-fields to centralise a bunch of my configs.
+e.g:
+version: '3.4'
+x-common-hosts: &common-hosts
+  - "varnish.krn.xxx.at:${KRN_HOST_VHIST}"
+  
+
+services:
+ xx:
+   extra_hosts: *common-hosts
+but i have like a ton of yml's and they all share the same common-hosts
+i tried doing it like this.
+`docker-compose -f global_settings.yml docker-compose.yml
+where as:
+global-settings.yml
+version: '3.4'
+x-common-hosts: &common-hosts
+  - "varnish.krn.xxx.at:${KRN_HOST_VHIST}"
+  
+and docker-compose.yml
+services:
+ xx:
+   extra_hosts: *common-hosts
+fails with undefined common-hosts
+docker-compose version: 1.22
+thx

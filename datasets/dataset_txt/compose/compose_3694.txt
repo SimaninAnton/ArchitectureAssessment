@@ -1,0 +1,35 @@
+lukestephenson commented on 23 Apr 2015
+I'm running a rails app within docker-compose. If I run with docker-compose up the performance of the web application is poor. If I run with docker-compose run --rm --service-ports web then performance is good.
+My docker-compose.yml
+---
+db:
+  image: postgres:9.4
+  ports:
+    - "5432:5432"
+web:
+  build: .
+  environment:
+    - DB_HOST=db
+  ports:
+    - "3000:80"
+  links:
+    - db
+  command: bundle exec unicorn -c config/unicorn.rb -p 80
+Performance as shown in logs with docker-compose run
+[23/Apr/2015:02:05:44 +0000] "GET /assets/templates/inputs/input.js?body=1 HTTP/1.1" 304 - 0.0163
+[23/Apr/2015:02:05:44 +0000] "GET /assets/templates/inputs/select.js?body=1 HTTP/1.1" 304 - 0.0158
+[23/Apr/2015:02:05:44 +0000] "GET /assets/inline/date-picker.js?body=1 HTTP/1.1" 304 - 0.0401
+[23/Apr/2015:02:05:44 +0000] "GET /assets/pickadate/classic.date.css?body=1 HTTP/1.1" 304 - 0.2362
+[23/Apr/2015:02:05:44 +0000] "GET /assets/templates/inputs/date.js?body=1 HTTP/1.1" 304 - 0.0675
+[23/Apr/2015:02:05:44 +0000] "GET /assets/inline/highlight_menu.js?body=1 HTTP/1.1" 304 - 0.0328
+[23/Apr/2015:02:05:44 +0000] "GET /assets/pickadate/picker.js?body=1 HTTP/1.1" 304 - 0.0106
+Those same requests for static resources are much slower with docker-compose up. From the web browser, its even slower than the logs suggest.
+web_1 | [23/Apr/2015:02:05:15 +0000] "GET /assets/templates/inputs/input.js?body=1 HTTP/1.1" 304 - 0.8170
+web_1 | [23/Apr/2015:02:05:16 +0000] "GET /assets/templates/inputs/select.js?body=1 HTTP/1.1" 304 - 0.8938
+web_1 | [23/Apr/2015:02:05:16 +0000] "GET /assets/inline/date-picker.js?body=1 HTTP/1.1" 304 - 0.8797
+web_1 | [23/Apr/2015:02:05:16 +0000] "GET /assets/inline/deals.js?body=1 HTTP/1.1" 304 - 0.8958
+web_1 | [23/Apr/2015:02:05:16 +0000] "GET /assets/inline/highlight_menu.js?body=1 HTTP/1.1" 304 - 0.8932
+web_1 | [23/Apr/2015:02:05:17 +0000] "GET /assets/pickadate/picker.js?body=1 HTTP/1.1" 304 - 0.9130
+web_1 | [23/Apr/2015:02:05:17 +0000] "GET /assets/pickadate/picker.date.js?body=1 HTTP/1.1" 304 - 0.9080
+web_1 | [23/Apr/2015:02:05:17 +0000] "GET /assets/pickadate.js?body=1 HTTP/1.1" 304 - 0.8573
+Is this expected? I'm guessing that with docker-compose up, the host (osx) file system is being mounted to serve the static resources which results in the slowness.

@@ -1,0 +1,1 @@
+docker-compose pull should ignore services with build statement

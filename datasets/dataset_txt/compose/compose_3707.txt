@@ -1,0 +1,15 @@
+niallmccullagh commented on 20 Apr 2015
+To run compose using only a pre-built image that does not match the projectName_service tag fails. However passing a project name in the -p flag that does not match the default name works.
+Declaration in docker-compose.yml:
+api:
+  image: example/appname
+ …
+Output when running docker-compose up
+docker-compose up
+Recreating appname_api_1...
+No such image: appname_api:latest (tag: latest)
+Works oddly when specifying -p flag with project name that does not match the default project name
+docker-compose -p someothername up
+Creating someothername_api_1...
+Attaching to someothername_api_1
+There should be no need to pass a project name to docker-compose up for this to work

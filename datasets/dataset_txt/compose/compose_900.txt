@@ -1,0 +1,34 @@
+zibok commented on 1 Feb 2018
+On docker-compose 1.19.0rc2, the DOCKER_TLS_VERIFY variable does not seem to be taken into account anymore.
+Environment:
+Docker 17.09.0-ce with TLS support enabled
+docker-compose.yml as follows:
+version: '2'
+
+services:
+  dev:
+    image: "whatever-image-you-want"
+And launch
+export DOCKER_HOST=tcp://x.x.x.x:2376
+export DOCKER_TLS_VERIFY=1
+export DOCKER_CERT_PATH=/path/to/certs
+docker-compose up -d
+With docker-compose 1.18.0, no warning and container is up
+vagrant@stretch:~$ docker-compose --tlsverify up -d dev
+Starting vagrant_dev_1 ... done
+With docker-compose 1.19.0-rc2, a lot of warnings appears
+vagrant@stretch:~$ docker-compose up -d dev
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+/tmp/_MEIAQRiAe/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+vagrant_dev_1 is up-to-date
+But if I launch docker-compose --tls-verify up -d, no warning appears.
+So maybe a glitch with DOCKER_TLS_VERIFY environment variable in 1.19?
+3

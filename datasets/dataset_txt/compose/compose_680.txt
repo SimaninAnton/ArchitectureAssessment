@@ -1,0 +1,29 @@
+singggum3b commented on 10 May 2018
+Description of the issue
+Compose:
+version: "3"
+
+services:
+ mangaex-api:
+   build:
+    context: .
+    dockerfile: ./api/Dockerfile
+    args:
+     - ENVIRONMENT=$ENVIRONMENT
+     - APP_PATH=$APP_PATH
+     - PORT=$API_PORT
+   tty: true
+   stdin_open: true
+   depends_on:
+    - mangaex-database
+   ports:
+    - $API_PORT:$API_PORT
+   volumes:
+    - ./api:$APP_PATH
+    - ./shared-model:$APP_PATH/shared-model
+export $APP_PATH="/app"
+Error when docker-compose up :
+ERROR: for mangaex_mangaex-api_1  Cannot create container for service mangaex-api: invalid volume specification: '/host_mnt/d/project/mangaex/shared-model:C:/Program Files/Git/app/shared-model:rw'
+See that the $APP_PATH get resolved in to absolute path C:/Program Files/Git/app/shared-model
+This config work fine in linux environment.
+Docker ce v.18 - window 10

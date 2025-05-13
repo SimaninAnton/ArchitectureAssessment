@@ -1,0 +1,14 @@
+j2kun commented on 28 May 2016
+Hi there,
+I have a scenario in mind where I spin up many containers, each with just one small difference that is based on the id of the container. E.g.,
+version: '2'
+services:
+  app:
+    image: python:3-onbuild
+    scale: 100
+    volumes:
+      - ./dir_$id:/working_dir
+    working_dir: /working_dir
+    command: python3 program.py
+This would spin up 100 containers, each identical except that app_1 mounts dir_1, app_2 mounts dir_2, etc.
+Is this currently possible with docker-compose? If it is not, would it be possible to implement this for a future release?

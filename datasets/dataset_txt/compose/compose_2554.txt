@@ -1,0 +1,21 @@
+shouze commented on 31 Mar 2016
+Related to #788 & kind of #1341
+There's kind of many tools able to generate diagrams from docker compose yml config files:
+url language v2 format support
+https://github.com/dockerboard/marsoon js no
+https://github.com/digibib/docker-compose-dot go partial
+https://github.com/abesto/docker-compose-graphviz go no
+http://dockercompose.inventage.com ? no
+https://github.com/rabelenda/docker2plant groovy no
+https://github.com/Alexis-benoist/draw-compose python no
+But, of course, here's the conclusion when testing them:
+They don't reuse the official docker-compose config parser.
+They're all incomplete, so 6 incomplete products instead of 1 complete one, there's a way to group the development effort.
+They don't have guidelines for the rendered output, each of them have some nice ideas but would be cool to put all the ideas together to make something great.
+Docker don't support them in any way.
+So, docker guys, should be great to help this kind of tool emerging the right way no?
+1st, maybe the config parser for docker compose could be available a separate lib? Or docker-compose could provide some plugins interface?
+It would be also very pleasant at the end to provide a gorgeous docker color palette by default for the generated diagram that could make them like beautiful, consistent / pro diagrams.
+54
+1
+2

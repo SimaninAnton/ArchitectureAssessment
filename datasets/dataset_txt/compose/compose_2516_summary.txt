@@ -1,0 +1,1 @@
+up doesn't restart/recreate stopped or removed containers if it is dealing with more than 3 containers/services

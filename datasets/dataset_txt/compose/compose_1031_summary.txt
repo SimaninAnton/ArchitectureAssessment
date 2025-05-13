@@ -1,0 +1,1 @@
+logging HOST_CONFIG_KEY in compose/service.py

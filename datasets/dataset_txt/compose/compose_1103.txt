@@ -1,0 +1,38 @@
+tomyan commented on 3 Nov 2017
+With the following container we are getting an error creating the container:
+  dynamodb:
+    image: instructure/dynamo-local-admin
+    labels:
+      - "com.acuris.service.group=companyhub"
+    ports:
+      - "8000:8000"
+When we run the command:
+docker-compose run dynamodb
+We get the error:
+Traceback (most recent call last):
+  File "/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 121, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 768, in run
+    run_one_off_container(container_options, self.project, service, options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 1178, in run_one_off_container
+    **container_options)
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 288, in create_container
+    previous_container=previous_container,
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 795, in _get_container_create_options
+    self.config_hash if add_config_hash else None)
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 1338, in build_container_labels
+    labels = dict(label_options or {})
+ValueError: dictionary update sequence element #0 has length 35; 2 is required
+However, if we change the container definition to the following then it works:
+  dynamodb:
+    image: instructure/dynamo-local-admin
+    labels:
+      com.acuris.service.group: companyhub
+    ports:
+      - "8000:8000"
+This has only started failing since we upgraded to docker-compose version 1.17.0, build ac53b73.
+12

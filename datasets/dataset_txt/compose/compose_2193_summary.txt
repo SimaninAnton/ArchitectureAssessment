@@ -1,0 +1,1 @@
+Print helpful message when passing invalid options/args

@@ -1,0 +1,114 @@
+jneljneljnel commented on 28 Mar 2018 •
+edited by shin-
+Description of the issue
+docker compose EACCESS error when spawning process
+Context information (for bug reports)
+I have a Dockerfile where I bring in some files and chmod some stuff. it's a node server that spawns an executable file.
+FROM ubuntu:16.04
+RUN apt-get update && apt-get install -y --no-install-recommends curl sudo
+RUN curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+RUN apt-get install -y nodejs && \
+apt-get install --yes build-essential
+RUN apt-get install --yes npm
+
+#VOLUME "/usr/local/app"
+
+# Set up C++ dev env
+RUN apt-get update && \
+   apt-get dist-upgrade -y && \
+   apt-get install gcc-multilib g++-multilib cmake wget -y  && \
+   apt-get clean autoclean && \
+   apt-get autoremove -y
+   #wget -O /tmp/conan.deb -L https://github.com/conan-io/conan/releases/download/0.25.1/conan-ubuntu-64_0_25_1.deb && \
+   #dpkg -i /tmp/conan.deb
+
+#ADD ./scripts/cmake-build.sh /build.sh
+#RUN chmod +x /build.sh
+#RUN /build.sh
+
+
+RUN curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+RUN apt-get install -y nodejs sudo
+
+
+RUN mkdir -p /usr/local/app
+WORKDIR /usr/local/app
+COPY package.json /usr/local/app
+RUN ["npm", "install"]
+COPY . .
+
+
+RUN echo "/usr/local/app/dm" > /etc/ld.so.conf.d/mythrift.conf
+RUN echo "/usr/lib/x86_64-linux-gnu" >> /etc/ld.so.conf.d/mythrift.conf
+RUN echo "/usr/local/lib64" >> /etc/ld.so.conf.d/mythrift.conf
+RUN ldconfig
+
+EXPOSE 9090
+RUN chmod +x dm/dm3
+RUN ldd dm/dm3
+RUN ["chmod", "+x", "dm/dm3"]
+RUN ["chmod", "777", "policy"]
+RUN ls -al .
+CMD ["nodemon", "-L", "app.js"]
+it works all fine but when I use docker-compose for the purpose of having an autoreload dev enviornment in docker, I get an EACCES error when spawning the executable process.
+version: '3'
+services:
+  web:
+    build: .
+    command: npm run start
+    volumes:
+      - .:/usr/local/app/
+      - /usr/app/node_modules
+    ports:
+      - "3000:3000"
+I'm using nodemon to restart the server on changes, hence the volumes in the compose. woulds love to get that workflow up again.
+Output of "docker-compose version"
+docker-compose version 1.18.0, build 8dd22a9
+Output of "docker version"
+
+Client:
+ Version: 17.12.0-ce
+ API version: 1.35
+ Go version: go1.9.2
+ Git commit: c97c6d6
+ Built: Wed Dec 27 20:03:51 2017
+ OS/Arch: darwin/amd64
+
+Server:
+ Engine:
+  Version: 17.12.0-ce
+  API version: 1.35 (minimum version 1.12)
+  Go version: go1.9.2
+  Git commit: c97c6d6
+  Built: Wed Dec 27 20:12:29 2017
+  OS/Arch: linux/amd64
+  Experimental: true
+Steps to reproduce the issue
+use code provided above
+Observed result
+web_1  | [nodemon] starting `node app.js`
+web_1  | listening on *:3000
+web_1  | client connected: zTZS7weZKuQgnIzmAAAA
+web_1  | internal/child_process.js:330
+web_1  |     throw errnoException(err, 'spawn');
+web_1  |     ^
+web_1  |
+web_1  | Error: spawn EACCES
+web_1  |     at ChildProcess.spawn (internal/child_process.js:330:11)
+web_1  |     at exports.spawn (child_process.js:500:9)
+web_1  |     at /usr/local/app/app.js:130:21
+web_1  |     at /usr/local/app/node_modules/portfinder/lib/portfinder.js:160:14
+web_1  |     at /usr/local/app/node_modules/async/lib/async.js:52:16
+web_1  |     at /usr/local/app/node_modules/async/lib/async.js:269:32
+web_1  |     at /usr/local/app/node_modules/async/lib/async.js:44:16
+web_1  |     at /usr/local/app/node_modules/portfinder/lib/portfinder.js:122:16
+web_1  |     at Server.onListen (/usr/local/app/node_modules/portfinder/lib/portfinder.js:45:7)
+web_1  |     at Object.onceWrapper (events.js:272:13)
+web_1  | [nodemon] app crashed - waiting for file changes before starting.
+Expected result
+app should not crash
+Stacktrace / full error message
+(if applicable)
+Additional information
+again, this works fine by building and running the dockerfile, but when i docker compose up, i get this error.
+OS version / distribution, docker-compose install method, etc.

@@ -1,0 +1,1 @@
+Docker-compose cut last part in a hostname

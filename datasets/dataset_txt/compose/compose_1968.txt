@@ -1,0 +1,49 @@
+pratapnanda commented on 1 Nov 2016 •
+edited by shin-
+Hello ,
+My docker version is below .I am trying to run my container on a particular host .it showing me error as"Unsupported config option for interlock_2: 'networks'" .
+$ docker version
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:20:08 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      ucp/1.1.1
+ API version:  1.22
+ Go version:   go1.6.2
+ Git commit:   f28e3be
+ Built:        Fri May 27 17:25:03 UTC 2016
+ OS/Arch:      linux/amd64
+Below details in my compose file
+interlock_2:
+    image: ehazlett/interlock:master
+    networks:
+          test:
+            ipv4_address: 192.168.23.113        
+    command: -D run
+    tty: true
+    ports:
+        - 8080
+    environment:       
+        INTERLOCK_CONFIG: |
+            ListenAddr = ":8080"
+            DockerURL = "tcp://192.168.23.139:2376"
+            TLSCACert = "/certs/ca.pem"
+            TLSCert = "/certs/cert.pem"
+            TLSKey = "/certs/key.pem"
+            PollInterval = "10s"
+
+            [[Extensions]]
+            Name = "nginx"
+            ConfigPath = "/etc/nginx/nginx.conf"
+            PidPath = "/etc/nginx/nginx.pid"
+            MaxConn = 1024
+            ipv4_address="192.168.23.113"
+            Port = 80            
+    volumes:
+        - ucp-node-certs:/certs
+    restart: always 

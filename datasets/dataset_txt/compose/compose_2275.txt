@@ -1,0 +1,26 @@
+nhatfield commented on 27 Jun 2016 •
+edited
+Docker --version
+docker version 1.9.0, build 76d6bc9
+Docker-compose --version
+docker-compose version 1.8.0-rc1, build 9bf6bc6
+Docker network ls
+default overlay
+docker-compose -f docker-compose.yml -d up zookeeper - works fine!
+docker-compose -f docker-compose.yml scale zookeeper=2 - fails with Unable to find a node that satisfies the following conditions
+[port 2181 (Bridge mode)]
+[available container slots]
+[image==devbox_zookeeper (soft=false)]
+This is 2 node swarm cluster:
+2 managers
+2 hosts
+1 consul
+docker-compose file:
+version 2
+Services:
+zookeeper:
+build: ./zookeeper/
+ports:
+- "2181:2181"
+networks:
+- default

@@ -1,0 +1,3 @@
+Contributor
+aleksandr-vin commented on 30 Mar 2015
+When you run 'docker-compose up' in terminal A, there is a 'followed' logs from all of them. Then, you call 'docker-compose restart xxx' in termnal B and see the 'xxx_1'-shutdown logs in terminal A. Then there is a couple logs of the 'xxx_1'-startup in terminal A and then nothing else added. You can call 'docker-compose logs xxx' in terminal C and will see the missed logs there.

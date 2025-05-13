@@ -1,0 +1,4 @@
+cjerdonek commented on 4 Aug 2017
+If you run docker-compose up and terminate it with a signal (e.g. SIGTERM or SIGINT / Control-C), the exit status is 0 instead of non-zero.
+When terminating with a signal, the convention is to exit with status code 128 + n, where n is the signal number. See here, for example.
+I'm observing this in docker-compose version 1.10.1, build b252738, but looking at the code it seems to be like this in master as well.

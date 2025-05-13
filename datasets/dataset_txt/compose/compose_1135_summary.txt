@@ -1,0 +1,1 @@
+I am having this "Encountered errors while bringing up the project." error

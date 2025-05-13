@@ -1,0 +1,12 @@
+selvik commented on 29 Jun 2016 •
+edited
+Hi,
+Could someone point me to instructions on using docker-compose to schedule services on the new docker-engine swarm mode cluster?
+When I try to do a:
+eval $(docker-machine env [swarm-master-hostname])
+docker-compose up
+All the services defined in my docker-compose.yaml file get started up as containers on the single host.
+How can I get the services defined in my docker-compose file started up as "services" in swarm mode?
+Thanks!
+-Selvi
+47

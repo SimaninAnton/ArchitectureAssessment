@@ -1,0 +1,21 @@
+thomas-riccardi commented on 25 Feb 2016
+dockerfile doc hasn't been updated with Compose File v2 format:
+Using dockerfile together with image is not allowed. Attempting to do so results in an error.
+This is wrong for v2 format, it does work:
+version: '2'
+services:
+  app:
+    image: redis
+    build:
+      dockerfile: Dockerfile
+      context: .
+$ docker-compose config
+networks: {}
+services:
+  test:
+    build:
+      context: /xxx
+      dockerfile: Dockerfile
+    image: redis
+version: '2.0'
+volumes: {}

@@ -1,0 +1,35 @@
+OJFord commented on 17 Dec 2017 •
+edited
+I'm trying to setup some dockerised NAS, with mergerfs and samba:
+services:
+
+  mergerfs:
+    build: ./mergerfs  # just debian and install latest release
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    volumes:
+      - media:/mnt/pool
+      - /mnt/data0:/mnt/data0
+      ...
+   ...
+
+  samba:
+    image: dperson/samba
+    command: ﻿﻿-s'media;/srv/media;yes;no;yes'  # guest allowed, not RO
+    ﻿﻿volumes:
+      - media:/srv/media
+    depends_on:
+      - mergerfs
+    ...
+
+volumes:
+  media:
+The problem is that, while I can read/write to /srv/media on samba, it doesn't get through to /mnt/pool on mergerfs.
+(I can see this by watching docker-compose logs mergerfs while doing docker-compose exec samba sh -c "echo 'foobar' > /srv/media/test.txt" which shows nothing in logs, versus the equivalent exec mergerfs which does.)
+If I change the named volume media for a path on the host machine I get the same affect: writes to samba make it to the host mount, can be read back, but are not propagated to /mnt/pool in mergerfs.
+It seems as if when I run /usr/bin/merger/fs ... /mnt/pool it's actually shadowing the mount, and completely disengaged from it. Should this work, or am I doing it wrong?
+In summary:
+Writing to samba writes through to the host mount (that should be the pool mount)
+Writing to mergerfs pool writes to the host physical disk mounts, but not the pool mount on host

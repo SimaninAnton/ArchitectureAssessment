@@ -1,0 +1,19 @@
+datosh commented on 2 Jul 2018
+Description of the issue
+Basically what the title says.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.2, build a133471
+Output of "docker version"
+Docker version 18.03.1-ce, build 9ee9f40
+Output of "docker-compose config"
+-
+Steps to reproduce the issue
+docker-compose up -d --no-deps --scale my_service=3
+Observed result
+Launches 3 instances of my_service, as well as one instance for all other services defined in my compose file. "All other" services include here not only directly specified dependencies of my_service, but all services I have defined in my docker-compose file.
+Expected result
+Launch 3 instances of my_service.
+Stacktrace / full error message
+(if applicable)
+Additional information

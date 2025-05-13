@@ -1,0 +1,10 @@
+Contributor
+dnephin commented on 19 Dec 2014
+With the current behaviour of fig up all container are stopped when a single container exits. This has caused some confusion.
+if a fig.yml contains any data volume containers (anything that would exit immediately) fig up is entirely useless, a -d must be specified every time
+if someone does a fig stop <some service> in a different terminal, it causes all containers to stop (which is not intuitive).
+I propose the default for fig up change. Some ideas:
+default to -d, and provide a flag to allow the old behaviour
+default to tailing logs, but don't stop containers on or when any container stops, leave everything running.
+show a fig ps as the output after starting containers, to show that all containers have started properly (or not) (credit @thaJeztah)
+I only ever use fig up with -d, and I wonder if others are using it this way. It seems like for CI you would have to, and for a development environment you may want to start/stop containers independently, so you'd still need -d.

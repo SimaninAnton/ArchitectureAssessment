@@ -1,0 +1,28 @@
+kingbuzzman commented on 21 Sep 2017 •
+edited
+With normal docker:
+$ docker volume ls
+DRIVER              VOLUME NAME
+Run the server
+docker run -it --rm -p 6379:6379 redis:3.2-alpine
+Save some stuff
+printf "set key value\nsave" | redis-cli
+Exactly what i expect.
+$ docker volume ls
+DRIVER              VOLUME NAME
+Run the server
+docker run -it --rm -p 6379:6379 -v /data redis:3.2-alpine
+Save some stuff
+printf "set key value\nsave" | redis-cli
+Cool, the data was saved to a random volume -- cool.
+docker volume ls
+DRIVER              VOLUME NAME
+local               47dddf3c80d654478ba8577f02d526668f09a9937c615b48515f7d2870731d08
+Why is it that this:
+services:
+  redis-ns:
+    restart: always
+    image: redis:3.2-alpine
+is equal to this: docker run -it --rm -p 6379:6379 -v /data redis:3.2-alpine when it should be more equal to this: docker run -it --rm -p 6379:6379 redis:3.2-alpine
+The frustrating part is that i have 20+ unnamed volumes (every time i restart redis i get a new one (and i run 2 instances!)) that i rather not see there.
+TLDR docker-compose adding volumes even though you never wanted them

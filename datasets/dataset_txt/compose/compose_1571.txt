@@ -1,0 +1,14 @@
+djs55 commented on 23 Mar 2017
+Version 1.11.2 of docker-compose bundled in Docker for Mac 17.03.0-ce fails to run for some users. According to the report in docker/for-mac#1428 it fails like this:
+ docker-compose --version
+Traceback (most recent call last):
+File "docker-compose", line 2, in 
+File "/private/var/folders/my/m6ynh3bn6tq06h7xr3js0z7r0000gn/T/pip-build-MW5H3j/pyinstaller/PyInstaller/loader/pyimod03_importers.py", line 389, in load_module
+File "compose/cli/init.py", line 16, in 
+File "subprocess.py", line 711, in init
+File "subprocess.py", line 1343, in _execute_child
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+Failed to execute script docker-compose
+For many people (including me) it's totally fine, but several users report this error.
+The compose binary comes from https://github.com/docker/compose/releases/download/1.11.2/docker-compose-Darwin-x86_64
+I don't know how to debug it further -- any pointers would be appreciated!

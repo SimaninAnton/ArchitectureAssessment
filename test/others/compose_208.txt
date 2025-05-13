@@ -1,0 +1,3 @@
+Contributor
+joakimr-axis commented on 23 Apr 2019
+Some RUN and COPY commands in the Dockerfile could be grouped in order to decrease the amount of layers used.

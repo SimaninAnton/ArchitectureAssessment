@@ -1,0 +1,1 @@
+Persistent DNS name for pinging a cluster of containers from the host

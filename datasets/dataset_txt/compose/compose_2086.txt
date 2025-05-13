@@ -1,0 +1,112 @@
+timofurrer commented on 8 Sep 2016
+I have a docker compose setup which runs three containers.
+One of them binds a port to the host like that:
+pgweb:
+  image: donnex/pgweb
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres
+docker ps and docker-compose ps both show that the port was bound correctly:
+0.0.0.0:8081->8080/tcp
+netstat and a running docker-proxy process confirm that:
+tcp6 0 0 :::8081 :::* LISTEN 12724/docker-proxy
+running docker-proxy process:
+root 12724 4299 0 13:34 ? 00:00:00 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 8081 -container-ip 172.20.0.4 -container-port 8080
+The problem is that when I'm running shorewall (which I really have to) I cannot access this port by browsing to http://0.0.0.0:8081.
+My shorewall is setup exactly as described at http://shorewall.net/Docker.html - I'm running shorewall 5.0.11 and can make use of the DOCKER=Yes setting.
+This is some of the output of iptables -L -n: (See docker_problem_iptable.txt for complete output)
+Chain DOCKER (5 references)
+target     prot opt source               destination         
+ACCEPT     tcp  --  0.0.0.0/0            172.17.0.2           tcp dpt:2375
+ACCEPT     tcp  --  0.0.0.0/0            172.17.0.4           tcp dpt:7001
+ACCEPT     tcp  --  0.0.0.0/0            172.17.0.4           tcp dpt:4001
+ACCEPT     tcp  --  0.0.0.0/0            172.17.0.8           tcp dpt:8080
+ACCEPT     tcp  --  0.0.0.0/0            172.20.0.5           tcp dpt:1995
+ACCEPT     tcp  --  0.0.0.0/0            172.20.0.4           tcp dpt:8080
+
+Chain DOCKER-ISOLATION (1 references)
+target     prot opt source               destination         
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+RETURN     all  --  0.0.0.0/0            0.0.0.0/0           
+My docker info:
+Containers: 142
+ Running: 11
+ Paused: 0
+ Stopped: 131
+Images: 152
+Server Version: 1.12.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 718
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: overlay null bridge host
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: apparmor seccomp
+Kernel Version: 4.4.0-36-generic
+Operating System: Ubuntu 16.04.1 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 7.674 GiB
+Name: troulwn0124
+ID: 7ORI:ZCZ2:NWTH:MQF3:XSGP:D7GP:TSIO:XSAH:QKW4:VNFX:5KQI:3EFP
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Insecure Registries:
+ 127.0.0.0/8
+docker-compose version:
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+If I run the same docker image as container without compose it works like a charm.
+I'm assuming that it has something to do with the bridge interface that is created on the host for the compose network.
+docker network ls shows:
+NETWORK ID          NAME                    DRIVER              SCOPE
+9b7cb75bfddd        bridge                  bridge              local               
+e9558e5249fa        host                    host                local               
+317abbd2455f        moliortesting_default   bridge              local               
+116b30342c7a        none                    null                local               
+1b82930e5585        roilom_default          bridge              local               
+80e6ead6ea7b        skynet_default          bridge              local   
+My brctl show:
+bridge name     bridge id               STP enabled     interfaces
+br-1b82930e5585         8000.02428bd19f94       no
+br-317abbd2455f         8000.02427742c08b       no
+br-80e6ead6ea7b         8000.0242b424b8ff       no              veth547addd
+                                                        veth7f94173
+                                                        vethb433c82
+                                                        vethb825fa2
+docker0         8000.0242b4da7669       no              veth324ad1e
+                                                        veth368e37e
+                                                        veth584b61d
+                                                        veth5bd8d7a
+                                                        veth7227d10
+                                                        veth7ce2492
+                                                        vethbf38c24
+lxcbr0          8000.000000000000       no
+The br-80e6ead6ea7b is the bridge for the docker compose network.
+Btw. I don't get any reject or drop logs from shorewall.
+2

@@ -1,0 +1,1 @@
+Compose 1.15 does not handle (at least) cross-file/inter-file extends correctly

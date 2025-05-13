@@ -1,0 +1,2 @@
+vultron81 commented on 7 Apr 2016
+When you use the "up" command docker-compose uses the depends_on configuration defined in the yaml file for a given service. However, if you "pull" a given service only its image will be pulled from the repo and not its dependencies. It would be very helpful if the "pull" command also honored the depends_on configuration.

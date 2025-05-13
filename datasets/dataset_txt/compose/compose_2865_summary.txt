@@ -1,0 +1,1 @@
+Failed to get ANSI buffer size(WideCharToMultiByte: El parßmetro no es correcto. )Failed to convert pyhome to ANSI (invalid multibyte string)

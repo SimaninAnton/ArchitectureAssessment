@@ -1,0 +1,17 @@
+Contributor
+dnephin commented on 2 Sep 2015
+tests/integration/service_test.py ServiceTest.test_scale_with_api_returns_unexpected_exception aka Test that when scaling if the API returns an error, that is not of type fails in many of our jenkins run
+https://jenkins.dockerproject.org/job/Compose-PRs/1213/console
+with error:
+Traceback (most recent call last):
+  File "/code/tests/integration/testcases.py", line 22, in tearDown
+    self.client.remove_container(c['Id'])
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/utils/decorators.py", line 20, in wrapped
+    return f(self, resource_id, *args, **kwargs)
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/client.py", line 696, in remove_container
+    self._raise_for_status(res)
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/clientbase.py", line 103, in _raise_for_status
+    raise errors.NotFound(e, response, explanation=explanation)
+NotFound: 404 Client Error: Not Found ("Cannot destroy container faeacc68496793312980e36e20be6c7ae2a04a9b5f98c12f815a2235963ae834: Driver overlay failed to remove root filesystem faeacc68496793312980e36e20be6c7ae2a04a9b5f98c12f815a2235963ae834: stat /var/lib/docker/overlay/faeacc68496793312980e36e20be6c7ae2a04a9b5f98c12f815a2235963ae834: no such file or directory")
+This is a docker engine bug, but something about this specific test triggers it frequently. Looking at the test, I can't really tell what it might be.
+The failure is coming from tearDown(). We could wrap this cleanup in a try/except, which would have the added benefit of completing the rest of the cleanup.

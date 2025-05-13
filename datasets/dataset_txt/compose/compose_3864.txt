@@ -1,0 +1,5 @@
+Member
+thaJeztah commented on 6 Mar 2015
+This is a continuation on #730 (comment)
+It would be really useful if pre-build binaries of docker-compose are added to https://master.dockerproject.com. This would enable people to download a working version of the latest version for testing if they like "living on the edge".
+Also useful to confirm if an issue is resolved ("could you download the latest master to check if the issue is resolved?")

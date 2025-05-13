@@ -1,0 +1,45 @@
+sandrodz commented on 20 Apr 2016
+I want to rewrite docker run commands into docker-compose for versioning purposes.
+As commands it all worked fine, but when doing docker-compose up I get these errors:
+    ERROR: for gitlab  Container command '/assets/wrapper' not found or does not exist.
+
+    ERROR: for nginx-proxy  Container command '/app/docker-entrypoint.sh' not found or does not exist.
+.yml file looks like this:
+    nginx-proxy:
+      image: jwilder/nginx-proxy
+      ports:
+        - "80:80"
+        - "443:443"
+      restart: always
+      environment:
+        - DEFAULT_HOST=njord.weare.de.com
+      volumes:
+        - /srv/certs:/etc/nginx/certs:ro
+        - /var/run/docker.sock:/tmp/docker.sock:ro
+        - /etc/nginx/vhost.d
+        - /usr/share/nginx/html
+
+
+    nginx-certs:
+      image: jrcs/letsencrypt-nginx-proxy-companion
+      volumes:
+        - /srv/certs:/etc/nginx/certs:rw
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      volumes_from:
+        - nginx-proxy
+
+
+    gitlab:
+      image: gitlab/gitlab-ce:8.6.5-ce.0
+      hostname: gitlab.weare.de.com
+      ports:
+        - "80"
+        - "443"
+        - "104.238.171.15:22:22"
+      restart: always
+      environment:
+        - VIRTUAL_HOST=gitlab.weare.de.com
+      volumes:
+        - /srv/gitlab/config:/etc/gitlab
+        - /srv/gitlab/logs:/var/log/gitlab
+        - /srv/gitlab/data:/var/opt/gitlab

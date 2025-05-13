@@ -1,0 +1,42 @@
+Yajo commented on 28 Apr 2017
+If you fail to configure your ports' IP when publishing them, you could end up unexpectedly binding them to the world!
+Imagine I have a machine with IPs 127.0.0.1 (localhost), 10.10.10.10 (VPN). I up this docker-compose.yaml:
+version: "2.1"
+services:
+  test:
+    image: alpine
+    ports:
+      - "127.0.1.1:1:1"
+      - "10.10.10.0/24:2:2"
+    command: sleep 1000
+Then:
+➤ docker port test_test_1
+1/tcp -> 127.0.1.1:1
+2/tcp -> 0.0.0.0:2
+Did you see? Instead of raising a syntax error, it bound port 2 on 0.0.0.0. User expects its port to be available only to the VPN hosts, but it is actually available to everybody.
+Let's try the same with docker commands:
+➤ docker container run --rm -p "127.0.1.1:1:1" -p "10.10.10.0/24:2:2" alpine sleep 1000
+docker: Invalid ip address: 10.10.10.0/24.
+See 'docker run --help'.
+Docker CLI refuses to boot a container with a wrong publish definition. This is the expected behavior.
+I wish we could publish ports to IP ranges, but while that comes in, this could even be considered a security issue IMHO.
+➤ docker-compose --version
+docker-compose version 1.11.2, build dfed245
+
+➤ docker version
+Client:
+ Version:      17.04.0-ce
+ API version:  1.28
+ Go version:   go1.7.5
+ Git commit:   4845c56
+ Built:        Wed Apr  5 19:14:52 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.04.0-ce
+ API version:  1.28 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   4845c56
+ Built:        Wed Apr  5 19:14:52 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

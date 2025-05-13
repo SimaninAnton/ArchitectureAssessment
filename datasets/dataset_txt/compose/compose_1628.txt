@@ -1,0 +1,2 @@
+deadbeef84 commented on 6 Mar 2017
+I would expect the docker-compose ps command to have a column for the current image, just as the docker ps command has. Same goes for the created column, but I don't find that as important. Is there any reason this is missing?

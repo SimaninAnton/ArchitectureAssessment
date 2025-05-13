@@ -1,0 +1,3 @@
+pabx06 commented on 13 Nov 2017
+Hello i made some tweaks into my docker file and was surprised that docker up did not build the image of on of my services:
+version: "3" services: datapoll: build: context: . dockerfile: Dockerfile.datapoll args: buildno: 1 image: datapoll deploy: restart_policy: condition: on-failure delay: 5s depends_on: - graphite links: - graphite

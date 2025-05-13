@@ -1,0 +1,1 @@
+Mysql2::Error: Can't connect to MySQL server on 'db' (111)

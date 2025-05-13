@@ -1,0 +1,49 @@
+smebberson commented on 15 Jun 2015
+When you issue a docker-compose up, all services always start. While you're iterating over some code, this isn't always great (some background: we use consul for service discovery once our images are started, so we don't rely on links too heavily. Having said that, our consul service images do link to one another).
+When I'm heavily iterating on the code in a particular container and it requires many restarts, it's much easier to have all other containers controlled by docker-compose, and the container you're iterating on to be controlled separately.
+The yaml could be something like:
+conductor:
+    build: ./conductor
+    volumes:
+        - /data/consul/conductor:/data/consul:rw
+consulagent:
+    build: ./consul
+    links:
+        - conductor:consul-agent
+db:
+    build: ./db
+    links:
+        - conductor:consul-agent
+cache:
+    build: ./cache
+    links:
+        - conductor:consul-agent
+static:
+    build: ./static
+    links:
+        - conductor:consul-agent
+    ports:
+        - 80:80
+        - 443:443
+    environment:
+        - DEBUG=debug,info,error
+        - NODE_ENV=development
+consului:
+    build: ./consul-ui
+    links:
+        - conductor:consul-agent
+    ports:
+        - 8500:8500
+app:
+    build: ./app
+    links:
+        - conductor:consul-agent
+    environment:
+        - NODE_ENV=development
+        - APP_PORT=4000
+    always-start: false
+Notice the always-start property, being set to false. This would allow me to have a workflow of:
+$ docker-compose up -d
+$ docker-compose up app
+I could then docker compose stop app and docker compose up app independently of all other services. To achieve this at present, you have comment/uncomment the app service within the yaml file.
+2

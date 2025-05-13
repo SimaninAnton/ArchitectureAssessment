@@ -1,0 +1,37 @@
+devent commented on 14 Jul 2016
+Hello,
+can I set the volume name if I also use a volume driver? I need to set the volume name to something like vol1 for convoy. If that's not possible with compose, please make it a feature request.
+docker-compose up
+Creating postgresqlconvoy_postgres_data_1
+
+ERROR: for postgres_data  Failed to execute: mount [/dev/mapper/postgresqlconvoy_vol1 /var/lib/rancher/convoy/devicemapper/mounts/postgresqlconvoy_vol1], output mount: wrong fs type, bad option, bad superblock on /dev/mapper/postgresqlconvoy_vol1,
+       missing codepage or helper program, or other error
+
+       In some cases useful info is found in syslog - try
+       dmesg | tail or so.
+, error exit status 32
+ERROR: Encountered errors while bringing up the project.
+Makefile:22: recipe for target 'run' failed
+make: *** [run] Error 1
+version: '2'
+
+services:
+  postgres_data:
+    image: erwinnttdata/postgresql:latest
+    restart: "no"
+    command: "true"
+    volumes:
+      - "vol1:/var/lib/postgresql/data"
+    volume_driver: "convoy"
+
+  postgres:
+    image: erwinnttdata/postgresql:latest
+    restart: "always"
+    depends_on:
+      - postgres_data
+    volumes_from:
+      - postgres_data
+
+volumes:
+    vol1:
+        driver: "convoy"

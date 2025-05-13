@@ -1,0 +1,3 @@
+vingrad commented on 23 Aug 2016 •
+edited
+Does compose support new Docker swarm mode?

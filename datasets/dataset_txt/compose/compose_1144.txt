@@ -1,0 +1,53 @@
+Brian-Williams commented on 17 Oct 2017 •
+edited
+Problem
+In the docs it is stated that:
+Setting entrypoint will both override any default entrypoint set on the service’s image with the ENTRYPOINT Dockerfile instruction, and clear out any default command on the image - meaning that if there’s a CMD instruction in the Dockerfile, it will be ignored.
+However this doesn't seem true in practice.
+Edit: This isn't true only if the input to entrypoint is empty ([], "").
+Bug setup
+Make the following dockerfile tag with echo and make the following docker-compose.yml file.
+Dockerfile
+From python:3
+
+ENTRYPOINT [ "echo", "garbage" ]
+CMD [ "echo", "hi" ]
+Build the image with tag echo docker build -t echo ..
+docker-compose.yml
+version: '3'
+services:
+  echo:
+    image: echo
+    entrypoint: ""
+Expected results
+That both the ENTRYPOINT and CMD are wiped when bringing up the docker-compose.yml.
+Actual result
+The CMD is still used.
+Execution with actual result
+$ docker-compose up
+WARNING: The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use `docker stack deploy`.
+
+Creating network "testcompose_default" with the default driver
+Creating testcompose_echo_1 ... 
+Creating testcompose_echo_1 ... done
+Attaching to testcompose_echo_1
+echo_1  | hi
+testcompose_echo_1 exited with code 0
+The entrypoint is being removed, but the CMD of echo hi is still being run on this line echo_1 | hi.
+If we comment out the entrypoint in the docker-compose.yml we get the expected result of entrypoint(echo garbage) cmd(echo hi) -> garbage echo hi
+Creating network "testcompose_default" with the default driver
+Creating testcompose_echo_1 ... 
+Creating testcompose_echo_1 ... done
+Attaching to testcompose_echo_1
+echo_1  | garbage echo hi
+testcompose_echo_1 exited with code 0
+The expected result of garbage echo hi is shown on this line echo_1 | garbage echo hi.
+Version info
+Brians-MacBook-Pro:test_compose brianwilliams$ docker-compose --version
+docker-compose version 1.16.1, build 6d1ac21
+Brians-MacBook-Pro:test_compose brianwilliams$ docker --version
+Docker version 17.09.0-ce-rc3, build 2357fb2

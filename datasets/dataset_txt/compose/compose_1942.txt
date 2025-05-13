@@ -1,0 +1,10 @@
+erictt commented on 10 Nov 2016
+I know docker will pick up the name as folder_name + "_"+ volume_key
+But is there any way to specify the name all by myself ? like this?
+volumes:
+      redis_data:
+          name: my_redis_data
+          driver: local
+      mongo_data:
+          driver: local
+1

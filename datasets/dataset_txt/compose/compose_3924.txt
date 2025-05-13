@@ -1,0 +1,17 @@
+Starefossen commented on 13 Feb 2015
+It would have been a nice addition to the docker-compose port command if you would just get all exposed project ports without having to probe each individual service and "internal" port.
+For the following docker-compose.yml file:
+service1:
+  ports:
+    - "80"
+    - "443"
+service2:
+  ports:
+    - "1234"
+The docker-compose port command with no arguments would return something like this:
+service1:
+  80:0.0.0.0:49201
+  443:0.0.0.0:49202
+
+service2:
+  1234:0.0.0.0:49203

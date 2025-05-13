@@ -1,0 +1,24 @@
+eychenz commented on 22 Dec 2015
+Description:
+--x-networking, adds /etc/hosts entries in a useless manner. The names added to /etc/hosts are not normally known by applications. Applications know about docker-compose.yml file, and there we could define "hostname" which is totally different from what --x-networking chooses to put at /etc/hosts.
+How to reproduce:
+An example of docker-compose.yml is attached.
+docker-compose.yml.txt
+docker-compose --x-networking up
+Actual behaviour:
+exec bash inside the first container and you'll see something like this in /etc/hosts :
+172.19.0.2  server1
+127.0.0.1           localhost
+172.19.0.3  docker_server2_1
+172.19.0.3  docker_server2_1.docker
+172.19.0.4  docker_server3_1
+172.19.0.4  docker_server3_1.docker
+As you could see, docker is the name of the directory the compose file is located. The application that runs inside container does not necessarily know about that directory! I know that can be manually affected using -p, but that doesn't solve the actual problem either. So "docker_server2_1" and "docker_server3_1" is totally useless for inter-application communications.
+Expected behaviour:
+This should be [more or less] the content of /etc/hosts based on the hostnames or containers' name that are in docker-compose.yml.
+172.19.0.2  server1
+127.0.0.1           localhost
+172.19.0.3  server2
+172.19.0.4  server3
+Worth mentioning
+As the official documentation suggests, --x-networking is introduced cause links are being deprecated. So, it makes sense to have the functionality somehow similar to links where it uses the containers' name adding them to /etc/hosts.

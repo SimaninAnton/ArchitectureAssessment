@@ -1,0 +1,7 @@
+nathanleclaire commented on 12 Nov 2015
+Compose file is simple:
+pinger:
+  image: busybox
+  command: ping google.com
+Check out this Asciinema to see the invalid behavior: https://asciinema.org/a/52yul8nka2htbzwjh4lk5faqi Essentially, everything gets back out of order, some containers do not actually get a "done" line, and so on.
+Essentially, the little real-time bits in the progress stream report back inaccurately due to the carraige-return trickery. I'm on OSX/zsh (iTerm2) but I get the same behavior with bash.

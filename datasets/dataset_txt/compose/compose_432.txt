@@ -1,0 +1,31 @@
+triesa commented on 26 Oct 2018 •
+edited
+docker-compose logs -f , docker logs -f foo
+That command show only first several lines of container log- and nothing on containers later actions.
+What can be wrong?
+Everything worked fine- and after some rebuilds its broken.
+docker-compose version
+docker-compose version 1.21.2, build j238402
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+
+docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:51 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:15 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false

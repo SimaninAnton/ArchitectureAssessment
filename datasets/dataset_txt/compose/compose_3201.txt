@@ -1,0 +1,10 @@
+joshuataylor commented on 18 Oct 2015
+Let's say I have the following setup with the following links (excluding the rest of the keys for brevity):
+something:
+  links:
+    - foobar:foobar
+
+foobar:
+  hostname: foobar
+  domainname: foobar.example.com
+On something, I can ping foobar as it's added to the hosts file, but foobar.example.com is not.

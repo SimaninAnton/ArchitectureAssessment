@@ -1,0 +1,53 @@
+whyvez commented on 26 Jul 2018 •
+edited
+Service stops responding after ~14,700 req during a stress test
+Context information
+I am running a stress test on one of our application and seeing some service degradation during stress testing. I've been able to replicate this behavior with a very simple configuration using a community image. I'm using https://github.com/wg/wrk to run my stress test. I've observed that when using docker-compose after about 14,700 requests, the containers stops responding. I've done the same test outside of docker compose spinning up a container with docker run and the same problem doesn't manifest.
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.4.0
+CPython version: 2.7.5
+OpenSSL version: OpenSSL 1.0.2k-fips  26 Jan 2017
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:08:18 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:10:42 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+services:
+  one:
+    container_name: one
+    image: nginxdemos/hello
+    ports:
+    - 80:80/tcp
+version: '3.0'
+Steps to reproduce the issue
+big test
+docker compose up
+wrk -t2 -c2 -d30s http://localhost => total requests will be ~ 14,700
+wrk -t2 -c2 -d30s http://localhost => total requests will be 0
+many small test
+docker compose up
+wrk -t2 -c2 -d1s http://localhost => total requests will be ~ 5000
+wrk -t2 -c2 -d1s http://localhost => total requests will be ~ 5000
+wrk -t2 -c2 -d1s http://localhost => total requests will be ~ 4000
+without docker compose
+docker run -d -p 80:80 nginxdemos/hello
+wrk -t2 -c2 -d60s http://localhost => will run fine not hitting the ~14,700 limit
+Observed result
+Using docker compose 14,700 seems to be the number where a container stops responding to requests when ran as a docker compose service.
+Expected result
+A container in a docker compose configuration should not stop responding to requests after 14,700 requests. Although these are bigger numbers, I've also observed this behavior using another one of our stress testing tool which replays two 500 request nginx access log concurrently. I cannot say yet if these two issues are related but solving this 14,700 issue might help shed some light on what might be happening for our replay load test.
+Additional information
+CentOS 7 / pip install docker-compose

@@ -1,0 +1,5 @@
+fodger commented on 9 May 2018
+Hi,
+it's minor but release notes from https://docs.docker.com/release-notes/docker-compose/ concerns 1.21.0 version, not the 1.21.2.
+I guess it is about fixes, but it is always good to know.
+Thanks all team for your incredible work !

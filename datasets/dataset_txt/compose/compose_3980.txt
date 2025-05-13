@@ -1,0 +1,5 @@
+bitliner commented on 22 Jan 2015
+One nice thing of docker is that you can just run docker ps to list every container running on a certain machine.
+While fig requires to be in a specific folder.
+Is there a way to enable fig ps running on any folder?
+Please, in case you plan it as feature, if you can address me on how to add this feature, I would be very glad to give an help.

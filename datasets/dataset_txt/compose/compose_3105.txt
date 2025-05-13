@@ -1,0 +1,6 @@
+powersplay commented on 12 Nov 2015
+docker-compose up gives ERROR: invalid --net and aborts on Windows Server 2016 Technical Preview 4 Build 10575 unless net: default or net: none is specified in docker-compose.yml
+PS C:\Users\Administrator\compose> ..\docker-compose-Windows-x86_64.exe up -d
+Recreating 7780fb51c7_7780fb51c7_7780fb51c7_7780fb51c7_compose_Wocker_1
+ERROR: invalid --net:
+Inserting net: default or net: none in docker-compose.yml is required to avoid this error.

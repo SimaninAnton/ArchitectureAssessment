@@ -1,0 +1,4 @@
+0xcb49 commented on 19 Aug 2014
+For example, Using command "fig attach appname" to enter the container which was created by fig.
+I think this may be helpful in some cases. Now I know that nsenter can attach a new bash shell on
+a running container, but I don't know if it's possible to intergrate it with fig. Thanks.

@@ -1,0 +1,1 @@
+Compose should send connection upgrade headers

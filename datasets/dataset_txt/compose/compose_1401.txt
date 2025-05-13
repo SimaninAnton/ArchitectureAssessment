@@ -1,0 +1,77 @@
+carlioth commented on 8 Jun 2017 •
+edited
+Description
+After I run docker-compose and my secrets has been bind mounted to /run/secrets, if I then update the bound file on my disk the file in the container only change to the length of the change I did. Example below:
+Steps to reproduce the issue:
+docker-compose up -d
+docker exec -it container bash
+cd /run/secrets
+cat mysecret, will print 123456789
+Change mysecret file on disk to ABC
+cat mysecret, will now print 123
+Describe the results you received:
+The secret file doesn't change it's content, only it's length corresponding to the bound file.
+Describe the results you expected:
+Not sure in the context of bind mounted secrets, but I expect one of the two scenarios:
+Either that the bound file didn't follow the changes made.
+That the file get's updated with the bound file.
+Output of docker version:
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Tue Mar 28 00:40:02 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:00:50 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+Output of docker info:
+Containers: 10
+ Running: 10
+ Paused: 0
+ Stopped: 0
+Images: 156
+Server Version: 17.03.1-ce
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 660
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 4ab9917febca54791c5f071a9d1f404867857fcc
+runc version: 54296cf40ad8143b62dbcaa1d90e520a2136ddfe
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.27-moby
+Operating System: Alpine Linux v3.5
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.934 GiB
+Name: moby
+ID: A6KM:WMON:AWPO:DLVL:XBRH:PWIP:HVCW:3AST:VTKD:AGFB:PMGK:2TKW
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

@@ -1,0 +1,14 @@
+dkfi commented on 3 May 2017 •
+edited
+Given the following YML file:
+version: '2'
+
+services:
+   db:
+      build: .
+      container_name: mydb
+      restart: always
+The image built is a customized postgres:9.6 image. By running "docker-compose up" I end up with a running container named "mydb". I then needed to have an identical container running side-by-side to perform some comparisons: in order to do this I renamed the running container "mydb" to "mydb-old". At this point I would have thought that by running "docker-compose up" with the very same untouched YML file I would've ended up with a fresh "mydb" and the previous "mydb-old" containers running. Instead "docker-compose up" returned
+kristian@kristian:~/sandbox/mydb$ docker-compose up -d
+Recreating mydb-old
+which resulted in the deletion of mydb-old and the recreation of an empty mydb container. Am I missing something?

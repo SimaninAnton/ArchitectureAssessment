@@ -1,0 +1,2 @@
+strk commented on 29 Jan 2016
+Running docker-compose up results in creation of directories specified via volumes directive on the host system. I think it would be better to error out if the host directory does not exist.

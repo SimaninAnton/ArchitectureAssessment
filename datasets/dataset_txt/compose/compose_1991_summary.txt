@@ -1,0 +1,1 @@
+path issue while aggregating compose files from multiple directories

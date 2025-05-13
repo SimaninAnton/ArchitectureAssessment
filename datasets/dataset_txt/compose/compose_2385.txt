@@ -1,0 +1,4 @@
+Fedcomp commented on 19 May 2016
+I am trying to make image of software that needs additional privilegies and face following issue:
+moby/moby#22304
+Is there any way i may use security_opt or privileged during build?

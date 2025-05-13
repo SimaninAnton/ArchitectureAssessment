@@ -1,0 +1,19 @@
+piotrpalek commented on 7 Dec 2016
+Hey, I'm on Fedora 25 and I have this error when trying to run docker-composed up:
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.8.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 62, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 111, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 35, in project_from_options
+    environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 110, in get_project
+    host=host, environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 82, in get_client
+    environment=environment, tls_version=get_tls_version(environment)
+  File "/usr/lib/python2.7/site-packages/compose/cli/docker_client.py", line 52, in docker_client
+    kwargs = kwargs_from_env(environment=environment, ssl_version=tls_version)
+TypeError: kwargs_from_env() got an unexpected keyword argument 'environment'```
+
+Tried reinstalling a bunch of packages but the issue remains.

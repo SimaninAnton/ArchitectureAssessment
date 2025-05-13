@@ -1,0 +1,10 @@
+zeeraw commented on 18 Feb 2015
+As it turns out, when you got two or more projects that want to communicate with each other, docker-compose support is lacking. Starting up project_a requires me to have project_b running and vice versa.
+# project_a/docker-compose.yml
+app:
+  external_links: projectb_app:b
+# project_b/docker-compose.yml
+app:
+  external_links: projecta_app:a
+For now I can circumvent this by running an ambassador proxy but it makes me wonder if this is something that should be solved by tooling in docker-compose. I'd love to hear your ideas.
+Currently this increases developer sadness quota by 42%

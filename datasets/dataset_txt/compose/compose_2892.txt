@@ -1,0 +1,26 @@
+Contributor
+schmunk42 commented on 21 Jan 2016
+I have this Dockerfile
+mrb:
+  build: .
+  environment:
+    - affinity:container!=/mrb/
+I run this against as swarm. The container should spread across nodes and should be built - not a common use-case, I know. But I tried to overcome issues with host-volumes.
+I was able to get two containers up and running, but nonetheless building on a swarm and scale should at least trigger a warning, since you can't really ensure that all nodes have the same version of a built image.
+docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 12:50:31 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.0.0
+ API version:  1.21
+ Go version:   go1.5.1
+ Git commit:   087e245
+ Built:        
+ OS/Arch:      linux/amd64
+docker-compose version 1.5.2, build 7240ff3

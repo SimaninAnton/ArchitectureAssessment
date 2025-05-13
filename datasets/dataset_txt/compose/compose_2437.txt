@@ -1,0 +1,3 @@
+niieani commented on 2 May 2016
+If a network isn't defined for a container, a project_default network is created, however when we define a new network after we already used docker-compose up, the project_default network isn't removed; additionally running docker-compose down --remove-orphans doesn't get rid of the default network unless we remove the network declaration from the docker-compose.yml file.
+2

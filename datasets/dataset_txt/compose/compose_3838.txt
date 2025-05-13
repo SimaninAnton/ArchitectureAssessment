@@ -1,0 +1,45 @@
+umurkontaci commented on 13 Mar 2015
+If you start a compose stack with one of the items with n nodes and then downgrade to anything <n nodes, the console will output that one of the nodes had quit with error code 137 and gracefully stop everything.
+However, if you start with n nodes, upscale to >n nodes then downscale to n nodes, everything works as intended and the stack will not crash.
+Example:
+web:
+  build: ./web
+  expose:
+    - "3000"
+  restart: always
+  environment:
+    JOB: web
+  links:
+    - soa
+lb:
+  build: ./lb
+  ports:
+    - "80:80"
+  restart: always
+  environment:
+    JOB: lb
+  links:
+    - web
+    - soa
+soa:
+  build: ./soa
+  environment:
+    JOB: soa
+  restart: always
+  expose:
+    - "8301"
+    - "8302"
+    - "8400"
+    - "8500"
+    - "8600"
+Then (everything is scale=1)
+docker-compose up
+docker-compose scale web=10
+docker-compose scale web=1
+docker-compose scale web=10
+docker-compose stop
+This works, scales, and stops as expected. However after the previous command (that is, when the last scale value for web is 10), if you execute the following
+docker-compose up
+docker-compose scale web=1
+This will say somenode_1 exited with code 137 and gracefully stop the whole thing.
+Is this the intended behavior?

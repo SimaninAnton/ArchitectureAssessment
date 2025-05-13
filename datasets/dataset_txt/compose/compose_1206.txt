@@ -1,0 +1,8 @@
+richraid21 commented on 15 Sep 2017 •
+edited
+Currently according to the documentation, you cannot use container_name when you scale using docker-compose -- It will throw an error.
+It would be nice if you could add a count property to ensure this name is unique when scaling.
+For example:
+container_name: 'my-service-$count`
+Launching it with my-service=2 would result in a container named my-service-0 and my-service-1
+1

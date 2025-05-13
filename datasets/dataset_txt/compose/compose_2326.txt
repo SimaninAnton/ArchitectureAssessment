@@ -1,0 +1,75 @@
+ninchan8328 commented on 7 Jun 2016
+Hi Docker Expert,
+root@myserver:# docker --version
+Docker version 1.10.1, build 9e83765
+root@myserver:# docker-compose --version
+docker-compose version 1.7.1, build 0a9ab35
+I am using the docker-compose v2 to spin up multiple containers and its been working fine until today I see a weird problem that when I try to run command (docker exec) on one of the container, it return Cannot allocate memory, but the other container that created in the same docker-compose file worked fine. Any idea?
+root@myserver:# docker exec jenkinsci_server01_1 ls
+nsenter: Unable to fork: Cannot allocate memory
+root@myserver:# docker exec jenkinsci_server02_1 ls
+bin
+dev
+etc
+home
+lib
+lib64
+lost+found
+media
+mnt
+opt
+proc
+root
+sbin
+selinux
+srv
+sys
+tmp
+usr
+var
+workspace
+Memory info:
+cat /proc/meminfo
+MemTotal: 6112100 kB
+MemFree: 638020 kB
+MemAvailable: 3580192 kB
+Buffers: 104184 kB
+Cached: 2841936 kB
+SwapCached: 15492 kB
+Active: 2332772 kB
+Inactive: 2013724 kB
+Active(anon): 700092 kB
+Inactive(anon): 1026608 kB
+Active(file): 1632680 kB
+Inactive(file): 987116 kB
+Unevictable: 192 kB
+Mlocked: 192 kB
+SwapTotal: 6291452 kB
+SwapFree: 5960096 kB
+Dirty: 2268 kB
+Writeback: 0 kB
+AnonPages: 1394356 kB
+Mapped: 429496 kB
+Shmem: 326324 kB
+Slab: 916848 kB
+SReclaimable: 575768 kB
+SUnreclaim: 341080 kB
+KernelStack: 22720 kB
+PageTables: 52304 kB
+NFS_Unstable: 0 kB
+Bounce: 0 kB
+WritebackTmp: 0 kB
+CommitLimit: 9347500 kB
+Committed_AS: 11739424 kB
+VmallocTotal: 34359738367 kB
+VmallocUsed: 161396 kB
+VmallocChunk: 34359478128 kB
+HardwareCorrupted: 0 kB
+AnonHugePages: 473088 kB
+HugePages_Total: 0
+HugePages_Free: 0
+HugePages_Rsvd: 0
+HugePages_Surp: 0
+Hugepagesize: 2048 kB
+DirectMap4k: 83904 kB
+DirectMap2M: 6207488 kB

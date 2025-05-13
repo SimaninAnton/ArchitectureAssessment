@@ -1,0 +1,31 @@
+fuentecilla86 commented on 26 Oct 2016
+docker version
+Client:
+ Version:      1.12.2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   bb80604
+ Built:        Tue Oct 11 18:19:35 2016
+ OS/Arch:      linux/amd64
+Cannot connect to the Docker daemon. Is the docker daemon running on this host?
+afuentes@chimera-swarm-dev-db-01:~$ sudo docker version
+Client:
+ Version:      1.12.2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   bb80604
+ Built:        Tue Oct 11 18:19:35 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   bb80604
+ Built:        Tue Oct 11 18:19:35 2016
+ OS/Arch:      linux/amd64
+I have declared a service with mode global and with a constraint to run it only in two servers (my cluster runs in 3 servers). When I try to update as following:
+sudo docker service update --image $IMAGE:$TAG $SERVICE
+The service is not updated.
+If I do it with in "replicas" mode it works perfectly.
+Thank you in advance.

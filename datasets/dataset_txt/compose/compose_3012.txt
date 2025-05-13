@@ -1,0 +1,10 @@
+darkmane commented on 5 Dec 2015
+Repro Steps:
+Create a new directory
+Use the attached docker-compose.yml file
+docker-compose up
+Expected Results:
+A redis container is created.
+Actual results:
+ERROR: Invalid interpolation format for "environment" option in service "contentMysql": "B!naree80reF0rG3taway$"
+docker-compose.yml.txt

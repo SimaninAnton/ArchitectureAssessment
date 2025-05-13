@@ -1,0 +1,58 @@
+TulsiRao commented on 3 Mar 2017
+Hi All,
+I'm facing issue installing docker..
+when I tried running command docker-compose,I am getting error
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 9, in
+load_entry_point('docker-compose==1.5.2', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 542, in load_entry_point
+return get_distribution(dist).load_entry_point(group, name)
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 2569, in load_entry_point
+return ep.load()
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 2229, in load
+return self.resolve()
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 2235, in resolve
+module = import(self.module_name, fromlist=['name'], level=0)
+File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 22, in
+from ..project import NoSuchService
+File "/usr/lib/python2.7/dist-packages/compose/project.py", line 18, in
+from .service import ContainerNet
+File "/usr/lib/python2.7/dist-packages/compose/service.py", line 13, in
+from docker.utils import LogConfig
+ImportError: cannot import name LogConfig
+here is my pip list
+DEPRECATION: The default format will switch to columns in the future. You can use --format=(legacy|columns) (or define a format=(legacy|columns) in your pip.conf under the [list] section) to disable this warning.
+adium-theme-ubuntu (0.3.4)
+backports.ssl-match-hostname (3.5.0.1)
+chardet (2.3.0)
+cryptography (1.2.3)
+docker (2.1.0)
+docker-compose (1.5.2)
+docker-py (1.8.0)
+docker-pycreds (0.2.1)
+dockerpty (0.3.4)
+docopt (0.6.2)
+enum34 (1.1.2)
+funcsigs (0.4)
+functools32 (3.2.3.post2)
+idna (2.0)
+ipaddress (1.0.18)
+jsonschema (2.5.1)
+mock (1.3.0)
+ndg-httpsclient (0.4.0)
+pbr (1.8.0)
+pip (9.0.1)
+pyasn1 (0.1.9)
+pycurl (7.43.0)
+pyOpenSSL (0.15.1)
+python-apt (1.1.0b1)
+PyYAML (3.11)
+requests (2.13.0)
+setuptools (20.7.0)
+six (1.10.0)
+texttable (0.8.1)
+unity-lens-photos (1.0)
+urllib3 (1.13.1)
+websocket-client (0.40.0)
+wheel (0.29.0)
+can anyone please help me fixing this issue.....

@@ -1,0 +1,20 @@
+Contributor
+vmalloc commented on 13 Jun 2017
+I'm running my project (Backslash, docker-compose file here: https://github.com/getslash/backslash/blob/develop/docker/docker-compose.yml) using docker-compose up. Apart from the actual processes running within docker, which should be taking actual CPU, I see the docker-compose process itself constantly taking around 15% of CPU (). Is that the expected behavior?
+Running docker-compose 1.13.0 with:
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Mon Mar 27 17:07:28 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Mon Mar 27 17:07:28 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

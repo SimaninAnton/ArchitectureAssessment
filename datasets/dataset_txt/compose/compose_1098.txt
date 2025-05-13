@@ -1,0 +1,2 @@
+tesoner commented on 5 Nov 2017
+how can i modify config files without lost my saved data? when i run docker-compose up -d my data is lost

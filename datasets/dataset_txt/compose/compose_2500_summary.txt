@@ -1,0 +1,1 @@
+Ctrl-C/SIGINT has erratic behaviour on "docker-compose up"

@@ -1,0 +1,61 @@
+nomadcanuck commented on 7 Sep 2016
+I am not sure if I am misinterpreting what the --force-recreate option is supposed to do, or if my docker-compose file syntax is incorrect/incompatible. I would greatly appreciate your insight.
+Upon executing docker-compose -f custom-filename.yml up --force-recreate app or docker-compose -f custom-filename.yml up --force-recreatecontainer is not rebuilt.
+custom-filename.yml:
+version: '2'
+services:
+  app:
+    container_name: myapp
+    image: dirName/imageName
+    build:
+      context: ./
+      dockerfile: dirName/Dockerfile
+    depends_on:
+      - db
+    entrypoint: ./wait-for-db.sh db "catalina.sh run"
+    ports:
+      - "8080:8080"
+  db:
+    image: privateRepository/privateImage
+    container_name: db
+directory structure:
+~/workspaces/
+  |_docker/
+    |_appName/
+      |_custom-filename.yml
+      |_dirName/
+        |_Dockerfile
+command line executed:
+cd ~/workspaces/docker/appName
+docker-compose -f custom-filename.yml up --force-recreate app
+results:
+Creating network "appName_default" with the default driver
+Creating db
+Creating app
+Attaching to myapp
+myapp | >> Waiting for database to start
+myapp | Database is up - starting dependent containers
+myapp | Sep 07, 2016 10:26:38 AM org.apache.catalina.startup.VersionLoggerListener log
+...
+docker version:
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      linux/amd64
+docker-compose version:
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+1

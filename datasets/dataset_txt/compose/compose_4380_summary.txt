@@ -1,0 +1,1 @@
+Validate Compose file and produce better error messages

@@ -1,0 +1,1 @@
+up command should allow the allocation of a pseudo-TTY during container creation

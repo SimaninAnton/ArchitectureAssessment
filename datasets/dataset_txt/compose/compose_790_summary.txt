@@ -1,0 +1,1 @@
+Unable to set mem_limit with docker-compose version 3.x in a non swarm run

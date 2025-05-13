@@ -1,0 +1,48 @@
+sibstark commented on 30 Nov 2017 •
+edited
+Hello. I have got an erro when tried to build docker-compose
+compose file
+version: '3'
+services:
+  postgres:
+    image: trytoremember-pg
+    restart: always
+    build:
+      context: ./Postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports: 
+      - "5432:5432"  
+  redis:
+    image: trytoremember-redis
+    restart: always
+    build:
+      context: ./Redis
+      dockerfile: Dockerfile
+    ports:
+      - "6379:6379"
+an error
+Building redis
+Step 1/3 : FROM redis:latest
+latest: PTraceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 68, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 249, in build
+  File "compose\project.py", line 343, in build
+  File "compose\service.py", line 922, in build
+  File "compose\progress_stream.py", line 23, in stream_output
+  File "compose\progress_stream.py", line 92, in print_output_event
+  File "codecs.py", line 370, in write
+  File "site-packages\colorama\ansitowin32.py", line 40, in write
+  File "site-packages\colorama\ansitowin32.py", line 141, in write
+  File "site-packages\colorama\ansitowin32.py", line 169, in write_and_convert
+  File "site-packages\colorama\ansitowin32.py", line 174, in write_plain_text
+IOError: [Errno 0] Error
+Failed to execute script docker-compose
+if run command docker build then dockerfile will build successfully.
+OS: Windows 10 pro
+Docker Version 17.09.0-ce-win33 (13620)

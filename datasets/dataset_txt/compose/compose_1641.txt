@@ -1,0 +1,19 @@
+SpComb commented on 1 Mar 2017
+With docker-compose version 1.11.1, compared to the raw docker exec output:
+$ docker exec composetest_redis_1 hostname | hd
+00000000  6c 6f 63 61 6c 68 6f 73  74 0a                    |localhost.|
+0000000a
+It seems like docker-compose exec and docker-compose run will convert the output to use CRLF:
+$ docker-compose run --rm redis hostname | hd    
+00000000  6c 6f 63 61 6c 68 6f 73  74 0d 0a                 |localhost..|
+0000000b
+$ docker-compose exec redis hostname | toolbox hd
+00000000  6c 6f 63 61 6c 68 6f 73  74 0d 0a                 |localhost..|
+0000000b
+This causes issues when using the output with shell command replacements, like
+$ curl -v "http://api.example.com/nodes/$(docker-compose exec redis hostname)"
+* Illegal characters found in URL
+* Closing connection -1
+curl: (3) Illegal characters found in URL
+which fails on the trailing CR in the resulting http://api.example.com/nodes/localhost\r URL.
+2

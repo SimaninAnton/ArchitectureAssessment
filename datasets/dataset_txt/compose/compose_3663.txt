@@ -1,0 +1,23 @@
+phlegx commented on 5 May 2015
+I frequently get a timeout when trying to bring a few docker containers up with docker-compose up. I cannot figure out if this is related to my private repository server (which really should be fast enough) or if this is a resource problem on my local machine (for testing I create virtualbox swarm) Maybe some of you know what might wrong Here is the error output I get when the timeout appears
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 208, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 214, in recreate_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 190, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.container", line 36, in create
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 425, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 432, in create_container_from_config
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 119, in _post_json
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 79, in _post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 425, in post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 387, in send
+requests.exceptions.Timeout: HTTPSConnectionPool(host='192.168.99.116', port=3376): Read timed out.

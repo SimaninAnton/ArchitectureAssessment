@@ -1,0 +1,6 @@
+mightyuser commented on 13 Dec 2016
+I have been running docker commands on remote host (swarm cluster in cloud) using host parameter as shown below.
+docker -H 10.10.10.10:2375 version
+Similarly, docker-compose also has -H parameter, as mentioned here
+I am running docker-compose version 1.6.2, which throws error when -H parameter is provided. It seems that host parameter is not supported in this version.
+How can I can point docker-compose to remote host on this machine.

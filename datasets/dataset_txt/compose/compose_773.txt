@@ -1,0 +1,74 @@
+yami12376 commented on 27 Mar 2018
+i have two war files and i run them fine on my local computer with docker-compose up command. I tried deploy it with docker-machine tutorial:
+https://docs.docker.com/get-started/part4/
+but i got an error after docker stack deploy -c docker-compose-deploy.yml app saying: "invalid mount config for type "bind": bind source path does not exist"
+I'am not sure how to handle it - and i'm preety sure that this error is caused by CMD ["/bin/sh","/data/app/bootstrap.sh"] from my Dockerfiles.
+I dont want to deploy it as two seperate war files to tomcat.
+Bellow i give you all details of my project regarding deployment. I changed my username to username:
+docker-compose-deploy.yml
+    version: "3"
+    services:
+      app2:
+        image: userName/dockerdocker_app2
+        container_name: app2
+        build:
+          context: ./app2
+        volumes:
+          - .:/data
+        environment:
+          - LOGGING_LOG-FILES-PATH=/opt/tomcat/logs
+        ports:
+          - "8000:8080"
+      app:
+        image: userName/dockerdocker_app
+        container_name: app
+        build:
+          context: ./app
+        volumes:
+          - .:/data
+        environment:
+          - LOGGING_LOG-FILES-PATH=/opt/tomcat/logs
+        ports:
+          - "8001:8080"
+My docker-compose.yml does not have image lines.
+Also i have two folders: app and app2
+in the folder app i have:
+app.war, app2.war, bootstrap.sh, Dockerfile
+bootstrap.sh
+is taking one of the war file and it places it in Tomcat
+    #!/bin/bash
+    
+    WAR_FILE=app.war
+    
+    cp /data/util/wait-for.sh /
+    chmod +x /wait-for.sh
+    
+    echo "Starting application..."
+    rm -rf /opt/tomcat/webapps/*
+    ln -s /data/app/$WAR_FILE /opt/tomcat/webapps/ROOT.war
+    rm -rf /opt/tomcat/logs
+    ln -s /data/logs/app /opt/tomcat
+    
+    echo "Starting Tomcat..."
+    
+    echo "org.apache.catalina.webresources.Cache.level = SEVERE" >> /opt/tomcat/conf/logging.properties
+    export JAVA_OPTS="$JAVA_OPTS -Duser.language=pl -Djava.security.egd=file:/dev/./urandom -D"
+    
+    ${CATALINA_HOME}/bin/catalina.sh run
+Dockerfile:
+FROM jeanblanchard/tomcat:8
+
+ENV authType ""
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+CMD ["/bin/sh","/data/app/bootstrap.sh"]
+in the folder app2 i have:
+bootstrap.sh, Dockerfile
+The first file only differs in this line:
+WAR_FILE=app2.war
+The second file is the same expect CMD ["/bin/sh","/data/app2/bootstrap.sh"]
+My application runs fine with docker-compose up command.
+But i find it difficult to deploy.
+I appreciate your help

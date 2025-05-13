@@ -1,0 +1,9 @@
+Timunas commented on 17 Nov 2017 •
+edited
+Hello guys,
+I'm running tests in jenkins and I'm launching containers with docker-compose. So basically I'm running 8 tests at time (concurrently) and each one launches 6 containers. Sometimes tests pass with success other times it fails to start the containers.
+So I managed to see using docker-compose logs that they are not starting because of this errors below:
+Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+What could be causing this issue? Most of builds run all tests with success, but sometimes they fail because of one or two tests that have this error.
+Thanks

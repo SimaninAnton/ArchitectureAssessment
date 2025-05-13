@@ -1,0 +1,27 @@
+davejohnson commented on 3 Feb 2015
+I'm just following the standard setup for fig + rails (http://www.fig.sh/rails.html) but getting the following error:
+$ fig run web rails new . --force --database=postgresql --skip-bundle
+...
+54549384f85a: Download complete
+...
+b65dcd86995a: Download complete
+353cb3772191: Pulling fs layer
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 56, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 289, in run
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.project", line 177, in up
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 281, in start_or_create_containers
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 187, in create_container
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.progress_stream", line 17, in stream_output
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/docker.client", line 289, in _stream_helper
+ValueError: invalid literal for int() with base 16: ''
+There are some issues with docker-py that seem related but not sure that that all fits together.
+I'm running the following:
+OS X 10.10.1
+Docker 1.4.1
+Fig 1.0.1

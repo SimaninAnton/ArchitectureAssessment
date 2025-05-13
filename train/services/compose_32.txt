@@ -1,0 +1,96 @@
+nikita-vanyasin commented on 22 Dec 2019 •
+edited
+Description of the issue
+I'm using the same workflow on one of my projects for more than 1 year.
+This flow worked perfectly (see below), but last week I encountered a problem: when I execute the 5th step (pull), it does not pull images from private registry.
+Running it with --verbose --log-level=DEBUG shows that it doesn't even try to lookup the fresh image tags from private repo, like these services in .yml file being completely ignored.
+If I execute docker pull <image_tag> directly without docker-compose it works just fine.
+Context information (for bug reports)
+All docker tools were installed from ArchLinux repo.
+Output of docker-compose version
+docker-compose version 1.25.0, build unknown
+docker-py version: 4.1.0
+CPython version: 3.8.0
+OpenSSL version: OpenSSL 1.1.1d  10 Sep 2019
+Output of docker version
+Client:
+ Version:           19.03.5-ce
+ API version:       1.40
+ Go version:        go1.13.4
+ Git commit:        633a0ea838
+ Built:             Fri Nov 15 03:19:09 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          19.03.5-ce
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.13.4
+  Git commit:       633a0ea838
+  Built:            Fri Nov 15 03:17:51 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.3.2.m
+  GitCommit:        d50db0a42053864a270f648048f9a8b4f24eced3.m
+ runc:
+  Version:          1.0.0-rc9
+  GitCommit:        d736ef14f0288d6993a1845745d6756cfc9ddd5a
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+I use two files: docker-compose.yml and docker-compose.prod.yml
+I will provide the config output as soon as I prepare the minimal configuration and remove the private info from there.
+Steps to reproduce the issue
+update image tag names in yml file, e.g. registry.gitlab.com/nikita-vanyasin/XXXX/app:1.1.11 -> registry.gitlab.com/nikita-vanyasin/XXXX/app:1.1.12
+build images with docker-compose build on my laptop
+push images to private registry (GitLab) with docker-compose push (works just fine, I see new image tags in the GitLab web UI).
+switch my environment to production server: eval $(docker-machine env <MACHINE_NAME>)
+I run docker-compose pull - it automatically pulls all the updated images from public registry and my private registry
+deploy new images: docker-compose up -d --no-build.
+This flow worked perfectly for more than 1 year, but last week I encountered a problem that when I execute the 5th step (pull), it does not pull images from private registry.
+Observed result
+Image tags specified in yml file are not pulled. Services that references this images are skipped in command output.
+Expected result
+New image tags to be pulled.
+Stacktrace / full error message
+No error messages. Exit code = 0
+Additional information
+On my laptop I use ArchLinux with all docker tools installed from Arch repo.
+On server I use Ubuntu 16. I installed docker there via docker-machine tool.
+docker version output from server machine:
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:56 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:21 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Command output for 4th step (private data masked):
+$ docker-compose --log-level=DEBUG -f docker-compose.yml -f docker-compose.prod.yml pull app   
+Using configuration files: ./docker-compose.yml,./docker-compose.prod.yml
+Trying paths: ['/home/nikita/.docker/config.json', '/home/nikita/.dockercfg']
+Found file at path: /home/nikita/.docker/config.json
+Found 'auths' section
+Found entry (registry='registry.gitlab.com', username='XXXXXXXXXX')
+Starting new HTTPS connection (1): XXXXXXXXXX:2376
+https://XXXXXXXXXX:2376 "GET /v1.25/networks/XXXXXXXXXX_default HTTP/1.1" 200 None
+Pending: set()
+$
+$ echo $?
+0
+$
+Also, I will be happy if you point out any problems in the workflow described above :)

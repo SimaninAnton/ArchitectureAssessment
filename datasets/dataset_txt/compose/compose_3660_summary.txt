@@ -1,0 +1,1 @@
+When closing a container with a rails app, rails doesn't delete /tmp/pids/server.pid

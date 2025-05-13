@@ -1,0 +1,21 @@
+Contributor
+dnephin commented on 22 Aug 2014
+fig.yml:
+database:
+    image: ...
+
+tester:
+    build: .
+Commands:
+fig run tester bash something.sh  # starts database and runs ok
+fig ps # Shows database is still Up, nothing else
+
+fig run tester bash something.sh # Still runs ok
+
+fig stop # Now stop the database
+fig ps  # Shows the database as exit 0
+
+fig run tester bash something.sh # Starts tester, but NOT the database, links are missing from the container
+fig ps # still shows database as exit 0
+fig rm will clean out the state and it will start working again. I believe there is a check somewhere to see if the container exists, that maybe should be checking if the container is Up, not just if it exists.
+I haven't looked into it much beyond this yet, but I wanted to write down the steps while I was hitting it.

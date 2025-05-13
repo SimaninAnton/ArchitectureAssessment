@@ -1,0 +1,10 @@
+wernight commented on 22 Mar 2015
+argparse is very powerful, supports sub-commands, and it's built-in Python. It's would be good to use it instead of the current solution because it would also make auto-completion free for Bash/ZSH/... using:
+$ pip install argcomplete
+
+# After initialiazing argparser:
+import argcomplete
+argcomplete.autocomplete(parser)
+
+$ register-python-argcomplete docker-compose >_docker-compose
+That generated script can be used in Bash and works in ZSH with bashcompinit.

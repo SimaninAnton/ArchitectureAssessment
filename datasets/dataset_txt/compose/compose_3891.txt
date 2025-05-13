@@ -1,0 +1,27 @@
+jamshid commented on 27 Feb 2015
+Getting below failure when I try to run a service with an environment variable override. Also showed fig.yml let me know if you need more info. Using version 1.1.0.
+$ docker-compose run -e FOO=bar test
+fig.yml is deprecated and will not be supported in future. Please rename your config file to docker-compose.yml
+
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 323, in run
+TypeError: list indices must be integers, not unicode
+test:
+  build: test
+  command: test
+  ports:
+    - "22"
+    - "80"
+  environment:
+    - PROJECT_NAME=myproject
+    - TERM=xterm-256color
+  links:
+    - myserver
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock

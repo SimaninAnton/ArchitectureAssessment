@@ -1,0 +1,1 @@
+Only log volume create message if a volume is created

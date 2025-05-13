@@ -1,0 +1,1 @@
+Extended service defined in v2 format always gets recreated

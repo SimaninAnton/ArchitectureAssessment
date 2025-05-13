@@ -1,0 +1,1 @@
+Disable yaml file checks unrelated to 'build' command

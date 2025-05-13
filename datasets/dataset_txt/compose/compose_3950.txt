@@ -1,0 +1,27 @@
+gijzelaerr commented on 6 Feb 2015
+It looks like I can't set an environment variable in the fig.yml and on the console at the same time.
+fig version: 1.0.1
+python version: 2.7 (homebrew)
+OS: OSX 10.10.2
+fig.yml:
+  image: ubuntu:14.04
+  environment:
+    - SECRET_KEY
+full output:
+$ fig run -e BLA=bla bliep
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==1.0.1', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/command.py", line 28, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/command.py", line 56, in perform_command
+    handler(project, command_options)
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/main.py", line 312, in run
+    service.options['environment'][k] = v
+TypeError: list indices must be integers, not unicode

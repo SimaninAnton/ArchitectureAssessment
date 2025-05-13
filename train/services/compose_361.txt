@@ -1,0 +1,99 @@
+huynhit-92 commented on 11 Dec 2018
+Hi there
+I am trying to add docker to my rails project and had problem with docker-compose build.
+It run perfectly at home but in my office it does not show any thing just stop at compose.cli.verbose_proxy.proxy_callable: docker build
+I also try to add the following three lines of code but it doesnt not change :
+127.0.0.1 localunixsocket
+127.0.0.1 localunixsocket.local
+127.0.0.1 localunixsocket.home
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+Output of docker version
+Docker version 18.09.0, build 4d60db4
+Output of docker-compose config
+services:
+  app:
+    build:
+      context: /Users/huynhit92/workspace/bee-cloud
+    command: bash -c "npm rebuild node-sass && bundle exec foreman start"
+    depends_on:
+    - db
+    environment:
+      RAILS_ENV: development
+      SECRET_KEY_BASE: hogehoge
+      TZ: Asia/Tokyo
+    ports:
+    - 3000:3000/tcp
+    - 8080:8080/tcp
+    volumes:
+    - /Users/huynhit92/workspace/bee-cloud:/app:rw
+    - bundle:/usr/local/bundle:rw
+    - /app/node_modules
+  db:
+    environment:
+      MYSQL_DATABASE: cloudlogi_development
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: appuser
+    image: mysql:5.7
+    ports:
+    - 3308:3306/tcp
+    restart: always
+version: '2.0'
+volumes:
+  bundle:
+    driver: local
+  store:
+    driver: local
+My Dockerfile
+FROM ruby:2.4
+
+ENV APP /app
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 9.11.1
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
+RUN apt-get install cmake libicu-dev -y
+
+# Install nvm with node and npm
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.30.1/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+WORKDIR $APP
+ADD Gemfile /app/Gemfile
+ADD Gemfile.lock /app/Gemfile.lock
+RUN bundle install
+
+RUN npm install yarn -g
+ADD package.json $APP
+ADD yarn.lock $APP
+RUN yarn install
+
+ADD . $APP
+docker-compose --verbose build output
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.utils.config.find_config_file: Trying paths: ['/Users/huynhit92/.docker/config.json', '/Users/huynhit92/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /Users/huynhit92/.docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Auth data for https://index.docker.io/v1/ is absent. Client might be using a credentials store instead.
+docker.auth.load_config: Found 'credsStore' section
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/version HTTP/1.1" 200 560
+compose.cli.command.get_client: docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': 'Docker Engine - Community'}, Components=[{'Name': 'Engine', 'Version': '18.09.0', 'Details': {'ApiVersion': '1.39', 'Arch': 'amd64', 'BuildTime': '2018-11-07T00:55:00.000000000+00:00', 'Experimental': 'false', 'GitCommit': '4d60db4', 'GoVersion': 'go1.10.4', 'KernelVersion': '4.9.125-linuxkit', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.09.0, ApiVersion=1.39, MinAPIVersion=1.12, GitCommit=4d60db4, GoVersion=go1.10.4, Os=linux, Arch=amd64, KernelVersion=4.9.125-linuxkit, BuildTime=2018-11-07T00:55:00.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('beecloud_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/beecloud_default HTTP/1.1" 404 35
+compose.cli.verbose_proxy.proxy_callable: docker inspect_volume <- ('beecloud_bundle')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/volumes/beecloud_bundle HTTP/1.1" 404 36
+compose.project.build: db uses an image, skipping
+compose.service.build: Building app
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='/Users/huynhit92/workspace/bee-cloud', tag='bee-cloud_app', rm=True, forcerm=False, pull=False, nocache=False, dockerfile=None, cache_from=None, labels=None, buildargs={}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)

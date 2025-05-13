@@ -1,0 +1,15 @@
+tgpfeiffer commented on 15 Dec 2014
+I think the situation "fig up is run when containers are still running" should be documented better with respect to what happens to volumes. The documentation says:
+By default if there are existing containers for a service, fig up will stop and recreate them (preserving mounted volumes with volumes-from), so that changes in fig.yml are picked up.
+However, this is not only true for volumes mounted with volumes-from, but also for volumes specified with volumes:
+$ sudo docker inspect -f '{{.Volumes}}' classes_base_1
+map[/var:/var/lib/docker/vfs/dir/1ea4fa07dd4ae53a98869587caa39623d797c179741121b01f3c61bcb38860fa]
+$ sudo fig up -d
+Recreating classes_base_1...
+$ sudo docker inspect -f '{{.Volumes}}' classes_base_1
+map[/var:/var/lib/docker/vfs/dir/1ea4fa07dd4ae53a98869587caa39623d797c179741121b01f3c61bcb38860fa]
+This leads to behavior that is not consistent with usual Docker behavior, I think, in the following sense:
+Normally, docker run -v /var -v /hostdir:/data --name=somecontainer someimage will 1) copy all files that exist in /var in the someimage image to some randomly named directory on the host and mount that within the container, and 2) mount /hostdir to /data without copying the data that might have been in /data before.
+Now the thing that comes closest to "stop and recreate" is docker rm somecontainer && docker run -v /var -v /hostdir:/data --name=somecontainer someimage. In particular, the data that was in someimage will be copied to the host again and any changes made in the previously running instance of somecontainer in /var will be lost.
+The behavior of fig up however, is that the same random directory that was mounted in the previous instance of somecontainer will be mounted to /var again. In particular, if the contents of /var in the image changed after the first run of fig up, they will never be reflected in the container.
+I actually think that this is a good behavior that fig up is showing, but it is so different to what the user is familiar with when using standard docker. AFAIK, it is not possible to achieve that with standard Docker command chaining (i.e., without manually keeping track of all mounted volume directories). Therefore, that behavior must be well documented and explained. I think the term "recreated" is not really sufficient here.

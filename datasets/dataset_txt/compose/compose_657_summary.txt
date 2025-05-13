@@ -1,0 +1,1 @@
+Docker-compose doesn't find credential helper in PATH

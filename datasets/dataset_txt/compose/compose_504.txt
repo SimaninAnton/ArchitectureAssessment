@@ -1,0 +1,4 @@
+melissachang commented on 13 Sep 2018
+I would like there to be a way for docker-compose up to print a docker run command for each service.
+I'm debugging an app issue. It would be useful for me to run "docker run" for one of my docker-compose services. For example, my service has two volumes in docker-compose.yml. I want to try running docker run with one volume removed.
+I tried running docker-compose up with --log-level DEBUG and --verbose, and didn't see this.

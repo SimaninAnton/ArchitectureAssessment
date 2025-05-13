@@ -1,0 +1,6 @@
+trungtuan commented on 17 Jul 2014
+Hi there,
+I am having problem running fig/docker on Ubuntu 14.04 desktop 64 bit VM. Docker is running very well without any error. However, # fig up or # fig ps all yield the error
+client and server don't have same version (client : 1.12, server: 1.10)
+Not sure what went wrong because all Google result point to boot2docker, which is not quite relevant is it?
+Thanks

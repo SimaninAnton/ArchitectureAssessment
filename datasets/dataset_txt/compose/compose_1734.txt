@@ -1,0 +1,21 @@
+BYK commented on 2 Feb 2017 •
+edited
+docker-compose build <name> command throws the following exception (with stracktrace) when the context directory includes a filename with a unicode character in it:
+docker-compose build web
+Building web
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 64, in main
+  File "compose\cli\main.py", line 116, in perform_command
+  File "compose\cli\main.py", line 222, in build
+  File "compose\project.py", line 307, in build
+  File "compose\service.py", line 786, in build
+  File "site-packages\docker\api\build.py", line 139, in build
+  File "site-packages\docker\utils\utils.py", line 91, in tar
+  File "tarfile.py", line 1881, in gettarinfo
+WindowsError: [Error 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\Users\\<redacted>\\files\\?.jpg'
+The file name in question is: ∆.jpg
+Original mention of the issue: #4370 (comment)
+I am using the latest docker-compose and docker-py installed from master (like pip install git+https://github.com/docker/docker-py.git#egg-info) and Python 3.5.2 on Windows 10.1
+$ docker-compose --version
+docker-compose version 1.11.0dev, build unknown

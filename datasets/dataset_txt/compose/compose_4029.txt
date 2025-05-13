@@ -1,0 +1,16 @@
+Contributor
+bfirsh commented on 23 Dec 2014
+When running fig up, if a container stops before attaching it seems like Fig will only attach to the containers that are left running. The output from the stopped container is also not displayed.
+$ cat > fig.yml
+web:
+  build: ubuntu
+  command: echo hello world
+db:
+  image: postgres:9.1
+$ fig up
+Creating example_web_1...
+Creating example_db_1...
+Attaching to example_db_1
+db_1 | The files belonging to this database system will be owned by user "postgres".
+db_1 | This user must also own the server process.
+...

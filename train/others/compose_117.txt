@@ -1,0 +1,10 @@
+junpet commented on 1 Aug 2019
+Description of the issue
+After installing basing on this (debian amd64) and trying to sudo docker-compose --version I get /usr/local/bin/docker-compose 1: /usr/local/bin/docker-compose: Not: not found
+Context information (for bug reports)
+Output of docker-compose version
+Does not work
+Output of docker version
+Docker version 19.03.1, build 74b1e89
+Additional information
+Debian latest stable, amd64

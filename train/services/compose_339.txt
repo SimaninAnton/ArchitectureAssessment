@@ -1,0 +1,179 @@
+DameLyngdoh commented on 2 Jan 2019
+docker-compose up does not create and start container
+docker-compose -f up does not create and start container. After running the command, execution stays in the foreground and on checking for containers from a different console using the command docker container ls the list is empty. Tried docker-compose -f up -d and the execution stays in the foreground.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:51 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  keycloak:
+    command:
+    - -b
+    - 0.0.0.0
+    - -Dkeycloak.migration.action=import
+    - -Dkeycloak.migration.provider=dir
+    - -Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config
+    - -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
+    - -Djboss.socket.binding.port-offset=1000
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_USER: admin
+    image: jboss/keycloak:4.5.0.Final
+    ports:
+    - 9080:9080/tcp
+    - 9443:9443/tcp
+    - 10990:10990/tcp
+    volumes:
+    - D:\Demos\jhipster\Keycloak-Demo\gateway\src\main\docker\realm-config:/opt/jboss/keycloak/realm-config:rw
+version: '2.0'
+Stacktrace / full error message docker-compose --verbose -f keycloak.yml up
+compose.config.config.find: Using configuration files: .\src\main\docker\keycloak.yml
+docker.utils.config.find_config_file: Trying paths: ['C:\\Users\\dame.lyngdoh\\.docker\\config.json', 'C:\\Users\\dame.lyngdoh\\.dockercfg']
+docker.utils.config.find_config_file: Found file at path: C:\Users\dame.lyngdoh\.docker\config.json
+docker.auth.load_config: Found 'credsStore' section
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/version HTTP/1.1" 200 560
+compose.cli.command.get_client: docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+compose.cli.command.get_client: Docker base_url: http+docker://localnpipe
+compose.cli.command.get_client: Docker version: Platform={'Name': 'Docker Engine - Community'}, Components=[{'Name': 'Engine', 'Version': '18.09.0', 'Details': {'ApiVersion': '1.39', 'Arch': 'amd64', 'BuildTime': '2018-11-07T00:55:00.000000000+00:00', 'Experimental': 'false', 'GitCommit': '4d60db4', 'GoVersion': 'go1.10.4', 'KernelVersion': '4.9.125-linuxkit', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.09.0, ApiVersion=1.39, MinAPIVersion=1.12, GitCommit=4d60db4, GoVersion=go1.10.4, Os=linux, Arch=amd64, KernelVersion=4.9.125-linuxkit, BuildTime=2018-11-07T00:55:00.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('docker_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/docker_default HTTP/1.1" 200 436
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {'Attachable': False,
+ 'ConfigFrom': {'Network': ''},
+ 'ConfigOnly': False,
+ 'Containers': {},
+ 'Created': '2018-12-29T20:46:39.3848077Z',
+ 'Driver': 'bridge',
+ 'EnableIPv6': False,
+ 'IPAM': {'Config': [{'Gateway': '172.18.0.1', 'Subnet': '172.18.0.0/16'}],
+          'Driver': 'default',
+          'Options': None},
+...
+compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/info HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker info -> {'Architecture': 'x86_64',
+
+ 'BridgeNfIp6tables': True,
+ 'BridgeNfIptables': True,
+ 'CPUSet': True,
+ 'CPUShares': True,
+ 'CgroupDriver': 'cgroupfs',
+ 'ClusterAdvertise': '',
+ 'ClusterStore': '',
+ 'ContainerdCommit': {'Expected': '468a545b9edcd5932818eb9de8e72413e616e86e',
+                      'ID': '468a545b9edcd5932818eb9de8e72413e616e86e'},
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('docker_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/docker_default HTTP/1.1" 200 436
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {'Attachable': False,
+ 'ConfigFrom': {'Network': ''},
+ 'ConfigOnly': False,
+ 'Containers': {},
+ 'Created': '2018-12-29T20:46:39.3848077Z',
+ 'Driver': 'bridge',
+ 'EnableIPv6': False,
+ 'IPAM': {'Config': [{'Gateway': '172.18.0.1', 'Subnet': '172.18.0.0/16'}],
+          'Driver': 'default',
+          'Options': None},
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=0&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=0&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.service=keycloak', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=1&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkeycloak%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.service=keycloak', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=1&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkeycloak%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('jboss/keycloak:4.5.0.Final')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/images/jboss/keycloak:4.5.0.Final/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {'Architecture': 'amd64',
+ 'Author': '',
+ 'Comment': '',
+ 'Config': {'ArgsEscaped': True,
+            'AttachStderr': False,
+            'AttachStdin': False,
+            'AttachStdout': False,
+            'Cmd': ['-b', '0.0.0.0'],
+            'Domainname': '',
+            'Entrypoint': ['/opt/jboss/tools/docker-entrypoint.sh'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.service=keycloak', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=1&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkeycloak%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.service=keycloak', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=1&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkeycloak%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) compose.parallel.feed_queue: Pending: {<Service: keycloak>}
+compose.parallel.feed_queue: Starting producer thread for <Service: keycloak>
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.service=keycloak', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=1&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkeycloak%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=docker', 'com.docker.compose.service=keycloak', 'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/containers/json?limit=-1&all=1&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkeycloak%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items) Creating docker_keycloak_1 ...
+compose.parallel.feed_queue: Pending: {ServiceName(project='docker', service='keycloak', number=1)}
+compose.parallel.feed_queue: Starting producer thread for ServiceName(project='docker', service='keycloak', number=1)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('jboss/keycloak:4.5.0.Final')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/images/jboss/keycloak:4.5.0.Final/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {'Architecture': 'amd64',
+ 'Author': '',
+ 'Comment': '',
+ 'Config': {'ArgsEscaped': True,
+            'AttachStderr': False,
+            'AttachStdin': False,
+            'AttachStdout': False,
+            'Cmd': ['-b', '0.0.0.0'],
+            'Domainname': '',
+            'Entrypoint': ['/opt/jboss/tools/docker-entrypoint.sh'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('jboss/keycloak:4.5.0.Final')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/images/jboss/keycloak:4.5.0.Final/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {'Architecture': 'amd64',
+ 'Author': '',
+ 'Comment': '',
+ 'Config': {'ArgsEscaped': True,
+            'AttachStderr': False,
+            'AttachStdin': False,
+            'AttachStdout': False,
+            'Cmd': ['-b', '0.0.0.0'],
+            'Domainname': '',
+            'Entrypoint': ['/opt/jboss/tools/docker-entrypoint.sh'],
+...
+compose.service.build_container_labels: Added config hash: e80207384b8bd51d468f3ea7a22b4dd35e2002ce099993707df1dfd6310e5370
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (links=[], port_bindings={'9080/tcp': ['9080'], '9443/tcp': ['9443'], '10990/tcp': ['10990']}, binds=['D:\\Demos\\jhipster\\Keycloak-Demo\\gateway\\src\\main\\docker\\realm-config:/opt/jboss/keycloak/realm-config:rw'], volumes_from=[], privileged=False, network_mode='docker_default', devices=None, dns=None, dns_opt=None, dns_search=None, restart_policy=None, runtime=None, cap_add=None, cap_drop=None, mem_limit=None, mem_reservation=None, memswap_limit=None, ulimits=None, log_config={'Type': '', 'Config': {}}, extra_hosts=None, read_only=None, pid_mode=None, security_opt=None, ipc_mode=None, cgroup_parent=None, cpu_quota=None, shm_size=None, sysctls=None, pids_limit=None, tmpfs=[], oom_kill_disable=None, oom_score_adj=None, mem_swappiness=None, group_add=None, userns_mode=None, init=None, init_path=None, isolation=None, cpu_count=None, cpu_percent=None, nano_cpus=None, volume_driver=None, cpuset_cpus=None, cpu_shares=None, storage_opt=None, blkio_weight=None, blkio_weight_device=None, device_read_bps=None, device_read_iops=None, device_write_bps=None, device_write_iops=None, mounts=None, device_cgroup_rules=None, cpu_period=None, cpu_rt_period=None, cpu_rt_runtime=None)
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': ['D:\\Demos\\jhipster\\Keycloak-Demo\\gateway\\src\\main\\docker\\realm-config:/opt/jboss/keycloak/realm-config:rw'],
+ 'Links': [],
+ 'LogConfig': {'Config': {}, 'Type': ''},
+ 'NetworkMode': 'docker_default',
+ 'PortBindings': {'10990/tcp': [{'HostIp': '', 'HostPort': '10990'}],
+                  '9080/tcp': [{'HostIp': '', 'HostPort': '9080'}],
+                  '9443/tcp': [{'HostIp': '', 'HostPort': '9443'}]},
+ 'VolumesFrom': []}
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (command=['-b', '0.0.0.0', '-Dkeycloak.migration.action=import', '-Dkeycloak.migration.provider=dir', '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config', '-Dkeycloak.migration.strategy=OVERWRITE_EXISTING', '-Djboss.socket.binding.port-offset=1000'], environment=['KEYCLOAK_USER=admin', 'KEYCLOAK_PASSWORD=admin', 'DB_VENDOR=h2'], image='jboss/keycloak:4.5.0.Final', ports=[('9080', 'tcp'), ('9443', 'tcp'), ('10990', 'tcp')], volumes={'/opt/jboss/keycloak/realm-config': {}}, name='docker_keycloak_1', detach=True, labels={'com.docker.compose.project': 'docker', 'com.docker.compose.service': 'keycloak', 'com.docker.compose.oneoff': 'False', 'com.docker.compose.container-number': '1', 'com.docker.compose.version': '1.23.2', 'com.docker.compose.config-hash': 'e80207384b8bd51d468f3ea7a22b4dd35e2002ce099993707df1dfd6310e5370'}, host_config={'NetworkMode': 'docker_default', 'VolumesFrom': [], 'Binds': ['D:\\Demos\\jhipster\\Keycloak-Demo\\gateway\\src\\main\\docker\\realm-config:/opt/jboss/keycloak/realm-config:rw'], 'PortBindings': {'9080/tcp': [{'HostIp': '', 'HostPort': '9080'}], '9443/tcp': [{'HostIp': '', 'HostPort': '9443'}], '10990/tcp': [{'HostIp': '', 'HostPort': '10990'}]}, 'Links': [], 'LogConfig': {'Type': '', 'Config': {}}}, networking_config={'EndpointsConfig': {'docker_default': {'Aliases': ['keycloak'], 'IPAMConfig': {}}}})
+compose.parallel.feed_queue: Pending: set()
+Additional information
+OS - Windows 10
+Architecture - 64-bit
+The docker-compose config file is generated by JHipster. For more information follow this link.

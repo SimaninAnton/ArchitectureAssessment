@@ -1,0 +1,90 @@
+stephan2012 commented on 4 Jul 2016
+While trying to deploy with docker-compose on a Windows system with docker-compose I cannot pull images from a private registry.
+$ docker login nexus.company.com:18446
+Username (username):
+Password:
+Login Succeeded
+
+$ docker-compose pull
+Pulling memcache (nexus.company.com:18446/custom-memcached:latest)...
+Pulling repository nexus.company.com:18446/custom-memcached
+ERROR: unauthorized: authentication required
+Pulling directly with Docker works as expected:
+$ docker pull nexus.company.com:18446/custom-memcached:latest
+latest: Pulling from custom-memcached
+
+a3ed95caeb02: Pull complete
+da71393503ec: Pull complete
+5cd41edb06aa: Pull complete
+d7066ba9851d: Pull complete
+2bf2935c93e8: Pull complete
+039250837ed5: Pull complete
+c576cd65c4e9: Pull complete
+add8dfd60915: Pull complete
+Digest: sha256:3fd27dec38906853c3f700215aaf02986be2e2114f763a5f9c4339f71787e9c5
+Status: Downloaded newer image for nexus.company.com:18446/custom-memcached:latest
+Versions:
+docker-compose: 1.8.0-rc1
+Docker 1.12.0-rc3
+Docker Toolbox 1.12.0-rc2
+Registry: Nexus Repository Manager 3.0.0-03
+$ docker-machine ip
+192.168.99.100
+
+$ docker-machine env
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.99.100:2376"
+export DOCKER_CERT_PATH="C:\Users\username\.docker\machine\machines\default"
+
+export DOCKER_MACHINE_NAME="default"
+# Run this command to configure your shell:
+# eval $("C:\Program Files\Docker Toolbox\docker-machine.exe" env)
+
+$ docker info
+Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 1
+Server Version: 1.12.0-rc3
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 10
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.14-boot2docker
+Operating System: Boot2Docker 1.12.0-rc3 (TCL 7.1); HEAD : 8d9ee9f - Sat Jul  2 05:02:44 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 995.9 MiB
+Name: default
+ID: XXBH:DI6X:DOYG:D3MW:NIML:X5VG:ZBHX:PUEA:BCHW:JDVB:BYRJ:Y5YR
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 13
+ Goroutines: 25
+ System Time: 2016-07-04T06:52:27.653725638Z
+ EventsListeners: 0
+Http Proxy: http://proxy.company.com:8080
+Https Proxy: http://proxy.company.com:8080
+No Proxy: localhost,127.0.0.1,.company.com
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox
+Insecure Registries:
+ 127.0.0.0/8
+Did I miss something or does docker-compose ignore registry logins?
+Thanks for your help.
+Stephan
+5

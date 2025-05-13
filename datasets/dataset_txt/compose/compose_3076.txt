@@ -1,0 +1,47 @@
+soedar commented on 19 Nov 2015
+I'm facing an issue with data volume containers under --x-networking flag. After re-building the image, the data in the volume container seems to have disappeared. This behavior does not exist without the --x-networking flag
+$ docker -v
+Docker version 1.9.0, build 76d6bc9
+$ docker-compose -v
+docker-compose version: 1.5.1
+docker-compose.yml
+app:
+  build: .
+  command: sleep infinity
+  volumes_from:
+    - data
+
+data:
+  build: .
+  volumes:
+    - /data
+Dockerfile
+FROM debian:jessie
+RUN mkdir /app
+ADD . /app
+Steps to reproduce
+# Without --x-networking
+$ docker-compose build
+$ docker-compose up -d
+$ docker exec -it tmp_app_1 touch /data/my_file
+$ docker exec -it tmp_app_1 ls /data
+my_file
+$ touch changes_local_directory
+$ docker-compose build
+$ docker-compose up -d
+$ docker exec -it tmp_app_1 ls /data
+my_file
+
+$ docker-compose stop -t 0
+$ docker-compose rm -f
+
+# With --x-networking
+$ docker-compose --x-networking build
+$ docker-compose --x-networking up -d
+$ docker exec -it tmp_app_1 touch /data/my_file2
+$ docker exec -it tmp_app_1 ls /data
+my_file2
+$ touch changes_local_directory2
+$ docker-compose --x-networking build
+$ docker-compose --x-networking up -d
+$ docker exec -it tmp_app_1 ls /data

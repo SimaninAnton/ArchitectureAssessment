@@ -1,0 +1,37 @@
+nicolasduminil commented on 23 Nov 2017 •
+edited by shin-
+Hello,
+I ahve the following yaml file:
+version: "2"
+services:
+  db:
+    image: oracle/database:11.2.0.2-xe
+    volumes:
+      - ./oraxe/customization:/u01/app/oracle/scripts/startup
+    container_name: oraxe
+    shm_size: 1g
+    ports:
+      - 1521:1521
+      - 80:8080
+    environment:
+      ORACLE_PWD: California1
+
+  wfy10:
+    build:
+      context: ./wfy10
+    image: wfy10_oracle
+    container_name: wfy10
+    entrypoint: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+    ports:
+      - 8080:8080
+      - 9990:9990
+    links:
+      - db:db
+    depends_on:
+     - "db"
+It starts a container running an Oracle XE database image and then another one running a Wildfly appserver, dependent of the first one. The appserver needs customizations and, a part of these customizations, depend of the status of the first container. For example, defining JDBC connections to the database requires that the database container be started.
+For some reason, the database container needs almost 3 minutes to start. My understanding was that the "links" and "depends_on" statements are used to synchronize the containers strat-up and I was expected that, given that the wildfly container depends on the oracle one, it doesn't execute its customizations until the oracle one is started. The customizations are executed as a script with RUN in the Dockerfile.
+But what seems to happen is that the Dockerfile for the wildfly container executes the customization script before the oracle container completely started-up and, hence, this customization script fails. Currently, I'm running the "docker-compose -up" command and when it finishes, I have the wildfly container started and the oracle container in the "starting" status. Almost three minutes later, the oracle container is started as well and only then I could execute the customizations.
+How could I do this ?
+Many thanks in advance,
+Nicolas DUMINIL

@@ -1,0 +1,6 @@
+systemmonkey42 commented on 30 Jun 2017
+Docker-machine depends on the environment variables to contact the provider (rather than caching them) and can never work correctly if you have many machines across multiple providers.
+I have been using environment variables which I set (via source) in the shell before issuing docker-machine command.
+If I set the variables to point to my amazonec2 account, then create a machine, docker-machine ls works correctly.
+If I change those variables to point to another EC2 account or an on-site vSphere account, and create a new machine, I can never run docker-machine ls without errors.
+Due to its dependency on environment variables, docker-machine either fails to talk to amazonec2, or fails to talk to my on-site vSphere instance.

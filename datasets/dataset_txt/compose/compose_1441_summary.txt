@@ -1,0 +1,1 @@
+Absolute path passed as argument in docker-compose to Dockerfile becomes relative in linux

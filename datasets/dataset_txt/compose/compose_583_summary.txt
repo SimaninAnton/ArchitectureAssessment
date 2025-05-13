@@ -1,0 +1,1 @@
+<theano.gof.cmodule>:[win error 123] The filename directory name or volume label syntax is incorrect. This error occurs when I run the .exe file in some systems. In other systems it works fine. Kindly help to tackle this error.

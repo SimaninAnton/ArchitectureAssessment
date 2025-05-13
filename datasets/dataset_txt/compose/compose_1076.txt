@@ -1,0 +1,26 @@
+bdharrington7 commented on 16 Nov 2017 •
+edited
+Versions:
+$ docker -v
+Docker version 17.09.0-ce, build afdb6d4
+
+$ docker-compose -v
+docker-compose version 1.16.1, build 6d1ac21
+Issue:
+In my docker compose file that has two containers running, this command works:
+$ docker-compose ps
+  Name                Command               State                       Ports
+--------------------------------------------------------------------------------------------------
+app        nodemon --inspect=0.0.0.0:9229   Up      0.0.0.0:9080->9080/tcp, 0.0.0.0:9229->9229/tcp
+database   docker-entrypoint.sh postgres    Up      0.0.0.0:5432->5432/tcp
+
+$ docker-compose ps -q app
+25d3b2c4feb9ff9db4780bfd196b33916d849df5314e2a7f46b6fadae3a33231
+But if I have a single container running, it doesn't work:
+$ docker-compose ps
+  Name                 Command               State                         Ports
+------------------------------------------------------------------------------------------------------
+singleapp   nodemon --inspect=0.0.0.0:9229   Up      0.0.0.0:10080->10080/tcp, 0.0.0.0:10229->9229/tcp
+
+$ docker-compose ps -q singleapp
+ERROR: No such service: singleapp

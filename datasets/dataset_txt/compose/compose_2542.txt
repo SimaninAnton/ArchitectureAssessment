@@ -1,0 +1,7 @@
+atrauzzi commented on 4 Apr 2016
+I have a boot2docker VM that's been created by docker-machine and I am running docker-compose 1.6.2, build 4d72027 on Windows, installed via pip.
+All my containers that don't use bind mounts seem to be working, but as soon as I try to perform a relative bind mount, I end up getting this message:
+ERROR: Cannot start container 713aaf8e67350f1182a8397b7ab68537f1ed9722d20f662a928d353c62c3f320: [9] System error: not a directory
+This issue seems to have been lingering for quite some while since I first reported it late last year: #2301
+If you'd like a sample of the project I'm using, head here: http://github.com/atruazzi/laravel-drydock
+A simple docker-compose up in the root directory on Windows should yield the same issue as what I'm experiencing. My hunch is that the paths being sent to the docker daemon/engine aren't lining up with what is in the filesystem of the VM. Unfortunately, I have no way of debugging any of this as --verbose doesn't show the paths being sent.

@@ -1,0 +1,29 @@
+vgeyer commented on 25 Nov 2014
+Hi there,
+I've got a little problem. I did this:
+web:
+  build: ./env/web/
+  volumes:
+    - ./env/web/:/var/www/html
+cli:
+  build: ./env/cli/
+  volumes:
+    - ./env/cli/:/app/
+db:
+  image: dockerfile/mariadb
+  volumes:
+    - ./data/db/mysql/:/var/lib/mysql/
+Well, a fig build works nice, a fig up_ produces something like that:
+Recreating exampletv_web_1...
+Recreating exampletv_db_1...
+Recreating exampletv_cli_1...
+Attaching to exampletv_web_1, exampletv_cli_1
+web_1 | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.178. Set the 'ServerName' directive globally to suppress this message
+web_1 | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.178. Set the 'ServerName' directive globally to suppress this message
+web_1 | [Tue Nov 25 15:57:16.325314 2014] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.10 (Debian) PHP/5.6.3 configured -- resuming normal operations
+web_1 | [Tue Nov 25 15:57:16.325421 2014] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+exampletv_cli_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping exampletv_web_1..
+I think because of the cli container which is a run once container and does nothing by default. This is the desired behavior because fig run cli /bin/bash should be run manually.
+Is there any way to disable this "dependency" behavior?

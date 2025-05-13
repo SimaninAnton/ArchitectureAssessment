@@ -1,0 +1,30 @@
+askoretskiy commented on 11 May 2015
+docker allows to build explicit filename:
+-f, --file= Name of the Dockerfile (Default is 'PATH/Dockerfile')
+docker build -f Dockerfile.test
+However it is not possible with compose:
+web:
+build: Dockerfile.test
+Result:
+Traceback (most recent call last):
+File "/usr/local/bin/docker-compose", line 8, in
+load_entry_point('docker-compose==1.2.0', 'console_scripts', 'docker-compose')()
+File "/Library/Python/2.7/site-packages/compose/cli/main.py", line 31, in main
+command.sys_dispatch()
+File "/Library/Python/2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+self.dispatch(sys.argv[1:], None)
+File "/Library/Python/2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+super(Command, self).dispatch(_args, *_kwargs)
+File "/Library/Python/2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+self.perform_command(*self.parse(argv, global_options))
+File "/Library/Python/2.7/site-packages/compose/cli/command.py", line 59, in perform_command
+handler(project, command_options)
+File "/Library/Python/2.7/site-packages/compose/cli/main.py", line 119, in build
+project.build(service_names=options['SERVICE'], no_cache=no_cache)
+File "/Library/Python/2.7/site-packages/compose/project.py", line 191, in build
+service.build(no_cache)
+File "/Library/Python/2.7/site-packages/compose/service.py", line 475, in build
+nocache=no_cache,
+File "/Library/Python/2.7/site-packages/docker/client.py", line 319, in build
+raise TypeError("You must specify a directory to build in path")
+TypeError: You must specify a directory to build in path

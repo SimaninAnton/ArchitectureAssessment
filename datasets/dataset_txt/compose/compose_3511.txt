@@ -1,0 +1,8 @@
+iMerica commented on 3 Jul 2015
+In one terminal session I'm tailing a container:
+$ docker-compose logs myapp
+myapp_1 | starting app ..
+myapp_1 | listenging on port 8080
+On a separate session, I would like to do:
+docker exec -d myapp_1 sh -c 'echo "foo" >>/dev/stdout'
+and have it print foo to stdout on the running container above. Does anyone know of a way to do this? I've tried the solution in http://serverfault.com/a/634296, but it didn't work for me.

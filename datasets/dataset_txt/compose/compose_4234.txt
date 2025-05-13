@@ -1,0 +1,18 @@
+btashton commented on 14 Aug 2014
+I am consistently getting a MemoryError on containers that produce a lot of logs.
+fig --version
+fig 0.5.2
+
+fig logs
+Attaching to fig_lmsks_1, fig_lmscore_1, fig_lmsweb_1, fig_lmsgw_1
+Exception in thread Thread-3:
+Traceback (most recent call last):
+  File "/code/build/fig/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/code/build/fig/out00-PYZ.pyz/threading", line 763, in run
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.multiplexer", line 41, in _enqueue_output
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.log_printer", line 53, in _make_log_generator
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.utils", line 100, in split_buffer
+  File "/code/build/fig/out00-PYZ.pyz/fig.packages.docker.client", line 282, in _multiplexed_socket_stream_helper
+  File "/code/build/fig/out00-PYZ.pyz/fig.packages.docker.client", line 263, in recvall
+MemoryError
+If I specify a specific container it usually is fine.

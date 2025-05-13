@@ -1,0 +1,6 @@
+nihiluis commented on 18 Sep 2017
+build:
+      context: '.'
+      dockerfile: Dockerfile-listener
+having this and doing docker-compose build will extend your build time by a lot. there's no output whatsoever. after like 1-2 minutes the build process begins and then proceeds normally.
+someone has the same problem here: #552

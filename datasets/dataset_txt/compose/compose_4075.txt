@@ -1,0 +1,39 @@
+xiaods commented on 26 Nov 2014
+i am working on a open source project:
+https://github.com/minnowlab/giggle
+this is rails project. so i cd to this project ,and fig build && fig up
+then the web always missing some gem, but from the console, i see the gem already installed. anyone came across this case:
+dxiao at dhcp-140-191 in ~/Documents/code/rails-dev/giggle on master
+$ clear
+db_1  | selecting default max_connections ... 100
+db_1  | selecting default shared_buffers ... 128MB
+db_1  | creating configuration files ... ok
+db_1  | ok
+db_1  | initializing pg_authid ... ok
+db_1  | initializing dependencies ... ok
+db_1  | creating system views ... ok
+db_1  | loading system objects' descriptions ... ok
+db_1  | creating collations ... ok
+db_1  | creating conversions ... ok
+db_1  | creating dictionaries ... ok
+db_1  | setting privileges on built-in objects ... ok
+db_1  | creating information schema ... ok
+db_1  | loading PL/pgSQL server-side language ... ok
+web_1 | /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/spec_set.rb:92:in `block in materialize': Could not find libv8-3.16.14.7 in any of the sources (Bundler::GemNotFound)
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/spec_set.rb:85:in `map!'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/spec_set.rb:85:in `materialize'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/definition.rb:132:in `specs'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/definition.rb:177:in `specs_for'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/definition.rb:166:in `requested_specs'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/environment.rb:18:in `requested_specs'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/runtime.rb:13:in `setup'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler.rb:121:in `setup'
+web_1 |     from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.3/lib/bundler/setup.rb:17:in `<top (required)>'
+web_1 |     from /usr/local/lib/ruby/2.1.0/rubygems/core_ext/kernel_require.rb:55:in `require'
+web_1 |     from /usr/local/lib/ruby/2.1.0/rubygems/core_ext/kernel_require.rb:55:in `require'
+db_1  | vacuuming database template1 ... ok
+giggle_web_1 exited with code 1
+Gracefully stopping... (press Ctrl+C again to force)
+mac/ docker 1.3.1
+$ fig --version
+fig 1.0.1

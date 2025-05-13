@@ -1,0 +1,25 @@
+nupurbansal8 commented on 18 Dec 2017
+Hi,
+I am testing restart policy for my container through docker-compose.
+I have explicitly given exit in my golang code with exit code -1.
+When Url for service is called then exit code is encountered and application is stopped.
+After this container is restarted with restart policy used "unless-stopped".
+When I am executing this, my docker-compose gives
+dockerapp_buylead_1 exited with code 255
+and exits.
+But container is restarted.
+So container keeps running in background.
+Why does docker-compose exit if container is running?
+Please help out with this issue.
+My docker-compose.yml is:
+version: '3'
+services:
+buylead:
+build:
+context: ./blDocker/
+dockerfile: Dockerfile
+ports:
+- "7083:7083"
+restart: unless-stopped
+volumes:
+- /home/nupur/dev-mapi-go/src/DockerApp/blDocker/log/:/home/nupur/dev-mapi-go/src/DockerApp/blDocker/log/

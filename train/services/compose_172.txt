@@ -1,0 +1,66 @@
+rca commented on 21 May 2019
+Description of the issue
+When installing docker and docker-compose in a virtual environment, the current versions that are installed are:
+docker==3.7.2
+docker-compose==1.24.0
+When building a project that is pulling the FROM image from a private repo I get the following error:
+Step 1/16 : FROM registry.mydomain.net/image:1.2.3
+ERROR: Service 'app' failed to build: Get https://registry.mydomain.net/v2/image/manifests/1.2.3: no basic auth credentials
+Context information (for bug reports)
+Output of docker-compose version
+[berto:env@MacBook-Pro]$ docker-compose version
+docker-compose version 1.24.0, build 0aa5906
+docker-py version: 3.7.2
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+[berto:env@MacBook-Pro]$ docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+[berto:env@MacBook-Pro]$ docker-compose -f docker-compose.yml config
+version: '3.4'
+services:
+  app:
+    build:
+      context: /Users/berto/Projects/openslate/service
+    image: registry.mydomain.net/service:local
+Steps to reproduce the issue
+pipenv shell
+pip install docker-compose
+build Dockerfile whose FROM image is private
+Observed result
+[berto:env@MacBook-Pro]$ docker-compose -f docker-compose.yml build --pull
+WARNING: The DOCKER_IMAGE variable is not set. Defaulting to a blank string.
+Building app
+Step 1/16 : FROM registry.mydomain.net/image:1.2.3
+ERROR: Service 'app' failed to build: Get https://registry.mydomain.net/v2/image/manifests/1.2.3: no basic auth credentials
+Expected result
+When configuring the virtual environment with the following, build succeeds:
+pip install docker==3.6.0 docker-compose==1.23.2
+Stacktrace / full error message
+[berto:env@MacBook-Pro]$ DOCKER_IMAGE=test docker-compose -f docker-compose.yml build --pull
+Building app
+Step 1/16 : FROM registry.mydomain.net/image:1.2.3
+Service 'app' failed to build: Get https://registry.mydomain.net/v2/image/manifests/1.2.3: no basic auth credentials
+Additional information
+Mac OS X 10.14.4
+docker-compose install via pip install in a pipenv-created virtual environment
+10

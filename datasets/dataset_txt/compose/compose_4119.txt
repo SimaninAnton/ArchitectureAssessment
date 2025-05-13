@@ -1,0 +1,30 @@
+penelopezone commented on 5 Nov 2014
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping kya_workercorpus_1...
+^CKilling kya_workercorpus_1...
+Killing kya_wordpress_1...
+Killing kya_mysqldb_1...
+Killing kya_redis_1...
+Killing kya_db_1...
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/threading", line 763, in run
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.multiplexer", line 41, in _enqueue_output
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.log_printer", line 56, in _make_log_generator
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.container", line 127, in wait
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.packages.docker.client", line 764, in wait
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.packages.docker.client", line 65, in _post
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.sessions", line 425, in post
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.adapters", line 391, in send
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.adapters", line 167, in build_response
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.models", line 526, in __init__
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.structures", line 69, in __init__
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/_abcoll", line 540, in update
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/abc", line 144, in __instancecheck__
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/abc", line 174, in __subclasscheck__
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/_weakrefset", line 59, in __iter__
+TypeError: 'NoneType' object is not callable
+got this error when trying to shut down my project.

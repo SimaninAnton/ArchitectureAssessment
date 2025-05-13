@@ -1,0 +1,12 @@
+docwhat commented on 12 Aug 2014
+I have some things that are maintenance related, e.g. database optimization or analysis.
+I would like to be able to tell fig not to run them automatically during fig up but only when using fig run <app>.
+Example:
+maintenance:
+  image: my-mysql
+  link: db:mysql
+  autostart: false
+
+db:
+  image: my-mysql
+  ....

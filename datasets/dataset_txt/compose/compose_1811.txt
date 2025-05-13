@@ -1,0 +1,2 @@
+nischay30 commented on 9 Jan 2017
+Hi i would like to know what is the alternate of depends_on in docker-compose v3 as in the release notes you said we will jot port the depends_on feature in v3

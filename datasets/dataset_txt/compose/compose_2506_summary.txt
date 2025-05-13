@@ -1,0 +1,1 @@
+Pass --detach-keys to docker-compose

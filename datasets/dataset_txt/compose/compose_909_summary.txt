@@ -1,0 +1,1 @@
+Multiple Compose files with common anchors do not work

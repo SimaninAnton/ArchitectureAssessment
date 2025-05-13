@@ -1,0 +1,8 @@
+octplane commented on 3 Jun 2015
+Because it can be desirable for monitoring, having the container name accessible in the container could be useful.
+Use case include:
+monitoring the docker from outside
+monitoring the applications inside the docker
+wanting to merge the data with coherent data.
+Currently, there is not way to get the container name apart from being outside the docker, or being able to talk to the docker daemon. This is clearly not something we want from out inner applications. I suggest passing a simple environment variable could do the trick in most case.
+11

@@ -1,0 +1,1 @@
+Pass environment variable from linux to docker container

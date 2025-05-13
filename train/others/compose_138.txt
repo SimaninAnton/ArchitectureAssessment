@@ -1,0 +1,99 @@
+ghatfan99 commented on 5 Jul 2019
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of docker version
+Client:
+ Version:           18.09.7
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        2d0083d
+ Built:             Thu Jun 27 17:57:09 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.7
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       2d0083d
+  Built:            Thu Jun 27 17:23:02 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 332, in config
+  File "compose/cli/command.py", line 68, in get_config_from_options
+  File "compose/config/config.py", line 385, in load
+  File "compose/config/config.py", line 385, in <listcomp>
+  File "compose/config/config.py", line 552, in process_config_file
+  File "compose/config/validation.py", line 437, in validate_against_config_schema
+  File "compose/config/validation.py", line 498, in handle_errors
+  File "compose/config/validation.py", line 498, in <genexpr>
+  File "compose/config/validation.py", line 424, in process_config_schema_errors
+  File "compose/config/validation.py", line 297, in handle_generic_error
+  File "compose/config/validation.py", line 371, in _parse_oneof_validator
+  File "compose/config/validation.py", line 333, in parse_key_from_error_msg
+IndexError: list index out of range
+[11300] Failed to execute script docker-compose
+Steps to reproduce the issue
+Dockerfile:
+FROM php:7.3.3-apache RUN apt-get update && apt-get upgrade -y RUN docker-php-ext-install mysqli EXPOSE 80
+docker-compose.yml
+`
+version: '3.3'
+services:
+web:
+build:
+context: ./php
+dockerfile: Dockerfile
+container_name: php73
+volumes:
+./php:/var/www/html/
+ports:
+8006:80
+db:
+container_name: mysql8
+image: mysql:8.0
+command: --default-authentication-plugin=mysql_native_password
+restart: always
+environment:
+MYSQL_ROOT_PASSWORD: root
+MYSQL_DATABASE: test_db
+MYSQL_USER: hazem
+MYSQL_PASSWORD: hasan
+ports:
+6033: 3306
+`
+Observed result
+Expected result
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 41, in project_from_options
+  File "compose/cli/command.py", line 113, in get_project
+  File "compose/config/config.py", line 385, in load
+  File "compose/config/config.py", line 385, in <listcomp>
+  File "compose/config/config.py", line 552, in process_config_file
+  File "compose/config/validation.py", line 437, in validate_against_config_schema
+  File "compose/config/validation.py", line 498, in handle_errors
+  File "compose/config/validation.py", line 498, in <genexpr>
+  File "compose/config/validation.py", line 424, in process_config_schema_errors
+  File "compose/config/validation.py", line 297, in handle_generic_error
+  File "compose/config/validation.py", line 371, in _parse_oneof_validator
+  File "compose/config/validation.py", line 333, in parse_key_from_error_msg
+IndexError: list index out of range
+[11639] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.

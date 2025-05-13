@@ -1,0 +1,36 @@
+csquared commented on 21 Jul 2015
+compose doesn't seem to work with repos in docker hub, even when I am logged in to docker via docker login. is there another way I should be authenticating with docker hub to use private images with docker-compose?
+Note: this is an example of me running docker-compose up with a compose.yml that has images in docker hub. dc is my alias for docker-compose.
+~/canvas/devkit (master)$ dc -p cloud -f hub-compose.yml up
+Creating cloud_web_1...
+Creating cloud_s3_1...
+Creating cloud_redis1_1...
+Creating cloud_redis2_1...
+Creating cloud_longhouse_1...
+Creating cloud_apidb_1...
+Pulling api (usecanvas/api:latest)...
+Pulling repository usecanvas/api
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 462, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 230, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 320, in execute_convergence_plan
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 208, in create_container
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 236, in ensure_image_exists
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 693, in pull
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 37, in stream_output
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 50, in print_output_event
+compose.progress_stream.StreamOutputError: Error: image usecanvas/api:latest not found
+However, the very next command I run is a pull for that repository from docker hub and it succeeds.
+~/canvas/devkit (master)$ docker pull usecanvas/api
+latest: Pulling from usecanvas/api
+
+d34a87a57084: Pull complete
+...
+Digest: sha256:85b3609173c6ee5cceb964e55e1d41e66bf11c0892bbe4ba56eee9d04d031753
+Status: Downloaded newer image for usecanvas/api:latest

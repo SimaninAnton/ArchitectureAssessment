@@ -1,0 +1,20 @@
+Contributor
+lindt commented on 30 Jun 2016
+I do have several compose files. My goal is to combine them using "docker-compose config". The problem is, that docker-compose does not understand its own created file after that.
+Given a compose file with an unnamed volume
+version: '2'
+services:
+  test:
+    image: ubuntu
+    volumes:
+      - /config
+When running 'docker-compose config'
+Then the unnamed volume will be suffixed with ":rw"
+Unnamed volumes are currently not allowed to be suffixed with ":rw".
+This causes docker-compose to do not understand it's own format anymore.
+Error message is like
+Creating composeconfig_test_1
+
+ERROR: for test  b'Invalid volume spec "rw": volumeabs: Invalid volume destination path: \'rw\' mount path must be absolute.'
+ERROR: Encountered errors while bringing up the project.
+Once running docker-compose config again on that file, the volume will be again suffixed with ":rw".

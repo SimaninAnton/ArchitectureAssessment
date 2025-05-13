@@ -1,0 +1,20 @@
+ggsenger commented on 10 Mar 2016
+It is not possible to use network_mode to join the bridge network (as suggested in #3012)
+in case the container needs to join both the bridge network and a custom network.
+This use case was also discussed here #2701
+I am using docker-compose version 1.6.0, build d99cad6 and Docker version 1.10.2, build c3959b1.
+Example docker-compose.yml
+version: '2'
+
+services:
+  debian:
+    image: debian:wheezy
+    network_mode: "bridge"
+    networks:
+      - custom
+networks:
+  custom:
+    external:
+      name: customnetwork
+Any help with this problem would be greatly appreciated.
+8

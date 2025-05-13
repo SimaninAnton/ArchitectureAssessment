@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 21 Mar 2015
+Shoving the binary in the repo is really ugly, but curl'ing from https://master.dockerproject.com is unstable.

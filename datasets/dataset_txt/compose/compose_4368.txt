@@ -1,0 +1,4 @@
+bradleyg commented on 14 Mar 2014
+I'm attempting to keep my fig processes up using supervisor. If one of my docker processes crashes I would like to restart it. Currently fig doesn't restart it, but it doesn't crash either.
+If for example fig up web crashes, it will just sit there showing the exception.
+Is it possible to make fig crash too? Allowing supervisor to restart it?

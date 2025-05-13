@@ -1,0 +1,49 @@
+d2xdt2 commented on 12 Mar 2015
+If docker-compose.yml contains
+ expose: 5432
+instead of
+  expose:
+    - "5432"
+then you trigger this bug
+# cat /etc/redhat-release 
+CentOS Linux release 7.0.1406 (Core) 
+# uname -a
+Linux docker 3.10.0-123.8.1.el7.x86_64 #1 SMP Mon Sep 22 19:06:58 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+# docker --version
+Docker version 1.3.2, build 39fa2fa/1.3.2
+# docker-compose --version
+docker-compose 1.1.0
+# cd /tmp/
+# cat docker-compose.yml 
+dbase:
+  image: training/postgres
+  expose: 5432
+
+rails:
+  image: training/notes
+  links:
+    - dbase:db
+  command: env
+
+# docker-compose up
+Creating tmp_dbase_1...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 445, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 184, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 259, in recreate_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 227, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 438, in _get_container_create_options
+TypeError: can only concatenate list (not "int") to list
+# 
+Removing expose: 5432 makes the error go away, and outputs
+# docker-compose up
+Creating root_dbase_1...
+Creating root_rails_1...
+Attaching to root_dbase_1, root_rails_1
+but never finishes. Here I had cp /tmp/docker-compose.yml ~/ and removed the expose line.

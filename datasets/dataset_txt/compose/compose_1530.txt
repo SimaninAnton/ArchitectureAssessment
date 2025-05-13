@@ -1,0 +1,16 @@
+lifanov commented on 11 Apr 2017
+I'm trying to do the "getting started" tutorial here: https://docs.docker.com/compose/gettingstarted/
+$ ls
+app.py   Dockerfile
+docker-compose.yml requirements.txt
+$ /home/lifanov/.local/bin/docker-compose up
+Traceback (most recent call last):
+  File "/home/lifanov/.local/bin/docker-compose", line 7, in <module>
+    from compose.cli.main import main
+  File "/home/lifanov/.local/lib/python2.7/site-packages/compose/cli/main.py", line 20, in <module>
+    from ..bundle import get_image_digests
+  File "/home/lifanov/.local/lib/python2.7/site-packages/compose/bundle.py", line 14, in <module>
+    from .service import format_environment
+  File "/home/lifanov/.local/lib/python2.7/site-packages/compose/service.py", line 108, in <module>
+    @enum.unique
+AttributeError: 'module' object has no attribute 'unique'

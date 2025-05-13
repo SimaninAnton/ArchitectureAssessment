@@ -1,0 +1,58 @@
+johanbrandhorst commented on 21 Oct 2016 •
+edited
+Hi,
+It appears that when using docker-compose run --rm --service-ports master where my master container depends on another container, which itself needs a network connection with the master container, the last connection is not created. It appears network connections are only made available for explicit dependencies (using depends_on), and only one-way.
+Note that when use with docker-compose up all expected network connections are created.
+Here is an example docker-compose (v2) which when used with docker-compose run master creates a network from master to slave, but not from slave to master.
+version: '2'
+networks:
+    internal:
+        driver: bridge
+services:
+    slave:
+        command: "ash -c 'sleep 1; ping master'"
+        image: busybox
+        networks:
+            - internal
+    master:
+        command: "ping slave"
+        depends_on:
+            - slave
+        image: busybox
+        networks:
+            - internal
+When this is run with docker-compose up:
+$ docker-compose up                                                                                                                                  
+Creating network "my_internal" with driver "bridge"                                                                                                                    
+Creating my_slave_1                                                                                                                                                    
+Creating my_master_1                                                                                                                                                   
+Attaching to my_slave_1, my_master_1                                                                                                                                
+master_1  | PING slave (172.19.0.2): 56 data bytes                                                                                                                        
+master_1  | 64 bytes from 172.19.0.2: seq=0 ttl=64 time=0.064 ms                                                                                                          
+slave_1   | PING master (172.19.0.3): 56 data bytes                                                                                                                       
+slave_1   | 64 bytes from 172.19.0.3: seq=0 ttl=64 time=0.146 ms                                                                                                          
+master_1  | 64 bytes from 172.19.0.2: seq=1 ttl=64 time=0.126 ms                                                                                                          
+slave_1   | 64 bytes from 172.19.0.3: seq=1 ttl=64 time=0.127 ms                                                                                                          
+master_1  | 64 bytes from 172.19.0.2: seq=2 ttl=64 time=0.143 ms                                                                                                          
+slave_1   | 64 bytes from 172.19.0.3: seq=2 ttl=64 time=0.153 ms                                                                                                          
+master_1  | 64 bytes from 172.19.0.2: seq=3 ttl=64 time=0.058 ms                                                                                                          
+slave_1   | 64 bytes from 172.19.0.3: seq=3 ttl=64 time=0.130 ms                                                                                                          
+master_1  | 64 bytes from 172.19.0.2: seq=4 ttl=64 time=0.157 ms                                                                                                          
+slave_1   | 64 bytes from 172.19.0.3: seq=4 ttl=64 time=0.142 ms
+^CGracefully stopping... (press Ctrl+C again to force)                                                                                                                    
+Stopping my_master_1 ... done                                                                                                                                          
+Stopping my_slave_1 ... done 
+Same thing run with docker-compose run --rm --service-ports master:
+$ docker-compose run --rm --service-ports master                                                                                                     
+Creating network "my_internal" with driver "bridge"                                                                                                                    
+Creating my_slave_1                                                                                                                                                    
+PING slave (172.19.0.2): 56 data bytes                                                                                                                                    
+64 bytes from 172.19.0.2: seq=0 ttl=64 time=0.090 ms                                                                                                                      
+^C                                                                                                                                                                        
+--- slave ping statistics ---                                                                                                                                             
+26 packets transmitted, 1 packets received, 96% packet loss                                                                                                               
+round-trip min/avg/max = 0.090/0.090/0.090 ms                                                                                                                             
+$ docker logs my_slave_1                                                                                                                          
+ping: bad address 'master'   
+Obviously I can't create dependency cycles using depends_on or links. Is there any way to get the expected result with docker-compose run?
+7

@@ -1,0 +1,7 @@
+JoshuaKGoldberg commented on 17 Mar 2018
+I restarted and forgot to launch Docker for Windows before running docker-compose:
+C:\Code\kuma>docker-compose pull
+Pulling redis (redis:latest)...
+ERROR: Windows named pipe error: The system cannot find the file specified. (code: 2)
+It'd be nice to have a more informative error message about what file can't be found.
+3

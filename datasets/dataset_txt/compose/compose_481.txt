@@ -1,0 +1,33 @@
+Flor1an-dev commented on 24 Sep 2018 •
+edited
+Description of the issue
+Clamav on Unix is detecting the docker-compose binary as Unix.Trojan.XbashPython-6690212-0.
+See also:
+https://www.virustotal.com/#/file/f679a24b93f291c3bffaff340467494f388c0c251649d640e661d509db9d57e9/detection
+Context information (for bug reports)
+OS: Ubuntu 16.04.5 LTS
+Clamav: ClamAV 0.100.1/24981/Mon Sep 24 15:50:40 2018
+Output of "docker-compose version"
+
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Steps to reproduce the issue
+curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+clamscan /usr/local/bin/docker-compose
+Observed result
+/usr/local/bin/docker-compose: Unix.Trojan.XbashPython-6690212-0 FOUND
+
+----------- SCAN SUMMARY -----------
+Known viruses: 6658562
+Engine version: 0.100.1
+Scanned directories: 0
+Scanned files: 1
+Infected files: 1
+Data scanned: 0.12 MB
+Data read: 11.20 MB (ratio 0.01:1)
+Time: 9.141 sec (0 m 9 s)
+Expected result
+Not being detected as trojan.
+5

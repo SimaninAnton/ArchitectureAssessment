@@ -1,0 +1,12 @@
+sunnysingh1985 commented on 3 Apr 2015
+Given a "docker-compose.yml":
+web:
+ extends:
+  file: common.yml
+  service: webapp
+and another "common.yml":
+webapp:
+ image: ubuntu
+Executing 'docker-compose ps' throws following error:
+$ docker-compose ps
+$ Unsupported config option for web service: 'extends'

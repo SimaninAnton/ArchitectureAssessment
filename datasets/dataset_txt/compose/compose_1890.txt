@@ -1,0 +1,5 @@
+jeffallen commented on 29 Nov 2016
+When I use "docker-compose logs -f" to see the logs for a set of containers started with "up -d", and then use "ctrl-c" to stop tailing, I get this:
+^CERROR: Aborting.
+It is not an error that I stopped using tail. The containers are still running, not "aborted". Please do not freak me out. :)
+12

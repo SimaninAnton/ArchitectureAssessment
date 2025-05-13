@@ -1,0 +1,63 @@
+manu-sparheld commented on 2 Apr 2019
+My docker-compose.yaml
+version: "3.0"
+services:
+
+    mariadb:
+      image: mariadb:10.4
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - MYSQL_ROOT_PASSWORD=123
+        - MYSQL_DATABASE=db
+        - MYSQL_USER=db
+        - MYSQL_PASSWORD=123
+      ports:
+        - "8003:3306"
+
+    webserver:
+      image: nginx:alpine
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "80:80"
+       - "443:443"
+
+    php-fpm:
+      build: phpdocker/php-fpm
+      working_dir: /application
+      volumes:
+        - .:/application
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
+When I do this:
+$ ecs-cli compose up --cluster xyz --cluster-config xyz --force-update
+INFO[0000] Using ECS task definition                     TaskDefinition="xyz-core:1"
+INFO[0000] Starting container...                         container=ea894de8-0c31-4879-90ee-e39909f423a5/webserver
+INFO[0000] Starting container...                         container=ea894de8-0c31-4879-90ee-e39909f423a5/php-fpm
+INFO[0000] Starting container...                         container=ea894de8-0c31-4879-90ee-e39909f423a5/mariadb
+INFO[0000] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/mariadb desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0000] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/webserver desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0000] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/php-fpm desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0012] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/mariadb desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0012] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/webserver desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0012] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/php-fpm desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0024] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/mariadb desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0024] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/webserver desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0024] Describe ECS container status                 container=ea894de8-0c31-4879-90ee-e39909f423a5/php-fpm desiredStatus=RUNNING lastStatus=PENDING taskDefinition="xyz-core:1"
+INFO[0036] Stopped container...                          container=ea894de8-0c31-4879-90ee-e39909f423a5/mariadb desiredStatus=STOPPED lastStatus=STOPPED taskDefinition="xyz-core:1"
+INFO[0036] Stopped container...                          container=ea894de8-0c31-4879-90ee-e39909f423a5/webserver desiredStatus=STOPPED lastStatus=STOPPED taskDefinition="xyz-core:1"
+INFO[0036] Stopped container...                          container=ea894de8-0c31-4879-90ee-e39909f423a5/php-fpm desiredStatus=STOPPED lastStatus=STOPPED taskDefinition="xyz-core:1"
+when I try to see the running images:
+$ ecs-cli ps --cluster xyz
+Name                                            State                                                                                                                                                                                                                                                                            Ports                       TaskDefinition  Health
+ea894de8-0c31-4879-90ee-e39909f423a5/mariadb    STOPPED ExitCode: 137                                                                                                                                                                                                                                                            host:8003->3306/tcp  xyz-core:1   UNKNOWN
+ea894de8-0c31-4879-90ee-e39909f423a5/webserver  STOPPED Reason: CannotStartContainerError: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:402: container init caused \"rootfs_linux.go:58: mounting \\\"/home/manu/project/xyz-core/php                              xyz-core:1   UNKNOWN
+ea894de8-0c31-4879-90ee-e39909f423a5/php-fpm    STOPPED ExitCode: 137                                                                                                                                                                                                                                                                                        xyz-core:1   UNKNOWN
+efd12ec9-af27-4f2b-abe2-39e9e3a25a68/webserver  STOPPED Reason: CannotStartContainerError: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:402: container init caused \"rootfs_linux.go:58: mounting \\\"/home/manu/project/xyz-core/php                              xyz-core:1   UNKNOWN
+efd12ec9-af27-4f2b-abe2-39e9e3a25a68/php-fpm    STOPPED                                                                                                                                                                                                                                                                                                      xyz-core:1   UNKNOWN
+efd12ec9-af27-4f2b-abe2-39e9e3a25a68/mariadb    STOPPED                                                                                                                                                                                                                                                                                                      xyz-core:1   UNKNOWN
+What's solution?
+Thanks

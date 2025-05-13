@@ -1,0 +1,1 @@
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe7 in position 9: ordinal not in range(128)

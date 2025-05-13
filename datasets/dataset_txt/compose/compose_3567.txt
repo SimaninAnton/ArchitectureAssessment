@@ -1,0 +1,32 @@
+Contributor
+schmunk42 commented on 15 Jun 2015
+continued from #1175
+I have this docker-compose.yml in a folder called testapp.
+src:
+    build: .
+worker:
+    image: testapp_src
+cli:
+    image: testapp_src
+When pulling images with docker-compose pull I get the following error (in 1.2 only in verbose mode):
+Kraftbuch:testapp tobias$ docker-compose build
+Building src...
+Step 0 : FROM debian
+ ---> f5224fc54ad2
+Successfully built f5224fc54ad2
+worker uses an image, skipping
+cli uses an image, skipping
+Kraftbuch:testapp tobias$ docker-compose --verbose pull
+Compose version 1.2.0
+Docker base_url: https://192.168.59.103:2376
+Docker version: KernelVersion=4.0.3-boot2docker, Arch=amd64, ApiVersion=1.18, Version=1.6.2, GitCommit=7c8fca2, Os=linux, GoVersion=go1.4.2
+Pulling worker (testapp_src:latest)...
+docker pull <- (u'testapp_src:latest', insecure_registry=False)
+docker pull -> u'{"status":"Pulling repository testapp_src"}\r\n{"errorDetail":{"message":"Error: image library/testapp_src:latest not found"},"error":"Error: image library/testapp_src:latest not found"}\r\n'
+Pulling cli (testapp_src:latest)...
+docker pull <- (u'testapp_src:latest', insecure_registry=False)
+docker pull -> u'{"status":"Pulling repository testapp_src"}\r\n{"errorDetail":{"message":"Error: image library/testapp_src:latest not found"},"error":"Error: image library/testapp_src:latest not found"}\r\n'
+Kraftbuch:testapp tobias$ 
+I didn't really notice this behavior until 1.3rc2, because docker-compose will now throw an error instead of failing silently without error.
+So my question is, how to use images, which are build in the same stack?
+As discussed in the issue above, I don't want to build/tag multiple images or even use different images for the services.

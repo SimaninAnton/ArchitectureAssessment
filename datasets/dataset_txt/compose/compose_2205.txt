@@ -1,0 +1,5 @@
+Contributor
+jtakkala commented on 26 Jul 2016 •
+edited
+PR moby/moby#19265 merged 'sysctl' support into docker, but there seems to be no way to use this feature with docker-compose. Has anyone started work on such a feature? If not, I will attempt to patch docker-compose and create a PR. Are there any suggestions on how to implement it? I was thinking of starting with something similar to how the environment or cap_add options work.
+25

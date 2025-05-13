@@ -1,0 +1,20 @@
+corentone commented on 23 May 2017
+I was trying to use multiple compose file and I got really confused by the fact that they had to have the same root.
+Glancing at the docs:
+When you use multiple configuration files, you must make sure all paths in the files are relative to > the base Compose file (the first Compose file specified with -f). This is required because override > files need not be valid Compose files. Override files can contain small fragments of configuration. > Tracking which fragment of a service is relative to which path is difficult and confusing, so to keep > paths easier to understand, all paths must be defined relative to the base file.
+The main confusion was that:
+docker-compose -f ./othercomponent/docker-compose.yaml up
+had a different behavior than:
+docker-compose -f docker-compose.yaml -f ./othercomponent/docker-compose.yaml up
+The second case failed as the othercomponent relies on building with relative path to its own folder and not the current folder.
+Here is my use-case:
+One of our component (let's call it foo) has an docker-compose which devs of that component maintain. It's an easy to run local version of their service.
+I have a component (bar) using foo and I am trying to test the integration between the two. I'd love to leverage what the foo devs have provided with their docker-compose.
+Something in foo does IP checking so the IP bar runs with has to match what foo sees.
+I'm on Mac OSX and Linux...
+I tried using external_links but unfortunately they show the issue of having to deal with:
+Container names as managed by compose
+network options and linking
+Also see: https://blog.virtualzone.de/2016/09/docker-compose-link-containers-outside-compose-file-using-external_links.html
+What I might end up writing is a tool that merges all compose into one and rewrites paths then run that compose but I feel that it could be better integrated into the tool itself.
+Thoughts?

@@ -1,0 +1,15 @@
+dcosson commented on 23 Jun 2015
+I've wondered about this for a while and haven't been able to find an explanation. If I have a simple docker-compose.yml file that looks like the following:
+foo:
+  image: ubuntu:precise
+  command: sleep 3600
+  links:
+    - bar
+bar:
+  image: ubuntu:precise
+  command: sleep 3600
+  expose: 
+    - 8000
+If they are both already running and then I restart foo with docker-compose up -d foo, it will recreate foo & bar. If I do docker-compose up -d bar it will recreate just bar.
+This seems like the opposite behavior of what I'd expect. If I restart bar, it might be at a different IP address (or different port if I have edited the exposed port), so foo should also be restarted since the linked env variables like $BAR_PORT might now be wrong. If I restart foo, presumably bar is still running fine so why do I need to wait for it to restart before foo restarts?
+Is this behavior intentional? I might just be missing something

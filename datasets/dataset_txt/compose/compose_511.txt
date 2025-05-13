@@ -1,0 +1,63 @@
+jcallin commented on 6 Sep 2018 •
+edited
+Description of the issue
+The docker-compose documentation at https://docs.docker.com/compose/compose-file/#secrets-configuration-reference implies that external secrets are usable by services created using docker-compose. However, when I try and create a service that uses an external secret, I receive a warning message
+WARNING: Service "<service>" uses secret "<secret_name>" which is external. External secrets are not available to containers created by docker-compose.
+Context information (for bug reports)
+I am using secrets to make an ssh key available to a container at runtime.
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o 27 Mar 2018
+Output of "docker version"
+Client:
+Version: 18.06.0-ce
+API version: 1.38
+Go version: go1.10.3
+Git commit: 0ffa825
+Built: Wed Jul 18 19:05:26 2018
+OS/Arch: darwin/amd64
+Experimental: false
+Server:
+Engine:
+Version: 18.06.0-ce
+API version: 1.38 (minimum version 1.12)
+Go version: go1.10.3
+Git commit: 0ffa825
+Built: Wed Jul 18 19:13:46 2018
+OS/Arch: linux/amd64
+Experimental: true
+Output of "docker-compose config"
+secrets:
+ssh_key:
+external: true
+name: ssh_key
+services:
+service_1:
+build:
+context: /Users/callin/Documents/
+dockerfile: build/Dockerfile
+secrets:
+- mode: 384
+source: ssh_key
+target: id_rsa
+version: '3.6'
+Steps to reproduce the issue
+Create a docker-compose file defining a top-level external secret
+Use the above secret in a service
+Run a container using the service docker-compose run --rm service_1 bash
+Observed result
+WARNING: Service "service_1" uses secret "ssh_key" which is external. External secrets are not available to containers created by docker-compose.
+--> The secret is not available at /run/secrets/id_rsa
+Expected result
+No warning
+Stacktrace / full error message
+N/A
+Additional information
+OS version / distribution, docker-compose install method, etc.
+sw_vers
+ProductName: Mac OS X
+ProductVersion: 10.13.3
+BuildVersion: 17D102
+1

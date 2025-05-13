@@ -1,0 +1,10 @@
+zmetcalf commented on 11 Mar 2016
+I keep running into a No space left on device error when running docker-compose. I am using the new version 2 where I can specify the context. It happens when it spins up one of my data containers, which is listed like this in docker-compose:
+htdocs:
+  build:
+     context: .
+     dockerfile: ./docker/data/Dockerfile
+  stdin_open: true
+It never gets to the point of actually running the Dockerfile commands. When I run docker-compose, it fills up RAM and throws the error. I am able to manually build my images, which does not use RAM when building context:
+Sending build context to Docker daemon 6.868 GB
+I am using docker compose v1.6.2 build 4d72027 and docker 1.10.2 build c3959b1.

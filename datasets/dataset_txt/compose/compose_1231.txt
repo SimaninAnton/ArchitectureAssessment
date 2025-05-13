@@ -1,0 +1,25 @@
+zoran119 commented on 1 Sep 2017
+Is it possible to share the host directory while specifying a Dockerfile for a service?
+For example, this doesn't mount the volume:
+version: '2'
+services:
+    test:
+        container_name: test
+        hostname: test
+        build: ./test
+        volumes:
+            - .:/src
+        ports:
+            - "80:80"
+but this does (specifies image instead of build):
+version: '2'
+services:
+    test:
+        container_name: test
+        hostname: test
+        image: nginx
+        volumes:
+            - .:/src
+        ports:
+            - "80:80"
+Is this expected?

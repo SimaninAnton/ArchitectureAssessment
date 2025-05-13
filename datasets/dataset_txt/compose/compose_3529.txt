@@ -1,0 +1,10 @@
+Contributor
+kevinsimper commented on 28 Jun 2015
+I used to run tests in docker by running one-off containers, but that is not possible in 1.3.
+When i try i says
+$ docker-compose run backend npm test
+Conflict. The name "app_backend_run_1" is already in use by container e46cb8f520ad. You have to delete (or rename) that container to be able to reuse that name.
+Same commando that I used before.
+I have tried running docker-compose up and also docker-compose migrate-to-labels
+How do you run one-off containers, like the docs propose
+https://github.com/docker/compose/blob/master/docs/cli.md#run

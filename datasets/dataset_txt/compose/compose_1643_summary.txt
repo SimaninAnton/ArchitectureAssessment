@@ -1,0 +1,1 @@
+Secrets don't work in docker-compose in some cases

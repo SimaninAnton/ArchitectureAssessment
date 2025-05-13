@@ -1,0 +1,13 @@
+olalonde commented on 16 Apr 2015
+I have a service that I just need to run once (dc run createdbs):
+createdbs:
+  image: postgres:9.3
+  links:
+    - db
+  command: >
+    /bin/bash -c "
+      psql --host=db --username=postgres -c 'CREATE DATABASE testnet;';
+      psql --host=db --username=postgres -c 'CREATE DATABASE livenet;';
+    "
+Is it possible to not have it launched every time I run docker-compose up? I have looked at alternatives for creating the databases, but I'd rather not have separate file(s) just for this.
+35

@@ -1,0 +1,2 @@
+larsnystrom commented on 4 Jun 2017
+Due to a race condition when creating networks (see moby/moby#20648) running docker-compose up in parallell sometimes creates two default networks with the same name. Running docker-compose down only removes one of them.

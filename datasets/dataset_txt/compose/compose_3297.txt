@@ -1,0 +1,4 @@
+arun-gupta commented on 10 Sep 2015
+If docker-compose.yml specifies the value as privileged: "true" instead of privileged: true, then docker-compose up -d gives the following error:
+json: cannot unmarshal string into Go value of type bool
+A more meaningful error should be provided.

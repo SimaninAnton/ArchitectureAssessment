@@ -1,0 +1,1 @@
+Installing a new version of docker compose results in a snap issue

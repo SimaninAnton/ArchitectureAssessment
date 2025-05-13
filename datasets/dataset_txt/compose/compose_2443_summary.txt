@@ -1,0 +1,1 @@
+Use requirements.txt from setup.py for install_requires

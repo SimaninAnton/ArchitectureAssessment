@@ -1,0 +1,1 @@
+Exception when using DOCKER_CERT_PATH or DOCKER_TLS_VERIFY

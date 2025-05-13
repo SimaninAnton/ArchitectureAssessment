@@ -1,0 +1,14 @@
+agucampos commented on 1 Dec 2016
+Hi! I cloned a code locally and installed docker but when I try to run the project I get this message:
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 2793, in <module>
+    working_set.require(__requires__)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 673, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 576, in resolve
+    raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: docker-compose==1.9.0
+Could you please point me out the solution or source of the issue? I'm using Mac and the devs that created the project with Docker are using Linux.
+Thanks,

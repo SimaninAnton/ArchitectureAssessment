@@ -1,0 +1,16 @@
+ale7714 commented on 19 Jan 2017
+We're using CircleCI and after the latest release of docker-compose
+After the command is run
+sudo pip install docker-compose
+Downloading/unpacking docker-compose
+  Downloading docker_compose-1.10.0-py2.py3-none-any.whl (81kB): 81kB downloaded
+we get an error when running
+docker-compose -f docker-compose.ci.yml pull
+ERROR: In file './docker-compose.ci.yml' service 'version' doesn't have any configuration options. All top level keys in your docker-compose.yml must map to a dictionary of configuration options.
+
+docker-compose -f docker-compose.ci.yml pull returned exit code 1
+
+Action failed: docker-compose -f docker-compose.ci.yml pull
+docker-compose.yml is version 2.0 and it is working properly when using docker-compose 1.9.0
+Running on Alpine 3.4
+1

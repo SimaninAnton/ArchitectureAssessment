@@ -1,0 +1,36 @@
+soullivaneuh commented on 19 Jan 2016
+With the following docker-compose configuration:
+mailspool:
+  build: docker/php-console
+  command: php app/console nexy:email:spool-send --watch
+  restart: on-failure # https://github.com/djfarrelly/MailDev/issues/101
+And the following command:
+docker-compose up
+If the mailspool container failed, it's indeed restarted, but not shown on the docker-compose logs anymore.
+Would be great to see the container reattached again when you're not running docker-compose on daemon mode.
+$ docker info
+Containers: 96
+Images: 650
+Server Version: 1.9.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 844
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.19.0-43-generic
+Operating System: Ubuntu 15.04
+CPUs: 4
+Total Memory: 7.765 GiB
+Name: sweetnexy
+ID: CYKT:4BS6:SO2B:5SL6:6L7V:5HQV:HNNX:3MJM:DZLL:6UQ6:7XGK:NAYE
+Username: soullivaneuh
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+
+$ docker-compose version
+docker-compose version 1.5.2, build 7240ff3
+docker-py version: 1.6.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014

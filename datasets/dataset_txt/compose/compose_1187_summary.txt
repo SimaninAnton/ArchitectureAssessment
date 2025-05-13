@@ -1,0 +1,1 @@
+compose crashes on duplicates in cache_from

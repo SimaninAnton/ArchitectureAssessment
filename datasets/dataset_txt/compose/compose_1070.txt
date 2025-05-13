@@ -1,0 +1,10 @@
+ArvsIndrarys commented on 20 Nov 2017
+Hi, I have some problem that I didn't manage to investigate on :
+I have an image that I built on armv7 that works on several rpis
+it was on running on a rasp, all it does is calling a golang program (binay execution : /myprogram )
+It encountered an error of type concurrent write on map that made the program crash
+The container was then blocked on a restarting (132) loop ; I investigated and 132 means 128 + 4. I mean 128 : container exit code and 4 : linux signal for Illegal Instruction ( http://www.manpages.info/linux/signal.7.html )
+From then on, I can't start that container back. I tried with docker-compose down then docker-compose up -d but it always fails with the Restarting (132) message
+And another time with docker-compose down, sudo service docker stop, sudo service docker start and back to docker-compose up
+I checked the image ID and pulled it on another raspberry and it launches perfectly.
+So is there a way to reset docker on the failing rasp so as not to provoke that error? Or to ensure the container will start the way it does without having an Illegal Instruction code?

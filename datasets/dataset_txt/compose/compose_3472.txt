@@ -1,0 +1,16 @@
+abijr commented on 15 Jul 2015
+When I run $ docker-compose run db eight50 bash with:
+eight50:
+  build: .
+  ports:
+    - "8080:8080"
+  tty: true
+  stdin_open: true
+  command: /bin/bash
+  links:
+    - db
+db:
+  image: mongo
+I get the error:
+Cannot start container 97778df3403bf353dabcb39b8eb7c93f95a0bba7fb8347a3f546a875eb6294fc: (exit status 1)
+But when i comment the links section in the docker-compose.yaml, it runs fine. Don't know if this is a bug, or a problem with my setup.

@@ -1,0 +1,3 @@
+t-hofmann commented on 20 Feb 2017
+with this it is not possible to use a custom-file and just create service-containers without starting them
+using: docker-compose version 1.11.1, build 7c5d5e4

@@ -1,0 +1,1 @@
+`docker run --rm` incompatible with `restart: always`

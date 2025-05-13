@@ -1,0 +1,83 @@
+twelve17 commented on 16 Jan 2017 •
+edited
+This one is a bit lengthy to explain, so I have created a test project to reproduce this behavior with.
+As I understand it from the docker compose up documentation, the container should be rebuilt if an image was changed. However, it seems here that docker-compose up is not noticing that a particular image changed, and thus is re-using an existing container which has pointers to an older image. At least that is the closest I can get to a theory. More information below the version and info.
+docker version:
+Client:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 02:42:17 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 02:42:17 2016
+ OS/Arch:      linux/amd64
+docker info:
+docker info
+Containers: 5
+ Running: 0
+ Paused: 0
+ Stopped: 5
+Images: 32
+Server Version: 1.12.5
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 85
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: apparmor seccomp
+Kernel Version: 4.4.0-59-generic
+Operating System: Ubuntu 16.04.1 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 7.682 GiB
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Insecure Registries:
+ 127.0.0.0/8
+I am including the contents of the README.md here to help explain the problem in detail.
+Use Case
+One simple nodejs project with a Dockerfile.
+One local NPM dependency used by the above project (copied to container via Dockerfile). The project refers to the dependency via a local path.
+The nodejs project has one web route (/) that prints the version of the local npm dependency from its package.json. This is used to verify the results of the test case procedure.
+The docker-compose.yml file uses this volume technique to overlay the host machine's source tree on top of the container's source tree and then overlaying the node_modules from the container on top of the first volume. This allows changing of sources on the host machine while at the same time using the node_modules that were built for the container's platform.
+Steps to Reproduce
+Clone this repo.
+Clean up any previous containers and images related to this repo's project via docker rm and docker rmi.
+Check out the test2_run1 tag. This state represents the project using version 1.0.0 of the local NPM dependency.
+Do a docker-compose build. All steps should run without any cache usage if step 2 was followed correctly. Note the version of the local NPM dependency during the npm install command, e.g. +-- my-npm@1.0.0.
+Do a docker-compose up. Browse to http://localhost:8000. The page should report version 1.0.0.
+Stop the running containers. (Ctrl-C on the terminal from which the up command was issued.)
+Check out the test2_run2 tag. This introduces a small change to the NPM's index.js file, and a version bump in its package.json to 1.0.1.
+Do a docker-compose build. Only the instructions up to COPY ./my-npm ... should use a cache. (E.g., the docker output prints ---> Using cache for that instruction.) All subsequent steps should be run by docker. This is because the changes introduced in step 7 to the NPM package should have invalidated the cache for the COPY ./my-npm ... command, and, as a result, subsequent steps too. Confirm that during the npm install command, the new version of the NPM is printed in the summary tree output, e.g. +-- my-npm@1.0.1.
+Do a docker-compose up. Browse to http://localhost:8000. The page should report version 1.0.1.
+Expected behavior: Page in step 9 should report 1.0.1. That is, a change in the local npm should be reflected in the container via docker-compose up.
+Actual behavior: Page in step 9 reports 1.0.0.
+Note that docker itself is re-building images as expected. The observed issue is not that docker is re-using a cached image, as the output shows it re-running NPM install and showing the new version of the local NPM dependency. The issue is that docker-compose is not seeing that the underlying images that comprise the dctest_service1 container have been updated.
+In fact, running bash in the container allows us to see that the container has the updated my-npm module files, but the node_modules version is stale:
+  # docker exec -it dctest_service1_1 bash
+  app@6bf2671b75c6:~/service1$ grep version  my-npm/package.json  node_modules/my-npm/package.json
+  my-npm/package.json:  "version": "1.0.1",
+  node_modules/my-npm/package.json:  "version": "1.0.0"
+  app@6bf2671b75c6:~/service1$
+Workaround: Use docker rm to remove the dctest_service1 container. Then re-run docker-compose up, which will re-create the container using the existing images. Notable in this step is that no underlying images are re-built. In re-creating the container, docker-compose seems to figure out to use the newer volume that has the updated node_modules.
+See the output directory for the output printed during the first run (steps 4 and 5) and the second run (steps 8 and 9).
+26

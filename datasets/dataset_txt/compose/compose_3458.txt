@@ -1,0 +1,6 @@
+andrefreitas commented on 20 Jul 2015
+When I invoke docker-compose as:
+docker-compose up
+Sometimes it fails saying that the image needs to be build and that --no-build was passed. I managed to fix this by destroying all containers, but is an ugly solution.
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)

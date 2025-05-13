@@ -1,0 +1,87 @@
+alvinr commented on 31 Jul 2015
+Problem
+If I do a pull from a single host when Hub is rate limited you get the following message
+docker pull alvinr/interlock-haproxy
+Error response from daemon: Get https://registry-1.docker.io/v2/alvinr/interlock-haproxy/manifests/latest: token auth attempt for registry: https://auth.docker.io/token?account=alvinr&scope=repository%3Aalvinr%2Finterlock-haproxy%3Apush%2Cpull&service=registry.docker.io request failed with status: 429 Too Many Requests
+However, if you do the same via docker-compose
+vero:prod$ docker-compose pull
+Pulling haproxy (alvinr/interlock-haproxy:latest)...
+swarm-3: Pulling alvinr/interlock-haproxy:latest...
+swarm-4: Pulling alvinr/interlock-haproxy:latest...
+swarm-0: Pulling alvinr/interlock-haproxy:latest...
+swarm-2: Pulling alvinr/interlock-haproxy:latest...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 39, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 246, in pull
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 305, in pull
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 768, in pull
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 18, in stream_output
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json", line 338, in loads
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json.decoder", line 366, in decode
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json.decoder", line 382, in raw_decode
+ValueError: Invalid control character at: line 1 column 364 (char 363)
+Solution
+Ensure that the error gets propagated back to the user
+Environment
+uname -a
+Linux swarm-0 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt11-1 (2015-05-24) x86_64 GNU/Linux
+docker-version
+Client:
+ Version:      1.8.0-dev
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   2c16229
+ Built:        Tue Jul 28 21:35:33 UTC 2015
+ OS/Arch:      linux/amd64
+ Experimental: true
+
+Server:
+ Version:      1.8.0-dev
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   2c16229
+ Built:        Tue Jul 28 21:35:33 UTC 2015
+ OS/Arch:      linux/amd64
+ Experimental: true
+docker info
+Client:
+ Version:      1.8.0-dev
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   2c16229
+ Built:        Tue Jul 28 21:35:33 UTC 2015
+ OS/Arch:      linux/amd64
+ Experimental: true
+
+Server:
+ Version:      1.8.0-dev
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   2c16229
+ Built:        Tue Jul 28 21:35:33 UTC 2015
+ OS/Arch:      linux/amd64
+ Experimental: true
+vero:prod$ docker-machine ssh swarm-0 "docker info"
+Containers: 2
+Images: 8
+Storage Driver: aufs
+ Root Dir: /mnt/data/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 12
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.16.0-4-amd64
+Operating System: Docker version 1.7.1, build 786b29d
+CPUs: 1
+Total Memory: 1000 MiB
+Name: swarm-0
+ID: GOSW:5ULW:AFYE:YQ4X:RX4S:54R2:ZYIK:G6C5:U6W3:FJ6J:A6PD:ETCP
+Labels:
+ provider=vmwarefusion
+Experimental: true

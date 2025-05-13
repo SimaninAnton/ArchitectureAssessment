@@ -1,0 +1,8 @@
+Contributor
+schmunk42 commented on 31 Mar 2016
+Sample output for docker-compose down without running up
+docker-compose -p "test-allow_failure" -f docker-compose.yml -f build/compose/test.override.yml down
+Removing network testallowfailure_default
+ERROR: network testallowfailure_default not found
+IMHO a warning would be good enough here.
+docker-compose version 1.6.2, build 4d72027

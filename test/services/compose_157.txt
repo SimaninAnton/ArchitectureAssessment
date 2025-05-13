@@ -1,0 +1,51 @@
+Blogshot commented on 14 Jun 2019 •
+edited
+Description of the issue
+Mounting a volume into a container using docker-compose with :ro (read only) leaves execute permissions on the files.
+Docker Compose Version
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Docker Version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:31 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ Kubernetes:
+  Version:          v1.10.11
+  StackAPI:         v1beta2
+Steps to reproduce the issue
+Mount a volume as read-only (:ro) into the container
+version: '3'
+services:
+  test:
+    container_name: test
+    image: ubuntu:latest
+    volumes:
+    - .ssh/:/root/.ssh/:ro
+Observed result
+The permissions on the files inside of /root/.ssh/ inside the container are 555, which equals read and execute and not read only, as the parameter implies.
+> ls -l /root.ssh/
+total 3
+-r-xr-xr-x    1 root     root          1831 Jun 13 07:45 id_rsa
+-r-xr-xr-x    1 root     root           174 Jun 14 15:09 known_hosts
+Expected result
+The file permission on /root/.ssh/id_rsa are 444 (or less).
+Additional information
+The context of this issue is the safety of mounted SSH keys. We're generating temporary keys for automatical deployment. The container needs to be able to access target servers via SSH. The containers and keys are deleted after process.
+Running chmod 400 /root/.ssh/id_rsa inside the entrypoint-file of the container does not fix this, wether the volume is mounted as read only or not.
+A possible workaround might be to mount the key into another directory and then copy it into the target folder, where the permissions might set correctly. I haven't tested this yet as I would like to find a proper way to do this.

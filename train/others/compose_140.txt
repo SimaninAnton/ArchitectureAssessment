@@ -1,0 +1,9 @@
+b00lpy commented on 4 Jul 2019
+Description of the issue
+I've built an image with and entrypoint .sh file. This file cd into a path and calls a python script which is basically a process split in two parallel threads. One is a rest api and the other is a script which interacts with another API.
+Context information (for bug reports)
+Running the image with docker run -it imagename:tag I've got the right behaviour of the script,
+And the terminal shows up the outputs of these 2 threads.
+Running this image inside a docker-compose only one of these threads starts, in particular the rest api.
+If I try to interact with that in order to activate the features of the second one i can't see any output or interactions.
+How can I fix this behavior?

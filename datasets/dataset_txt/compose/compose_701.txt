@@ -1,0 +1,8 @@
+ugurarpaci commented on 2 May 2018
+Hello;
+When using compatibility mode, if there is an attachable flag declared in networks It is expected to run as a regular docker-compose stack. Example as follows:
+ networks:
+   foonetwork:
+-    driver: overlay
+-    attachable: true
+However, this config asks for local swarm cluster. When I run the docker-compose --compatibility config command, I can still see the attachable: true flag, which requires a version 3.2v compose file. It seems like a conversion bug in docker-compose config

@@ -1,0 +1,65 @@
+bperel commented on 7 Jul 2017
+The docker-compose.yml that I try to use has version 3 (https://raw.githubusercontent.com/jamiejackson/docker-mariadb-replication/master/docker-compose.yml) and docker-compose has version 1.14.0 so it shouldn't throw an error.
+~:/home# curl -L --fail https://github.com/docker/compose/releases/download/1.14.0/run.sh > /usr/local/bin/docker-compose
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   596    0   596    0     0   1325      0 --:--:-- --:--:-- --:--:--  1327
+100  1480  100  1480    0     0   1654      0 --:--:-- --:--:-- --:--:-- 1445k
+~:/home# sudo chmod +x /usr/local/bin/docker-compose
+~:/home# docker-compose -v
+Unable to find image 'docker/compose:1.14.0' locally
+1.14.0: Pulling from docker/compose
+709515475419: Pull complete
+a3bdaecc7369: Pull complete
+9bf07fa81d38: Pull complete
+Digest: sha256:85ae662feb5d1cdb4a0afbbf16ac112028566e54200575aaef61c29a65e76761
+Status: Downloaded newer image for docker/compose:1.14.0
+docker-compose version 1.14.0, build c7bdf9e
+~:/home# docker-compose up -d && docker-compose logs -f
+ERROR: The Docker Engine version is less than the minimum required by Compose. Your current project requires a Docker Engine of version 1.13.0 or greater.
+~:/home# 
+~:/home# cat docker-compose.yml
+version: '3'
+services:
+
+  db_master:
+    image: jamiejackson/mariadb-replication:10.2
+    container_name: db_master
+    ports:
+      - "3307:3306"
+    restart: unless-stopped
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+  db_slave1:
+    image: jamiejackson/mariadb-replication:10.2
+    container_name: db_slave1
+    depends_on:
+      - "db_master"
+    ports:
+     - "3308:3306"
+    links:
+      - db_master:master
+    restart: unless-stopped
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MASTER_HOST=master
+      - MASTER_PORT=3306
+      # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+  db_slave2:
+    image: jamiejackson/mariadb-replication:10.2
+    container_name: db_slave2
+    depends_on:
+      - "db_master"
+    ports:
+     - "3309:3306"
+    links:
+      - db_master:master
+    restart: unless-stopped
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MASTER_HOST=master
+      - MASTER_PORT=3306
+      # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}

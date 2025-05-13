@@ -1,0 +1,7 @@
+sdwr98 commented on 1 Feb 2014
+I'm trying to use fig to assemble our application and have run into a use case that I don't see supported at the moment: I need to have a service that has 2 links to the same container, like so:
+links:
+  - db:db
+  - db:legacydb
+The reason is that in some environments those are 2 different containers but in a dev environment they're set up as one.
+Is this something that is coming down the road for fig?

@@ -1,0 +1,1 @@
+Port command gives wrong output when using port ranges like 8000-8010:80

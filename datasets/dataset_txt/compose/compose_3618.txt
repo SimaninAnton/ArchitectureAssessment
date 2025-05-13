@@ -1,0 +1,15 @@
+munhitsu commented on 26 May 2015
+requirements.txt on 1.2.0 git tag:
+docker-py==1.0.0
+setup.py on 1.2.0 git tag:
+'docker-py >= 1.0.0, < 1.2',
+when installing using pip (version source is setup.py):
+$ pip install docker-compose==1.2.0
+$ pip freeze
+docker-compose==1.2.0
+docker-py==1.1.0
+...
+while binary build comes with docker-py==1.0.0 bundled (version source is requirements*.txt)
+(conclusion based on missing private registry authentication)
+Can you cut a new docker-compose patch release to synchronize the binary and pip install?
+Might be also worth to update the binary build script not to rely on requirements.txt but on pip install .

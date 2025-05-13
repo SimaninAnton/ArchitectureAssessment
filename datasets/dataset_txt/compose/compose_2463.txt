@@ -1,0 +1,12 @@
+Contributor
+metal3d commented on 22 Apr 2016
+It could be nice to get some useful value without to have the need to create environment variables as:
+the current user id, owner of the compose processus
+same for the group id
+used docker version
+used compose version
+running compose platform
+I've made a PR #3367 to be able to get them with a special syntax. Vote or comment to let me know if you are interessed or if I'm wasting my time ;)
+Thanks
+2
+2

@@ -1,0 +1,1 @@
+add a way to execute arbitrary docker commands on a service container

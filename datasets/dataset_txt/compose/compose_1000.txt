@@ -1,0 +1,12 @@
+Kitanotori commented on 20 Dec 2017
+I have a container like this:
+  my_container:
+    volumes:
+      - type: volume
+        source: ./some/host/path
+        target: /some/container/path
+        read_only: true
+This used to work with docker-compose 1.17.1, but when I switched to Docker edge containing 1.18.0-rc2, the syntax broke and I got this kind of error when running docker-compose build :
+ERROR: Named volume "{u'read_only': True, u'source': 'some/host/path', u'type': 'volume', u'target': '/some/container/path'}" is used in service "my_container" but no declaration was found in the volumes section.
+2
+1

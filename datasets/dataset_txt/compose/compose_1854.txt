@@ -1,0 +1,99 @@
+pshomov commented on 14 Dec 2016
+Attached is the docker-compose to demo this issue.
+The command I use to run this is the following
+cat docker-compose.yml | docker-compose run --rm test
+The command completes just fine when run again Docker for Mac and fails when run agains Docker Toolbox for Mac.
+When running the equivalent using just docker works fine against both implementations:
+cat docker-compose.yml | docker run --rm -i debian /bin/bash -c 'cat /dev/stdin'
+When used against Docker for Mac
+docker-bug$ docker info
+Containers: 9
+ Running: 6
+ Paused: 0
+ Stopped: 3
+Images: 230
+Server Version: 1.12.3
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 332
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: overlay host bridge null
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.27-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 1.951 GiB
+Name: moby
+ID: KSYW:CZ7D:II3Q:ADBK:Z72K:ZCWQ:CYB2:TNKG:KN6H:3F5B:P4AM:YCXM
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 47
+ Goroutines: 86
+ System Time: 2016-12-13T23:03:01.967224538Z
+ EventsListeners: 1
+No Proxy: *.local, 169.254/16
+Username: pshomov
+Registry: https://index.docker.io/v1/
+WARNING: No kernel memory limit support
+Insecure Registries:
+ 127.0.0.0/8
+docker-bug$ docker-compose -v
+docker-compose version 1.9.0, build 2585387
+When against Docker Toolbox For Mac (VMWare fusion, but I believe the hypervisor does not matter)
+docker-bug$ docker info                                          
+Containers: 7
+ Running: 0
+ Paused: 0
+ Stopped: 7
+Images: 16
+Server Version: 1.12.3
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 30
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge null host overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.27-boot2docker
+Operating System: Boot2Docker 1.12.3 (TCL 7.2); HEAD : 7fc7575 - Thu Oct 27 17:23:17 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 995.7 MiB
+Name: dev
+ID: 6UQ6:GL4S:BAFO:LPTC:X5HT:EDT2:JXOZ:C5GA:RHSZ:HAHR:IE5F:YWQK
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 13
+ Goroutines: 24
+ System Time: 2016-12-13T23:07:15.005095737Z
+ EventsListeners: 0
+Username: pshomov
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=vmwarefusion
+Insecure Registries:
+ 127.0.0.0/8
+docker-bug$ docker-compose -v
+docker-compose version 1.9.0, build 2585387
+docker-compose.yml.zip
+1

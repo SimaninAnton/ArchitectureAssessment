@@ -1,0 +1,5 @@
+adelevie commented on 15 Aug 2014
+Is this possible with the setup described in the Rails guide?
+This is especially useful to debug any issues that pop up during a bundle install.
+I'd like to run something like:
+$ fig run ruby gem install some_gem -v '1.1.1'

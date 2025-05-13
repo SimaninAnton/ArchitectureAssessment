@@ -1,0 +1,46 @@
+eld1887 commented on 24 Feb 2018
+hi,
+i want to update my docker-compose, dotnet configuration but after that, i get the follwing error msg after docker-compose up (with the old version of dotnet the solution worked well):
+ERROR: for 4c115b1b9fef_4c115b1b9fef_identityServer  Cannot create container for service identityserver: invalid volume specification: '17fa9043120077131e36ea4de1c4a5232b571dd70b5584e9823794ad7a379de5:[“/app”]:rw': invalid mount config for type "volume": invalid mount path: '[“/app”]' mount path must be absolute
+
+ERROR: for identityserver  Cannot create container for service identityserver: invalid volume specification: '17fa9043120077131e36ea4de1c4a5232b571dd70b5584e9823794ad7a379de5:[“/app”]:rw': invalid mount config for type "volume": invalid mount path: '[“/app”]' mount path must be absolute
+ERROR: Encountered errors while bringing up the project.
+my dockerfile:
+FROM microsoft/dotnet:2.0.0-sdk
+
+#Install dockerize
+RUN apt-get update && apt-get install -y wget
+
+ENV DOCKERIZE_VERSION v0.4.0
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+
+WORKDIR /app
+COPY run.sh /run.sh
+RUN chmod 755 /*.sh
+EXPOSE 5000
+VOLUME [“/app”]
+
+CMD ["/run.sh"]
+my docker-compose file:
+version: '3.1'
+
+services:
+
+  identityserver:
+    build: ./IdentityServer/docker
+    container_name: identityServer
+    volumes:
+      - ./IdentityServer/:/app/
+    links:
+      - hawai-dashboard-database:hawai-database
+    environment:
+      - ASPNETCORE_ENVIRONMET=Development
+    ports:
+      - "5000:5000"
+    depends_on:
+      - hawai-dashboard-database
+The only thing i have changed is the line at the dockerfile : FROM microsoft/dotnet:1.1-sdk to FROM microsoft/dotnet:2.0.0-sdk
+What can be the problem?

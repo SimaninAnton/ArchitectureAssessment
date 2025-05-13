@@ -1,0 +1,1 @@
+Network created by compose using --x-networking should be deleted when the servers are removed

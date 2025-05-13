@@ -1,0 +1,47 @@
+joshstrom commented on 12 Apr 2016
+Due to organizational infrastructure (incompatible Artifactory version), for the time being, I am required to use Docker engine version 1.7.1, which is not compatible with Docker Compose.
+That being said, the error message produced by Docker Compose when the engine version is incompatible is confusing at best.
+$ docker-compose up
+Creating network "project_default" with the default driver
+ERROR: 404 page not found
+The actual cause of the issue is only shown when the --verbose flag is provided:
+$ docker-compose --verbose up
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'*********', username=u'*******')
+docker.auth.auth.parse_auth: Found entry (registry=u'*********', username=u'*******')
+ERROR: compose.cli.main.log_api_error: The engine version is lesser than the minimum required by compose. Your current project requires a Docker Engine of version 1.10.0 or superior.
+It would be really helpful to show the cause of the error (Docker Engine version less than minimum) without the --verbose flag.
+System Information
+$ docker info
+Containers: 0
+Images: 281
+Storage Driver: aufs
+ Root Dir: /mnt/docker/images/aufs
+ Backing Filesystem: extfs
+ Dirs: 281
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.16.0-53-generic
+Operating System: Ubuntu 14.04.4 LTS
+CPUs: 8
+Total Memory: 15.67 GiB
+Name: sdc-dev-01
+ID: MC6B:CETM:WLIB:JQDR:CLU7:SMXU:63LB:YF5S:C53H:E75V:JSTM:CSIK
+Debug mode (server): true
+File Descriptors: 9
+Goroutines: 14
+System Time: 2016-04-12T09:05:22.280748887-07:00
+EventsListeners: 0
+Init SHA1: c8f59b9547b87a6d097a72404dc29cba4e3a196e
+Init Path: /usr/lib/docker/dockerinit
+Docker Root Dir: /mnt/docker/images
+Http Proxy: http://********.com:****
+Https Proxy: http://********.com:****
+No Proxy: localhost,127.0.0.1,/var/run/docker.sock
+WARNING: No swap limit support
+$ docker --version
+Docker version 1.7.1, build 786b29d
+$ docker-compose --version
+docker-compose version 1.6.2, build 4d72027

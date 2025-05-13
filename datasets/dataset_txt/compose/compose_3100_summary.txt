@@ -1,0 +1,1 @@
+How to bind container to IP with full range of ports?

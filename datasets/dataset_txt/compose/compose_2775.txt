@@ -1,0 +1,46 @@
+ibizaman commented on 14 Feb 2016
+In the doc, there is very little explanation for the named volumes. It should be at least said that using one implies also having a top-level volumes key. Nevermind, running docker-compose build gives an explicit message about this.
+So I added a top-level volumes key like this:
+version: '2'
+services:
+    app:
+        volumes:
+            - db:/var/lib/mysql
+volumes:
+    - db
+But the docker-compose build failed miserably with the following error:
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.6.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 55, in main
+    command.sys_dispatch()
+  File "/usr/lib/python3.5/site-packages/compose/cli/docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python3.5/site-packages/compose/cli/docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 172, in perform_command
+    project = project_from_options(self.base_dir, options)
+  File "/usr/lib/python3.5/site-packages/compose/cli/command.py", line 52, in project_from_options
+    verbose=options.get('--verbose'),
+  File "/usr/lib/python3.5/site-packages/compose/cli/command.py", line 80, in get_project
+    config_data = config.load(config_details)
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 288, in load
+    for config_file in config_details.config_files
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 288, in <listcomp>
+    for config_file in config_details.config_files
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 389, in process_config_file
+    config_file.get_volumes(), 'volume')
+  File "/usr/lib/python3.5/site-packages/compose/config/interpolation.py", line 25, in interpolate_environment_variables
+    for name, config_dict in config.items()
+AttributeError: 'list' object has no attribute 'items'
+Instead, the expected syntax is (at least that's what's working for me):
+version: '2'
+services:
+    app:
+        volumes:
+            - db:/var/lib/mysql
+volumes:
+    db:
+        driver: local
+It would be nice to at least add an example in the docs. And maybe give a less cryptic error message.
+Anyway, thanks for the great work, docker-compose is awesome!

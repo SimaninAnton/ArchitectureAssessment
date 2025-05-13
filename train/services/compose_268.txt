@@ -1,0 +1,149 @@
+saites commented on 7 Mar 2019
+Description of the issue
+Non-default proxy settings in ~/.docker/config.json are not used, and docker-compose instead falls back to default.
+Context information (for bug reports)
+In response to this issue, this PR made it into release 1.20.0. However, I think this line is not performing as expected, due to the way the python client converts tcp to https.
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+docker-py version: 3.7.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.11.1
+ Git commit:        4d60db472b
+ Built:             Thu Nov  8 21:14:51 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1-rc1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.5
+  Git commit:       bca0068
+  Built:            Fri Dec  7 05:36:26 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  alpine:
+    command: sh -c 'env | grep -i proxy'
+    image: alpine
+version: '3.0'
+Steps to reproduce the issue
+Set ~/.docker/config.json proxies to:
+"proxies": {
+     "default": {
+            "httpProxy": "http://proxy.mycorp.com:1234",
+            "httpsProxy": "https://proxy.mycorp.com:1234",
+            "noProxy": "127.0.0.1,localhost"
+        },
+        "tcp://192.168.99.101:2376": {
+            "httpProxy": "",
+            "httpsProxy": "",
+            "noProxy": "*"
+        }
+    }
+Create a compose file:
+version: "3"
+
+services:
+  alpine:
+    image: alpine
+    command: "sh -c 'env | grep -i proxy'"
+Run docker-compose up on something other than default
+Using not default:
+[17:34] ~/bugreport
+another> docker-machine ls
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER         ERRORS
+default   -        virtualbox   Running   tcp://192.168.99.100:2376           v18.06.0-ce
+another   *        virtualbox   Running   tcp://192.168.99.101:2376           v18.09.1-rc1
+
+[17:35] ~/bugreport
+another> env | grep DOCKER_
+DOCKER_HOST=tcp://192.168.99.101:2376
+DOCKER_MACHINE_NAME=another
+DOCKER_TLS_VERIFY=1
+DOCKER_TOOLBOX_INSTALL_PATH=C:\Program Files\Docker Toolbox
+DOCKER_CERT_PATH=[home]\.docker\machine\machines\another
+
+[17:35] ~/bugreport
+another> docker-compose up
+Creating network "bugreport_default" with the default driver
+Creating bugreport_alpine_1 ... done
+Attaching to bugreport_alpine_1
+alpine_1  | HTTPS_PROXY=https://proxy.mycorp.com:1234
+alpine_1  | no_proxy=127.0.0.1,localhost
+alpine_1  | NO_PROXY=127.0.0.1,localhost
+alpine_1  | https_proxy=https://proxy.mycorp.com:1234
+alpine_1  | http_proxy=http://proxy.mycorp.com:1234
+alpine_1  | HTTP_PROXY=http://proxy.mycorp.com:1234
+bugreport_alpine_1 exited with code 0
+
+[17:36] ~/bugreport
+another> docker run --rm -it alpine sh -c "env | grep proxy"
+no_proxy=*
+Using default
+[17:21] ~/bugreport
+default> docker-machine ls
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER         ERRORS
+default   *        virtualbox   Running   tcp://192.168.99.100:2376           v18.06.0-ce
+another     -      virtualbox   Running   tcp://192.168.99.101:2376           v18.09.1-rc1
+
+[17:21] ~/bugreport
+default> env | grep DOCKER_
+DOCKER_HOST=tcp://192.168.99.100:2376
+DOCKER_MACHINE_NAME=default
+DOCKER_TLS_VERIFY=1
+DOCKER_TOOLBOX_INSTALL_PATH=C:\Program Files\Docker Toolbox
+
+[17:31] ~/bugreport
+default> docker-compose up
+Creating network "bugreport_default" with the default driver
+Creating bugreport_alpine_1 ... done
+Attaching to bugreport_alpine_1
+alpine_1  | HTTPS_PROXY=https://proxy.mycorp.com:1234
+alpine_1  | no_proxy=127.0.0.1,localhost
+alpine_1  | NO_PROXY=127.0.0.1,localhost
+alpine_1  | https_proxy=https://proxy.mycorp.com:1234
+alpine_1  | http_proxy=http://proxy.mycorp.com:1234
+alpine_1  | HTTP_PROXY=http://proxy.mycorp.com:1234
+bugreport_alpine_1 exited with code 0
+
+[17:32] ~/bugreport
+default> docker run --rm -it alpine sh -c "env | grep proxy"
+HTTPS_PROXY=https://proxy.mycorp.com:1234
+no_proxy=127.0.0.1,localhost
+https_proxy=https://proxy.mycorp.com:1234
+http_proxy=http://proxy.mycorp.com:1234
+HTTP_PROXY=http://proxy.mycorp.com:1234
+Using the python client
+>>> import docker
+>>> from pprint import pprint
+>>> c = docker.from_env()
+>>> pprint(c.api._general_configs.get('proxies'))
+{'default': {'httpProxy': 'http://proxy.mycorp.com:1234',
+             'httpsProxy': 'https://proxy.mycorp.com:1234',
+             'noProxy': '127.0.0.1,localhost'},
+ 'tcp://192.168.99.101:2376': {'httpProxy': '',
+                               'httpsProxy': '',
+                               'noProxy': '*'}}
+>>> c.api.base_url
+'https://192.168.99.101:2376'
+Workaround/Confirmation
+On the above suspicion, I added an https://192.168.99.101:2376 config section to the proxy config, leaving the others alone:
+another> docker-compose up
+Creating network "bugreport_default" with the default driver
+Creating bugreport_alpine_1 ... done
+Attaching to bugreport_alpine_1
+alpine_1  | HTTPS_PROXY=
+alpine_1  | no_proxy=*
+alpine_1  | NO_PROXY=*
+alpine_1  | https_proxy=
+alpine_1  | http_proxy=
+alpine_1  | HTTP_PROXY=
+bugreport_alpine_1 exited with code 0
+Note: I issued docker-compose down to remove the old container first.

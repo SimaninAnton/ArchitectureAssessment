@@ -1,0 +1,2 @@
+dzwicker commented on 9 Feb 2016
+The error message ist: In file './common.yml' service 'version' doesn't have any configuration options. All top level keys in your docker-compose.yml must map to a dictionary of configuration options.

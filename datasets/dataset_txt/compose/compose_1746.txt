@@ -1,0 +1,31 @@
+rvernica commented on 28 Jan 2017
+Docker Engine is running in swarm mode. I manually created an overlay attachable network foo on the manager node:
+> docker network create --driver overlay --attachable foo
+> docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+b9653fe43369        bridge              bridge              local
+f111200c51a0        docker_gwbridge     bridge              local
+a0bdd5df7a75        host                host                local
+6u4dleo7zzmn        ingress             overlay             swarm
+e9de752139c3        none                null                local
+i5rqhfn493w7        foo                 overlay             swarm
+In the Docker Compose file I use:
+networks:
+  default:
+    external:
+      name: foo
+Docker Compose services on the manager node start and attach to the network successfully.
+Docker Compose services on the worker node cannot find the network:
+> docker-compose up -d
+WARNING: The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use `docker stack deploy`.
+
+ERROR: Network foo declared as external, but could not be found. Please create the network manually using `docker network create foo` and try again.
+Using docker run on the worker node, I can successfully attach a container to the overlay network:
+> docker run --net foo bar
+docker-engine: 1.13.0
+docker-compose: 1.10.0
+16

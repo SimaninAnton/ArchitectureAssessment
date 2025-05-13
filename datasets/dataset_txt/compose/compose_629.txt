@@ -1,0 +1,32 @@
+thomasbruggink commented on 12 Jun 2018 •
+edited
+Description of the issue
+When the encoding of a compose file is UTF-8 BOM docker compose up results in the following error:
+ERROR: In file '.\docker-compose.yml', service 'ï»¿version' must be a mapping not a string.
+When using version 1.15.0-rc1 the issue does not occur.
+Output of "docker-compose version"
+Working version: docker-compose version 1.15.0-rc1, build 2188098
+Failing verson: docker-compose version 1.21.2, build a133471
+Output of "docker version"
+Docker version 17.05.0-ce, build 89658be
+Output of "docker-compose config"
+Stored with encoding UTF8 BOM
+version: "3"
+services:
+consul:
+image: consul:latest
+networks:
+- nat
+networks:
+nat:
+external: true
+Steps to reproduce the issue
+Save the content above in UTF8 BOM
+docker-compose up
+Observed result
+ERROR: In file '.\docker-compose.yml', service 'ï»¿version' must be a mapping not a string
+Expected result
+Creating consul_1 ... done
+Additional information
+Windows Server 2016. Compose was installed by extracting the executable. I am not using docker toolbox.
+This issue does not occur on the Linux version of compose

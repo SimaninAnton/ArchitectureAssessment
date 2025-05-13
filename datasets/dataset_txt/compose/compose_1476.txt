@@ -1,0 +1,2 @@
+LukeusMaximus commented on 8 May 2017
+PR #4716 added init to docker-compose services in v2.2 compose files, but not v3. Please can v3 be made to support the init option as well.

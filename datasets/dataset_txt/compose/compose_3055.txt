@@ -1,0 +1,54 @@
+nazar-pc commented on 24 Nov 2015
+A bit of background
+I'm building MariaDB Galera server image that automatically creates cluster (with single node initially and 2+ nodes when running docker-compose scale mariadb=x, were x is target number of nodes).
+It works, but there are few caveats, one of which is topic of this issue.
+When I want to upgrade containers to newer versions of images I initially run docker-compose pull to get new images.
+But if I run docker-compose --x-networking up -d right after this all MariaDB containers will be restarted quickly and eventually nodes will lost quorum and cluster will be effectively destroyed.
+To overcome this I decided to increase cluster size even further, wait for new nodes to replicate and then to upgrade the rest of containers.
+But here is the problem - when I run docker-compose --x-networking up -d it recreates all MariaDB containers, even those that already having up to date version of image.
+TL;DR edition
+# Simplified version of /x/docker-compose.yml
+data:
+  image: nazarpc/webserver:data
+mariadb:
+  image: nazarpc/webserver:mariadb
+  environment:
+    SERVICE_NAME: mariadb
+  volumes_from:
+    - data
+docker-compose --x-networking up -d
+# ^ Running cluster with one node, wait to start properly
+docker-compose --x-networking scale mariadb=2
+# ^ Now we have second node joining cluster, wait to start and replicate properly
+docker-compose pull
+# ^ Whoops, we have new version of `nazarpc/webserver:mariadb` image
+docker-compose --x-networking scale mariadb=3
+# ^ Third node joining cluster, based on newer image
+docker-compose --x-networking up -d
+Expected result:
+x_mariadb_1 and x_mariadb_2 containers recreated with newer images, x_mariadb_3 doesn't change since it is up to date already
+Actual result:
+x_mariadb_3 container is also recrected, while has already up to date image, which is not expected/desired behavior
+docker version:
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:20:08 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:20:08 UTC 2015
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+uname -a
+Linux nazar-pc 4.3.0-haswell #1 SMP Mon Nov 2 06:42:33 CET 2015 x86_64 x86_64 x86_64 GNU/Linux

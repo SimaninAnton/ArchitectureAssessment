@@ -1,0 +1,112 @@
+giuseppegreco commented on 1 Aug 2018 •
+edited
+I'm using docker 18.06.0-ce with docker-compose 1.17.1, and it seems the env_file option doesn't work.
+Here is my docker-compose.yaml:
+version: '3.3'
+
+services:
+  etcd:
+    container_name: 'etcd'
+    image: 'quay.io/coreos/etcd'
+    command: >
+      etcd -name etcd
+      -advertise-client-urls http://127.0.0.1:2379,http://127.0.0.1:4001
+      -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001
+      -initial-advertise-peer-urls http://127.0.0.1:2380
+      -listen-peer-urls http://0.0.0.0:2380
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://etcd:2379/version"]
+      interval: '30s'
+      timeout: '10s'
+      retries: 5
+    networks:
+      mynet:
+
+  kontrol:
+    container_name: 'kontrol'
+    env_file: 'variables.env'
+    build:
+      context: '.'
+      dockerfile: 'Dockerfile'
+    ports:
+      - '6000:6000'
+    links:
+      - 'etcd'
+    depends_on:
+      - 'etcd'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://kontrol:6000/kite"]
+      interval: '30s'
+      timeout: '10s'
+      retries: 5
+    networks:
+      mynet:
+
+networks:
+  mynet:
+Here is my variables.env:
+KONTROL_PORT=6000
+KONTROL_USERNAME=gonzo
+KONTROL_STORAGE=etcd
+KONTROL_MACHINES=http://etcd:2379
+KONTROL_KONTROLURL=http://kontrol:6000/kite
+KONTROL_PUBLICKEYFILE=/certs/key_pub.pem
+KONTROL_PRIVATEKEYFILE=/certs/key.pem
+KITE_ENVIRONMENT=dev
+KITE_REGION=ch
+KITE_LOG_LEVEL=INFO
+And finally here is my Dockerfile:
+FROM golang:alpine as builder
+
+RUN apk add --update --no-cache git
+RUN go get -u github.com/golang/dep/cmd/dep
+RUN go get -d github.com/koding/kite
+
+WORKDIR ${GOPATH}/src/github.com/koding/kite
+
+RUN mkdir /build
+RUN ${GOPATH}/bin/dep ensure
+RUN go build -o /build/kontrol ./kontrol/kontrol
+
+FROM alpine
+ENV APP_HOME /opt/robotrader
+WORKDIR ${APP_HOME}
+
+ADD ./certs/* /certs/
+ADD ./kontrol.sh .
+RUN chmod a+x ./kontrol.sh
+
+COPY --from=builder /build/kontrol .
+CMD ["./kontrol.sh"]
+The container is created successfully:
+sudo -E docker-compose -f docker-compose.yaml build
+...
+Step 16/16 : CMD ["./kontrol.sh"]
+ ---> Using cache
+ ---> 67332fce8116
+
+Successfully built 67332fce8116
+Successfully tagged robotrader_kontrol:latest
+As u can see, no environment variable has been set in the container:
+sudo docker run --rm -it robotrader_kontrol sh -c 'echo "$KONTROL_PORT"'
+Also if I connect the container, still no environment variables have been set:
+sudo docker run -it --rm --name j3d-test --entrypoint sh robotrader_kontrol
+
+/opt/robotrader # set
+APP_HOME='/opt/robotrader'
+HISTFILE='/root/.ash_history'
+HOME='/root'
+HOSTNAME='e1d3cf395aa4'
+IFS='  
+'
+OPTIND='1'
+PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+PPID='0'
+PS1='\w \$ '
+PS2='> '
+PS4='+ '
+PWD='/opt/robotrader'
+SHLVL='1'
+TERM='xterm'
+/opt/robotrader # 
+I'm struggling for days now... any idea?

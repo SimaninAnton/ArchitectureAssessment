@@ -1,0 +1,47 @@
+Member
+justincormack commented on 19 Feb 2016
+Copying files from stdout out of a container using compose may corrupt the files, apparently only when combining build and run.
+This basically does docker-compose run -T default cat debian.iso > debian2.iso ie copies the file out of the container via stdout, which should leave it unchanged. With -T it should not allocate a tty which I know may modify output (docker run -it does have issues doing this but without a tty it is fine.
+To replicate, clone this repo https://github.com/justincormack/composebug and do run.sh. On my Linux machine I get the following output:
+compose 1
+Building default
+-rw-rw-r-- 1 justin justin 389869735 Feb 19 19:10 debian2.iso
+-rw-rw-r-- 1 justin justin 389869568 Feb 19 18:41 debian.iso
+compose 2
+-rw-rw-r-- 1 justin justin 389869568 Feb 19 19:11 debian2.iso
+-rw-rw-r-- 1 justin justin 389869568 Feb 19 18:41 debian.iso
+docker
+Sending build context to Docker daemon 780.2 MB
+Step 1 : FROM alpine:3.3
+ ---> 14f89d0e6257
+Step 2 : COPY debian.iso .
+ ---> Using cache
+ ---> b71467706501
+Successfully built b71467706501
+-rw-rw-r-- 1 justin justin 389869568 Feb 19 19:12 debian2.iso
+-rw-rw-r-- 1 justin justin 389869568 Feb 19 18:41 debian.iso
+The first copy of the debian iso has been corrupted.
+This is on Linux:
+justin@zander:~/composebug$ uname -a
+Linux zander.myriabit.eu 3.13.0-24-generic #47-Ubuntu SMP Fri May 2 23:30:00 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+justin@zander:~/composebug$ docker-compose version
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+justin@zander:~/composebug$ docker version
+Client:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 19:27:08 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 19:27:08 2016
+ OS/Arch:      linux/amd64

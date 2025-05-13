@@ -1,0 +1,114 @@
+shaurya157 commented on 24 Apr 2018
+Description of the issue
+I'm trying to run Open Loyalty on Docker (my first time setting up docker). When I used the Get Started guide on the Docker website, it worked perfectly but when I used docker-compose up on a cloned version of this repo: https://github.com/DivanteLtd/open-loyalty (in the docker subfolder) I get an error.
+Context information (for bug reports)
+Error Message:
+ERROR: Service 'php' failed to build: The command '/bin/sh -c chmod a+x init.sh && rm web/app_dev.php && composer install --no-dev -o --prefer-dist && bin/console assets:install && rm web/config.php && chown -R www-data:www-data /var/www/openloyalty/var' returned a non-zero code: 127
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b2 docker-py version: 3.1.4 CPython version: 3.6.4 OpenSSL version: OpenSSL 1.0.2k 26 Jan 2017
+Output of "docker version"
+`Client:
+Version: 18.03.0-ce
+API version: 1.37
+Go version: go1.9.4
+Git commit: 0520e24302
+Built: Fri Mar 23 08:31:36 2018
+OS/Arch: windows/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.04.0-ce
+API version: 1.37 (minimum version 1.12)
+Go version: go1.9.4
+Git commit: 3d479c0
+Built: Tue Apr 10 18:23:35 2018
+OS/Arch: linux/amd64
+Experimental: false`
+Output of "docker-compose config"
+`Client:
+Version: 18.03.0-ce
+API version: 1.37
+Go version: go1.9.4
+Git commit: 0520e24302
+Built: Fri Mar 23 08:31:36 2018
+OS/Arch: windows/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.04.0-ce
+API version: 1.37 (minimum version 1.12)
+Go version: go1.9.4
+Git commit: 3d479c0
+Built: Tue Apr 10 18:23:35 2018
+OS/Arch: linux/amd64
+Experimental: false
+PS C:\Users\Jacky Nguyen\Desktop\projects\loyalty\open-loyalty\docker> docker-compose config
+services:
+db:
+container_name: open_loyalty_db
+environment:
+APP_DB_HOST: db
+APP_DB_NAME: openloyalty
+APP_DB_PASSWORD: openloyalty
+APP_DB_PORT: '5432'
+APP_DB_USER: openloyalty
+ELK_HOST: elk
+POSTGRES_DB: openloyalty
+POSTGRES_PASSWORD: openloyalty
+POSTGRES_USER: openloyalty
+image: postgres:9
+elk:
+container_name: open_loyalty_elk
+image: elasticsearch:2.2
+mail:
+container_name: open_loyalty_mail
+image: mailhog/mailhog
+ports:
+- 8186:8025/tcp
+nginx:
+build:
+context: C:\Users\Jacky Nguyen\Desktop\projects\loyalty\open-loyalty
+dockerfile: ./docker/prod/web/app-dockerfile
+container_name: open_loyalty_frontend
+links:
+- php
+ports:
+- 80:80/tcp
+- 8182:3001/tcp
+- 8183:3002/tcp
+- 8184:3003/tcp
+php:
+build:
+context: C:\Users\Jacky Nguyen\Desktop\projects\loyalty\open-loyalty
+dockerfile: ./docker/prod/php/fpm-dockerfile
+container_name: open_loyalty_backend
+depends_on:
+- db
+environment:
+APP_DB_HOST: db
+APP_DB_NAME: openloyalty
+APP_DB_PASSWORD: openloyalty
+APP_DB_PORT: '5432'
+APP_DB_USER: openloyalty
+ELK_HOST: elk
+POSTGRES_DB: openloyalty
+POSTGRES_PASSWORD: openloyalty
+POSTGRES_USER: openloyalty
+links:
+- db
+- elk
+- mail
+version: '2.0'`
+Steps to reproduce the issue
+Clone repo: https://github.com/DivanteLtd/open-loyalty
+cd docker
+docker-compose up
+Observed result
+ERROR: Service 'php' failed to build: The command '/bin/sh -c chmod a+x init.sh && rm web/app_dev.php && composer install --no-dev -o --prefer-dist && bin/console assets:install && rm web/config.php && chown -R www-data:www-data /var/www/openloyalty/var' returned a non-zero code: 127
+Expected result
+Should compile and show up in local IP:5000
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Run on Windows 10 Home in a VM

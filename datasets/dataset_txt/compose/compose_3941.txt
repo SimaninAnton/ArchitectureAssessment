@@ -1,0 +1,6 @@
+Member
+crosbymichael commented on 9 Feb 2015
+Please add support for cupset. This takes a string and looks something like:
+0
+0,1
+0-2

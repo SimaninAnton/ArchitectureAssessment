@@ -1,0 +1,1 @@
+The project name should be configurable

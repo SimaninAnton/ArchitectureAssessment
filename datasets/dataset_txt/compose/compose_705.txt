@@ -1,0 +1,59 @@
+dazinator commented on 1 May 2018
+Description of the issue
+Just upgraded to docker CE (windows) Version 18.03.1-ce-win65 (17513)
+Compose version 1.21.1
+When running docker compose within my git repo I see a permissions error on particular file. (See stack trace below)
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 7641a56
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k 26 Jan 2017
+Output of "docker version"
+Client:
+Version: 18.03.1-ce
+API version: 1.37
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:12:48 2018
+OS/Arch: windows/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.1-ce
+API version: 1.37 (minimum version 1.24)
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:21:42 2018
+OS/Arch: windows/amd64
+Experimental: false
+Output of "docker-compose config"
+Steps to reproduce the issue
+docker-compose in repo with visual studio solution containing database projects with .dbmdl files
+Observed result
+permission error as per message
+Expected result
+Success
+Stacktrace / full error message
+Building db
+[10784] Failed to execute script docker-compose
+Traceback (most recent call last):
+  File "site-packages\docker\utils\build.py", line 179, in create_archive
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\darrell.tunnell\\Source\\Repos\\foo\\foo\\foo\\foo.DB.dbmdl'
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 282, in build
+  File "compose\project.py", line 373, in build
+  File "compose\service.py", line 1027, in build
+  File "site-packages\docker\api\build.py", line 154, in build
+  File "site-packages\docker\utils\build.py", line 31, in tar
+  File "site-packages\docker\utils\build.py", line 183, in create_archive
+OSError: Can not read file in context: C:\Users\darrell.tunnell\Source\Repos\foo\foo\foo.DB\foo.DB.dbmdl
+Additional information
+Windows 10
+Installed docker CE for windows from stable channel latest installer.
+1

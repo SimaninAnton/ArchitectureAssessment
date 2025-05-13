@@ -1,0 +1,149 @@
+freen commented on 13 Nov 2019 •
+edited
+Description of the issue
+Any use of the docker-compose binary results in the exact same process abort:
+➜  ~ docker-compose
+[1]    33617 abort      docker-compose
+➜  ~ echo $?
+134
+➜  ~ docker-compose help
+[1]    33633 abort      docker-compose help
+➜  ~ echo $?
+134
+The exit code appears to be SIGABT (128 + 6), possibly the result of a failed assertion.
+I am using docker-compose stable version 1.24.1 installed via Homebrew, on macOS Catalina 10.15.
+I am not using Docker Desktop for macOS because it is completely unusable on my system, per issue docker/for-mac#4035.
+Context information (for bug reports)
+Output of docker-compose version
+➜  ~ docker-compose version
+[1]    33546 abort      docker-compose version
+➜  ~ echo $?
+134
+Output of docker version
+➜  ~ docker version
+Client: Docker Engine - Community
+ Version:           19.03.4
+ API version:       1.40
+ Go version:        go1.13.3
+ Git commit:        9013bf5
+ Built:             Sat Oct 19 03:13:21 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.4
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.10
+  Git commit:       9013bf583a
+  Built:            Fri Oct 18 15:55:51 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+➜  ~ docker-compose config
+[1]    33502 abort      docker-compose config
+➜  ~ echo $?
+134
+Steps to reproduce the issue
+Run docker-compose with any CLI options (or no CLI options.)
+Observed result
+➜  ~ docker-compose
+[1]    32906 abort      docker-compose
+➜  ~ echo $?
+134
+Expected result
+The docker-compose binary successfully runs.
+Stacktrace / full error message
+➜  ~ docker-compose
+[1]    32906 abort      docker-compose
+➜  ~ echo $?
+134
+Additional information
+macOS Catalina
+➜  ~ sw_vers                 
+ProductName: Mac OS X
+ProductVersion: 10.15
+BuildVersion: 19A603
+Installed via homebrew
+➜  ~ brew info docker-compose
+docker-compose: stable 1.24.1 (bottled), HEAD
+Isolated development environments using Docker
+https://docs.docker.com/compose/
+/usr/local/Cellar/docker-compose/1.24.1_1 (1,437 files, 15.7MB) *
+  Poured from bottle on 2019-11-13 at 10:17:40
+From: https://github.com/Homebrew/homebrew-core/blob/master/Formula/docker-compose.rb
+==> Dependencies
+Required: libyaml ✔, python ✔
+==> Options
+--HEAD
+ Install HEAD version
+==> Caveats
+Bash completion has been installed to:
+  /usr/local/etc/bash_completion.d
+
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+==> Analytics
+install: 10,184 (30 days), 32,580 (90 days), 119,808 (365 days)
+install_on_request: 10,031 (30 days), 31,934 (90 days), 116,100 (365 days)
+build_error: 0 (30 days)
+➜  ~ which docker-compose
+/usr/local/bin/docker-compose
+➜  ~ ls -la /usr/local/bin/docker-compose
+lrwxr-xr-x  1 freen  admin  52 Nov 13 10:17 /usr/local/bin/docker-compose -> ../Cellar/docker-compose/1.24.1_1/bin/docker-compose
+Fearing crossed wires on PATH with another version of docker-compose, I believe I was able to rule out any residual binary, configuration or library file from the previous Docker Desktop install:
+➜  ~ locate docker-compose | xargs ls -d 2>/dev/null
+/Users/freen/.oh-my-zsh/plugins/docker-compose
+/Users/freen/.oh-my-zsh/plugins/docker-compose/README.md
+/Users/freen/.oh-my-zsh/plugins/docker-compose/_docker-compose
+/Users/freen/.oh-my-zsh/plugins/docker-compose/docker-compose.plugin.zsh
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails30.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails31.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails32.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails40.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails41.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails42.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails50.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails51.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails52.docker-compose.yml
+/Users/freen/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/pry-rails-0.3.9/scenarios/rails60.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails30.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails31.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails32.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails40.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails41.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails42.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails50.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails51.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails52.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.4/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails60.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails30.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails31.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails32.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails40.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails41.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails42.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails50.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails51.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails52.docker-compose.yml
+/Users/freen/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/pry-rails-0.3.9/scenarios/rails60.docker-compose.yml
+/Users/freen/.tldr/cache/pages.it/common/docker-compose.md
+/Users/freen/.tldr/cache/pages/common/docker-compose.md
+/usr/local/Cellar/docker-compose
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/docker-compose-completion.rb
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/docker-compose.rb
+/usr/local/bin/docker-compose
+/usr/local/etc/bash_completion.d/docker-compose
+/usr/local/opt/docker-compose
+/usr/local/share/zsh/site-functions/_docker-compose
+/usr/local/var/homebrew/linked/docker-compose

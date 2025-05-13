@@ -1,0 +1,5 @@
+ghost commented on 13 Sep 2016
+Hi... I am trying to run a container
+However I receive an error that it already exist even when I list all of the containers with docker ps and there is no container listed.
+The line inside the script is
+docker run --name ldap-service --hostname ldap-service --detach osixia/openldap:1.1.1

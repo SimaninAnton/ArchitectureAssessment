@@ -1,0 +1,25 @@
+matthughes commented on 7 Jan 2016
+Trying very basic example of string interpolation using compose 1.5.2 / docker 1.9.1 on Centos 7.2 and not having any luck.
+I've tried $FOO/${FOO}/"$FOO"/"${FOO}" and none work. I've tried setting the variable, exporting it, putting it in my bashrc file and relogging in and compose will see that I'm trying to interpolate a file, but doesn't see a value for it.
+[fldengr@localhost tmp]$ docker-compose --version
+docker-compose version 1.5.2, build 7240ff3
+[fldengr@localhost tmp]$
+[fldengr@localhost tmp]$ cat docker-compose.yml
+test:
+    image: busybox
+    container_name: env-test
+    environment:
+        - BAR=$FOO
+[fldengr@localhost tmp]$
+[fldengr@localhost tmp]$ export FOO=baz
+[fldengr@localhost tmp]$
+[fldengr@localhost tmp]$ echo $FOO
+baz
+[fldengr@localhost tmp]$
+[fldengr@localhost tmp]$ docker-compose up
+WARNING: The FOO variable is not set. Defaulting to a blank string.
+Recreating env-test^C
+
+[fldengr@localhost tmp]$ docker --version
+Docker version 1.9.1, build a34a1d5
+4

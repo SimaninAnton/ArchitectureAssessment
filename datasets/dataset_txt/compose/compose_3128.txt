@@ -1,0 +1,23 @@
+KamilKopaczyk commented on 6 Nov 2015
+Before 1.5.0, from time to time, python stack trace was popping up.
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/threading.py", line 810, in __bootstrap_inner
+    self.run()
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/threading.py", line 763, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/multiplexer.py", line 41, in _enqueue_output
+    for item in generator:
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/log_printer.py", line 59, in _make_log_generator
+    for line in line_generator:
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/utils.py", line 100, in split_buffer
+    for data in reader:
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/vendor/lib/python2.7/site-packages/docker/clientbase.py", line 238, in _stream_raw_result
+    for out in response.iter_content(chunk_size=1, decode_unicode=True):
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/vendor/lib/python2.7/site-packages/requests/utils.py", line 332, in stream_decode_response_unicode
+    for item in iterator:
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/vendor/lib/python2.7/site-packages/requests/models.py", line 680, in generate
+    raise ConnectionError(e)
+ConnectionError: HTTPSConnectionPool(host='192.168.99.104', port=2376): Read timed out.
+In 1.5.0 this stack trace doesn't show up anymore, but all containers are stopped instead. Even though the target docker machine is running.
+Reverted to 1.4.2 and it works fine.

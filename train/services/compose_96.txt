@@ -1,0 +1,37 @@
+Collaborator
+glours commented on 25 Sep 2019 •
+edited
+Description of the issue
+The current message is
+Service "your_service" uses an undefined secret file "~/compose-test/missing_file", the following folder is created "~/compose-test/missing_file"
+When reading the message we could think that docker-compose just created the directory for us which is not the case.
+Other point, message will always talk about folder even if we declare a file in the compose file.
+Maybe we should have a message more explicit like this :
+Service "your_service" uses an undefined secret file "~/compose-test/missing_file", the following folder/file should be created "~/compose-test/missing_file"
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0dev, build unknown
+Output of docker version
+Docker version 19.03.3-beta1, build 7348bc0
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+secrets:
+  my_secret:
+    file: ~/compose-test/missing_file.txt
+services:
+  front:
+    image: nginx
+    secrets:
+    - source: my_secret
+version: '3.7'
+Steps to reproduce the issue
+create a docker-compose.yaml file with a secret pointing torwards to a missing file
+run a docker-compose build in the directory where you defined the docker-compose.yaml file
+check the warning message
+Observed result
+Service "your_service" uses an undefined secret file "~/compose-test/missing_file", the following folder is created "~/compose-test/missing_file"
+Expected result
+Service "your_service" uses an undefined secret file "~/compose-test/missing_file", the following folder/file should be created "~/compose-test/missing_file"
+More context
+First issue: #5920
+PR: #6131

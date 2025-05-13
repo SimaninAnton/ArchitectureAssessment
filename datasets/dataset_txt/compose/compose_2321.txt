@@ -1,0 +1,13 @@
+CircleCode commented on 8 Jun 2016 •
+edited
+sometimes, one want to run docker <command> <service-container> where
+<command> is any valid docker command
+<service-container> is the container associated with service <service>
+This can be done by mentally composing the name of the container based on project and service name, but this would be useful to have a way to
+either have a command giving the container name for a given service
+(previous command would then become docker <command> $(docker-compose name <service>)
+either have a command to relay a docker command to a service
+(previous command would then become docker-compose relay <service> <command>
+if this is something aleady implemented, I apologize for not having found it
+If this does not exists yet, what are your feelings about such a feature?
+1

@@ -1,0 +1,18 @@
+Contributor
+kevinsimper commented on 19 Apr 2015
+Right now docker compose will just output an unscripted error if the file contains something to extends does not exists:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 57, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 76, in get_project
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.config", line 55, in load
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.config", line 65, in from_dictionary
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.config", line 88, in make_service_dict
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.config", line 110, in resolve_extends
+TypeError: 'NoneType' object has no attribute '__getitem__'
+I propose that it should check if the file exists and only include it if it does.
+This provide a nice way to override certain values in your own development environment very easy, and that can be gitignore as well, make it convenient to develop with.

@@ -1,0 +1,22 @@
+gone commented on 9 Jan 2015
+I'm running a django server via fig for local development. I'd like to integrate a command line driven proxy server that handles live reloads (browser-sync).
+Current solution is run the fig cluster, then locally open a new terminal and run browser-sync start --proxy localhost:8000, and then navigate to the url that browser-sync gives me (localhost:3000).
+What I'd really like to do is have fig handle this proxy redirect internally by mapping a single url and runing two TTY's within the web instance.
+I prose supporting this syntax in the fig.yml:
+db:
+image: mdillon/postgis:9.3
+web:
+environment:
+DATABASE_URL: postgis://postgres:postgres@localhost:5432/myproject
+DJANGO_SETTINGS_MODULE: myproject.settings.local
+build: .
+command:
+- python manage.py runserver 0.0.0.0:8001
+- browser-sync start --port 8000 --proxy localhost:8001
+volumes:
+- .:/code
+ports:
+- "8000:8000"
+links:
+- db
+I'd be happy to work on a patch if it seems like a good idea

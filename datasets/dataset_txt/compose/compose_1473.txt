@@ -1,0 +1,153 @@
+RicardoPoleo commented on 9 May 2017 •
+edited
+Hello guys,
+I'm pretty new with Docker so, maybe I'm doing, something very basic, wrong here.
+I'm executing
+docker-compose up
+over this compose file
+services: db: image: postgres apache2: image: webdevops/apache:latest ports: - 8084:80 - 443:443 links: - db
+The postgres image is the official and the composing process just get stuck, usually at this command:
+AH00094: Command line: 'apache2 -D FOREGROUND -D APACHE_LOCK_DIR'
+and never finish".
+This is the output while it builds, from the start:
+docker-compose up
+Pulling db (postgres:latest)...
+latest: Pulling from library/postgres
+cd0a524342ef: Pull complete
+9c784d04dcb0: Pull complete
+d99dddf7e662: Pull complete
+e5bff71e3ce6: Pull complete
+cb3e0a865488: Pull complete
+31295d654cd5: Pull complete
+fc930a4e09f5: Pull complete
+8650cce8ef01: Pull complete
+61949acd8e52: Pull complete
+527a203588c0: Pull complete
+26dec14ac775: Pull complete
+0efc0ed5a9e5: Pull complete
+40cd26695b38: Pull complete
+Digest: sha256:fd6c0e2a9d053bebb294bb13765b3e01be7817bf77b01d58c2377ff27a4a46dc
+Status: Downloaded newer image for postgres:latest
+Pulling apache2 (webdevops/apache:latest)...
+latest: Pulling from webdevops/apache
+aafe6b5e13de: Pull complete
+0a2b43a72660: Pull complete
+18bdd1e546d2: Pull complete
+8198342c3e05: Pull complete
+f56970a44fd4: Pull complete
+7d255d8cc29c: Pull complete
+6b76599eeb74: Pull complete
+ac6a5bdae794: Pull complete
+bfe65de9caf3: Pull complete
+45f407574293: Pull complete
+5f28b0c8228a: Pull complete
+ceb4b3de72bc: Pull complete
+Digest: sha256:acf3049ddc1cf7f615eb4751250881d31dccfc50752ac3a1261169b684f430cb
+Status: Downloaded newer image for webdevops/apache:latest
+Creating dockertest7_db_1
+Creating dockertest7_apache2_1
+Attaching to dockertest7_db_1, dockertest7_apache2_1
+apache2_1 | 2017-05-09 01:36:54,332 CRIT Set uid to user 0
+apache2_1 | 2017-05-09 01:36:54,332 WARN Included extra file "/opt/docker/etc/supervisor.d/apache.conf" during parsing
+apache2_1 | 2017-05-09 01:36:54,332 WARN Included extra file "/opt/docker/etc/supervisor.d/cron.conf" during parsing
+apache2_1 | 2017-05-09 01:36:54,332 WARN Included extra file "/opt/docker/etc/supervisor.d/dnsmasq.conf" during parsing
+apache2_1 | 2017-05-09 01:36:54,332 WARN Included extra file "/opt/docker/etc/supervisor.d/postfix.conf" during parsing
+apache2_1 | 2017-05-09 01:36:54,332 WARN Included extra file "/opt/docker/etc/supervisor.d/ssh.conf" during parsing
+apache2_1 | 2017-05-09 01:36:54,332 WARN Included extra file "/opt/docker/etc/supervisor.d/syslog.conf" during parsing
+apache2_1 | 2017-05-09 01:36:54,340 INFO RPC interface 'supervisor' initialized
+apache2_1 | 2017-05-09 01:36:54,340 INFO supervisord started with pid 1
+db_1 | The files belonging to this database system will be owned by user "postgres".
+db_1 | This user must also own the server process.
+db_1 |
+db_1 | The database cluster will be initialized with locale "en_US.utf8".
+db_1 | The default database encoding has accordingly been set to "UTF8".
+db_1 | The default text search configuration will be set to "english".
+db_1 |
+db_1 | Data page checksums are disabled.
+db_1 |
+db_1 | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+db_1 | creating subdirectories ... ok
+db_1 | selecting default max_connections ... 100
+db_1 | selecting default shared_buffers ... 128MB
+db_1 | selecting dynamic shared memory implementation ... posix
+db_1 | creating configuration files ... ok
+apache2_1 | 2017-05-09 01:36:55,345 INFO spawned: 'apached' with pid 17
+apache2_1 | 2017-05-09 01:36:55,404 INFO success: apached entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+apache2_1 | [Tue May 09 01:36:55.414084 2017] [mpm_event:notice] [pid 17:tid 140039054796672] AH00489: Apache/2.4.18 (Ubuntu) OpenSSL/1.0.2g configured -- resuming normal operations
+apache2_1 | [Tue May 09 01:36:55.414134 2017] [core:notice] [pid 17:tid 140039054796672] AH00094: Command line: 'apache2 -D FOREGROUND -D APACHE_LOCK_DIR'
+db_1 | running bootstrap script ... ok
+db_1 | performing post-bootstrap initialization ... ok
+db_1 | syncing data to disk ...
+db_1 | WARNING: enabling "trust" authentication for local connections
+db_1 | You can change this by editing pg_hba.conf or using the option -A, or
+db_1 | --auth-local and --auth-host, the next time you run initdb.
+db_1 | ok
+db_1 |
+db_1 | Success. You can now start the database server using:
+db_1 |
+db_1 | pg_ctl -D /var/lib/postgresql/data -l logfile start
+db_1 |
+db_1 | ****************************************************
+db_1 | WARNING: No password has been set for the database.
+db_1 | This will allow anyone with access to the
+db_1 | Postgres port to access your database. In
+db_1 | Docker's default configuration, this is
+db_1 | effectively any other container on the same
+db_1 | system.
+db_1 |
+db_1 | Use "-e POSTGRES_PASSWORD=password" to set
+db_1 | it in "docker run".
+db_1 | ****************************************************
+db_1 | waiting for server to start....LOG: database system was shut down at 2017-05-09 01:36:56 UTC
+db_1 | LOG: MultiXact member wraparound protections are now enabled
+db_1 | LOG: database system is ready to accept connections
+db_1 | LOG: autovacuum launcher started
+db_1 | done
+db_1 | server started
+db_1 | ALTER ROLE
+db_1 |
+db_1 |
+db_1 | /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+db_1 |
+db_1 | LOG: received fast shutdown request
+db_1 | LOG: aborting any active transactions
+db_1 | waiting for server to shut down...LOG: autovacuum launcher shutting down
+db_1 | .LOG: shutting down
+db_1 | LOG: database system is shut down
+db_1 | done
+db_1 | server stopped
+db_1 |
+db_1 | PostgreSQL init process complete; ready for start up.
+db_1 |
+db_1 | LOG: database system was shut down at 2017-05-09 01:36:58 UTC
+db_1 | LOG: MultiXact member wraparound protections are now enabled
+db_1 | LOG: database system is ready to accept connections
+db_1 | LOG: autovacuum launcher started
+Here it got stuck. I Cntrl + C and executed
+docker-compose up
+again
+Starting dockertest7_db_1
+Starting dockertest7_apache2_1
+Attaching to dockertest7_db_1, dockertest7_apache2_1
+db_1 | LOG: database system was interrupted; last known up at 2017-05-09 01:37:00 UTC
+db_1 | LOG: database system was not properly shut down; automatic recovery in progress
+db_1 | LOG: invalid record length at 0/14EE238: wanted 24, got 0
+db_1 | LOG: redo is not required
+db_1 | LOG: MultiXact member wraparound protections are now enabled
+db_1 | LOG: database system is ready to accept connections
+db_1 | LOG: autovacuum launcher started
+apache2_1 | 2017-05-09 01:41:17,903 CRIT Set uid to user 0
+apache2_1 | 2017-05-09 01:41:17,903 WARN Included extra file "/opt/docker/etc/supervisor.d/apache.conf" during parsing
+apache2_1 | 2017-05-09 01:41:17,903 WARN Included extra file "/opt/docker/etc/supervisor.d/cron.conf" during parsing
+apache2_1 | 2017-05-09 01:41:17,903 WARN Included extra file "/opt/docker/etc/supervisor.d/dnsmasq.conf" during parsing
+apache2_1 | 2017-05-09 01:41:17,903 WARN Included extra file "/opt/docker/etc/supervisor.d/postfix.conf" during parsing
+apache2_1 | 2017-05-09 01:41:17,903 WARN Included extra file "/opt/docker/etc/supervisor.d/ssh.conf" during parsing
+apache2_1 | 2017-05-09 01:41:17,903 WARN Included extra file "/opt/docker/etc/supervisor.d/syslog.conf" during parsing
+apache2_1 | Unlinking stale socket /.supervisor.sock
+apache2_1 | 2017-05-09 01:41:18,226 INFO RPC interface 'supervisor' initialized
+apache2_1 | 2017-05-09 01:41:18,226 INFO supervisord started with pid 1
+apache2_1 | 2017-05-09 01:41:19,230 INFO spawned: 'apached' with pid 17
+apache2_1 | 2017-05-09 01:41:19,307 INFO success: apached entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+apache2_1 | [Tue May 09 01:41:19.316042 2017] [mpm_event:notice] [pid 17:tid 139733962508160] AH00489: Apache/2.4.18 (Ubuntu) OpenSSL/1.0.2g configured -- resuming normal operations
+apache2_1 | [Tue May 09 01:41:19.316085 2017] [core:notice] [pid 17:tid 139733962508160] AH00094: Command line: 'apache2 -D FOREGROUND -D APACHE_LOCK_DIR'
+There is any problem with my configuration? Or am I missing something?

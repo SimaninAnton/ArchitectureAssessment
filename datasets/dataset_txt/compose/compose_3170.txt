@@ -1,0 +1,74 @@
+sparrc commented on 28 Oct 2015
+Hello, I'm trying to debug a problem I'm having only when trying to run my container via docker-compose.
+Here is my docker-compose.yml:
+mysql:
+    image: mysql
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: yes
+When I run with just docker (docker run -p "3306:3306" -e MYSQL_ALLOW_EMPTY_PASSWORD=yes mysql), I don't get errors
+when I run docker-compose up mysql I get many errors (see output below)
+How do I get docker-compose to forget about any caches it might be holding onto for the mysql image? Is it possible? I see that there is a --no-cache option for build, but that doesn't apply when using images.
+[...]
+2015-10-27T20:35:58.826722Z 0 [ERROR] Incorrect definition of table performance_schema.events_waits_current: expected column 'NESTING_EVENT_TYPE' at position 15 to have type enum('TRANSACTION','STATEMENT','STAGE','WAIT', found type enum('STATEMENT','STAGE','WAIT').
+2015-10-27T20:35:58.826841Z 0 [ERROR] Incorrect definition of table performance_schema.events_waits_history: expected column 'NESTING_EVENT_TYPE' at position 15 to have type enum('TRANSACTION','STATEMENT','STAGE','WAIT', found type enum('STATEMENT','STAGE','WAIT').
+2015-10-27T20:35:58.826970Z 0 [ERROR] Incorrect definition of table performance_schema.events_waits_history_long: expected column 'NESTING_EVENT_TYPE' at position 15 to have type enum('TRANSACTION','STATEMENT','STAGE','WAIT', found type enum('STATEMENT','STAGE','WAIT').
+2015-10-27T20:35:58.827405Z 0 [ERROR] Incorrect definition of table performance_schema.events_waits_summary_by_user_by_event_name: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.827516Z 0 [ERROR] Incorrect definition of table performance_schema.events_waits_summary_by_account_by_event_name: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.828505Z 0 [ERROR] Column count of performance_schema.setup_actors is wrong. Expected 5, found 3. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.828858Z 0 [ERROR] Incorrect definition of table performance_schema.setup_objects: expected column 'OBJECT_TYPE' at position 0 to have type enum('EVENT','FUNCTION','PROCEDURE','TABLE','TRIGGER', found type enum('TABLE').
+2015-10-27T20:35:58.829377Z 0 [ERROR] Column count of performance_schema.table_lock_waits_summary_by_table is wrong. Expected 68, found 73. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.829546Z 0 [ERROR] Column count of performance_schema.threads is wrong. Expected 17, found 14. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.829665Z 0 [ERROR] Column count of performance_schema.events_stages_current is wrong. Expected 12, found 10. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.829796Z 0 [ERROR] Column count of performance_schema.events_stages_history is wrong. Expected 12, found 10. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.829921Z 0 [ERROR] Column count of performance_schema.events_stages_history_long is wrong. Expected 12, found 10. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.830192Z 0 [ERROR] Incorrect definition of table performance_schema.events_stages_summary_by_account_by_event_name: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.830312Z 0 [ERROR] Incorrect definition of table performance_schema.events_stages_summary_by_user_by_event_name: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.830691Z 0 [ERROR] Column count of performance_schema.events_statements_current is wrong. Expected 41, found 40. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.832532Z 0 [ERROR] Column count of performance_schema.events_statements_history is wrong. Expected 41, found 40. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.833393Z 0 [ERROR] Column count of performance_schema.events_statements_history_long is wrong. Expected 41, found 40. Created with MySQL 50626, now running 50709. Please use mysql_upgrade to fix this error.
+2015-10-27T20:35:58.833670Z 0 [ERROR] Incorrect definition of table performance_schema.events_statements_summary_by_account_by_event_name: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.833822Z 0 [ERROR] Incorrect definition of table performance_schema.events_statements_summary_by_user_by_event_name: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.834207Z 0 [ERROR] Native table 'performance_schema'.'events_statements_summary_by_program' has the wrong structure
+2015-10-27T20:35:58.834243Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_current' has the wrong structure
+2015-10-27T20:35:58.834283Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_history' has the wrong structure
+2015-10-27T20:35:58.834313Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_history_long' has the wrong structure
+2015-10-27T20:35:58.834344Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_summary_by_thread_by_event_name' has the wrong structure
+2015-10-27T20:35:58.834375Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_summary_by_account_by_event_name' has the wrong structure
+2015-10-27T20:35:58.834407Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_summary_by_user_by_event_name' has the wrong structure
+2015-10-27T20:35:58.834436Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_summary_by_host_by_event_name' has the wrong structure
+2015-10-27T20:35:58.834466Z 0 [ERROR] Native table 'performance_schema'.'events_transactions_summary_global_by_event_name' has the wrong structure
+2015-10-27T20:35:58.834593Z 0 [ERROR] Incorrect definition of table performance_schema.users: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.834722Z 0 [ERROR] Incorrect definition of table performance_schema.accounts: expected column 'USER' at position 0 to have type char(32), found type char(16).
+2015-10-27T20:35:58.837752Z 0 [ERROR] Native table 'performance_schema'.'memory_summary_global_by_event_name' has the wrong structure
+2015-10-27T20:35:58.837792Z 0 [ERROR] Native table 'performance_schema'.'memory_summary_by_account_by_event_name' has the wrong structure
+2015-10-27T20:35:58.837830Z 0 [ERROR] Native table 'performance_schema'.'memory_summary_by_host_by_event_name' has the wrong structure
+2015-10-27T20:35:58.837860Z 0 [ERROR] Native table 'performance_schema'.'memory_summary_by_thread_by_event_name' has the wrong structure
+2015-10-27T20:35:58.837894Z 0 [ERROR] Native table 'performance_schema'.'memory_summary_by_user_by_event_name' has the wrong structure
+2015-10-27T20:35:58.837924Z 0 [ERROR] Native table 'performance_schema'.'table_handles' has the wrong structure
+2015-10-27T20:35:58.837957Z 0 [ERROR] Native table 'performance_schema'.'metadata_locks' has the wrong structure
+2015-10-27T20:35:58.837989Z 0 [ERROR] Native table 'performance_schema'.'replication_connection_configuration' has the wrong structure
+2015-10-27T20:35:58.838017Z 0 [ERROR] Native table 'performance_schema'.'replication_group_members' has the wrong structure
+2015-10-27T20:35:58.838047Z 0 [ERROR] Native table 'performance_schema'.'replication_connection_status' has the wrong structure
+2015-10-27T20:35:58.838081Z 0 [ERROR] Native table 'performance_schema'.'replication_applier_configuration' has the wrong structure
+2015-10-27T20:35:58.838112Z 0 [ERROR] Native table 'performance_schema'.'replication_applier_status' has the wrong structure
+2015-10-27T20:35:58.838141Z 0 [ERROR] Native table 'performance_schema'.'replication_applier_status_by_coordinator' has the wrong structure
+2015-10-27T20:35:58.838169Z 0 [ERROR] Native table 'performance_schema'.'replication_applier_status_by_worker' has the wrong structure
+2015-10-27T20:35:58.838230Z 0 [ERROR] Native table 'performance_schema'.'replication_group_member_stats' has the wrong structure
+2015-10-27T20:35:58.838264Z 0 [ERROR] Native table 'performance_schema'.'prepared_statements_instances' has the wrong structure
+2015-10-27T20:35:58.838297Z 0 [ERROR] Native table 'performance_schema'.'user_variables_by_thread' has the wrong structure
+2015-10-27T20:35:58.838326Z 0 [ERROR] Native table 'performance_schema'.'status_by_account' has the wrong structure
+2015-10-27T20:35:58.838354Z 0 [ERROR] Native table 'performance_schema'.'status_by_host' has the wrong structure
+2015-10-27T20:35:58.838382Z 0 [ERROR] Native table 'performance_schema'.'status_by_thread' has the wrong structure
+2015-10-27T20:35:58.838412Z 0 [ERROR] Native table 'performance_schema'.'status_by_user' has the wrong structure
+2015-10-27T20:35:58.838441Z 0 [ERROR] Native table 'performance_schema'.'global_status' has the wrong structure
+2015-10-27T20:35:58.838473Z 0 [ERROR] Native table 'performance_schema'.'session_status' has the wrong structure
+2015-10-27T20:35:58.838500Z 0 [ERROR] Native table 'performance_schema'.'variables_by_thread' has the wrong structure
+2015-10-27T20:35:58.838530Z 0 [ERROR] Native table 'performance_schema'.'global_variables' has the wrong structure
+2015-10-27T20:35:58.838559Z 0 [ERROR] Native table 'performance_schema'.'session_variables' has the wrong structure
+2015-10-27T20:35:58.838626Z 0 [ERROR] Incorrect definition of table mysql.db: expected column 'User' at position 2 to have type char(32), found type char(16).
+2015-10-27T20:35:58.838653Z 0 [ERROR] mysql.user has no `Event_priv` column at position 28
+2015-10-27T20:35:58.838938Z 0 [ERROR] Event Scheduler: An error occurred when initializing system tables. Disabling the Event Scheduler.
+2015-10-27T20:35:58.839006Z 0 [Note] mysqld: ready for connections.
+Version: '5.7.9'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)

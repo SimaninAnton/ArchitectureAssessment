@@ -1,0 +1,3 @@
+olalonde commented on 27 Oct 2016 •
+edited
+https://github.com/docker/compose/blob/release/docs/overview.md#common-use-cases is a 404 and same for "the list of features" link.

@@ -1,0 +1,1 @@
+docker-compose config raises pyyaml exception with secrets in a service.

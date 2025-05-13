@@ -1,0 +1,55 @@
+Nitin286roxs commented on 24 Oct 2019 •
+edited by ndeloof
+I am running multiple modules [container] using docker-compose.
+when I press [CTRL+C] , i got following logs ...
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping perimeter-monitoring-engine   ... done
+Stopping perimeter-input-1             ... done
+Stopping perimeter-rule-engine         ... done
+Stopping perimeter-sink                ... done
+Stopping perimeter-per_detector        ... done
+Stopping perimeter-orchestrator        ... done
+##########################################################################
+But when i check docker ps-a, I get following log..
+uncanny@uncanny-H310M-H-2-0:~/Desktop/atm_project$ sudo docker ps -a
+
+CONTAINER ID                         IMAGE                 COMMAND                CREATED                STATUS                  PORTS                    NAMES
+
+3fd832518efe        perimeter_monitoring_engine:latest             "./run_monitoring.sh"    34 seconds ago      Exited (137) 9 seconds ago                       perimeter-monitoring-engine
+
+6aef9a55a37d        perimeter_input:latest                         "./run_inputEngine.sh"   34 seconds ago      Exited (137) 9 seconds ago                       perimeter-input-1
+
+ec7dc06b6a1c        perimeter_rules_engine:latest                  "./run_rules-engine.…"   34 seconds ago      Exited (137) 9 seconds ago                       perimeter-rule-engine
+
+d6cda1172b58        uvdeployment/node-common:sink_v1.0.3           "pm2-docker /uncanny…"   47 hours ago        Exited (0) 19 seconds ago                        perimeter-sink
+
+49580dc29824        perimeter_person_head_detector:latest          "./run_openvino_dete…"   47 hours ago        Exited (137) 9 seconds ago                       perimeter-per_detector
+
+b459f3f00bc9        perimeter_orchestrator:latest                  "./run_orchestrator.…"   47 hours ago        Exited (137) 9 seconds ago     perimeter-orchestrator
+Mean all the containers are crashing except "perimeter-sink" because this is handled by javascipt and other containers handling SINGINT by shell-scipt....
+One of Shell script is given blow..
+##################### run_rules-engine.sh #########################
+#!/bin/bash
+function trapCtrlC()
+{
+echo "perimeter_rules_engine safely exited"
+exit 0
+}
+trap trapCtrlC 2
+#echo "1111"
+python3 ./rules-engine.py -externalconfig=config/externalconfig/externalconfig.yaml &
+wait $!
+ret=$?
+if [ $ret -ne 0 ]; then
+#echo "not zero"
+exit $ret
+fi
+echo "done"`
+######################################################################
+I have no idea why all the *.sh is not receiving CTRL+C singnal, All the .*sh running with PID 1...
+UID PID PPID C STIME TTY TIME CMD
+root 1 0 0 10:49 ? 00:00:00 /bin/bash ./run_rules-engine.sh
+root 6 1 0 10:49 ? 00:00:01 python3 ./rules-engine.py -exter
+root 28 0 0 10:57 pts/0 00:00:00 ps -ef
+#######################################################################
+If anyone have any idea, help me, Thanks in advance.

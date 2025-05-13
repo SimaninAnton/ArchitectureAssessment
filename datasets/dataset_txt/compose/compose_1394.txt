@@ -1,0 +1,65 @@
+dleon-dsc commented on 12 Jun 2017
+I have MacOs Sierra 10.12.5 with Docker 17.5 and docker-compose 1.13, my yml file is:
+version: '3'
+
+services:
+  db:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_USER:'userpostgresql'
+      - POSTGRES_PASSWORD:'password'
+      - POSTGRES_DB:'postgresqldb'
+    build:
+      context: .
+      dockerfile: Dockerfile-postgresql
+    volumes:
+      - ./dbscripts:/docker-entrypoint-initdb.d
+  web:
+    restart: always
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./project:/code
+      - ./html:/var/www/website/html
+      - ./media:/var/www/website/media
+      - ./project/templates:/var/www/website/project/templates
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+With this, docker-compose build works fine, but when i want to run with docker-compose up shows the error:
+ERROR: for web  Cannot create container for service web: invalid port specification: "None"
+ERROR: Encountered errors while bringing up the project.
+Finally, i execute docker-compose config, says the port is None, but in the yml file i have declared "Ports" section, and ports still are None:
+networks: {}
+services:
+  db:
+    build:
+      context: /Users/adaniel/git/website
+      dockerfile: Dockerfile-postgresql
+    environment:
+      POSTGRES_DB:'onclouddev': null
+      POSTGRES_PASSWORD:'piNDEVybvY5ONCLOUDH4optuZYC': null
+      POSTGRES_USER:'onclouddev': null
+    image: postgres
+    restart: always
+    volumes:
+    - /Users/adaniel/git/website/dbscripts:/docker-entrypoint-initdb.d:rw
+  web:
+    build:
+      context: /Users/adaniel/git/website
+    command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+    - db
+    ports:
+    - None/tcp
+    restart: always
+    volumes:
+    - /Users/adaniel/git/website/oncloud:/code:rw
+    - /Users/adaniel/git/website/html:/var/www/website/html:rw
+    - /Users/adaniel/git/website/media:/var/www/website/media:rw
+    - /Users/adaniel/git/website/oncloud/templates:/var/www/website/oncloud/templates:rw
+version: '3.0'
+volumes: {}
+The most strange is, i did execute the same yml file on other Mac and other Linux and it is function correct; but what thing should i review for make that works?

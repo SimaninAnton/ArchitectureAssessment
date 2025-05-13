@@ -1,0 +1,34 @@
+Contributor
+dave-tucker commented on 5 Jan 2016
+In the current Docker CLI (as of 1.9) there are at least 4 ways of specifying a port mapping for -p
+containerPort
+hostPort:containerPort
+hostIP:hostPort:containerPort
+hostIP::containerPort
+As Compose is looking to make some incompatible changes in the v2 format I would like to propose that we move away from using the string and to instead use a hash/dictionary
+v1
+ports:
+  - "80"
+  - "8080:80"
+  - "192.168.99.100:8080:80"
+  - "192.168.99.100::80"
+Proposed v2**
+ports:
+  - container_port: 80
+
+  - host_port: 8080
+    container_port: 80
+
+  - host_ip: "192.168.99.100"
+    host_port: 8080
+    container_port: 80
+
+  - host_ip: "192.168.99.100"
+    container_port: 80
+The new format should be:
+Easier to read
+Easier to validate as the port numbers are int rather than string and there are no separators to deal with
+Easier to document - we replace 4 different string formats with 3 keys
+container_port is required, all other fields are optional
+host_port defines a specific port on the host
+host_ip specifies which IP address a port should bind to (default 0.0.0.0)

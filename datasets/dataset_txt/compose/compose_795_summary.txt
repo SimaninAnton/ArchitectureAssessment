@@ -1,0 +1,1 @@
+ERROR: for behat_tests Cannot start service behat_tests: linux mounts: Duplicate mount point '/dev/shm'

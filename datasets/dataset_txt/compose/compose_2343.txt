@@ -1,0 +1,21 @@
+tarunlalwani commented on 31 May 2016
+I have a simple docker-compose.yml file
+version: '2'
+
+services:
+  test:
+     image: centos:6.7
+     entrypoint: echo
+     command: echo From compose
+Now below is the command i execute
+[root@localhost test-compose]# docker-compose run test
+echo From compose
+[root@localhost test-compose]# docker-compose run test this is best
+this is best
+[root@localhost test-compose]# docker-compose run --entrypoint "" test /bin/bash
+/bin/bash
+[root@localhost test-compose]# docker-compose run --entrypoint /bin/bash test
+/bin/echo: /bin/echo: cannot execute binary file
+[root@localhost test-compose]# docker-compose run --entrypoint /bin/bash test ""
+/bin/echo: /bin/echo: cannot execute binary file
+As you can see I am not able to get into bash any how. I am using Docker 1.11.1. If any more is needed please let me know

@@ -1,0 +1,42 @@
+ghost commented on 23 Jun 2017
+My docker container is able to successfully build but when I enter the command docker-compose build, the following error is returned:
+Starting docker_etl_1 ... 
+Starting 1e5f56853e10_1e5f56853e10_1e5f56853e10_docker_postgis_1 ... 
+Starting 1e5f56853e10_1e5f56853e10_1e5f56853e10_docker_postgis_1
+Starting 1e5f56853e10_1e5f56853e10_1e5f56853e10_docker_postgis_1 ... error
+
+ERROR: for 1e5f56853e10_1e5f56853e10_1e5f56853e10_docker_postgis_1  Cannot start service 
+postgis: driver failed programming external connectivity on endpoint 
+1e5f56853e10_1e5f56853e10_1e5f56853e10_docker_postgis_1 
+(91464afbee8bf7212061797ec0f4c017a56cc3c30c9bdaf513127a6e6a4a5a52): Error starting 
+userland prStarting docker_etl_1 ... done
+
+ERROR: for postgis  Cannot start service postgis: driver failed programming external connectivity 
+on endpoint 1e5f56853e10_1e5f56853e10_1e5f56853e10_docker_postgis_1 
+(91464afbee8bf7212061797ec0f4c017a56cc3c30c9bdaf513127a6e6a4a5a52): Error starting 
+userland proxy: Bind for 0.0.0.0:5432 failed: port is already allocated
+Here is my docker-compose.yaml
+version: '2'
+services:
+  postgis:
+    build: ./postgis
+    volumes:
+      - ../src/main/sql:/sql
+    ports:
+      - "5432:5432"
+
+  etl:
+    build: ./etl
+    volumes:
+      - ..:/national-voter-file
+    entrypoint:
+      - python3
+      - /national-voter-file/load/loader.py
+and here is the Dockerfile:
+FROM mdillon/postgis:9.5
+ENV POSTGRES_DB VOTER
+RUN  mkdir /sql
+COPY ./dockerResources/z-init-db.sh /docker-entrypoint-initdb.d/
+EXPOSE 5432
+I don't believe I have another container running so I'm confused by the message Bind for 0.0.0.0:5432 failed: port is already allocated
+17

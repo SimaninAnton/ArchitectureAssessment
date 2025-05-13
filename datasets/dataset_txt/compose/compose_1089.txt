@@ -1,0 +1,32 @@
+JeroenBoersma commented on 9 Nov 2017
+We use a webservice setup with docker-compose for running a webserver with a php backend.
+Example stub
+version: "2"
+
+services:
+    db:
+        image: mysql
+    redis:
+        image: redis
+    php:
+        image: php
+        links:
+            - db
+            - redis
+    web:
+        image: nginx
+        links:
+            - php
+$ docker-compose up
+Creating project_db_1 ... 
+Creating project_redis_1 ... Done
+Creating project_php_1 ... 
+Creating project_web_1 ... Done
+This works as expected and the service is up and running.
+We also want to run a application cronjob we run a seperate php container with the correct command.
+$ docker-compose run php php path/to/cron.php
+Starting project_db_1... Done
+Starting project_redis_1... Done
+# Example Output Application!
+The Starting messages are overhead because the containers are already running and re-used for the cron run container.
+Several versions ago this was the default behavior, don't know what changed, but since a few versions these overhead messages are shown which is very annoying :-)

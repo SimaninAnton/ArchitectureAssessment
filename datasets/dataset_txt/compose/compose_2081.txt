@@ -1,0 +1,27 @@
+mairh commented on 9 Sep 2016
+I am getting the following error while starting mongo router in my docker container
+ERROR: for mongo_router  Cannot start service mongo_router: driver failed programming external connectivity on endpoint mongo_router (b2d8527f7082794642ab6b0d33db36eda0bc8f717a746d00f544a85d0ded2812): Bind for 0.0.0.0:28017 failed: port is already allocated
+ERROR: Encountered errors while bringing up the project.
+Error response from daemon: Container b1c2f7ac83a910113a1387dd22e272406f6ff4c45771e2160bdcbb8a8464933f is not running
+Error response from daemon: Container b1c2f7ac83a910113a1387dd22e272406f6ff4c45771e2160bdcbb8a8464933f is not running
+I am using Docker for Mac
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      linux/amd64
+I have tried removing all existing containers and setting up the containers again, but no luck and I am still receiving the same error.
+Greping port 28017 seems to be fine and shouldn't stop mongo router to beheve the way it is behaving now.
+lsof -n -i:28017 | grep LISTEN
+com.docke 431 Nish   20u  IPv4 0xfd0803c65df39e73      0t0  TCP *:28017 (LISTEN)
+com.docke 431 Nish   21u  IPv6 0xfd0803c65c29756b      0t0  TCP [::1]:28017 (LISTEN)

@@ -1,0 +1,59 @@
+lukaso commented on 26 Sep 2015
+Here is a simple test case to illustrate the problem. This was verified to work correctly in docker in this issue: moby/moby#14308.
+~/projects/docker_tests $ docker-compose --version
+docker-compose version: 1.4.0
+~/projects/docker_tests $ cat test.sh
+#!/bin/bash
+
+rm -rf foo
+mkdir -p foo/a/b/c
+mkdir -p foo/b/c/d/e
+
+cat >foo/Dockerfile <<EOF
+FROM ubuntu
+ADD . /foo
+WORKDIR foo
+EOF
+
+cat >foo/.dockerignore <<EOF
+a
+b/c
+EOF
+
+cat >foo/docker-compose.yml <<EOF
+test:
+  build: .
+  dockerfile: Dockerfile
+  volumes:
+    - .:/foo
+EOF
+
+docker-compose -f foo/docker-compose.yml build
+docker-compose -f foo/docker-compose.yml run test find .
+~/projects/docker_tests $ ./test.sh
+Building test...
+Step 0 : FROM ubuntu
+ ---> 91e54dfb1179
+Step 1 : ADD . /foo
+ ---> Using cache
+ ---> 02ebfcbd8bc2
+Step 2 : WORKDIR foo
+ ---> Using cache
+ ---> 981d6d1d5fd3
+Successfully built 981d6d1d5fd3
+.
+./.dockerignore
+./a
+./a/b
+./a/b/c
+./b
+./b/c
+./b/c/d
+./b/c/d/e
+./docker-compose.yml
+./Dockerfile
+Expected output for the find command is:
+.
+./.dockerignore
+./b
+./Dockerfile

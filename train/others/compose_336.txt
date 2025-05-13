@@ -1,0 +1,15 @@
+Contributor
+qboot commented on 7 Jan 2019
+hello!
+I recently received this Github alert on a project because I'm using a pyyaml version <4.2b1:
+CVE-2017-18342
+high severity
+Vulnerable versions: < 4.2b1
+Patched version: 4.2b1
+In PyYAML before 4.1, the yaml.load() API could execute arbitrary code. In other words, yaml.safe_load is not used.
+After some research it seems that it's because docker-compose require PyYAML >= 3.10, < 4 in setup.py :
+compose/setup.py
+Line 35 in 64633a8
+ 'PyYAML >= 3.10, < 4', 
+Is there any contraindication to not authorize version >4 ? Thanks.
+2

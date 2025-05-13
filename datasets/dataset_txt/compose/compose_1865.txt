@@ -1,0 +1,43 @@
+rootsongjc commented on 8 Dec 2016 •
+edited
+I have 3 hosts which have networks bellow:
+172.18.0.3:root@test-003:/root/swarm]# docker network ls
+NETWORK ID NAME DRIVER
+4cb0abf16180 test-001/bridge bridge
+24143189e311 test-001/host host
+844e5c5691b6 test-001/mynet bridge
+fe3f9a93a55f test-001/none null
+dad5687721c5 test-002/bridge bridge
+fd0edcb397c5 test-002/host host
+5394f7de730b test-002/mynet bridge
+1127fb1430e0 test-002/none null
+82fcb3434747 test-003/bridge bridge
+28048b56fcee test-003/host host
+c7d82cbc5a33 test-003/mynet bridge
+7244035f3422 test-003/none null
+Now I want to use "mynet" on swarm.
+docker-compose.yml
+version: '2'
+services:
+host1:
+dns:
+- 172.20.0.1
+- 172.20.0.2
+image: sz-pg-oam-docker-hub-001.tendcloud.com/library/centos:7.2.1511
+hostname: host1
+networks:
+- mynet
+networks:
+mynet:
+external:
+name: mynet
+docker-compose --verbose up
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('mynet') ERROR: compose.cli.main.main: Network mynet declared as external, but could not be found. Please create the network manually using docker network create mynetand try again.
+Environment
+docker1.11.1
+swarm1.2.2
+docker-compose1.9.0
+docker-py version: 1.10.6
+CPython version: 2.7.9
+I see if I use the network name "test-003/mynet" in my docker-compose.yml, the service will be created but cannot start because the swarm agent cannot find the network, it only aware of "mynet".
+2

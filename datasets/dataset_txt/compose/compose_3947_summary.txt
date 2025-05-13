@@ -1,0 +1,1 @@
+Fig could pull and build images in parallel to speed things up.

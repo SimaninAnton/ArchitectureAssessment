@@ -1,0 +1,161 @@
+Contributor
+kinghuang commented on 20 Apr 2017 •
+edited
+Problem Description
+Docker Compose files are YAML files. In YAML, anchors can be used to reference and duplicate content across a document. For example, the following YAML declares an anchor named base that is applied to foo.
+Source:
+base: &base
+    name: Everyone has same name
+
+foo:
+    <<: *base
+    age: 10
+Result:
+base:
+    name: Everyone has same name
+
+foo:
+    name: Everyone has same name
+    age: 10
+It is possible to use YAML anchors in Docker Compose files so that one service is used as the base of another service. For example, the following snippet declares a service named .function that has an anchor named function, which is used as the base of the function1 and function2 services.
+services:
+  .function: &function
+    image: fscm
+    labels:
+      function: 'true'
+    networks:
+      - functions
+
+  function1:
+    <<: *function
+    environment:
+      fprocess: 'mkfscmproj'
+
+  function2:
+    <<: *function
+    environment:
+      fprocess: 'mkpcgeneral'
+In the above example, the .function service is meant to be used as an abstract definition for the concrete function1 and function2 services, and should not be run as an actual service by Docker Compose. Service names cannot contain . in their names, so the above example cannot be deployed at all using docker stack deploy.
+Proposed Solution
+I propose that a future Docker Compose file format treat services starting with . as hidden, so that they can be easily used with YAML anchors. These hidden services would not be deployed and can be ignored by Docker Compose and docker stack deploy. This is similar to GitLab CI YAML files, where jobs starting with a . are considered hidden.
+Example Usage
+In the Functions as a Service project, functions are declared as individual services in a Docker Compose file. There can be a large number of functions, all with nearly identical service declarations, resulting in lots of repeated lines. Here is an example of a Docker Compose file with four functions as services written in the Docker Compose 3 file format, and then with a hidden service. This example is based on the docker-compose.yml file in alexellis/faas.
+Docker Compose version 3 format
+version: "3"
+services:
+  gateway:
+    image: functions/gateway:${FAAS_VERSION}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - functions
+
+  # Uses `cat` to echo back response, fastest function to execute.
+  echoit:
+    image: functions/alpine:health
+    labels:
+      function: "true"
+    depends_on:
+      - gateway
+    networks:
+      - functions
+    environment:
+      fprocess: "cat"
+
+  # Counts words in request with `wc` utility
+  wordcount:
+    image: functions/alpine:health
+    labels:
+      function: "true"
+      com.faas.max_replicas: "10"
+    depends_on:
+      - gateway
+    networks:
+      - functions
+    environment:
+      fprocess: "wc"
+
+  # Calculates base64 representation of request body.
+  base64:
+    image: functions/alpine:health
+    labels:
+      function: "true"
+    depends_on:
+      - gateway
+    networks:
+      - functions
+    environment:
+      fprocess: "base64"
+
+  # Decodes base64 representation of request body.
+  decodebase64:
+    image: functions/alpine:health
+    labels:
+      function: "true"
+    depends_on:
+      - gateway
+    networks:
+      - functions
+    environment:
+      fprocess: "base64 -d"
+
+networks:
+  functions:
+    driver: overlay
+With YAML anchors and . hidden service
+version: "3"
+services:
+  gateway:
+    image: functions/gateway:${FAAS_VERSION}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - functions
+  
+  .function: &function
+    image: functions/alpine:health
+    labels:
+      function: "true"
+    depends_on:
+      - gateway
+    networks:
+      - functions
+
+  # Uses `cat` to echo back response, fastest function to execute.
+  echoit:
+    <<: *function
+    environment:
+      fprocess: "cat"
+
+  # Counts words in request with `wc` utility
+  wordcount:
+    <<: *function
+    environment:
+      fprocess: "wc"
+
+  # Calculates base64 representation of request body.
+  base64:
+    <<: *function
+    environment:
+      fprocess: "base64"
+
+  # Decodes base64 representation of request body.
+  decodebase64:
+    <<: *function
+    environment:
+      fprocess: "base64 -d"
+
+networks:
+  functions:
+    driver: overlay
+With anchors, the declarations for echoit, wordcount, base64, and decodebase64 are much more terse, and contain only the parts specific to them.
+Related Issues
+This is partially related to the discussions about the lack of support for extends in version 3. See #4315 and moby/moby#31101. However, this does not replace the functionality offered by extends because YAML anchors do not offer Docker Compose's behaviour for combining lists and dictionaries.

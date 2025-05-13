@@ -1,0 +1,6 @@
+AnthonyMastrean commented on 29 Mar 2019 •
+edited
+It seems like installing Compose on docker:stable inside a GitLab CI build is a pretty popular workflow (see #6617). In this issue, @ulyssessouza said:
+This is related to the new SSH support which added some new dependencies. On our test systems these dependencies are already available once pip is installed. #6617 (comment)
+Should you add this configuration to your build matrix?
+3

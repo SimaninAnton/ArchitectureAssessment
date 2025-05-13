@@ -1,0 +1,47 @@
+IAmJulianAcosta commented on 27 Jan 2016
+My docker-composer.yml
+wordpress-data:
+   image: myproject/data
+   volumes:
+     - /src/wordpress:/data
+   container_name: wordpress-data
+
+wordpress-database-data:
+   image: myproject/database-data
+   container_name: wordpress-database-data
+
+wordpress:
+  image: myproject/php-fpm
+  volumes:
+    - ./wordpress/php-fpm.conf:/etc/php7/fpm/php-fpm.conf
+  links:
+    - wordpress-database
+  container_name: wordpress-php
+  volumes_from:
+    - wordpress-data
+
+wordpress-database:
+  image: myproject/mariadb
+  volumes_from:
+   - wordpress-database-data
+  environment:
+   - MYSQL_ROOT_PASSWORD=secret
+  container_name: wordpress-database
+
+wordpress-cli:
+    image: myproject/wp-cli
+    container_name: wordpress-cli
+    links:
+      - wordpress-data
+    volumes_from:
+      - wordpress-data
+I run docker-compose up -d, but when I run docker-compose run --rm wordpress-cli --allow-root, I get the following error:
+Creating wordpress-data
+ERROR: Conflict. The name "wordpress-data" is already in use by container ff355f0747ac. You have to remove (or rename) that container to be able to reuse that name.
+But sometimes I get
+Starting wordpress-data
+...output of wp-cli
+There is nothing that makes the difference. I just stop and remove the containers and after running docker-compose-up.sh, the container is created, but sometimes it starts... When I use -p project-name when running docker-compose up, the problem occurs.
+docker-compose -v
+docker-compose version: 1.5.1
+Edit: Same problem with 1.6.0-RC2

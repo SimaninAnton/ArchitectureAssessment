@@ -1,0 +1,116 @@
+Maicius commented 29 days ago •
+edited
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.8.0, build unknown
+docker-py version: 1.9.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Output of docker version
+Client:
+ Version:           18.09.7
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        2d0083d
+ Built:             Fri Aug 16 14:19:38 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.7
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       2d0083d
+  Built:            Thu Aug 15 15:12:41 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  default:
+    driver: bridge
+services:
+  judge-server:
+    cap_drop:
+    - SETPCAP
+    - MKNOD
+    - NET_BIND_SERVICE
+    - SYS_CHROOT
+    - SETFCAP
+    - FSETID
+    container_name: judge-server
+    environment:
+      BACKEND_URL: http://oj-backend:8000/api/judge_server_heartbeat/
+      SERVICE_URL: http://judge-server:8080
+      TOKEN: CHANGE_THIS
+    image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/judge_server
+    read_only: true
+    restart: always
+    tmpfs:
+    - /tmp
+    volumes:
+    - /root/oj/OnlineJudgeDeploy/data/backend/test_case:/test_case:ro
+    - /root/oj/OnlineJudgeDeploy/data/judge_server/log:/log:rw
+    - /root/oj/OnlineJudgeDeploy/data/judge_server/run:/judger:rw
+  oj-backend:
+    container_name: oj-backend
+    depends_on:
+    - oj-redis
+    - oj-postgres
+    - judge-server
+    environment:
+      JUDGE_SERVER_TOKEN: CHANGE_THIS
+      POSTGRES_DB: onlinejudge
+      POSTGRES_PASSWORD: onlinejudge
+      POSTGRES_USER: onlinejudge
+    image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/oj_backend
+    ports:
+    - 0.0.0.0:80:8000
+    - 0.0.0.0:443:1443
+    restart: always
+    volumes:
+    - /root/oj/OnlineJudgeDeploy/data/backend:/data:rw
+  oj-postgres:
+    container_name: oj-postgres
+    environment:
+      POSTGRES_DB: onlinejudge
+      POSTGRES_PASSWORD: onlinejudge
+      POSTGRES_USER: onlinejudge
+    image: postgres:10-alpine
+    restart: always
+    volumes:
+    - /root/oj/OnlineJudgeDeploy/data/postgres:/var/lib/postgresql/data:rw
+  oj-redis:
+    container_name: oj-redis
+    image: redis:4.0-alpine
+    restart: always
+    volumes:
+    - /root/oj/OnlineJudgeDeploy/data/redis:/data:rw
+version: '2.0'
+volumes: {}
+Steps to reproduce the issue
+Because the default network address of docker conflicts with that of my server, I need to modify the default network address of docker.
+Modify the docker0 subnet and gateway as the target address. The following information shows that I have successfully modified it:
+
+built and run the docker-compose with command: docker-compose up -d
+Observed result
+The subnet addr and gateway of my app didn't change:
+Expected result
+The subnet addr and gateway of my app should be the same as that of bridge, because this is the bridge mode used
+Additional information
+In addition, I also tried to create a new network with the following command:
+docker network create -d bridge --subnet=192.168.1.0/24 --gateway=192.168.1.254 test
+and use it instead of deafult by change the yml:
+networks:
+  default:
+    driver: test
+but anther error occured:
+Creating network "onlinejudgedeploy_default" with driver "test"
+ERROR: plugin "test" not found
+But when I use a single container to connect to the test network, the display is normal
+The two windows on the right are before and after launching the container Ubuntu
+More interestingly, although I can't modify the default subnet and gateway, I can change the IP by restarting the container:
+You can see that the subnet has "+ 1" and become 172.18.0.0/16 from 172.17.0.0.16. Add 1 for each restart. So, 172.18 didn't conflict with my server and my problem was solved. But, why can't I modify the gateway and subnet directly, is this a feature or a bug?
+I did the experiments on MacOS 10.13 and CentOS 7.

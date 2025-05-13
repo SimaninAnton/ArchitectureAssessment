@@ -1,0 +1,14 @@
+docteurklein commented on 30 Jun 2015
+Hi!
+I'm in a use-case where I have a basic docker-compose.yml file that defines a php service talking to a db service.
+Now I added a second file named "dev.yml" where I extend all the services from docker-compose.yml and I add a volumes key to the php service.
+This scenario does not work (services with 'links' cannot be extended) and I don't think the docs are quite clear on this behavor. (EDIT: it's clear but stay with me :))
+Docs says that links won't be copied:
+Compose copies configurations from the original service over to the local one, except for links and volumes_from. These exceptions exist to avoid implicit dependencies—you always define links and volumes_from locally.
+What I'd like is to not being forced to create a prod.yml file, just to add a links section.
+I'm perfectly OK with the idea of always defining links locally (and not merging the array like it's done with expose f.e).
+But I think the base file can also be considered a perfectly valid leaf.
+I'd like my docker-compose.yml file to be the standard, and dev.yml to add some volumes (and define links locally in it).
+I hope I'm clear :)
+I think there is no reasion why I can't define links in the base file. It would be great if I just had to redefine them if needed in any other file that extends it.
+21

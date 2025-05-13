@@ -1,0 +1,124 @@
+Aarbel commented on 29 Dec 2017 •
+edited
+Problem
+Hi Docker teams !
+I'm using a CI (Circle CI V2) and docker-compose doesn't mount volumes with the host files. How could i fix this issue ? Thanks a lot for your help !
+NOTE 1 : Everything works fine on my computer (MacOSX) and on my EC2 servers for production (Ubuntu 16.04).
+NOTE 2 : i checked #4585 but didn't found a way to fix my problem
+Details of the problem
+command
+docker-compose run --rm api-server
+docker-compose.yaml
+version: '2'
+services:
+
+  maildev:
+    image: djfarrelly/maildev
+    ports:
+      - "${CLOVIS_MAILDEV_PORT}:80"
+
+
+  api-server:
+    environment:
+      CLOVIS_CLIENT_URL: "http://localhost:${CLOVIS_CLIENT_PORT}"
+      AWS_ACCESS_KEY_ID: "${CLOVIS_AWS_ID}"
+      AWS_SECRET_ACCESS_KEY: "${CLOVIS_AWS_SECRET}"
+      CLOVIS_RUN_SLOW_TESTS: "${CLOVIS_RUN_SLOW_TESTS}"
+      CLOVIS_SMTP_HOST: "maildev"
+      CLOVIS_SMTP_PORT: "25"
+      GOOGLEMAP_KEY: "${CLOVIS_GOOGLEMAP_KEY}"
+    build:
+      context: .
+      dockerfile: api-server/Dockerfile.dev
+
+    volumes:
+      - ./api-server/src:/usr/src/api-server/src:ro
+      - ./api-server/resources:/usr/src/api-server/resources:ro
+      - ./email/src:/usr/src/email/src:ro
+      - ./sms/src:/usr/src/sms/src:ro
+      - ./api-server/scripts:/usr/src/api-server/scripts:ro
+
+    command: yarn run watch
+
+    ports:
+      - "${CLOVIS_API_PORT}:3000"
+
+    links:
+      - mongo:mongo
+      - maildev:maildev
+
+    tty: true
+
+
+  mongo:
+    image: mongo
+    logging:
+      driver: "none"
+Local (MacOSX) - Everything works !
+Docker version
+$ docker --version
+Docker version 17.09.1-ce, build 19e2cf6
+$ docker-compose --version
+docker-compose version 1.17.1, build 6d101fb
+Listing the files
+$ ls -ln
+-rw-r--r--   1 501  20  1897 Dec 26 17:25 Dockerfile.dev
+drwxr-xr-x  14 501  20   476 Dec 28 15:42 api-server
+-rwxr-xr-x   1 501  20  2650 Dec 29 18:03 dev.sh
+-rw-r--r--   1 501  20  3098 Dec 29 17:43 docker-compose.dev.yml
+drwxr-xr-x  11 501  20   374 Dec 26 17:25 email
+drwxr-xr-x  20 501  20   680 Dec 29 18:10 scripts
+drwxr-xr-x   9 501  20   306 Dec 26 17:25 sms
+
+
+$ docker-compose exec api-server pwd
+/usr/src/api-server
+
+$ docker-compose exec p2 ls -ln src
+-rw-r--r--  1 0 0  1363 Dec 26 16:25 app.js
+-rw-r--r--  1 0 0   797 Dec 26 16:25 auth.js
+-rw-r--r--  1 0 0  1122 Dec 26 16:25 avatar.js
+-rw-r--r--  1 0 0    99 Feb 26  2017 aws.js
+-rw-r--r--  1 0 0  1678 Dec 26 16:25 config.js
+drwxr-xr-x 21 0 0   714 Dec 26 16:25 controllers
+drwxr-xr-x  8 0 0   272 Dec 28 13:05 cron
+-rw-r--r--  1 0 0   989 Dec 26 16:25 db.js
+etc... 
+
+>>> ok all my files and folders are copied from host ./api-server/src 
+>>> to mounted container /usr/src/api-server/src ! perfect !
+
+$ docker-compose exec p2 ls -ln ..
+drwxr-xr-x 1 0 0 4096 Dec 28 15:48 api-server
+drwxr-xr-x 1 0 0 4096 Dec 28 15:48 email
+drwxr-xr-x 1 0 0 4096 Dec 28 15:48 sms
+Remote (Circle-CI, Ubuntu 14.04) - Volume mount doesn't work
+Docker version
+$ docker --version
+Docker version 17.12.0-ce, build c97c6d6
+
+$ docker-compose --version
+docker-compose version 1.11.2, build dfed245
+Listing the files
+$ ls -ln
+-rw-r--r-- 1 3434 3434 1897 Dec 29 20:16 Dockerfile.dev
+drwxr-xr-x 5 3434 3434 4096 Dec 29 20:16 api-server
+-rwxr-xr-x 1 3434 3434 2650 Dec 29 20:16 dev.sh
+-rw-r--r-- 1 3434 3434 3098 Dec 29 20:16 docker-compose.dev.yml
+drwxr-xr-x 3 3434 3434 4096 Dec 29 20:16 email
+drwxr-xr-x 3 3434 3434 4096 Dec 29 20:16 scripts
+drwxr-xr-x 3 3434 3434 4096 Dec 29 20:16 sms
+
+$ docker-compose exec -T api-server pwd
+/usr/src/api-server
+
+$ docker-compose exec -T api-server ls -ln src
+
+>>> ?!!! there's no file here, the volume isn't mounted with the host files :/
+>>> (cf docker-compose.yaml file '-./api-server/src:/usr/src/api-server/src:ro' )
+
+$ docker-compose exec -T api-server ls -ln ..
+drwxr-xr-x 6 0 0 4096 Dec 29 20:23 api-server
+drwxr-xr-x 4 0 0 4096 Dec 29 20:23 email
+drwxr-xr-x 4 0 0 4096 Dec 29 20:23 sms
+Do you have any idea what happened on the remote Circle Ci and how to fix that ?

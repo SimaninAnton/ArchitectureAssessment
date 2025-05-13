@@ -1,0 +1,88 @@
+spatchamatla commented on 14 Mar 2019
+ENVIRONMENT VARIABLES from .env are setting to empty string in docker compose file
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+WARNING: The POSTGRES_VERSION variable is not set. Defaulting to a blank string.
+WARNING: The POSTGRES_USER variable is not set. Defaulting to a blank string.
+WARNING: The POSTGRES_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The POSTGRES_DB variable is not set. Defaulting to a blank string.
+services:
+  testpg:
+    environment:
+      POSTGRES_DB: ''
+      POSTGRES_PASSWORD: ''
+      POSTGRES_USER: ''
+      POSTGRES_VERSION: '9.6'
+    expose:
+    - 5432
+    image: 'testpgimage:'
+    ports:
+    - published: 5432
+      target: 5432
+version: '3.7'
+Steps to reproduce the issue
+postgreServer-test.yml
+# To execute this docker-compose yml file use docker-compose -f <file_name> up
+# Add the "-d" flag at the end for detached execution
+version: "3.7"
+services:
+    testpg:
+        env_file:
+          - POSTGRES_SERVER.env
+        image: testpgimage:${POSTGRES_VERSION}
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+        expose:
+            - 5432
+POSTGRES_SERVER.env
+POSTGRES_VERSION=9.6
+POSTGRES_USER=testuser
+POSTGRES_PASSWORD=testPWD
+POSTGRES_DB=testdb
+Expected result
+services:
+  testpg:
+    environment:
+      POSTGRES_VERSION='9.6'
+      POSTGRES_USER='testuser'
+      POSTGRES_PASSWORD='testPWD'
+      POSTGRES_DB='testdb'
+    expose:
+    - 5432
+    image: 'testpgimage:9.6'
+    ports:
+    - published: 5432
+      target: 5432
+version: '3.7'
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Mac OS 10.14.3, docker installed as desktop

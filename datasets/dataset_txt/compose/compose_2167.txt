@@ -1,0 +1,4 @@
+furiousOyster commented on 8 Aug 2016
+I am not sure how to make this happen, but on my machine, I observe that somehow, "docker-compose up" had made two networks of exactly the same name.
+Now when I try to build containers, and specify the compose network name, it randomly picks between the two. This sounds simple but took a while to notice.
+I think that compose should either refuse to create a network with the same name, or should remove the old network before making the new one.

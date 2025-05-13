@@ -1,0 +1,13 @@
+cgcgbcbc commented on 21 Feb 2016
+The same following compose file works well in one host but failed in another host, while they are using the same version of docker and docker-compose
+ssl:
+  image: quay.io/letsencrypt/letsencrypt
+  volumes:
+   - ./cli.ini:/etc/letsencrypt/cli.ini
+   - ./certs:/etc/letsencrypt
+   - ./letsencrypt_challenge:/usr/share/nginx/html
+docker-compose version
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.6
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014

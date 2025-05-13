@@ -1,0 +1,4 @@
+dkirrane commented on 2 Mar 2015
+It would be useful if one could do this
+docker-compose build service1 service2 --no-cache
+5

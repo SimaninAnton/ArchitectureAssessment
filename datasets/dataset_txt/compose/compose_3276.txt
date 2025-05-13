@@ -1,0 +1,19 @@
+maxatwork commented on 21 Sep 2015
+Trying to perform docker-compose build in a directory with a path containing non-ascii characters (Russian letters), got this:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 39, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 135, in build
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 233, in build
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 701, in build
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 17-22: ordinal not in range(128)
+Doing the same in a directory without non-ascii characters in a path seems to be OK.
+Mac OS X 10.10.5
+Python 2.7.10
+docker 1.8.1, build d12ea79
+docker-machine 0.4.1 (e2c88d6)
+docker-compose v1.4.0

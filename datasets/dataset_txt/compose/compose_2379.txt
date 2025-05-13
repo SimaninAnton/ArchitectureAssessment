@@ -1,0 +1,21 @@
+tugberkugurlu commented on 20 May 2016
+When I press CTRL + C, docker compose gives me the below error in some cases leaving containers in the running state:
+^CTraceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/compose/cli/main.py", line 55, in main
+  File "/code/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/code/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/code/compose/cli/main.py", line 174, in perform_command
+  File "/code/compose/cli/main.py", line 646, in up
+  File "/usr/local/lib/python2.7/contextlib.py", line 21, in __exit__
+  File "/code/compose/cli/signals.py", line 12, in shutdown
+compose.cli.signals.ShutdownException
+docker-compose returned -1
+Docker Compose:
+docker-compose version 1.6.0, build d99cad6
+OS:
+Distributor ID: Ubuntu
+Description:    Ubuntu 14.04.4 LTS
+Release:    14.04
+Codename:   trusty
+Linux ubuntu 3.19.0-49-generic #55~14.04.1-Ubuntu SMP Fri Jan 22 11:24:31 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux

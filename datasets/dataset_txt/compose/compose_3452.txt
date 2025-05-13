@@ -1,0 +1,3 @@
+docteurklein commented on 21 Jul 2015
+Curently it's not possible to know the size of the upload when using docker-compose build.
+15

@@ -1,0 +1,7 @@
+dkapanidis commented on 13 Feb 2015
+Now that we have the possibility to run docker container on read-only filesystem with docker v1.5 It would be really cool to have it on docker-compose.yml format also.
+That would be very useful in order to create immutable infrastructures.
+compose.yml example format could follow the same format as privileged boolean flag:
+nginx:
+  image: nginx:1.7.9
+  read_only: true

@@ -1,0 +1,23 @@
+saikrishnav commented on 27 Sep 2019
+My DockerFile starts like this:
+ARG BASEIMAGE
+FROM ${BASEIMAGE} as base-image
+RUN echo ${BASEIMAGE}
+........
+now, when I do :
+docker build --build-arg BASEIMAGE=localimage:v1 .
+this works.
+But my docker-compose yml which has this:
+services:
+web:
+build:
+context: .
+dockerfile: service.dockerfile
+args:
+BASEIMAGE: ''
+when I issue command:
+docker-compose build --build-arg BASEIMAGE=localimage:v1
+this doesn't work and throws the below errors:
+Building web Step 1/11 : ARG BASEIMAGE Step 2/11 : FROM ${BASEIMAGE} as base-image ERROR: Service 'web' failed to build: pull access denied for localimage, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+I know that this is related to issue 6668. But the workaround specified in that doesn't work with "up" command. "--pull-ignore-failures" is not supported with "up" command and I cannot spin up the service(s) at all using the local images.
+I am trying to create "dev environment" for my repo and I cannot do that with docker-compose due to this. Idea is to build images locally, test them out by deploying them, then push to Container Registry for further testing if necessary. Now, I cannot do that using docker-compose since local images are not supported.

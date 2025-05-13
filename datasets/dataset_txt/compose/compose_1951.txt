@@ -1,0 +1,4 @@
+whitecolor commented on 6 Nov 2016
+Out of the box compose tries to find and apply docker-compose.override.yml, why not make such feature for convinience for other files passed in -f option
+So that docker-compose -f docker-compose-dev.yml would also try to lookup and apply docker-compose-dev.override.yml
+2

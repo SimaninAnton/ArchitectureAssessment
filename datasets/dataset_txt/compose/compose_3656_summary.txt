@@ -1,0 +1,1 @@
+Dockerfile ADD relative path when initiated from docker-compose build

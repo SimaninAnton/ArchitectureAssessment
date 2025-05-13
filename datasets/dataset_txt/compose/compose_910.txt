@@ -1,0 +1,43 @@
+su-narthur commented on 28 Jan 2018
+I'm getting the following error when running docker-compose commands:
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information. If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+Once I start getting the errors, I consistently get the errors for docker-compose commands until I restart Docker via the toolbar menu.
+Turning off wifi doesn't help
+Adding these entries to /etc/hosts doesn't help:
+127.0.0.1       localunixsocket.local  
+127.0.0.1       localunixsocket  
+127.0.0.1       localunixsocket.lan
+Docker diagnose comes up clean
+Stopping all other containers than the 3 needed for this app doesn't help. All remaining containers are healthy.
+ping localhost works
+docker container ls (and other docker commands) works instantly
+I can successfully telnet into all my running containers' published ports
+I can use my app via the browser without any problems
+No docker updates available ("Docker 17.12.0-ce-mac49 is currently the newest version available.")
+I have no reference to tty in my docker-compose.yml or Dockerfile files
+OS: macOS High Sierra version 10.13.2 (17C205)
+Processor: 3.4 GHz Intel Core i5
+Memory: 40 GB 2400 MHz DDR4 (I'm not using anywhere near that much)
+My docker diagnostics ID is 0F286399-29FA-49AB-A3E7-669DB39AD08B
+Docker for Mac: version: 17.12.0-ce-mac49 (d1778b704353fa5b79142a2055a2c11c8b48a653)
+macOS: version 10.13.2 (build: 17C205)
+logs: /tmp/0F286399-29FA-49AB-A3E7-669DB39AD08B/20180128-105656.tar.gz
+[OK] db.git
+[OK] vmnetd
+[OK] dns
+[OK] driver.amd64-linux
+[OK] virtualization VT-X
+[OK] app
+[OK] moby
+[OK] system
+[OK] moby-syslog
+[OK] kubernetes
+[OK] env
+[OK] virtualization kern.hv_support
+[OK] slirp
+[OK] osxfs
+[OK] moby-console
+[OK] logs
+[OK] docker-cli
+[OK] menubar
+[OK] disk

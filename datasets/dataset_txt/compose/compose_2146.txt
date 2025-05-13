@@ -1,0 +1,40 @@
+yngvark commented on 16 Aug 2016
+Problem: Running nginx using docker-compose doesn't work, but running with docker run works fine.
+Details:
+docker-compose.yml in folder nginxcompose:
+version: '2'
+services:
+  mytestserver:
+    image: nginx
+    ports:
+      - "80:80"
+After running docker-compose up, and accessing http://localhost, Chrome's status bar says "Waiting for localhost" (which is different from not running docker-compose at all).
+The nginx log is empty.
+Expected behaviour is that I get shown the Nginx startup site.
+I can get Nginx to work by simply running
+docker run -p 80:80 nginx
+Version details:
+docker version:
+
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 22:11:10 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 22:11:10 2016
+ OS/Arch:      linux/amd64
+
+docker-compose version:
+
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

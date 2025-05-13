@@ -1,0 +1,56 @@
+prochnowc commented on 23 Feb 2017
+I receive pywintypes.error: (232, 'WriteFile', 'The pipe is being closed.') when trying to build a container on Windows.
+version: '2.1'
+PS C:\> docker-compose version
+docker-compose version 1.11.1, build 7afaa436
+docker-py version: 2.0.2
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+PS C:\dev\Source\DevTools\Docker> docker version
+Client:
+ Version:      1.13.1
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   092cba3
+ Built:        Wed Feb  8 08:47:51 2017
+ OS/Arch:      windows/amd64
+ Server:
+ Version:      1.13.1
+ API version:  1.26 (minimum version 1.24)
+ Go version:   go1.7.5
+ Git commit:   092cba3
+ Built:        Wed Feb  8 08:47:51 2017
+ OS/Arch:      windows/amd64
+ Experimental: true
+PS C:\dev\Source\DevTools\Docker> docker-compose -f .\docker-compose.windows.yml build
+consul uses an image, skipping
+sql uses an image, skipping
+Building audittrail
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose\cli\main.py", line 88, in main
+  File "compose\cli\main.py", line 140, in perform_command
+  File "compose\cli\main.py", line 247, in build
+  File "compose\project.py", line 313, in build
+  File "compose\service.py", line 804, in build
+  File "site-packages\docker\api\build.py", line 205, in build
+  File "site-packages\docker\utils\decorators.py", line 47, in inner
+  File "site-packages\docker\api\client.py", line 175, in _post
+  File "site-packages\requests\sessions.py", line 522, in post
+  File "site-packages\requests\sessions.py", line 475, in request
+  File "site-packages\requests\sessions.py", line 596, in send
+  File "site-packages\requests\adapters.py", line 423, in send
+  File "site-packages\requests\packages\urllib3\connectionpool.py", line 595, in urlopen
+  File "site-packages\requests\packages\urllib3\connectionpool.py", line 363, in _make_request
+  File "httplib.py", line 1042, in request
+  File "httplib.py", line 1082, in _send_request
+  File "httplib.py", line 1038, in endheaders
+  File "httplib.py", line 886, in _send_output
+  File "httplib.py", line 855, in send
+  File "site-packages\docker\transport\npipesocket.py", line 22, in wrapped
+  File "site-packages\docker\transport\npipesocket.py", line 159, in sendall
+  File "site-packages\docker\transport\npipesocket.py", line 22, in wrapped
+  File "site-packages\docker\transport\npipesocket.py", line 154, in send
+pywintypes.error: (232, 'WriteFile', 'The pipe is being closed.')
+Failed to execute script docker-compose
+1

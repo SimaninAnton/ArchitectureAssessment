@@ -1,0 +1,2 @@
+Gabology commented on 2 Jul 2018
+Currently it looks like only version 2 Compose files support storage_opt. It would be a very useful addition if support for storage_opt was extended to version 3 as well.

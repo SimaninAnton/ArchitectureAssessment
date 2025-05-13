@@ -1,0 +1,175 @@
+devotox commented on 3 Mar 2016
+Output of docker version:
+Client:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 19:14:21 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 22:37:33 2016
+ OS/Arch:      linux/amd64
+Output of docker info:
+Containers: 7
+ Running: 6
+ Paused: 0
+ Stopped: 1
+Images: 54
+Server Version: 1.10.2
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 135
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: bridge null host
+Kernel Version: 4.1.18-boot2docker
+Operating System: Boot2Docker 1.10.2 (TCL 6.4.1); master : 611be10 - Mon Feb 22 22:47:06 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 3.858 GiB
+Name: doctify-dev
+ID: HLTD:ZB4A:DRIQ:Y4AO:ZCMF:7MFK:KJU3:FHII:AWMS:YXVD:BO4W:JHVG
+Debug mode (server): true
+ File Descriptors: 74
+ Goroutines: 113
+ System Time: 2016-03-03T10:35:14.794778199Z
+ EventsListeners: 1
+ Init SHA1:
+ Init Path: /usr/local/bin/docker
+ Docker Root Dir: /mnt/sda1/var/lib/docker
+Username: devotox
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox
+My Compose File:
+version: '2'
+volumes:
+    tmp: {}
+services:
+    openvpn:
+        image: kylemanna/openvpn
+        ports:
+            - 1194:1194/udp
+        volumes:
+            - ../openvpn:/etc/openvpn
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - /dev/net/tun
+    server:
+        build:
+            context: ../nginx
+            dockerfile: Dockerfile
+        volumes:
+            - ../security:/var/app/current/security
+            - ../sslcert:/var/app/current/sslcert
+            - ../shared:/var/app/current/shared
+            - ../nginx:/etc/nginx
+            - /var/log/nginx
+            - tmp:/tmp
+        volumes_from:
+            - api
+            - intranet
+        ports:
+            - 80
+            - 443
+        networks:
+            - container:openvpn
+        extends:
+            service: base
+            file: ../shared/base.yml
+    api:
+        command: bash -c "gulp start-prod | tee -a /var/log/nodejs/api/api.log"
+        build:
+            context: ../api
+            dockerfile: Dockerfile
+        volumes:
+            - ../sslcert:/var/app/current/sslcert
+            - /var/app/current/api/node_modules
+            - ../shared:/var/app/current/shared
+            - ../api:/var/app/current/api
+            - /var/log/nodejs/api
+            - /tmp/api
+        ports:
+            - 3000
+            - 3001
+        extends:
+            service: base
+            file: ../shared/base.yml
+        networks:
+            - container:openvpn
+    intranet:
+        command: bash -c "ember build dist | tee -a /var/log/nodejs/intranet/intranet.log"
+        build:
+            context: ../intranet
+            dockerfile: Dockerfile
+        volumes:
+            - /var/app/current/intranet/bower_components
+            - /var/app/current/intranet/node_modules
+            - ../intranet:/var/app/current/intranet
+            - ../shared:/var/app/current/shared
+            - /var/log/nodejs/intranet
+            - /tmp/intranet
+        extends:
+            service: base
+            file: ../shared/base.yml
+    registrator:
+        image: devotox/registrator
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock
+        depends_on:
+            - consul
+        links:
+            - consul
+        extends:
+            service: base
+            file: ../shared/base.yml
+    consul:
+        command: -data-dir=/data -ui-dir=/ui -server -bootstrap
+        image: progrium/consul
+        ports:
+            - 53
+            - 8301
+            - 8302
+            - 8300
+            - 8400
+            - 8500
+            - 53/udp
+            - 8301/udp
+            - 8302/udp
+        extends:
+            service: base
+            file: ../shared/base.yml
+        networks:
+            - container:openvpn
+    consul-template:
+        image: masm/consul-template
+        command: >
+            -consul consul:8500
+            -template /etc/nginx/templates/upstream_servers.ctmpl:/etc/nginx/conf.d/upstream_servers.conf
+            -template /etc/nginx/templates/upstream_stream_servers.ctmpl:/etc/nginx/conf.d/streams/upstream_servers.conf
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock
+        volumes_from:
+            - server
+        depends_on:
+            - consul
+            - registrator
+        links:
+            - consul
+        extends:
+            service: base
+            file: ../shared/base.yml
+My issue is that i am looking for a way to allow connection to to the services behind using the vpn server. I can connect to the VPN server easily and i can connect to my services. but i cannot figure out how to only allow connection trhough the vpn. I thouth the networks: -container:openvpn was the solution but alas i seem to be wrong
+2

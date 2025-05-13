@@ -1,0 +1,55 @@
+lukeromanowicz commented on 31 Oct 2019 •
+edited
+Description of the issue
+You cannot assign values saved in files referenced in env_file in environment section of docker-compose but values from .env file work just fine.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+Output of docker version
+Docker version 18.09.5, build e8ff056
+Output of docker-compose config
+services:
+  redis:
+    environment:
+      FOO: baz
+      VALUE: bar
+    image: redis:4-alpine
+version: '3.0'
+Steps to reproduce the issue
+Create following files:
+docker-compose.yml:
+version: '3'
+
+services:
+  redis:
+    image: 'redis:4-alpine'
+    environment:
+      VALUE: ${FOO}
+    env_file:
+      - override.env
+.env:
+FOO=bar
+override.env:
+FOO=baz
+Observed result
+$ docker-compose config
+services:
+  redis:
+    environment:
+      FOO: baz
+      VALUE: bar
+    image: redis:4-alpine
+version: '3.0'
+Expected result
+$ docker-compose config
+services:
+  redis:
+    environment:
+      FOO: baz
+      VALUE: baz
+    image: redis:4-alpine
+version: '3.0'
+Stacktrace / full error message
+N/A
+Additional information
+N/A

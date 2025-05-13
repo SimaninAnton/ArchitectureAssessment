@@ -1,0 +1,1 @@
+Fig tutorial for Ruby on Rails doesn't work

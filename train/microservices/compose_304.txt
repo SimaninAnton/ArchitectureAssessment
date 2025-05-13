@@ -1,0 +1,106 @@
+FernandoMiguel commented on 1 Feb 2019
+Description of the issue
+installing compose via pip3
+Output of docker-compose version
+Collecting docker-compose
+  Downloading https://files.pythonhosted.org/packages/1e/6c/bf9879305530c4b765ef4eb3be76202788ca1037aec74d2c0ec73191d467/docker_compose-1.23.2-py2.py3-none-any.whl (131kB)
+Collecting docopt<0.7,>=0.6.1 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/a2/55/8f8cab2afd404cf578136ef2cc5dfb50baa1761b68c9da1fb1e4eed343c9/docopt-0.6.2.tar.gz
+Requirement already satisfied: PyYAML<4,>=3.10 in /usr/lib/python3/dist-packages (from docker-compose)
+Requirement already satisfied: requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1 in /usr/lib/python3/dist-packages (from docker-compose)
+Collecting dockerpty<0.5,>=0.4.1 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/8d/ee/e9ecce4c32204a6738e0a5d5883d3413794d7498fe8b06f44becc028d3ba/dockerpty-0.4.1.tar.gz
+Collecting texttable<0.10,>=0.9.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/02/e1/2565e6b842de7945af0555167d33acfc8a615584ef7abd30d1eae00a4d80/texttable-0.9.1.tar.gz
+Requirement already satisfied: jsonschema<3,>=2.5.1 in /usr/lib/python3/dist-packages (from docker-compose)
+Collecting websocket-client<1.0,>=0.32.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/26/2d/f749a5c82f6192d77ed061a38e02001afcba55fe8477336d26a950ab17ce/websocket_client-0.54.0-py2.py3-none-any.whl (200kB)
+Requirement already satisfied: six<2,>=1.3.0 in /usr/lib/python3/dist-packages (from docker-compose)
+Collecting cached-property<2,>=1.2.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/3b/86/85c1be2e8db9e13ef9a350aecd6dea292bd612fa288c2f40d035bb750ded/cached_property-1.5.1-py2.py3-none-any.whl
+Collecting docker<4.0,>=3.6.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/7e/3c/b610f22b170b0f8fe4d8f78974878e116562389f666f99e6549567eb9d87/docker-3.7.0-py2.py3-none-any.whl (133kB)
+Collecting docker-pycreds>=0.4.0 (from docker<4.0,>=3.6.0->docker-compose)
+  Downloading https://files.pythonhosted.org/packages/f5/e8/f6bd1eee09314e7e6dee49cbe2c5e22314ccdb38db16c9fc72d2fa80d054/docker_pycreds-0.4.0-py2.py3-none-any.whl
+Building wheels for collected packages: docopt, dockerpty, texttable
+  Running setup.py bdist_wheel for docopt: started
+  Running setup.py bdist_wheel for docopt: finished with status 'error'
+  Complete output from command /usr/bin/python3 -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-67wxloz8/docopt/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" bdist_wheel -d /tmp/tmpab6ole9vpip-wheel- --python-tag cp36:
+  usage: -c [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+     or: -c --help [cmd1 cmd2 ...]
+     or: -c --help-commands
+     or: -c cmd --help
+
+  error: invalid command 'bdist_wheel'
+
+  ----------------------------------------
+  Failed building wheel for docopt
+  Running setup.py clean for docopt
+  Running setup.py bdist_wheel for dockerpty: started
+  Running setup.py bdist_wheel for dockerpty: finished with status 'error'
+  Complete output from command /usr/bin/python3 -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-67wxloz8/dockerpty/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" bdist_wheel -d /tmp/tmpbf_hpb8upip-wheel- --python-tag cp36:
+  usage: -c [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+     or: -c --help [cmd1 cmd2 ...]
+     or: -c --help-commands
+     or: -c cmd --help
+
+  error: invalid command 'bdist_wheel'
+
+  ----------------------------------------
+  Failed building wheel for dockerpty
+  Running setup.py clean for dockerpty
+  Running setup.py bdist_wheel for texttable: started
+  Running setup.py bdist_wheel for texttable: finished with status 'error'
+  Complete output from command /usr/bin/python3 -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-67wxloz8/texttable/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" bdist_wheel -d /tmp/tmp2nb81ao7pip-wheel- --python-tag cp36:
+  usage: -c [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+     or: -c --help [cmd1 cmd2 ...]
+     or: -c --help-commands
+     or: -c cmd --help
+
+  error: invalid command 'bdist_wheel'
+
+  ----------------------------------------
+  Failed building wheel for texttable
+  Running setup.py clean for texttable
+Failed to build docopt dockerpty texttable
+Installing collected packages: docopt, dockerpty, texttable, websocket-client, cached-property, docker-pycreds, docker, docker-compose
+  Running setup.py install for docopt: started
+    Running setup.py install for docopt: finished with status 'done'
+  Running setup.py install for dockerpty: started
+    Running setup.py install for dockerpty: finished with status 'done'
+  Running setup.py install for texttable: started
+    Running setup.py install for texttable: finished with status 'done'
+Successfully installed cached-property-1.5.1 docker-3.7.0 docker-compose-1.23.2 docker-pycreds-0.4.0 dockerpty-0.4.1 docopt-0.6.2 texttable-0.9.1 websocket-client-0.54.0```
+
+**Output of `docker version`**
+docker version
+Client:
+Version: 18.09.1
+API version: 1.39
+Go version: go1.10.6
+Git commit: 4c52b90
+Built: Wed Jan 9 19:35:36 2019
+OS/Arch: linux/amd64
+Experimental: false
+Server: Docker Engine - Community
+Engine:
+Version: 18.09.1
+API version: 1.39 (minimum version 1.12)
+Go version: go1.10.6
+Git commit: 4c52b90
+Built: Wed Jan 9 19:02:44 2019
+OS/Arch: linux/amd64
+Experimental: false
+## Steps to reproduce the issue
+
+1. pip3 install docker-compose
+
+## Additional information
+
+OS version / distribution, `docker-compose` install method, etc.
+lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 18.10
+Release: 18.10
+Codename: cosmic

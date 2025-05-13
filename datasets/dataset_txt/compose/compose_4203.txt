@@ -1,0 +1,19 @@
+Contributor
+dnephin commented on 30 Aug 2014
+Example:
+foo:
+    build: .
+    volumes_from:
+        - configs
+
+configs:
+    build: ./configs
+    volumes:
+        - /etc/something
+If I run
+fig run foo
+The volume is not mounted, without any warnings. This is because it tries to iterate over the containers for configs, and none exist yet, so it just skips it and continues.
+fig up
+fig run foo
+This works.
+I propose that if there is a volumes_from a service, and there are no containers for that services, it should at lease raise a warning, but possibly error.

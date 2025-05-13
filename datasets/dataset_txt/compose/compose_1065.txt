@@ -1,0 +1,59 @@
+coughlanio commented on 22 Nov 2017
+Error is thrown when logging.options.max-file is set to an integer, despite being a numeric field.
+logging:
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: 5
+Results in:
+ERROR: for mongo  Cannot create container for service mongo: b'json: cannot unmarshal number into Go value of type string'
+Environment:
+# docker-compose version
+docker-compose version 1.17.0, build ac53b73
+docker-py version: 2.5.1
+CPython version: 3.6.3
+OpenSSL version: OpenSSL 1.1.0f-fips  25 May 2017
+
+# docker info       
+Containers: 18
+ Running: 0
+ Paused: 0
+ Stopped: 18
+Images: 35
+Server Version: 17.10.0-ce-rc1
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 0351df1c5a66838d0c392b4ac4cf9450de844e2d
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.13.12-300.fc27.x86_64
+Operating System: Fedora 27 (Workstation Edition)
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 31.3GiB
+Name: ravenholm
+ID: SCOV:7YVF:XBEA:SSET:VJEI:L34X:2W7O:C7KS:JMP3:T5UY:UQY4:DUMC
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

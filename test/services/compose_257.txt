@@ -1,0 +1,102 @@
+VoidAspect commented on 12 Mar 2019 •
+edited
+Description of the issue
+docker-compose ps -a fails with a type error when containers are running
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+docker-py version: 3.7.0
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.3
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        774a1f4
+ Built:             Thu Feb 28 06:47:20 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.3
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       774a1f4
+  Built:            Thu Feb 28 05:59:55 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+networks:
+  docker_net: {}
+services:
+  mongodb:
+    command: mongod --smallfiles --logpath=/dev/null
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /dev/null
+    image: mongo:3.4
+    networks:
+      docker_net: null
+    ports:
+    - published: 27017
+      target: 27017
+    volumes:
+    - /home/void/Projects/mjp/data/db:/data/db:rw
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: password
+    image: postgres:9.6
+    ports:
+    - published: 5432
+      target: 5432
+    volumes:
+    - /home/void/Projects/mjp/data/pgdb:/var/lib/postgresql/data:rw
+version: '3.2'
+Steps to reproduce the issue
+Create a compose file:
+version: '3.2'
+
+services:
+
+  mongodb:
+    image: mongo:3.4
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - docker_net
+    command: mongod --smallfiles --logpath=/dev/null
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/pgdb:/var/lib/postgresql/data
+
+networks:
+  docker_net:
+Run docker-compose up -d
+Run docker-compose ps -a
+Observed result
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 712, in ps
+TypeError: '<' not supported between instances of 'Container' and 'Container'
+[31723] Failed to execute script docker-compose
+Expected result
+      Name                     Command               State            Ports          
+-------------------------------------------------------------------------------------
+mjp_mongodb_1    docker-entrypoint.sh mongo ...   Up      0.0.0.0:27017->27017/tcp
+mjp_postgres_1   docker-entrypoint.sh postgres    Up      0.0.0.0:5432->5432/tcp 
+9

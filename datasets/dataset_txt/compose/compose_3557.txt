@@ -1,0 +1,17 @@
+TwentySixer commented on 18 Jun 2015
+Our idea was to bundle some configuration settings in a config.yml
+web:
+  volumes:
+   - ../development:/srv    
+   - ../logs:/logs        
+and extend the services in docker-compose.yml like that
+hal1:
+  build: phpBuild/
+  extends:
+    file: config.yml
+    service: web
+  restart: always
+  command: supervisord
+but this is not working.
+For absolute path in config.yml it work's.
+Both files are in the same directory.

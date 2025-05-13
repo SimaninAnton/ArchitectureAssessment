@@ -1,0 +1,122 @@
+rogaha commented on 5 Dec 2015
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl_2$ docker-compose up                      20:32:30
+Pulling redis (redis:3.0)...
+c0-n2: Pulling redis:3.0... : downloaded
+c0-master: Pulling redis:3.0... : downloaded
+c0-n1: Pulling redis:3.0... : downloaded
+Creating dockerdemofgsl2_redis_1
+Building web
+Step 1 : FROM python:2.7
+2.7: Pulling from library/python
+1565e86129b8: Pull complete
+a604b236bcde: Pull complete
+5822f840e16b: Pull complete
+107e487a8c94: Pull complete
+a8b24eb79c37: Downloading [========================>                          a8b24eb79c37: Downloading [========================>                          a8b24eb79c37: Downloading [========================>                          a8b24eb79c37: Downloading [=========================>                         a8b24eb79c37: Downloading [=========================>                         a8b24eb79c37: Downloading [=========================>                         a8b24eb79c37: Downloading [=========================>                         a8b24eb79c37: Downloading [=========================>                         a8b24eb79c37: Downloading [==========================>                        a8b24eb79c37: Downloading [==========================>                        a8b24eb79c37: Downloading [==========================>                        a8b24eb79c37: Downloading [==========================>                        a8b24eb79c37: Downloading [==========================>                        a8b24eb79c37: Downloading [===========================>  a8b24eb79c37: Downloading [========================================>          ] 103.3 MB/128.6 MB
+a8b24eb79c37: Pull complete
+589101c4f19b: Pull complete
+4b8716fc8ea9: Pull complete
+8138fde93b87: Pull complete
+6992b75b417e: Pull complete
+ffafd4baeefc: Pull complete
+a17b57371504: Pull complete
+ed6c56b24398: Pull complete
+58f3d9f818bf: Pull complete
+Digest: sha256:ff09fd2612df7148d06759fed64f0f63c9b5780d78fa90eb5be43a5a4442469e
+Status: Downloaded newer image for python:2.7
+ ---> 58f3d9f818bf
+Step 2 : ADD . /code
+ ---> 3b154cd2f240
+Removing intermediate container 63f9958dfc64
+Step 3 : WORKDIR /code
+ ---> Running in d69b74bec63f
+ ---> 78c04d225cfe
+Removing intermediate container d69b74bec63f
+web:
+Step 4 : RUN pip install -r requirements.txt
+ ---> Running in bebc58f8967d
+Collecting flask (from -r requirements.txt (line 1))
+  Downloading Flask-0.10.1.tar.gz (544kB)
+Collecting redis (from -r requirements.txt (line 2))
+web:
+  Downloading redis-2.10.5-py2.py3-none-any.whl (60kB)
+Collecting Werkzeug>=0.7 (from flask->-r requirements.txt (line 1))
+  Downloading Werkzeug-0.11.2-py2.py3-none-any.whl (304kB)
+Collecting Jinja2>=2.4 (from flask->-r requirements.txt (line 1))
+  Downloading Jinja2-2.8-py2.py3-none-any.whl (263kB)
+web:
+Collecting itsdangerous>=0.21 (from flask->-r requirements.txt (line 1))
+  Downloading itsdangerous-0.24.tar.gz (46kB)
+Collecting MarkupSafe (from Jinja2>=2.4->flask->-r requirements.txt (line 1))
+  Downloading MarkupSafe-0.23.tar.gz
+Building wheels for collected packages: flask, itsdangerous, MarkupSafe
+  Running setup.py bdist_wheel for flask
+  Stored in directory: /root/.cache/pip/wheels/d2/db/61/cb9b80526b8f3ba89248ec0a29d6da1bb6013681c930fca987
+  Running setup.py bdist_wheel for itsdangerous
+  Stored in directory: /root/.cache/pip/wheels/97/c0/b8/b37c320ff57e15f993ba0ac98013eee778920b4a7b3ebae3cf
+web:
+  Running setup.py bdist_wheel for MarkupSafe
+  Stored in directory: /root/.cache/pip/wheels/94/a7/79/f79a998b64c1281cb99fa9bbd33cfc9b8b5775f438218d17a7
+Successfully built flask itsdangerous MarkupSafe
+Installing collected packages: Werkzeug, MarkupSafe, Jinja2, itsdangerous, flask, redis
+Successfully installed Jinja2-2.8 MarkupSafe-0.23 Werkzeug-0.11.2 flask-0.10.1 itsdangerous-0.24 redis-2.10.5
+ ---> f6207365138c
+Removing intermediate container bebc58f8967d
+Successfully built f6207365138c
+Creating dockerdemofgsl2_web_1
+ERROR: Error: image library/dockerdemofgsl2_web:latest not found
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl_2$
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl_2$ docker-compose kill                     20:54:06
+Killing dockerdemofgsl2_redis_1 ... done
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl_2$ docker-compose up                       20:54:36
+Starting dockerdemofgsl2_redis_1
+Creating dockerdemofgsl2_web_1
+ERROR: Error: image library/dockerdemofgsl2_web:latest not found
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl_2$ docker images                           20:54:50
+REPOSITORY            TAG                 IMAGE ID            CREATED              VIRTUAL SIZE
+redis                 3.0                 e5bd4f6f1bad        2 weeks ago          109.2 MB
+ubuntu                14.04               e9ae3c220b23        3 weeks ago          187.9 MB
+swarm                 latest              6b40fe7724bd        4 weeks ago          15.6 MB
+nginx                 latest              198a73cfd686        2 weeks ago          132.8 MB
+dockerdemofgsl2_web   latest              f6207365138c        About a minute ago   682 MB
+python                2.7                 58f3d9f818bf        2 weeks ago          675.2 MB
+alpine                latest              8a648f689ddb        11 weeks ago         5.249 MB
+demo1                 latest              aa0ab63fafb4        9 minutes ago        227.5 MB
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl12$ cat docker-compose.yml
+web:
+  build: .
+  command: python app.py
+  ports:
+   - "5000"
+  volumes:
+   - .:/code
+  links:
+   - redis
+redis:
+  image: redis:3.0
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl12$
+
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl12$ docker-compose version
+docker-compose version 1.5.2, build 7240ff3
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl12$
+
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl12$ docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 17:56:04 UTC 2015
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      swarm/1.0.0
+ API version:  1.21
+ Go version:   go1.5.1
+ Git commit:   087e245
+ Built:
+ OS/Arch:      linux/amd64
+rogaha@Robertos-MacBook-Pro:~/development/rogaha/docker_demo_fgsl12$

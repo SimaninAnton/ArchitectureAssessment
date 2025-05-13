@@ -1,0 +1,48 @@
+gregfr commented on 21 Jul 2018
+Description of the issue
+I've installed a fresh Ubuntu 18.04, then docker from repos, then a few containers. Everything was doing fine.
+I've then installed docker-composer from repos : docker is now dead, I can't start it, even after rebooting.
+Context information (for bug reports)
+Output of "docker-compose version"
+
+docker-compose version 1.17.1, build unknown
+docker-py version: 2.5.1
+CPython version: 2.7.15rc1
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+Output of "docker version"
+
+Client:
+ Version:       17.12.1-ce
+ API version:   1.35
+ Go version:    go1.10.1
+ Git commit:    7390fc6
+ Built: Wed Apr 18 01:23:11 2018
+ OS/Arch:       linux/amd64
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+Output of "docker-compose config"
+
+ERROR: 
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml
+# service docker start
+Job for docker.socket failed.
+See "systemctl status docker.socket" and "journalctl -xe" for details.
+Failed to start docker.service: Unit docker.service is masked.
+# systemctl status docker.socket
+● docker.socket - Docker Socket for the API
+   Loaded: loaded (/lib/systemd/system/docker.socket; enabled; vendor preset: enabled)
+   Active: inactive (dead)
+   Listen: /var/run/docker.sock (Stream)
+
+Jul 20 17:38:33 ros systemd[1]: docker.socket: Socket service docker.service not loaded, refusing.
+Jul 20 17:38:33 ros systemd[1]: Failed to listen on Docker Socket for the API.
+Jul 20 21:05:53 ros systemd[1]: docker.socket: Socket service docker.service not loaded, refusing.
+Jul 20 21:05:53 ros systemd[1]: Failed to listen on Docker Socket for the API.
+Jul 20 21:16:08 ros systemd[1]: docker.socket: Socket service docker.service not loaded, refusing.
+Jul 20 21:16:08 ros systemd[1]: Failed to listen on Docker Socket for the API.
+Everything was done as root, so I don't think it's a permission problem.
+I've done some googling but didn't find any solution.
+Is there a way to get thing back online without re-installing everything?
+Thanks

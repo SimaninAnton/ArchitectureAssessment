@@ -1,0 +1,35 @@
+benhoskings commented on 30 Oct 2017
+I tried to install docker-compose via brew (via source), and Little Snitch detected a process with an invalid signature was trying to make network requests. Here are the details:
+$ brew install docker-compose
+==> Downloading https://github.com/docker/compose/archive/1.16.1.tar.gz
+Already downloaded: /Users/ben/Library/Caches/Homebrew/docker-compose-1.16.1.tar.gz
+==> Downloading https://files.pythonhosted.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.
+Already downloaded: /Users/ben/Library/Caches/Homebrew/docker-compose--homebrew-virtualenv-15.1.0.tar.gz
+==> python -c import setuptools... --no-user-cfg install --prefix=/tmp/docker-compose--homebrew-virtualenv-20171030-79342-2rewrz/target --sin
+==> python -s /tmp/docker-compose--homebrew-virtualenv-20171030-79342-2rewrz/target/bin/virtualenv -p python /usr/local/Cellar/docker-compose
+At that point, I get the following error:
+I believe the signature shown there is actually iTerm's, and a red herring. However, investigating the python binary shows its signature is invalid:
+$ codesign --verify /usr/local/Cellar/docker-compose/1.16.1/libexec/bin/python
+/usr/local/Cellar/docker-compose/1.16.1/libexec/bin/python: invalid Info.plist (plist or signature have been modified)
+In architecture: x86_64
+
+$ codesign --display -vvv /usr/local/Cellar/docker-compose/1.16.1/libexec/bin/python
+Executable=/usr/local/Cellar/docker-compose/1.16.1/libexec/bin/python
+Identifier=org.python.python
+Format=Mach-O universal (i386 x86_64)
+CodeDirectory v=20100 size=290 flags=0x0(none) hashes=4+3 location=embedded
+Platform identifier=4
+Hash type=sha256 size=32
+CandidateCDHash sha256=3e046a90783ab10480cf09372a77c70acba04354
+Hash choices=sha256
+CDHash=3e046a90783ab10480cf09372a77c70acba04354
+Signature size=4485
+Authority=Software Signing
+Authority=Apple Code Signing Certification Authority
+Authority=Apple Root CA
+Info.plist=not bound
+TeamIdentifier=not set
+Sealed Resources=none
+Internal requirements count=1 size=68
+Is this just because Info.plist is missing, or something similarly innocuous? I can install the package from the bottle without any problems, but without knowing more about the failure I'd prefer not to trust that python binary.
+Cheers.

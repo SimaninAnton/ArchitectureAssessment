@@ -1,0 +1,1 @@
+Installation instructions in release notes different from docs

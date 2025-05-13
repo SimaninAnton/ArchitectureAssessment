@@ -1,0 +1,1 @@
+docker-compose config should keep escaped variable

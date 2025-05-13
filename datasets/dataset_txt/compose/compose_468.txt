@@ -1,0 +1,33 @@
+shridharkalagi commented on 1 Oct 2018
+Description of the issue
+Unbale to bind the port to localhost on Mac
+Context information (for bug reports)
+I'm doing
+docker pull citizenstig/nowasp
+docker run -d -p 80:80 citizenstig/nowasp
+But the http://localhost site cant be reached. This is happening only on Mac ( Same thing worked on Ubuntu). Below are the versions.
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:28:38 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"

@@ -1,0 +1,17 @@
+harshsanghani commented on 21 Oct 2016 •
+edited by aanand
+Hello All,
+I got the same error and I have tried many solution but I can not get out of this, Can you please help me?
+I got this error :-
+In file './docker-compose.yml' service 'version' doesn't have any configuration options. All top level keys in your docker-compose.yml must map to a dictionary of configuration options.
+docker-compose.yml file :-
+version: '2'
+services:
+    frontend-server:
+    image: node:4
+    volumes:
+      - ./app:/app:rw
+    ports:
+      - "3000:3000"
+    privileged: true
+    command: "/app/run.sh"

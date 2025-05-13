@@ -1,0 +1,5 @@
+Contributor
+dnephin commented on 15 Sep 2015
+Right now docs/reference/docker-compose.md is a copy of docker-compose --help and all the docs/reference/*.md files that have the same issue.
+We should be able to generate this output instead of copy-paste it into the docs. Trying to keep them sycned will result in the docs always being out of date (they are currently), and a lot of unnecessary work to attempt to keep them up-to-date.
+I don't know much about https://gohugo.io/ but it's definitely something it should support. An example of this feature for sphinx can be found here: https://pythonhosted.org/sphinxcontrib-programoutput/

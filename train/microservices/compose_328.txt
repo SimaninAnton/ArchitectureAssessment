@@ -1,0 +1,75 @@
+skar404 commented on 14 Jan 2019 •
+edited
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad0
+docker-py version: 3.7.0
+CPython version: 2.7.15rc1
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+Output of docker version
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:31 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:02:44 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  my-test:
+    image: hello-world
+    network_mode: bridge
+version: '2.1'
+Stacktrace / full error message
+root@home-bot:~/temp# docker-compose up
+Pulling my-test (hello-world:)...
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 127, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 1080, in up
+    to_attach = up(False)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 1076, in up
+    silent=options.get('--quiet-pull'),
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 475, in up
+    svc.ensure_image_exists(do_build=do_build, silent=silent)
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 352, in ensure_image_exists
+    self.pull(silent=silent)
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 1217, in pull
+    return progress_stream.get_digest_from_pull(event_stream)
+  File "/usr/local/lib/python2.7/dist-packages/compose/progress_stream.py", line 101, in get_digest_from_pull
+    for event in events:
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 1182, in _do_pull
+    output = self.client.pull(repo, **pull_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/image.py", line 381, in pull
+    header = auth.get_config_header(self, registry)
+  File "/usr/local/lib/python2.7/dist-packages/docker/auth.py", line 48, in get_config_header
+    client._auth_configs, registry, credstore_env=client.credstore_env
+  File "/usr/local/lib/python2.7/dist-packages/docker/auth.py", line 322, in resolve_authconfig
+    return authconfig.resolve_authconfig(registry)
+  File "/usr/local/lib/python2.7/dist-packages/docker/auth.py", line 235, in resolve_authconfig
+    cfg = self._resolve_authconfig_credstore(registry, store_name)
+  File "/usr/local/lib/python2.7/dist-packages/docker/auth.py", line 262, in _resolve_authconfig_credstore
+    store = self._get_store_instance(credstore_name)
+  File "/usr/local/lib/python2.7/dist-packages/docker/auth.py", line 287, in _get_store_instance
+    name, environment=self._credstore_env
+  File "/usr/local/lib/python2.7/dist-packages/dockerpycreds/store.py", line 25, in __init__
+    self.program
+dockerpycreds.errors.InitializationError: docker-credential-osxkeychain not installed or not available in PATH
+Additional information
+OS version / distribution:
+Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-43-generic x86_64)

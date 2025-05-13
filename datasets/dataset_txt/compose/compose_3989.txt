@@ -1,0 +1,19 @@
+hadim commented on 17 Jan 2015
+Hi
+I am thinking about using fig which seems a really nice tool but my build is pretty complex and I would like to know what do you think about it.
+I have three Dockerfile: database (db), application (app) and data.
+Before to start my app I first need to init the data container:
+run data container
+call init script from db (which will populate data)
+call start script from db
+call init script from app (which will populate data through db)
+Once these steps are done, data is initialized and I won't need to re run these steps only if I want to start from scratch.
+The next step is to start the app:
+run data container (or recreate it with a backup archive)
+call start script from db
+call start script from app
+I also have small backup script which consist in archiving and compressing /data in data.
+So I guess here I need to use two fig files (or three if I add the backup script) but I don't know how to handle the fact that data container from init step need to be kept for the start step.
+I am currently using a Makefile to handle this but it's messy and I really would like to use a tool like fig. My application is here : https://github.com/hadim/docker-omero, if you want to have a look.
+Hope I am clear enough and apologize in advance if this thread is not exactly an "issue" but I didn't find any mailing list.
+Thanks you

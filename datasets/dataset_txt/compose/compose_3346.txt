@@ -1,0 +1,11 @@
+Contributor
+dnephin commented on 26 Aug 2015
+(Aliased as "Test that calling scale on a service that has a custom container name" from the docstring)
+Seems to be failing fairly frequently against docker 1.8.1
+https://jenkins.dockerproject.org/job/Compose-PRs/1118/console
+https://jenkins.dockerproject.org/job/Compose-PRs/1122/console
+https://jenkins.dockerproject.org/job/Compose-PRs/1117/console
+https://jenkins.dockerproject.org/job/Compose-PRs/1115/console
+https://jenkins.dockerproject.org/job/Compose-PRs/1112/console
+(a sample from today)
+I suspect there is an underlying docker bug here. We should confirm and make sure it's known upstream, and/or find a way to make the test suite less flaky.

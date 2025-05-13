@@ -1,0 +1,5 @@
+knyghty commented on 6 Nov 2019
+Description of the issue
+The release notes seem incorrect. They say:
+"Add BuildKit support, use DOCKER_BUILDKIT=1 and COMPOSE_NATIVE_BUILDER=1"
+I think the second env var should be COMPOSE_DOCKER_CLI_BUILD=1 - at least that's what works for me.

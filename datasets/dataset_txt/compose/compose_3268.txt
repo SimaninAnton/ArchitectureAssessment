@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 25 Sep 2015
+Reported by @ahmetalpbalkan (thanks!):
+"We solved this issue in both docker-cli and docker-machine by using the https://github.com/Azure/go-ansiterm package that does ANSI terminal emulation in Windows consoles. Python may have something similar."

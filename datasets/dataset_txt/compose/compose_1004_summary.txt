@@ -1,0 +1,1 @@
+docker-compose failed recognizing files over version 2.0

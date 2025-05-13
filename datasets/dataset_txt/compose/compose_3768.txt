@@ -1,0 +1,4 @@
+sourav82 commented on 31 Mar 2015
+What is the purpose of the switch -v with "docker-compose rm"?
+I thought it would delete the volume associated with the container but it is not doing so. In my configuration, I have one container with volume mapping (hostPath:containerPath).
+If I use "docker-compose rm -v --force <<service_name>>", will it delete the volume along with the container?

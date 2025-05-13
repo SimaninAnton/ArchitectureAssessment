@@ -1,0 +1,95 @@
+alxlve commented on 10 Apr 2019
+Description of the issue
+HTTP(S) proxy auto-configuration via docker's client config.json file is broken/missing or ambiguous.
+According to the following documentation :
+docs.docker.com/network/proxy
+Adding proxy configuration in $DOCKER_CONFIG/config.json (by default $HOME/.docker/config.json if not set) shall make docker client set automatically proxy environment variables in containers when building or running them.
+docker run does populate proxy environment variables as expected in the container run.
+docker-compose up does not populate proxy environment variables as expected in the container run.
+Context information
+Output of docker-compose version
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.6.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2k-fips  26 Jan 2017
+Output of docker version
+Client:
+ Version:           18.09.4
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        d14af54266
+ Built:             Wed Mar 27 18:34:51 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.4
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       d14af54
+  Built:            Wed Mar 27 18:04:46 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of cat $DOCKER_CONFIG/config.json
+{
+  "proxies": {
+    "default": {
+      "httpProxy": "http://10.0.2.2:3128",
+      "httpsProxy": "http://10.0.2.2:3128",
+      "noProxy": "localhost,127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.company.loc"
+    }
+  }
+}
+Steps to reproduce the issue
+Try proxy access by running docker run busybox wget -O- example.com, it works.
+Result
+<!doctype html>
+<...> # Truncated HTML content
+Here is a matching docker-compose file.
+Output of docker-compose config
+version: '3'
+services:
+  test:
+    image: 'busybox:latest'
+    restart: always
+    hostname: 'localhost'
+    command: sh -c "echo HTTP_PROXY=$$HTTP_PROXY && wget -O- example.com"
+Try proxy access by running docker-compose up, it does not work.
+Result
+Attaching to busybox_test_1
+test_1  | HTTP_PROXY=
+test_1  | Connecting to example.com (93.184.216.34:80)
+test_1  | wget: can't connect to remote host (93.184.216.34): Connection refused
+busybox_test_1 exited with code 1
+Workaround: I now populate proxy environment variables directly in the docker-compose file.
+Output of docker-compose config
+version: '3'
+services:
+  test:
+    image: 'busybox:latest'
+    restart: always
+    hostname: 'localhost'
+    environment:
+      HTTP_PROXY: '$HTTP_PROXY'
+      HTTPS_PROXY: '$HTTPS_PROXY'
+      NO_PROXY: '$NO_PROXY'
+      http_proxy: '$http_proxy'
+      https_proxy: '$https_proxy'
+      no_proxy: '$no_proxy'
+    command: sh -c "echo HTTP_PROXY=$$HTTP_PROXY && wget -O- google.com"
+HTTP_PROXY, HTTPS_PROXY, NO_PROXY, http_proxy, https_proxy and no_proxy environment variables are all set on the docker host machine.
+Try proxy access by running docker-compose up with a workaround, it works.
+Result
+Attaching to withproxy_test_1
+test_1  | HTTP_PROXY=http://10.0.2.2:3128
+test_1  | Connecting to 10.0.2.2:3128 (10.0.2.2:3128)
+test_1  | <!doctype html>
+test_1  | <...> # Truncated HTML content
+withproxy_test_1 exited with code 0
+Expected result
+In step 2, proxy environment variables should have been set automatically with the values specified in docker's client config.json.
+Additional information
+Issue #5601 and pull request #5706 (merged) indicate that the functionality is already implemented, however I have found no way to make this feature work neither I have found any documentation link.
+Documentation references
+docs.docker.com/compose/environment-variables

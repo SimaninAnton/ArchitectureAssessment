@@ -1,0 +1,35 @@
+realitycheck commented on 16 Oct 2018 •
+edited
+Description of the issue
+Usages of PATH_JOKER regex in docker-compose config interpolation logic are in conflict with services whose name contains dot.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.5.0
+CPython version: 3.4.6
+OpenSSL version: OpenSSL 1.0.2j-fips 26 Sep 2016
+Steps to reproduce the issue
+Given the sample docker-compose.yaml file with a service named app.0:
+version: "3"
+services:
+  app.0:
+    image: redis
+    ulimits:
+      nofile:
+        soft: ${APP_NOFILE}
+        hard: ${APP_NOFILE}
+Given the sample .env file:
+APP_NOFILE=10000
+Call docker-compose config
+Observed result
+ERROR: The Compose file './docker-compose.yaml' is invalid because:
+services.app.0.ulimits.nofile.soft contains "10000", which is an invalid type, it should be an integer
+Expected result
+services:
+  app.0:
+    image: redis
+    ulimits:
+      nofile:
+        hard: 10000
+        soft: 10000
+version: '3.0'

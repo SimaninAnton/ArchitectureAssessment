@@ -1,0 +1,2 @@
+dmp1ce commented on 19 Aug 2015
+How do I force docker-compose to pull the latest image for Dockerfile services? The only way I could figure out how to get the latest image was with docker pull <image>. docker-compose pull only pulls images for services that reference an image, not a Dockerfile. docker-compose build --no-cache doesn't pull the latest image for me either.

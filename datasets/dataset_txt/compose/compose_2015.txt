@@ -1,0 +1,4 @@
+midnightconman commented on 7 Oct 2016
+It appears that the functionality for extending and overriding compose files is currently the same for multi-value options... this makes it so that it is impossible to remove multi-value declarations via the override mechanism. I propose that the extend functionality remains the same and concatenates multi-value declarations, but override unions these options instead of concatenates. This would allow people the functionality of extending multi-value option declarations and overriding them if they so desire.
+https://docs.docker.com/compose/extends/#/adding-and-overriding-configuration
+1

@@ -1,0 +1,69 @@
+Yajo commented on 9 Jun 2017 •
+edited
+Write this docker-compose.yaml in a directory named test. It assumes you have an additional ip that is 10.10.10.10 for this example:
+version: "2.1"
+services:
+    # This will work and listen on both interfaces
+    good:
+        image: stackatoapps/phpinfo
+        ports:
+            - "127.0.0.1:80:80"
+            - "10.10.10.10:80:80"
+
+    # This will fail and listen on last interface only
+    badbase:
+        image: stackatoapps/phpinfo
+    bad:
+        extends:
+            file: docker-compose.yaml
+            service: badbase
+        ports:
+            - "127.0.0.1:81:80"
+            - "10.10.10.10:81:80"
+Now check this out:
+➤ docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2k-fips  26 Jan 2017
+
+➤ docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:18:37 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:18:37 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+
+➤ docker-compose up -d
+Creating network "test_default" with the default driver
+Creating test_bad_1 ... 
+Creating test_badbase_1 ... 
+Creating test_good_1 ... 
+Creating test_bad_1
+Creating test_good_1
+Creating test_good_1 ... done
+
+➤ docker-compose ps
+     Name             Command         State            Ports          
+---------------------------------------------------------------------
+test_bad_1       apache2-foreground   Up      10.10.10.10:81->80/tcp 
+test_badbase_1   apache2-foreground   Up      80/tcp                  
+test_good_1      apache2-foreground   Up      10.10.10.10:80->80/tcp 
+
+➤ docker container inspect -f '{{.HostConfig.PortBindings}}' test_good_1 test_bad_1
+map[80/tcp:[{127.0.0.1 80} {10.10.10.10 80}]]
+map[80/tcp:[{10.10.10.10 81}]]
+Problems:
+docker-compose ps displays wrong ports for test_good_1 (although this is not the main issue here).
+test_bad_1 did not publish 127.0.0.1:81:80 port.

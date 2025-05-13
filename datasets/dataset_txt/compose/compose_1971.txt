@@ -1,0 +1,4 @@
+songhuangcn commented on 30 Oct 2016
+I want define a base service in docker-compose.yml, which need to be extended by other services.
+But there is a question, when I run the command docker-compose up, I must to give all the services except it.
+I know there is a solution by extends another file, but in a file, can it be solved?

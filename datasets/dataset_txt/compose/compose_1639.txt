@@ -1,0 +1,13 @@
+Contributor
+schmunk42 commented on 2 Mar 2017
+docker-compose 1.11.2
+Broken config, due to missing variable - no error during config
+networks:
+  default:
+    ipam:
+      config:
+      - subnet: ''
+      driver: default
+On docker-compose up
+ERROR: Invalid subnet  : invalid CIDR address:
+Should be thrown already during validation.

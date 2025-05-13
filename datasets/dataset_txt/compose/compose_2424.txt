@@ -1,0 +1,7 @@
+gdamjan commented on 6 May 2016
+using the tmpfs option in the compose file makes the directory not very useful in some scenarios. it gets mounted as:
+tmpfs on /src/core/node_modules type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k)
+which means it:
+can't be written to if using the user option - it's root:root, mode 755.
+can't execute stuff from it, cause of the noexec flag
+I suggest removing noexec and making it mode 777

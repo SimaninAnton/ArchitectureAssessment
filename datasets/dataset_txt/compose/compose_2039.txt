@@ -1,0 +1,6 @@
+foxx commented on 26 Sep 2016 •
+edited
+If I make changes to docker-compose.yml, such as command, these changes are not picked up automatically when using docker-compose run.
+I'm able to force it to detect these changes by using docker-compose down -v --remove-orphans.
+Any ideas why this isn't automatically applied?
+1

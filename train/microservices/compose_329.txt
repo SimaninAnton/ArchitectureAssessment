@@ -1,0 +1,44 @@
+Maks3w commented on 14 Jan 2019 •
+edited
+Description of the issue
+order of keys in cache_from indicates precedence when evaluating if the given image is suitable for cache source.
+Context information (for bug reports)
+docker-compose version 1.23.1, build b02f1306
+Docker version 18.09.0, build 4d60db472b
+Output of docker-compose config
+version: '3.2'
+
+services:
+  app:
+    build:
+      context: ./
+      cache_from:
+        - service_app
+        - AAA
+  foo:
+    build:
+      context: ./
+      cache_from:
+        - AAA
+        - service_foo
+  appZ:
+    build:
+      context: ./
+      cache_from:
+        - service_appZ
+        - ZZZ
+Given the above config file and the images AAA/ZZZ have at least 1 layer different than the expected build:
+Observed result
+Services app and foo does always try to use AAA as cache source does not matter the position of service_X
+Service appZ always use service_X as cache source
+Expected result
+Services app and appZ should always to use service_X as cache source
+Service foo should always to use AAA as cache_source
+Behavior with Docker command
+The order of parameters when using Docker command is honored and works as expected
+docker build . --tag service_app --cache-from service_app --cache-from AAA
+docker build . --tag service_foo --cache-from AAA  --cache-from service_app
+docker build . --tag service_appZ --cache-from service_appZ --cache-from ZZZ
+Additional details
+Seems there are some kind of alphabetic sort wich mess the cache_from order
+If I remember as October 2018 this was working as expected but I'm not totally sure of this.

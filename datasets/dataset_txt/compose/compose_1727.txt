@@ -1,0 +1,45 @@
+rocketmonkeys commented on 3 Feb 2017 •
+edited by shin-
+(Sorry for the rushed bug report, just heading out the door... will fix later if there's missing details)
+Ubuntu 14.04 (on vagrant)
+Installing docker on the system, which brings in docker-compose 1.10.1 package
+Try to do "docker-compose build", fails:
+$ docker-compose build
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 7, in <module>
+    from compose.cli.main import main
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 41, in <module>
+    from . import errors
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/errors.py", line 10, in <module>
+    from docker.errors import APIError
+  File "/usr/local/lib/python2.7/dist-packages/docker/__init__.py", line 2, in <module>
+    from .api import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/__init__.py", line 2, in <module>
+    from .client import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 11, in <module>
+    from .build import BuildApiMixin
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/build.py", line 9, in <module>
+    from .. import utils
+  File "/usr/local/lib/python2.7/dist-packages/docker/utils/__init__.py", line 2, in <module>
+    from .utils import (
+  File "/usr/local/lib/python2.7/dist-packages/docker/utils/utils.py", line 19, in <module>
+    from .. import tls
+  File "/usr/local/lib/python2.7/dist-packages/docker/tls.py", line 5, in <module>
+    from .transport import SSLAdapter
+  File "/usr/local/lib/python2.7/dist-packages/docker/transport/__init__.py", line 3, in <module>
+    from .ssladapter import SSLAdapter
+  File "/usr/local/lib/python2.7/dist-packages/docker/transport/ssladapter.py", line 22, in <module>
+    urllib3.connection.match_hostname = match_hostname
+AttributeError: 'module' object has no attribute 'connection'
+This is a known issue (docker/docker-py#1054), but was working fine with docker-compose 1.10.0.
+But this change in docker-compose 1.10.1 is causing the above error:
+5895d8b#diff-228ac110a2a9f4c594407b860e1b0ed0
+Specifically:
+pip = __import__('pip')
+This line alters the sys.path. Before that line:
+sys.path: ['/usr/local/bin', '/test', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages']
+After that line:
+sys.path: ['/usr/share/python-wheels/setuptools-3.3-py2.py3-none-any.whl', '/usr/share/python-wheels/urllib3-1.7.1-py2.py3-none-any.whl', '/usr/share/python-wheels/html5lib-0.999-py2.py3-none-any.whl', '/usr/share/python-wheels/pip-1.5.4-py2.py3-none-any.whl', '/usr/share/python-wheels/requests-2.2.1-py2.py3-none-any.whl', '/usr/share/python-wheels/distlib-0.1.8-py2.py3-none-any.whl', '/usr/share/python-wheels/chardet-2.2.1-py2.py3-none-any.whl', '/usr/share/python-wheels/six-1.5.2-py2.py3-none-any.whl', '/usr/share/python-wheels/colorama-0.2.5-py2.py3-none-any.whl', '/usr/local/bin', '/test', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages']
+Notably, the "/usr/share/python-wheels/urllib3-1.7.1-py2.py3-none-any.whl" package is added to the top of the path, making it impossible to override with PYTHONPATH or anything else later. This means request will be forced to use the older ubuntu 14.04's urllib 1.7, which breaks everything.
+Downgrading to docker-compose 1.10.0 fixes this, allowing the code to use a newer urllib3 version than what's installed in the system.
+4

@@ -1,0 +1,65 @@
+nyoakaway commented on 17 Sep 2018
+Description of the issue
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o 27 Mar 2018
+Output of "docker version"
+Client:
+Version: 18.06.1-ce
+API version: 1.38
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:21:34 2018
+OS/Arch: windows/amd64
+Experimental: false
+Server:
+Engine:
+Version: 18.06.1-ce
+API version: 1.38 (minimum version 1.12)
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:29:02 2018
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+ERROR:
+Can't find a suitable configuration file in this directory or any
+parent. Are you in the right directory?
+    Supported filenames: docker-compose.yml, docker-compose.yaml
+## Steps to reproduce the issue
+
+1. Run Pull command: "**docker pull osrm/osrm-backend**"
+2. Download GeoFabrik "**http://download.geofabrik.de/south-america-latest.osm.pbf**" and save past C:/User/osmr
+3. Run Command: "**docker run -t -v //c/Users/osrm:/data osrm/osrm-backend osrm-extract -p /opt/car.lua /data/south-america-latest.osm.pbf**"
+
+### Observed result
+```
+Docker asks for network sharing, when typing user and password it closes (as if it was ok) and after it displays the error: "docker: Error response from daemon: An error occurred while sharing drive.".
+
+When I quit Docker and install again, I can quickly share 1 drive! but then the error appears.
+Input /data/south-america-latest.osm.pbf file not found.
+```
+### Expected result
+`The result is to initiate the extraction of the file in question generating several files referring to map, streets and roterization`
+
+### Stacktrace / full error message
+
+```
+Depending on the moment
+docker: Error response from daemon: An error occurred while sharing drive.
+and
+Input /data/south-america-latest.osm.pbf file not found.
+```
+
+## Additional information
+
+WIN 10 PRO.
+
+
+Installation of the OSRM Project: https://hub.docker.com/r/osrm/osrm-backend/
+
+The first time I was able to start the partition, but it did not finish due to lack of memory, later I released more memory for the docker and thus began the errors, there were several attempts to uninstall everything and install again, download the files again without success!
+1

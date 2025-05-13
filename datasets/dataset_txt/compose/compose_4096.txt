@@ -1,0 +1,99 @@
+mhubig commented on 17 Nov 2014
+Using this fig.yml file ...
+nginx:
+  image: nginx:1.7.7
+  ports:
+    - "80:80"
+... I get slightly different port setup using fig run nginx:
+"Name": "/test_nginx_run_3",
+"NetworkSettings": {
+    "Bridge": "docker0",
+    "Gateway": "172.17.42.1",
+    "IPAddress": "172.17.0.21",
+    "IPPrefixLen": 16,
+    "MacAddress": "02:42:ac:11:00:15",
+    "PortMapping": null,
+    "Ports": {
+        "443/tcp": null,
+        "80/tcp": null
+    }
+},
+... vs. using fig up:
+"Name": "/test_nginx_1",
+"NetworkSettings": {
+    "Bridge": "docker0",
+    "Gateway": "172.17.42.1",
+    "IPAddress": "172.17.0.20",
+    "IPPrefixLen": 16,
+    "MacAddress": "02:42:ac:11:00:14",
+    "PortMapping": null,
+    "Ports": {
+        "443/tcp": null,
+        "80/tcp": [
+            {
+                "HostIp": "0.0.0.0",
+                "HostPort": "80"
+            }
+        ]
+    }
+Which sometimes seems to be a problem using boot2docker:
+fig run nginx:
+~/D/D/a/test git:master ❯❯❯ curl $(boot2docker ip 2>/dev/null)
+curl: (7) Failed to connect to 192.168.59.103 port 80: Connection refused
+~/D/D/a/test git:master ❯❯❯ boot2docker ssh
+docker@boot2docker:~$ sudo netstat -alnp
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      564/sshd
+tcp        0      0 10.0.2.15:22            10.0.2.2:53866          ESTABLISHED 2626/sshd: docker [
+tcp        0      0 :::22                   :::*                    LISTEN      564/sshd
+tcp        0      0 :::2376                 :::*                    LISTEN      658/docker
+tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53897 ESTABLISHED 658/docker
+tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53496 CLOSE_WAIT  658/docker
+tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53894 ESTABLISHED 658/docker
+tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53528 CLOSE_WAIT  658/docker
+tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53497 CLOSE_WAIT  658/docker
+tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53896 ESTABLISHED 658/docker
+tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53495 CLOSE_WAIT  658/docker
+tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53895 ESTABLISHED 658/docker
+udp        0      0 10.0.2.15:50728         50.7.156.4:123          ESTABLISHED 595/ntpclient
+fig up:
+~/D/D/a/test git:master ❯❯❯ curl $(boot2docker ip 2>/dev/null)
+<!DOCTYPE html>
+<html>
+...
+</html>
+~/D/D/a/test git:master ❯❯❯ boot2docker ssh
+docker@boot2docker:~$ sudo netstat -alnp
+ Active Internet connections (servers and established)
+ Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+ tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      564/sshd
+ tcp        0      0 10.0.2.15:22            10.0.2.2:53866          ESTABLISHED 2626/sshd: docker [
+"tcp        0      0 :::80                   :::*                    LISTEN      2607/docker-proxy"
+ tcp        0      0 :::22                   :::*                    LISTEN      564/sshd
+ tcp        0      0 :::2376                 :::*                    LISTEN      658/docker
+ tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53496 CLOSE_WAIT  658/docker
+ tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53804 TIME_WAIT   -
+ tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53851 ESTABLISHED 658/docker
+ tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53528 CLOSE_WAIT  658/docker
+ tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53497 CLOSE_WAIT  658/docker
+ tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53806 TIME_WAIT   -
+ tcp        1      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53495 CLOSE_WAIT  658/docker
+ tcp        0      0 ::ffff:192.168.59.103:2376 ::ffff:192.168.59.3:53805 TIME_WAIT   -
+ udp        0      0 10.0.2.15:50728         50.7.156.4:123          ESTABLISHED 595/ntpclient
+So it seems there is a docker-proxy deamon missing!
+~/D/D/a/test git:master ❯❯❯ fig --version                                                               ⏎ ◼
+fig 1.0.1
+~/D/D/a/test git:master ❯❯❯ boot2docker version                                                           ◼
+Boot2Docker-cli version: v1.3.0
+Git commit: deafc19
+~/D/D/a/test git:master ❯❯❯ docker version                                                                ◼
+Client version: 1.3.0
+Client API version: 1.15
+Go version (client): go1.3.3
+Git commit (client): c78088f
+OS/Arch (client): darwin/amd64
+Server version: 1.3.1
+Server API version: 1.15
+Go version (server): go1.3.3
+Git commit (server): 4e9bbfa

@@ -1,0 +1,30 @@
+gagoman commented on 17 Feb 2016
+Good day.
+Sample case:
+docker-compose.yml
+version: '2'
+
+services:
+    echo:
+        image: alpine
+        entrypoint: [echo]
+        command: ['Hello, world!']
+
+   hello-world:
+       extends:
+           service: echo
+docker-compose.prod.yml
+version: '2'
+
+services:
+   echo:
+      command: ['Not so friendly']
+Outputs for hello-world:
+docker-compose up hello-world
+Hello, world!
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up hello-world
+Hello, world! (Not so friendly was expected)
+While outputs for docker-compose up echo are ok
+Versions:
+Docker 1.10.1
+Compose 1.6.0

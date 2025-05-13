@@ -1,0 +1,1 @@
+Should compose file also be split into stacks ?

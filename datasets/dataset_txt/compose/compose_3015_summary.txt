@@ -1,0 +1,1 @@
+Syntax for locally-declared versus externally-created entities

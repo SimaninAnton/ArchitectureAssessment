@@ -1,0 +1,73 @@
+fmahnke commented on 19 Jun 2015
+Description of problem:
+We are losing all data in a data volume when using docker compose to build and restart containers.
+docker version:
+Client version: 1.6.0
+Client API version: 1.18
+Go version (client): go1.4.2
+Git commit (client): 8aae715/1.6.0
+OS/Arch (client): linux/amd64
+Server version: 1.6.0
+Server API version: 1.18
+Go version (server): go1.4.2
+Git commit (server): 8aae715/1.6.0
+OS/Arch (server): linux/amd64
+docker info:
+Containers: 67
+Images: 2559
+Storage Driver: devicemapper
+ Pool Name: docker-8:4-3222612005-pool
+ Pool Blocksize: 65.54 kB
+ Backing Filesystem: xfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 36.9 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 70.47 GB
+ Metadata Space Used: 99.69 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.048 GB
+ Udev Sync Supported: true
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.93-RHEL7 (2015-01-28)
+Execution Driver: native-0.2
+Kernel Version: 3.10.0-229.4.2.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+CPUs: 12
+Total Memory: 15.47 GiB
+Name: <removed>
+ID: KTFX:ZDDL:IL5M:4JJX:DN32:N2Z2:XQIT:2OBL:GAPT:ZF42:6BSR:LREN
+uname -a:
+Linux <removed> 3.10.0-229.4.2.el7.x86_64 #1 SMP Wed May 13 10:06:09 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+Environment details (AWS, VirtualBox, physical, etc.):
+VMware virtual machine.
+How reproducible:
+This problem is intermittently reproducible.
+Steps to Reproduce:
+-bash-4.2$ d-c stop jenkins && d-c build jenkins && d-c up -d jenkins
+Stopping unityci_jenkins_1...
+Building jenkins...
+...
+Removing intermediate container b0a834697b78
+Successfully built 0150d8fc1c9d
+Recreating unityci_registrydata_1...
+Recreating unityci_registry_1...
+Recreating unityci_dockerserver_1...
+Recreating unityci_jenkins_1...
+Cannot destroy container 0ee5103b22ceac0add98adc031c6be1c2e112483f304ed89f7f0b7ec539bf46e: Driver devicemapper failed to remove root filesystem 0ee5103b22ceac0add98adc031c6be1c2e112483f304ed89f7f0b7ec539bf46e: Device is Busy
+When I run the up command again, a new container starts.
+-bash-4.2$ d-c up -d jenkins
+Recreating unityci_registrydata_1...
+Recreating unityci_registry_1...
+Recreating unityci_dockerserver_1...
+Creating unityci_jenkins_1...
+But my old container is gone, so all the data in my data volume is gone.
+Actual Results:
+-bash-4.2$ docker ps -a | grep 0ee5103b22c
+0ee5103b22ce        my_jenkins:latest                                                    "/usr/local/bin/jenk   8 days ago          Dead                                                                    
+-bash-4.2$ docker ps | grep jenkins
+0fefc007a1e0        my_jenkins:latest                                           "/usr/local/bin/jenk   4 minutes ago       Up 4 minutes        ...
+Additional Info:
+We are using the Jenkins docker image, which creates a data volume using the volume instruction. VOLUME /var/jenkins_home. We are not mounting this data volume from the host. It is internal to the container only.
+https://github.com/jenkinsci/docker/blob/1f0d2b7d5b69aed1b0af7916ca46d35b249c1c86/Dockerfile

@@ -1,0 +1,33 @@
+fundon commented on 13 Oct 2015
+We can use below command and the context of container is current dir:
+docker -f ../path/Dockerfile
+How to do it In compose?
+my project
+docker
+├── README.md
+├── mongo
+│   ├── Dockerfile
+│   └── docker-entrypoint.sh
+└── node
+    └── Dockerfile
+docker-compose.yml
+docker-compose
+web:
+  restart: always
+  build: docker/node
+  links:
+    - mongo
+  ports:
+    - "3000:3000"
+    - "9001:9001"
+    - "3001:3001"
+  volumes:
+    - .:/src
+  environment:
+docker/node/Dockerfile
+FROM mhart/alpine-node
+
+WORKDIR /src
+# project root
+ADD . .
+I want add the project source codes to web container, but it was failed.

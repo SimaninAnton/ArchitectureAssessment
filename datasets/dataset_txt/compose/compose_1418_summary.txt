@@ -1,0 +1,1 @@
+Docker Compose fails to pull from private registry when using credential helper

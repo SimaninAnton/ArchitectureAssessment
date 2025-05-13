@@ -1,0 +1,64 @@
+justingood-gfs commented on 19 Sep 2018 •
+edited
+Problem
+docker-compose cannot pull from private container registry (gcp).
+Similar closed issues
+#4885
+#5875
+Versions
+# mac-os : 10.13.6 (17G65)
+# docker-machine: 0.15.0
+
+$ docker --version
+Docker version 18.06.1-ce, build e68fc7a
+
+$ docker-compose --version
+docker-compose version 1.22.0, build f46880f
+Docker credential gcloud
+echo gcr.io | docker-credential-gcloud get
+{
+  "Secret": "~~omitted~~",
+  "Username": "_dcgcloud_token"
+}
+Docker pull
+$ docker pull gcr.io/my-gcp-container-registry-project/php:7.1.19-0-fpm
+7.1.19-0-fpm: Pulling from my-gcp-container-registry-project/php
+Digest: sha256:~~~~omitted~~~~
+Status: Image is up to date for gcr.io/my-gcp-container-registry-project/php:7.1.19-0-fpm
+Docker compose pull
+$ docker-compose --verbose build
+...
+docker.utils.config.find_config_file: Trying paths: ['/Users/justin/.docker/config.json', '/Users/justin/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /Users/justin/.docker/config.json
+docker.auth.load_config: Found 'credHelpers' section
+...
+compose.service.build: Building drupal
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='/Users/justin/projects/project/drupal', tag='project_drupal', rm=True, forcerm=False, pull=False, nocache=False, dockerfile=None, cache_from=None, labels=None, buildargs={}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: Sending auth config ()
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.30/build?t=project_drupal&q=False&nocache=False&rm=True&forcerm=False&pull=False HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object APIClient._stream_helper at 0x10c5525c8>
+Step 1/6 : ARG REGISTRY=gcr.io/my-gcp-container-registry-project
+Step 2/6 : ARG PHP_VERSION=7.1.19-0
+Step 3/6 : FROM $REGISTRY/php:$PHP_VERSION-fpm
+ERROR: compose.cli.main.main: Service 'drupal' failed to build: unauthorized: You don't have the needed permissions to perform this operation, and you may have invalid credentials. To authenticate your request, follow the steps in: https://cloud.google.com/container-registry/docs/advanced-authentication
+Docker compose file
+version: '3.5'
+
+services:
+  ...
+  drupal:
+    container_name: drupal.${APP_NAME}.local
+    build:
+      context: ./drupal
+    user: "${UID}:0"
+Dockerfile
+ARG REGISTRY=gcr.io/my-gcp-container-registry-project/php
+ARG PHP_VERSION=7.1.19-0
+FROM $REGISTRY/php:$PHP_VERSION-fpm
+
+COPY d8/ /var/www/
+
+ENV PATH $PATH:/var/www/vendor/bin
+
+WORKDIR /var/www

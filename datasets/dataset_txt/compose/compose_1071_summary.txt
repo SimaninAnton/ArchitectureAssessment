@@ -1,0 +1,1 @@
+Docker compose/swarm issue in bridge networking

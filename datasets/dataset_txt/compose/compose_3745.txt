@@ -1,0 +1,4 @@
+fullofcaffeine commented on 8 Apr 2015
+I'm setting up a deployment stack, and I'm using Ansible to bootstrap a server, namely installing Docker and Docker compose (fig).
+I'm wondering why it's not recommended for production us yet? I've seen this in the main documentation but there are no specific reasons as to why.
+I could possibly use Ansible instead with the docker module, but docker-compose's API is better for the dev env, and using Ansible for production would not be DRY at all, since it would basically do the same thing compose does.

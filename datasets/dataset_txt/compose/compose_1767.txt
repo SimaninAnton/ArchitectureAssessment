@@ -1,0 +1,4 @@
+nschoe commented on 23 Jan 2017
+Currently, there is no way in compose to replicate docker run -P option (i.e. randomly bind all EXPOSEed ports from the Docker Image).
+We can randomly bind a port just by specifying it: ports:/n- <port>. But that could be useful to have a way to randomly bind all ports that are EXPOSE in the Dockerfiles.
+2

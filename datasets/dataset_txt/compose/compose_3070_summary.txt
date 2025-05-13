@@ -1,0 +1,1 @@
+Provide container name (and/or its number) in environment variables

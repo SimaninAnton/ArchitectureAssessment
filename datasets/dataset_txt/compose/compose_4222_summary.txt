@@ -1,0 +1,1 @@
+[feature] fig.yml support multy command

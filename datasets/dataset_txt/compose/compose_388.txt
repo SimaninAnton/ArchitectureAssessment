@@ -1,0 +1,130 @@
+skors commented on 23 Nov 2018
+Description of the issue
+Since version 1.23 the internal container name resolution for scaled services fails. Previous the behavior was
+service name resolves to one of the scaled instances, always the same
+service name with _<Int> resolves to the specific scaled instance.
+Now, only with the service name, I get an ip result. the numbered instances are not available anymore.
+see below
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:48:46 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  php-fpm:
+    image: php:7-fpm
+    restart: always
+  web:
+    depends_on:
+    - php-fpm
+    image: nginx:latest
+    links:
+    - php-fpm
+    restart: always
+version: '3.5'
+Steps to reproduce the issue
+start with docker-compose up -d --scale php-fpm=3
+run shell in Nginx container with docker-compose exec web bash
+install e.g. ping to test apt update && apt install iputils-ping dnsutils
+ping or nslookup php-fpm ping php-fpm; nslookup php-fpm -> success
+Observed result
+ping or nslookup on specific scaled instance ping php-fpm_1; nslookup php-fpm_1 -> fails
+ping or nslookup on specific scaled instance ping php-fpm_2; nslookup php-fpm_2 -> fails
+ping or nslookup on specific scaled instance ping php-fpm_3; nslookup php-fpm_3 -> fails
+Expected result
+The three instanced should be accessible as in Versions previous to 1.23
+ping or nslookup on specific scaled instance ping php-fpm_1; nslookup php-fpm_1 -> success, ping with response, IP address from nslookup
+ping or nslookup on specific scaled instance ping php-fpm_2; nslookup php-fpm_2 -> success, ping with response, IP address from nslookup
+ping or nslookup on specific scaled instance ping php-fpm_3; nslookup php-fpm_3 -> success, ping with response, IP address from nslookup
+Stacktrace / full error message
+skors$ docker-compose -f development.yaml up -d --scale php-fpm=3
+
+Creating network "development_default" with the default driver
+Creating development_php-fpm_1_60e9b569740b ... done
+Creating development_php-fpm_2_20d402026c6d ... done
+Creating development_php-fpm_3_4daf81947004 ... done
+Creating development_web_1_7051748e9bd9     ... done
+
+skors$ docker-compose -f development.yaml exec web bash
+
+root@d9c476451cf5:/# apt update -yqq && apt install -yqq iputils-ping dnsutils
+[...]
+root@d9c476451cf5:/# ping php-fpm
+PING php-fpm (172.21.0.2) 56(84) bytes of data.
+64 bytes from development_php-fpm_1_37d95f58dfea.development_default (172.21.0.2): icmp_seq=1 ttl=64 time=0.061 ms
+64 bytes from development_php-fpm_1_37d95f58dfea.development_default (172.21.0.2): icmp_seq=2 ttl=64 time=0.071 ms
+64 bytes from development_php-fpm_1_37d95f58dfea.development_default (172.21.0.2): icmp_seq=3 ttl=64 time=0.098 ms
+^C
+--- php-fpm ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2033ms
+rtt min/avg/max/mdev = 0.061/0.076/0.098/0.018 ms
+root@d9c476451cf5:/# ping php-fpm_1
+ping: php-fpm_1: Name or service not known
+root@d9c476451cf5:/# ping php-fpm_2
+ping: php-fpm_2: Name or service not known
+root@d9c476451cf5:/# ping php-fpm_3
+ping: php-fpm_3: Name or service not known
+root@d9c476451cf5:/#
+Additional information
+Same Procedure with docker compose in version 1.22 works on the same system:
+root@ba8ed2d182d3:/# ping php-fpm
+PING php-fpm (172.23.0.2) 56(84) bytes of data.
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=1 ttl=64 time=0.059 ms
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=2 ttl=64 time=0.072 ms
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=3 ttl=64 time=0.093 ms
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=4 ttl=64 time=0.059 ms
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=5 ttl=64 time=0.056 ms
+^C
+--- php-fpm ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4072ms
+rtt min/avg/max/mdev = 0.056/0.067/0.093/0.017 ms
+root@ba8ed2d182d3:/# ping php-fpm_1
+PING php-fpm_1 (172.23.0.2) 56(84) bytes of data.
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=1 ttl=64 time=0.039 ms
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=2 ttl=64 time=0.095 ms
+64 bytes from development_php-fpm_1.development_default (172.23.0.2): icmp_seq=3 ttl=64 time=0.098 ms
+^C
+--- php-fpm_1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2029ms
+rtt min/avg/max/mdev = 0.039/0.077/0.098/0.028 ms
+root@ba8ed2d182d3:/# ping php-fpm_2
+PING php-fpm_2 (172.23.0.3) 56(84) bytes of data.
+64 bytes from development_php-fpm_2.development_default (172.23.0.3): icmp_seq=1 ttl=64 time=0.059 ms
+64 bytes from development_php-fpm_2.development_default (172.23.0.3): icmp_seq=2 ttl=64 time=0.095 ms
+64 bytes from development_php-fpm_2.development_default (172.23.0.3): icmp_seq=3 ttl=64 time=0.062 ms
+^C
+--- php-fpm_2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2054ms
+rtt min/avg/max/mdev = 0.059/0.072/0.095/0.016 ms
+root@ba8ed2d182d3:/# ping php-fpm_3
+PING php-fpm_3 (172.23.0.4) 56(84) bytes of data.
+64 bytes from development_php-fpm_3.development_default (172.23.0.4): icmp_seq=1 ttl=64 time=0.067 ms
+64 bytes from development_php-fpm_3.development_default (172.23.0.4): icmp_seq=2 ttl=64 time=0.060 ms
+64 bytes from development_php-fpm_3.development_default (172.23.0.4): icmp_seq=3 ttl=64 time=0.094 ms
+^C
+--- php-fpm_3 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2054ms
+rtt min/avg/max/mdev = 0.060/0.073/0.094/0.017 ms
+thx in advance for your support

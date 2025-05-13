@@ -1,0 +1,1 @@
+Problems with Network between containers after many initializations - After many docker-compose down and up I have problems in the network

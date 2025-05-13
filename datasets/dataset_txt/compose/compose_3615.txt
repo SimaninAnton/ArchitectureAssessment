@@ -1,0 +1,24 @@
+BardiaAfshin commented on 27 May 2015
+I'm following the docs on setting up demo docker-compose project.
+When I run
+docker-compose up
+I get the following exception
+docker-compose up
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 208, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 208, in recreate_containers
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 74, in containers
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 385, in containers
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 102, in _result
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.models", line 741, in json
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json", line 338, in loads
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json.decoder", line 365, in decode
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json.decoder", line 383, in raw_decode
+ValueError: No JSON object could be decoded

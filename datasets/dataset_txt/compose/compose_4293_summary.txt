@@ -1,0 +1,1 @@
+Question: Should `fig stop/fig rm` also affect linked services?

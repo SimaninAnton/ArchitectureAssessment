@@ -1,0 +1,31 @@
+iMerica commented on 24 Jun 2018 •
+edited
+Description of the issue
+I have dozens of projects/repos that use Docker compose and often times many yaml files will include services with common names like app and worker. Currently this creates a collision because the containers will have duplicate names – project bar will have the containers of project foo and so on.
+Since -p/--project is very tedious (I'm the kind of person who doesn't even like to type docker-compose because its too long so I've aliased it to dc) the only option is for me to name each service something unique. Which is really bad because it would be great if I could just name my application "app" and my worker "worker", but I can't.
+It would be really great if we could just declare the project name in the yaml itself. Save everyone the hassle of having to wrap the docker-compose command with bug ridden bash wrappers that handle this stuff.
+"docker-compose version: docker-compose version 1.21.1, build 5a3f1a3
+"docker version": Docker version 18.03.1-ce, build 9ee9f40
+Example
+Project Foo
+version: '3'
+project: 'foo'
+services:
+  app:
+     ...
+  worker:
+    ..
+Containers:
+foo_app_1
+foo_worker_1
+Project Bar
+version: '3'
+project: 'bar'
+services:
+  app:
+     ...
+  worker:
+    ..
+Containers:
+bar_app_1
+bar_worker_1

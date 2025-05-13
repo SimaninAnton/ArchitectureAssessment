@@ -1,0 +1,1 @@
+unhelpful stacktrace instead of error message when file's version is malformed

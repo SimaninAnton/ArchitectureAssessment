@@ -1,0 +1,1 @@
+How to make a service in a docker-compose file depend on the health status of another service started outside

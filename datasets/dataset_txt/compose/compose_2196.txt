@@ -1,0 +1,8 @@
+5f6b3fb8 commented on 29 Jul 2016
+docker-compose version 1.8.0, build f3628c7
+RHEL 7.2
+I'm trying to run docker-compose to bring up a couple of services, and docker-compose prints the version and then exits. Here's my command line being executed:
+docker-compose --host tcp://192.168.47.189:2376 -tlsverify -tlscacert /jenkins_slave/workspace/sonar/5.6-release@tmp/secretFiles/c6b0ddbc-998a-436f-bd01-85e5c2095298/ca.pem -tlskey /jenkins_slave/workspace/sonar/5.6-release@tmp/secretFiles/87bbe5b3-8843-4b9f-9c6b-a128ca50a678/key.pem -tlscert /jenkins_slave/workspace/sonar/5.6-release@tmp/secretFiles/a76521ac-cadf-4380-8c75-70ebd6b66fa9/cert.pem up -d
+The result of the command
+docker-compose version 1.8.0, build f3628c7
+I'm following the docs here and I don't see a single -v or --version in the command line.

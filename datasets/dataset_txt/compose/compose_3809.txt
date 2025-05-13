@@ -1,0 +1,4 @@
+mazzy89 commented on 23 Mar 2015
+I'm trying to run my composition but I get this error when compose try to create container for nginx image
+Cannot start container 2d204a5aca6cc2ef37cf361a96074b3dea4ef17c7567e033cd66f79f6a1461fa: set apparmor profile docker-default: no such file or directory
+Here is my repo https://github.com/mazzy89/rstudioserver-docker

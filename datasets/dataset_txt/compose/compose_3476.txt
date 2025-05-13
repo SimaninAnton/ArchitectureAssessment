@@ -1,0 +1,11 @@
+vielmetti commented on 13 Jul 2015
+So I was trying to follow the Wordpress under Docker Compose installation directions as part of a little project to get Compose running on the Raspberry Pi. A few other examples worked, so I looked at the Wordpress instructions, and tried to follow along (substituting along the way the Pi images instead of the default ones). The docs I was working from are
+https://docs.docker.com/compose/wordpress/
+However - after some considerable head-scratching and spelunking and trying to figure out what was going wrong and discovering race conditions and bug reports I found this
+https://github.com/docker-library/wordpress
+which is the "official" Wordpress release, and it has an example (source code here)
+https://github.com/docker-library/docs/blob/master/wordpress/README.md
+with an "official" example of how to start up Wordpress with docker-compose, as well as a new entrypoint.sh
+https://github.com/docker-library/wordpress/blob/master/docker-entrypoint.sh
+that deals with the things that can go wrong for you (like a race condition when you first initialize the first database).
+The suggestion then is to fold the Wordpress README.md into the documentation for compose, so that the compose docs match the offical docs, and so the project does not provide conflicting guidance.

@@ -1,0 +1,63 @@
+berwyn commented on 7 Feb 2019 •
+edited
+Description of the issue
+I recently upgraded Compose to 1.24.0-rc1 (build 0f3d4dda) and now Compose's automatic parsing of my .env file fails. I keep export statements in my .env file so I can easily source it in addition to using it as a standard .env. In previous versions of Compose, this worked fine and didn't give me any issues, however with this new update I instead get an error about spaces inside a value.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+Output of docker version
+Docker version 18.09.1, build 4c52b90
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  db:
+    image: mdillon/postgis:10-alpine
+    ports:
+    - 5432:5432/tcp
+    volumes:
+    - pgdata:/var/lib/postgresql/data:rw
+  elasticsearch:
+    environment:
+      discovery.type: single-node
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.3
+  memcached:
+    image: memcached:1.5.10-alpine
+  redis:
+    image: redis:4.0.6-alpine
+  web:
+    build:
+      context: /Users/berwyn/dev/<repo>
+    depends_on:
+    - db
+    - elasticsearch
+    - memcached
+    - redis
+    environment:
+      DB_HOST: db
+      DB_USERNAME: postgres
+      FOUNDELASTICSEARCH_URL: elasticsearch
+      REDIS_CACHE_HOST: redis
+      # Several more removed variables here
+    ports:
+    - 3000:3000/tcp
+    stdin_open: true
+    tty: true
+    volumes:
+    - /Users/berwyn/dev/<repo>:/app:rw
+version: '3.0'
+volumes:
+  pgdata: {}
+Steps to reproduce the issue
+Create a .env file with something like export FOO=1
+Attempt to run a one-off container docker-compose run --rm service bash
+Notice the error
+Observed result
+ERROR: In file ./.env: environment variable name `export FOO` may not contains whitespace.
+Expected result
+The container runs and FOO is correctly set in it.
+Stacktrace / full error message
+ERROR: In file ./.env: environment variable name `export FOO` may not contains whitespace.
+Additional information
+macOS 10.14.3
+Docker & Friends installed using Cask (cask install docker-edge)
+32

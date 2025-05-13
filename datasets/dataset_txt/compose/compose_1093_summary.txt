@@ -1,0 +1,1 @@
+`docker-compose config` misses strange keys in volumes

@@ -1,0 +1,15 @@
+srhb commented on 31 May 2016
+If several services in a composition contain the same build arg, it's very hard (I haven't found a good method yet) to disambiguate it while retaining the ability to have default build args in a Dockerfile.
+The obvious way to disambiguate build args would be to prepend the service name:
+a:
+  build:
+    args:
+      - x=$a_x
+b:
+  build:
+    args:
+      - x=$b_x
+However, if $a_x or $b_x are unset, they will be defaulted to empty strings with the warning:
+WARNING: The a_x variable is not set. Defaulting to a blank string.
+Now, they will be passed to docker build as empty strings, circumventing any default arg in the Dockerfile.
+This seems to me to be a very surprising and not docker-like way of handling it. A less surprising (and more featureful) method would be to not pass unset build args at all.

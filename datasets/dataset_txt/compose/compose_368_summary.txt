@@ -1,0 +1,1 @@
+docker-compose build on Ubuntu seems to sort services before building them

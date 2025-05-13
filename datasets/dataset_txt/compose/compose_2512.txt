@@ -1,0 +1,71 @@
+ComaVN commented on 11 Apr 2016
+I have the following docker-compose.yml:
+version: '2'
+services:
+  foo:
+    image: busybox
+    volumes:
+      - /tmp
+  bar:
+    image: busybox
+    volumes:
+      - /tmp
+  qux:
+    image: busybox
+    volumes_from:
+      - foo
+      - bar
+Note that foo and bar both have an anonymous (is that the term?) volume at /tmp.
+Now, when I run this, I get 2 anonymous volumes:
+% docker-compose up && docker ps -a && docker volume ls
+Creating network "dockercomposebug_default" with the default driver
+Pulling foo (busybox:latest)...
+latest: Pulling from library/busybox
+385e281300cc: Pull complete
+a3ed95caeb02: Pull complete
+Digest: sha256:4a887a2326ec9e0fa90cce7b4764b0e627b5d6afcb81a3f73c85dc29cea00048
+Status: Downloaded newer image for busybox:latest
+Creating dockercomposebug_foo_1
+Creating dockercomposebug_bar_1
+Creating dockercomposebug_qux_1
+Attaching to dockercomposebug_foo_1, dockercomposebug_bar_1, dockercomposebug_qux_1
+dockercomposebug_foo_1 exited with code 0
+dockercomposebug_bar_1 exited with code 0
+dockercomposebug_qux_1 exited with code 0
+CONTAINER ID        IMAGE               COMMAND             CREATED                  STATUS                              PORTS               NAMES
+dd5e0151a557        busybox             "sh"                Less than a second ago   Exited (0) Less than a second ago                       dockercomposebug_qux_1
+f84c6f721415        busybox             "sh"                Less than a second ago   Exited (0) Less than a second ago                       dockercomposebug_bar_1
+9895e95688fa        busybox             "sh"                Less than a second ago   Exited (0) 1 seconds ago                                dockercomposebug_foo_1
+DRIVER              VOLUME NAME
+local               be5f699ee4b4fc5fd54a0247f686916c9fbf4ff1dfb7b9016cba812c8b6a7f48
+local               d5e17a52bce7da4763446c87a85e994472f829d07d9ea33c84ad62b4ed999139
+Now, when I try to remove the exited containers, including their volumes, only one is removed:
+% docker-compose rm -v --force && docker ps -a && docker volume ls
+Going to remove dockercomposebug_qux_1, dockercomposebug_bar_1, dockercomposebug_foo_1
+Removing dockercomposebug_qux_1 ... done
+Removing dockercomposebug_bar_1 ... done
+Removing dockercomposebug_foo_1 ... done
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+DRIVER              VOLUME NAME
+local               be5f699ee4b4fc5fd54a0247f686916c9fbf4ff1dfb7b9016cba812c8b6a7f48
+I cannot remove the remaining volume, even tho there are no more containers:
+% docker volume rm be5f699ee4b4fc5fd54a0247f686916c9fbf4ff1dfb7b9016cba812c8b6a7f48
+Error response from daemon: Conflict: remove be5f699ee4b4fc5fd54a0247f686916c9fbf4ff1dfb7b9016cba812c8b6a7f48: volume is in use - [dd5e0151a557266caa306cfc3c96a97518e96999adbcbb782ae5eb38f7e1f036]
+The only way I can remove this volume is by clearing out the /var/lib/docker directory.
+Running Docker 1.10.3, using boot2docker from OSX
+% docker version
+Client:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 21:49:11 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 21:49:11 2016
+ OS/Arch:      linux/amd64

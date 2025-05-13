@@ -1,0 +1,98 @@
+msabramo commented on 14 Feb 2016
+My use case is that I'm running docker-compose on a Mac so when I do docker-compose port, by default it returns 0.0.0.0 as the IP address, which is not useful if you're on a Mac and trying to contact a service on the Docker host.
+Example:
+I have a docker-compose.yml that looks like this:
+version: '2'
+services:
+
+  anonweb:
+    ...
+    ports:
+      - ":8000"
+    ...
+Now I do:
+[marca@marca-mac2 smdevstack]$ docker-compose up -d
+Recreating smdevstack_anonweb_1
+
+[marca@marca-mac2 smdevstack]$ docker-compose ps
+        Name                      Command               State            Ports
+---------------------------------------------------------------------------------------
+smdevstack_anonweb_1   gunicorn --paste=/appinifi ...   Up      0.0.0.0:32777->8000/tcp
+
+[marca@marca-mac2 smdevstack]$ docker-compose port anonweb 8000
+0.0.0.0:32777
+
+[marca@marca-mac2 smdevstack]$ http $(docker-compose port anonweb 8000)/status/pid
+
+http: error: ConnectionError: HTTPConnectionPool(host='0.0.0.0', port=32777): Max retries exceeded with url: /status/pid (Caused by NewConnectionError('<requests.packages.urllib3.connection.HTTPConnection object at 0x10363fa50>: Failed to establish a new connection: [Errno 61] Connection refused',)) while doing GET request to URL: http://0.0.0.0:32777/status/pid
+Connecting to 0.0.0.0:32777 of course from the Mac is not useful.
+So instead I'd like to use make the container bind to the real IP address of the Docker machine. I change my docker-compose.yml to the following:
+version: '2'
+services:
+
+  anonweb:
+  ...
+    ports:
+      - "${DOCKER_HOST_IP}::8000"
+    ...
+This in itself accomplishes nothing because DOCKER_HOST_IP is not set:
+[marca@marca-mac2 smdevstack]$ docker-compose up -d
+WARNING: The DOCKER_HOST_IP variable is not set. Defaulting to a blank string.
+Starting smdevstack_anonweb_1
+
+[marca@marca-mac2 smdevstack]$ docker-compose ps
+WARNING: The DOCKER_HOST_IP variable is not set. Defaulting to a blank string.
+        Name                      Command               State            Ports
+---------------------------------------------------------------------------------------
+smdevstack_anonweb_1   gunicorn --paste=/appinifi ...   Up      0.0.0.0:32779->8000/tcp
+
+[marca@marca-mac2 smdevstack]$ docker-compose port anonweb 8000
+WARNING: The DOCKER_HOST_IP variable is not set. Defaulting to a blank string.
+0.0.0.0:32779
+
+[marca@marca-mac2 smdevstack]$ http $(docker-compose port anonweb 8000)/status/pid
+WARNING: The DOCKER_HOST_IP variable is not set. Defaulting to a blank string.
+
+http: error: ConnectionError: HTTPConnectionPool(host='0.0.0.0', port=32779): Max retries exceeded with url: /status/pid (Caused by NewConnectionError('<requests.packages.urllib3.connection.HTTPConnection object at 0x103789a50>: Failed to establish a new connection: [Errno 61] Connection refused',)) while doing GET request to URL: http://0.0.0.0:32779/status/pid
+It works great if I arrange for DOCKER_HOST_IP to be set.
+One nice way to do this is with direnv. Assuming I have direnv installed, I can do this:
+[marca@marca-mac2 smdevstack]$ cat > .envrc
+export DOCKER_HOST_IP=$(docker-machine ip)
+direnv: error .envrc is blocked. Run `direnv allow` to approve its content.
+
+[marca@marca-mac2 smdevstack]$ direnv allow
+direnv: loading .envrc
+direnv: export +DOCKER_HOST_IP
+Now I get this:
+[marca@marca-mac2 smdevstack]$ docker-compose up -d
+Recreating smdevstack_anonweb_1
+
+[marca@marca-mac2 smdevstack]$ docker-compose ps
+        Name                      Command               State               Ports
+----------------------------------------------------------------------------------------------
+smdevstack_anonweb_1   gunicorn --paste=/appinifi ...   Up      192.168.99.101:32774->8000/tcp
+
+[marca@marca-mac2 smdevstack]$ docker-compose port anonweb 8000
+192.168.99.101:32774
+
+[marca@marca-mac2 smdevstack]$ http $(docker-compose port anonweb 8000)/status/pid
+HTTP/1.1 200 OK
+Connection: close
+Content-Length: 112
+Content-Type: application/json; charset=UTF-8
+Date: Sat, 13 Feb 2016 20:46:16 GMT
+SM-Request-ID: 094fe0a4-605c-457f-a0b1-8a97764abcaa
+Server: gunicorn/19.4.5
+
+{
+    "host": "7c8b1a192f27",
+    "pid": 9,
+    "reason": "/appenv/enabled.txt does not exist",
+    "status": "SERVICE_DISABLED"
+}
+Beautiful!
+But now if I want my little docker-compose project to be easily usable by others, I have to tell them to install direnv. Also my solution assumes folks are using docker-machine and maybe they aren't. Maybe they are using straight Docker without Docker Machine and so that docker-machine ip command won't work.
+I am asking if docker-compose could simply set that environment variable automatically, perhaps by taking the existing DOCKER_HOST variable and massaging it into a simple IP address.
+Then it just works out of the box without requiring direnv.
+Reasonable?
+Cc: @sudarkoff

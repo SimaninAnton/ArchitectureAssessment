@@ -1,0 +1,51 @@
+omerh commented on 28 Jun 2017 •
+edited
+I hame having some weird issue now.
+I have a fresh install docker with docker compose
+docker version: 17.03.2-ce
+docker-compose: 1.14.0, build c7bdf9e
+running on ubuntu 16.04
+I am trying to run the following compose file:
+version: "3"
+services:
+  web:
+    image: tutum/hello-world
+    ports:
+     - "86:80"
+And I am getting port parse exception when running the command:
+docker-compose -f test.yml up -d
+The exception is:
+ERROR: for web  expected string or bytes-like object
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python3.5/dist-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/local/lib/python3.5/dist-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python3.5/dist-packages/compose/cli/main.py", line 926, in up
+    scale_override=parse_scale_args(options['--scale']),
+  File "/usr/local/lib/python3.5/dist-packages/compose/project.py", line 424, in up
+    get_deps
+  File "/usr/local/lib/python3.5/dist-packages/compose/parallel.py", line 69, in parallel_execute
+    raise error_to_reraise
+  File "/usr/local/lib/python3.5/dist-packages/compose/parallel.py", line 167, in producer
+    result = func(obj)
+  File "/usr/local/lib/python3.5/dist-packages/compose/project.py", line 410, in do
+    rescale=rescale
+  File "/usr/local/lib/python3.5/dist-packages/compose/service.py", line 460, in execute_convergence_plan
+    self.show_scale_warnings(scale)
+  File "/usr/local/lib/python3.5/dist-packages/compose/service.py", line 205, in show_scale_warnings
+    if self.specifies_host_port() and desired_num > 1:
+  File "/usr/local/lib/python3.5/dist-packages/compose/service.py", line 983, in specifies_host_port
+    return any(has_host_port(binding) for binding in self.options.get('ports', []))
+  File "/usr/local/lib/python3.5/dist-packages/compose/service.py", line 983, in <genexpr>
+    return any(has_host_port(binding) for binding in self.options.get('ports', []))
+  File "/usr/local/lib/python3.5/dist-packages/compose/service.py", line 963, in has_host_port
+    _, external_bindings = split_port(binding)
+  File "/usr/local/lib/python3.5/dist-packages/docker/utils/ports.py", line 57, in split_port
+    match = PORT_SPEC.match(port)
+TypeError: expected string or bytes-like object
+I have tried downgrading to 1.13.0 and issue still persists.
+after downgrading to 1.7.0 it works as expected
+3

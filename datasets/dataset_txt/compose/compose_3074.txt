@@ -1,0 +1,25 @@
+Yajo commented on 19 Nov 2015
+Installing docker-compose in CentOS under a virtualenv fails with this:
+Traceback (most recent call last):
+  File "/opt/docker/odoo-grupoesoc/pyenv/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/opt/docker/odoo-grupoesoc/pyenv/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3095, in <module>
+    @_call_aside
+  File "/opt/docker/odoo-grupoesoc/pyenv/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3081, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/docker/odoo-grupoesoc/pyenv/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3108, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+  File "/opt/docker/odoo-grupoesoc/pyenv/lib/python2.7/site-packages/pkg_resources/__init__.py", line 658, in _build_master
+    ws.require(__requires__)
+  File "/opt/docker/odoo-grupoesoc/pyenv/lib/python2.7/site-packages/pkg_resources/__init__.py", line 959, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/opt/docker/odoo-grupoesoc/pyenv/lib/python2.7/site-packages/pkg_resources/__init__.py", line 846, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'functools32' distribution was not found and is required by jsonschema
+Steps to reproduce:
+virtualenv-2.7 pyenv
+source ./pyenv/bin/activate
+pip install docker-compose
+docker-compose pull
+Workaround: pip install functools32
+Related to #2222?

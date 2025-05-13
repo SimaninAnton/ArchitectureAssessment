@@ -1,0 +1,3 @@
+vieux commented on 30 Oct 2015
+I'm not sure I'm reading correctly, but it seems like compose is choosing bridge by default as default network driver : https://github.com/docker/compose/blob/master/compose/project.py#L86
+We should let the daemon decide instead, same as this PR moby/moby#17504

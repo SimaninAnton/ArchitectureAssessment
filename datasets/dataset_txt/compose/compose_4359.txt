@@ -1,0 +1,12 @@
+renato-zannon commented on 26 Mar 2014
+Hi!
+If I get the binary from https://github.com/orchardup/fig/releases/download/0.3.2/linux and run on my Arch Linux, I get a few errors on startup:
+$ /usr/local/bin/fig --version
+sh: symbol lookup error: sh: undefined symbol: rl_signal_event_hook
+sh: symbol lookup error: sh: undefined symbol: rl_signal_event_hook
+sh: symbol lookup error: sh: undefined symbol: rl_signal_event_hook
+sh: symbol lookup error: sh: undefined symbol: rl_signal_event_hook
+fig 0.3.2
+However, if I install directly from pip, these errors don't appear.
+From a bit of googling it seems to me they are related to the readline version... Might be some incompatibility with a bundled library in the binary version.
+I haven't had any issues apart from the annoying messages though (console apps work fine).

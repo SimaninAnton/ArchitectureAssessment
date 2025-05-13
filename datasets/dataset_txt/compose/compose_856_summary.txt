@@ -1,0 +1,1 @@
+--credentials-spec parameter shall be possible to use without swarm

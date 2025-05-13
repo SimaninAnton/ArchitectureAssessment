@@ -1,0 +1,34 @@
+voltagex commented on 1 Nov 2015
+Given the following docker-compose
+db:
+  image: mysql:latest
+  ports: 
+   - "3306:3306"
+  environment:
+   - MYSQL_ROOT_PASSWORD=docker
+
+wheelmap:
+  build: .
+  links:
+   - db
+   - db:db
+I'd expect the wheelmap container to have an /etc/hosts entry like
+172.17.0.26    db
+However, I get
+172.17.0.26     wheelmap_db_1
+172.17.0.26     wheelmap_db_1.bridge
+172.17.0.46     condescending_swartz
+172.17.0.46     condescending_swartz.bridge
+instead. These names don't look like they're going to be stable, and they don't match the documentation, which says:
+links
+Link to containers in another service. Either specify both the service name and the link alias (SERVICE:ALIAS), or just the service name (which will also be used for the alias).
+
+links:
+ - db
+ - db:database
+ - redis
+An entry with the alias’ name will be created in /etc/hosts inside containers for this service, e.g:
+
+172.17.2.186  db
+172.17.2.186  database
+172.17.2.187  redis

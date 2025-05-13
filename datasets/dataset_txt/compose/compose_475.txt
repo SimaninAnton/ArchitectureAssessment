@@ -1,0 +1,18 @@
+vm31 commented on 27 Sep 2018
+Description of the issue
+Context information (for bug reports)
+Output of "docker-compose version"
+Output of "docker version"
+Output of "docker-compose config"
+Steps to reproduce the issue
+1.docker build
+2.docker run
+3.docker ps
+Observed result
+no container is shown
+Expected result
+container hsould start and status should be up and running
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

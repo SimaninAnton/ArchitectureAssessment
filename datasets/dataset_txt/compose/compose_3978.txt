@@ -1,0 +1,28 @@
+bachue commented on 23 Jan 2015
+When I write fig.yml like this:
+web:
+  build: .
+  volumes:
+    - .:/var/www/sso
+  environment:
+    - MOUNTED: true
+  ports:
+    - "4000:80"
+  links:
+    - db
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 56, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 427, in up
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.project", line 174, in up
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 207, in recreate_containers
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 237, in recreate_container
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 176, in create_container
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 370, in _get_container_create_options
+TypeError: unhashable type: 'dict'
+Fig will raise error like this, looks like the root cause is I pass an array in environment, if I give a dict, then it works.
+My fig version is 1.0.1, docker is 1.3.2

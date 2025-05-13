@@ -1,0 +1,6 @@
+jamshid commented on 5 Apr 2016
+Would be good if there were a way to stop all the docker-compose run svc param1 jobs of service.
+Seems --all should be usable on stop like it is for rm.
+https://github.com/docker/compose/releases/tag/1.7.0-rc1
+PS: would be nice if rm -f svc also stopped running containers.
+1

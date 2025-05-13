@@ -1,0 +1,9 @@
+Contributor
+dnephin commented on 3 Dec 2015
+From #2477
+If we remove links for networking, run will no longer start any "dependent" services. Some users were depending on this functionality to be able to do things with a single run command.
+From #2474
+When we changed the default behaviour of up to not exit until all containers have exited, it broke the workflow for some users.
+To support these kinds of workflows, we might be able to do something like this:
+Add an --up flag to run. This flag would tell Compose to start all services in the project before running the one-off container.
+Combined with proposed docker-compose down (#2277) this would allow users to run a testing workflow with only two commands, instead of 4 or 5.

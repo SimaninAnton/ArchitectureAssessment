@@ -1,0 +1,1 @@
+Docker-compose start strange behviour when containers are not available

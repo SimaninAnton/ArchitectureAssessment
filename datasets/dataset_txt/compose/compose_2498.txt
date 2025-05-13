@@ -1,0 +1,5 @@
+iamKurt commented on 14 Apr 2016
+Hi folks,
+I'm wondering whether there is support for default values in Compose v1.6.2. I've been trying to do the following:
+image: postgres:${VERSION:-latest}
+This results in an error. Is this the correct format?

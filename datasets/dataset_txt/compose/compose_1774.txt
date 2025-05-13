@@ -1,0 +1,16 @@
+rishimathur81 commented on 20 Jan 2017
+I upgraded to the latest docker version (1.13) for mac os x and when I try to run docker-compose I get the following error:
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 64, in main
+File "compose/cli/main.py", line 116, in perform_command
+File "compose/cli/main.py", line 848, in up
+File "compose/project.py", line 389, in up
+File "compose/service.py", line 302, in ensure_image_exists
+File "compose/service.py", line 786, in build
+File "site-packages/docker/api/build.py", line 139, in build
+File "site-packages/docker/utils/utils.py", line 105, in tar
+File "tarfile.py", line 2046, in addfile
+AttributeError: 'NoneType' object has no attribute 'tobuf'
+Everything was working fine on all previous versions of docker for osx until this recent upgrade
+14

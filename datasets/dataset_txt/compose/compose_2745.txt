@@ -1,0 +1,13 @@
+o1lo01ol1o commented on 19 Feb 2016
+Is there a configuration variable that could be causing a conflict? Versions are all up to spec and related yml is minimal.
+$ docker --version
+Docker version 1.10.1, build 9e83765
+
+
+$ docker-compose --version
+docker-compose version 1.6.0rc2, build 695c692
+docker-compose.yml
+version: '2'
+services:
+  rabbitmq:
+      image: rabbitmq

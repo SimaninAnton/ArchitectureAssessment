@@ -1,0 +1,39 @@
+paonath commented 7 days ago
+I have tried with the latest version of my channel (Stable or Edge)
+I have uploaded Diagnostics
+Diagnostics ID: A3663CF0-4AA1-49B2-AEA7-779D6B81A3D7/20200123114732
+Expected behavior
+should be able to build containers from yml: docker-compose -f SOME_FILE.yml up --build
+Actual behavior
+unable to build the same docker-compose file working on previous version:
+docker-compose.exe -f SOME_FILE.yml up --build
+
+> WARNING: The Docker Engine you're using is running in swarm mode.
+> 
+> Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+> 
+> To deploy your application across the swarm, use `docker stack deploy`.
+> 
+> Building SOME
+> Traceback (most recent call last):
+>   File "docker-compose", line 6, in <module>
+>   File "compose\cli\main.py", line 72, in main
+>   File "compose\cli\main.py", line 128, in perform_command
+>   File "compose\cli\main.py", line 1077, in up
+>   File "compose\cli\main.py", line 1073, in up
+>   File "compose\project.py", line 548, in up
+>   File "compose\service.py", line 351, in ensure_image_exists
+>   File "compose\service.py", line 1106, in build
+>   File "site-packages\docker\api\build.py", line 160, in build
+>   File "site-packages\docker\utils\build.py", line 31, in tar
+>   File "site-packages\docker\utils\build.py", line 109, in create_archive
+> UnicodeDecodeError: 'ascii' codec can't decode byte 0xef in position 0: ordinal not in range(128)
+> [15572] Failed to execute script docker-compose
+Information
+Windows Version: Windows 10 Pro N
+Docker Desktop Version: 2.2.0.0 (42247)
+Are you running inside a virtualized Windows e.g. on a cloud server or on a mac VM: NO
+Steps to reproduce the behavior
+build a mid-complex docker file
+build a simple yml docker-compose file
+try to build machine(s)

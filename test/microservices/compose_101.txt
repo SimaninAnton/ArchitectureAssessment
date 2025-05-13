@@ -1,0 +1,131 @@
+ad-m commented on 5 Sep 2019 •
+edited
+Description of the issue
+docker-compose version 1.25.0-rc2, build 661ac20e silently ignores some container when pull. Docker-compose version docker-compose version 1.24.1, build 4667896b pull images mentioned in docker-compose in that situation.
+Context information (for bug reports)
+Output of docker-compose version
+$ ./docker-compose-Linux-x86_64 version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+$ docker-compose version
+docker-compose version 1.25.0-rc2, build 661ac20e
+docker-py version: 4.0.1
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.0k  28 May 2019
+Output of docker version
+$ docker version
+Client: Docker Engine - Community
+ Version:           19.03.1
+ API version:       1.40
+ Go version:        go1.12.5
+ Git commit:        74b1e89
+ Built:             Thu Jul 25 21:21:24 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.1
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.5
+  Git commit:       74b1e89
+  Built:            Thu Jul 25 21:19:56 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+$ docker-compose config 
+services:
+  agent:
+    build:
+      context: /home/{{truncated}}/journal
+    command: node ./index.js
+    environment:
+      AGENT_ID: {{truncated}}
+      AGENT_PRIVATE_KEY: '-----BEGIN RSA PRIVATE KEY-----
+{{truncated}}
+        -----END RSA PRIVATE KEY-----
+
+        '
+    image: {{truncated}}agent:latest
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: PathPrefix:/
+      traefik.port: '8888'
+    restart: always
+    volumes:
+    - /home/guru/{{truncated}}/conf:/src/conf:rw
+    - /home/guru/{{truncated}}/datadir:/src/datadir:rw
+  reverse-proxy:
+    command: '--api --docker
+
+      --entryPoints=''Name:http Address::80''
+
+      --entryPoints=''{{truncated}}''
+
+      --defaultentrypoints=http,https
+
+      --acme=''true''
+
+      --acme.email=''{{truncated}}''
+
+      --acme.storage=''/data/acme.json''
+
+      --acme.entrypoint=''https''
+
+      --acme.onhostrule=''true''
+
+      --acme.httpchallenge.entrypoint=''http''
+
+      --acme.keytype=''EC256''
+
+      # --logLevel=DEBUG
+
+      # --acme.acmelogging=''true''
+
+      '
+    image: traefik
+    ports:
+    - 80:80/tcp
+    - 443:443/tcp
+    - 127.0.0.1:8080:8080/tcp
+    restart: always
+    volumes:
+    - /home/guru/{{truncated}}/acme:/data:rw
+    - /home/guru/.acme.sh:/mnt/acme:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+version: '3.0'
+$ diff <(./docker-compose-Linux-x86_64 config) <(docker-compose config) | wc -l
+0
+Steps to reproduce the issue
+Execute docker-compose pull agent
+Observed result
+Silently ignores (without any errors):
+$ docker-compose pull agent | wc -l
+0
+$ docker-compose pull agent
+$ echo $?
+0
+$ docker-compose pull
+Pulling reverse-proxy ... done
+Expected result
+Pull image from docker registry (as in previous version):
+$ ./docker-compose-Linux-x86_64 pull agent
+Pulling agent ... done
+$ ./docker-compose-Linux-x86_64 pull
+Pulling agent         ... done
+Pulling reverse-proxy ... done
+Stacktrace / full error message
+No apply
+Additional information

@@ -1,0 +1,54 @@
+SamD commented 15 days ago
+Running my compose build on most environments has worked fine, attempting to run this on a jenkins worker however exits without any message e.g.
+[worker@butler-worker docker]$ /usr/local/bin/docker-compose --verbose -f ./docker-compose-build-dev.yml build
+compose.config.config.find: Using configuration files: ./docker-compose-build-dev.yml
+docker.utils.config.find_config_file: Trying paths: ['/home/worker/.docker/config.json', '/home/worker/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.utils.config.find_config_file: Trying paths: ['/home/worker/.docker/config.json', '/home/worker/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+urllib3.connectionpool._new_conn: Starting new HTTP connection (1): localhost
+urllib3.connectionpool._make_request: http://localhost:2375 "GET /v1.37/version HTTP/1.1" 200 549
+compose.cli.command.get_client: docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+compose.cli.command.get_client: Docker base_url: http://localhost:2375
+compose.cli.command.get_client: Docker version: Platform={'Name': ''}, Components=[{'Name': 'Engine', 'Version': '18.05.0-ce', 'Details': {'ApiVersion': '1.37', 'Arch': 'amd64', 'BuildTime': '2018-05-09T22:18:36.000000000+00:00', 'Experimental': 'false', 'GitCommit': 'f150324', 'GoVersion': 'go1.9.5', 'KernelVersion': '3.10.0-514.el7.x86_64', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.05.0-ce, ApiVersion=1.37, MinAPIVersion=1.12, GitCommit=f150324, GoVersion=go1.9.5, Os=linux, Arch=amd64, KernelVersion=3.10.0-514.el7.x86_64, BuildTime=2018-05-09T22:18:36.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('test')
+urllib3.connectionpool._make_request: http://localhost:2375 "GET /v1.37/networks/test HTTP/1.1" 404 37
+compose.service.build: Building db
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='...', tag='...:test', rm=True, forcerm=False, pull=False, nocache=False, dockerfile='Dockerfile-build', cache_from=None, labels=None, buildargs={'PG_DATA': '/var/lib/postgresql/data/pgdata', 'POSTGRES_VERSION': '9.6', 'BASE_DIR': '/opt/...', 'SDDC_MGR_MOUNT': '...'}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.utils.config.find_config_file: Trying paths: ['/home/worker/.docker/config.json', '/home/worker/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.api.build._set_auth_headers: No auth config found
+strace shows a broken pipe if that helps
+...
+docker.utils.config.find_config_file: Trying paths: ['/home/worker/.docker/config.json', '/home/worker/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.api.build._set_auth_headers: No auth config found
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=25844, si_uid=501, si_status=SIGPIPE, si_utime=35, si_stime=8} ---
+--- SIGPIPE {si_signo=SIGPIPE, si_code=SI_TKILL, si_pid=25843, si_uid=501} ---
++++ killed by SIGPIPE +++
+docker version
+Client:
+ Version:      18.05.0-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   f150324
+ Built:        Wed May  9 22:14:54 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.05.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   f150324
+  Built:        Wed May  9 22:18:36 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Additionally I needed to: export COMPOSE_API_VERSION=1.37

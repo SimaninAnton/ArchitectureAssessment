@@ -1,0 +1,5 @@
+liamzebedee commented on 28 Jul 2014
+Firstly, Fig is a wonderful piece of software, thanks so much for designing something so simple yet powerful to use. Now onto my problem:
+I have an issue where my Rails app (as based off of your tutorial) is receiving connections to the Rack server very long after the browser initiates them (20 seconds), and is very slow in transmitting data (another 10 seconds on top of that). The interesting thing is this only happens when Ubuntu is not connected to the Internet. I've tested this without Internet and it runs slowly, yet when I'm connected to the home wifi it loads fine.
+I've also tried this out again with the vanilla Rails app, restarted, turned off the firewall etc. Nothing seems to work.
+I think it's something to do with the docker0 interface.

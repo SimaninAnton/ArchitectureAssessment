@@ -1,0 +1,54 @@
+pandemie commented on 22 Jun 2018
+Description of the issue
+In my docker-compose.yml I have external: false but docker-compose config gives me external: true.
+What is the reason for this change of value? My assumption was that this command just validates the file and performs only cosmetic changes.
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Steps to reproduce the issue
+$> cat docker-compose.yml
+version: '3.4'
+
+volumes:
+      test-volume:
+          name: test-name
+          external: false
+
+services:
+    test-service:
+        image: test-image
+
+$> docker-compose -f docker-compose.yml config
+services:
+  test-service:
+    image: test-image
+version: '3.4'
+volumes:
+  test-volume:
+    external: true
+    name: test-name
+Observed result
+docker-compose config yields external: true
+Expected result
+external: false

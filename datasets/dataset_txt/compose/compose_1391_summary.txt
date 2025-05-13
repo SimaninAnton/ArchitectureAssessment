@@ -1,0 +1,1 @@
+docker-compose process constantly takes ~15% CPU

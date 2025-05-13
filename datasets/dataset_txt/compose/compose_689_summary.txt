@@ -1,0 +1,1 @@
+Images command should output the same tag as the service definition if possible

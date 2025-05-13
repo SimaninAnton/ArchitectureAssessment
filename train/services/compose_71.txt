@@ -1,0 +1,51 @@
+zejaco commented on 31 Oct 2019
+Description of the issue
+It seems that despite having 0 as exit code after running docker-compose -f /path/to/docker-compose up -d the output is redirected to stderr instead of stdout
+Context information (for bug reports)
+I was playing a bit and trying to execute docker-compose cli commands from the Scala code. And I was a bit surprised that even despite getting 0 as exit_code I couldn't get the output of that command. It appeared that the output was redirected to stderr instead stdout.
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.4
+ API version:       1.40
+ Go version:        go1.12.10
+ Git commit:        9013bf5
+ Built:             Thu Oct 17 23:44:48 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.4
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.10
+  Git commit:       9013bf5
+  Built:            Thu Oct 17 23:50:38 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Steps to reproduce the issue
+Execute val output = Process(s"docker-compose -f $pathToDockerfile up -d", new File(dirWhereDockerfileIsPlaced)).!!
+println(output)
+Observed result
+Output is empty even if a command was executed with 0 exit code. The output is redirected to stderr instead of stdout.
+Expected result
+Output should contain:
+Starting docker_componentA_1 ... done
+Starting docker_componentB_1 ... done
+Stderr should be empty if everything went well.
+Additional information
+macOS Sierra
+10.12.6

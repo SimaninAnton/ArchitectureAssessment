@@ -1,0 +1,24 @@
+jpanganiban commented on 2 Jul 2014
+I have a fig.yml and an app directory that contains a Dockerfile. It complains that the Gemfile doesn't exist.
+## file tree
+- app_dir/
+  - Dockerfile
+  - app.rb
+  - Gemfile
+- fig.yml
+## fig.yml
+
+app:
+  build: app_dir
+  command: ruby app.rb
+  volumes:
+    - app_dir/:/deploy
+## app_dir/Dockerfile
+
+FROM <some image that contains ruby + bundler>
+VOLUME ["/deploy"]
+WORKDIR /deploy
+RUN bundle install
+Doing a RUN echo $(ls) inside the Dockerfile shows that the directory doesn't contain anything.
+But doing a fig run and checking the /deploy directory shows that the files mounted from the host are there.
+Am I doing something wrong?

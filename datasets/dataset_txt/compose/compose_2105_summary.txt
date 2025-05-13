@@ -1,0 +1,1 @@
+docker-proxy remains running and cannot upgrade containers

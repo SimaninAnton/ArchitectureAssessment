@@ -1,0 +1,56 @@
+peterthomassen commented on 28 Sep 2016
+I am using docker 1.12.1 on Ubuntu 16.04, and docker-compose 1.8.1. The Compose file from https://docs.docker.com/compose/compose-file/#ipv4-address-ipv6-address does not run correctly: The ipv6_address setting seems to be ignored. I tried on various machines.
+For reference, I created docker-compose.yml with the following content:
+version: '2'
+
+services:
+  app:
+    image: busybox
+    command: ifconfig
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.10
+        ipv6_address: 2001:3984:3989::10
+
+networks:
+  app_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "true"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+        gateway: 172.16.238.1
+      - subnet: 2001:3984:3989::/64
+        gateway: 2001:3984:3989::1
+Now, running docker-compose up produces
+Creating network "tmp_app_net" with driver "bridge"
+Creating tmp_app_1
+Attaching to tmp_app_1
+app_1  | eth0      Link encap:Ethernet  HWaddr 02:42:AC:10:EE:0A  
+app_1  |           inet addr:172.16.238.10  Bcast:0.0.0.0  Mask:255.255.255.0
+app_1  |           inet6 addr: fe80::42:acff:fe10:ee0a/64 Scope:Link
+app_1  |           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+app_1  |           RX packets:4 errors:0 dropped:0 overruns:0 frame:0
+app_1  |           TX packets:1 errors:0 dropped:0 overruns:0 carrier:0
+app_1  |           collisions:0 txqueuelen:0 
+app_1  |           RX bytes:520 (520.0 B)  TX bytes:90 (90.0 B)
+app_1  | 
+app_1  | lo        Link encap:Local Loopback  
+app_1  |           inet addr:127.0.0.1  Mask:255.0.0.0
+app_1  |           inet6 addr: ::1/128 Scope:Host
+app_1  |           UP LOOPBACK RUNNING  MTU:65536  Metric:1
+app_1  |           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+app_1  |           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+app_1  |           collisions:0 txqueuelen:1 
+app_1  |           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+app_1  | 
+tmp_app_1 exited with code 0
+The IPv6 address is not assigned. That seems to be a bug, either in ipv6_address itself, or there is some required configuration step missing from the documentation.
+For further information, here's what I already tried:
+Starting the docker daemon with --ipv6
+Starting the docker daemon with --ipv6 --fixed-cidr-v6="2001:3984:3989::/64"
+Note that docker run -it busybox ifconfig actually gives me an IPv6 address here (from the --fixed-cidr subnet which is assigned to the default bridge network)
+Using my actual IPv6 subnet instead of the one from the code example, and repeating 2. with this subnet
+1

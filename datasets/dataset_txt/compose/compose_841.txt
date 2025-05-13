@@ -1,0 +1,5 @@
+neutralvibes commented on 28 Feb 2018
+Hi,
+Getting a 'not found' using the method mentioned in the docs for installing docker-compose. I have established the url being accessed is as follows:
+https://github.com/docker/compose/releases/download/1.19.0/docker-compose-Linux-armv7l
+This url is not available on github, sorry if I have missed something.

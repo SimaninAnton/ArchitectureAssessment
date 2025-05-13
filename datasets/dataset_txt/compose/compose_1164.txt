@@ -1,0 +1,97 @@
+Tazovsky commented on 7 Oct 2017 •
+edited
+When I try to docker-compose push or docker-compose pull I got error:
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 667, in push
+  File "compose/project.py", line 516, in push
+  File "compose/service.py", line 1045, in push
+  File "site-packages/docker/api/image.py", line 451, in push
+  File "site-packages/docker/auth.py", line 50, in get_config_header
+  File "site-packages/docker/auth.py", line 97, in resolve_authconfig
+  File "site-packages/docker/auth.py", line 125, in _resolve_authconfig_credstore
+  File "site-packages/dockerpycreds/store.py", line 25, in get
+  File "site-packages/dockerpycreds/store.py", line 57, in _execute
+  File "subprocess.py", line 711, in __init__
+  File "subprocess.py", line 1343, in _execute_child
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+Failed to execute script docker-compose
+I use edge because on latest stable version doesn't even docker-compose up work. Can you help?
+docker info:
+Containers: 1
+ Running: 1
+ Paused: 0
+ Stopped: 0
+Images: 21
+Server Version: 17.09.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.49-moby
+Operating System: Alpine Linux v3.5
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 7.786GiB
+Name: moby
+ID: R6DH:MQ2P:KA53:KA6W:B653:VHYV:FDTR:5BB6:FC6T:CUFI:BOVU:SMFG
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 43
+ Goroutines: 95
+ System Time: 2017-10-07T15:46:03.744196019Z
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+Docker compose version:
+docker-compose version 1.16.1, build 6d1ac21
+OSX version:
+ProductName: Mac OS X
+ProductVersion: 10.12.6
+BuildVersion: 16G29
+pip freeze | grep docker && python --version && docker version:
+docker==2.3.0
+docker-compose==1.16.1
+docker-py==1.10.6
+docker-pycreds==0.2.1
+dockerpty==0.4.1
+Python 2.7.14
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:09 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:45:38 2017
+ OS/Arch:      linux/amd64
+ Experimental: true

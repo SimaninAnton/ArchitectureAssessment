@@ -1,0 +1,1 @@
+docker-compose fails on image pull from private registries

@@ -1,0 +1,28 @@
+amjadharri commented on 19 Oct 2017 •
+edited by shin-
+when $ docker-compose up it returns
+Starting df33a29fc6ee_df33a29fc6ee_adaptive-admin_mariadb ...
+Starting df33a29fc6ee_df33a29fc6ee_adaptive-admin_mariadb ... error
+Docker Version
+Client:
+ Version:      17.07.0-ce
+ API version:  1.31
+ Go version:   go1.8.3
+ Git commit:   8784753
+ Built:        Tue Aug 29 17:41:05 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:45:38 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+on $ docker-compose --verbose up
+compose.parallel.feed_queue: Pending: set([])
+Starting df33a29fc6ee_df33a29fc6ee_adaptive-admin_mariadb ... error
+compose.parallel.feed_queue: Pending: set([])
+
+ERROR: compose.cli.main.main: Encountered errors while bringing up the project.

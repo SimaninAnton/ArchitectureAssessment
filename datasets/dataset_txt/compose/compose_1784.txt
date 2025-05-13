@@ -1,0 +1,6 @@
+samattridge commented on 18 Jan 2017
+I've been having a play with 1.13rc7 and the docker stack deploy command using a docker-compose.yml file. This is all well and good but it doesn't support most of the functionality found within docker-compose itself. For example, one glaring omission is the use of environment variables or an environment variables file. Have I missed something or is it not possible to deploy to Docker in Swarm Mode using a docker-compose.yml file that contains environment variables?
+You also don't appear to be able to deploy individual services using stack deploy which means every time you run the command it replaces your entire stack, even if some of the services haven't changed. Again, docker-compose allows you to specify an individual service within the docker-compose.yml file to update but this hasn't been translated to stack deploy.
+I'd be grateful for any help.
+Cheers,
+Sam

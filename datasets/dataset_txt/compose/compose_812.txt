@@ -1,0 +1,73 @@
+justinbarrick commented on 9 Mar 2018
+With the new 1.20.0-rc1, it is not possible to extend a service that contains a security_opt.
+Steps to reproduce
+I have two compose files, one that has seccomp settings and one that extends the service with seccomp settings (other.yml):
+version: '2.1'
+
+services:
+  hello:
+    security_opt: ['apparmor:unconfined', 'seccomp:unconfined']
+And then the service that extends it (docker-compose.yml):
+version: '2.1'
+
+services:
+  test:
+    image: debian:stretch
+    extends:
+      file: other.yml
+      service: hello
+Next, use docker-compose up or docker-compose config to reproduce the issue:
+$ docker-compose --version
+docker-compose version 1.20.0-rc1, build 86428af
+$ docker-compose up
+Recreating testsalt_test_1 ... error
+
+ERROR: for testsalt_test_1  Cannot create container for service test: invalid --security-opt 2: "SecurityOpt(value='apparmor:unconfined', src_file=None)"
+
+ERROR: for test  Cannot create container for service test: invalid --security-opt 2: "SecurityOpt(value='apparmor:unconfined', src_file=None)"
+ERROR: Encountered errors while bringing up the project.
+$ docker-compose config
+services:
+  test:
+    image: debian:stretch
+    security_opt:
+    - SecurityOpt(value='apparmor:unconfined', src_file=None)
+    - SecurityOpt(value='seccomp:unconfined', src_file=None)
+version: '2.1'
+$ 
+Note that the SecurityOpt appear to be a python representation of the object and not the literal value.
+Expected results
+This should work correctly like it does with 1.19.0-rc1:
+$ docker-compose --version
+docker-compose version 1.19.0, build 9e633ef
+$ docker-compose up
+Starting testsalt_test_1 ... done
+Attaching to testsalt_test_1
+testsalt_test_1 exited with code 0
+$ docker-compose config
+services:
+  test:
+    image: debian:stretch
+    security_opt:
+    - apparmor:unconfined
+    - seccomp:unconfined
+version: '2.1'
+$
+Other notes
+This issue does not occur if the service is not extending another service. It must be a service that extends another one:
+$ cat docker-compose.yml 
+version: '2.1'
+
+services:
+  test:
+    image: debian:stretch
+    security_opt: ['apparmor:unconfined', 'seccomp:unconfined']
+$ docker-compose config
+services:
+  test:
+    image: debian:stretch
+    security_opt:
+    - apparmor:unconfined
+    - seccomp:unconfined
+version: '2.1'
+$ 

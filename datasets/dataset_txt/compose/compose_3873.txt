@@ -1,0 +1,9 @@
+bsideup commented on 4 Mar 2015
+Hi!
+It would be cool if compose will support something like this:
+base:
+   build: base
+app:
+   from: base
+   ports:
+      80:80

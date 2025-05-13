@@ -1,0 +1,9 @@
+jordimassaguerpla commented on 18 Jul 2016
+Hi,
+docker-compose requires an old version of python-requests. This is a problem when using docker-compose on latest versions of linux distributions because they don't provide with such and old version.
+http://packages.ubuntu.com/search?suite=default&section=all&arch=any&keywords=python-requests&searchon=names
+https://packages.debian.org/search?keywords=python-requests
+https://apps.fedoraproject.org/packages/python-requests
+http://software.opensuse.org/package/python-requests
+Would it be possible to update this requirement so that it can be used with python-request-2.10.0 ?
+9

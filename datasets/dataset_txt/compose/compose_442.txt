@@ -1,0 +1,39 @@
+4devnull commented on 17 Oct 2018 •
+edited
+Hi,
+The "extends" is not supported or not available in the schema of version 3, the possibility of a multiple call (-f compose1.yml -f compose2.yml ..) not correspond to the need because I dont want to extend a service or create/deploy another service.
+Is it possible to add global or default specification definitions for all services to factorize this?
+Example "combined" format :
+services_global_spec:
+  deploy:
+    replicas: 1
+    update_config:
+      parallelism: 1
+      delay: 30s
+  logging:
+    driver: syslog
+    options: 
+      syslog-address: "tcp://logs.domain.tdl"
+      tag: '{{.Name}}'
+
+services:
+  myservice1:
+    image: hub/image:tag
+
+  myservice2:
+    image: hub/image2:tag
+    deploy:
+      replicas: 3
+
+  myservice3:
+    image: hub/image:tag
+    deploy:
+      replicas: 6
+      update_config:
+        parallelism: 2
+    logging:
+      options: 
+        tag: 'override_myservice1'
+PS: I think of the ability to define the defaults values of services in the docker configuration (daemon.json) is ideal.. What do you think?
+Thx,
+Best regard,

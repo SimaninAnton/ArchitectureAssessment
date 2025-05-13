@@ -1,0 +1,1 @@
+Fig barfs when using 'centos6.6' image tag, but not '6.6'

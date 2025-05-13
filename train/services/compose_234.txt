@@ -1,0 +1,36 @@
+AnthonyMastrean commented on 1 Apr 2019
+I'm always frustrated when a Compose 2.x project with depends_on (and condition: service_healthy) finds some service unhealthy and exits. For example:
+version: '2.3'
+services:
+  db:
+    image: postgres:alpine
+  api:
+    image: api:latest
+    depends_on:
+      db:
+        condition: service_healthy
+$ docker-compose up -d
+example_db_1 is up-to-date
+example_api_1 is up-to-date
+
+ERROR: for api  Container "925e231df5aa" is unhealthy.
+ERROR: Encountered errors while bringing up the project.
+This error message is confusing in multiple ways...
+You only name the depending service, so it's easy to read this message and think the "api" service is at fault (subsequent ps or logs of the depending service will not reveal anything useful).
+The error message only lists the failed service's Docker container ID, not its service name or container name (both of which Compose should know).
+The error message doesn't explicitly note the relationship between the depending and dependent service.
+We start exploring the ps output, to figure out which service is unhealthy (but "api" isn't listed here at all, if I was confused initially now I'm extra confused).
+$ docker-compose ps
+   Name           Command                          State            Ports
+---------------------------------------------------------------------------------------
+example_db_1   docker-entrypoint.sh postg ...   Up (unhealthy)   0.0.0.0:5432->5432/tcp
+I don't have an example now, but I think the unhealthy container can also fail bad enough that it hasn't started at all (like Exit 1). Then neither the unhealthy service nor the depending service are listed at all.
+Now, we need to run docker commands with advanced flags (including --filter, which is hard enough, but also sometimes -a if the container exited already).
+$ docker ps -a --filter id=925e231df5aa
+CONTAINER ID   IMAGE          COMMAND                          CREATED     STATUS                 PORTS   NAMES
+925e231df5aa   3433e80298f6   docker-entrypoint.sh postg ...   1 min ago   Exited (1) 1 min ago           example_db_1
+And only now do you have enough information to run the appropriate docker-compose logs <service-name> or docker logs <id>.
+Describe the solution you'd like
+In the best case scenario, Compose should explicitly note the depending/dependent relationship and list the service name, container name, and container ID.
+ERROR: Could not start service "api" because a dependent service, "db", is unhealthy (container name "example_db_1", container ID "925e231df5aa").
+1

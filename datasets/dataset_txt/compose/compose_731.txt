@@ -1,0 +1,89 @@
+Reverite commented on 19 Apr 2018
+Description of the issue
+Setting up a network to direct all IPv4 and IPv6 inbound and outbound traffic to a container (in this example, nginx) breaks reading configuration.
+Context information (for bug reports)
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version: 18.04.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 3d479c0
+ Built: Tue Apr 10 18:21:20 2018
+ OS/Arch: linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.04.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 3d479c0
+  Built: Tue Apr 10 18:19:27 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+networks:
+  external_network:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+      - 172.18.0.0/16
+      - 2001:19f0:9002:1702::/64
+      driver: default
+services:
+  nginx:
+    image: nginx:stable
+    networks:
+      external_network: null
+    ports:
+    - 80:80/tcp
+version: '2.4'
+Steps to reproduce the issue
+Create a docker-compose.yml with the following:
+version: '2.4'
+services:
+
+  nginx:
+    image: nginx:stable
+    ports:
+      - "80:80"
+    networks:
+      - external_network
+
+networks:
+  external_network:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - 172.18.0.0/16
+        - 2001:19f0:9002:1702::/64
+Run docker-compose pull
+Observe the error.
+Observed result
+AttributeError: 'str' object has no attribute 'get'
+[1334] Failed to execute script docker-compose
+Expected result
+Pulling nginx ... done
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 41, in project_from_options
+  File "compose/cli/command.py", line 126, in get_project
+  File "compose/project.py", line 85, in from_config
+  File "compose/network.py", line 224, in build_networks
+  File "compose/network.py", line 224, in <dictcomp>
+  File "compose/network.py", line 36, in __init__
+  File "compose/network.py", line 134, in create_ipam_config_from_dict
+  File "compose/network.py", line 134, in <listcomp>
+AttributeError: 'str' object has no attribute 'get'
+[893] Failed to execute script docker-compose
+Additional information
+Ubuntu 17.10 fresh install, using the latest release.

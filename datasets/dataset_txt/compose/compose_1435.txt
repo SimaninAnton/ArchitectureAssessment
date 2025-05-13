@@ -1,0 +1,39 @@
+JeromeVi commented on 23 May 2017 •
+edited
+Hi,
+I installed Docker-machine and Docker-compose in my container via the Dockefile:
+FROM martinezko/alpine-meteor:latest
+
+RUN apk add --update curl && \
+    rm -rf /var/cache/apk/*
+
+RUN apk add --no-cache docker
+
+RUN curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+chmod +x /usr/local/bin/docker-compose
+
+RUN curl -L https://github.com/docker/machine/releases/download/v0.9.0/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
+chmod +x /usr/local/bin/docker-machine
+but I can only use docker-machine. When I want to use docker-compose it says:
+bash-4.3# ls /usr/local/bin/
+docker-compose docker-machine
+bash-4.3# stat  /usr/local/bin/docker-compose
+  File: /usr/local/bin/docker-compose
+  Size: 8273264    Blocks: 16160      IO Block: 4096   regular file
+Device: fd09h/64777d Inode: 29362189    Links: 1
+Access: (0755/-rwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-23 07:14:43.000000000
+Modify: 2017-05-23 07:08:17.000000000
+Change: 2017-05-23 07:14:23.000000000
+bash-4.3# docker-compose
+bash: /usr/local/bin/docker-compose: No such file or directory
+any ideas ?
+[EDIT] The docker-machine who works perfectly has the same right:
+bash-4.3# stat  /usr/local/bin/docker-machine
+  File: /usr/local/bin/docker-machine
+  Size: 25287328   Blocks: 49392      IO Block: 4096   regular file
+Device: fd09h/64777d Inode: 29362188    Links: 1
+Access: (0755/-rwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-23 07:14:28.000000000
+Modify: 2017-05-23 07:08:07.000000000
+Change: 2017-05-23 07:14:22.000000000

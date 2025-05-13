@@ -1,0 +1,3 @@
+GeoffreyPlitt commented on 13 Jan 2014
+I can't help but notice how much the fig.yml format looks like a dotcloud.yml or Procfile!
+So... how about a "fig scale" command?

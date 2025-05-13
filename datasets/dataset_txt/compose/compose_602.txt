@@ -1,0 +1,15 @@
+harobed commented on 1 Jul 2018
+I post this issue here but this linter can be an independent project.
+I would like a linter for:
+check docker-compose.yml syntax
+check docker-compose.yml coding style, example:
+use this syntax:
+    environment:
+      LISTEN: =0.0.0.0:8081
+      CLIENT_URL: http://foobar:8080
+instead this syntax:
+    environment:
+      - LISTEN=0.0.0.0:8081
+      - CLIENT_URL=http://foobar:8080
+Best regards,
+Stéphane

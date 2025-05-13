@@ -1,0 +1,4 @@
+AlicanAkkus commented on 23 Jul 2017
+We could't specifiy compose file for docker-compose config command. We will use the more than one compose file in project. When we typing docker-compose config, it's use the default docker-compose.yml file.
+May be more useful when add the -c options this command for specifiy compose file. Such as below;
+docker-compose config -c docker-stack.yml

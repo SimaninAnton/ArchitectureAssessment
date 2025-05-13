@@ -1,0 +1,1 @@
+docker-compose uses previous volume from Dockerfile instead of the volume from docker-compose.yml

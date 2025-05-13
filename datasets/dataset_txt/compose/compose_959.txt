@@ -1,0 +1,19 @@
+srghma commented on 8 Jan 2018
+Example:
+PWD is interpolated when I'm using environment
+# docker-compose
+  tests_runner:
+    environment:
+      STORAGE_DIR: ${PWD}/storage-tmp
+      UPLOADS_DIR: ${PWD}/public/uploads-tmp
+      CARRIERWAVE_CACHE_DIR: ${PWD}/tmp/uploads-tmp
+I expect that it would interpolate variables when I'm using env_file too
+# docker-compose
+  tests_runner:
+    env_file:
+      - ./some.env
+
+# some.env
+STORAGE_DIR=${PWD}/storage-tmp
+UPLOADS_DIR=${PWD}/public/uploads-tmp
+CARRIERWAVE_CACHE_DIR=${PWD}/tmp/uploads-tmp

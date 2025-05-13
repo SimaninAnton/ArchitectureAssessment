@@ -1,0 +1,14 @@
+nickcodefresh commented on 8 Dec 2015
+Using using docker-compose v1.5.2 under Windows and cygwin, when I run docker-compose pull I get the error:
+{ MioEvents }  » docker-compose pull
+Pulling mongodb (mongo:latest)...
+latest: Pulling from library/mongo
+Digest: sha256:9693218db42f58992744fe566ea6e67f149b7757ab43df597d270c7daf25b5cf
+Status: Image is up to date for mongo:latest
+Pulling consul (registry.nativ-systems.com/nativ/consuld:latest)...
+Pulling repository registry.nativ-systems.com/nativ/consuld
+Authentication is required.
+I've registered with my private registry and it works fine under CMD. I've tried making a symlink ~/.docker to C:\Users\nick.smith\.docker but it still doesn't work.
+Any ideas?
+Thanks
+Nick

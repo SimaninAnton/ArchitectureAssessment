@@ -1,0 +1,3 @@
+burningTyger commented on 6 Mar 2017
+docker-compose installs just fine according to the docs but it doesn't run with sudo because - and now I'm rather guessing whether this is the root cause - /usr/local/bin is not in root's path. It however is in my user's path. So docker-compose --version works but not sudo docker-compose --version. I'm getting a command not found error. I moved the file to /usr/bin and now it works. This is probably not very smart because once I update I'll have forgotten about this issue...
+OS: current Fedora 25

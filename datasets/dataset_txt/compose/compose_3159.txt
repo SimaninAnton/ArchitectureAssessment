@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 29 Oct 2015
+Steps to reproduce (against docker 1.9.0-rc3):
+Create a new project, or set a new project name
+Run any service with the new project name docker-compose --x-networking run service bash
+You'll get an error:
+Cannot start container b631dcb1feea803af2d06471789fe3646a3b6f59af04bc771f66fd70137a024b: network networking not found
+We need to create the network as part of run as well as up I think.

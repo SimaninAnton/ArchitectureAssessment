@@ -1,0 +1,108 @@
+MaciejKucia commented on 17 Jul 2017
+docker-compose.yml:
+version: '3'
+services:
+ db:
+  image: mariadb
+  restart: always
+  environment:
+   MYSQL_ROOT_PASSWORD: mypassword
+   MYSQL_DATABASE: prestashop
+  volumes:
+   - ./sql:/docker-entrypoint-initdb.d
+PS C:\Users\Maciej\arturo> Get-ChildItem -Recurse
+
+
+    Directory: C:\Users\Maciej\arturo
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----       2017-07-17     01:01                sql
+-a----       2017-07-17     01:09            946 docker-compose.yml
+
+    Directory: C:\Users\Maciej\arturo\sql
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----       2017-07-17     00:43         508211 prestashop.sql
+PS C:\Users\Maciej\arturo> docker exec -it arturo_db_1 /bin/bash
+root@8d9af1c0ea4a:/# cd /docker-entrypoint-initdb.d/
+root@8d9af1c0ea4a:/docker-entrypoint-initdb.d# ls -l
+total 0
+drwxr-xr-x  3 root     root      60 Jul 16 22:58 sql
+root@8d9af1c0ea4a:/docker-entrypoint-initdb.d# cd sql
+root@8d9af1c0ea4a:/docker-entrypoint-initdb.d/sql# ls -l
+total 0
+drwxr-xr-x 2 root root 40 Jul 16 22:58 prestashop.sql
+root@8d9af1c0ea4a:/docker-entrypoint-initdb.d/sql#
+PS C:\Users\Maciej\arturo> docker version
+Client:
+ Version:      17.06.0-ce
+ API version:  1.30
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:30:30 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.06.0-ce
+ API version:  1.30 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:51:55 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+PS C:\Users\Maciej\arturo> docker info
+Containers: 3
+ Running: 2
+ Paused: 0
+ Stopped: 1
+Images: 9
+Server Version: 17.06.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: cfb82a876ecc11b5ca0977d1733adbe58599088a
+runc version: 2d41c047c83e09a6d61d464906feb2a2f3c52aa4
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.36-moby
+Operating System: Alpine Linux v3.5
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.934GiB
+Name: moby
+ID: J6S3:DSSH:PEKF:VHZT:2OVL:4RGK:M3VG:3YGI:MI7O:PYMO:W5DB:LZIO
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 35
+ Goroutines: 51
+ System Time: 2017-07-17T06:57:11.1749416Z
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+PS C:\Users\Maciej\arturo> docker-compose version
+docker-compose version 1.14.0, build c7bdf9e3
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016

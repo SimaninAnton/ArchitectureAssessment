@@ -1,0 +1,2 @@
+AdrianTeng commented on 24 Aug 2017
+Is there any reason the init flag is supported on v2.2+ but not from v3+?

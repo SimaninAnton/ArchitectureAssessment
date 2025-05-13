@@ -1,0 +1,19 @@
+vtortola commented on 27 Sep 2017 •
+edited
+Hi!
+I was trying to use the env_file feature in docker-compose but the environment variables were not being readed from the file.
+In this example project you will see two files named config.env and config2.env. They almost contains the same data, but config.env starts with the UTF8 BOM, causing docker-compose to not read the variables.
+Most text editors shows the same content for both files.
+During the execution, the log shows that something is going wrong with the parsing:
+config.env:
+    environment:
+      NUGET_FALLBACK_PACKAGES: /root/.nuget/fallbackpackages
+      "\uFEFFTEST": Compose
+config2.env
+    environment:
+      NUGET_FALLBACK_PACKAGES: /root/.nuget/fallbackpackages
+      TEST: Compose
+Would it be possible for docker in general to be aware of the UTF8 BOM in configuration files?
+How did happen?
+Well it seems that when you add a text file in Visual Studio, it adds the UTF8 BOM by default. I generated the second file that has to BOM using the Windows Explorer contextual menu "New File".
+Maybe: StackOverflow: Reading Unicode file data with BOM chars in Python

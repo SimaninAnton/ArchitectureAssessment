@@ -1,0 +1,45 @@
+ShadeTT commented on 24 Apr 2014
+Hi. I can something wrong. I have two Docker file and fig.yml.
+first Docker file for webapp:
+FROM ubuntu
+RUN apt-get -y update
+RUN sudo apt-get -y install libpq-dev python-dev python-pip
+RUN mkdir /code
+WORKDIR /code
+ADD requirements.txt /code/
+RUN pip install -r requirements.txt
+ADD . /code/
+fig.yml:
+db:
+  build: /home/user/Public/db
+  expose:
+    - "5432"
+web:
+  build: /home/user/Public/o/code/
+  command: python manage.py runserver 0.0.0.0:8000
+  volumes:
+    - /home/user/Public/o/code/:/code
+  ports:
+    - "8000:8000"
+  links:
+    - db
+second Dockerfile for db:
+FROM ubuntu:12.04
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt-get -y update
+RUN apt-get -y install ca-certificates
+RUN apt-get -y install wget
+RUN wget --quiet --no-check-certificate -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" >> /etc/apt/sources.list
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get -y install postgresql-9.3 postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgis
+RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.3/main/postgresql.conf
+RUN echo "port = 5432" >> /etc/postgresql/9.3/main/postgresql.conf
+EXPOSE 5432
+ADD start.sh /start.sh
+RUN chmod 0755 /start.sh
+CMD ["/start.sh"]
+After "fig up", and "python manage.py runserver 0.0.0.0:8000" from fig.yml I have problem - manage.py say django is not installed.
+I tried build and run Docker file for webapp without fig. All good.

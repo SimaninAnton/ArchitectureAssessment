@@ -1,0 +1,1 @@
+Is there any way to "watch" or "follow" the output of docker-compose ps?

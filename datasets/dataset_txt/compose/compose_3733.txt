@@ -1,0 +1,20 @@
+blizart commented on 12 Apr 2015
+Hello, I am trying to run compose on Windows, i am instaling it using python package as instructed in installation manual, but after installation when i check docker-compose --version i get followin error:
+$ docker-compose --version
+Traceback (most recent call last):
+File "C:\Users\Entaro\appdata\local\scoop\apps\python\3.4.3\scripts\docker-compose-script.py", line 9, in
+load_entry_point('docker-compose==1.1.0', 'console_scripts', 'docker-compose')()
+File "C:\Users\Entaro\appdata\local\scoop\apps\python\3.4.3\lib\site-packages\pkg_resources__init__.py", line 519, in load_entry_point
+return get_distribution(dist).load_entry_point(group, name)
+File "C:\Users\Entaro\appdata\local\scoop\apps\python\3.4.3\lib\site-packages\pkg_resources__init__.py", line 2630, in load_entry_point
+return ep.load()
+File "C:\Users\Entaro\appdata\local\scoop\apps\python\3.4.3\lib\site-packages\pkg_resources__init__.py", line 2310, in load
+return self.resolve()
+File "C:\Users\Entaro\appdata\local\scoop\apps\python\3.4.3\lib\site-packages\pkg_resources__init__.py", line 2316, in resolve
+module = import(self.module_name, fromlist=['name'], level=0)
+File "C:\Users\Entaro\appdata\local\scoop\apps\python\3.4.3\lib\site-packages\compose__init__.py", line 2, in
+from .service import Service # noqa:flake8
+File "C:\Users\Entaro\appdata\local\scoop\apps\python\3.4.3\lib\site-packages\compose\service.py", line 485
+except StreamOutputError, e:
+^
+SyntaxError: invalid syntax

@@ -1,0 +1,1 @@
+fig install complete after execute fig, happend exception

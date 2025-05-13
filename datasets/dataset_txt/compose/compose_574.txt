@@ -1,0 +1,18 @@
+FarYoung commented on 18 Jul 2018
+While I upgrade to Macos high sierra, the docker-compose -up -d and docker-compose -down comes not work, get following ERROR from the zsh terminal：
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+:3306", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+:6379", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+But it can comes up by the Docker APP from the MacOS stock banner while stop the Docker client and restart.
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+8142df6b34b8        redis:alpine        "redis-server --appe…"   13 days ago         Up About an hour    0.0.0.0:6379->6379/tcp   redis
+b175d381b6e9        mysql:latest        "/entrypoint.sh --de…"   13 days ago         Up About an hour    0.0.0.0:3306->3306/tcp   mysql1000
+it worked well before i sure, the docker-compose.yml looks like here:
+ports:
+  - ${REDIS_PORT}:6379
+and the ./.env likes:
+ # REDIS
+REDIS_HOST=redis
+REDIS_IP=172.18.0.3
+REDIS_PORT=6379
+Now, I find back all the containers and database, after remove all the ${*} from the docker-compose.yml instead of its real name, without the .env function.

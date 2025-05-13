@@ -1,0 +1,54 @@
+nathanleclaire commented on 10 Apr 2015
+cc @aanand
+I noticed this when testing the most recent RC (4)
+Steps to reproduce:
+Clone https://github.com/nathanleclaire/hubfwd
+Run docker-compose up in the repo
+Expected behavior: It doesn't blow up
+Actual behavior: It blows up
+On the first up and the first up only, so build smells suspicious.
+Creating hubfwd_app_1...
+Building app...
+Step 0 : FROM golang:1.4.2
+ ---> 121a93c90463
+Step 1 : RUN go get -u github.com/codegangsta/negroni
+ ---> Running in 5e2161a172f9
+ ---> 623f1c94741b
+Removing intermediate container 5e2161a172f9
+Step 2 : RUN go get -u github.com/gorilla/mux
+ ---> Running in c74924a6c8fd
+ ---> 7923dd360f79
+Removing intermediate container c74924a6c8fd
+Step 3 : RUN go get -u github.com/Sirupsen/logrus
+ ---> Running in 93443d6cf298
+ ---> 3ae5e3801312
+Removing intermediate container 93443d6cf298
+Step 4 : RUN mkdir -p /go/src/github.com/nathanleclaire/hubfwd
+ ---> Running in 8deddcbb0f1d
+ ---> 6586dfbe5b2e
+Removing intermediate container 8deddcbb0f1d
+Step 5 : WORKDIR /go/src/github.com/nathanleclaire/hubfwd
+ ---> Running in bb42cbdf1032
+ ---> 0d824f6e8519
+Removing intermediate container bb42cbdf1032
+Step 6 : COPY . /go/src/github.com/nathanleclaire/hubfwd
+ ---> ad6983d66cf7
+Removing intermediate container e16e62829fb7
+Step 7 : CMD go build
+ ---> Running in 550e4ab79b39
+ ---> 15ebeafc0600
+Removing intermediate container 550e4ab79b39
+Successfully built 15ebeafc0600
+Attaching to hubfwd_app_1
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 763, in run
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.multiplexer", line 41, in _enqueue_output
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.log_printer", line 59, in _make_log_generator
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.utils", line 77, in split_buffer
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 199, in _multiplexed_response_stream_helper
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 143, in _get_raw_response_socket
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 95, in _raise_for_status
+APIError: 500 Server Error: Internal Server Error ("http: Hijack is incompatible with use of CloseNotifier")
+I'm on OSX using a VM created by docker-machine in VirtualBox (boot2docker).

@@ -1,0 +1,1 @@
+docker-compose up fails with 'expected string or buffer' when specifying ports

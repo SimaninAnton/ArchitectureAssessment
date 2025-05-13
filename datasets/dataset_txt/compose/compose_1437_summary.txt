@@ -1,0 +1,1 @@
+ERROR: for webapplication2 Cannot create container for service webapplication2: D: drive is not shared. Please share it in Docker for Windows Settings

@@ -1,0 +1,42 @@
+ghost commented on 21 Oct 2018
+Hello.
+I am not good at English, so it may be funny.
+I am trying to edit wordpress theme by starting wordpress with docker.
+The following is docker-compose.yml. ↓
+// docker-compose.yml ↓
+version: '2'
+services:
+  mysql:
+    image: mysql: 5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pw
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_pw
+    restart: always
+  wordpress:
+    image: wordpress: latest
+    ports:
+    - "3001: 80"
+    volumes:
+    - ./wordpress: /var/www/html/wp-content/themes/wordpress
+    -. /www:/var/www/html
+    environment:
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: mysql_user
+      WORDPRESS_DB_PASSWORD: mysql_pw
+I tried editing by putting a theme folder in the directory "wordpress".
+However, when index.php is rewritten as shown below, the following error is displayed on the image file.
+// index.php ↓
+hello world
+// console.log error ↓
+GET http: // localhost: 3001 / screenshot.png 404 (Not Found)
+The installation of wordpress succeeded successfully, we are also changing the theme.
+http: // localhost: 3001 / displays "hello world" and icons of images that can not be read.
+screenshot.png is located at the same level as index.php.
+So, the image path is not wrong.
+The same error (GET http: // localhost: 3001 / *. Js 404 (Not Found)) is displayed even if you try to read *. Js file as an external file, for example, as well as an image file.
+I think that this error is caused because the volumes of docker-compose.yml are not properly mounted between the host and the container.
+However, I do not know how to confirm whether it is mounted or how to set it correctly.
+What is causing this error?
+How can I avoid errors?

@@ -1,0 +1,106 @@
+biffen commented on 2 May 2019
+Description of the issue
+docker-compose has a few ‘boolean’ options, e.g. --verbose, --no-ansi, etc, but supplying the same one more than once causes an error.
+It might seem an odd thing to want to do, but when using docker-compose in a script or build system, or as a shell alias, it’s not that unthinkable that some options get repeated.
+A lot of other command-line tools have no issue with this, and are perhaps even deliberately built to allow things like command --foo --no-foo --foo (where later options override earlier ones) as a result of scripting or aliases.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.5
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        e8ff056dbc
+ Built:             Thu Apr 11 04:44:28 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       e8ff056
+  Built:            Thu Apr 11 04:10:53 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+N/A
+Steps to reproduce the issue
+Let’s use docker-compose version as an example sub-command, since it’s simple with simple output, and let’s use --verbose as an example option:
+(Note: I’m not expecting --verbose to necessarily have an impact on the output of version; I’m just expecting it not to fail.)
+Run:
+docker-compose --verbose --verbose version
+Observed result
+It prints the usage, as if an unknown command-line option was used.
+It exits with code 1.
+Expected result
+The same as if running:
+docker-compose --verbose version
+Stacktrace / full error message
+Define and run multi-container applications with Docker.
+
+Usage:
+  docker-compose [-f <arg>...] [options] [COMMAND] [ARGS...]
+  docker-compose -h|--help
+
+Options:
+  -f, --file FILE             Specify an alternate compose file
+                              (default: docker-compose.yml)
+  -p, --project-name NAME     Specify an alternate project name
+                              (default: directory name)
+  --verbose                   Show more output
+  --log-level LEVEL           Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  --no-ansi                   Do not print ANSI control characters
+  -v, --version               Print version and exit
+  -H, --host HOST             Daemon socket to connect to
+
+  --tls                       Use TLS; implied by --tlsverify
+  --tlscacert CA_PATH         Trust certs signed only by this CA
+  --tlscert CLIENT_CERT_PATH  Path to TLS certificate file
+  --tlskey TLS_KEY_PATH       Path to TLS key file
+  --tlsverify                 Use TLS and verify the remote
+  --skip-hostname-check       Don't check the daemon's hostname against the
+                              name specified in the client certificate
+  --project-directory PATH    Specify an alternate working directory
+                              (default: the path of the Compose file)
+  --compatibility             If set, Compose will attempt to convert deploy
+                              keys in v3 files to their non-Swarm equivalent
+
+Commands:
+  build              Build or rebuild services
+  bundle             Generate a Docker bundle from the Compose file
+  config             Validate and view the Compose file
+  create             Create services
+  down               Stop and remove containers, networks, images, and volumes
+  events             Receive real time events from containers
+  exec               Execute a command in a running container
+  help               Get help on a command
+  images             List images
+  kill               Kill containers
+  logs               View output from containers
+  pause              Pause services
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pull service images
+  push               Push service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  top                Display the running processes
+  unpause            Unpause services
+  up                 Create and start containers
+  version            Show the Docker-Compose version information
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Debian GNU/Linux 9 (stretch)
+docker-compose downloaded from GitHub
+3

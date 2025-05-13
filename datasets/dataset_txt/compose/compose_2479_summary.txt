@@ -1,0 +1,1 @@
+`docker-compose build` shouldn't complain about missing env file

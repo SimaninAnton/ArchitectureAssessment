@@ -1,0 +1,1 @@
+Cannot docker up using an image name that does not match the default project_service format

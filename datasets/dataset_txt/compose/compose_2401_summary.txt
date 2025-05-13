@@ -1,0 +1,1 @@
+docker-compose "rolling deploy" (restart containers one after another instead of all at once)

@@ -1,0 +1,24 @@
+aldarund commented on 26 Feb 2016
+Windows 10.
+Docker toolbox 1.10.2 ( docker-compose version 1.6.0, build cdb920a )
+When im trying to build a container im getting this error:
+$ docker-compose.exe build
+Building web
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "C:\projects\compose\compose\cli\main.py", line 55, in main
+  File "C:\projects\compose\compose\cli\docopt_command.py", line 23, in sys_dispatch
+  File "C:\projects\compose\compose\cli\docopt_command.py", line 26, in dispatch
+  File "C:\projects\compose\compose\cli\main.py", line 174, in perform_command
+  File "C:\projects\compose\compose\cli\main.py", line 195, in build
+  File "C:\projects\compose\compose\project.py", line 246, in build
+  File "C:\projects\compose\compose\service.py", line 678, in build
+  File "c:\projects\compose\venv\lib\site-packages\docker\api\build.py", line 49, in build
+  File "c:\projects\compose\venv\lib\site-packages\docker\utils\utils.py", line 103, in tar
+  File "c:\python27-x64\Lib\tarfile.py", line 2006, in add
+  File "c:\python27-x64\Lib\tarfile.py", line 1878, in gettarinfo
+WindowsError: [Error 3] The system cannot find the path specified: 'C:\\Users\\ShapeR\\PycharmProjects\\esanum-ng\\src\\frontend\\library\\bower_components\\angular-api-sdk\\node_modules\\grunt-protractor-runner\\node_modules\\protractor\\node_modules\\accessibility-developer-tools\\src\\audits\\its\\FocusableElementNotVisibleAndNotAriaHidden.js'
+docker-compose returned -1
+If i build without compose - no such error.
+There is a pull request in docker itself for this : moby/moby#15491
+But seems like compose doesn't handle this case.

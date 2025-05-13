@@ -1,0 +1,1 @@
+fig up tries to run incorrect command

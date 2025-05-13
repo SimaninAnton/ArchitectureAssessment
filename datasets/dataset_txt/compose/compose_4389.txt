@@ -1,0 +1,38 @@
+schickling commented on 28 Feb 2014
+When I run fig up I get the following error. I installed fig via pip.
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.2.2', 'console_scripts', 'fig')()
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/command.py", line 26, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/main.py", line 287, in up
+    (old, new) = self.project.recreate_containers(service_names=options['SERVICE'])
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/project.py", line 107, in recreate_containers
+    (s_old, s_new) = service.recreate_containers()
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/service.py", line 144, in recreate_containers
+    containers = self.containers(stopped=True)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/service.py", line 59, in containers
+    for container in self.client.containers(all=stopped):
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/packages/docker/client.py", line 399, in containers
+    res = self._result(self._get(u, params=params), True)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/packages/docker/client.py", line 98, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 395, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 349, in request
+    prep = self.prepare_request(req)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 287, in prepare_request
+    hooks=merge_hooks(request.hooks, self.hooks),
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/models.py", line 287, in prepare
+    self.prepare_url(url, params)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/models.py", line 338, in prepare_url
+    "Perhaps you meant http://{0}?".format(url))
+requests.exceptions.MissingSchema: Invalid URL u'localhost/v1.6/containers/json': No schema supplied. Perhaps you meant http://localhost/v1.6/containers/json?

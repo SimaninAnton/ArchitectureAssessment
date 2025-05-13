@@ -1,0 +1,7 @@
+Contributor
+albers commented on 18 May 2015
+#1356 introduced some uncertainty about how to convert containers to the new format.
+The help message says
+migrate_to_labels Recreate containers to add labels
+The error message is
+If you'd like compose to use this container, please run docker-compose --migrate-to-labels

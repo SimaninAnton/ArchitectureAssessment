@@ -1,0 +1,31 @@
+jjaimon commented on 10 Mar 2018
+I've been using a host directory as my data volume for a postgresql container. My docker-compose.yml reads something like this.
+postgresql:
+        image: postgres
+        ports:
+            - "5432:5432"
+        container_name: postgresql
+        networks:
+            - mynet
+        volumes:
+            - pg-data:/var/lib/postgresql/data
+
+volumes:
+    pg-data:
+        driver_opts:
+            type: none
+            device: /volumes/pgdata
+            o: bind
+As we wanted to consolidate all data into a single encrypted volume, I decided to remap the volume for this container.
+volumes:
+    pg-data:
+        driver_opts:
+            type: none
+            device: /volumes/data/pgdata
+            o: bind
+I know that I need to remove the containers of this image and recreate the image. I removed all containers and images. It appears that docker-compose is still remembering my old setting somewhere when I try to rebuild (docker-compose up --build postgresql) the image. I get the following error.
+ERROR: for postgresql Cannot create container for service postgresql: error while mounting volume with options: type='none' device='/volumes/pgdata' o='bind': no such file or directory
+Its still trying to access the old volume definition where as my new docker-compose.yml has no reference to this directory.
+I tried to start a container using this image directly
+docker run -p 5432:5432 --name postgresql -v /volumes/data/pgdata:/var/lib/postgresql/data postgres
+And this brings up the image with changed volume path. Why is docker-compose not changing the path?

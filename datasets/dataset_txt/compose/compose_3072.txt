@@ -1,0 +1,2 @@
+Zomis commented on 20 Nov 2015
+This is referred to in README.md: https://github.com/docker/compose#common-use-cases but it leads nowhere, as there is no anchor with that name.

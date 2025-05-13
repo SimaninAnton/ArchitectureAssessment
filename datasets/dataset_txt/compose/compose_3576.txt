@@ -1,0 +1,8 @@
+mrzechonek commented on 10 Jun 2015
+I need to pass --user option to run orchestrated containers under my own UID. This is mostly because of mounted host volumes, and I'd like the dockerized app to generate files owned by me, not the root.
+With docker-compose up, this is not possible, at least not directly. Right now I'm using a crazy workaround:
+NAME=`compose run -d --user="$UID" someservicename`
+docker rename $NAME ${NAME/_run/}
+which is suboptiomal, to be gentle.
+95
+10

@@ -1,0 +1,33 @@
+bruceforlearn commented on 1 Sep 2017 •
+edited by shin-
+Hello,all
+my docker-compose.yaml:
+services:
+   oracle:
+    container_name: oracle
+    image: oracle:sddb
+    ports:
+        - "49160:22"
+        - "49161:1521"
+    expose:
+        - "22"
+        - "1521"
+   sd:
+    build: /home/Dockerfile/sd
+    container_name: sdp
+    image: sdp:latest
+    ports:
+         - "18888:8081"
+    expose:
+         - 8081
+    links:
+         - oracle
+    depends_on:
+         - oracle
+    command: ["./wait-for-it.sh", "db:1521"]
+run docker-compose
+[root@localhost composetest]# docker-compose up
+Creating network "composetest_default" with the default driver
+Building sd
+my question is that, why does compose build sd first?
+why not create oracle container first ?

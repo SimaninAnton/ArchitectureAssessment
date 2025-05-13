@@ -1,0 +1,13 @@
+jbulchergist commented on 25 Dec 2014
+I'm using fig up --no-recreate to run a container, which works as expected. Fig apparently gets two services in the process (weird):
+# ps aux|grep fig                                                                                                                         
+root      9341  0.5  0.0  12960  2016 pts/2    S+   13:19   0:00 fig up --no-recreate
+root      9342  2.0  0.8 134992 16408 pts/2    Sl+  13:19   0:00 fig up --no-recreate
+When I perfirm fig stop, the container goes down as expected, but if I perform kill 9341, the container does not go down even though fig does:
+# kill 9341 && ps aux|grep fig
+root      9353  0.0  0.0  11744   920 pts/3    S+   13:22   0:00 grep --color=auto fig
+# fig ps
+     Name        Command   State   Ports 
+----------------------------------------
+jbulcher_app_1   /run.sh   Up 
+If the container does not shut down with a kill signal, it isn't possible to integrate it into upstart/systemd, is it?

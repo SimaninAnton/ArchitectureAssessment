@@ -1,0 +1,1 @@
+Changing the `volumes_from` mode doesn’t trigger a recreate on that service

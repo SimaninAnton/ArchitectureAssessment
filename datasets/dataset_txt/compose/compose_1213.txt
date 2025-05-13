@@ -1,0 +1,44 @@
+Member
+StefanScherer commented on 9 Sep 2017
+After moby/moby#33852 is merged and available in 17.09.0-ce-rc1 I checked this with current Windows Server Insider 16278.
+For the docker cli the syntax looks like the following line to map the Windows named pipe of the Docker engine into the Windows container.
+docker run -u ContainerAdministrator -v \\.\pipe\docker_engine:\\.\pipe\docker_engine stefanscherer/docker-cli-windows:insider version
+So I tried it with this docker-compose.yml
+version: '2.1'
+services:
+  traefik:
+    image: stefanscherer/traefik-windows:windowsservercore-insider
+    command: --docker.endpoint=\\.\pipe\docker_engine --logLevel=DEBUG
+    ports:
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - C:/traefik:C:/etc/traefik
+      - \\.\pipe\docker_engine:\\.\pipe\docker_engine
+but I get this error message
+ERROR: for e638c5f802d5_e638c5f802d5_e638c5f802d5_traefik_traefik_1  Cannot create container for service traefik: invalid volume spec "\\\\.\\pipe\\docker_engine": file '\\.\pipe\docker_engine' cannot be mapped. Only directories can be mapped on this platform
+
+ERROR: for traefik  Cannot create container for service traefik: invalid volume spec "\\\\.\\pipe\\docker_engine": file '\\.\pipe\docker_engine' cannot be mapped. Only directories can be mapped on this platform
+I'm running these versions:
+PS C:\Users\stefan\code\dockerfiles-windows\traefik> docker-compose version
+docker-compose version 1.16.1, build 6d1ac219
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+PS C:\Users\stefan\code\dockerfiles-windows\traefik> docker version
+Client:
+ Version:      17.09.0-ce-rc1
+ API version:  1.31
+ Go version:   go1.8.3
+ Git commit:   ae21824
+ Built:        Wed Sep  6 22:25:14 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.09.0-ce-rc1
+ API version:  1.32 (minimum version 1.24)
+ Go version:   go1.8.3
+ Git commit:   ae21824
+ Built:        Wed Sep  6 22:35:40 2017
+ OS/Arch:      windows/amd64
+ Experimental: true

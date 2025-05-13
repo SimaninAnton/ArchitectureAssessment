@@ -1,0 +1,28 @@
+talolard commented on 29 Sep 2015
+When trying to launch docker-compose in a python 3 environment I get the following error
+(analytics4)tal@tal-desktop:~/dev/analytics/data_migration$ docker-compose up
+Traceback (most recent call last):
+  File "/home/tal/.virtualenvs/analytics4/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.4.2', 'console_scripts', 'docker-compose')()
+  File "/home/tal/.virtualenvs/analytics4/local/lib/python3.4/site-packages/pkg_resources.py", line 356, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/home/tal/.virtualenvs/analytics4/local/lib/python3.4/site-packages/pkg_resources.py", line 2431, in load_entry_point
+    return ep.load()
+  File "/home/tal/.virtualenvs/analytics4/local/lib/python3.4/site-packages/pkg_resources.py", line 2147, in load
+    ['__name__'])
+  File "/home/tal/.virtualenvs/analytics4/local/lib/python3.4/site-packages/compose/cli/main.py", line 16, in <module>
+    from ..project import NoSuchService, ConfigurationError
+  File "/home/tal/.virtualenvs/analytics4/local/lib/python3.4/site-packages/compose/project.py", line 12, in <module>
+    from .service import ContainerNet
+  File "/home/tal/.virtualenvs/analytics4/local/lib/python3.4/site-packages/compose/service.py", line 28, in <module>
+    from .utils import json_hash, parallel_execute
+  File "/home/tal/.virtualenvs/analytics4/local/lib/python3.4/site-packages/compose/utils.py", line 8, in <module>
+    from Queue import Queue, Empty
+ImportError: No module named 'Queue'
+Easy enough fix,
+from Queue import Queue, Empty 
+Should be
+try:
+    from Queue import Queue, Empty 
+except:
+    from queue import Queue, Empty 

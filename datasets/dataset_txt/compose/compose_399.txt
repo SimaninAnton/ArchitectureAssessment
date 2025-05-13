@@ -1,0 +1,80 @@
+bwateratmsft commented on 17 Nov 2018 •
+edited
+Description of the issue
+If "docker-compose config" is run against YAML files such that the output contains unicode characters (for example, path, of the dockerfile), and run with output redirection, it fails with:
+[9388] Failed to execute script docker-compose
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 351, in config
+  File "c:\projects\compose\venv\lib\encodings\cp1252.py", line 19, in encode
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 87-90: character maps to <undefined>
+Context information (for bug reports)
+Output of docker-compose version
+>docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+>docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+>docker-compose -f "C:\Users\myUser\source\repos\MyApp2 雕\docker-compose.yml" -f "C:\Users\myUser\source\repos\MyApp2 雕\docker-compose.override.yml" -p dockercompose597229694053810312 --no-ansi config
+services:
+  myapp2:
+    build:
+      context: C:\Users\myUser\source\repos\MyApp2 雕
+      dockerfile: MyApp2 雕/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTPS_PORT: '44343'
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: myapp2
+    ports:
+    - published: 58378
+      target: 80
+    - published: 44343
+      target: 443
+    volumes:
+    - C:\Users\myUser\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\myUser\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+version: '3.4'
+Steps to reproduce the issue
+Create a simple C# console project that will run docker-compose config
+In it, use a ProcessStartInfo with UseShellExecute=false, RedirectStandardOutput true, FileName "docker-compose", arguments like @"-f ""C:\Users\myUser\source\repos\MyApp2 雕\docker-compose.yml"" -f ""C:\Users\myUser\source\repos\MyApp2 雕\docker-compose.override.yml"" -p dockercompose597229694053810312 --no-ansi config"
+Launch
+Observed result
+Printing the output of standard error gives the below stack trace from UnicodeEncodeError
+Expected result
+No error, and the config is printed like when launched from command line
+Stacktrace / full error message
+[9388] Failed to execute script docker-compose
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 351, in config
+  File "c:\projects\compose\venv\lib\encodings\cp1252.py", line 19, in encode
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 87-90: character maps to <undefined>
+Additional information
+Win 10 version 1809
+Please note the output of the above commands is lightly redacted.

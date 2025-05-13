@@ -1,0 +1,11 @@
+gulien commented on 21 Dec 2016 •
+edited
+Hi guys,
+It seems that config_schema_v2.0.json and config_schema_v2.1.json are not valid schemas.
+The online validator JSON Schema Validator throws the following errors:
+config_schema_v2.0.json:
+Unexpected token encountered when reading value for 'additionalProperties'. Expected StartObject, got Boolean. Path 'definitions.volume.properties.additionalProperties', line 280, position 37.
+config_schema_v2.1.json:
+Unexpected token encountered when reading value for 'additionalProperties'. Expected StartObject, got Boolean. Path 'definitions.volume.properties.additionalProperties', line 287, position 37.
+I also tried to validate them using avj library but the result was the same for both files.
+My first guess is that "additionalProperties": false should be removed as it does not appear anymore in config_schema_v3.0.json.

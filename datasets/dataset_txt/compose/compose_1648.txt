@@ -1,0 +1,27 @@
+Contributor
+londoncalling commented on 26 Feb 2017
+@shin- @dnephin @dgageot
+I'm opening this issue for @hindsight20-20, who first opened it in Docker for Windows issues.
+Please see docker/for-win#527 for the full conversation thread.
+Expected behavior
+In compose file:
+version: "3"
+services:
+  image: myimage
+  myservice:
+    healtcheck:
+      test: exit 0
+
+  image: myotherimage
+  myotherservice:
+    depends_on:
+      myservice:
+        condition: service_healthy
+docker-compose up should start services in order and start second only if first is healthy. (see compose file reference and Dockerfile reference)
+Actual behavior
+when running docker-compose up compose complains that depends_on contains an invalid value. the contents of depends_on should be an array
+compose is happily processing the file given above when setting the version to 2.1
+Information
+Docker for Windows 17.03.0-ce-rc1-win1 (1083)
+Channel: beta
+docker-compose 1.11.1

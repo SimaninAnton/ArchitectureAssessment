@@ -1,0 +1,52 @@
+1dal commented on 20 Apr 2018
+Description of the issue
+My docker-compose.yml:
+version: '3'
+
+services:
+  app:
+      image: 'registry.1dal.loc/kek/mekekeke'
+      build:
+          context: .
+          dockerfile: ./docker/app/Dockerfile
+Context information (for bug reports)
+PS C:\Users\1dal\devel\kek\mekekeke> docker-compose up
+Building app
+Traceback (most recent call last):
+  File "site-packages\docker\utils\utils.py", line 117, in create_archive
+OSError: [Errno 22] Invalid argument: 'C:\Users\\1dal\\devel\\kek\\mekekeke\\bin\\console'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 1039, in up
+  File "compose\cli\main.py", line 1035, in up
+  File "compose\project.py", line 465, in up
+  File "compose\service.py", line 327, in ensure_image_exists
+  File "compose\service.py", line 998, in build
+  File "site-packages\docker\api\build.py", line 150, in build
+  File "site-packages\docker\utils\build.py", line 15, in tar
+  File "site-packages\docker\utils\utils.py", line 121, in create_archive
+OSError: Can not read file in context: C:\Users\\1dal\\devel\\kek\\mekekeke\\bin\\console
+[4756] Failed to execute script docker-compose
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b2
+Output of "docker version"
+Docker version 18.03.0-ce, build 0520e24
+Output of "docker-compose config"
+services:
+  app:
+    build:
+      context: C:\Users\1dal\devel\kek\mekekeke
+      dockerfile: ./docker/app/Dockerfile
+    image: 'registry.1dal.loc/kek/mekekeke'
+version: '3.0'
+Steps to reproduce the issue
+docker-compose up
+Expected result
+Builded, container up.
+Additional information
+Windows 10, Powershell/cmd.exe (same result)

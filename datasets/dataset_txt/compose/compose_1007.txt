@@ -1,0 +1,24 @@
+AtomicBit commented on 18 Dec 2017
+We used to create big compose-file from small composes via config command, with some variable preserved so they can be defined later on.
+a.yml
+services:
+  a:
+    image: ${registry}/my:image
+b.yml
+services:
+  a:
+    environment:
+      ENVIRONMENT: ${env}
+We produced our final compose via
+docker-compose -f a.yml -f b.yml config
+with variables as
+env=prod
+registry="\${registry}"
+so final compose looked like
+services:
+  a:
+    environment: prod
+    image: ${registry}
+now the last line is
+    image: $${registry}
+is there some way to preserve old behavior? Or do we need to process compose file elsewhere after generating it?

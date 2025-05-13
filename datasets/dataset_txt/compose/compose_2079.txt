@@ -1,0 +1,24 @@
+multimac commented on 10 Sep 2016
+Following on from this comment, #1607 (comment)
+I've created a repository demonstrating the issue, https://github.com/multimac/compose-dockerignore
+When including a file already excluded by a prior rule in a .dockerignore file, Compose stops ignoring any other files.
+Expected Results
+ignore_1  | /context/
+ignore_1  | /context/.dockerignore
+ignore_1  | /context/docker-compose.yml
+ignore_1  | /context/Dockerfile
+ignore_1  | /context/folder
+ignore_1  | /context/folder/included
+Actual Results - (/context/folder/ignored shouldn't be there)
+ignore_1  | /context/
+ignore_1  | /context/.dockerignore
+ignore_1  | /context/docker-compose.yml
+ignore_1  | /context/Dockerfile
+ignore_1  | /context/folder
+ignore_1  | /context/folder/included
+ignore_1  | /context/folder/ignored
+Versions
+Windows 10 Pro
+Docker version 1.12.0, build 8eab29e
+docker-compose version 1.8.0, build d988a55
+10

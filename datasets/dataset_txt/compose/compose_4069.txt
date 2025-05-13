@@ -1,0 +1,2 @@
+sge-babrams commented on 2 Dec 2014
+Following the same behavior as fig up which recreates containers and attaches docker logs to stdout. fig start should start the stopped containers and attach their docker logs to stdout.

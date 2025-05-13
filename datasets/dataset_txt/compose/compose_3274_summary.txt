@@ -1,0 +1,1 @@
+Support of the newest logging drivers

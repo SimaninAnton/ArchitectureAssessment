@@ -1,0 +1,18 @@
+tobias-kuendig commented on 24 Jan 2017 •
+edited
+With v2 I had the following setup:
+A "code" container, where I bake the source code of my app into. This container specifies a volume using the VOLUME keyword.
+A php-fpm (and a few other) container that gets my application's source code via volumes_from: code.
+If I change my source code I rebuild the code container, push and pull it and rebuild my docker-compose services.
+version: '2'
+services:
+    code:
+        image: custom/backend:latest
+
+    php-fpm:
+        image: php-fpm:latest
+        volumes_from:
+            - code
+This is the workflow described here: https://docs.docker.com/engine/tutorials/dockervolumes/#/creating-and-mounting-a-data-volume-container
+With v3, since volumes_from is gone, I am unable to recreate this setup. What are my options? It was very easy to deploy new code by simply baking it into a new container. I have no idea how to solve this problem with v3.
+73

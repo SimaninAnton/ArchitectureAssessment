@@ -1,0 +1,1 @@
+docker-compose pulls image if 'build' and 'image' are provided

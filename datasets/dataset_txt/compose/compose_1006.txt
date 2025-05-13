@@ -1,0 +1,20 @@
+pluque commented on 18 Dec 2017
+Hi guys,
+I'm using docker run security-opt "credentialspec... without any issues but when I try to use it in docker-compose yaml file, I get the following warning: WARNING: Some services (wcm) use the 'credential_spec' key, which will be ignored. Compose does not support 'credential_spec' configuration - use docker stack deploy to deploy to a swarm.
+Did I miss something in the documentation?
+Client:
+ Version:      17.06.2-ee-6
+ API version:  1.30
+ Go version:   go1.8.3
+ Git commit:   e75fdb8
+ Built:        Mon Nov 27 22:46:09 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.06.2-ee-6
+ API version:  1.30 (minimum version 1.24)
+ Go version:   go1.8.3
+ Git commit:   e75fdb8
+ Built:        Mon Nov 27 22:55:16 2017
+ OS/Arch:      windows/amd64
+ Experimental: false

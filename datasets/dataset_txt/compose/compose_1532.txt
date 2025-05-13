@@ -1,0 +1,12 @@
+giper45 commented on 10 Apr 2017 •
+edited
+Hello, I'm working at a docker-compose library for node. I'm trying to implement the up command . It's simply call "docker-compose up" by cmd-line. Approximately, this is the code :
+return cmd.get('cd '+path+'; docker-compose  up', callback)      
+It returns the pid process and the callback is called after the command. I'd like to get the output of docker-compose at runtime. The problem is that the end callback is called only when I destroy the containers with docker-compose down.
+More simply,l if I try to call "docker-compose up > log.txt" from terminal, the process starts and remains active, but it doesn't redirect the output to log.txt :
+docker-compose up > log.txt
+Creating network "beginnerbov1_default" with the default driver
+Creating beginnerbov1_another_1
+Creating beginnerbov1_hackme_1
+If there is a way to write those lines to log.txt I think that I've resolved this issue.
+Thanks in advance!

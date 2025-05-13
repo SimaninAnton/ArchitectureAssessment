@@ -1,0 +1,25 @@
+Contributor
+ofek commented on 20 Feb 2018
+The logic to print done involves finding the right place using ansi codes. For some reason, this is not properly done because it appears to do this by writing over the previous line and not the line itself. This includes one's terminal session.
+Ofek@Ofek-PC ~\Desktop $ docker-compose version
+docker-compose version 1.18.0, build 8dd22a96
+docker-py version: 2.6.1
+CPython version: 2.7.14
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+I captured the raw output to show what is happening.
+See:
+Python 3.6.1 | packaged by conda-forge | (default, May 23 2017, 14:21:39) [MSC v.1900 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> output = 'Creating desktop_nginx_1 ... \r\r\n\x1b[2A\x1b[2K\rCreating desktop_nginx_1 ... \x1b[32mdone\x1b[0m\r\x1b[2BCreating agent_nginx_stub_default ... \r\r\n\x1b[2A\x1b[2K\rCreating agent_nginx_stub_default ... \x1b[32mdone\x1b[0m\r\x1b[2B'                                                                     
+>>>                                                                                                                                                            
+>>> print(output)
+and then:
+Python 3.6.1 | packaged by conda-forge | (default, May 23 2017, 14:21:39) [MSC v.1900 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> output = 'Creating desktop_nginx_1 ... \r\r\n\x1b[2A\x1b[2K\rCreating desktop_nginx_1 ... \x1b[32mdone\x1b[0m\r\x1b[2BCreating agent_nginx_stub_default ... \r\r\n\x1b[2A\x1b[2K\rCreating agent_nginx_stub_default ... \x1b[32mdone\x1b[0m\r\x1b[2B'                                                                     
+>>>                                                                                                                                                            
+Creating desktop_nginx_1 ... done
+Creating agent_nginx_stub_default ... done
+Creating agent_nginx_stub_default ...
+
+>>>

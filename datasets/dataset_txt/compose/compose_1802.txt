@@ -1,0 +1,40 @@
+Contributor
+kinghuang commented on 12 Jan 2017 •
+edited
+Description
+The config command in Docker Compose 1.9.0 and 1.10.0-rc1 produces incorrect output for depends_on when the Compose file version is 3.0. In Compose file version 2.1, the depends_on property gained the ability to specify that dependencies wait on positive healthchecks. This feature is not part of file version 3.0.
+However, when docker-compose config is called with version 3.0 files as input, it outputs version 2.1 style depends_on, which then doesn't work with docker stack deploy --compose-file in Docker 1.13.
+I use docker-compose config to produce a single Docker Compose file from multiple files before passing it to docker stack deploy --compose-file.
+Steps to reproduce the issue:
+Create a Docker Compose file with the version set to 3.0 and a service that has a depends_on with a list of other services that it depends on.
+Run docker-compose config.
+Describe the results you received:
+In the output of the config command, depends_on should remain a list of services.
+Describe the results you expected:
+In the output of the config command, depends_on has been converted to version 2.1 format. It is now a mapping, with condition: service_started added to each service.
+Additional information you deem important (e.g. issue happens only occasionally):
+Tried with both Docker Compose 1.9.0 and 1.10.0-rc1. Same result.
+Here's an example.
+Input Docker Compose file:
+version: '3'
+
+services:
+  converis:
+    image: docker.ucalgary.ca/tr/converis
+    depends_on:
+      - converis-db
+
+  converis-db:
+    image: docker.ucalgary.ca/rms/converis-db-configs
+Output of docker-compose config:
+networks: {}
+services:
+  converis:
+    depends_on:
+      converis-db:
+        condition: service_started
+    image: docker.ucalgary.ca/tr/converis
+  converis-db:
+    image: docker.ucalgary.ca/rms/converis-db-configs
+version: '3.0'
+volumes: {}

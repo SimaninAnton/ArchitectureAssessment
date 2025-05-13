@@ -1,0 +1,19 @@
+rafaelsierra commented on 3 Apr 2016
+Sometimes you deal with multipurpose monolithic applications that need multiple background processes to work (such as Django + Celery), and you should be able to start and stop those processes by calling docker-compose up and down, without having to run multiple services.
+I see two ways of implement this:
+Allow multiple commands per service
+Allow build a service from another service
+Particularly, I think that another service makes more sense:
+version: "2"
+
+base-service:
+  build:
+     dockerfile: MyDockerfile
+     context: .
+  # CMD is already set on MyDockerfile
+  # Lots of env, ports, etc
+
+support-service:
+  build:
+    service: base-service
+  command: some command -D

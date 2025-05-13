@@ -1,0 +1,7 @@
+jatins commented on 20 Jul 2016
+I am using Docker for Mac beta.
+Let's say my compose.yml file has two services frontend, and backend.
+Previously, with docker-compose up the services could not talk to each other over localhost. You had to use service name. So, in my frontend code I would make a call to http://backend:3000
+Seems like with the latest update, the I have to make a call to http://localhost:3000 to accomplish the same behaviour.
+Although, when I try to access backend service from inside the frontend container, I have to use the service name (i.e. "backend"), and not localhost.
+Is this the expected behaviour?

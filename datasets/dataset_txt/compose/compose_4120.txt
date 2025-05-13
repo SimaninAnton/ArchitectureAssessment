@@ -1,0 +1,6 @@
+icambron commented on 5 Nov 2014
+The way to set up fig + boot2docker seems to be:
+Run boot2docker
+Take its IP:port, cert path, and a TLS flag and put them in your shell init file
+run fig
+It would be nice, though, if Fig fails to find DOCKER_HOST and boot2docker is both on the path and has a "running" status, to have Fig just ask boot2docker for the relevant details and use those instead.

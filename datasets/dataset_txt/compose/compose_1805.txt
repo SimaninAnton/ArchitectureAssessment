@@ -1,0 +1,19 @@
+whitecolor commented on 11 Jan 2017 •
+edited
+I'm running serveral services in the output
+docker-compose up service1 service2 service3
+Often (not always, I think in 80% of cases) when I restart some of the service with docker-compose restart service1, console with the output is emitting the error:
+File "threading.py", line 810, in __bootstrap_inner
+File "threading.py", line 763, in run
+ File "compose/cli/log_printer.py", line 197, in watch_ev
+ents
+File "compose/project.py", line 343, in events
+File "site-packages/docker/client.py", line 261, in _str
+eam_helper
+File "json/__init__.py", line 338, in loads
+File "json/decoder.py", line 369, in decode
+ValueError: Extra data: line 2 column 1 - line 2 column 71
+0 (char 706 - 1415)
+After this error is shown process doesn't exit, but not output anymore.
+Tested on docker-compose 1.9.0 on linux
+And appears on docker-compose 1.10.0-rc1 (docker for windows)

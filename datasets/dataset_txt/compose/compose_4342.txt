@@ -1,0 +1,5 @@
+tcr commented on 24 Apr 2014
+Perhaps this should be optional, but I'd love to be able to see this work:
+$ fig run web node -e "process.exit(1)"
+$ echo $?
+1

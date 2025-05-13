@@ -1,0 +1,2 @@
+tj commented on 26 Mar 2015
+Any objection to relaxing to allow hyphens and underscores? We use names like "site-docs", "site-help", "site-blog" etc often – combined with backend components that do not have the "site" prefix to help disambiguate. It would be nice to keep things consistent if we can

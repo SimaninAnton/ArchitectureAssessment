@@ -1,0 +1,4 @@
+mboussaa commented on 8 Jul 2015
+Hi
+I am getting this error json: cannot unmarshal number into Go value of type string when starting yaml file
+I am using ubuntu 14 and docker 1.7.0

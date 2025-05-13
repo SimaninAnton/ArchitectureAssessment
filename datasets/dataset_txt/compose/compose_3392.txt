@@ -1,0 +1,11 @@
+ksylvan commented on 11 Aug 2015
+Repeat by:
+Bring up a service that provides some volumes to another container, and then remove it later.
+$ docker-compose up service
+Creating foo_service_1
+Attaching to foo_service_1
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping foo_service_1
+
+$ docker-compose rm -f service
+It leaves orphaned volumes in /var/lib/docker/volumes/ that are not referenced by any containers.

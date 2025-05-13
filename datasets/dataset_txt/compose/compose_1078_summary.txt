@@ -1,0 +1,1 @@
+ERROR while typing: curl -sSL https://goo.gl/5ftp2f | bash in windows command

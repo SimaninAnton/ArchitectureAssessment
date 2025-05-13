@@ -1,0 +1,17 @@
+poc7667 commented on 15 Jun 2015
+My server has 2GB mem
+I launched 2 containers in the server with docker-compose
+Although I set the memory limiti, but it seems not work
+docker-compose
+hub:
+  mem_limit: 256m
+  image: selenium/hub
+  ports:
+    - "4444:4444"
+test:
+  mem_limit: 256m
+  build: ./
+  links:
+    - hub
+  ports:
+    - "5900"      

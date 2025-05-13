@@ -1,0 +1,55 @@
+alexamirante commented on 12 Apr 2018
+Description of the issue
+If the docker-compose.yml contains multiple services with the same name, only the last one is actually executed.
+Context information (for bug reports)
+Output of "docker-compose version":
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of "docker version":
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:10:01 2018
+ OS/Arch: linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:08:31 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+Output of "docker-compose config":
+services:
+  alex:
+    command: bash
+    image: ubuntu:14.04
+    tty: true
+version: '2.4'
+Steps to reproduce the issue
+Create a simple docker-compose.yml file like this:
+version: "2.4"
+services:
+ alex:
+  image: ubuntu:16.04
+  tty: true
+  command: "bash"
+ alex:
+  image: ubuntu:14.04
+  tty: true
+  command: "bash"
+docker-compose up -d
+Observed result
+Only one container is spawned.
+Expected result
+An error message and no containers spawned.
+Additional information
+OS version / distribution: Ubuntu Linux 16.04

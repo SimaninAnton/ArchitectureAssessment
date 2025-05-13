@@ -1,0 +1,34 @@
+jedie commented on 13 Jun 2017 •
+edited
+$ docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.3.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+
+$ docker-compose top
+elasticsearch
+Traceback (most recent call last):
+  File ".virtualenv/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File ".virtualenv/local/lib/python2.7/site-packages/compose/cli/main.py", line 68, in main
+    command()
+  File ".virtualenv/local/lib/python2.7/site-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File ".virtualenv/local/lib/python2.7/site-packages/compose/cli/main.py", line 847, in top
+    print(Formatter().table(headers, rows))
+  File ".virtualenv/local/lib/python2.7/site-packages/compose/cli/formatter.py", line 30, in table
+    return table.draw()
+  File ".virtualenv/local/lib/python2.7/site-packages/texttable.py", line 377, in draw
+    out += self._draw_line(self._header, isheader=True)
+  File ".virtualenv/local/lib/python2.7/site-packages/texttable.py", line 554, in _draw_line
+    line = self._splitit(line, isheader)
+  File ".virtualenv/local/lib/python2.7/site-packages/texttable.py", line 593, in _splitit
+    array.extend(textwrap.wrap(c, width))
+  File "/usr/lib/python2.7/textwrap.py", line 354, in wrap
+    return w.wrap(text)
+  File "/usr/lib/python2.7/textwrap.py", line 329, in wrap
+    return self._wrap_chunks(chunks)
+  File "/usr/lib/python2.7/textwrap.py", line 258, in _wrap_chunks
+    raise ValueError("invalid width %r (must be > 0)" % self.width)
+ValueError: invalid width 0 (must be > 0)

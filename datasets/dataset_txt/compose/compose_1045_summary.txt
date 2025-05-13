@@ -1,0 +1,1 @@
+PLEASE disable http:// and https:// links to flat text on build: docker-compose.yml

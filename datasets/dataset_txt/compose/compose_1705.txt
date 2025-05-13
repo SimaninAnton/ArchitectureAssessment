@@ -1,0 +1,6 @@
+cmc333333 commented on 10 Feb 2017
+If I install using a container, e.g.
+curl -L https://github.com/docker/compose/releases/download/1.10.0/run.sh > ~/bin/docker-compose
+I can't pipe in compose configurations:
+~/bin/docker-compose -f - up < my-config.yml
+If I install via pip, instead, I can.

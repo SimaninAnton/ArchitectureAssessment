@@ -1,0 +1,19 @@
+ScreamingDev commented on 25 Mar 2016
+Hello.
+I have service A containing "/path/to/file.socket".
+This file shall now be in service B in the path "/different/path/to/socket.io" (could also be the same path, tho).
+It would be very useful to have such an option in the docker-compose.yml file:
+version: '2'
+services:
+    MYSQL_SERVICE:
+        image: mysql:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: ''
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    PHP_SERVICE:
+        image: php:latest
+        volumes_from:
+            - MYSQL_SERVICE:/var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock
+Currently you might need to create an empty file, mount it in service A and then mount the same file in service B. Such a detour. Especially if you need to do it with directories - then it will end up in a big mess.
+Hope to hear from you soon.
+Cheers!

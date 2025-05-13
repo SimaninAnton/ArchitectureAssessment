@@ -1,0 +1,2 @@
+vladimirtiukhtin commented on 8 Mar 2018
+At the moment docker-compose pull fails to pull an image with build statement. It likely, because we do not want to pull it, we want to build it. So docker-compose should probably ignore services with build statement

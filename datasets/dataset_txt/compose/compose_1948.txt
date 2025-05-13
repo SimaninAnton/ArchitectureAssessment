@@ -1,0 +1,60 @@
+kyledecot commented on 8 Nov 2016 •
+edited
+Hi All,
+I'm not sure if this is the right repo to post this to but I figured I'd start here and perhaps someone can at least point me in the right direction. I have a docker-compose.test.yml file which creates two services (web and db). Here is said file:
+version: '2'
+services:
+  db:
+    container_name: "rfc_test_db"
+    image: mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+  web:
+    container_name: "rfc_test_web"
+    stdin_open: true
+    tty: true
+    environment:
+      - RAILS_ENV=test
+      - DATABASE_HOST=db
+      - DATABASE=mysql
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=
+      - SECRET_KEY_BASE=3ad576ebf101d796769739f909b4a84d01a9f99852765d51008ec7d
+    build: .
+    volumes:
+      - .:/rfc
+    depends_on:
+      - db
+The problem that I'm running into is when I perform an up and then a run that attempts to connect to the db service I get the following error:
+Mysql2::Error: Can't connect to MySQL server on 'db' (111)
+What's odd is that if I run the up and then wait ~30 seconds and then run everything works as expected. It appears that my networking isn't getting linked up or something. Has anyone else run into this problem?
+docker-compose version: docker-compose version 1.9.0-rc2, build a2da43b
+docker version: Docker version 1.12.3, build 6b644ec, experimental
+Doesn't Work
+docker-compose -f docker-compose.test.yml -p rfc_test up --build --remove-orphans -d
+# immediately after this completes call 
+docker-compose -f docker-compose.test.yml -p rfc_test run --rm web rake db:schema:load
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+-- create_table("attachments", {:force=>:cascade})
+rake aborted!
+Mysql2::Error: Can't connect to MySQL server on 'db' (111)
+...
+Works
+docker-compose -f docker-compose.test.yml -p rfc_test up --build --remove-orphans -d
+# wait ~30 seconds
+docker-compose -f docker-compose.test.yml -p rfc_test run --rm web rake db:schema:load
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+[DEPRECATION] `last_comment` is deprecated.  Please use `last_description` instead.
+-- create_table("attachments", {:force=>:cascade})
+   -> 0.1204s
+...
+1

@@ -1,0 +1,19 @@
+tk0485 commented on 3 Jan 2018
+I need to set a system-wide env varible using compose file. I have a stack file that looks like the following:
+---
+version: "3.3"
+  services:
+     serv-1:
+          environment:
+                my_var: "defined"
+          ports:
+              - "12000:22"
+when I ssh into the serv-1 container and run:
+ echo $my_var
+>> defined
+sudo -iu other_user
+echo $my_var
+>>   
+I get nothing when I try to access same env variable using another user. is there a way to set this env variable as global to all users of the system or at least for specific users?
+my docker version is:
+Docker version 17.06.2-ce, build cec0b72

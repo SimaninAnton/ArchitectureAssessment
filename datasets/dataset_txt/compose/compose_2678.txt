@@ -1,0 +1,87 @@
+GerjanOnline commented on 3 Mar 2016
+Intro
+I have a Scala project and I'm using sbt-native-packer to create my docker file (so inside build.sbt). This works fine.
+sbt-native-packer creates the following Dockerfile inside /backend/target/docker/stage/
+FROM java
+MAINTAINER GerjanOnline <mymail@gmail.com>
+WORKDIR /opt/docker
+ADD opt /opt
+RUN ["chown", "-R", "daemon:daemon", "."]
+EXPOSE 9000
+USER daemon
+ENTRYPOINT ["bin/my-system"]
+CMD []
+Example 1 that works:
+/backend
+sbt docker:publishLocal
+docker run --rm -it -p 9000:9000 -d my-image-name
+Example 2 that works:
+/backend/target/docker/stage/
+docker build -t my-image-name .
+docker run --rm -it -p 9000:9000 -d my-image-name
+Problem
+But now I want to use docker-compose to connect it with my database and frontend, but this doesn't work:
+docker-compose.yml
+backend: 
+  build: ./backend/target/docker/stage/
+  ports: 
+    - "9000:9000"
+When I run docker-compose up I get:
+Building backend
+Step 1 : FROM java
+ ---> 9afbe4c3ddc8
+Step 2 : MAINTAINER GerjanOnline <mymail@gmail.com>
+ ---> Using cache
+ ---> 8c09ff3fcd4e
+Step 3 : WORKDIR /opt/docker
+ ---> Using cache
+ ---> 54065ef17f9c
+Step 4 : ADD opt /opt
+ ---> 5e7a479e690c
+Removing intermediate container dcc45d5c8e3f
+Step 5 : RUN chown -R daemon:daemon .
+ ---> Running in 43e7eff7d625
+ ---> 4b5c5943dec9
+Removing intermediate container 43e7eff7d625
+Step 6 : EXPOSE 9000
+ ---> Running in 9fa75ed85f6f
+ ---> e862a9e572ff
+Removing intermediate container 9fa75ed85f6f
+Step 7 : USER daemon
+ ---> Running in 4cfce80de29b
+ ---> 1070ec926288
+Removing intermediate container 4cfce80de29b
+Step 8 : ENTRYPOINT bin/my-system
+ ---> Running in df28c2abe040
+ ---> afe3ff531eda
+Removing intermediate container df28c2abe040
+Step 9 : CMD
+ ---> Running in 1e2e82fc6c07
+ ---> 4a7e275d25d9
+Removing intermediate container 1e2e82fc6c07
+Successfully built 4a7e275d25d9
+Creating code_backend_1
+ERROR: Cannot start container 4ae89e3fe79dff21b1ef10bc3a592c35b4a3ce54153300655ef9ecebd9d40436: [8] System error: exec: "bin/my-system": permission denied
+Why does docker-compose give me this error while docker doesn't?
+Versions
+docker-compose version
+docker-compose version 1.5.2, build e5cf49d
+docker-py version: 1.5.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 1.0.2a 19 Mar 2015
+docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 17:56:04 UTC 2015
+ OS/Arch:      windows/amd64
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 17:56:04 UTC 2015
+ OS/Arch:      linux/amd64
+Windows 7 Professional x64

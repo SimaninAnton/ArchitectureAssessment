@@ -1,0 +1,32 @@
+jjaimon commented on 15 Feb 2017
+docker-compose up fails while trying to bring up the default tomcat image with remapped logs and webapps folders. These are defined as follow in the docker-compose.yml.
+   tomcat:
+        image: tomcat:8.5.8-jre8
+        container_name: tomcat
+        depends_on:
+            >> cut<<
+        volumes:
+            - tomcat-data:/usr/local/tomcat/webapps
+            - tomcat-logs:/usr/local/tomcat/logs
+ 
+volumes:
+    tomcat-data: 
+        driver_opts:
+            type: none
+            device: /home/tomcat/webapps
+            o: bind
+
+    tomcat-logs: 
+        driver_opts:
+            type: none
+            device: /home/tomcat/logs
+            o: bind
+The error message is cryptic and difficult to figure out which volume is not present. (Both folders are present in the host volume)
+compose.service.create_container: Creating tomcat
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name='tomcat', image='tomcat:8.5.8-jre8', labels={u'com.docker.compose.service': u'tomcat', u'com.docker.compose.project': u'composer', u'com.docker.compose.config-hash': 'd046814d17a5ce67d8c2af5182c398091e3435eb54fe81b12524a529ad038f57', u'com.docker.compose.version': u'1.10.0', u'com.docker.compose.oneoff': u'False', u'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': u'composer_default', 'Links': [], u'Isolation': None, 'PortBindings': {'8080/tcp': [{'HostPort': '8888', 'HostIp': ''}]}, 'Binds': [u'composer_tomcat-data:/usr/local/tomcat/webapps:rw', u'composer_tomcat-logs:/usr/local/tomcat/logs:rw'], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment=[], volumes={u'/usr/local/tomcat/webapps': {}, u'/usr/local/tomcat/logs': {}}, detach=True, ports=['8080'], networking_config={u'EndpointsConfig': {u'composer_default': {u'IPAMConfig': {}, u'Aliases': ['tomcat']}}})
+compose.parallel.parallel_execute_iter: Failed: <Service: tomcat>
+compose.parallel.feed_queue: Pending: set([])
+
+ERROR: for tomcat  Cannot create container for service tomcat: no such file or directory
+ERROR: compose.cli.main.main: Encountered errors while bringing up the project.
+4

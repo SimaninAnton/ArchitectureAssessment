@@ -1,0 +1,25 @@
+cjoelrun commented on 18 Aug 2014
+Example:
+example:
+  image: ubuntu:14.04
+  dns: 8.8.8.8
+Result is:
+$ fig up
+Creating tmp_example_1...
+Traceback (most recent call last):
+  File "/usr/local/Cellar/fig/0.5.1/libexec/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.5.1', 'console_scripts', 'fig')()
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/main.py", line 39, in main
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/docopt_command.py", line 21, in sys_dispatch
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/command.py", line 31, in dispatch
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/docopt_command.py", line 24, in dispatch
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/command.py", line 50, in perform_command
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/docopt_command.py", line 27, in perform_command
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/main.py", line 333, in up
+  File "build/bdist.macosx-10.10-intel/egg/fig/project.py", line 169, in up
+  File "build/bdist.macosx-10.10-intel/egg/fig/service.py", line 167, in recreate_containers
+  File "build/bdist.macosx-10.10-intel/egg/fig/service.py", line 149, in create_container
+  File "build/bdist.macosx-10.10-intel/egg/fig/container.py", line 34, in create
+  File "build/bdist.macosx-10.10-intel/egg/fig/packages/docker/client.py", line 460, in create_container
+  File "build/bdist.macosx-10.10-intel/egg/fig/packages/docker/client.py", line 150, in _container_config
+fig.packages.docker.errors.DockerException: 'dns' parameter has no effect on create_container(). It has been moved to start()

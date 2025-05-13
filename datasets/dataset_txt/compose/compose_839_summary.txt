@@ -1,0 +1,1 @@
+docker-compose build on macos failing with procfs

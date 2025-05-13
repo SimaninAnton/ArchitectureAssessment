@@ -1,0 +1,31 @@
+Contributor
+andyneff commented on 6 Feb 2018 •
+edited
+Problem
+I have a cross OS script that calls docker-compose using xargs. While it works as expected in Linux and macOS, there is no stdout/stderr output on my terminal in
+Step to reproduce:
+docker-compose.yml
+version: '3.2'
+services:
+  test_hay:
+    image: alpine
+    command: sh -c 'echo horse'
+echo test_hay | xargs docker-compose run --rm
+Nothing echos, but horse should
+I'm using this, because I have a bash command like if [ "$(docker-compose run foo)" = "bar" ] inside a script called by xargs that's not working, but these steps are simpler to reproduce
+Other investigation
+All had no affect
+I have also tried manipulating and verifying the tty status of stdin, stdout, and stderr via test -t 1, etc...
+Tried compose file version 2.3
+Use git for windows and cygwin terminal windows, and their xargs
+Used a powershell windows
+Using xargs env -i "PATH=$PATH" "TEMP=$TEMP" docker-compose to see if xargs was exporting something in the environment
+Calling docker-compose --version does work, so that convinced me it wasn't related to #2775
+I could not find way to reproduce this without xargs.
+Work around
+Adding the -T works, but this doesn't make any sense. This fails both when stdout is a tty and isn't a tty.
+echo test_hay | xargs docker-compose run --rm -T
+Using
+docker-compose version 1.18.0, build 8dd22a9
+git xargs 4.6.0 (from git for windows 2.15.1.windows.2)
+cygwin xargs 4.6.0

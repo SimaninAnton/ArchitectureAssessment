@@ -1,0 +1,9 @@
+shulcsm commented on 10 Jul 2015
+$ seq 10 | parallel docker-compose run --rm web sleep 5
+Conflict. The name "omd2_web_run_3" is already in use by container ab66ff04dcce. You have to delete (or rename) that container to be able to reuse that name.
+Conflict. The name "omd2_web_run_3" is already in use by container ab66ff04dcce. You have to delete (or rename) that container to be able to reuse that name.
+Conflict. The name "omd2_web_run_3" is already in use by container ab66ff04dcce. You have to delete (or rename) that container to be able to reuse that name.
+Conflict. The name "omd2_web_run_4" is already in use by container 69ad87a6084c. You have to delete (or rename) that container to be able to reuse that name.
+Conflict. The name "omd2_web_run_4" is already in use by container 69ad87a6084c. You have to delete (or rename) that container to be able to reuse that name.
+Conflict. The name "omd2_web_run_5" is already in use by container 545140512d4e. You have to delete (or rename) that container to be able to reuse that name.
+This an issue when scheduling multiple run commands in cron for instance.

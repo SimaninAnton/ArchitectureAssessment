@@ -1,0 +1,6 @@
+Nukker commented on 3 Dec 2018
+relation-link: moby/moby#38073
+we found this bug(containner hang up) only happen in this method
+project.up(service_names=services, ignore_orphans=True)
+we use project.client.up(...) is ok
+we test hundreds docker-compose -f compose_file_xxx.yml up -d in cmd is ok

@@ -1,0 +1,21 @@
+sensharma commented on 14 Mar 2018
+Hi, I am using the following docker-ce version.
+Client:
+Version: 17.12.1-ce
+API version: 1.35
+Go version: go1.9.4
+Git commit: 7390fc6
+Built: Tue Feb 27 22:17:40 2018
+OS/Arch: linux/amd64
+Server:
+Engine:
+Version: 17.12.1-ce
+API version: 1.35 (minimum version 1.12)
+Go version: go1.9.4
+Git commit: 7390fc6
+Built: Tue Feb 27 22:16:13 2018
+OS/Arch: linux/amd64
+Experimental: false
+As per the link (https://docs.docker.com/compose/compose-file/ ), docker-compose version 3.5 should be supported with this docker-ce. However, when I use version: '3.5', I get the following error msg:
+Version in "./docker-compose.yml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify a supported version ("2.0", "2.1", "3.0","3.1", "3.2")
+Why is that?

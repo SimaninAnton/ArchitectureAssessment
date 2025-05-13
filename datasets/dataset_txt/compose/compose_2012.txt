@@ -1,0 +1,31 @@
+khaale commented on 10 Oct 2016
+Hi, I have the following error while trying docker-compose up on Windows 10 (with Russian language pack, don't be afraid of cyrillic symbols). I'm using the latest build of docker-compose:
+docker-compose.exe --verbose up
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.auth.find_config_file: Trying paths: ['C:\Users\Aleksander.docker\config.json', 'C:\Users\Aleksander.dockercfg']
+docker.auth.auth.find_config_file: No config file found
+compose.cli.command.get_client: docker-compose version 1.9.0dev, build 9248298
+docker-py version: 1.10.3
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 1.0.2a 19 Mar 2015
+compose.cli.command.get_client: Docker base_url: http://127.0.0.1:2375
+compose.cli.command.get_client: Docker version: KernelVersion=10.0 14393 (14393.206.amd64fre.rs1_release.160915-0644), Os=windows, BuildTime=2016-09-23T20:50:29.300867400+00:00, ApiVersion=1.25, Version=1.12.2-cs2-ws-beta-rc1, GitCommit=62d9ff9, Arch=amd64, GoVersion=go1
+.7.1
+compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+compose.cli.verbose_proxy.proxy_callable: docker info -> {u'Architecture': u'x86_64',
+u'BridgeNfIp6tables': True,
+u'BridgeNfIptables': True,
+u'CPUSet': False,
+u'CPUShares': False,
+u'CgroupDriver': u'',
+u'ClusterAdvertise': u'',
+u'ClusterStore': u'',
+u'Containers': 34,
+u'ContainersPaused': 0,
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'docker_default')
+compose.network.ensure: Creating network "docker_default" with the default driver
+compose.cli.verbose_proxy.proxy_callable: docker create_network <- (ipam=None, internal=False, driver=None, options=None, name=u'docker_default')
+ERROR: compose.cli.errors.log_api_error: HNS failed with error : Параметр задан неверно.
+The Параметр задан неверно means Parameter is set incorrectly.
+5

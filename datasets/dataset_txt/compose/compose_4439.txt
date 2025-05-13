@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 17 Jan 2014
+It's very easy to type, e.g., link instead of links. Or, perhaps for the sake of future compatibility, we should special case a few obvious mistakes. Otherwise new fig.ymls won't work with old versions.

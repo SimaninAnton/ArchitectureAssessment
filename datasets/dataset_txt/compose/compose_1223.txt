@@ -1,0 +1,31 @@
+frozendragon498 commented on 4 Sep 2017
+I need to be able fork a process. As i understand it i need to set the security-opt. I have tried doing this with docker command and it works fine. However when i do this in a docker-compose file it seem to do nothing, maybe I'm not using compose right.
+Docker
+docker run --security-opt=seccomp:unconfined <id> dlv debug --listen=:2345 --headless --log ./cmd/main.go
+Docker-compose
+Setup
+docker-compose.yml
+networks:
+  backend:
+
+services:
+  example:
+    build: .
+    security_opt:
+      - seccomp:unconfined
+    networks:
+      - backend
+    ports:
+      - "5002:5002"
+Dockerfile
+FROM golang:1.8
+
+RUN go get -u github.com/derekparker/delve/cmd/dlv
+RUN dlv debug --listen=:2345 --headless --log ./cmd/main.go
+command
+docker-compose -f docker-compose.yml up --build --abort-on-container-exit
+Result
+2017/09/04 15:58:33 server.go:73: Using API v1
+2017/09/04 15:58:33 debugger.go:97: launching process with args: [/go/src/debug]
+could not launch process: fork/exec /go/src/debug: operation not permitted
+3

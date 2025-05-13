@@ -1,0 +1,31 @@
+brandontamm commented on 5 May 2016 •
+edited by shin-
+Exception in thread Thread-17:
+Traceback (most recent call last):
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/threading.py", line 810, in __bootstrap_inner
+    self.run()
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/threading.py", line 763, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/lib/python2.7/site-packages/compose/cli/log_printer.py", line 190, in watch_events
+    for event in event_stream:
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/lib/python2.7/site-packages/compose/project.py", line 353, in events
+    container = Container.from_id(self.client, event['id'])
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/lib/python2.7/site-packages/compose/container.py", line 42, in from_id
+    return cls(client, client.inspect_container(id), has_been_inspected=True)
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/docker/utils/decorators.py", line 21, in wrapped
+    return f(self, resource_id, *args, **kwargs)
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/docker/api/container.py", line 182, in inspect_container
+    self._get(self._url("/containers/{0}/json", container)), True
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/docker/utils/decorators.py", line 47, in inner
+    return f(self, *args, **kwargs)
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/docker/client.py", line 120, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/requests/sessions.py", line 477, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/requests/sessions.py", line 465, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/Cellar/docker-compose/1.7.0/libexec/vendor/lib/python2.7/site-packages/requests/adapters.py", line 433, in send
+    raise ReadTimeout(e, request=request)
+ReadTimeout: HTTPSConnectionPool(host='192.168.99.100', port=2376): Read timed out. (read timeout=60)

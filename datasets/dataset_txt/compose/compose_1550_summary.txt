@@ -1,0 +1,1 @@
+Commit 66f4a79 breaks docker-py detection if inside virtualenv

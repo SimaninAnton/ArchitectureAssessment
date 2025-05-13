@@ -1,0 +1,19 @@
+VolCh commented on 23 Aug 2017 •
+edited
+I try to test target option for 3.4 with
+version: '3.4'
+services:
+  test:
+    image: test
+    build:
+      context: .
+      target: test
+and got
+ERROR: Version in "./docker-compose.yml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify a supported version (e.g "2.2" or "3.3") and place your service definitions under the `services` key, or omit the `version` key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+With '2.3' version it works
+docker -v
+Docker version 17.06.1-ce, build 874a737
+docker-compose -v
+docker-compose version 1.16.0-rc1, build 9bea70a
+2

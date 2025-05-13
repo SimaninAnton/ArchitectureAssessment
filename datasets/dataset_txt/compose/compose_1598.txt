@@ -1,0 +1,22 @@
+kopnok commented on 14 Mar 2017
+python --version
+Python 2.7.5
+docker -v
+Docker version 17.03.0-ce, build 60ccb22
+docker-compose -v
+docker-compose version 1.8.0, build f3628c7
+file format version: '2'
+docker-compose -H 10.0.0.52:4000 -f my-compose.yml start
+...
+Starting container-1 ... done
+Starting container-7 ... done
+ERROR: for container-5  quote_plus
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 61, in main
+  File "compose/cli/main.py", line 113, in perform_command
+  File "compose/cli/main.py", line 734, in start
+  File "compose/project.py", line 238, in start
+  File "compose/parallel.py", line 64, in parallel_execute
+AttributeError: quote_plus
+docker-compose returned -1

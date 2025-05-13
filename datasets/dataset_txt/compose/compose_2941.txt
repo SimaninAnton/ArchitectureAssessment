@@ -1,0 +1,20 @@
+dynamiccast commented on 7 Jan 2016
+Hi guys,
+In my setup I have a Dockerfile in the current directory with a custom name. I also have a docker-compose.yml refering to this Dockerfile as follow :
+example:
+ build: ./
+ dockerfile: DockerfileCustom
+This worked very well until today when I tried to create an other docker-compose.yml file extending this one.
+He is what I have in my second docker-compose file :
+example:
+ extends:
+  file: docker-compose-base.yml
+  service: example
+ image: docker:1.9
+This only difference is it uses an image instead of build the container from the Dockerfile.
+The documentation says In the case of build and image, using one in the local service causes Compose to discard the other. But in this case it seems like the dockerfile property prevents the overriding behavior to happen because I have the following message when I run docker-compose up :
+ERROR: Validation failed, reason(s):
+Service 'example' has both an image and alternate Dockerfile. A service can either be built to image or use an existing image, not both.
+I expected compose to just ignore both build and dockerfile since the extended docker-compose.yml provided an image property.
+I attached an archive with the basic setup to reproduce this.
+bug-docker-compose-extend.zip

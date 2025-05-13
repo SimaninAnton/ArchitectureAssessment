@@ -1,0 +1,34 @@
+IngmarStein commented on 30 Mar 2017
+I have some services which are based on an empty image as they simply run a command from a shared volume. In that case, compose fails with the following stacktrace:
+latest: Pulling from bankrs/empty
+
+Traceback (most recent call last):
+  File "/opt/circleci/.pyenv/versions/2.7.11/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/cli/main.py", line 64, in main
+    command()
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/cli/main.py", line 608, in pull
+    ignore_pull_failures=options.get('--ignore-pull-failures')
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/project.py", line 459, in pull
+    service.pull(ignore_pull_failures)
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/service.py", line 898, in pull
+    stream_output(output, sys.stdout))
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/progress_stream.py", line 18, in stream_output
+    for event in utils.json_stream(output):
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/utils.py", line 58, in split_buffer
+    for data in stream_as_text(stream):
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/compose/utils.py", line 34, in stream_as_text
+    for data in stream:
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/docker/api/client.py", line 296, in _stream_helper
+    data = reader.read(1)
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/requests/packages/urllib3/response.py", line 324, in read
+    flush_decoder = True
+  File "/opt/circleci/python/2.7.11/lib/python2.7/contextlib.py", line 35, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/opt/circleci/python/2.7.11/lib/python2.7/site-packages/requests/packages/urllib3/response.py", line 250, in _error_catcher
+    raise ProtocolError('Connection broken: %r' % e, e)
+requests.packages.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))
+So, 0 bytes are considered an error, but the same command is successful when run for a second time.
+1

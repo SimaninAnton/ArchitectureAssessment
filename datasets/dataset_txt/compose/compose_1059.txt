@@ -1,0 +1,4 @@
+smadapathi commented on 24 Nov 2017
+We are using IPV6 feature for our containers & when we try to upgrade our containers it gives the error
+networks have overlapping IPv6
+We tried deleting the /var/lib/docker/network/ but of no use. Can anyone please let us how to fix this?

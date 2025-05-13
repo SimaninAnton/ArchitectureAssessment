@@ -1,0 +1,4 @@
+stephanbuys commented on 27 Jul 2015
+When wrapping docker-compose into automation I've got a couple of scripts that run a series of docker-compose files in a row. If I just wanted to run a file that contains a specific server it would be super handy to have a 'docker-compose ls' option that spits the name of the containers it would create out to the command line. Inspired by docker-machine ls
+Anyone else think this would be useful?
+My other option is to grep the files for 'service:\n' lines, this works ok but can be much better, especially if --filter functionality gets implemented too.

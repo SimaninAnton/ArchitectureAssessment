@@ -1,0 +1,4 @@
+saadfarooq commented on 16 Apr 2014
+Every time a command is run, the docker ps container name gets some more text appended to it.
+The docker ps output becomes non-readable very quickly.
+Can 'fig' detect that a previous run has finished and reuse names ?

@@ -1,0 +1,22 @@
+dsheets commented on 19 Jul 2017
+From @lawrencepit in docker/for-mac#1824:
+We have this docker-compose.yml file:
+version: '2'
+services:
+  test:
+    image: test
+    container_name: test
+    ports:
+      - 0:80
+Then:
+$ docker-compose --file docker-compose-test.yml config
+services:
+  test:
+    container_name: test
+    image: test
+    ports:
+    - 080/tcp
+version: '2.0'
+Expected result: The output should be:
+    ports:
+    - 0:80/tcp

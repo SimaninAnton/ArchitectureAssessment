@@ -1,0 +1,13 @@
+Shogoki commented on 22 Nov 2019
+Hi,
+Just learned, the hard way, that since version 1.25 there is a new Feature that says:
+Only pull images that can't be built
+Which sounds reasonable at a first look and is probably a good behaviour in 99% of the use cases.
+However ,my DevOps mate and myself, just had a hard time troubleshooting my build/deployment pipeline, where i was using the same compose to first build and push the images on a specific set of runners, and later pulled em at another set of runners.
+Turned out that they updated the compose version, and my docker-compose was just silently (successfully) quitting without pulling any images, as they all had a build statement.
+After i found out, that this was a change in 1.25 I was thinking, "Hey, there´s probably a command line switch that we can use."
+Turned out, there isn´t, therefore this is the kind of feature i like to request.
+Maybe something like docker-compose pull --include-build to also pull images, that have a build statement.
+I believe this would be a good idea, to have the new Behaviour in place, but still allow the old behaviour for some situations (like my CI/CD pipeline ;-) )
+Kind Regards
+Shogoki

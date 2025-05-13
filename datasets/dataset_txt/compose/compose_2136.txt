@@ -1,0 +1,79 @@
+dpavlotzky commented on 19 Aug 2016
+Hi all,
+# docker-compose -v
+docker-compose version 1.8.0-rc2, build c72c966
+I am trying to use one docker-compose.yml file to start mutliple multi-container services. So far, so good. The containers comprising one service share a data volume and this is where I am having some trouble.
+I would like my docker-compose.yml file to look something like this:
+version: '2'
+
+services:
+  php:
+    image: dpavlotzky/wordpress_php:4.6
+    volumes:
+      - ${COMPOSE_PROJECT_NAME}:/data
+
+  nginx:
+    image: dpavlotzky/wordpress_nginx:4.6
+    depends_on:
+      - php
+    environment:
+      - SERVICE_80_NAME=wordpress
+      - SERVICE_443_IGNORE=true
+      - SERVICE_TAGS=${COMPOSE_PROJECT_NAME}
+    volumes:
+      - ${COMPOSE_PROJECT_NAME}:/data:ro
+
+  mariadb:
+    image: dpavlotzky/mariadb
+    volumes:
+      - ${COMPOSE_PROJECT_NAME}:/data
+
+volumes:
+  ${COMPOSE_PROJECT_NAME}:
+Every service uses a data volume named after the project name. This usually is a url (e.g. www.test.com).
+But this does not work unfortunately:
+# COMPOSE_PROJECT_NAME=www.test.com docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+volumes value Additional properties are not allowed ('${COMPOSE_PROJECT_NAME}' was unexpected)
+So then I tried this:
+version: '2'
+
+services:
+  php:
+    image: dpavlotzky/wordpress_php:4.6
+    volumes:
+      - my_volume:/data
+
+  nginx:
+    image: dpavlotzky/wordpress_nginx:4.6
+    depends_on:
+      - php
+    environment:
+      - SERVICE_80_NAME=wordpress
+      - SERVICE_443_IGNORE=true
+      - SERVICE_TAGS=${COMPOSE_PROJECT_NAME}
+    volumes:
+      - my_volume:/data:ro
+
+  mariadb:
+    image: dpavlotzky/mariadb
+    volumes:
+      - my_volume:/data
+
+volumes:
+  my_volume:
+    name: ${COMPOSE_PROJECT_NAME}
+# COMPOSE_PROJECT_NAME=www.test.com docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+volumes.my_volume value Additional properties are not allowed ('name' was unexpected)
+The name trick seems to only work for external volumes...
+I now work around this with a shell script that first creates a named volume (if it does not exist yet) with the COMPOSE_PROJECT_NAME as name and then creates a YAML file with COMPOSE_PROJECT_NAME as name:
+version: '2'
+volumes:
+  www.test.com:
+    external: true
+and I include that using:
+COMPOSE_FILE=docker-compose.yml:${COMPOSE_PROJECT_NAME}.yml
+But I am actually hoping I could get by without the scripting...
+Thank you for creating docker and docker-compose!
+David

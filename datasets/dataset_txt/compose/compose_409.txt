@@ -1,0 +1,22 @@
+Payden-Pringle commented on 9 Nov 2018 •
+edited
+Is your feature request related to a problem? Please describe.
+The problem is that I can't easily set secrets to variables within service containers from Docker Compose. The only viable solution I've found is modifying the image for the containers, but this is a lack-luster solution.
+The documentation for Compose environment states the following:
+Environment variables with only a key are resolved to their values on the machine Compose is running on, which can be helpful for secret or host-specific values.
+The word secret in the above context seems to mean information that is to be hidden as opposed to the Docker Term secret meaning a value encrypted to be used with Docker containers. It should probably be reworded.
+Describe the solution you'd like
+The ability to assign secrets to environment variables within Docker Compose, like so:
+environment:
+ - password
+secrets:
+ - password
+This should assign $password the contents of /run/secrets/password. This was my original expectation after reading the above quoted documentation until I realized it meant the generic secret.
+Describe alternatives you've considered
+Creating custom entrypoint scripts and having them set the variables to the values then run the image's original entrypoint script, but the only way to supply the custom entrypoint script is to put it inside a persistent volume and attach it to the container, or modify the image to include the custom entrypoint script. This doesn't work because the container doesn't mount the volume until after the entrypoint script runs.
+Creating a CMD override to do what is needed, but this is convoluted & ugly. Plus it doesn't work as desired.
+Modifying the original image. Not desired for the reasons to follow.
+Additional context
+Modifying the image to support using the /run/secrets contents is not a good solution to this problem for a few reasons.
+It defeats the point of using a Compose file. A Compose file is as much documentation for an environment as it is a script much like Dockerfiles are for images. Secrets should be obfuscated by nature, but changes to support those secrets should not be. Changing an image to move away from a standard like using environment variables to support something Docker Compose cannot do is also creating unnecessary work. I would even go on to say changing images to use /run/secrets contents is an anti-pattern, and modifying them to assign the contents of /run/secrets to variables is just something Compose should do itself.
+In most cases, official images such as mariadb, phpmyadmin, etc aren't built to use secrets and instead use environment variables. Utilizing those official sources for updates is preferred over sourcing their images then making modifications to them. It adds an unnecessary step of work to automate, or to make changes when updates result in a need to change the customized image further.

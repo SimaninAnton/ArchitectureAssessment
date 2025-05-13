@@ -1,0 +1,17 @@
+abitrolly commented on 24 Apr 2019
+It is impossible to run a docker-compose build that will use locally built images and pull updated remote image at the same time.
+build --pull will fail on local image.
+$ docker-compose build --pull app
+Step 1/6 : FROM local-image as local
+ERROR: Service 'app' failed to build: pull access denied for local-image, repository does
+ not exist or may require 'docker login'
+build without --pull won't fetch latest version of other base images.
+Context information (for bug reports)
+Output of docker-compose version
+# docker-compose version
+docker-compose version 1.23.1, build b02f130
+docker-py version: 3.7.2
+CPython version: 2.7.15
+OpenSSL version: LibreSSL 2.6.5
+Adding --ignore-pull-failures to docker-compose build --pull should be enough to fix the issue. Otherwise a separate builder script is needed to implement the logic without docker-compose.
+2

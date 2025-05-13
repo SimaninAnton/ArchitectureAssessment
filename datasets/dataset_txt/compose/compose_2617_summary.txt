@@ -1,0 +1,1 @@
+compose doesn't take node constraints into account when creating networks in a swarm

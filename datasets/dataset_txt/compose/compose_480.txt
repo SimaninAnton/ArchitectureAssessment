@@ -1,0 +1,148 @@
+henres commented on 25 Sep 2018
+Description of the issue
+nginx can't access to my other service php_fpm:
+$ docker-compose -p lbdd_form up
+Starting lbdd_form_php_fpm_1 ... done
+Starting lbdd_form_nginx_1   ... done
+Attaching to lbdd_form_php_fpm_1, lbdd_form_nginx_1
+php_fpm_1  | [25-Sep-2018 08:26:48] NOTICE: [pool www] 'user' directive is ignored when FPM is not running as root
+php_fpm_1  | [25-Sep-2018 08:26:48] NOTICE: [pool www] 'user' directive is ignored when FPM is not running as root
+php_fpm_1  | [25-Sep-2018 08:26:48] NOTICE: [pool www] 'group' directive is ignored when FPM is not running as root
+php_fpm_1  | [25-Sep-2018 08:26:48] NOTICE: [pool www] 'group' directive is ignored when FPM is not running as root
+php_fpm_1  | [25-Sep-2018 08:26:48] NOTICE: fpm is running, pid 1
+nginx_1    | 2018/09/25 08:26:48 [emerg] 1#1: invalid host in upstream "http://php_fpm:9000" in /etc/nginx/conf.d/lbdd.conf:23
+nginx_1    | nginx: [emerg] invalid host in upstream "http://php_fpm:9000" in /etc/nginx/conf.d/lbdd.conf:23
+php_fpm_1  | [25-Sep-2018 08:26:48] NOTICE: ready to handle connections
+lbdd_form_nginx_1 exited with code 1
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping lbdd_form_php_fpm_1 ... done
+From this docker-compose :
+services:
+  nginx:
+    environment:
+      APP_FPM_HOST: php_fpm
+      APP_NGINX_HOST: dev.lbdd
+      APP_SSL: "true"
+    image: nginx:latest
+    ports:
+    - published: 9080
+      target: 80
+    - published: 9443
+      target: 443
+    tty: true
+    volumes:
+    - consistency: delegated
+      source: /Users/henres/project/lbdd/lbdd-form/docker/nginx/config/lbdd.conf
+      target: /etc/nginx/conf.d/lbdd.conf
+      type: bind
+    - consistency: delegated
+      source: /Users/henres/project/lbdd/lbdd-form
+      target: /var/www/html
+      type: bind
+    working_dir: /var/www/html/public
+  php_fpm:
+    build:
+      args:
+        USER_ID: '501'
+      context: /Users/henres/project/lbdd/lbdd-form/docker/php-fpm
+      dockerfile: Dockerfile
+    environment:
+      PHP_XDEBUG_ENABLED: 1
+    user: www-data
+    volumes:
+    - consistency: delegated
+      source: /Users/henres/.composer
+      target: /var/www/.composer
+      type: bind
+    - consistency: delegated
+      source: /Users/henres/project/lbdd/lbdd-form
+      target: /var/www/html
+      type: bind
+    working_dir: /var/www/html
+version: '3.6'
+my ./docker/nginx/config/lbdd.conf :
+server {
+    # Change to the right pattern
+    server_name 'dev.lbdd';
+    root /var/www/html/public;
+
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Frame-Options DENY;
+
+    # Statics
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+        expires max;
+        log_not_found off;
+    }
+    location / {
+        # try to serve file directly, fallback to index.php
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass http://php_fpm:9000;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+
+        # optionally set the value of the environment variables used in the application
+        # fastcgi_param APP_ENV prod;
+        # fastcgi_param APP_SECRET <app-secret-id>;
+        # fastcgi_param DATABASE_URL "mysql://db_user:db_pass@host:3306/db_name";
+
+        # When you are using symlinks to link the document root to the
+        # current version of your application, you should pass the real
+        # application path instead of the path to the symlink to PHP
+        # FPM.
+        # Otherwise, PHP's OPcache may not properly detect changes to
+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
+        # for more information).
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        # Prevents URIs that include the front controller. This will 404:
+        # http://domain.tld/index.php/some-path
+        # Remove the internal directive to allow URIs like this
+        internal;
+    }
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+      return 404;
+    }
+
+    error_log /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+}
+Aliases seem correct:
+"Networks": {
+                "lbdd_form_default": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "318c95ab4d80",
+                        "php_fpm"
+                    ],
+                    "NetworkID": "cbf532dbfb431873364865a2fc199fab47e9cb963a52a81ce3b938ec48e22218",
+                    "EndpointID": "0b602d192627c35bbae1d30f0caf7a91101033c6e826d9817f9ee638d5883b15",
+                    "Gateway": "172.24.0.1",
+                    "IPAddress": "172.24.0.3",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:18:00:03",
+                    "DriverOpts": null
+                }
+            }
+Context information (for bug reports)
+I post my current mac version of docker, but i had the same issue with linux.
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Docker version 18.06.1-ce, build e68fc7a
+Additional information
+Mac os High Sierra

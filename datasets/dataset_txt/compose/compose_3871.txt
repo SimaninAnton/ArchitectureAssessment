@@ -1,0 +1,2 @@
+hamiltont commented on 5 Mar 2015
+Can docker-compose ps have an option like docker-compose ps -a that shows containers which are non-running? Basically, I'd like an easy method to see what's inside the docker-compose.yml file without having to cat the file and skim through it.

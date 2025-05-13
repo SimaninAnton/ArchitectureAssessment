@@ -1,0 +1,43 @@
+elpirata15 commented on 25 Nov 2015
+docker version
+Client:
+ Version:      1.8.3
+ API version:  1.20
+ Go version:   go1.5.1
+ Git commit:   f4bf5c7
+ Built:        
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.8.3
+ API version:  1.20
+ Go version:   go1.5.1
+ Git commit:   f4bf5c7
+ Built:        
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version: 1.5.0
+docker-py version: 1.5.0
+CPython version: 3.4.3+
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+uname -a
+Linux debian01 4.2.0-1-amd64 #1 SMP Debian 4.2.5-1 (2015-10-27) x86_64 GNU/Linux
+I'm trying to setup basic wordpress + mysql container but I got an error when I try to setup the enviroment with MYSQL_ROOT_PASSWORD value starting with special character '*'
+docker-compose.yml
+wordpress:
+  image: wordpress
+  links:
+    - db:mysql
+  ports:
+    - 8080:80
+
+db:
+  image: mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: **$$.example
+docker-compose up (Error)
+ERROR: yaml.scanner.ScannerError: while scanning an alias
+  in "./docker-compose.yml", line 11, column 26
+expected alphabetic or numeric character, but found '*'
+  in "./docker-compose.yml", line 11, column 27
+Regards,

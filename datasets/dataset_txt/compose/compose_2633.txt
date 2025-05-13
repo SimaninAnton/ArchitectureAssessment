@@ -1,0 +1,4 @@
+crunchtime-ali commented on 14 Mar 2016
+Docker 1.9 introduced a new volume API for creating data only containers (via docker volume create).
+Is it possible to create those and mount them via docker-compose?
+I would like to create a data only container to store data from my MySQL database (https://hub.docker.com/_/mysql/). Sadly I couldn't find any documentation whether it is possible with docker-compose itself.

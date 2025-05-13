@@ -1,0 +1,4 @@
+Contributor
+aanand commented on 9 Jun 2015
+So we can be more permissive about the Python version while preserving security and avoiding the bug described in #1484.
+Blocking on pyca/cryptography#2039.

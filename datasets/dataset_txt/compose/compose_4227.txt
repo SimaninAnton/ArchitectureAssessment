@@ -1,0 +1,42 @@
+chymian commented on 19 Aug 2014
+hey,
+trying to mount a single file (instead of a directory) throws an error:
+Cannot start container bc0f924401841f2ed92c088cb8089cadad2359126b9f6a3ff15b6cb657835fb0: setup mount namespace bind mounts mounting /etc/eb8/freeIPA/server/etc/krb5.conf into /var/lib/docker/btrfs/subvolumes/bc0f924401841f2ed92c088cb8089cadad2359126b9f6a3ff15b6cb657835fb0/etc/krb5.conf not a directory
+it's allowed in docker!!!
+fig.yml
+    build: docker-freeipa
+    ports:
+        - "2222:22"
+        - "53"
+        - "80:80"
+        - "443:443"
+        - "389:389"
+        - "636:636"
+        - "88:88"
+        - "464:464"
+        - "123:123"
+
+    environment:
+        PASSWORD:   **************
+        FORWARDER:  192.168.***.***
+
+    hostname:     freeipa
+    domainname:   ****.*****
+
+    privileged:   true
+
+    volumes:
+        - /etc/eb8/freeIPA/server/etc/httpd/conf.d/:/etc/httpd/conf.d
+        - /etc/eb8/freeIPA/server/etc/httpd/conf/:/etc/httpd/conf
+        - /etc/eb8/freeIPA/server/etc/ipa/:/etc/ipa
+        - /etc/eb8/freeIPA/server/etc/krb5.conf:/etc/krb5.conf
+        - /etc/eb8/freeIPA/server/etc/pki-ca/:/etc/pki-ca
+        - /etc/eb8/freeIPA/server/etc/ssh/:/etc/ssh
+        - /etc/eb8/freeIPA/server/etc/sssd/:/etc/sssd
+        - /etc/eb8/freeIPA/server/root/:/root
+        - /etc/eb8/freeIPA/server/var/cache/ipa:/var/cache/ipa
+        - /etc/eb8/freeIPA/server/var/lib/dirsrv/:/var/lib/dirsrv
+        - /etc/eb8/freeIPA/server/var/lib/ipa-client/:/var/lib/ipa-client
+        - /etc/eb8/freeIPA/server/var/lib/ipa/:/var/lib/ipa
+        - /etc/eb8/freeIPA/server/var/log/:/var/log
+14

@@ -1,0 +1,109 @@
+pennywisdom commented on 21 Feb 2017
+docker-compose up is failing randomly on windows server 2016. Details below. Seems similar to 335 which was closed due to inactivity not with a resolution as far as I can see.
+In my situation for the data below, I am standing up 4 or 5 services in the compose file and sometimes it succeeds and sometimes it fails. Seems quite random.
+Expected behavior
+docker-compose up -d --no-build should bring up multiple services defined in the docker-compose.yml file
+Actual behavior
+docker-compose up fails randomly with messages similar to
+failed to create endpoint [[service]] on network nat
+The process is failing randomly for random services.
+Information
+The output from the following script - https://aka.ms/Debug-ContainerHost.ps1 is
+(please note that windowsservercore and nanoserver are being cleaned up by docker system prune) so the images declared in the docker-compose.yml file are being pulled when missing and in turn this dependencies are being satisfied by docker as I would expect.
+Checking for common problems
+Describing Windows Version and Prerequisites
+Info 15:57:10
+[+] Is Windows 10 Anniversary Update or Windows Server 2016 979ms
+[+] Has KB3192366, KB3194496, or later installed if running Windows build 14393 229ms
+[+] Is not a build with blocking issues 137ms
+[+] Has 'Containers' feature installed 1.01s
+Describing Docker is installed
+Info 15:57:12
+[+] A Docker service is installed - 'Docker' or 'com.Docker.Service' 154ms
+[+] Service is running 52ms
+Info 15:57:16
+[+] Docker.exe is in path 4.09s
+[+] Docker is registered in the EventLog service 42ms
+Describing User has permissions to use Docker daemon
+[+] docker.exe should not return access denied 75ms
+Describing Windows container settings are correct
+[+] Do not have DisableVSmbOplock set to 1 55ms
+[+] Do not have zz values set 47ms
+Describing The right container base images are installed
+[-] At least one of 'microsoft/windowsservercore' or 'microsoft/nanoserver' should be installed 196ms
+ValidationMetadataException: The argument is null or empty. Provide an argument that is not null or empty, and then try the command again.
+ParameterBindingValidationException: Cannot validate argument on parameter 'Property'. The argument is null or empty. Provide an argument that is not null or empty, and then try the command again.
+at , : line 109
+Describing Container network is created
+Info 15:57:20
+[+] At least one local container network is available 3.9s
+[+] At least one NAT, Transparent, or L2Bridge Network exists 62ms
+[+] NAT Network's vSwitch is internal 43ms
+[+] Specified Network Gateway IP for NAT network is assigned to Host vNIC 102ms
+[+] NAT Network's internal prefix does not overlap with external IP' 88ms
+Showing output from: docker info
+Containers: 4
+Running: 3
+Paused: 0
+Stopped: 1
+Images: 4
+Server Version: 1.13.1
+Storage Driver: windowsfilter
+Windows:
+Logging Driver: json-file
+Plugins:
+Volume: local
+Network: l2bridge l2tunnel nat null overlay transparent
+Swarm: inactive
+Default Isolation: process
+Kernel Version: 10.0 14393 (14393.693.amd64fre.rs1_release.161220-1747)
+Operating System: Windows Server 2016 Standard
+OSType: windows
+Architecture: x86_64
+CPUs: 4
+Total Memory: 3.997 GiB
+Name: xxxxx
+ID: U7WK:4ML4:4BDA:SDJF:2XDD:Q4IG:HBKQ:D23L:JAWM:ABIK:SXYZ:WPJK
+Docker Root Dir: C:\ProgramData\docker
+Debug Mode (client): false
+Debug Mode (server): true
+File Descriptors: -1
+Goroutines: 37
+System Time: 2017-02-21T15:57:12.9507604Z
+EventsListeners: 0
+Registry: https://index.docker.io/v1/
+Labels:
+hosttype=windows
+dc=xxxx
+hostrole=xxx
+Experimental: false
+Insecure Registries:
+192.168.xxx.xxx:5000
+localhost:5000
+127.0.0.0/8
+Live Restore Enabled: false
+Showing output from: docker version
+Client:
+Version: 1.13.1
+API version: 1.26
+Go version: go1.7.5
+Git commit: 092cba3
+Built: Wed Feb 8 08:47:51 2017
+OS/Arch: windows/amd64
+Server:
+Version: 1.13.1
+API version: 1.26 (minimum version 1.24)
+Go version: go1.7.5
+Git commit: 092cba3
+Built: Wed Feb 8 08:47:51 2017
+OS/Arch: windows/amd64
+Experimental: false
+Showing output from: docker network ls
+NETWORK ID NAME DRIVER SCOPE
+08862edda91a nat nat local
+6eddbc707551 none null local
+The error logs contain this:
+Handler for POST /v1.25/containers/d7502a1511da4d26983746b02b30740c4dc58eace250e21b36de522e36826827/start returned error: failed to create endpoint scsprint_query_1 on network nat: HNS failed with error : Unspecified error
+Steps to reproduce the behavior
+run docker-compose up -d --no-build randomly on windows server 2016 and fails randomly with for random services.
+1

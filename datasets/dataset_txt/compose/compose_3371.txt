@@ -1,0 +1,6 @@
+richardjortega commented on 17 Aug 2015
+Wondering if it's possible to update the docker-compose logs endpoint to use a -f for following log output.
+Right now if you type docker-compose logs you have to wait for the logs to catch up. Depending on your app, this can take an extremely long time to catch up (typically in development or staging I have to run docker-compose kill && docker-compose up -d && docker-compose logs just so I don't have to wait for the log output to catch up.
+The Docker Engine api already supports this on their docker logs endpoint with an -f option. docker logs -f <container>.
+Essentially this Docker issue but for Compose
+moby/moby#2997

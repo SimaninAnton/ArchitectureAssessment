@@ -1,0 +1,32 @@
+fnzr commented on 16 Jul 2017
+The problem
+Volume is empty after the container is brought up from the "restart:always" setting. It is not empty when started manually.
+Environment
+Windows 10 Build 15063.
+Docker for Windows.
+Docker version 17.06.0-ce.
+Docker compose version 1.14.0, build c7bdf9e
+Reproduction
+First, I create the directory F:\test with a folder named "folder" and a file named "file.txt".
+Using the following compose file:
+version: '3'
+services:
+  test-service:
+    container_name: test-container
+    image: nginx:1.13
+    volumes:
+      - F:\test:/test
+    restart: always
+I bring it up with docker-compose up. In another console I count the number of files on the volume:
+λ docker-compose exec test-service ls /test -1 | wc -l     
+2
+Which is expected and working properly. Then I gracefully stop the container and restart the computer.
+λ docker ps
+CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS              PORTS                NAMES
+bab6e5aab15e        nginx:1.13              "nginx -g 'daemon ..."   5 minutes ago       Up About a minute   80/tcp           test-container
+The container restarted with docker as expected, but then I again count the files in the volume:
+λ docker-compose exec test-service ls /test -1 | wc -l     
+0
+The volume is empty after the restart! Restarting the container with docker-compose restart, fixes the problem, and the 2 results show up as expected, but then having restart:always is pointless if I have to manually restart everytime.
+I used nginx as image because it's a easy example, but it also happens with python:3.
+Is this some expected behavior that I'm overlooking?

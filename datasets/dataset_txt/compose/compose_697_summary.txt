@@ -1,0 +1,1 @@
+npm install in network_mode host not working with docker-compose

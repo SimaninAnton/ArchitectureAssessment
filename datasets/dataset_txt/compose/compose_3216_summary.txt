@@ -1,0 +1,1 @@
+`docker-compose up` seems to hang at weird times on Windows

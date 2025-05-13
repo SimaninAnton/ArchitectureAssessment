@@ -1,0 +1,26 @@
+Mrchenli commented on 29 Nov 2018
+here is my compose file , task up but it's ip not what i specified ( '10.0.10.11{{.Task.Slot}}')
+version: '3.3'
+services:
+redis-cluster:
+hostname: 'redis-{{.Task.Slot}}'
+deploy:
+mode: replicated
+replicas: 6
+restart_policy:
+condition: on-failure
+image: kiibos/redis-cls:1.0.0
+volumes:
+- redisVol:/data
+container_name: redis-cluster
+networks:
+demo:
+ipv4_address: '10.0.10.11{{.Task.Slot}}'
+volumes:
+redisVol:
+external:
+name: '{{index .Service.Labels "com.docker.stack.namespace"}}_redisVol-{{.Task.Slot}}'
+networks:
+demo:
+external:
+name: redis-cluster

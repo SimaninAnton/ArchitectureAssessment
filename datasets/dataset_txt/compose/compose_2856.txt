@@ -1,0 +1,23 @@
+mysqlboy commented on 1 Feb 2016
+My use case calls for a random integer to be used as a server id for a mysql replica setup. This can be passed via a docker run command using bash but not an option with docker-compose due to the nature of RANDOM not being listed in the static list of ENV. Naturally it's generated each call.
+Docker example:
+[moore@host test]$ docker run --rm busybox echo $RANDOM
+6735
+[moore@host test]$ docker run --rm busybox echo $RANDOM
+25738
+Compose example:
+config...
+docker-compose.yml:
+randomTest:
+   image: busybox
+   container_name: rand
+   command: echo $RANDOM
+run...
+$ docker-compose up
+WARNING: The RANDOM variable is not set. Defaulting to a blank string.
+Recreating rand
+Attaching to rand
+rand |
+rand exited with code 0
+Could be fixed by catching the instance of the RANDOM key before error and generate an appropriate random integer using python functionality therefore permitting $RANDOM to live in compose workflow too.
+2

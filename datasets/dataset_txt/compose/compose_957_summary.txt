@@ -1,0 +1,1 @@
+docker secret only supports docker swarm mode, do not support simple docker-compose?

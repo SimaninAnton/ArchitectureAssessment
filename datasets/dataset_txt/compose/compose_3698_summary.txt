@@ -1,0 +1,1 @@
+Size of Docker directories keeps on growing

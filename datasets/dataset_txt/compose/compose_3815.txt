@@ -1,0 +1,9 @@
+Contributor
+aanand commented on 21 Mar 2015
+Currently, environment and volumes are merged when a service extends another. With other multi-value options, however, no merging is done - instead, the new list completely replaces the old. The following need to be fixed:
+external_links
+ports
+expose
+labels (do this in #1139)
+dns
+dns_search

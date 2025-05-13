@@ -1,0 +1,5 @@
+basickarl commented on 8 Aug 2018
+Currently build arguments do not support strings with spaces
+docker-compose -f docker-compose.yml build --build-arg HELLO="hello world ${SOME_VAR}" something
+This would be super helpful.
+I apologise for the naming, I'm not quite sure what it is called when you do this.

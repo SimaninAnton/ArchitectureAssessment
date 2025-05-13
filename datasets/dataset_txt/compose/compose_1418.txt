@@ -1,0 +1,48 @@
+ghost commented on 2 Jun 2017
+Docker seems to authenticate and pull images fine, but docker-compose fails. The docker container URLs below have been redacted. This issue seems to be present in versions 1.13.0 and 1.14.0rc1.
+$ docker pull us.gcr.io//mysql:latest
+latest: Pulling from /mysql
+10a267c67f42: Already exists
+c2dcc7bb2a88: Pull complete
+17e7a0445698: Pull complete
+9a61839a176f: Pull complete
+a1033d2f1825: Pull complete
+0d6792140dcc: Pull complete
+cd3adf03d6e6: Pull complete
+d79d216fd92b: Pull complete
+b3c25bdeb4f4: Pull complete
+02556e8f331f: Pull complete
+4bed508a9e77: Pull complete
+47cc4a3f7009: Pull complete
+Digest: sha256:b899cae2e17184411adde639bd61ba808ada6d01514213c5569862c88a8d5649
+Status: Downloaded newer image for us.gcr.io//mysql:latest
+$ docker-compose pull
+Pulling mysql (us.gcr.io//mysql:latest)...
+ERROR: repository us.gcr.io//mysql not found: does not exist or no pull access
+$ docker-compose --verbose pull
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('us.gcr.io//mysql:latest')
+compose.service.pull: Pulling mysql (us.gcr.io//mysql:latest)...
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('us.gcr.io//mysql', tag='latest', stream=True)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'us.gcr.io'
+docker.auth.resolve_authconfig: No entry found
+docker.auth.get_config_header: No auth config found
+ERROR: compose.cli.errors.log_api_error: repository us.gcr.io//mysql not found: does not exist or no pull access
+$ cat ~/.docker/config.json
+{
+ "auths": {},
+ "credHelpers": {
+  "appengine.gcr.io": "gcr",
+  "asia.gcr.io": "gcr",
+  "b.gcr.io": "gcr",
+  "beta.gcr.io": "gcr",
+  "bucket.gcr.io": "gcr",
+  "eu.gcr.io": "gcr",
+  "gcr.io": "gcr",
+  "gcr.kubernetes.io": "gcr",
+  "us.gcr.io": "gcr",
+  "mirror.gcr.io": "gcr"
+ }
+}
+2

@@ -1,0 +1,6 @@
+MrMMorris commented on 2 Mar 2015
+I am running docker-compose up and rm as part of a CI build and it gives me these errors:
+Error removing intermediate container 4f41a29459bf: Driver btrfs failed to remove root filesystem 4f41a29459bf3514e459addfb3e25d706ff6f8a85c59070bfdafe9617ffef3f2: Failed to destroy btrfs snapshot: operation not permitted
+and
+Cannot destroy container 93110f1e7f807bea6a2d73b4bd2b4f6bde8817a0c99e7fd8d2465d6d6e1b6047: Driver btrfs failed to remove root filesystem 93110f1e7f807bea6a2d73b4bd2b4f6bde8817a0c99e7fd8d2465d6d6e1b6047: Failed to destroy btrfs snapshot: operation not permitted
+I tried running as sudo but no dice. Any ideas?

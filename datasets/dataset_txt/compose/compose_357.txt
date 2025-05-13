@@ -1,0 +1,46 @@
+jboavida commented on 15 Dec 2018
+Description of the issue
+docker-compose run is not attaching stdin (example below).
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:48:57 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  alpine:
+    image: alpine:3.8
+version: '3.7'
+Steps to reproduce the issue
+docker-compose run alpine
+attempt to enter commands at alpine's shell
+Observed result
+It shows CLI prompt, but does not respond to any input. Ctrl-C returns to normal shell (as if container had been killed), but container keeps running. docker exec <container_name> sh enters container and provides normal interaction. Within that entered shell, ps -ef shows pid 1 with original shell (even if Ctrl-C was used). As far as I can tell, the initial invocation is just not attaching the terminal or something close to that.
+This is not connected to alpine; I'm showing alpine just to have a minimal test case. I ran into this with a node container (trying to do docker-compose run node bash).
+Expected result
+Normal interaction with shell within container.
+Stacktrace / full error message
+N/A.
+Additional information
+docker-compose installed as a container, running on Ubuntu 16.04. It works with Docker Compose 1.22.0 but not with any Docker Compose 1.23.x. (I'm not using any new features from 1.23.x, so reverting to 1.22.0 is an ok option for me.)

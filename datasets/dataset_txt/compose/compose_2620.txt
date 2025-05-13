@@ -1,0 +1,15 @@
+gittycat commented on 16 Mar 2016
+I have multiple compose files that rely on a common overlay network within a swarm cluster. I planned to define the common network using a compose file but it doesn't create it unless it is used within the compose file itself.
+This is simple to duplicate:
+docker-compose.ml
+version "2"
+networks:
+  backbone:
+    driver: overlay
+docker compose up -d then gives this warning:
+WARNING: Some networks were defined but are not used by any service: backbone
+and the network isn't shown by docker network ls
+On the other hand, using docker network create -d overlay backbone does create the network as expected.
+docker 1.10.3
+docker-compose 1.6.2
+docker-swarm 1.1.3 (42b1620)    <- built from the latest master

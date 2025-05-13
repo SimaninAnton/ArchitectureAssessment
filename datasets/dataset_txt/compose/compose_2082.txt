@@ -1,0 +1,100 @@
+e1ee1e11 commented on 9 Sep 2016
+Output of docker version:
+$ docker version
+Client:
+ Version:      1.12.1
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   23cf638
+ Built:        Thu Aug 18 05:22:43 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.1
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   23cf638
+ Built:        Thu Aug 18 05:22:43 2016
+ OS/Arch:      linux/amd64
+Output of docker-compose version:
+$ docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Additional environment details (AWS, VirtualBox, physical, etc.):
+VirtualBox version: 5.0.26
+Vagrant: 1.8.1
+Ubuntu 14.04.5 LTS
+Steps to reproduce the issue:
+Write yml file with v1 format:
+$ cat docker-compose-v1.yml
+h1:
+  image: alpine
+  container_name: a1
+  stdin_open: true
+  command: sh
+  environment:
+    - ONE=1
+
+h2:
+  image: alpine
+  container_name: a2
+  stdin_open: true
+  command: sh
+  environment:
+    - TWO=2
+  links:
+    - h1:h1
+docker-compose up and see env in a2 container:
+$ docker-compose -f docker-compose-v1.yml up -d
+Creating a1
+Creating a2
+$ docker exec a2 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=a1aed9991541
+H1_NAME=/a2/h1
+H1_ENV_ONE=1
+A1_NAME=/a2/a1
+A1_ENV_ONE=1
+TWO=2
+HOME=/root
+Delete containers and write yml file with v2 format:
+$ cat docker-compose-v2.yml
+version: '2'
+
+services:
+  h1:
+    image: alpine
+    container_name: a1
+    stdin_open: true
+    command: sh
+    environment:
+      - NUMBER=1
+
+  h2:
+    image: alpine
+    container_name: a2
+    stdin_open: true
+    command: sh
+    environment:
+      - NUMBER=2
+    depends_on:
+      - h1
+    links:
+      - h1:h1
+docker-compose up and see env in a2 container:
+$ docker-compose -f docker-compose-v2.yml up -d
+Creating network "vagrant_default" with the default driver
+Creating a1
+Creating a2
+$ docker exec a2 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=34dc1c0c6a89
+NUMBER=2
+HOME=/root
+Describe the results you received:
+It works fine in v1 file format.
+But in v2 file format, the environment variable of a1 wasn't passed to a2.
+Describe the results you expected:
+In v2 file format, the environment variables of a1 should be passed to a2.

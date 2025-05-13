@@ -1,0 +1,1 @@
+Document that string interpolation doesn't work with the container install (env is propagated to the container)

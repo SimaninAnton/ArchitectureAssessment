@@ -1,0 +1,8 @@
+adminrezo commented on 24 Apr 2015
+I use docker under Debian Wheezy.
+My Debian is up to date and I don't know why I don't have docker-compose available.
+uname -a :
+Linux hypvm2 3.16.0-0.bpo.4-amd64 #1 SMP Debian 3.16.7-ckt4-3~bpo70+1 (2015-02-12) x86_64 GNU/Linux
+docker --version :
+Docker version 1.6.0, build 4749651
+Thanks in advance

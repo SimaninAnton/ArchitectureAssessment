@@ -1,0 +1,43 @@
+CWSpear commented on 29 Jan 2016
+I am pretty sure this is related to #622, and you were asking for a use-case for it, and I think I've got one.
+The issue here is that new volumes aren't being properly attached to containers if the containers were already running.
+Reduced test case
+Gists don't allow subdirectories, but the --SLASH-- represents... well, a / (a subdirectory division).
+https://gist.github.com/CWSpear/3bdacca128641164a836
+Anyway, have the above files in this structure:
+├── data
+│   ├── Dockerfile
+│   └── index.html
+├── docker-compose.yml
+└── server
+    └── Dockerfile
+Steps to reproduce
+Step 1: Run:
+docker-compose up -d
+Step 2: Visit http://localhost:8080/ (don't forget to replace localhost with your Docker Machine's IP if you need to) and you should see Hello World!
+Step 3: Change the contents of data/index.html to Hello Compose! then run:
+Step 4: Rebuild data:
+docker-compose build data
+Step 5: Start up data?
+docker-compose up data
+Step 6: Refresh http://localhost:8080/.
+Results
+Expected: Hello Compose!
+Actual: Hello World!
+Addendum
+You can replace Step 5 with any of these and you get the same result:
+Step 5 alt (a)
+docker-compose up -d
+Step 5 alt (b)
+docker-compose restart
+Step 5 alt (c)
+docker-compose rm -f data
+docker-compose up data
+Step 5 alt (d)
+docker-compose stop
+docker-compose start
+Workaround
+The following does work, but it will restart server, and the goal here would be to not have any down time:
+Step 5 alt (e)
+docker-compose rm -f data
+docker-compose up -d

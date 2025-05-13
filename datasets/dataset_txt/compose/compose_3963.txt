@@ -1,0 +1,16 @@
+Stono commented on 30 Jan 2015
+Hi,
+This caused me much, much pain.
+I'm using docker-compose with TLS enabled, however under the hood the tls library was using the environmental variables for proxy (which is fine) and I didn't have a no_proxy exemption for this host.
+However the error you get back from docker doesn't make it clear:
+$ docker-compose ps
+Couldn't connect to Docker daemon at https://localhost:2376 - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+So I spent hours trying to work out what's going on, before delving into the .py files and adding some "prints", to give me:
+$ docker-compose ps
+HTTPSConnectionPool(host='localhost', port=2376): Max retries exceeded with url: /v1.14/containers/json?all=1&limit=-1&trunc_cmd=1&size=0 (Caused by ProxyError('Cannot connect to proxy.', error('Tunnel connection failed: 503 Service Unavailable',)))
+Couldn't connect to Docker daemon at https://localhost:2376 - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+Therefore can I suggest that you output the HTTP Status code and a truncated message with this error?

@@ -1,0 +1,8 @@
+LinusU commented on 25 Feb 2015
+Don't know if this is the correct place to post this, but just a heads up that someone should fix the brew formula. The formula should also be renamed to docker-compose as soon as the first stable version is out.
+Adding the following lines to fig.rb and installing with brew install fig --devel results in a broken package.
+  devel do
+    url "https://github.com/docker/compose/archive/1.1.0-rc2.tar.gz"
+    version "1.1.0-rc2"
+  end
+When running docker-compose it complains that it can't find the python packages. But it seems like they are in the correct place. Unfortunately I don't know enough about how python loads packages to debug further :(

@@ -1,0 +1,2 @@
+BenWildeman commented on 17 Jun 2015
+please can you make the docker-compose.yml file load the dockers in the order that's written instead of alphabetical order when not using links or volumes from. there are other reasons for needs a specified boot order such as when dockers are linked via host (as needed by mesos). it's frustrating having to write a docker-compose.yml file then having to manually start each service so that they boot in the order you need them, may as well not use the docker-compose.yml files.

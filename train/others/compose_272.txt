@@ -1,0 +1,12 @@
+lordofhyphens commented on 1 Mar 2019
+Is your feature request related to a problem? Please describe.
+I am currently attempting to use docker + docker-compose to recreate a closed network system for testing purposes. Our external spec dictates that I need to use static IPs for several containers in the system to mimic the real thing on /24 networks so that our test scripts can use configurations consistent with the production environment.
+The default behavior of the system appears to be to consume the x.x.x.1 IP of the system, which conflicts with my system specification (which assigns that to a container I am using for test purposes).
+I have been unable to determine a method to change this behavior to use a different IP with the v3 syntax. These networks are internal and I don't otherwise care about the bridge adapter IP, other than it doesn't conflict with a static IP used by a container in the system.
+The only workaround I have been able to find is in the v2 syntax; the gateway parameter does change the IP used by the bridge adapter.
+Describe the solution you'd like
+I want internal networks to be able to set which IP is used by the bridge adapter created, similar to the workaround available in v2 + gateway.
+Describe alternatives you've considered
+Only alternative I have been able to find is v2 syntax and abusing the 'gateway' parameter, which does change the bridge adapter IP.
+Additional context
+Add any other context or screenshots about the feature request here.

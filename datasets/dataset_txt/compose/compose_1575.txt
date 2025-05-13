@@ -1,0 +1,12 @@
+mdelapenya commented on 22 Mar 2017
+Having a docker-compose.yml file with volumes in it, when executing:
+docker-compose config > updated-compose.yml
+Then:
+    volumes:
+    - ./host_volume:/container_volume:rw
+is converted into:
+    volumes:
+    - /Users/myuser/path/to/project/host_volume:/container_volume:rw
+I'd expect preserving the relative paths in that case.
+I believe the problem is here: https://github.com/docker/compose/blob/master/compose/config/config.py#L1032
+Thanks!

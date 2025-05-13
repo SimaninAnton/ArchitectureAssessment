@@ -1,0 +1,2 @@
+serg-mo commented on 6 Jun 2017
+"php" is the name of my service, "./composer.phar --no-suggest install" is my command. Composer finishes with no complaints, but for some reason the exit code is non-zero. I could not find anything online, except that the parent's exit code is 128 + child exit code, so the exit code may be 1 or 129.

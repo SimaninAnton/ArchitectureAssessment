@@ -1,0 +1,35 @@
+uuf6429 commented on 11 May 2018 •
+edited
+Docker Compose File:
+version: '3'
+
+x-shared-env:
+  &shared-env
+  MYSQL_HOST: db
+  MYSQL_NAME: app
+  MYSQL_USER: admin
+  MYSQL_PASS: 123456
+
+services:
+  db:
+    image: tutum/mysql:5.6
+    environment:
+      << : *shared-env
+      ON_CREATE_DB: $MYSQL_NAME
+When I run it with docker-compose -f 6.2.0.yml up --build --force-recreate, I get:
+WARNING: The MYSQL_NAME variable is not set. Defaulting to a blank string.
+ERROR: The Compose file '.\6.2.0.yml' is invalid because:
+Invalid top-level property "x-shared-env". Valid top-level sections for this Compose file are: version, services, networks, volumes, and extensions starting with "x-".
+
+You might be seeing this error because you're using the wrong Compose file version. Either specify a supported version (e.g "2.2" or "3.3") and place your service definitions under the `services` key, or omit the `version` key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+The error is not what I expected... versions seem fine and especially, the error message is misleading (Invalid top-level property "x-shared-env" ..... and extensions starting with "x-").
+Specs:
+Docker Toolbox
+
+> docker -v
+Docker version 18.03.0-ce, build 0520e24302
+
+> docker-compose -v
+docker-compose version 1.20.1, build 5d8c71b2
+I've already seen #5542

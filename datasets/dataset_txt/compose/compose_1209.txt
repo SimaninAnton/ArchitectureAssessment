@@ -1,0 +1,21 @@
+tagirb commented on 11 Sep 2017
+Docker-Compose version 1.16.1, build 6d1ac21.
+In my docker-compose.yml I am using an environment variable, which, if unset, must default to an empty value:
+version: '3.3'
+
+services:
+  test:
+    image: alpine:latest
+    command: echo "'${TEST:-}'"
+Running this setup ends up with the following error:
+$ TEST=test docker-compose up
+ERROR: Invalid interpolation format for "command" option in service "test": "echo ${TEST:-}"
+Adding a space after 'minus' works around this issue:
+$ sed -e 's/:-/:- /' docker-compose.yml | TEST=test docker-compose -f - up
+Recreating test_test_1 ...
+Recreating test_test_1 ... done
+Attaching to test_test_1
+test_1  | 'test'
+test_test_1 exited with code 0
+But having an empty default should also work from my perspective.
+1

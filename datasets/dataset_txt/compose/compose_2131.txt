@@ -1,0 +1,5 @@
+epelc commented on 21 Aug 2016
+It seems the .env file doesn't allow you to use environment variables in the values.
+example .env
+SOME_CONFIG_DIR=$GOPATH/src/my-project/config
+$GOPATH is not interpolated here.

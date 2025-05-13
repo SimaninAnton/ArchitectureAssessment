@@ -1,0 +1,1 @@
+Environment variables / labels set differently pointed at a Docker Swarm and vanilla Engine

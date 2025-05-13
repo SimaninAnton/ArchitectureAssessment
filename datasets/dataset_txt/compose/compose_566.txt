@@ -1,0 +1,8 @@
+pauldraper commented on 20 Jul 2018 •
+edited
+https://docs.docker.com/compose/startup-order/
+Compose always starts containers in dependency order
+Insofar as I can tell, this doesn't mean anything useful.
+And I've noticed that depends_on still introduces some delay between dependent containers.
+Given that "start in order" doesn't dependably mean anything, there should be no waiting or delay in starting dependent containers. There's no point to the delay.
+All containers should be started as fast as possible without waiting for dependencies.

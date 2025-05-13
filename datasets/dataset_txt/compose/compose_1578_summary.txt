@@ -1,0 +1,1 @@
+docker-compose does not have a way to override tls version at the commandline

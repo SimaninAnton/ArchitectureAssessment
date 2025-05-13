@@ -1,0 +1,91 @@
+Fangfenghua commented on 24 Oct 2016 •
+edited
+compose file
+version: '2'
+services:
+  zk1:
+    image: 192.168.56.105:5000/zookeeper
+    volumes:
+      - zk-data:/code
+    network_mode: "host"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: "server.1=node2:2888:3888 server.2=node3:2888:3888 server.3=node4:2888:3888"
+    labels:
+      - "constraint:node==node2"
+  zk2:
+    image: 192.168.56.105:5000/zookeeper
+    volumes:
+     - zk-data:/code
+    network_mode: "host"
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: "server.1=node2:2888:3888 server.2=node3:2888:3888 server.3=node4:2888:3888"
+    labels:
+      - "constraint:node==node3"
+  zk3:
+    image: 192.168.56.105:5000/zookeeper
+    volumes:
+     - zk-data:/code
+    network_mode: "host"
+    environment:
+     ZOO_MY_ID: 3
+     ZOO_SERVERS: "server.1=node2:2888:3888 server.2=node3:2888:3888 server.3=node4:2888:3888"
+    labels:
+      - "constraint:node==node4"
+volumes:
+  zk-data:
+    driver: local
+[root@node1 home]# docker info
+Containers: 16
+ Running: 2
+ Paused: 0
+ Stopped: 14
+Images: 10
+Server Version: 1.10.3
+Storage Driver: devicemapper
+ Pool Name: docker-253:0-202518753-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 2.138 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 33.9 GB
+ Metadata Space Used: 4.391 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.143 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107-RHEL7 (2016-06-09)
+Execution Driver: native-0.2
+Logging Driver: journald
+Plugins: 
+ Volume: local
+ Network: bridge null host
+Kernel Version: 3.10.0-327.36.1.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+OSType: linux
+Architecture: x86_64
+Number of Docker Hooks: 2
+CPUs: 2
+Total Memory: 488.9 MiB
+Name: node1
+ID: T54M:OQDV:C53T:IZHD:IJVC:CRB5:MW7E:HWRQ:2SZD:4OQA:XDHF:32NM
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled
+Labels:
+ storage=ssd
+ env=production
+Registries: docker.io (secure)
+[root@node1 home]# 
+[root@node1 home]# docker-compose  -v
+docker-compose version 1.8.1, build 878cff1
+[root@node1 home]# 
+when i use above compose file.it didn't create container on specify node

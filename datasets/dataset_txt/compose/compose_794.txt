@@ -1,0 +1,30 @@
+mateusleonardi commented on 17 Mar 2018 •
+edited by shin-
+Hi,
+I'm trying to run my docker-compose file using stack deploy but when I run it using this command, I'm not able to consume the API (it keeps loading the page eternally).
+works using: docker-compose -f docker-compose.yml up -d
+not work using: docker stack deploy -c docker-compose.yml pharma
+Should I change something in my docker-compose file?
+Follow my docker-compose.yml.
+Thanks in advance.
+version: '3.3'
+services:
+  database:
+    image: postgres:10.3
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=testkey
+      - POSTGRES_DB=Test
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+  api:
+    image: mateusleonardi/dotnetcore:latest
+    depends_on:
+      - database
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./../mydir:/app
+    working_dir: /app/myappdir

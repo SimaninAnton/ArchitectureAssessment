@@ -1,0 +1,1 @@
+Consider adding a powershell script to update compose on Windows

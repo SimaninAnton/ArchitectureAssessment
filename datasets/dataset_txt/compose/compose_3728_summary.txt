@@ -1,0 +1,1 @@
+docker-compose run with custom environment variable throw TypeError

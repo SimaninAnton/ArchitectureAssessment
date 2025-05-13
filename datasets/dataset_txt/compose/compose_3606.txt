@@ -1,0 +1,17 @@
+Contributor
+aanand commented on 29 May 2015
+#890 is getting long, so I'm creating this issue to zoom out a bit.
+The Original Problem
+On Python versions prior to 2.7.9, urllib3 (and therefore Requests, and therefore Compose) outputs an InsecurePlatformWarning, because Python prior to 2.7.9 is insecure, as explained here.
+(This seems to have been the case since Requests 2.6. Requests 2.6+ is a hard requirement, since anything earlier doesn't work with PyInstaller: psf/requests#2465)
+So anyway, this can be fixed either by using Python 2.7.9+ or by using PyOpenSSL. All explained in that link.
+Using Python 2.7.9+
+Python 2.7.9+ exhibits a bug with newer versions of OpenSSL - it exits with a CERTIFICATE_VERIFY_FAILED error, seemingly when attempting to make any request over TLS. This was discovered a while back by users installing Compose via Pip and reported in #890, docker/docker-py#465, Homebrew/legacy-homebrew#38226.
+If we're going to use Python 2.7.9 to build the binary, it's now an issue for everyone.
+Python 2.7.9 works fine with OpenSSL 1.0.1, but Python 2.7.10 complains about missing symbols (for me) unless it's using OpenSSL 1.0.2, which is no good because it exhibits the bug. So the magic combination seems to be Python 2.7.9 and OpenSSL 1.0.1.
+Now, getting Python 2.7.9 and OpenSSL 1.0.1j running on OS X Mountain Lion (the older OS we use to build the Mac binary so that it works on as many Macs as possible) is working: #1474
+However, getting Python 2.7.9 running on Debian Wheezy (the older distro we use to build the Linux binary so that a widely compatible libc is linked in) is non-trivial, and would seem to entail building from source (since Wheezy's python package is understandably old - 2.7.3). Furthermore, I can't get Pip working. People are welcome to try - have at the Dockerfile.
+Using PyOpenSSL
+Installing PyOpenSSL via Pip and using it with Compose seems to work just fine (here's my branch). Getting it to work with PyInstaller, however, is proving a challenge:
+I get an error when attempting to build the Mac binary.
+While the Linux binary builds successfully, I get an error when I run it.

@@ -1,0 +1,10 @@
+dragonpiper commented on 5 Nov 2019
+When docker-compose build on a mac and specifying a folder that is a golang git repository. It never uses a cache for the add line which is
+ADD --chown=jenkins:user . /home/user/myapp.
+when using the os version of tar which is bsdtar 2.8.3 - libarchive 2.8.3
+I get different hash doing the following command
+tar cf - ~/build-context-path | shasum && sleep 3 && tar cf - ~/build-context-path | shasum
+However if i use gnu tar which is at the version
+tar (GNU tar) 1.32
+gtar cf - ~/build-context-path | shasum && sleep 3 && gtar cf - ~/build-context-path | shasum
+the checksums are the same. I'm wondering what is causing the . docker buildkit to not detect the checksum is the same and if its related to the version of tar it's using

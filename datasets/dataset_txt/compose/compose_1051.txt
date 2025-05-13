@@ -1,0 +1,67 @@
+Ciloe commented on 29 Nov 2017
+Hi everybody,
+I have a problem with the virtual size of my docker machine. This is some informations :
+My environment :
+Mac OSX Hight Sierra, docker-machine (with virtual-box) And docker-compose
+My docker machine :
+NAME   ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
+dev    *        virtualbox   Running   tcp://192.168.99.100:2376           v17.10.0-ce
+My docker images :
+CONTAINER ID        IMAGE                                        COMMAND                  CREATED             STATUS              PORTS                     NAMES                      SIZE
+e1f482f9d7de        www_app                                      "/run.sh"                2 days ago          Up 2 days           80/tcp                    www_app_1                  142kB (virtual 563MB)
+593f57818634        eu.gcr.io/registry/www:db-full            "docker-entrypoint.s…"   5 days ago          Up 2 days           0.0.0.0:5431->5432/tcp    www_postgres_1             42.8GB (virtual 87.1GB)
+524a6ae68e25        eu.gcr.io/registry/redis:cluster          "/docker-entrypoint.…"   5 days ago          Up 2 days           6379/tcp, 7000-7005/tcp   www_redis_cluster_1        64.4kB (virtual 547MB)
+My docker compose file :
+version: '2.1'
+services:
+  # A generic container with apache server ,php 7 and psql support
+  app_base:
+    build: app/Resources/docker/app-base
+    volumes:
+      - .:/app/www
+      - ~/.ssh:/home/www-data/.ssh
+      - $COMPOSER_HOME:/home/www-data/.composer
+    environment:
+      USER_ID: $VOLUME_USER_ID
+    entrypoint: /run.sh
+
+  # The development database
+  postgres:
+    image: eu.gcr.io/registry/www:db-full
+    ports:
+      - 5431:5432
+
+  # The development web instance
+  app:
+    extends:
+      service: app_base
+    links:
+      - postgres
+      - redis_cluster
+    networks:
+      default: ~
+      mynetwork:
+        aliases:
+          - dev.test-my-host.com
+    environment:
+      - VIRTUAL_HOST=dev.*
+
+  # The compose entrypoint for every commands on the project (DB rebuild, cache clear, ...)
+  toolbox:
+    extends:
+      service: app_base
+    entrypoint: /toolbox.sh
+    links:
+      - postgres
+      - redis_cluster
+
+  # The development Redis Cache
+  redis_cluster:
+    image: eu.gcr.io/registry/redis:cluster
+
+networks:
+  mynetwork:
+    external:
+      name: mynetwork
+This is my problem : I have a database witch is rebuild all night (because took a lot of time) and push to the google cloud registry. This container get 42,8GB on the dick space. But the virtual size get the double ! I know that the virtual size is the total size of all containers using my container. But how can I change my docker compose to use the physic container ? (This container is used one time).
+Thank you !!

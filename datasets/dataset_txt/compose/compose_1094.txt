@@ -1,0 +1,18 @@
+villasenor commented on 8 Nov 2017 •
+edited
+The latest update to 1.17.0 suddenly broke our normal docker-compose up. No other changes have been made to the compose file or the system. Reverting back to 1.16.1 fixes everything.
+Sample output of the 1.17.0 failure:
+Creating elasticsearch ... 
+
+ERROR: for elasticsearch  dictionary update sequence element #0 has length 39; 2 is required
+
+ERROR: for elasticsearch  dictionary update sequence element #0 has length 39; 2 is required
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 952, in up
+  File "compose/project.py", line 455, in up
+  File "compose/parallel.py", line 70, in parallel_execute
+ValueError: dictionary update sequence element #0 has length 39; 2 is required
+Failed to execute script docker-compose

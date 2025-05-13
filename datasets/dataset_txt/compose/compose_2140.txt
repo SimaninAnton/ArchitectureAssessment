@@ -1,0 +1,16 @@
+thewilli commented on 18 Aug 2016
+I'm using docker-compose v1.8.0, build 94f7017.
+Consider the following compose file where I am defining a service with an image name which exists on Docker Hub as well:
+version: "2"
+services:
+    myredis:
+        build: .
+        image: redis:2.8
+The compose file reference states that
+If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image
+for the example
+build: ./dir
+image: webapp:tag
+so this seems to be a valid usecase.
+When I run docker-compose pull (because e.g. I have defined other services that I want to update), docker-compose lets Docker pull the redis image 2.8 from Docker Hub, which really seems to be a bug to me. I would have expected that - because build is specified - docker compose would not pull anything for this service.
+2

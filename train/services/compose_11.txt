@@ -1,0 +1,76 @@
+Crack commented 9 days ago •
+edited
+Description of the issue
+docker-compose run fails to run when non-empty ".env" file is present, printing TypeError: environment can only contain strings. docker-compose up works correctly.
+This started happening when I upgraded today from older Docker Desktop release with docker-compose 1.24.0.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.2, build 698e2846
+docker-py version: 4.1.0
+CPython version: 2.7.16
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea
+ Built:             Wed Nov 13 07:22:37 2019
+ OS/Arch:           windows/amd64
+ Experimental:      true
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea
+  Built:            Wed Nov 13 07:29:19 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+services:
+  ubuntu:
+    image: ubuntu:bionic
+version: '2.1'
+Steps to reproduce the issue
+Create docker-compose.yml file:
+version: '2.1'
+services:
+  ubuntu:
+    image: ubuntu:bionic
+Create .env file:
+A=a
+(I made sure that it contains only these three characters, i.e. 41 3D 61)
+3. Run docker-compose run ubuntu - fails with "TypeError: environment can only contain strings". Removing/emptying this file letsdocker-compose to run correctly.
+Observed result
+Fails to start
+Expected result
+Runs container using environment variables from .env
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 72, in main
+  File "compose\cli\main.py", line 128, in perform_command
+  File "compose\cli\main.py", line 865, in run
+  File "compose\cli\main.py", line 1349, in run_one_off_container
+  File "compose\cli\main.py", line 1469, in call_docker
+  File "subprocess.py", line 172, in call
+  File "subprocess.py", line 394, in __init__
+  File "subprocess.py", line 644, in _execute_child
+TypeError: environment can only contain strings
+[19220] Failed to execute script docker-compose
+Additional information
+OS: Windows 10 Pro 1909 (18363.592) - up to date
+docker-compose from Docker Desktop (stable, 2.2.0.0 42247).
+Result is the same regardless of used shell: Power Shell / bash from Git for Windows / cmd
+57

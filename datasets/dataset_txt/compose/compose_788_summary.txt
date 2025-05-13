@@ -1,0 +1,1 @@
+Making extension fields valid anywhere in `docker-compose.yaml`

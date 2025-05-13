@@ -1,0 +1,47 @@
+RafiC92 commented on 20 Nov 2018
+I tried to update compose because of a problem I had that I read was fixed in later versions
+I removed copose using:
+sudo apt-get remove docker-compose
+and then installed the latest version using pip (I also tried other methods)
+cannot change profile for the next exec call: No such file or directory
+snap-update-ns failed with code 1: No such file or directory
+Output of docker-compose version
+docker-compose version gives the same error.
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:51 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:15 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Observed result
+snap issue
+cannot change profile for the next exec call: No such file or directory
+snap-update-ns failed with code 1: No such file or directory
+Additional information
+Was trying to find a fix to this issue, and got tangled in this upgrade issue
+OS details:
+NAME="Ubuntu"
+VERSION="18.04.1 LTS (Bionic Beaver)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.04.1 LTS"
+VERSION_ID="18.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=bionic
+UBUNTU_CODENAME=bionic

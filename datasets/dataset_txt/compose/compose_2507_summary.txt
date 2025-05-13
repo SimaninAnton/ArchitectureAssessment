@@ -1,0 +1,1 @@
+docker-compose returns not found on Alpine Linux 3.3 64 bits

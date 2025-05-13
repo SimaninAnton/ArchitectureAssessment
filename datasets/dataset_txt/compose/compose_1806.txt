@@ -1,0 +1,21 @@
+chaosk commented on 10 Jan 2017
+I'm running Docker 1.13.0-rc4 and current master (545153f) of Compose.
+I tried to deploy a stack using following docker-compose.yml file:
+version: "3"
+services:
+  base:
+    image: hello-world
+  extending:
+    extends: base
+    labels:
+      - "label=test"
+Got following in response:
+$ docker stack deploy --compose-file ./docker-compose.yml test
+Compose file contains unsupported options:
+
+extends: Support for `extends` is not implemented yet. Use `docker-compose config` to generate a configuration with all `extends` options resolved, and deploy from that.
+I found an issue about it in Docker's repo (moby/moby#29304) and attempted to run the command given by the error message, which resulted in:
+$ docker-compose config
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services.extending: 'extends'
+13

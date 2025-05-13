@@ -1,0 +1,4 @@
+etc0de commented on 30 May 2015
+Very often, docker-compose up doesn't rebuild image specified as "build:" in the docker-compose.yml although the respective Dockerfile has changed. Instead, I need to run docker build -t servicename_foldername . manually for the affected service which will actually update the image accordingly.
+Is this intended? Because it's rather annoying, I can never be sure the image is actually up-to-date and need to run docker build manually before using docker-compose up.
+129

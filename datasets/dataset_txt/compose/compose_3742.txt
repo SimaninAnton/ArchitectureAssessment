@@ -1,0 +1,6 @@
+miko commented on 8 Apr 2015
+Hello,
+I was looking to write an yml file for complex application configuration. I wanted to split it to smaller files, so I was looking for include command, so I could use:
+include webserver.yml
+include db.yml
+Proposed extend command does not work, as I do not really want to "extend" anything, but to combine services from many files. Whould the include directive make sense?

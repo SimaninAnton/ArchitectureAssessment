@@ -1,0 +1,30 @@
+lxe commented on 29 Aug 2015
+I'm not sure if this is a feature of a bug. I've installed docker-compose version: 1.4.0 from homebrew and I'm seeing logs getting preserved across runs:
+docker-compose.yml
+helloworld:
+  image: busybox
+  command: echo "Hello World!"
+Here's the log of multiple docker-compose up:
+~/dockercompose-test ❯❯❯ docker-compose up
+Starting dockercomposetest_helloworld_1...
+Attaching to dockercomposetest_helloworld_1
+helloworld_1 | Hello World!
+dockercomposetest_helloworld_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+~/dockercompose-test ❯❯❯ docker-compose up
+Starting dockercomposetest_helloworld_1...
+Attaching to dockercomposetest_helloworld_1
+helloworld_1 | Hello World!
+helloworld_1 | Hello World!
+dockercomposetest_helloworld_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+~/dockercompose-test ❯❯❯ docker-compose up
+Starting dockercomposetest_helloworld_1...
+Attaching to dockercomposetest_helloworld_1
+helloworld_1 | Hello World!
+helloworld_1 | Hello World!
+helloworld_1 | Hello World!
+dockercomposetest_helloworld_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+~/dockercompose-test ❯❯❯ docker-compose --version
+As you can see the logs are getting preserved across the runs.

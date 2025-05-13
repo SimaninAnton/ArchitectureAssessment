@@ -1,0 +1,1 @@
+Windows in LCOW can't use `docker-compose pull` linux container

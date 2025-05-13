@@ -1,0 +1,37 @@
+Contributor
+javabrett commented on 17 Mar 2019
+Version info
+ uname -a
+Darwin some-mac 17.7.0 Darwin Kernel Version 17.7.0: Thu Dec 20 21:47:19 PST 2018; root:xnu-4570.71.22~1/RELEASE_X86_64 x86_64
+ docker-compose --version
+docker-compose version 1.23.2, build 1110ad01
+Summary
+When interpolating a mandatory variable, the default error message generated when the value is unset does not mention the missing variable name. The error mentions all the other relevant context, just not the variable name itself, which is the most important fact. It is true that a ?err could be supplied, but this seems like a DRY and somewhat non-obvious syntax.
+Example
+Consider this trivial docker-compose.yml:
+version: '3.7'
+services:
+  myservice:
+    image: busybox
+    environment:
+      - MYENV=${MYVAR:?}
+    command: ["/bin/sh", "-c", "env | grep MYENV"]
+Then docker-compose up (with no extra environment set) yields:
+ERROR: Missing mandatory value for "environment" option in service "myservice": 
+Compose error provides:
+the section name environment
+the service name myservice
+It does not mention:
+the environment value (or any other key) being set: MYENV. That sounds reasonable, but also:
+the (mandatory) variable being interpolated: MYVAR.
+Proposed change
+When the interpolation contains a mandatory sep, and does not define a custom error ?err, Compose could simply default the error to the name of the missing variable. This would yield for above e.g.:
+ERROR: Missing mandatory value for "environment" option in service "myservice": MYVAR
+That is, a missing err defaults to ?<variable-name>.
+Other considerations or workarounds
+As mentioned, an ?err can be defined to achieve much the same thing, e.g. the somewhat obtuse - MYENV=${MYVAR:?MYVAR} yields the desired:
+ERROR: Missing mandatory value for "environment" option in service "myservice": MYVAR
+However the syntax is unwieldy, and forces an unnecessary repetition of the variable name in order to produce a custom error message, whereas a standard error message should suffice. This syntax risks being not universally-applied, and leaves the runner of docker-compose unsure of which variable(s) (of potentially many) are unset.
+Alternatives to consider
+The proposal is to default err to ?<variable-name> for mandatory variable interpolation. Another option would be to always pre-pend to err even when present. This seems like a compatibility issue and doesn't do-as-I-ask ... if you want to specify a custom ?err, then you are responsible for also mentioning the variable name, if that is how you want it reported.
+4

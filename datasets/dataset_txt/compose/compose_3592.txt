@@ -1,0 +1,88 @@
+stephaneerard commented on 3 Jun 2015
+Hi,
+I'm trying to run docker-compose from a node app and pipe its outputs to the node app stdout.
+I have two problems here :
+Node app does not get the correct output order (looks like a buffer is flushed when I send CTRL+C)
+I get a python stacktrace
+serard@debian:~/dc$ node n.js
+start
+Recreating dc_test_1...
+Killing dc_test_1...
+Attaching to dc_test_1
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+test_1 | hello world
+Gracefully stopping... (press Ctrl+C again to force)
+Exception in thread Thread-1 (most likely raised during interpreter shutdown):
+Traceback (most recent call last):
+  File "/code/build/docker-compose/out00-PYZ.pyz/threading", line 552, in __bootstrap_inner
+  File "/code/build/docker-compose/out00-PYZ.pyz/threading", line 505, in run
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.multiplexer", line 41, in _enqueue_output
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.log_printer", line 62, in _make_log_generator
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.container", line 140, in wait
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 918, in wait
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 79, in _post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 425, in post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 374, in send
+<type 'exceptions.AttributeError'>: 'NoneType' object has no attribute 'error'
+dc exited
+Here is my setup
+~/dc/docker-compose.yml
+test:
+  image: busybox
+  entrypoint: /bin/sh
+  command: -c "while true; do echo hello world; sleep 1; done"
+~/dc/n.js
+#!/usr/bin/env node
+
+console.info("start");
+
+var DC_BIN="/usr/local/bin/docker-compose";
+
+var cp = require("child_process");
+
+var p = cp.spawn(DC_BIN, ["up"], {
+        stdio: "pipe"
+});
+
+
+p.stdout.pipe(process.stdout);
+p.stderr.pipe(process.stdout); // process.stderr gives same result
+
+// catching nodejs app CTRL+C
+process.on("SIGINT", function(){
+        p.kill("SIGINT"); // sending it to docker-compose
+
+        p.on("close", function(){ // same with exit event, gives same python stack trace
+                console.log("dc exited");
+                process.exit();
+        });
+});
+command :
+~/dc$ node n.js
+docker-compose v: 1.2.0
+docker v: 1.6.3
+nodejs: 0.10, 0.12.4
+debian wheezy
+And I get the output given on top.
+Is this a docker-compose bug or a nodejs one ? :)
+Thank you very much !

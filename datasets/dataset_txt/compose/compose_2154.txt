@@ -1,0 +1,5 @@
+dbreshears commented on 12 Aug 2016
+Problem
+We are attempting to detect the error condition that drive sharing is not enabled in Docker For Windows and thus volume mapping would not be working. From our VS extension we pipe the stdout and stderr to the output window but we don't get any error or warnings messages in this case and thus hard to pinpoint as a user of the extension what is happening.
+Expected
+When we call docker-compose up and have a volumes: section defined in the compose file then some level of validation occurs in docker-compose that drive sharing is enabled and thus volume mapping is working or not. If not, it would output some meaningful error message and a non-zero exit code so we can detect this.

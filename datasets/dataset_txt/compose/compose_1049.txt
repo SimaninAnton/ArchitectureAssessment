@@ -1,0 +1,39 @@
+jeffguorg commented on 30 Nov 2017
+expected: old network removed after recreating images
+issue: compose don't remove old network when recreating images
+reproduction:
+up a swarm with some networks
+modify network name in docker-compose.yml
+docker-compose up again
+3.1. (optional) docker-compose down
+docker network ls and you will find old networks lays in the corner waiting for you to remove it
+version:
+$ docker version
+Client:
+ Version:      17.10.0-ce
+ API version:  1.33
+ Go version:   go1.9.2
+ Git commit:   f4ffd2511c
+ Built:        Sun Nov 19 18:46:29 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.10.0-ce
+ API version:  1.33 (minimum version 1.12)
+ Go version:   go1.9.2
+ Git commit:   f4ffd2511c
+ Built:        Sun Nov 19 18:46:37 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+$ docker-compose version
+docker-compose version 1.17.1, build unknown
+docker-py version: 2.6.1
+CPython version: 3.6.3
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+$ uname -a
+Linux archlinux 4.13.12-1-ARCH #1 SMP PREEMPT Wed Nov 8 11:54:06 CET 2017 x86_64 GNU/Linux
+$ pacman -Ss docker
+community/docker 1:17.10.0-2 [已安装|installed]
+    Pack, ship and run any application as a lightweight container
+community/docker-compose 1.17.1-1 [已安装|installed]
+    Fast, isolated development environments using Docker

@@ -1,0 +1,3 @@
+reflection commented on 7 Aug 2015
+Trying out docker 1.4.0, I noticed that services were starting up so quickly that even with links between containers, sometimes the first service wouldn't be ready for connections before the dependent service was already up. For example, I have elasticsearch and kafka containers that need to be started first, but they'd still be initializing when other containers would start flooding them with requests.
+Can we have an option to delay a service's startup by a configurable amount of milliseconds? Thanks.

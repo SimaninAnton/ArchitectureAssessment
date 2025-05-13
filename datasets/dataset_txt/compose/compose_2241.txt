@@ -1,0 +1,18 @@
+zrml commented on 11 Jul 2016
+Hi:
+I understand that I can override, in my docker-compose.yml, the CMD or ENTRYPOINT,
+however, in general, I do not want to perform an override operation.
+The executable provided as PID 1 is exactly what we want.
+I just want to pass ARGs to my executable (not to the docker-compose.yml and not as environment variables). There are particular, well-determined flags that my executable needs.
+I just want to make sure that the override (entrypoint) is as efficient as it can be
+or I'd like to ask for an enhancement request so that I can pass the right arguments (flags) to my exe PID 1 and of course specify them in the docker-compose.yml definition
+Example of possible implementation
+services:
+XYZservice:
+image: myImage:myTag
+image_exec_args:
+- -xstart=bla.sh
+- -consolelog=1
+- -shmem=32GB
+the above -xstart -consolelog and -shmem are a series of params or flags I need to pass to the Entrypoint executable.
+Thank you

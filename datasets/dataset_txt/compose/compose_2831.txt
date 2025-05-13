@@ -1,0 +1,15 @@
+crepererum commented on 6 Feb 2016
+Abstract
+docker-compose rm has a -v parameter to remove volumes associated with containers, but no -n(?) parameter to remove the network created by compose.
+Steps to reproduce
+docker network ls to list current networks
+docker-compose up on a version 2 compose.yml
+press CTRL-C to kill the containers
+docker rm -rf
+docker network ls
+the created network is still there (compare to step 1)
+Versions
+Docker: 1.10.0
+Compose: 1.6.0
+Docker-Py: 1.7.0
+1

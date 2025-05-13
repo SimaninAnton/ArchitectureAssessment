@@ -1,0 +1,7 @@
+gggeek commented on 12 Jan 2016
+I know that it is already possible to use shell environment variables which will expand in the definition of e.g. the path of a mount volume
+volumes:
+    - "$SOLR_HOME:/opt/solr/home"
+But to set all the environment variables I need, this forces me to write some shell wrappers around the invocation of docker-compose (a one liner, admittedly, but I am a lazy bum...)
+Since I already use a docker-compose.env file to define variables which are used in the construction of the containers, I wonder:
+would it make sense to expand the variables in the docker-compose.env file so that they are available in docker-compose.yml ? (apart from an obvious loop problem of using them to define the value for 'env_file'...)

@@ -1,0 +1,3 @@
+ulope commented on 25 Sep 2015
+Currently when using docker-compose scale ... a warning about potentially clashing ports is emitted for every container that defines ports even when the requested scale number is zero or one.
+I'd suggest to only show this warning when a scale number > 1 is requested.

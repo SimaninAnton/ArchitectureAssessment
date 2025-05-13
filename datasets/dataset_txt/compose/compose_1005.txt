@@ -1,0 +1,94 @@
+waynr commented on 18 Dec 2017
+Relevant docker-compose --verbose up output
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.25/images/ormuco-vpn:compose-build/json HTTP/1.1" 200 2041
+Then a little bit later...
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (device_read_iops=None, mem_swappiness=None, links=[], oom_score_adj=None, blkio_weight=None, cpu_count=None, cpuset_cpus=None, dns_search=None, pid_mode=None, init_path=None, log_config={'Type': u'', 'Config': {}}, cpu_quota=None, read_only=None, cpu_percent=None, device_read_bps=None, storage_opt=None, init=None, dns=None, volumes_from=[], ipc_mode=None, mem_reservation=None, security_opt=None, shm_size=None, device_write_iops=None, dns_opt=None, cgroup_parent=None, group_add=None, network_mode=u'cerebrom_default', volume_driver=None, oom_kill_disable=None, userns_mode=None, tmpfs=None, nano_cpus=None, port_bindings={'9600/tcp': [None]}, isolation=None, memswap_limit=None, restart_policy=None, blkio_weight_device=None, devices=None, extra_hosts=None, binds=[], sysctls=None, pids_limit=None, device_write_bps=None, cap_add=None, mounts=[{'Source': u'/home/wayne/projects/ormuco/cerebrom/docker/ormuco-vpn/credentials/vpnc', 'ReadOnly': None, 'Type': 'bind', 'Target': '/etc/vpnc'}, {'Source': u'/home/wayne/projects/ormuco/cerebrom/docker/ormuco-vpn/credentials/ssh', 'ReadOnly': None, 'Type': 'bind', 'Target': '/ssh'}], mem_limit=None, cap_drop=None, privileged=False, ulimits=None, cpu_shares=None)
+compose.parallel.parallel_execute_iter: Failed: <Container: 21d4214f35f5_cerebrom_ormuco-vpn_1 (21d421)>
+compose.parallel.feed_queue: Pending: set([])
+
+ERROR: for 21d4214f35f5_cerebrom_ormuco-vpn_1  mounts param is not supported in API versions < 1.30
+compose.parallel.parallel_execute_iter: Failed: <Service: ormuco-vpn>
+compose.parallel.feed_queue: Pending: set([<Service: proctor>])
+compose.parallel.feed_queue: <Service: proctor> has upstream errors - not processing
+compose.parallel.parallel_execute_iter: Failed: <Service: proctor>
+compose.parallel.feed_queue: Pending: set([])
+
+ERROR: for ormuco-vpn  mounts param is not supported in API versions < 1.30
+Traceback (most recent call last):
+  File "/home/wayne/.virtualenvs/cerebrom-5qiep0Vx/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/home/wayne/.virtualenvs/cerebrom-5qiep0Vx/local/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/home/wayne/.virtualenvs/cerebrom-5qiep0Vx/local/lib/python2.7/site-packages/compose/cli/main.py", line 124, in perform_command
+    handler(command, command_options)
+  File "/home/wayne/.virtualenvs/cerebrom-5qiep0Vx/local/lib/python2.7/site-packages/compose/cli/main.py", line 956, in up
+    start=not no_start
+  File "/home/wayne/.virtualenvs/cerebrom-5qiep0Vx/local/lib/python2.7/site-packages/compose/project.py", line 479, in up
+    get_deps,
+  File "/home/wayne/.virtualenvs/cerebrom-5qiep0Vx/local/lib/python2.7/site-packages/compose/parallel.py", line 80, in parallel_execute
+    raise error_to_reraise
+docker.errors.InvalidVersion: mounts param is not supported in API versions < 1.30
+docker version output
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:42:09 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:48 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+docker info output
+Containers: 13
+ Running: 4
+ Paused: 0
+ Stopped: 9
+Images: 245
+Server Version: 17.09.0-ce
+Storage Driver: overlay
+ Backing Filesystem: extfs
+ Supports d_type: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.0-3-amd64
+Operating System: Debian GNU/Linux 9 (stretch)
+OSType: linux
+Architecture: x86_64
+CPUs: 12
+Total Memory: 23.5GiB
+Name: agora
+ID: UW3Z:67B4:Y2UM:YQS6:RD6G:7IMS:NE5R:3P32:27YZ:ZJQD:44ZA:QVX5
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+docker-compose --version output
+docker-compose version 1.18.0-rc2, build 189468b
+my thoughts
+It seems strange to me that docker-compose attempts to use API version 1.25 rather than 1.32 as reported by docker version (see above). Is it because docker-compose 1.18.0-rc2 simply doesn't support API version 1.32? Or am I doing something incorrectly that causes docker-compose to use API version 1.25?
+Also it's worth mentioning that I am attempting to use https://docs.docker.com/compose/compose-file/#long-syntax-3; whenever I exclude the volumes key from the service this problem affects the api version conflict doesn't occur. I guess the next thing I'll try is https://docs.docker.com/compose/compose-file/#short-syntax-3.

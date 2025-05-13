@@ -1,0 +1,1 @@
+UP creates a new container as expected but also deletes a previously renamed container

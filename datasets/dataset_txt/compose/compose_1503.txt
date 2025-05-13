@@ -1,0 +1,34 @@
+maitre-hibou commented on 26 Apr 2017 •
+edited
+Hello there,
+I'm trying to run a dockerized project which is deployed with Capistrano
+My application is located within /opt/hosting/my-project directory with the following structure :
+/opt/hosting/my-project
+    /current -> releases/201704251234/
+    /releases/201704251234/
+    /repo/
+    revisions.log
+    /shared/
+Currently, what I'm trying to do is simply :
+cd /opt/hosting/my-project/current
+docker-compose -f docker-compose-production.yml up -d
+This fails with the following error :
+ERROR: Couldn't find env file: /opt/hosting/my-project/shared/.env
+This is the content of my docker-compose-production.yml
+version: "2"
+
+services:
+  app:
+    build: ./
+    container_name: myproject_app
+    env_file:
+      - /opt/hosting/my-project/shared/.env
+    expose:
+      - 9000
+    volumes:
+      - /opt/hosting/my-project/:/opt/hosting
+The .env file needed exists, is readable and doesn't seem to contain any error.
+My docker-compose -v :
+docker-compose version 1.9.0, build 2585387
+Does anyone have an idea on why this is failing ?
+Cheers !

@@ -1,0 +1,1 @@
+docker-compose pulls images without being told to do so

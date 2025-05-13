@@ -1,0 +1,1 @@
+[1.22.0] "restart: unless-stopped" makes "docker-compose run .." leave restarting containers behind

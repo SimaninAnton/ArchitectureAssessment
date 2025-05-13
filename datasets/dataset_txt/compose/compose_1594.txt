@@ -1,0 +1,11 @@
+elyase commented on 17 Mar 2017 •
+edited
+When I do docker-compose up I am getting:
+$ docker-compose up
+Creating intent_classifier
+
+ERROR: for classifier  Cannot create container for service classifier: b'invalid environment variable:'
+ERROR: Encountered errors while bringing up the project.
+I have searched and it looks like I am the first to get this error. I can run the container with docker run so it doesn't look like the problem is there. I tried replacing my only environment variable with its expected value, i.e. there isn't any environment variable in in my docker-compose.yml and I still get that error message.
+Any suggestions regarding further debugging?
+docker-compose version 1.11.2, build dfed245

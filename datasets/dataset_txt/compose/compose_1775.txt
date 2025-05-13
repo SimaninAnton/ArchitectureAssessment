@@ -1,0 +1,6 @@
+liujunjiun commented on 20 Jan 2017
+I install it by pip, and code as follow:
+pip install docker-compose
+chmod a+rx /usr/local/bin/docker-compose
+so, please tell me how can I do?
+1

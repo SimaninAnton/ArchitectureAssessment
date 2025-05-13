@@ -1,0 +1,20 @@
+tprasadtp commented on 5 Nov 2018 •
+edited
+docker-compose tries to load python36.dll from %temp%. It causes issues.
+running docker-compose returns,
+Error loading Python DLL 'C:\Users\<USER>\AppData\Local\Temp\_MEI19762\python36.dll'.
+LoadLibrary: This program is blocked by group policy. For more information, contact your system administrator.
+There is no such file at %temp%<folder/>\
+I already have python installed and is available in the path.
+If applocker policies are enforced it fails as %temp% is not white-listed.
+Possibly related to #5834
+Context information
+docker-compose version 1.22.0 (I have also tried with 1.20, 1.21 and 1.19 issue is the same. Only difference is in case of 1.19 it fails to load python27.dll. It still tries to load from temp.)
+docker 18.06.1-ce
+Steps to reproduce the issue
+Run docker-compose
+Every command fails.
+Observed result
+Fails to run with error.
+OS version
+Windows 10 1803 64 Bit

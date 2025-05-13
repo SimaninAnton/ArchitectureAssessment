@@ -1,0 +1,2 @@
+ev4ern commented on 5 Nov 2017
+Can I set custom .dockerignore file for service?

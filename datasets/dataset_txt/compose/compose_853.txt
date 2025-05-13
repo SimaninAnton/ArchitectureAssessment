@@ -1,0 +1,8 @@
+basickarl commented on 23 Feb 2018
+https://hub.docker.com/r/docker/compose/
+States to install you do:
+docker pull docker/compose
+The latest tag does not exist so this is incorrect.
+km@Karls-MBP ~ $ docker pull docker/compose
+Using default tag: latest
+Error response from daemon: manifest for docker/compose:latest not found

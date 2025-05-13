@@ -1,0 +1,25 @@
+Contributor
+bfirsh commented on 8 Apr 2016
+I have a project with containers already created but stopped. When I do up --build, it just starts the containers and doesn't recreate them:
+$ docker-compose up --build
+Building web
+...
+Removing intermediate container d2dbcf581064
+Successfully built ebe1c55658cd
+Starting charingcross_db_1
+Starting charingcross_web_1
+...
+Running a second time builds twice, but recreates it successfully:
+$ docker-compose up -d
+Building web
+...
+Removing intermediate container 47aa1ff5fd24
+Successfully built 2f73f4815ea1
+Starting charingcross_db_1
+Recreating charingcross_web_1
+Building web
+...
+Successfully built 2f73f4815ea1
+Attaching to charingcross_db_1, charingcross_web_1
+...
+Compose 1.7.0rc1 / Engine 1.11.0rc3

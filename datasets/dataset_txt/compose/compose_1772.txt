@@ -1,0 +1,5 @@
+OlivierDupre commented on 20 Jan 2017
+As shown on in the official doc: https://docs.docker.com/compose/compose-file/#args you can pass arguments from docker-compose to the build process.
+But, the Dockerfile must start with directive FROM, and an argument is available only after calling ARG your-arg-name.
+So one cannot provide base version through build argument.
+Could it be possible to make this working? So we can call something like this: FROM ubuntu:$UBUNTU_VERSION?

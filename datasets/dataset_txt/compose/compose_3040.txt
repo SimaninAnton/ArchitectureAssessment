@@ -1,0 +1,3 @@
+traviscooper commented on 30 Nov 2015
+I can build and run containers on windows just fine. But when including the build: . in my docker-compose.yml, the build step fails as it hits the max path error that was fixed in docker.
+Anyone else encounter the same issue have any workarounds?

@@ -1,0 +1,8 @@
+DannyBen commented on 30 Jan 2019
+Is there a reason that the docker/compose image on DockerHub does not have a latest tag?
+I would love to be able to just do this:
+$ docker run --rm -it docker/compose --version
+Unable to find image 'docker/compose:latest' locally
+docker: Error response from daemon: manifest for docker/compose:latest not found.
+See 'docker run --help'.
+3

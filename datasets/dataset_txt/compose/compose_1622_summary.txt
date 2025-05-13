@@ -1,0 +1,1 @@
+No environment variable interpolation in secrets definitions

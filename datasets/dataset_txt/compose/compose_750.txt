@@ -1,0 +1,56 @@
+jasonsemko commented on 10 Apr 2018 •
+edited
+Description of the issue
+When executing bash on a running container line wrapping occurs around 80 characters on to the same line.
+When getting to around 80 chars
+Wrapping back onto same line (above line shown for context)
+Context information (for bug reports)
+...
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2n  7 Dec 2017
+Output of "docker version"
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:06:22 2018
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:14:32 2018
+  OS/Arch: linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+web:
+    build:
+      context: 
+    command: 
+    environment:
+    links:
+    - links
+    ports:
+    - 8000:8000/tcp
+    stdin_open: true
+    tty: true
+    volumes:
+    - some volume
+Steps to reproduce the issue
+Start up containers
+docker-compose exec web bash
+Observed result
+Line wrapping
+Expected result
+No line wrapping
+Additional information
+First appeared after updating docker to:

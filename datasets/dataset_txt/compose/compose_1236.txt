@@ -1,0 +1,19 @@
+Sunrry commented on 31 Aug 2017 •
+edited
+Now I have such a situation in my using of docker-compose:
+I use docker-compose to start a network of test instances to do my component test, and different services may start component test in the same time sometimes.
+In another words, these two command will start in the same time sometimes:
+docker-compose -f compose-serviceA-test.yml up -d --build
+docker-compose -f compose-serviceB-test.yml up -d --build
+At this time, I find something strange happened:
+Successfully tagged serviceA:lates
+Recreating rabbitmq-serviceB ...
+Recreating redis-serviceB ...
+Recreating rabbitmq-serviceB
+Recreating mysql-serviceB...
+Recreating riak-serviceB ...
+Recreating serviceB ... done
+It seems docker-compose cannot deal with the concurrently running , or it will be mixed.
+Is there any solution to this ?
+Thanks very much
+Sunrry

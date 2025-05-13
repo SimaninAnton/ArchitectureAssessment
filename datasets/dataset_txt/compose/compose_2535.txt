@@ -1,0 +1,6 @@
+cjerdonek commented on 5 Apr 2016
+I've noticed that docker-compose run -T seems to behave inconsistently from run to run with respect to outputting stderr and stdout.
+For example, on repeated invocations of the following command:
+$ docker-compose run -T web python3 -c "import sys; print(\"err\\n\", file=sys.stderr); print(\"stdout\\nstdout\\nstdout\\nstdout\\n\")"
+the "err" usually doesn't print out (but sometimes does), and the "stdout" messages usually (but don't always) print.
+This is a follow-up to issue #3239.

@@ -1,0 +1,56 @@
+bcoughlan commented on 10 Apr 2018 •
+edited
+Description of the issue
+Compose can hang when trying to run tasks with a low COMPOSE_PARALLEL_LIMIT.
+Suppose I'm starting 10 containers with a parallel limit of 3:
+The first 3 containers begin starting. Then in service.py:_execute_convergence_create another parallel task is kicked off to actually start the containers. However because the thread pool is full this task never executes and the application hangs.
+I think either:
+The service.py code needs a separate thread pool (complicated).
+Multiple instances of the same service need to start sequentially (inefficient for certain deployments).
+The parallel logic could be contained in project.py by running a task for each instance of a service.
+In cases where parallel_execute is passed an objects parameter of length 1, could it just execute it on the calling thread? That would at least limit the issue to containers where scale > 1.
+Context information (for bug reports)
+Tested on master (2975f06 at time of writing).
+$ docker-compose --version
+docker-compose version 1.21.0dev, build unknown
+Steps to reproduce the issue
+Below is a Compose file that starts 9 instances of Redis. Run with COMPOSE_PARALLEL_LIMIT=3 docker-compose up to observe the issue:
+version: '2.3'
+
+services:
+  redis1:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+  redis2:
+    image: "redis:alpine"
+    ports:
+      - "6380:6379"
+  redis3:
+    image: "redis:alpine"
+    ports:
+      - "6381:6379"
+  redis4:
+    image: "redis:alpine"
+    ports:
+      - "6382:6379"
+  redis5:
+    image: "redis:alpine"
+    ports:
+      - "6383:6379"
+  redis6:
+    image: "redis:alpine"
+    ports:
+      - "6384:6379"
+  redis7:
+    image: "redis:alpine"
+    ports:
+      - "6385:6379"
+  redis8:
+    image: "redis:alpine"
+    ports:
+      - "6386:6379"
+  redis9:
+    image: "redis:alpine"
+    ports:
+      - "6387:6379"

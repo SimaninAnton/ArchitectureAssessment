@@ -1,0 +1,16 @@
+alfredoBelloAurea commented on 3 Mar 2016
+hello
+I did a container for oracle 11g and it works properly in standalone mode
+I create a docker-compose.yml with this
+database_host:
+build: 'database'
+ports:
+- "1521:1521"
+- "8080:8080"
+compose runs the container but at the end I see this message
+database_host_1 exited with code 0
+I already tried to used command: /bin/bash in compose with the same result
+is not a problem with the port 8080 nothing running on that port
+if I run the new container (database_host_1) with the command docker "run" it woks properly and the image is created properly
+the question is why the container runs properly standalone and don't run with compose ???
+btw I am using windows 10 with docker toolbox, docker version 1.10.0

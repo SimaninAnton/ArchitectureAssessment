@@ -1,0 +1,7 @@
+nschoe commented on 22 Apr 2016
+There is the -t | --timeout option that can be passed to docker-compose stop, it would be nice to add this option to docker-compose down.
+As down destroys a containers, it means we won't be using it again, so we should be allowed "not to care if it exits correctly. Alternatively it could be a -k | --kill flag so that instead of "stopping and removing container" it would "kill and remove container".
+I understand that it should not be the default behavior because some linked containers can still prefer if the present container is stopped correctly, but there are such cases where it could speed things up.
+For instance, I do a lot of debugging on an application that unfortunately doesn't handle SIGTERM signal, and it is a pain to wait 10 seconds after running down, so I usually kill it first, then down it.
+It's just a suggestion, what do you think?
+12

@@ -1,0 +1,12 @@
+ghost commented on 30 Oct 2015
+This shell script (as example) is never executed by crontab unless the docker-compose commands are commented. If is executed standalone it runs.
+#!/bin/sh
+# arg0 start-channel
+# arg1 channel name
+
+cd $HOME/$1
+docker-compose ps
+docker-compose up -d
+docker-compose ps
+exit 0
+2

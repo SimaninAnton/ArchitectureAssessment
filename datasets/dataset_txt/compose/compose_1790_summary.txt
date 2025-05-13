@@ -1,0 +1,1 @@
+In docker 1.13， service spec supports duplicate container port expose

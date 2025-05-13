@@ -1,0 +1,6 @@
+ghost commented on 24 May 2018
+Previous to upgrading my Ubuntu installation to 18.04 whenever I started my services with docker-compose -f file up all the output from containers was streamed consistently. But ever since the upgrade, the output from containers stops somewhere in between. I know a workaround is do start services with -d flag and then use logs -f to monitor them. But what might have gone wrong. For me starting services with -d and following it up with logs -f works fine but I would like to do it without it.
+OS - Ubuntu 18.04 LTS
+Docker - Docker version 18.05.0-ce, build f150324
+Compose - docker-compose version 1.21.2, build a133471
+1

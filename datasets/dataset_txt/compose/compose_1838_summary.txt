@@ -1,0 +1,1 @@
+Allow colors for container log messages to be specified in docker-compose.yml

@@ -1,0 +1,27 @@
+verges-io commented on 11 Aug 2016
+Problem
+Running Docker 1.11.2 and docker-compose 1.8.0 (problem persists after downgrading to 1.7.0), I try to update a service in a Docker 1.11.2 Swarm cluster of three nodes. The services in my docker-compose.yml have affinities to ensure that one container of each service is deployed on each node.
+The compose-file
+services:
+  service1:
+    image: myimage1:latest
+    environment:
+    - "affinity:com.mycompany.type!=~service1"
+    - "affinity:container!=~*service1_*"
+    labels:
+    - "com.mycompany.type=service1"
+
+  service2:
+    image: myimage2:latest
+    environment:
+    - "affinity:com.mycompany.type!=~service2"
+    - "affinity:container!=~*service2_*"
+    labels:
+    - "com.mycompany.type=service2"
+Actual behaviour
+This works well on initial start:
+docker-compose -p myproject scale service1=3 service2=3
+distributes both services nicely. But when I try to update the project running docker-compose -p myproject up -d, all recreated containers are randomly placed on the nodes, ignoring what I definied as affinities.
+Expected behaviour
+The containers should be recreated on the nodes they're on, or distributed again according to the definied affinities.
+7

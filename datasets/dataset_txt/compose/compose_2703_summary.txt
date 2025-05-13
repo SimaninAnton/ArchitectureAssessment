@@ -1,0 +1,1 @@
+docker-compose not working without TLS since 1.6.1

@@ -1,0 +1,60 @@
+leo4ever commented on 4 May 2018
+Description of the issue
+Docker stack deploy command returns a parse error "configs Additional property configs is not allowed"
+Context information (for bug reports)
+Running Docker edge on Windows 10 with Kubernetes enabled
+Output of "docker-compose version"
+docker-compose version 1.21.0, build 5920eb08
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:      18.05.0-ce-rc1
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   33f00ce
+ Built:        Thu Apr 26 00:57:53 2018
+ OS/Arch:      windows/amd64
+ Experimental: true
+ Orchestrator: kubernetes
+
+Server:
+ Engine:
+  Version:      18.05.0-ce-rc1
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.10.1
+  Git commit:   33f00ce
+  Built:        Thu Apr 26 01:06:49 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+ Kubernetes:
+  Version:     v1.9.6
+  StackAPI:                   v1beta1
+Output of "docker-compose config"
+version: "3.2"
+
+services:
+  nats-mq:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+  dm-service:
+    image: dm/dm-service:latest
+    environment:
+      - NATS_URL=nats://nats-mq
+    depends_on:
+      - nats-mq
+Steps to reproduce the issue
+Running command docker stack deploy --compose-file .
+\docker-compose.yml dm-service
+Observed result
+Parse error
+Expected result
+containers deployed to local kubernetes cluster
+Stacktrace / full error message
+Stack.compose.docker.com "dm-service" is invalid: dm-service: Invalid value: "version: "3.2"\nservices:\n dm-service:\n depends_on:\n - nats-mq\n environment:\n NATS_URL: nats://nats-mq\n image: dm/dm-service:latest\n nats-mq:\n image: nats:latest\n ports:\n - mode: ingress\n target: 4222\n published: 4222\n protocol: tcp\nnetworks: {}\nvolumes: {}\nsecrets: {}\nconfigs: {}\n": parse error: configs Additional property configs is not allowed
+(if applicable)
+Additional information
+The dm/dm-service is a local image on my laptop and is not part of any publish/private registry
+OS version / distribution, docker-compose install method, etc.

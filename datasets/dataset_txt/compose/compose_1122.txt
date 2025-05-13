@@ -1,0 +1,19 @@
+aboosoyeed commented on 26 Oct 2017
+`
+version: '3.4'
+services:
+...
+...
+networks:
+default:
+aliases:
+- usb.staging.com
+- hub.staging.com
+- heart.staging.com
+- mongo
+- minio
+`
+The above looking docker compose is throwing me the following error
+"networks.default value Additional properties are not allowed ('aliases' was unexpected)"
+However the closed issue #3426 suggests that we can do the same. Am I missing something here
+Ps:- i have not listed the services as I thought its relevant but if required i can share

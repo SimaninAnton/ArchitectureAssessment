@@ -1,0 +1,10 @@
+CrimsonGlory commented on 11 Oct 2017 •
+edited
+Currently (v1.16.1 with 17.05.0-ce) the use of scale command (when docker-compose.yml is version 2) prints a warning indicating that it will be deprecated and suggests the user to use --scale flag instead.
+Having tried docker-compose up's --scale flag, it seems that the behaviour is different from the old scale command.
+I mean that docker-compose scale servicename=3 != docker-compose up -d --scale servicename=3.
+Plain --scale will end up recreating the started service containers if there is a new image or if the configuration changed. While scale command didn't do that.
+So the equivalent of docker-compose scale servicename=3 is docker-compose up -d --scale servicename=3 --no-recreate.
+Why such a big deal for this? If the user uses databases without mounting the data folder as volume, this can end up in deleting the database.
+Please confirm me the --scale has the desired behaviour and I'll submit a pull request to add this info the docs.
+4

@@ -1,0 +1,1 @@
+[question] detecting resources using "legacy" naming convetion

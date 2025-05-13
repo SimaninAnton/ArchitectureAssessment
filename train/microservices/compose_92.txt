@@ -1,0 +1,76 @@
+Contributor
+lukas9393 commented on 2 Oct 2019 •
+edited
+Description of the issue
+If I have build and image entries in the same docker-compose config file, then I cannot load my images and get no feedback on why this is happening. I did not understand the problem until I loaded the master and started the debugger. Perhaps it would be better if the program indicated that the images are not loaded. In addition, it also prints the reason for this.
+I build my images on a CI server using a docker-compose.yml file and load these images into the registry. I use the same file to load the images from the registry on my server.
+So we are talking about the following command sequence:
+CI-Server
+Step 1: docker-compose build
+Step 2: docker-compose push
+Production Server
+Step 3: docker-compose pull
+Step 4: docker-compose up -d
+Because of commit c6dd7da, a docker-compose pull ignores any service that contains build instructions in the config.
+If this behaviour is included in the release 1.25.0, then I (and anyone else who uses the same file for building and pulling) will have to use two separate config files in the future.
+E.g. docker-compose.yml + docker-compose.build.yml
+With this bug issue I would like to point out that the fix of issue #6464 breaks with the original behavior. I'm in favor of either reverting the commit or adding a flag that also loads image even though it contains build instructions in the config file.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0dev, build bc57a1bd
+docker-py version: 4.0.1
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.1c  28 May 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:26:49 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:32:21 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+services:
+  web:
+    build:
+      context: /foo
+    image: luuukas/nginx
+    ports:
+    - published: 80
+      target: 80
+version: '3.7'
+Steps to reproduce the issue
+1. docker-compose pull
+// Nothing's happening
+2. docker-compose up -d
+// Wants to build the image
+Observed result
+docker-compose pull                                
+// Nothing's happening
+Expected result
+docker-compose pull 
+Pulling web ... done
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Darwin macbook-pro-092.local 18.7.0 Darwin Kernel Version 18.7.0: Tue Aug 20 16:57:14 PDT 2019; root:xnu-4903.271.2~2/RELEASE_X86_64 x86_64
+10

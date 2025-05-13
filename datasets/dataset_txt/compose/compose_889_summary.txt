@@ -1,0 +1,1 @@
+depends_on is recreating more containers in 1.19 then with 1.18

@@ -1,0 +1,1 @@
+Windows, Dockerfile ENTRYPOINT and CMD in exec form require double quotes

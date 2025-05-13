@@ -1,0 +1,15 @@
+Contributor
+bfirsh commented on 25 Feb 2015
+$ script/docs
++ DOCSPORT=8000
+++ git rev-parse --abbrev-ref HEAD
++ GIT_BRANCH=master
++ DOCKER_DOCS_IMAGE=compose-docsmaster
++ DOCKER_RUN_DOCS='docker run --rm -it -e NOCACHE'
++ docker build -t compose-docsmaster -f docs/Dockerfile .
+Sending build context to Docker daemon 755.7 kB
+Sending build context to Docker daemon
+Step 0 : FROM docs/base:latest
+Pulling repository docs/base
+INFO[0001] HTTP code: 403
+It's expecting a docs/base that doesn't exist. /cc @SvenDowideit

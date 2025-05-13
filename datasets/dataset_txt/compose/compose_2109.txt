@@ -1,0 +1,22 @@
+Vanuan commented on 30 Aug 2016 •
+edited
+Version
+docker-compose -v
+docker-compose version 1.8.0, build f3628c7
+docker -v
+Docker version 1.12.1, build 23cf638
+docker-compose.yml
+version: '2'
+services:
+  nginx:
+    image: 'nginx:1.10-alpine'
+command
+$ docker-compose bundle
+ERROR: Some images are missing digests.
+
+The following images need to be pulled:
+
+    nginx:1.10-alpine
+
+Use `docker-compose pull nginx:1.10-alpine` to pull them.
+Clearly, the message should've been docker pull nginx:1.10-alpine, without compose.

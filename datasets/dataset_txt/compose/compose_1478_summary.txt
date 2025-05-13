@@ -1,0 +1,1 @@
+"docker-compose run" stops (deletes!) other scaled services

@@ -1,0 +1,4 @@
+twang2218 commented on 19 Dec 2016
+Currently, there is no checksum in the download section on the release page:
+It would be great if there is a checksum file for those binaries, so we can verify the downloaded file's integrity. Thanks.
+11

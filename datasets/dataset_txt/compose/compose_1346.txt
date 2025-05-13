@@ -1,0 +1,13 @@
+bdharrington7 commented on 1 Jul 2017
+I have a docker image I'm trying to build, that needs to talk to an existing docker network during the build phase. Is it possible to configure the docker-compose build attribute to do this?
+I tried something like
+services:
+  server:
+    build:
+      context: .
+      args:
+        - network=host
+but that doesn't work, unsurprisingly.
+To be specific, I'm asking if a docker-compose.yml file can be configured to do the same thing as docker build --network=host, or more preferably, docker build --network=external_docker_network
+docker: v17.06.0-ce-mac18
+docker-compose version 1.14.0, build c7bdf9e

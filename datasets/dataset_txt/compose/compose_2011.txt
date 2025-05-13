@@ -1,0 +1,29 @@
+emoshaya commented on 11 Oct 2016 •
+edited by shin-
+I have the following compose.yml:
+hub:
+  image: selenium/hub
+  ports:
+    - "4444:4444"
+  volumes:
+    - ~/webui-share:/var/webui-share
+  environment:
+    - GRID_TIMEOUT=500000
+    - GRID_MAX_SESSION=50
+    - GRID_BROWSER_TIMEOUT=600000
+
+firefox:
+  image: selenium/node-firefox
+  links:
+    - hub
+chrome:
+  image: selenium/node-chrome
+  links:
+    - hub
+  volumes:
+    - /dev/shm:/dev/shm
+  volumes_from:
+    - hub
+I'd like to automate starting the grid as the CentOS machine starts up, either as a service or systemd. Here are the commands I run to startup the grid:
+docker-compose -f docker_selenium_compose.yml up -d || true
+docker-compose -f docker_selenium_compose.yml scale firefox=10 chrome=10 || true

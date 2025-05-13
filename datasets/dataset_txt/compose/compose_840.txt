@@ -1,0 +1,63 @@
+ruchitgandhi commented on 28 Feb 2018 •
+edited by shin-
+Background
+I have 2 containers being spun through my docker-compose file :
+Angular Web Container and Selenium Hub container. I am trying to perform end to end testing on Angular using Protractor/Selenium.
+My docker-compose.yml :
+    version: "3"
+    services:
+      angular:
+        build: .
+        ports:
+          - "4200:4200"
+        depends_on:
+            - seleniumhub
+        networks:
+            front:
+                aliases:
+                    - angular_service
+      seleniumhub:
+          image: selenium/standalone-chrome:latest
+          ports:
+            - 4444
+          networks: 
+            - front
+    networks:
+        front:
+            driver: bridge
+The issue :
+The angular container is able to discover the selenium hub and can connect to it on the hub address :
+http://seleniumhub:444/wd/hub; but the protractor test is unable to connect to the angular container using the service name "angular".
+My Protractor.conf.js file for reference :
+const { SpecReporter } = require('jasmine-spec-reporter');
+
+exports.config = {
+  allScriptsTimeout: 11000,
+  seleniumAddress: 'http://seleniumhub:4444/wd/hub',
+  specs: [
+    './e2e/**/*.e2e-spec.ts'
+  ],
+  capabilities: {
+    'browserName': 'chrome',
+     'chromeOptions': {
+          args: ['no-sandbox'],
+        },
+  },
+//  directConnect: true,
+  framework: 'jasmine',
+  jasmineNodeOpts: {
+    showColors: true,
+    defaultTimeoutInterval: 30000,
+    print: function() {}
+  },
+  onPrepare() {
+    browser.baseUrl = 'http://angular:4200/'; //This doesn't work
+//    browser.baseUrl = 'http://172.18.0.3:4200/'; // This works
+    require('ts-node').register({
+      project: 'e2e/tsconfig.e2e.json'
+    });
+    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+  }
+};
+If the static ip of the angular container is given, then the selenium hub is able to test the application successfully. But given the service name "angular" it is not able to connect.
+Any insights on this?

@@ -1,0 +1,25 @@
+joekohut commented on 29 Jun 2017
+File: compose/extends.md
+AS STATED BY DOCKER:
+For the multi-value options ports, expose, external_links, dns, dns_search, and tmpfs, Compose concatenates both sets of values:
+original service
+expose:
+"3000"
+local service
+expose:
+"4000"
+"5000"
+result
+expose:
+"3000"
+"4000"
+"5000"
+MY REQUEST:
+This behavior causes issues for multi-tenant docker engines when publish(public) ports are used.
+If host is already using port 8080, and a new compose file specifies ports: "8080:80", the compose file will fail to launch the service (port in use). The is no way to override the original file's ports: setting, since compose behavior is to "merge" ports. It would be better to make an option for merge or override for ports, e.g.
+ports:
+"8080:80"
+extend: override|merge
+I'd like to be able to override any ports specified by a developer with an enterprise override yaml that would add an approved, privately-registered hostport, e.g.
+ports:
+"11000:8080"

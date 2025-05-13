@@ -1,0 +1,2 @@
+webfrank commented on 18 May 2017
+Which is the correct syntax in docker-compose.yaml v3 to support endpoint-mode dnsrr?

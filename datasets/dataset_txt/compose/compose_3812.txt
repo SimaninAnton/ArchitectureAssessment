@@ -1,0 +1,4 @@
+ScottFred commented on 22 Mar 2015
+On the main Docker Compose documentation (https://docs.docker.com/compose/),starting at the top, it describes three steps that need to be taken to get things up and running with a small sample using Python and Postgres (not the Python, Flask, and Redis example later). It isn't clear for the new user that this first example is not an App, especially when the steps include what looks to be "docker-compose up" in the description which indicates that something should execute.
+I believe it would be more clear to the novice that the first example isn't something that will run if the example Dockerfile and docker-compose.yml file were removed; leaving on the description of the three steps. Later, the Quick Start section describes a fully functioning example with all the necessary files.
+The confusion created here for the novice could dissuade them from attempting to use Compose.

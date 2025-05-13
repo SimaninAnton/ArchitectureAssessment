@@ -1,0 +1,1 @@
+Please how I can limit memory in docker-compose build

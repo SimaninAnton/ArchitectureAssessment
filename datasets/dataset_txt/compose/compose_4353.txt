@@ -1,0 +1,3 @@
+Contributor
+j0hnsmith commented on 4 Apr 2014
+'Fast, isolated development environments using Docker.' This infers that fig should only be used for development environments. I'm going to use it in production in order to keep config in fig.yml, which is far easier to read than the docker commandline commands needed to start my containers.

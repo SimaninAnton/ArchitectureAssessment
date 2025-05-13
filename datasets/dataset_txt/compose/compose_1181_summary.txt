@@ -1,0 +1,1 @@
+docker-compose failing to read env_file with UTF8 BOM

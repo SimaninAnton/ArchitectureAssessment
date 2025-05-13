@@ -1,0 +1,9 @@
+golubitsky commented on 30 Jul 2016
+In this .env file, A will consistently fail to be imported by docker-compose.yml:
+A=1
+B=2
+In this .env, both A and B are imported correctly:
+#nothing on first line
+A=1
+B=2
+Anybody else have this issue?

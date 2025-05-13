@@ -1,0 +1,6 @@
+KamilKopaczyk commented on 15 Jan 2016
+Hello,
+docker-compose version 1.5.2
+i'm unable to build images, if there's 'env_file' pointing to nonexistent file. Since building has nothing to do with container's environment, maybe it should be possible?
+I think it's related to #1585 and possibly other properties, that are used solely for containers, not building/images.
+I also remember(but couldn't find it), there was a discussion whether the build tool should be separated from container management commands. Maybe this issue should be stated as an argument there too.

@@ -1,0 +1,62 @@
+savermyas commented on 24 Jun 2016 •
+edited
+Hello.
+I am using the Docker and Docker Compose in OS X and need to use the SOCKS proxy to reach remote Docker Engines. And looks like Docker Compose doesn't support it despite Docker does.
+My environment is the following:
+bash-3.2$ uname -a
+Darwin myhost 15.5.0 Darwin Kernel Version 15.5.0: Tue Apr 19 18:36:36 PDT 2016; root:xnu-3248.50.21~8/RELEASE_X86_64 x86_64
+
+
+bash-3.2$ docker version
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:20:08 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Wed Apr 27 00:34:42 2016
+ OS/Arch:      linux/amd64
+
+
+bash-3.2$ docker-compose version
+docker-compose version 1.7.1, build 0a9ab35
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+Please, consider the following actions:
+Docker supports the ALL_PROXY environment variable:
+bash-3.2$ ALL_PROXY=socks5://localhost:31457 docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+Docker Compose doesn't:
+bash-3.2$ ALL_PROXY=socks5://localhost:31457 docker-compose ps
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+And in case of HTTPS_PROXY environment variable usage we get another error:
+bash-3.2$ HTTPS_PROXY=socks5://localhost:31457 docker-compose ps
+Traceback (most recent call last):
+File "<string>", line 3, in <module>
+File "compose/cli/main.py", line 58, in main
+File "compose/cli/main.py", line 109, in perform_command
+File "compose/cli/main.py", line 462, in ps
+File "compose/project.py", line 457, in containers
+File "compose/project.py", line 448, in _labeled_containers
+File "site-packages/docker/api/container.py", line 70, in containers
+File "site-packages/docker/utils/decorators.py", line 47, in inner
+File "site-packages/docker/client.py", line 120, in _get
+File "site-packages/requests/sessions.py", line 477, in get
+File "site-packages/requests/sessions.py", line 465, in request
+File "site-packages/requests/sessions.py", line 573, in send
+File "site-packages/requests/adapters.py", line 337, in send
+File "site-packages/docker/ssladapter/ssladapter.py", line 55, in get_connection
+File "site-packages/requests/adapters.py", line 245, in get_connection
+File "site-packages/requests/adapters.py", line 155, in proxy_manager_for
+File "site-packages/requests/packages/urllib3/poolmanager.py", line 280, in proxy_from_url
+File "site-packages/requests/packages/urllib3/poolmanager.py", line 231, in __init__
+AssertionError: Not supported proxy scheme socks5
+docker-compose returned -1

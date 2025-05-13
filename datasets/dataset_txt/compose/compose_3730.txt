@@ -1,0 +1,14 @@
+arun-gupta commented on 12 Apr 2015
+This would be useful for data-only container.
+So something like this would be useful:
+mysql-data:
+  image: arungupta/mysql-data-container
+  create-only: true
+mysqldb:
+  image: mysql:latest
+  volumes-from: mysqld-data
+  environment:
+    MYSQL_DATABASE: sample
+    MYSQL_USER: mysql
+    MYSQL_PASSWORD: mysql
+    MYSQL_ROOT_PASSWORD: supersecret

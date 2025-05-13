@@ -1,0 +1,14 @@
+nritholtz commented on 13 Oct 2015
+My environment:
+$ docker -v
+Docker version 1.8.3, build f4bf5c7
+
+$ docker-compose -v
+docker-compose version: 1.5.0dev
+I've created a test repo to reproduce this issue.
+When using links for connecting a sample web app to a fluentd container, and using the fluentd-address to refer to this link, I am getting the following error:
+sample_fluentd_compose nritholtz$ docker-compose up
+Creating samplefluentdcompose_log_1
+Creating samplefluentdcompose_web_1
+Cannot start container ca26fe06dd7e4d63b401b12203f5670a8b95fa0c50793fb4ab5e1ec052c4cd30: Failed to initialize logging driver: dial tcp 198.105.244.74:24224: i/o timeout
+However, when exposing the fluentd container port to host and then connecting via localhost, it works just fine.

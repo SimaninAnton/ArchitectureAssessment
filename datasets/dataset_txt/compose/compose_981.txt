@@ -1,0 +1,68 @@
+BentCoder commented on 28 Dec 2017
+Hi,
+I have a Jenkins project called "Hello-World" and it executes echo PWD && cd docker && docker-compose --verbose up -d shell command as part of "Build Step" but the build fails (see error below). However, when I SSH into Jenkins server and run the command myself, it works fine. I am not even sure if the error is related to Jenkins or Compose. Any solution to this?
+Note: There is no such folder called /var/lib/jenkins/.docker though. Not sure if this is needed as the command runs fine manually.
+Regards
+Error
+[Hello-World] $ /bin/sh -xe /tmp/jenkins315253004276115678.sh
++ PWD
++ echo /var/lib/jenkins/workspace/Hello-World
+/var/lib/jenkins/workspace/Hello-World
++ cd docker
++ docker-compose --verbose up -d
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.find_config_file: Trying paths: ['/var/lib/jenkins/.docker/config.json', '/var/lib/jenkins/.dockercfg']
+docker.auth.find_config_file: No config file found
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/command.py", line 37, in project_from_options
+  File "compose/cli/command.py", line 99, in get_project
+  File "compose/cli/command.py", line 74, in get_client
+  File "site-packages/docker/api/daemon.py", line 177, in version
+  File "site-packages/docker/utils/decorators.py", line 46, in inner
+  File "site-packages/docker/api/client.py", line 191, in _get
+  File "site-packages/requests/sessions.py", line 521, in get
+  File "site-packages/requests/sessions.py", line 508, in request
+  File "site-packages/requests/sessions.py", line 618, in send
+  File "site-packages/requests/adapters.py", line 490, in send
+requests.exceptions.ConnectionError: ('Connection aborted.', error(13, 'Permission denied'))
+Failed to execute script docker-compose
+Build step 'Execute shell' marked build as failure
+Finished: FAILURE
+System
+jenkins@linux:~$ docker -v
+Docker version 17.09.1-ce, build 19e2cf6
+jenkins@linux:~$ docker-compose -v
+docker-compose version 1.18.0, build 8dd22a9
+User
+jenkins@linux:~$ id
+uid=113(jenkins) gid=116(jenkins) groups=116(jenkins),998(docker)
+jenkins@linux:~$ groups jenkins
+jenkins : jenkins docker
+.env
+COMPOSE_PROJECT_NAME=helloworld
+docker-compose.yml
+version: '3'
+
+services:
+    nginx_img:
+        container_name: ${COMPOSE_PROJECT_NAME}_nginx_con
+        image: nginx:1.13.8
+        ports:
+            - 1000:80
+        networks:
+            public_net:
+                ipv4_address: 192.168.0.11
+
+networks:
+    public_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.0.0/24
+Socket permission
+jenkins@linux:~$ ls -l /var/run/docker.sock
+srw-rw---- 1 root docker 0 Dec 23 12:59 /var/run/docker.sock

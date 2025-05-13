@@ -1,0 +1,1 @@
+Pulling images from HTTP private registry endpoint fails

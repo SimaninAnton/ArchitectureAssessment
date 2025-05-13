@@ -1,0 +1,32 @@
+Wilfred commented on 8 Jan 2018 •
+edited
+Given the following configuration:
+# cat two_containers.yml
+version: '2.1'
+services:
+  foo:
+    image: my-web-service
+  bar:
+    image: my-web-service
+# cat one_container.yml
+version: '2.1'
+services:
+  foo:
+    image: my-web-service
+--remove-orphans removes the bar container when I do up -d:
+# /apps/research/tools/docker-compose/1.17.1_no_cert_warnings/bin/docker-compose -f two_containers.yml up -d
+Creating mytest_bar_1 ...
+Creating mytest_foo_1 ...
+Creating mytest_foo_1
+Creating mytest_bar_1 ... done
+# /apps/research/tools/docker-compose/1.17.1_no_cert_warnings/bin/docker-compose -f one_container.yml up -d --remove-orphans
+Removing orphan container "mytest_bar_1"
+mytest_foo_1 is up-to-date
+However, --remove-orphans seems to be ignored with up --no-start:
+# docker-compose -f two_containers.yml up --no-start
+Creating network "mytest_default" with the default driver
+Creating mytest_bar_1 ...
+Creating mytest_foo_1 ...
+Creating mytest_bar_1
+Creating mytest_bar_1 ... done
+# docker-compose -f one_container.yml up --no-start --remove-orphans

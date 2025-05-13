@@ -1,0 +1,101 @@
+facundovictor commented on 22 May 2018
+Description of the issue
+After merging #5788 (docker compose v1.21.0) all builds from projects where the parent folder starts with a dash (-) results in a failure. Also if the folder starts with underscore (_).
+Note: If you ask "OMG Why you have a folder starting with a dash?!!": It is Jenkins workspaces auto-generating folders based on project names, branches and UUIDs. And if it is long it truncates the first letters. This was working on v1.20-1. And it is easier for me to fix docker-compose than adding adapting a Jenkins plugin. And also, this would affect to a lot of people.
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+Docker version 18.03.1-ce, build 9ee9f40                   
+docker-compose config:
+services:                                                  
+  myapp:                                                   
+    build:                                                 
+      context: /home/user/repos/-myapp                                                        
+version: '2.0'
+Dockerfile:
+FROM centos:centos7
+CMD ["bash"]
+Steps to reproduce the issue
+Create a folder named -testing
+cd -- -testing
+Create the Dockerfile and docker-compose.yml with the content described above
+docker-compose --verbose build
+Observed result
+ docker-compose --verbose build
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/version HTTP/1.1" 200 551
+compose.cli.command.get_client: docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': ''}, Components=[{'Name': 'Engine', 'Version': '18.03.1-ce', 'Details': {'ApiVersion': '1.37', 'Arch': 'amd64', 'BuildTime': '2018-04-26T07:24:55.000000000+00:00', 'Experimental': 'false', 'GitCommit': '9ee9f40', 'GoVersion': 'go1.9.5', 'KernelVersion': '4.15.6-200.fc26.x86_64', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.03.1-ce, ApiVersion=1.37, MinAPIVersion=1.12, GitCommit=9ee9f40, GoVersion=go1.9.5, Os=linux, Arch=amd64, KernelVersion=4.15.6-200.fc26.x86_64, BuildTime=2018-04-26T07:24:55.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('myapp_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/myapp_default HTTP/1.1" 404 32
+compose.service.build: Building myapp
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='/home/user/repos/-myapp', tag='-myapp_myapp', rm=True, forcerm=False, pull=False, nocache=False, dockerfile=None, cache_from=None, labels=None, buildargs={}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.api.build._set_auth_headers: No auth config found
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/build?t=-myapp_myapp&q=False&nocache=False&rm=True&forcerm=False&pull=False HTTP/1.1" 500 25
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object APIClient._stream_helper at 0x7f90b5bc53b8>
+ERROR: compose.cli.errors.log_api_error: invalid reference format
+Expected result
+Same as it would not start with a dash (-)
+docker-compose --verbose build
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/version HTTP/1.1" 200 551
+compose.cli.command.get_client: docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': ''}, Components=[{'Name': 'Engine', 'Version': '18.03.1-ce', 'Details': {'ApiVersion': '1.37', 'Arch': 'amd64', 'BuildTime': '2018-04-26T07:24:55.000000000+00:00', 'Experimental': 'false', 'GitCommit': '9ee9f40', 'GoVersion': 'go1.9.5', 'KernelVersion': '4.15.6-200.fc26.x86_64', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.03.1-ce, ApiVersion=1.37, MinAPIVersion=1.12, GitCommit=9ee9f40, GoVersion=go1.9.5, Os=linux, Arch=amd64, KernelVersion=4.15.6-200.fc26.x86_64, BuildTime=2018-04-26T07:24:55.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('myapp_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/myapp_default HTTP/1.1" 404 32
+compose.service.build: Building myapp
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='/home/user/repos/myapp', tag='myapp_myapp', rm=True, forcerm=False, pull=False, nocache=False, dockerfile=None, cache_from=None, labels=None, buildargs={}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.api.build._set_auth_headers: No auth config found
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/build?t=myapp_myapp&q=False&nocache=False&rm=True&forcerm=False&pull=False HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object APIClient._stream_helper at 0x7f3643395e08>
+Step 1/2 : FROM centos:centos7
+ ---> e934aafc2206
+Step 2/2 : CMD ["bash"]
+ ---> Running in 15dc1bf30163
+Removing intermediate container 15dc1bf30163
+ ---> daaf68b144fb
+Successfully built daaf68b144fb
+Successfully tagged myapp_myapp:latest
+compose.cli.verbose_proxy.proxy_callable: docker close <- ()
+compose.cli.verbose_proxy.proxy_callable: docker close -> None
+Stacktrace / full error message
+From docker with debug mode on:
+May 21 22:37:00 localhost.localdomain dockerd[20980]: time="2018-05-21T22:37:00.767806189-03:00" level=debug msg="Calling POST /v1.22/build?t=-myapp_myapp&q=False&nocache=False&rm=True&forcerm=False&pull=False"
+May 21 22:37:00 localhost.localdomain dockerd[20980]: time="2018-05-21T22:37:00.767917942-03:00" level=debug msg="FIXME: Got an API for which error does not match any expected type!!!: invalid reference format" error_type="*errors.errorString" module=api
+May 21 22:37:00 localhost.localdomain dockerd[20980]: time="2018-05-21T22:37:00.767929750-03:00" level=error msg="Handler for POST /v1.22/build returned error: invalid reference format"
+May 21 22:37:00 localhost.localdomain dockerd[20980]: time="2018-05-21T22:37:00.767938863-03:00" level=debug msg="FIXME: Got an API for which error does not match any expected type!!!: invalid reference format" error_type="*errors.errorString" module=api
+Additional information
+OS version / distribution: Centos/7 and Fedora 26.
+docker-compose install method:
+curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+docker install method: https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository
+Other error observations
+ERROR: compose.cli.errors.exit_with_error: Couldn't connect to Docker daemon at http+docker://localhost - is it running?                                                                                                                       
+                                                                                                                                                                                                                                               
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.  
+This also is present only with some folder names starting dash (-). If I just remove it from the folder name, docker-compose works as expected.
+I'll be doing a PR with an update on the regular expression to remove leading dashes and leading underscores.

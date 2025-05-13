@@ -1,0 +1,57 @@
+ganlanyuan commented on 25 Aug 2016
+Hey,
+I'm running docker for mac (1.12.1-rc1).
+And my Dockerfile is
+FROM node
+
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E9C74FEEA2098A6E && \
+    echo "deb http://packages.dotdeb.org/ wheezy-php55 all" > /etc/apt/sources.list.d/php.list && \
+  apt-get update && \
+  apt-get install -y php5-cli php5-curl php5-fpm php5-gd php5-mcrypt php5-mysql php5-pgsql php5-sqlite
+ADD php-fpm.conf /etc/php5/fpm/php-fpm.conf
+
+VOLUME ['/www/web']
+WORKDIR /www/
+
+# Global install gulp
+RUN npm set progress=false && \
+    npm install --global --progress=false gulp bower && \
+    echo '{ "allow_root": true }' > /root/.bowerrc
+
+COPY package.json /www/package.json
+RUN npm install
+
+EXPOSE 8000 3000 3001
+
+COPY docker-start.sh /www/docker-start.sh
+docker-compose.yml
+version: '2'
+services:
+  web:
+    image: web
+    ports:
+      - 8000:8000
+      - 3000:3000
+      - 3001:3001
+    volumes:
+      - .:/www/web/
+    entrypoint: /www/docker-start.sh
+    container_name: web
+    tty: true
+When I run docker-compose up -d, I get the error no such file or directory
+WARNING: The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use the bundle feature of the Docker experimental build.
+
+More info:
+https://docs.docker.com/compose/bundles
+
+Starting web
+
+ERROR: for web  Cannot start service web: oci runtime error: exec: "/www/docker-start.sh": stat /www/docker-start.sh: no such file or directory
+ERROR: Encountered errors while bringing up the project.
+Could someone help me with this issue?
+Thanks
+10

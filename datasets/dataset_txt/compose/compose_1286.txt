@@ -1,0 +1,3 @@
+marcelmfs commented on 31 Jul 2017
+It seems 1.15 re-introduced something that was fixed before in #2719 - Downgrading to 1.14 "fixes" this issue.
+7

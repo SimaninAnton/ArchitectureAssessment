@@ -1,0 +1,59 @@
+Contributor
+rumpl commented on 9 Jan 2019 •
+edited
+Description of the issue
+This commit added logging for services that fail to start. Since that commit docker-compose pull will always output a failed message for all pulled images.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0dev, build unknown
+docker-py version: 3.6.0
+CPython version: 3.7.2
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+I am running docker-compose from the master branch
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:43 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  db:
+    image: dockerdemos/lab-db
+  web:
+    image: dockerdemos/lab-web
+    ports:
+    - published: 33000
+      target: 80
+  words:
+    image: dockerdemos/lab-words
+version: '3.7'
+Steps to reproduce the issue
+use the docker-compose.yml above
+run docker-compose pull
+Observed result
+The output is:
+$ docker-compose pull
+Pulling web   ... failed
+Pulling words ... failed
+Pulling db    ... failed
+Expected result
+The output should be
+$ docker-compose pull
+Pulling web   ... done
+Pulling words ... done
+Pulling db    ... done

@@ -1,0 +1,17 @@
+docwhat commented on 28 Jan 2016
+When docker-compose is talking to the docker daemon, it should ensure that certain environment variables are being ignored, such as REQUESTS_CA_BUNDLE.
+These variables may still be needed for other network requests such as possibly fetching images, etc. To be honest, I'm not sure what networking activity docker-compose is doing directly vs. what the docker daemon is doing.
+Basically, the environment should be saved and then the dangerous variables should be removed. If a sub-process needs the dangerous variables, then restore the environment for that sub-process. Ditto for anything that needs to make SSL network calls out to something other than the docker daemon.
+In my use case, I had this set because I used other python programs that needed this set to use our enterprise CA certificates, but this would cause docker-compose to always fail with requests.exceptions.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:581).
+It took a lot of searching around to find that variable.
+A list of dangerous variables I can think of off the top-of-my-head:
+REQUESTS_CA_BUNDLE
+CURL_CA_BUNDLE
+SSL_CERT_FILE
+SSL_CERT_DIR
+The _env values in python -c "import ssl; print ssl.get_default_verify_paths()"
+Anything else that Requests will pick up.
+I hope this helps fixing issues #890, #2668, #2603, #1524.
+My personal work-around was to alias docker-compose to env -u REQUESTS_CA_BUNDLE docker-compose.
+3
+1

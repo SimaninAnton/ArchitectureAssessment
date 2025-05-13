@@ -1,0 +1,14 @@
+c4tz commented on 3 Jan 2017
+Hi guys,
+I just noticed one can specify a .env-file for services, but not under "networks".
+Why is that? I have an .env file which includes the subnet for my application and would like to use it as a variable for a network.
+Example:
+networks:
+  example:
+    env_file:
+      - ./docker/dev.env
+    driver: bridge
+    ipam:
+      config:
+      - subnet: ${PROJECT_NETWORK}
+It works when using the default .env in the root folder of the project, though.

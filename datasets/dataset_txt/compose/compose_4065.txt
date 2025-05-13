@@ -1,0 +1,14 @@
+icambron commented on 3 Dec 2014
+Fig very helpfully creates aliases between the name of the service and the first (?) container instantiated from it, so like riemann for mycoolthing_riemann_1. But it doesn't seem to keep them updated on restarts. Steps to reproduce:
+Two containers, app and riemann, where app has a link to riemann:
+From fig run app bash:
+root@6861c5de152d:/code# more /etc/hosts | grep riemann
+172.17.0.64     riemann
+172.17.0.64     riemann_1
+172.17.0.64     mycoolthing_riemann_1
+Leave that up, but back at home and in another terminal, I do fig restart riemann. And then back in my in-container bash instance:
+root@6861c5de152d:/code# more /etc/hosts | grep riemann
+172.17.0.64     riemann
+172.17.0.64     riemann_1
+172.17.0.66     mycoolthing_riemann_1
+Notice that the container has changed IPs, but the alias hasn't updated. So if I'm using the alias in my app code and I restart the container, I won't be able to find my links.

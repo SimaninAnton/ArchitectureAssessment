@@ -1,0 +1,1 @@
+Compose version 1.10.1 fails without creating network when using a remote DOCKER_HOST

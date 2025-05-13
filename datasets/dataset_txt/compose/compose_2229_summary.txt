@@ -1,0 +1,1 @@
+docker run works perfectly but docker-compose with the same images dont

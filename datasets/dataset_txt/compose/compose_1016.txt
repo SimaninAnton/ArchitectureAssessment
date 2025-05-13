@@ -1,0 +1,12 @@
+vamsi248 commented on 12 Dec 2017
+can anyone please help me in this error....
+i mentioned bin/bash in my sh file also...
+still getting format error where i did mistake..
+my format for the entrypoint.sh is correct can anyone help me....
+#!/bin/bash
+set -e
+sed -i "s/-Xms512m/$MIN_HEAP_SIZE/g" /opt/artifactory/bin/artifactory.default
+sed -i "s/-Xmx2g/$MAX_HEAP_SIZE/g" /opt/artifactory/bin/artifactory.default
+echo -e "Starting artifactory..."
+./opt/artifactory/bin/artifactory.sh
+thanks

@@ -1,0 +1,4 @@
+whitecolor commented on 29 Nov 2016
+Many googd cli tools allows to have something like this:
+cat docker-compose.custom.yml | docker-compose up -f -
+So that file data would be taken from stdin of previous command in pipe.

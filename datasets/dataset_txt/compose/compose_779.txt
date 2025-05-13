@@ -1,0 +1,8 @@
+sothy commented on 23 Mar 2018
+I am using Docker-compose to create my app (with four services). Docker-compose version is 3.
+To run services, I am using docker-compose -f up.
+I am running docker in my local 4 core (intel 7).
+Now I wan to assign specific CPUs to some specific services.
+Will it possible to do with this setup? can you give me any link to read about it?
+I try with deploy key and réservation. It didnt work?
+Thanks for your help.

@@ -1,0 +1,15 @@
+deanmraz commented on 11 May 2017
+Goal
+The ability to declare default environment variables in custom env file.
+Current
+ability to define in .env file
+defined here https://docs.docker.com/compose/env-file/
+Request
+ability to define custom file
+Issue
+.env should not be committed to the repository
+developers are frustrated when docker-compose up doesn't work out of the box, first have to figure out which environment variables are required, then decided what values to use.
+Use case
+We define the port in the .env file and would like that to persist between developer machines without the requirement of creating or knowing what environment values to use.
+Open for suggestions and alternatives. Thanks for your time!
+5

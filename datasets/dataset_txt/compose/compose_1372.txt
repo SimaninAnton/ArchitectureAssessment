@@ -1,0 +1,33 @@
+danielcompton commented on 22 Jun 2017 •
+edited
+Summary
+I am using the AWS ECR credential helper to manage logging in to my ECR Docker repositories. I have specified the ecr credential helper as a credHelper with my repo hostname. docker pull 12345.../my-app:latest for the image hosted there works, but docker-compose pull doesn't.
+$ docker pull 123456789012.dkr.ecr.ap-southeast-2.amazonaws.com/my-app:latest
+latest: Pulling from my-app
+Digest: sha256:382a8c98d7a881643fc18003030e57d58a534f4d14e6343448bab0c354ade19b
+Status: Image is up to date for 123456789012.dkr.ecr.ap-southeast-2.amazonaws.com/my-app:latest
+$ docker-compose pull
+Pulling rethink-proxy (123456789012.dkr.ecr.ap-southeast-2.amazonaws.com/my-app:latest)...
+ERROR: repository 123456789012.dkr.ecr.ap-southeast-2.amazonaws.com/my-app:latest not found: does not exist or no pull access
+Workaround
+If I change credsStore from osxkeychain to ecr-login, then docker-compose pull works as expected. This is not a great option though, as it means I can't use the osxkeychain to store credentials for other repositories.
+Details
+Platform: macOS 10.12.5
+Docker: Docker version 17.06.0-ce-rc5, build b7e4173
+Docker-Compose: docker-compose version 1.14.0, build c7bdf9e
+Installed via Docker for Mac CE
+docker-compose.yml
+version: '3'
+services:
+  my-app:
+    image: "123456789012.dkr.ecr.ap-southeast-2.amazonaws.com/my-app:latest"
+~/.docker/config.json
+{
+  "credsStore" : "osxkeychain",
+  "credHelpers" : {
+    "123456789012.dkr.ecr.ap-southeast-2.amazonaws.com" : "ecr-login"
+  }
+}
+Related
+This looks similar to #4924, but I'm running the version that fixed that bug.
+1

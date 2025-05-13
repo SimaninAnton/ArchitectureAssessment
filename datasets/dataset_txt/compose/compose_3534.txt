@@ -1,0 +1,53 @@
+Contributor
+albers commented on 26 Jun 2015
+Although the version command ist still present in code, see https://github.com/albers/compose/blob/master/compose/cli/main.py#L104, it is missing in help output:
+user@ubuntu:~$ docker-compose
+Define and run multi-container applications with Docker.
+
+Usage:
+  docker-compose [options] [COMMAND] [ARGS...]
+  docker-compose -h|--help
+
+Options:
+  -f, --file FILE           Specify an alternate compose file (default: docker-compose.yml)
+  -p, --project-name NAME   Specify an alternate project name (default: directory name)
+  --verbose                 Show more output
+  -v, --version             Print version and exit
+
+Commands:
+  build              Build or rebuild services
+  help               Get help on a command
+  kill               Kill containers
+  logs               View output from containers
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pulls service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  up                 Create and start containers
+  migrate-to-labels  Recreate containers to add labels
+user@ubuntu:~$
+It's no longer recognized as a valid command, too:
+user@ubuntu:~$ docker-compose version
+No such command: version
+
+Commands:
+  build              Build or rebuild services
+  help               Get help on a command
+  kill               Kill containers
+  logs               View output from containers
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pulls service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  up                 Create and start containers
+  migrate-to-labels  Recreate containers to add labels

@@ -1,0 +1,1 @@
+docker-compose.yml doesn't seem to reference image / container in Dockerfile

@@ -1,0 +1,1 @@
+Compose Build Freezes with Bad Tag

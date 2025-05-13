@@ -1,0 +1,9 @@
+reasonerjt commented on 8 Apr 2016
+After running docker-compose up, a new bridge will be created.
+docker network ls
+NETWORK ID NAME DRIVER
+f4f2af093035 bridge bridge
+65b0cf530cec deploy_default bridge
+0e2eb3cf1040 none null
+b9d3550256af host host
+Is it possible to customize the IP of the new bridge? I went through the docs and didn't find any information about this question.

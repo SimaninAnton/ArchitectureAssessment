@@ -1,0 +1,5 @@
+Jacobingalls commented on 24 Jun 2015
+I am currently putting together a docker-compose backed app, and in order to ship the config to another team member, they would have to pull the whole git project, seems to me that there should be a way to share various clusters with people, so in the same way that docker hub shares images, it would be neat to share compose files.
+Is this in the road map, or does this exist an i am just blind?
+Thanks.
+14

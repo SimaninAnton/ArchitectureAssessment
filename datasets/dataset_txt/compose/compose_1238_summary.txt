@@ -1,0 +1,1 @@
+Docker-compose deploys containers differently than expected

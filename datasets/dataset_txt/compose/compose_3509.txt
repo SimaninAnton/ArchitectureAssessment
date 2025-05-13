@@ -1,0 +1,47 @@
+Contributor
+funkyfuture commented on 3 Jul 2015
+i ran into a crash when i wanted to migrate a project to use labels:
+$ docker-compose migrate-to-labels
+Running migration to labels for project dockerui
+Recreating dockerui_web_1...
+Traceback (most recent call last):
+  File "/home/frank/.virtualenvs/docker-compose/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.3.0.dev0', 'console_scripts', 'docker-compose')()
+  File "/home/frank/dev/python/docker-compose/compose/cli/main.py", line 33, in main
+    command.sys_dispatch()
+  File "/home/frank/dev/python/docker-compose/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/home/frank/dev/python/docker-compose/compose/cli/command.py", line 34, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/home/frank/dev/python/docker-compose/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/home/frank/dev/python/docker-compose/compose/cli/command.py", line 66, in perform_command
+    handler(project, command_options)
+  File "/home/frank/dev/python/docker-compose/compose/cli/main.py", line 507, in migrate_to_labels
+    legacy.migrate_project_to_labels(project)
+  File "/home/frank/dev/python/docker-compose/compose/legacy.py", line 83, in migrate_project_to_labels
+    add_labels(project, container)
+  File "/home/frank/dev/python/docker-compose/compose/legacy.py", line 69, in add_labels
+    service.recreate_container(container)
+  File "/home/frank/dev/python/docker-compose/compose/service.py", line 364, in recreate_container
+    quiet=True,
+  File "/home/frank/dev/python/docker-compose/compose/service.py", line 216, in create_container
+    previous_container=previous_container,
+  File "/home/frank/dev/python/docker-compose/compose/service.py", line 555, in _get_container_create_options
+    one_off=one_off)
+  File "/home/frank/dev/python/docker-compose/compose/service.py", line 602, in _get_container_host_config
+    security_opt=security_opt
+  File "/home/frank/.virtualenvs/docker-compose/local/lib/python2.7/site-packages/docker/utils/utils.py", line 420, in create_host_config
+    host_config['Binds'] = convert_volume_binds(binds)
+  File "/home/frank/.virtualenvs/docker-compose/local/lib/python2.7/site-packages/docker/utils/utils.py", line 178, in convert_volume_binds
+    for k, v in binds.items():
+AttributeError: 'list' object has no attribute 'items'
+here's the config:
+web:
+  image: dockerui/dockerui
+  environment:
+    - VIRTUAL_HOST=dockerui.docker.lan
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+sorry, i can't investigate on this issue atm.
+ping @dnephin

@@ -1,0 +1,7 @@
+Contributor
+webwurst commented on 1 Jun 2014
+There are some reports of fig crashing with unicode-encoding errors.
+One problem happens in fig run when non-ASCII charactars are printed within the container. This can be fixed by #233.
+These reports are about fig build and need some other solution: #231 #224.
+At least this line crashes when running fig build in a terminial with ASCII encoding.
+Unfortunately I am not an expert on the encoding stuff. I have just read this article about unicode and python and terminals. I will try to work through the fig source code to figure out some problematic spots.. But maybe we have some experts who can help out more quickly?

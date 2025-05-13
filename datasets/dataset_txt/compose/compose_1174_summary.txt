@@ -1,0 +1,1 @@
+Stack does not start if logging driver destination is unreadable (version 2)

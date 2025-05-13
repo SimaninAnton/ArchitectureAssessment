@@ -1,0 +1,2 @@
+Michel73 commented on 30 Mar 2015
+I have already created an issue at stackoverflow: http://stackoverflow.com/questions/29307645/how-to-link-docker-container-to-each-other-with-docker-compose

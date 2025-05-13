@@ -1,0 +1,2 @@
+garvincasimir commented on 21 Aug 2017
+When using Docker compose I find myself having to create a custom shell script for the sole purpose of waiting on services. Is the compose team willing to consider adding a tcp/udp port option to the depends_on config? This would mostly eliminate the need for a shell in a container that is only intended to ship a compiled binary. It would certainly make my compose based integration tests less complicated.

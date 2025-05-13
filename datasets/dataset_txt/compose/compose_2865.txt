@@ -1,0 +1,10 @@
+ruverav commented on 29 Jan 2016
+Not sure if it's my fault but docker-compose has stopped working for me on Windows 10 (64 bits) with Docker Toolbox.
+I normally use it from MINGW64, but whenever I type it (I have also tried on cmd.exe) I get the following error:
+$ docker-compose
+Failed to get ANSI buffer size(WideCharToMultiByte: El parßmetro no es correcto.
+)Failed to convert pyhome to ANSI (invalid multibyte string)
+NOTE: "El parßmetro no es correcto." means "Parameter is not correct." in spanish.
+I have been using it without issues or warnings until yesterday, but suddenly stopped working.
+I have also downloaded the latest version (1.6.0) for Windows but still does not work. I don't know what else to do but I urgently need it to work.
+Thanks for your help and advices.

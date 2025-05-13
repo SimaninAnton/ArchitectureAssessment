@@ -1,0 +1,8 @@
+lucasfcm9 commented on 11 Jul 2019 •
+edited
+Description of the issue
+Currently, the docker-compose -build command accumulates space on my computer's hard drive, in this case a MacBook Pro, causing Docker to take up a lot of space, leaving me quite frustrated. However, I know there are some commands for cleaning images, but it would be a lot easier if it were something automatic, something instant, when you stopped using Docker, so that it does not occupy the entire hard disk space.
+Context information and solution alternative
+The alternative I thought was to create a cronjob that every week, or every 3 days, the docker prune -a --volumes command is executed, causing the Docker image to be completely cleaned.
+This can be extremely useful, taking into consideration that adding a cronjob to the docker could make the computer lighter and doesn't crash.
+The alternative I thought was creating a cronjob that would make it easier to clean disk and Docker images, causing significant improvements in the software.

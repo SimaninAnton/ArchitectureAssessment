@@ -1,0 +1,1 @@
+Docker compose does not set MTU while RUN commands are being executed in a Dockerfile

@@ -1,0 +1,99 @@
+Silex commented on 25 Jan 2017 •
+edited
+Solving this issue might also fix #3341
+When there is a file:
+named a special way
+owned by root
+binary
+with permissions 600
+Docker-compose build fails because it "cannot connect to the Docker daemon".
+philippe@pv-desktop:~/foo$ docker version
+Client:
+ Version:      1.13.0
+ API version:  1.25
+ Go version:   go1.7.3
+ Git commit:   49bf474
+ Built:        Tue Jan 17 09:58:26 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.13.0
+ API version:  1.25 (minimum version 1.12)
+ Go version:   go1.7.3
+ Git commit:   49bf474
+ Built:        Tue Jan 17 09:58:26 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+
+philippe@pv-desktop:~/foo$ docker-compose version
+docker-compose version 1.10.0, build 4bd6f1a
+docker-py version: 2.0.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+
+# Before problems, container "iso" builds fine
+philippe@pv-desktop:~/foo$ docker-compose build
+old uses an image, skipping
+Building iso
+Step 1/10 : FROM ubuntu:14.04
+ ---> b969ab9f929b
+^CERROR: Aborting.
+
+# Create binary file, name it "specially" and chmod & chown it
+philippe@pv-desktop:~/foo$ dd if=/dev/urandom of=test.bin count=1 bs=1024
+1+0 records in
+1+0 records out
+1024 bytes (1.0 kB, 1.0 KiB) copied, 0.00051162 s, 2.0 MB/s
+
+philippe@pv-desktop:~/foo$ chmod 600 test.bin 
+
+philippe@pv-desktop:~/foo$ sudo chown root:root test.bin
+
+# Now it fails to build
+philippe@pv-desktop:~/foo$ docker-compose --verbose build
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.find_config_file: Trying paths: ['/home/philippe/.docker/config.json', '/home/philippe/.dockercfg']
+docker.auth.find_config_file: No config file found
+compose.cli.command.get_client: docker-compose version 1.10.0, build 4bd6f1a
+docker-py version: 2.0.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.0-59-generic, Arch=amd64, BuildTime=2017-01-17T09:58:26.273203038+00:00, ApiVersion=1.25, Version=1.13.0, MinAPIVersion=1.12, GitCommit=49bf474, Os=linux, GoVersion=go1.7.3
+compose.project.build: old uses an image, skipping
+compose.service.build: Building iso
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag=u'provision_iso', buildargs=None, rm=True, forcerm=False, path='/home/philippe/foo', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.find_config_file: Trying paths: ['/home/philippe/.docker/config.json', '/home/philippe/.dockercfg']
+docker.auth.find_config_file: No config file found
+docker.api.build._set_auth_headers: No auth config found
+ERROR: compose.cli.errors.exit_with_error: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+
+# If we rename the file to "qqqq.bin" then it works again
+philippe@pv-desktop:~/foo$ mv test.bin qqqq.bin
+
+philippe@pv-desktop:~/foo$ docker-compose build
+old uses an image, skipping
+Building iso
+Step 1/10 : FROM ubuntu:14.04
+ ---> b969ab9f929b
+^CERROR: Aborting.
+
+# If we name it "asdf.bin" it fails
+philippe@pv-desktop:~/foo$ mv qqqq.bin asdf.bin
+
+philippe@pv-desktop:~/foo$ docker-compose build
+old uses an image, skipping
+Building iso
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+What is weird is that:
+Renaming the file makes it work again
+Emptying the file or giving it simple ascii content makes it work again
+chmod 666 test.bin makes it work again
+Given the randomness of this bug I assume it is a bug somewhat deep in how the files are sent as context to the daemon. Maybe some hash collision?
+2

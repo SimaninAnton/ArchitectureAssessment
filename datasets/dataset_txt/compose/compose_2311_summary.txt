@@ -1,0 +1,1 @@
+Compose Causes Traceback After Compose Auto Recreates Container

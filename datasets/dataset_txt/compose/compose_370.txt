@@ -1,0 +1,17 @@
+daniel-dia commented on 4 Dec 2018 •
+edited
+Description of the issue
+DockerComposeCommandExecutor does not works properly on Windows Folder due its folder constructor
+Context information (for bug reports)
+Docker-compose extensions does not execcutes any command, and returns an error.
+Output of docker-compose version
+0.3.2
+Output of docker version
+Failed to execute script docker-compose
+I found that on windows hosts the file does not works properly. On file Provider.ts constructor it initializes
+DockerComposeCommandExecutor(name, files, shell, folder.uri);`
+On Windows "folder.uri" is /C:/Users/SomeUser/ProjectFoler (with slash at start) However it does not works on shell. It must NOT HAVE the slash at start. : C:/Users/SomeUser/ProjectFoler
+I made a quick fix on the go on my windows VsCode removing the initial slash
+DockerComposeCommandExecutor(name, files, shell, folder.uri.path.substring(1));
+(removing the first slash) and it works,
+It must have to check if hots is windows and give it propper file.

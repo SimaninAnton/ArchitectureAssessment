@@ -1,0 +1,1 @@
+Compose fails to create dependent container for network_mode: container

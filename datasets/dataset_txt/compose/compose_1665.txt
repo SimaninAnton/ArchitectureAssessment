@@ -1,0 +1,27 @@
+lsapan commented on 20 Feb 2017 •
+edited
+The support for compose with docker stack deploy in 1.13 is absolutely wonderful. It would be just that much more wonderful if we didn't need to do a ton of these after deploying:
+docker service update --secret-add DB_USER web
+docker service update --secret-add DB_PASS web
+docker service update --secret-add AWS_ACCESS_KEY_ID web
+docker service update --secret-add AWS_SECRET_ACCESS_KEY web
+
+docker service update --secret-add DB_USER celery
+docker service update --secret-add DB_PASS celery
+docker service update --secret-add AWS_ACCESS_KEY_ID celery
+docker service update --secret-add AWS_SECRET_ACCESS_KEY celery
+
+...etc
+Granted these can somewhat be combined, but it's still cumbersome.
+Something like this would be amazing:
+version: '3'
+services:
+    web:
+        ...
+        deploy:
+            ...
+            secrets:
+                - DB_USER
+                - DB_PASS
+                - AWS_ACCESS_KEY_ID
+                - AWS_SECRET_ACCESS_KEY

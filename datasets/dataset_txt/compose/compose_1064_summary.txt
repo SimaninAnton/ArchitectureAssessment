@@ -1,0 +1,1 @@
+Fix instructions for running tests in CONTRIBUTING.md

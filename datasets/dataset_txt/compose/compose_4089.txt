@@ -1,0 +1,31 @@
+Globegitter commented on 21 Nov 2014
+I am working on an automated setup for fig, with following fig.yml used:
+db:
+  image: postgres:latest #postgres, mysql, mongo. You can also specifiy a specific version instead of using latest.
+  ports:
+    - "5432:5432" #for postgres "5432:5432", for mysql "3306:3306", for mongo "27017:27017", etc
+server:
+  #Right now docker-sails supports 3 different tags:
+  #0.10.32 (node 0.10.32), stable (latest node 0.10.x), latest (latest node 0.11.x)
+  image: artificial/docker-sails:stable
+  command: sails lift
+  volumes:
+    - server/:/server
+  ports:
+    - "1337:1337"
+  links:
+    - db
+  #For a future version
+  #environment:
+  #  - VIRTUAL_HOST=sails
+  #  - VIRTUAL_PORT=1337
+Then I am (via the script) executing fig run server sails new . and while this has worked numerous times in the past now it is failing with the following error:
+Creating testProject_db_1...
+Cannot start container fefb0fb9107821a450039a15c8024cd62af51089dfd1824dc059ab5fc6f2a816: Cannot link to a non running container: /testProject_db_1 AS /testProject_server_run_157/db_1
+If I manually run fig up and then fig run server sail new . it is working. Any reason the fig run command by itself doesn't seem to be working anymore?
+Btw, using fig 1.0.0 and boot2docker-cli 1.3.1
+Edit: After restarting boot2docker and trying again I am getting the following error:
+Starting testProject_db_1...
+Cannot start container fa759f0180b2edec2075470e99443a6b5d3f3409bc45b068749bfd96ea976fc1: Failed to update /etc/hosts in parent container: open : no such file or directory
+Edit2: Also I seem to sporadically get it to work.
+Edit3: Could this have to do something with the fact that I am just doing a lot of testing, so I am creating a folder and then just rm -rfing it without explicitly shutting down/removing containers, etc?

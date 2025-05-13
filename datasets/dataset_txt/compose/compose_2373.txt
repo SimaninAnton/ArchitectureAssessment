@@ -1,0 +1,4 @@
+bergtwvd commented on 23 May 2016 •
+edited
+Currently docker compose (1.7.1) does not support global env variables in a compose file. Certain env variables apply to all services and I need to repeat them for every service. It would be good to have an environment section similar to networks and volumes where I can set env variables for all services.
+13

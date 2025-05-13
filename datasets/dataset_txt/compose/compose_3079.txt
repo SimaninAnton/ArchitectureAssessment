@@ -1,0 +1,76 @@
+icollar commented on 19 Nov 2015
+Since upgrading to Docker Compose v1.5.1 "secret" environment variables are sometimes being evaluated to None. Assuming that this is an issue with Compose as "None" is certainly from Python.
+docker-compose.yml
+app:
+    image: alpine:edge
+    entrypoint: ["/usr/bin/tail"]
+    command: ["-f","/dev/null"]
+    environment:
+        - SECRET
+
+ext:
+    extends:
+        service: app
+    environment:
+        - THING
+When running:
+$ export SECRET=secret
+$ export THING=thing  
+$ echo $SECRET 
+secret
+$ echo $THING
+thing
+$ docker-compose up -d
+Creating test_app_1
+Creating test_ext_1
+
+$ docker exec test_app_1 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=056879fbe127
+SECRET=secret
+HOME=/root
+
+$ docker exec test_ext_1 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=dece36c15a28
+THING=None
+SECRET=secret
+HOME=/root
+Currently I'm using a workaround with the variable substitution:
+app:
+    image: alpine:edge
+    entrypoint: ["/usr/bin/tail"]
+    command: ["-f","/dev/null"]
+    environment:
+        - SECRET=${SECRET}
+
+ext:
+    extends:
+        service: app
+    environment:
+        - THING=${THING}
+Docker and Docker Compose info below
+$ docker info
+Containers: 0
+Images: 303
+Server Version: 1.9.1-rc1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 307
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.19.0-30-generic
+Operating System: Ubuntu 15.04
+CPUs: 4
+Total Memory: 7.529 GiB
+Name: vcr005
+ID: 2IDI:AT5B:LFKI:K3IQ:QYUH:NIEA:MKPM:TCT7:L7VQ:QNFM:O37Y:HF3J
+WARNING: No swap limit support
+
+$ docker-compose version
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

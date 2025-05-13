@@ -1,0 +1,7 @@
+Contributor
+dnephin commented on 23 Feb 2016
+We've been warning when a boolean value is used in these fields because things like y, yes, on, off, are all converted to True, which is often not the intent of the user.
+The warning says we're going to make it an error in the next release, so we should do that.
+I think our options are:
+make it an error
+violate the yaml spec, and only accept True, and False as booleans, and treat everything else as a string.

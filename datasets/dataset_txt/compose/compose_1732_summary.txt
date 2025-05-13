@@ -1,0 +1,1 @@
+healthcheck is not inherited properly when using extends.

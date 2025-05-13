@@ -1,0 +1,10 @@
+yukaary commented on 26 Nov 2014
+It may be related to 626.
+Currently it looks that fig attach a hostname written in fig.yml when user specified a hostname attribute. So when I use fig scale service=3 for some service(actually it's a rabbitMq), fig creates 2 new services, then these 3(1+2) services has a same hostname.
+This becomes a bit problem in my case,
+when service is a kind of building a cluster, I doubt same hostname may disturb a joining new node into the cluster.
+In addition, I've noticed same hostname makes hard to resolve a name by DNS.
+(I tried to run DNS with hostname-container's IP pair.)
+From these reason, I rewrote some codes in fig like this.
+service.py
+Is there any reason fig does not attach a scale number into a hostname, but an item name in fig ps list holds it?

@@ -1,0 +1,8 @@
+cjbottaro commented on 24 Mar 2017
+docker build supports --network option (note, this is different from docker run's --net option).
+Request extending docker-compose yaml spec to include the following:
+build:
+  context: .
+  network: host
+Thanks.
+3

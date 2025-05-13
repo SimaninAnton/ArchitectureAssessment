@@ -1,0 +1,20 @@
+ghost commented on 1 Apr 2015
+Just found out about the extends feature recently added and has helped to cut down a lot of repeated configuration. Would it be possible to alter it such that if file is not defined then search for the service within the current file.
+E.g.
+app:
+  environment:
+    - A=X
+    - B=Y
+  volumes:
+    - /var/log:/var/log
+    -/etc/localtime:/etc/localhost:ri
+  restart: on-failure
+
+application:
+  extends:
+    service: app
+  volumes_from:
+    - otherapp
+  links:
+    - db:db
+This should still be backwards compatible with how it currently works.

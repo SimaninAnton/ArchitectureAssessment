@@ -1,0 +1,13 @@
+djbingham commented on 28 Apr 2017
+Hi.
+I'm not sure whether this is a bug in the software, or a mistake in the online documentation. Looking at the online docs, I saw that docker-compose rm should have an option -s (or --stop) to auto-stop the containers, if necessary, before attempting to remove them. This seemed like a handy shortcut, so I gave it a go and received the following output, which seems to suggest that option is not available:
+Removes stopped service containers.
+By default, anonymous volumes attached to containers will not be removed. You
+can override this with -v. To list all volumes, use docker volume ls.
+Any data which is not in a volume will be lost.
+Usage: rm [options] [SERVICE...]
+Options:
+-f, --force Don't ask to confirm removal
+-v Remove any anonymous volumes attached to containers
+-a, --all Deprecated - no effect.
+I'm using the latest version of Docker for Mac (17.03.1-ce-mac5, which has Compose 1.11.2).

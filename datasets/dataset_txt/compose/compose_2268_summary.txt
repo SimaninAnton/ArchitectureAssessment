@@ -1,0 +1,1 @@
+docker-compose does not scale correctly with network_mode="service:..." enabled

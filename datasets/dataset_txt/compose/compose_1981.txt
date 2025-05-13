@@ -1,0 +1,30 @@
+olalonde commented on 27 Oct 2016 •
+edited
+I am getting the following error after running docker-compose up createbucket:
+$ docker-compose up createbucket
+Starting blockaiapi_createbucket_1
+
+ERROR: for createbucket  Cannot start service createbucket: Cannot link to a non running container: /41b06ab0d5ce_blockai_minio_1 AS /blockaiapi_createbucket_1/minio
+ERROR: Encountered errors while bringing up the project.
+My docker-compose.yml:
+createbucket:
+  image: garland/aws-cli-docker
+  external_links:
+    - blockai_minio_1:minio
+  command: >
+    /bin/sh -c "
+      while ! wget -q -s http://minio:9000/minio/login; do sleep 1; done;
+      aws configure set default.s3.signature_version s3v4;
+      aws configure set default.region us-east-1;
+      aws s3api create-bucket \
+        --bucket filepunk-test \
+        --endpoint-url=http://minio:9000;
+      exit 0;
+    "
+  environment:
+    - "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE"
+    - "AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+I verified that blockai_minio_1 is running. It was started from a separate docker-compose.yml file.
+$ docker ps | grep blockai_minio_1
+5fbb57067b9e        minio/minio          "go-wrapper run serve"   6 minutes ago    Up 6 minutes        0.0.0.0:9000->9000/tcp   blockai_minio_1
+Why does it try to link to /41b06ab0d5ce_blockai_minio_1 instead of /blockai_minio_1?

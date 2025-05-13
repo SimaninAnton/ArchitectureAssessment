@@ -1,0 +1,31 @@
+ct-clearhaus commented on 18 Nov 2015
+% cat ports-fail.yml 
+foo:
+    image: busybox
+    ports:
+        - '8765:80'
+    command: sh -c "exit 0"
+
+bar:
+    image: busybox
+    ports:
+        - '8765a:80'
+    command: sh -c "exit 0"
+
+% docker-compose -f ports-fail.yml up
+Creating tmp_foo_1
+Creating tmp_bar_1
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+
+% docker run --rm -p '8765a:80' busybox sh -c 'exit 0'
+docker: Invalid hostPort: 8765a.
+See 'docker run --help'.
+
+% docker-compose --version
+docker-compose version: 1.5.0
+
+% docker --version
+Docker version 1.7.1, build 786b29d
+Anything else needed to debug?

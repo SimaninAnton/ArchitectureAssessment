@@ -1,0 +1,1 @@
+Cannot service with an empty list of links

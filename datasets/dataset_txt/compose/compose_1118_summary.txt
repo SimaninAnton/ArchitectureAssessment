@@ -1,0 +1,1 @@
+Wait for another service to be healthy instead of build failure.

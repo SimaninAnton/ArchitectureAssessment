@@ -1,0 +1,1 @@
+run --entrypoint not working as expected

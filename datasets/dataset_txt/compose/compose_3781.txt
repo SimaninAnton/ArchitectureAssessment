@@ -1,0 +1,26 @@
+robwithhair commented on 27 Mar 2015
+When up'ing to a swarm of docker machines I am getting the following error. It seems to be due to not waiting long enough for the image to be downloaded. If the image is on the swarm then it works fine, if not then it times out.
+Robs-iMac:GitHubCms robwithhair$ docker-compose up -d
+Creating githubcms_jenkins_1...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 445, in up
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.project", line 184, in up
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 259, in recreate_containers
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 235, in create_container
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.container", line 35, in create
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/docker.client", line 556, in create_container
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/docker.client", line 563, in create_container_from_config
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/docker.client", line 245, in _post_json
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/docker.client", line 78, in _post
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 425, in post
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 387, in send
+requests.exceptions.Timeout: HTTPSConnectionPool(host='104.155.42.232', port=3376): Read timed out.
+To fix this first download all images required for compose, for me docker run jenkins:weekly delete the container you just created docker rm foobar. Run docker-compose rm to clear out compose and then run docker-compose up -d once more. This time it works.

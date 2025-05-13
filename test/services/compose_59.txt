@@ -1,0 +1,57 @@
+stratosgear commented on 11 Nov 2019
+Description of the issue
+docker-compose fails to start
+Context information (for bug reports)
+➜ docker-compose                             
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 6, in <module>
+    from pkg_resources import load_entry_point
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3250, in <module>
+    @_call_aside
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3234, in _call_aside
+    f(*args, **kwargs)
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3263, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 583, in _build_master
+    ws.require(__requires__)
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 900, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 786, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'docker-compose==1.24.1' distribution was not found and is required by the application
+Output of docker-compose version
+Cannot run docker-compose!
+Output of docker version
+➜ docker version
+Client:
+ Version:           19.03.4-ce
+ API version:       1.40
+ Go version:        go1.13.1
+ Git commit:        9013bf583a
+ Built:             Sat Oct 19 04:40:07 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          19.03.4-ce
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.13.1
+  Git commit:       9013bf583a
+  Built:            Sat Oct 19 04:39:38 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.3.0.m
+  GitCommit:        d50db0a42053864a270f648048f9a8b4f24eced3.m
+ runc:
+  Version:          1.0.0-rc9
+  GitCommit:        d736ef14f0288d6993a1845745d6756cfc9ddd5a
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+$ python --version
+Python 3.7.4
+ uname -a
+Linux serenity 5.3.8-arch1-1 #1 SMP PREEMPT @1572357769 x86_64 GNU/Linux
+Installed through curl. (I run another install to make sure I had the latest)

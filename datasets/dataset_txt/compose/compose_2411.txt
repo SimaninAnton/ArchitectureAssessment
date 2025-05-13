@@ -1,0 +1,123 @@
+gvilarino commented on 11 May 2016 •
+edited
+Hi, I've been trying, to no avail, to make work the following development scenario with docker-compose:
+Environment:
+OS: OS/X 10.11.4
+Docker versions (using Docker for Mac beta):
+Engine: 1.11.1, build 5604cbe
+Compose:
+docker-compose version 1.7.1, build 0a9ab35
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+app: web application, running natively on host.
+Depends on database (db).
+Impractical to run in a container; app build/serve takes 10x more than when natively on host.
+worker: headless application, running on a container.
+Depends on database (db)
+Depends on being able to hit the web app's (app) REST API
+db: database, running on a container
+Since app isn't a container, I need to expose db's port to the host machine, so I can access the db container from it.
+Here's what a simplified version of my docker-compose.yml file looks like:
+version: '2'
+
+services:
+  worker:
+    build: .
+    links:
+      - db
+
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
+docker-compose up works properly and then I run my app separately, with its DB connection string to localhost:27017.
+app and worker can access db, no problem; the issue appears when worker wants to hit app's API: I can't reach the host machine by default.
+Still, my DB logs do list that it is receiving connections from 172.18.0.1 so I thought that should be the IP for my host machine from the default docker network created by compose.
+When attaching to the container and trying to curl http://172.18.0.1:8080, though, I got no answer. Still, when checking ifconfig I didn't even see the docker0 interface, just eth0 and lo.
+Since I'm new to the networking layer of compose, I went through all the docs I could find and tried several things:
+My networks are:
+$ docker network ls
+NETWORK ID          NAME                DRIVER
+2772b8a002ec        bridge              bridge
+3243cfc5b4fb        myproject_default   bridge
+07c1adccfe55        host                host
+91e27cd6d9f1        none                null
+So I thought maybe using the default bridge network instead of the one created by docker-compose might shed some light. So I added network_mode: bridge to both services in docker-compose.yml:
+# added network_mode: bridge
+version: '2'
+
+services:
+  worker:
+    build: .
+    links:
+      - db
+    network_mode: bridge
+
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    network_mode: bridge
+This didn't produce any change except that the docker0 interface became visible from within the containers and that the IP reporter by the database was now 172.17.0.1 instead of 172.18.0.1; still no answer from the gateway IP in that network.
+Finally, I tried making all services hook directly to the host network with network_mode: host. Also, I had to specify the connection string for the DB manually since container linking isn't allowed with this network mode:
+# set network_mode to host
+version: '2'
+
+services:
+  worker:
+    build: .
+    depends_on:
+      - db
+    environment:
+      - MONGO_URL: mongodb://localhost:27017/test
+    network_mode: host
+
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    network_mode: host
+And here's the weird part: app now is unable to reach the db container. docker ps yields that no port is available for the db container, even though ports is specified there:
+$ docker ps -a
+CONTAINER ID   IMAGE            COMMAND        CREATED          STATUS          PORTS   NAMES
+xxxxxxxxxxxx   XXXXXXXXXXXX     "/bin/sh -c "  xx seconds ago   Up xx seconds           myproject_worker_1
+yyyyyyyyyyyy   YYYYYYYYYYYY     "/bin/sh -c "  xx seconds ago   Up xx seconts           myproject_db_1
+And here's where I don't know how to move forward. Is this the expected behavior?
+My workaround for this is to manually specify my host's local IP through environment to the worker and using that IP from inside the app. But that breaks whenever I switch networks or if I try to run this scenario on a different machine. Is there any other "proper" way around this?
+Thanks in advance.
+FWIW, my docker info output:
+Containers: 11
+ Running: 1
+ Paused: 0
+ Stopped: 10
+Images: 74
+Server Version: 1.11.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 153
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: null host bridge
+Kernel Version: 4.4.6-moby
+Operating System: Alpine Linux v3.3
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 2.937 GiB
+Name: docker
+ID: HCIA:A23D:ACWI:PFKJ:XFCF:RLAI:OUWX:BSSQ:K3K6:KPF2:V5NS:5TRN
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): true
+ File Descriptors: 26
+ Goroutines: 60
+ System Time: 2016-05-10T21:09:02.527666896Z
+ EventsListeners: 5
+Username: gvilarino
+Registry: https://index.docker.io/v1/
+20

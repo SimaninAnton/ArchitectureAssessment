@@ -1,0 +1,1 @@
+docker-compose up fails - override file with different port types

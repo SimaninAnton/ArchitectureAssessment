@@ -1,0 +1,21 @@
+louisandkatherine commented on 17 Aug 2016 •
+edited
+Hi there,
+I am trying to link my app to a mongo db, this works fine if I mount the code however when building using the docker file they cannot talk to one another, here is my code, any help would be much appreciated:
+version: '2'
+services:
+  mongodb:
+    image: mongo:3.2
+    container_name: mongodb
+
+  app:
+    build:
+      context: .
+    environment:
+      - MONGODB_HOST=mongodb
+      - MONGODB_URL=mongodb://mongodb/db-test
+      - PORT=80
+    depends_on:
+      - mongodb
+I get an getaddrinfo EAI_AGAIN mongodb:27017
+Am I doing anything wrong?

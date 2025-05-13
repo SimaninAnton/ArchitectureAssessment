@@ -1,0 +1,7 @@
+timfallmk commented on 16 Jun 2015
+Running docker-compose build --no-cache will fail if one of the Dockerfile commands returns a non-zero exit code. However running docker build --no-cache will return successfully in the same condition.
+Example:
+Dockerfile has command RUN npm install libxmljs:
+npm will return code 137 (a warning) from this command
+docker-compose will exit at this stage while docker does not.
+I can provide more details of the builds if necessary.

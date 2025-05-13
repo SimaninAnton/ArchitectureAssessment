@@ -1,0 +1,16 @@
+jpic commented on 2 Apr 2019
+Is your feature request related to a problem? Please describe.
+I'm always frustrated when I have to run a bunch of docker-compose commands manually because it's long to type (i would prefer dockerctl but that's another story):
+pull
+build
+down
+up -d
+logs
+ps
+Especially when automating docker-compose deployments from CI, calling logs and ps in the job do save the systematic action i would take on the server that is running these commands before debugging any kind of problem -> automating them saves from typing them later.
+Describe the solution you'd like
+I would like docker-compose apply to run the deploy chain of automation and post deployment logs commands.
+Describe alternatives you've considered
+Currently, I have implemented this in my docker-compose wrapper I use for experimental commands (other notable ones are backup and restore, planned for submission one day).
+Additional context
+I'm submitting the apply command idea here, because I'm so happy with it i want to share it with the community ;)

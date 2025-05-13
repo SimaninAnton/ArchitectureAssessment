@@ -1,0 +1,1 @@
+how use tty.Bluetooth* or /dev/tty.* and /dev/cu.* in mac os

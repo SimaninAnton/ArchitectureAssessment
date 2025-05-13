@@ -1,0 +1,9 @@
+joshwget commented on 22 Oct 2016 •
+edited
+Docker Compose doesn't currently have fields for the following Docker flags:
+--device-read-bps
+--device-read-iops
+--device-write-bps
+--device-write-iops
+--blkio_weight_device
+6

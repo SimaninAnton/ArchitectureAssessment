@@ -1,0 +1,23 @@
+ghost commented on 18 Oct 2016 •
+edited by ghost
+Windows 10.
+Docker version 1.12.1, build 23cf638, experimental
+docker-compose version 1.8.0, build d988a55
+This is how my compose file works
+ registry:
+    image: registry:2.5.0
+    env_file:
+      - 'C:\Users\username\data\config\registry\registry.env'
+    volumes:
+      - '/C/Users/username/data/data/registry:/var/lib/registry'
+    ports:
+      - '5000:5000'
+    ulimits:
+      nproc: 163840
+      nofile:
+        soft: 163840
+        hard: 163840
+    restart: always
+This is how it does not work:
+C/Users/username/data/config/registry/registry.env
+Since we use Puppet to generate compose file I need a unified template. Any reason why /c/User/username/ does not work? Compose says it cannot find the file. Why volumes work and env_file does not?

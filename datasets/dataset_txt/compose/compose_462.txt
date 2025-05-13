@@ -1,0 +1,10 @@
+dbjpanda commented on 9 Oct 2018 •
+edited
+I have some setup where the project dir and container names changes frequently. But I don't want to down those containers at all. I want to persist the containers and volumes as it is throughout the continuous refactoring of the names. e.g
+dir_a  > docker-compose up -d 
+mv dir_a dir_b 
+dir_b  > docker-compose -p dir_a up -d 
+mv dir_b dir_c 
+dir_c  > docker-compose -p dir_a up -d 
+Everytime I rename a dir I need to provide the project name of the first dir name from where I had started the containers. But I want to provide the last dir name from which it recently renamed i.e dir_b . How can I override the project name of running containers.
+Infact how to change the com.docker.compose.project label of already started containers

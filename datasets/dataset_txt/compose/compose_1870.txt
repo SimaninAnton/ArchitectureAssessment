@@ -1,0 +1,42 @@
+Glideh commented on 6 Dec 2016 •
+edited
+I need to run 2 instances of an application served by a reverse proxy.
+Imagine this simple docker-compose.yml
+version: '2'
+services:
+  db:
+    image: postgres
+  web:
+    image: nginx
+    depends_on:
+      - db
+
+networks:
+  default:
+    external:
+      name: my_reverse_proxy_network
+I understand the project is a way to isolate environments, so I'm launching this application twice in different projects:
+$ docker-compose -p proj1 -f docker-compose.yml up -d
+Creating proj1_db_1
+Creating proj1_web_1
+
+$ docker-compose -p proj2 -f docker-compose.yml -f proj2-overrides.yml up -d
+Creating proj2_db_1
+Creating proj2_web_1
+But since I'm specifying the same network so my reverse proxy can communicate with, my 2 instances seem not isolated anymore.
+$ docker ps
+CONTAINER ID ... NAMES
+23a13acd4ffc ... proj2_web_1
+dbeea953f805 ... proj2_db_1
+df376b9ee400 ... proj1_web_1
+bf246e503fc6 ... proj1_db_1
+a06064cb0660 ... my_reverse_proxy
+$ docker inspect -f '...{{.IPAddress}}...' bf246e503fc6 #proj1_db
+172.21.0.3
+$ docker inspect -f '...{{.IPAddress}}...' dbeea953f805 #proj2_db
+172.21.0.5
+$ docker exec -ti proj1_web_1 ping db
+PING db (172.21.0.5): 56 data bytes
+64 bytes from 172.21.0.5: icmp_seq=0 ttl=64 time=0.079 ms
+As you can see the proj2 db service is linked to my proj1 web.
+How can I isolate my instances while keeping exposed to my reverse proxy ?

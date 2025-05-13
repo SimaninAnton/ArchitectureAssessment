@@ -1,0 +1,6 @@
+SrihariThalla commented on 9 Mar 2017
+Homebrew formula - docker-compose on Homebrew
+When docker-compose --version command has been executed, the build will be returned unknown!
+$ docker-compose --version
+docker-compose version 1.11.2, build unknown
+I'm not sure why.

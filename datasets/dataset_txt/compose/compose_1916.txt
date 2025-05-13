@@ -1,0 +1,6 @@
+peterthomassen commented on 18 Nov 2016
+I assign IPv6 addresses directly to my docker containers and don't want anything docker-related to be available on the host IPv6 address.
+By default, docker-proxy listens on the host IPv6 address to deal with traffic coming in on exposed ports (each with a different process). I therefore added --userland-proxy=false to the dockerd systemd configuration.
+It turns out that the main dockerd process now listens on the exposed ports instead. While I was not able to establish a connection on these ports (I tried an SSL connection on port 443, with no success), I am wondering what the purpose of this is.
+Why does dockerd listen on exposed ports when --userland-proxy=false is set?
+What sort of communication can be done with dockerd through these ports? Is any form of remote control possible?

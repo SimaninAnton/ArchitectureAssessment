@@ -1,0 +1,5 @@
+bscheshirwork commented on 30 Jan 2018
+$docker-compose -f ~/docker-codeception-run/docker-compose.yml up -d
+will rewrite existing output by produced output
+4
+1

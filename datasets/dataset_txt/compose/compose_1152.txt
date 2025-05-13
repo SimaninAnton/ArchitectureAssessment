@@ -1,0 +1,4 @@
+infosec-alchemist commented on 12 Oct 2017
+I'm using Docker Compose, and I'm unclear how to setup a multi container architecture where one of those containers needs to be available OUTSIDE of Docker.
+In my scenario, I'm setting up an Elasticsearch, Logstash, Kibana stack in Docker. However, I need to send logs to Logstash from a Windows VM. So, that Windows VM needs to know the IP of logstash.
+In Docker Compose 3, the ability to assign IP addresses appears to be removed. So, what is the option?

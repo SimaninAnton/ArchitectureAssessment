@@ -1,0 +1,4 @@
+Jean85 commented on 14 Feb 2018
+Hello there! This is more of an inquiry than a proper issue.
+I'm currently using Docker compose to ease my Docker CI pipeline, and I'm leveraging the parallel pull feature to do that to. My question is: if I pull in parallel multiple images with various layers in common, do the pull notice that and do the smart move of pulling them only once?
+Thanks!

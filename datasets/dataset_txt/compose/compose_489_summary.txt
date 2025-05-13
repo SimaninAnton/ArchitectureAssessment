@@ -1,0 +1,1 @@
+env_file required on all services if specified once

@@ -1,0 +1,1 @@
+Update to docker-compose version 1.21 breaks certain deployments

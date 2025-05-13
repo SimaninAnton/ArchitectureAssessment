@@ -1,0 +1,3 @@
+heycalmdown commented on 11 Aug 2015
+I have a service A which refers another service B to use volumes_from. If I use the service without recreate which as using --x-smart-recreate or default of 1.4.0-dev then I can't get changes from service B. So I need to use the option --force-recreate.
+Is this behavior expected by design?

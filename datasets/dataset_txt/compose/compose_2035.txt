@@ -1,0 +1,5 @@
+augi commented on 27 Sep 2016
+Our use-case is .NET application running in Windows Container that accesses various services available in Linux containers only (Postgres, Cassandra).
+It would be very nice if we could describe this applications in one Compose file. This would require possibility to specify platform of each service (linux or windows).
+Is this even doable? It would require to have connection to more Docker hosts (now, there is one Docker connection for whole Compose), ensure networking (must have) and volumes linking (not so important imho).
+10

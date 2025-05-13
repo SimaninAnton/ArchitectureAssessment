@@ -1,0 +1,44 @@
+superseed commented on 20 Aug 2018
+This is more of a enhancement request than a bug report, but the current behavior was unexpected to me.
+Description of the issue
+I'm using docker-compose build on a project with:
+a customized default compose network
+a number of services bound to the default network (no services.<name>.network key)
+During build, the transient containers are bound to the daemon global default network instead of the customized compose default network. This was a bit unexpected to me, because it means that if the default compose network embeds config/behavior that is important in the context of the build, it won't be available to the build containers.
+I'm able to work around it by using the new-ish services.<name>.build.network key, but I feel like I shouldn't have to in this is case, hence the report: it is a small papercut.
+Context information
+> docker-compose version
+docker-compose version 1.22.0, build unknown
+docker-py version: 3.5.0
+CPython version: 3.7.0
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+> docker version
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa8257ec
+ Built:             Sun Aug 19 09:47:50 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa8257ec
+  Built:            Sun Aug 19 09:47:31 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+To be really precise about the context, I need to use a network other than the daemon's global default bridge because I need the behavior of the embedded Docker DNS which is not provided in this specific one. The default compose network works for me.
+As to why I need a network with the embedded Docker DNS (but I don't know if you want to read through that, the baseline is that I need to use the compose default network): my host is a Linux system using systemd-resolved. As such, my /etc/resolv.conf contains only 127.0.0.53. Using the daemon default network means that each of my container's resolv.conf will contain 8.8.8.8 (since localhost nameservers are stripped). This fails flat for me because I need to resolve names, in my containers, on domains that aren't provided by 8.8.8.8. Rather than going through very complicated steps to make that name resolution work in my containers, using any other bridge network just works because the behavior for non-default bridges is that all containers will use the embedded DNS of Docker which delegates this task to native host-side DNS resolution, and through that, my localhost resolver. i.e. when Docker delegates name resolution to the host side, I don't have to pull my hair or go through any config options.
+Steps to reproduce the issue
+Have a docker-compose.yml containing a networks.default with specific behavior
+docker-compose build
+Observed result
+The specific behavior of the docker-compose default network is applied
+Expected result
+The specific behavior of the docker-compose default network is lost
+Additional information
+Archlinux (current) with distribution-provided Docker and Docker Compose, see versions above.

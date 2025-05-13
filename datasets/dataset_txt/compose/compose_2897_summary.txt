@@ -1,0 +1,1 @@
+[1.6.0] Extra volumes are created when using new compose file format

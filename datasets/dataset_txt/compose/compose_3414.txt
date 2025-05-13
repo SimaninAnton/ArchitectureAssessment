@@ -1,0 +1,14 @@
+lphuberdeau commented on 3 Aug 2015
+Sample set-up
+dispatcher
+worker_a
+worker_b
+docker-compose up -d
+docker-compose scale worker_b=2
+Update code for worker_a, rebuild image (worker_b unaffected)
+docker-compose up -d --x-smart-recreate
+> sample_dispatcher_1 is up-to-date
+> Recreating sample_worker_a_1...
+> Recreating sample_worker_b_1...
+> Recreating sample_worker_b_2...
+Would expect worker_b instances to be left untouched.

@@ -1,0 +1,29 @@
+dmitry commented on 6 Jan 2017 •
+edited
+docker-compose 1.9.0 ignores volume from the symlink.
+I have a symlinked path current in a /home/host/www/site.com/current which linked to a /home/host/www/site.com/releases/[timestamp], where [timestamp] is dynamic path created on each deployment.
+I have the following docker-compose config:
+  volumes:
+    - ./data/elasticsearch:/usr/share/elasticsearch/data
+  image: elasticsearch:2.1.0
+  ports:
+    - "127.0.0.1:12001:9200"
+  restart: always
+Once I run docker-compose -p site up -d from the current path, docker inspect returns the following config data:
+        "HostConfig": {
+            "Binds": [
+                "/home/host/www/site.com/releases/20170106124517/data/elasticsearch:/usr/share/elasticsearch/data:rw"
+            ],
+...
+        "Mounts": [
+            {
+                "Source": "/home/host/www/site.com/releases/20170106124517/data/elasticsearch",
+                "Destination": "/usr/share/elasticsearch/data",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+Means instead of /home/host/www/site.com/current/data/elasticsearch path it use /home/host/www/site.com/releases/20170106124517/data/elasticsearch path.
+Is there are a solution, that allows me to bind mounted volume to a symlink, instead of a real path behind the symlink?
+Could be related to the moby/moby#21055

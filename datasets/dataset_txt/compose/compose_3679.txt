@@ -1,0 +1,19 @@
+etc0de commented on 28 Apr 2015
+I have the following docker-compose.yml:
+nginx:
+  build: .
+  ports:
+   - "80:80"
+.. along with this Dockerfile in the same directory:
+FROM ubuntu
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y nginx
+
+CMD nginx && tail -f /dev/null
+Now if I do "docker-compose up", I get the following image entry:
+jonas@cyberman#11: docker images
+REPOSITORY                         TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+nginx_nginx                        latest              70d6fcf2fc2c        29 minutes ago      261.1 MB
+"nginx_nginx"? Really? You couldn't just use "nginx" as I named it?
+If you really want to have such weird naming schemes, at least let me override it with a proper name.

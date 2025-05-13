@@ -1,0 +1,50 @@
+egoag commented on 5 Aug 2016
+Docker version:
+Client:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 19:27:08 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 19:27:08 2016
+ OS/Arch:      linux/amd64
+Docker Info:
+Containers: 7
+ Running: 5
+ Paused: 0
+ Stopped: 2
+Images: 17
+Server Version: 1.10.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 194
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins: 
+ Volume: local
+ Network: bridge null host
+Kernel Version: 3.16.0-41-generic
+Operating System: Ubuntu 14.04.2 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 1.955 GiB
+Name: i-sbbdpbcf
+ID: T77I:F5X4:7HB2:URUJ:27CB:QOQY:MNYS:CJNH:7NAK:DDUY:445T:RDD4
+WARNING: No swap limit support
+Compose Version:
+docker-compose version 1.8.0, build f3628c7
+Issue:
+When try to volume a directory not exist in image but will be created at entrypoint.sh, compose will throw an error:
+ERROR: for nginx  Cannot start service nginx: Cannot start container ad5ac5b2b03bd92fe63ee6e0b37a3b0193ab2381ef90785a56215a1321d9cd23: [9] System error: not a directory
+ERROR: Encountered errors while bringing up the project.
+Use the command docker run -d -v /PATH:/NOT_EXIST_PATH image will be okay.

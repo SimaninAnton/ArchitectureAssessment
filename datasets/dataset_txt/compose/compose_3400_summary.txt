@@ -1,0 +1,1 @@
+Stack trace when trying to extend a nonexistent service

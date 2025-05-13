@@ -1,0 +1,3 @@
+dineshlt commented on 15 Apr 2019
+I'm getting the following error while trying to run docker-compose up:
+ERROR: Encountered errors while bringing up the project

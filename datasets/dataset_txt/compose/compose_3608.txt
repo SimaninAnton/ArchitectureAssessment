@@ -1,0 +1,7 @@
+iMerica commented on 29 May 2015
+Just upgraded to the 1.3.0 release candidate and got this:
+❯ docker ps                                                                                                                                                  
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+❯ docker-compose ps                                                                                                                                           local_dev_plus/git/master 
+SSL error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:581)
+I"m on Docker version 1.6.0, build 4749651

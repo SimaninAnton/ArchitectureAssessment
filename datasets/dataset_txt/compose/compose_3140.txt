@@ -1,0 +1,7 @@
+ghost commented on 4 Nov 2015
+After upgrading to docker toolbox 1.9.0/compose 1.5.0, docker-compose up will no longer build containers:
+Tarik-MacBook-Pro:web tarikansari$ docker-compose up
+Recreating 80f34a2a35_80f34a2a35_80f34a2a35_80f34a2a35_80f34a2a35_web_web_1
+ERROR: Service 'web' needs to be built, but --no-build was passed.
+Tarik-MacBook-Pro:web tarikansari$ docker-compose -v
+docker-compose version: 1.5.0

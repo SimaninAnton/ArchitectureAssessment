@@ -1,0 +1,1 @@
+Overriding entrypoint and command in docker-compose.yml

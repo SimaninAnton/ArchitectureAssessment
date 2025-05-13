@@ -1,0 +1,72 @@
+rino1 commented on 28 Jul 2018 •
+edited by thaJeztah
+$ cat docker-compose.yml 
+version: '3.3'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - dbdata:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: somewordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress
+
+   wordpress:
+        depends_on:
+            - db
+        image: wordpress:latest
+        ports:
+            - "8080:80"
+        restart: always
+        environment:
+           WORDPRESS_DB_HOST: db:3306
+           WORDPRESS_DB_USER: wordpress
+           WORDPRESS_DB_PASSWORD: wordpress
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8080"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+        
+volumes:
+    dbdata:
+$ cat start 
+#!/usr/bin/env bash
+
+#restarting...
+docker-compose down
+docker-compose up -d
+
+function curl {
+    local url=http://localhost:8080
+    
+    echo ">>> TESTING $url..."
+    /usr/bin/curl --output /dev/null --silent $url \
+        && echo ">>> OK!!!"
+}
+
+curl
+echo ">>> WAIT 10s..." && sleep 10
+curl
+
+$ ./start
+Stopping dockerup_wordpress_1 ... done
+Stopping dockerup_db_1        ... done
+Removing dockerup_wordpress_1 ... done
+Removing dockerup_db_1        ... done
+Removing network dockerup_default
+Creating dockerup_db_1        ... done
+Creating dockerup_db_1        ... 
+Creating dockerup_wordpress_1 ... done
+>>> TESTING http://localhost:8080...
+>>> WAIT 10s...
+>>> TESTING http://localhost:8080...
+>>> OK!!!
+How to see the server is not available on the first shot, but cookie looks about 10 seconds.
+Yet the healthcheck directives have been specified.
+Where is the problem?
+2

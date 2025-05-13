@@ -1,0 +1,62 @@
+estenrye commented on 22 Jan 2018 •
+edited
+Issue
+docker-compose config does not correctly merge and format labels in the deploy section of a compose file.
+Steps to Reproduce
+docker-compose.a.yml
+version: '3.4'
+services:
+  hello:
+    image: hello-world
+    deploy:
+      labels:
+        - labelA=helloLabelA
+        - labelAPrime=helloLabelA
+docker-compose.b.yml
+version: '3.4'
+services:
+  hello:
+    image: hello-world
+    deploy:
+      labels:
+        - labelB=helloLabelB
+        - labelAPrime=helloLabelBPrime
+command executed:
+docker-compose -f ./docker-compose.a.yml -f ./docker-compose.b.yml config
+Expected Output:
+WARNING: Some services (hello) use the 'deploy' key, which will be ignored. Compose does not support 'deploy' configuration - use `docker stack deploy` to deploy to a swarm.
+services:
+  hello:
+    deploy:
+      labels:
+        - labelA=helloLableA
+        - labelB=helloLabelB
+        - labelAPrime=helloLabelBPrime
+    image: hello-world
+version: '3.4'
+Actual Output
+WARNING: Some services (hello) use the 'deploy' key, which will be ignored. Compose does not support 'deploy' configuration - use `docker stack deploy` to deploy to a swarm.
+services:
+  hello:
+    deploy:
+      labels:
+      - labelB=helloLabelB
+      - labelAPrime=helloLabelBPrime
+    image: hello-world
+version: '3.4'
+Observations
+docker-compose is not indenting the labels correctly
+docker-compose is overwriting values from ./docker-compose.a.yml with values from ./docker-compose.b.yml instead of merging the values.
+Docker Compose Version
+On my Windows box:
+PS C:\Users\esten\Source\Repos\docker-compose-config-bug> docker-compose version
+docker-compose version 1.18.0, build 8dd22a96
+docker-py version: 2.6.1
+CPython version: 2.7.14
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+On my Linux box:
+[root@host Stack-Files]# docker-compose version
+docker-compose version 1.17.1, build 6d101fb
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016

@@ -1,0 +1,5 @@
+Contributor
+marcosnils commented on 24 Feb 2016
+Sorry if this is a duplicate, tried a quick search and couldn't find anything.
+The default behavior of the docker daemon when forcing container removal is to kill and remove running containers as well. Compose doesn't seem to handle this and expects containers to be stopped/killed before removing.
+It'd be nice to do docker-compose rm -f instead of docker-compose kill && docker-compose rm -f

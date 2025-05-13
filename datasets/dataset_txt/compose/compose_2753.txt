@@ -1,0 +1,125 @@
+lancehudson commented on 18 Feb 2016
+I am using 1.6.0 and the 2.0 file format. I cannot get an extended service to use the network_mode nor the networks config options.
+Regardless of where I seem to put either option and docker-compose config nor docker inspect reflect the settings.
+network_mode
+version: "2"
+
+services:
+  web:
+    image: tutum/hello-world
+    hostname: web
+    ports:
+      - 80
+    network_mode: bridge
+
+  web-bridge:
+    extends:
+      service: web
+    network_mode: bridge
+and resulting config
+networks: {}
+services:
+  web:
+    hostname: web
+    image: tutum/hello-world
+    network_mode: bridge
+    ports:
+    - 80
+  web-bridge:
+    hostname: web
+    image: tutum/hello-world
+    ports:
+    - 80
+version: '2.0'
+volumes: {}
+I would expect the service web-bridge to have the network_mode: bridge setting. And again if I inspect web-bridge I can verify that it is using the default user defined network instead of the legacy bridge.
+...
+            "Networks": {
+                "test_default": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "web-bridge",
+                        "b7b0b8095f"
+                    ],
+                    "NetworkID": "589f25976493c6c9129a04a010871e03d5bde1f9b1d26b85ad8237df6125d6c5",
+                    "EndpointID": "473b2d782eddf094f772a1bfd4896d5d4973f64c43b16fb59ad61589b8dfd8cd",
+                    "Gateway": "172.18.0.1",
+                    "IPAddress": "172.18.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:12:00:02"
+                }
+            }
+        }
+same things happens for networks
+version: "2"
+
+services:
+  web:
+    image: tutum/hello-world
+    hostname: web
+    ports:
+      - 80
+    networks:
+      - default
+
+  web-net2:
+    extends:
+      service: web
+    networks:
+      - net2
+
+networks:
+  default:
+    driver: bridge
+  net2:
+    driver: bridge
+networks:
+  default:
+    driver: bridge
+  net2:
+    driver: bridge
+services:
+  web:
+    hostname: web
+    image: tutum/hello-world
+    networks:
+    - default
+    ports:
+    - 80
+  web-net2:
+    hostname: web
+    image: tutum/hello-world
+    ports:
+    - 80
+version: '2.0'
+volumes: {}
+I also get this error when up'ing WARNING: Some networks were defined but are not used by any service: net2
+...
+"Networks": {
+                "test_default": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "web-net2",
+                        "5856c7c864"
+                    ],
+                    "NetworkID": "8d92d7d3ab6f93541ef6b867f553421c7540dc25da47fbeefbff20cf17f6d5a7",
+                    "EndpointID": "23e21d5207968d3962cc22c2cef5d053fff3ebd45e16c14132e24f2163343ee5",
+                    "Gateway": "172.18.0.1",
+                    "IPAddress": "172.18.0.3",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:12:00:03"
+                }
+            }
+        }
+    }
+]
+I am using https://github.com/gliderlabs/registrator which does not currently support the user defined networking. A work around is to use network_mode: bridge but it seems because I am using extended services this is not an option.
+Full command outputs are available at https://gist.github.com/lancehudson/823848dec790bc1ca658

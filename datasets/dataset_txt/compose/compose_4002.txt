@@ -1,0 +1,7 @@
+eduherraiz commented on 9 Jan 2015
+The scale command is very useful to define a unique docker entry in the fig.yml and scale the number of containers in execution time, but I can't found any way to increase the default number of containers at initial start. There is any way to define it in the fig.yml?
+Something like:
+node:
+    build: node
+    scale: 3
+If not exist, I think it could be a nice feature.

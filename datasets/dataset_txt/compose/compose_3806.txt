@@ -1,0 +1,7 @@
+garry-cairns commented on 23 Mar 2015
+While trying to develop a Haskell/Yesod application I found that linking containers with compose behaved differently than linking them manually with docker commands. I initially asked a stack overflow question about this, which contains the relevant detail. On giving it more thought I think this may be a bug, or perhaps related to issue 374. I will summarise my SO question here for convenience:
+Linking the web app with postgres using compose up fails every time, but not always in the same way.
+Bringing the database and webapp up separately with compose run partially succeeds.
+Bringing the database up any way then running the web app by docker run-ning it for /bin/bash then adding environment variables and using yesod devel in the container's shell works every time.
+I believe these three should exhibit equivalent behaviour, although I'd be grateful for any indication that I'm wrong.
+I'll keep working on this at my end and post anything I find useful.

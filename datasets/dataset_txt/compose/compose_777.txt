@@ -1,0 +1,55 @@
+jeyglk commented on 26 Mar 2018 •
+edited
+Description of the issue
+Since version 1.20.0, compose fails to locate a dockerfile out of the build context. It worked before, and is allowed since Docker 18.03 docker/cli#886
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:06:22 2018
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:14:32 2018
+  OS/Arch: linux/amd64
+  Experimental: true
+networks:
+  devops-test: {}
+services:
+  devops-test:
+    build:
+      context: /Users/johndoe/repos/test/devops-test/src
+      dockerfile: /Users/johndoe/repos/test/devops-test/Dockerfile
+    environment:
+    image: repo.dkr.ecr.eu-west-1.amazonaws.com/devops-test
+    networks:
+      devops-test: null
+version: '3.0'
+Steps to reproduce the issue
+Just run docker-compose build with a Dockerfile out of the context.
+Observed result
+./docker-compose-1.20.1 -f tools/docker/docker-compose.yml build
+Building devops-test
+ERROR: Cannot locate specified Dockerfile: /Users/johndoe/repos/test/devops-test/Dockerfile
+./docker-compose-1.20.0 -f tools/docker/docker-compose.yml build
+Building devops-test
+ERROR: Cannot locate specified Dockerfile: /Users/johndoe/repos/test/devops-test/Dockerfile
+Expected result
+./docker-compose-1.19.0 -f tools/docker/docker-compose.yml build
+Building devops-test
+Step 1/21 : FROM alpine:3.7
+3.7: Pulling from library/alpine
+Stacktrace / full error message
+(if applicable)
+Additional information
+macOS 10.13.3

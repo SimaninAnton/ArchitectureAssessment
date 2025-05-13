@@ -1,0 +1,34 @@
+delbao commented on 6 Feb 2017 •
+edited
+docker-compose scale has no ability to specify variables
+docker-compose version 1.7.0, build unknown
+for example,
+I have the following docker-compose.yaml. I want to pin each container to a separate core. Hopefully, I can run it like docker-compose scale up cassandra-node=3 $cpuset=id
+networks: {}
+services:
+  cassandra-node:
+    environment:
+      CASSANDRA_SEEDS: seed1
+    image: cassandra
+    links:
+    - 
+    restart: always
+    cpuset: "1"
+ 
+  cassandra-seed1:
+    container_name: cassandra-seed1
+    hostname: cassandra-seed1
+    image: cassandra
+    ports:
+    - 9042:9042
+    restart: always
+    cpuset: "0"
+ 
+version: '2.0'
+volumes: {}
+Del Bao
+Software Engineer
+distributed system infra
+Yelp
+w: https://www.linkedin.com/in/delbao/ e:
+2

@@ -1,0 +1,20 @@
+nickjj commented on 4 Jan 2019 •
+edited
+I would like to be able to set a variable as a default variable substitution value like you can do in Bash.
+An example of the feature working in Bash
+nick@workstation:/tmp$ COMPOSE_PROJECT_NAME="hello"
+nick@workstation:/tmp$ echo ${DOCKER_WEB_IMAGE:-${COMPOSE_PROJECT_NAME}_web}
+hello_web
+Trying the same thing with Docker Compose fails
+image: "${DOCKER_WEB_IMAGE:-${COMPOSE_PROJECT_NAME}_web}"
+It fails with ERROR: invalid reference format: repository name must be lowercase.
+And upon further investigation, if you run docker-compose config, we see the problem. That image property gets evaluated as image: $${COMPOSE_PROJECT_NAME_web}.
+I'm not sure if this is a bug or a feature request, or maybe a little bit of both. :D
+Describe the solution you'd like
+I would really like to see things work as they do in Bash.
+Describe alternatives you've considered
+I tried a bunch of different syntax styles to get it to work but I couldn't find anything that worked.
+For now I can just hard code the project name to work around this specific use case, but this won't always be an option for all use cases.
+Use case
+I'm on a quest to make my development and production Docker Compose files to be as close as possible, and differentiate certain things with environment variables.
+This is one case where in development I want to build hello_web images, but in production I want to build nickjj/hello_web images, and I would like the image property to exist in both Docker Compose files. Yes, I know I can remove it from the development file and Docker Compose will create the image name like that already, but that still doesn't help us use variables as default values.

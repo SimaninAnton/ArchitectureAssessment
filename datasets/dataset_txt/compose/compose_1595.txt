@@ -1,0 +1,8 @@
+sorenmh commented on 16 Mar 2017
+If a fifo pipe exists in the hierarchy on the same level or below docker-compose.yml, it will cause docker-compose build to hang.
+How to reproduce:
+Create docker-compose.yml file
+mkfifo some-pipe
+Build it: docker-compose build
+Now it hangs while waiting for data to be available in the pipe and you can make it continue, by piping data to the pipe: echo "something" > some-pipe
+16

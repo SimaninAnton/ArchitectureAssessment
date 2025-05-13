@@ -1,0 +1,1 @@
+`docker-compose` on Windows Server 2016 [TP4] requires `net: default` or `net: none`

@@ -1,0 +1,1 @@
+Can not volume directory not exist in image but will be created at entrypoint.sh

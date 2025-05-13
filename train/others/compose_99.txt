@@ -1,0 +1,11 @@
+DemianTinkiel commented on 12 Sep 2019
+I have a nexus server that acts as a repo for NPM, Maven and Docker artifacts.
+The problem is that for NPM and Maven, for legacy reasons I had to serve all nexus from a different root i.e
+[npm]
+http://ip:port/nexus/repository/npm/
+[maven]
+http://ip:port/nexus/repository/maven/
+and obviously by extension docker is http://ip:port/nexus/repository/docker/
+but when docker tries to do anything it automatically goes as https://ip:port/v2/ which of course results in a 404
+I would like a way to specify the full url of the repo in the daemon.json rather than just host + port
+if I have anything else after port I cant start the daemon: parsing "8081/nexus/repository/docker": invalid syntax

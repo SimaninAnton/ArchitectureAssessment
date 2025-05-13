@@ -1,0 +1,116 @@
+f3ltron commented on 6 Dec 2017 •
+edited
+got an issue on docker-compose up
+my config
+version: "2"
+
+services:
+
+  db-mongo:
+    image: launcher.gcr.io/google/mongodb3
+    ports:
+      - "27017"
+
+  redis-master:
+    image: gcr.io/google_containers/redis:e2e 
+    ports:
+      - "6379"
+
+  # redis-slave:
+  #   image: gcr.io/google_samples/gb-redisslave:v1
+  #   ports:
+  #     - "6379"
+  #   environment:
+  #     - GET_HOSTS_FROM=dns
+
+  us-user:
+    image: xtechforce/node-alpine-dev
+    env_file: ./service/us-user/.env
+    command : npm run dev
+    ports:
+      - "30001:8080"
+      - "30002:9229"
+    depends_on:
+      - db-mongo
+    volumes:
+      - ./service/us-user/:/app
+
+  us-order:
+    image: xtechforce/node-alpine-dev
+    env_file: ./service/us-order/.env
+    command : npm run dev
+    ports:
+      - "30003:8080"
+      - "30004:9229"
+    depends_on:
+      - db-mongo
+    volumes:
+      - ./service/us-order/:/app
+
+  us-product:
+    image: xtechforce/node-alpine-dev
+    env_file: ./service/us-product/.env
+    command : npm run dev
+    ports:
+      - "30005:8080"
+      - "30006:9229"
+    depends_on:
+      - db-mongo
+    volumes:
+      - ./service/us-product/:/app
+
+  us-admin:
+    image: xtechforce/node-alpine-dev
+    env_file: ./service/us-admin/.env
+    command : npm run dev
+    ports:
+      - "30007:8080"
+      - "30008:9229"
+    depends_on:
+      - db-mongo
+    volumes:
+      - ./service/us-admin/:/app
+
+  ws-api :
+    image: xtechforce/node-alpine-dev
+    env_file: ./website/ws-api/.env
+    command : npm run dev
+    ports:
+    - "30009:8080"
+    - "30010:9229"
+    depends_on:
+      - db-mongo
+      - redis-master
+      - us-user
+      - us-order
+      - us-product
+      - us-admin
+      # - redis-slave
+    volumes:
+      - ./website/ws-api/:/app 
+
+  ws-back:
+    image: xtechforce/node-alpine-dev
+    env_file: ./website/ws-back/.env
+    command : npm run dev
+    depends_on:
+      - ws-api
+    volumes:
+      - ./website/ws-back/:/app
+    ports:
+      - "8000:8000"
+      
+  init-db:
+    image: mongo:3.2.6
+    links:
+      - db-mongo
+    volumes:
+      - ./database/init:/init
+    command: >
+             sh -c '
+             sleep 4
+             && mongorestore --host db-mongo -d clicbeton /init/clicbeton
+             && bash
+             '
+can't find the unicode ...
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 13: ordinal not in range(128)

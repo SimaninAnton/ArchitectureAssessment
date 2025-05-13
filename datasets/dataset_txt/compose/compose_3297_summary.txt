@@ -1,0 +1,1 @@
+Meaningful error message if string value instead of boolean is used

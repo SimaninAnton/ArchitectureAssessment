@@ -1,0 +1,21 @@
+alanfranz commented on 13 Feb 2017
+Problem: when I use docker-compose up --force-recreate and a volume has changed in the docker-compose.yml file, I get a warning saying that the newly created container still uses the old volume. This makes it quite complex to use the tool reliably in CD environment, since some changes wouldn't be actually be propagated to production (I'd prefer the tool to actually fail rather than issuing a warning).
+I would expect that either docker-compose starts a new container with a new volume, or at least fails with an error
+Example of the issue (tested on Ubuntu 16.04, docker-engine 1.13.1, docker-compose 1.11.0):
+docker-compose.yml
+cassandra:
+    image: cassandra:2.1
+alan@alan-virtualbox-mate:~/test-docker-compose-issue$ docker-compose up -d
+Creating testdockercomposeissue_cassandra_1
+alan@alan-virtualbox-mate:~/test-docker-compose-issue$
+docker-compose.yml
+cassandra:
+    image: cassandra:2.1
+    volumes:
+      - /home/alan/test-docker-compose-issue/data:/var/lib/cassandra
+alan@alan-virtualbox-mate:~/test-docker-compose-issue$ docker-compose up --force-recreate -d
+Recreating testdockercomposeissue_cassandra_1
+WARNING: Service "cassandra" is using volume "/var/lib/cassandra" from the previous container. Host mapping "/home/alan/test-docker-compose-issue/data" has no effect. Remove the existing containers (with `docker-compose rm cassandra`) to use the host volume mapping.
+alan@alan-virtualbox-mate:~/test-docker-compose-issue$ 
+Possibly related: #2481 and #2609 (I think it should have been solved, but I still get the behaviour).
+8

@@ -1,0 +1,1 @@
+`fig ps` empty after scaling, docker stop'ing a container, and scaling again

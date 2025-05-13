@@ -1,0 +1,25 @@
+ghigt commented on 16 Dec 2014
+If I precise VOLUME inside the Dockerfile, when I want to use the volumes-from, a new volume is created instead of using the good one.
+db:
+  image: busybug
+  command: sleep 300
+  volumes_from: 
+    - data
+To reproduce, having a data-only container with a volume mounted somewhere:
+$ docker run -v /test --name data busybox
+Adding something to it:
+$ docker run --rm --volumes-from data busybox touch /test/file
+Try it with this dockerfile:
+FROM busybox
+# VOLUME /test 
+$ docker build -t busybug .
+$ fig up -d
+$ docker exec platforms_db_1 ls /test
+file
+$
+Try it uncommenting VOLUME /test in the dockerfile:
+$ docker build -t busybug .
+$ fig up -d
+$ docker exec platforms_db_1 ls /test
+$
+Am I understanding something wrong?

@@ -1,0 +1,1 @@
+docker-compose run java application and throws exception "Too many open files"

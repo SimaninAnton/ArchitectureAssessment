@@ -1,0 +1,1 @@
+Environment variable substitution: Directly support non-ascii env values

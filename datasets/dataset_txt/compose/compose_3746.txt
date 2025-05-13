@@ -1,0 +1,12 @@
+draghuram commented on 8 Apr 2015
+When I run ./script/test, I get the following error:
+...
+...
+docker run --rm --volume=/var/run/docker.sock:/var/run/docker.sock --volume=/mywork/compose:/code -e DOCKER_VERSIONS -e TAG=docker-compose:4f95e81 --entrypoint=script/test-versions docker-compose:4f95e81
+Running lint checks
+Running tests against Docker default
+Unable to find image 'docker-compose:4f95e81' locally
+time="2015-04-07T19:38:13Z" level=fatal msg="Error response from daemon: client and server don't have same version (client : 1.18, server: 1.17)" 
+Any help in getting past this problem is appreciated.
+Thanks,
+Raghu

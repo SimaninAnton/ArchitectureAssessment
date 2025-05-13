@@ -1,0 +1,21 @@
+beatlejuse commented on 27 Jul 2017
+i have a docker-compose.yml and set "dns", "dns_search" and "dns_opt"
+version: '2' services: runner: restart: always privileged: true image: gitlab/gitlab-runner:v9.4.0 container_name: runner depends_on: - executor volumes: - /srv/runner/conf:/etc/gitlab-runner - /srv/docker/sock/:/var/run/ executor: restart: always privileged: true image: docker:dind container_name: docker dns: - 192.168.77.11 - 192.168.77.12 dns_search: - company.ru dns_opt: - timeout:1 volumes: - /srv/docker/sock/:/var/run/
+Options "dns_opt" and "dns_search" works and i see this in resolv.conf inside docker:dind, but option "dns" dont work!
+docker-compose version 1.15.0, build e12f3b9 docker-py version: 2.4.2 CPython version: 2.7.13 OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+`docker version
+Client:
+Version: 17.05.0-ce
+API version: 1.29
+Go version: go1.7.5
+Git commit: 89658be
+Built: Thu May 4 22:10:54 2017
+OS/Arch: linux/amd64
+Server:
+Version: 17.05.0-ce
+API version: 1.29 (minimum version 1.12)
+Go version: go1.7.5
+Git commit: 89658be
+Built: Thu May 4 22:10:54 2017
+OS/Arch: linux/amd64
+Experimental: false`

@@ -1,0 +1,66 @@
+casz commented on 9 May 2018
+Description of the issue
+Docker compose version 3.6 does not support platform yet 2.4 does? What gives?
+#5767 seems only to have added it for 2.4
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.2, build a1334711
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:      18.05.0-ce-rc1
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   33f00ce
+ Built:        Thu Apr 26 00:57:53 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.05.0-ce-rc1
+  API version:  1.37 (minimum version 1.24)
+  Go version:   go1.10.1
+  Git commit:   33f00ce
+  Built:        Thu Apr 26 01:07:01 2018
+  OS/Arch:      windows/amd64
+  Experimental: true
+docker-compose file
+version: '3.6'
+
+services:
+  jenkins:
+    platform: linux
+    env_file: prod.env
+    container_name: jenkins
+    image: jenkins-master
+    build: .
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - jenkins:/var/jenkins_home
+    secrets:
+      - id_rsa
+
+volumes:
+  jenkins:
+
+secrets:
+  id_rsa:
+    file: .\secrets\jenkins_ssh_key
+Output of "docker-compose config"
+ERROR: The Compose file '.\docker-compose.yml' is invalid because:
+Unsupported config option for services.jenkins: 'platform'
+Steps to reproduce the issue
+use version: '3.6' in docker-compose.yml file
+add platform to service
+run docker-compose config
+Observed result
+ERROR: The Compose file '.\docker-compose.yml' is invalid because:
+Unsupported config option for services.jenkins: 'platform'
+Expected result
+Platform to be supported

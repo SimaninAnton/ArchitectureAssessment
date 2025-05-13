@@ -1,0 +1,1 @@
+Resolve all passed files before throwing the "env variable not set" warning

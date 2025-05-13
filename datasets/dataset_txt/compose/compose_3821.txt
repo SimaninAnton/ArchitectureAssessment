@@ -1,0 +1,2 @@
+psykzz commented on 18 Mar 2015
+When installing through Homebrew, compose is referenced as fig.

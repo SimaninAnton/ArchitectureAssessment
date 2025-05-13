@@ -1,0 +1,41 @@
+mightyroser commented on 22 May 2017
+Starting at around version 17.05.0-ce it seems that services cannot be created using internal overlay networks. This used to work in previous versions.
+Here is a short example compose file, docker-compose-internal-network.yml, that demonstrates the problem:
+version: '3.1'
+services:
+  linux:
+    image: alpine:3.5
+    networks:
+      - network_internal
+    deploy:
+      replicas: 2
+networks:
+  network_internal:
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24
+    internal: True
+Running stack deploy with this compose file generates the following:
+$ docker stack deploy -c docker-compose-internal-network.yml test
+Creating network test_network_internal
+Creating service test_linux
+Error response from daemon: rpc error: code = 3 desc = Service cannot be explicitly attached to "test_network_internal" network which is a swarm internal network
+Docker version info:
+$ docker version
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Tue Mar 28 00:40:02 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Please let me know if there is any additional information I can provide.

@@ -1,0 +1,3 @@
+tshepitko commented on 2 Feb 2018
+If you specify strict order (like a chain) of containers launching via depends_on feature and would like to change something in the middle container then all containers below will be recreated (even if their config were not changed).
+What scenario is possible to have strict order of containers launching and avoid behavior above?

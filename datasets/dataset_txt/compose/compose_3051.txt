@@ -1,0 +1,20 @@
+arthurk commented on 25 Nov 2015
+I'm running the redis container from dockerhub. The docker-compose.yml file is:
+redis:
+  image: redis:3.0.5
+  ports:
+    - "6379:6379"
+Then i start the container, and stop it via ctrl+c:
+docker-compose up
+
+redis_1 | 1:M 25 Nov 10:07:12.236 * DB loaded from disk: 0.000 seconds
+redis_1 | 1:M 25 Nov 10:07:12.236 * The server is now ready to accept connections on port 6379
+This gives me the following error:
+Stopping my_redis_1 ...
+compose.cli.verbose_proxy.proxy_callable: docker stop <- (u'82b509a6f585b722eba69401a13b8268a669073d9a00ef2f66ae160afaa41950', timeout=10)
+compose.cli.verbose_proxy.proxy_callable: docker wait <- (u'82b509a6f585b722eba69401a13b8268a669073d9a00ef2f66ae160afaa41950')
+compose.cli.verbose_proxy.proxy_callable: docker stop -> None
+Stopping my_redis_1 ... done
+ERROR: compose.cli.main.main:
+Aborting.
+There is no clear error message, however, The container is stopped correctly. Is there anything i can do beside running --verbose? I've also tried it with the "mongo" image from dockerhub and have the same problem.

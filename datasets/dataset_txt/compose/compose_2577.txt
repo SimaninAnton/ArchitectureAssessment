@@ -1,0 +1,46 @@
+tombee commented on 25 Mar 2016
+After testing out the new TLS configuration flags (that should make compose consistent with engine). In particular I'm testing the scenario where we want to do server verification using a CA root certificate. I'm seeing a few issues where I have to enable --skip-hostname-check:
+I'm testing this by running the master build docker-compose binary inside a debian:jessie image:
+Just to confirm, -H <hostname:port> --tlsverify --tlscacert ca.pem info works okay with the engine CLI:
+root@b3ace98de2f8 $ docker -H 192.168.122.153:443 --tlsverify --tlscacert ca.pem info 
+Containers: 22
+ Running: 10
+ Paused: 0
+ Stopped: 12
+Images: 18
+...
+But I can't use the same parameters with compose:
+root@b3ace98de2f8 $ docker-compose -H 192.168.122.153:443 --tlsverify --tlscacert ca.pem up -d 
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 56, in main
+  File "compose/cli/main.py", line 107, in perform_command
+  File "compose/cli/main.py", line 722, in up
+  File "compose/project.py", line 371, in up
+  File "compose/project.py", line 179, in get_services_without_duplicate
+  File "compose/service.py", line 472, in remove_duplicate_containers
+  File "compose/service.py", line 479, in duplicate_containers
+  File "compose/service.py", line 145, in containers
+  File ".tox/py27/lib/python2.7/site-packages/docker/api/container.py", line 69, in containers
+  File ".tox/py27/lib/python2.7/site-packages/docker/utils/decorators.py", line 47, in inner
+  File ".tox/py27/lib/python2.7/site-packages/docker/client.py", line 112, in _get
+  File ".tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 477, in get
+  File ".tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 465, in request
+  File ".tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+  File ".tox/py27/lib/python2.7/site-packages/requests/adapters.py", line 370, in send
+  File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 544, in urlopen
+  File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 341, in _make_request
+  File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 761, in _validate_conn
+  File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connection.py", line 253, in connect
+  File "ssl.py", line 252, in match_hostname
+  File "ssl.py", line 209, in _dnsname_match
+AttributeError: 'bool' object has no attribute 'lower'
+docker-compose returned -1
+
+root@b3ace98de2f8 $ docker-compose -H 192.168.122.153:443 --tlsverify --tlscacert ca.pem --skip-hostname-check up -d
+myapp_redis_1 is up-to-date
+I've also noticed that the error is different when a scheme is supplied, we the following error (with and without --skip-hostname-check).
+root@b3ace98de2f8 $ docker-compose -H tcp://192.168.122.153:443 --tlsverify --tlscacert ca.pem up -d
+ERROR: SSL error: hostname '192.168.122.153' doesn't match 'myhost'
+root@b3ace98de2f8 $ docker-compose -H tcp://192.168.122.153:443 --tlsverify --tlscacert ca.pem --skip-hostname-check up -d
+ERROR: SSL error: hostname '192.168.122.153' doesn't match 'myhost'

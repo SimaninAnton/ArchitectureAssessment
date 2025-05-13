@@ -1,0 +1,33 @@
+joemaz95 commented on 16 Nov 2018
+Description of the issue
+When I run "docker-compose up", it doesn't seem to be able to find the docker module. I definitely have it installed, and I've also tried moving everything into a virtualenv, and changing the version of python I am using (from 3.5.2 to 3.6.7).
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose==1.23.1
+Output of docker version
+docker==3.5.1
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  tesseract:
+    build:
+      context: /home/j/PycharmProjects/tesseract-manager/app
+      dockerfile: Dockerfile
+Steps to reproduce the issue
+Create a new virtualenv
+pip install docker and docker-compose
+docker-compose up
+Observed result
+See below
+Expected result
+docker-compose to succeed
+Stacktrace / full error message
+tesseract_1  | Traceback (most recent call last):
+tesseract_1  |   File "./web_server.py", line 10, in <module>
+tesseract_1  |     import vmsn_transform
+tesseract_1  |   File "/usr/src/vmsn_transform.py", line 1, in <module>
+tesseract_1  |     import docker
+tesseract_1  | ImportError: No module named 'docker'
+app_tesseract_1 exited with code 1
+Additional information
+Ubuntu 16.04

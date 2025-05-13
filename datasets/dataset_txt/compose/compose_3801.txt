@@ -1,0 +1,17 @@
+Contributor
+madwire commented on 24 Mar 2015
+It would be great if compose had a commit option on the run command, this will help to improve productivity with various package manages. For example if Im building a rails app and I would like to change/update a dependancy. I would have to rebuild the docker image every time which can take some time. If after the run command it could commit the changes made to the docker image then it would save a load of time.
+Something like this? docker-compose run -c web bundle update
+I have build a basic shell script which I currently use which is great, but it would be better if its built in.
+#!/bin/bash
+
+dir=${PWD##*/} # Get current directory name 
+image_base=${dir//_/} # remove underscores
+service_name=$1 # Service name
+docker_image_name=$image_base'_'$service_name # build docker compose image name
+
+docker-compose run $service_name $2 $3 $4 $5 $6 # pass args to service
+run_container=$(docker ps -l -q) #get the last run container id
+docker commit $run_container $docker_image_name #commit the image changes
+docker rm $run_container # remove the run container
+How I use the script is like this docker-compose-commit web bundle update

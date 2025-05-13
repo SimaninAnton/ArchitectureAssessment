@@ -1,0 +1,1 @@
+Proposal: Replace scale command with a scale option in the compose file

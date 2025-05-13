@@ -1,0 +1,18 @@
+pahaz commented on 22 Aug 2014
+sometimes I want doing somthing like this
+ command:
+   - "python manage.py collectstatic --noinput"
+   - "python manage.py syncdb --noinput"
+   - "echo 'Hi'"
+   - "gunicorn -b 0.0.0.0:8000 _project_.wsgi --log-level debug --log-file -"
+What the problem.
+I can't add manage.py collectstatic to Dockerfile because I use volume .:/code wich is not supported for Dockerfile.
+Now I should usr fig run command but I want use simpe fig up.
+Other solution may be something like this:
+ hook_after_build:
+   - "python manage.py collectstatic --noinput"
+   - "python manage.py syncdb --noinput"
+   - "echo 'Hi'"
+ command:
+   - "gunicorn -b 0.0.0.0:8000 _project_.wsgi --log-level debug --log-file -"
+what do you think about this?

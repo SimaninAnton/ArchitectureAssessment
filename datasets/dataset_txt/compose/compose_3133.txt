@@ -1,0 +1,3 @@
+QuackMartins commented on 5 Nov 2015
+What do you think about checking if we're running on windows system? and if so... automatically config virtual box for sharing folder
+I don't know python very well, but I am forking this project for trying to implement this feature... at least for me would be really really useful

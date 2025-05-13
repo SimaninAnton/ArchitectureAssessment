@@ -1,0 +1,1 @@
+docker-compose ps -q {container-name} doesn't work if there's only one container

@@ -1,0 +1,20 @@
+devknoll commented on 11 Feb 2014
+Using boot2docker:
+$ docker version
+Client version: 0.8.0
+Go version (client): go1.2
+Git commit (client): cc3a8c8
+Server version: 0.8.0
+Git commit (server): cc3a8c8
+Go version (server): go1.2
+
+$ fig version
+fig 0.2.1
+
+$ fig up
+Building web...
+Couldn't connect to Docker daemon - you might need to run `docker-osx shell`.
+
+$ echo $DOCKER_HOST
+tcp://localhost:4243
+Any ideas?

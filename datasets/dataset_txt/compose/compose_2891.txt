@@ -1,0 +1,53 @@
+Member
+thaJeztah commented on 21 Jan 2016
+Got something weird with compose; containers are created, but docker inspect does not show IP-address information of them. Very simple docker-compose.yml;
+version: 2
+services:
+  server-a:
+    image: nginx
+
+  server-b:
+    image: nginx
+After running docker-compose up -d, containers are created, and attached to a network for the project, but a docker inspect does not show IP-address information;
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "207b243445d2600860d5280b81c9ecba9e088a75f6156d1df906b1a48ab33164",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {
+                "443/tcp": null,
+                "80/tcp": null
+            },
+            "SandboxKey": "/var/run/docker/netns/207b243445d2",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "testing_default": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "server-a"
+                    ],
+                    "NetworkID": "",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": ""
+                }
+            }
+        }
+Containers are in fact having an IP-address assigned, and function correctly.
+Not sure if this is a bug in docker-compose or engine

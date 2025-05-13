@@ -1,0 +1,1 @@
+Fig pull fails with a private repository/self-signed cert

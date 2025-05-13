@@ -1,0 +1,4 @@
+wsong commented on 4 Nov 2016
+docker-compose up -d --no-color still displays ERROR messages with the word "ERROR" in red and the word "WARNING" in yellow.
+It would also be nice if compose respected the CLICOLOR=0 env variable as a synonym for --no-color.
+8

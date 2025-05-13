@@ -1,0 +1,17 @@
+jamsea commented on 1 Dec 2016
+Code is available here: nfl/react-wildcat#163
+Go to the example/ directory and edit docker-compose.override.yml.
+Replace:
+command: "dev"
+with
+command: "prod-local"
+run:
+docker-compose up -d
+Wait about 45 seconds for the project to boot up then run:
+docker-compose exec wildcat npm run test:e2e
+You should see the error:
+(SystemJS) Fetch error (404 Not Found) loading https://static.example.dev:4000/bundles/vendor.js
+However, if you edit docker-compose.override.yml and change the command to:
+command: "test:e2e"
+then run docker-compose up the tests run fine. The issue is static.example.dev resolves correctly when the command is run in the context of docker-compose up, but does not resolve when the command is run in the context of docker-compose exec
+@spara was kind enough to take a look at this with me at Node Interactive. If you could point me in the right direction for a solve for this issue I'd really appreciate it :)

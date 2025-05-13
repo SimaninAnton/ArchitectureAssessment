@@ -1,0 +1,19 @@
+basileos commented on 4 Jun 2016 •
+edited
+Docker version 1.11.1, build 5604cbe
+docker-compose version 1.7.1, build 6c29830
+version: "2"
+services:
+    nginx:
+        image: nginx
+        depends_on:
+            -app_server
+        environment:
+             - node1=app_server
+         entrypoint: ./wait-for-server.sh
+          ports:
+              - "80:80"
+I tried all possible paths to wait-for-server.sh, but i always get
+ERROR: for nginx Container command './wait-for-server.sh' not found or does not exist
+How to specify path to entrypoint script to make it visible for docker-compose?
+Thanks.

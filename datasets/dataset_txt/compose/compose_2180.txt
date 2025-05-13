@@ -1,0 +1,15 @@
+JettJones commented on 3 Aug 2016
+I read the overview here - https://docs.docker.com/compose/swarm/ :
+If you’re using version 2, your app should work with no changes:
+...
+Once you’ve got [swarm] running, deploying your app to it should be as simple as:
+$ eval "$(docker-machine env --swarm <name of swarm master machine>)"
+$ docker-compose up
+But when running docker-compose against a swarm, it provides a warning (below) and runs all docker-compose instances against the targeted master.
+WARNING: The Docker Engine you're using is running in swarm mode.
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+To deploy your application across the swarm, use the bundle feature of the Docker experimental build.
+More info:
+https://docs.docker.com/compose/bundles
+This is a request to update the docs to point folks in the right direction (which I'm guessing is the .dab experiment)
+9

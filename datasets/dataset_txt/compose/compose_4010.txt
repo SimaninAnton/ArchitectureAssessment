@@ -1,0 +1,26 @@
+Contributor
+aanand commented on 6 Jan 2015
+(NOTICE: replaced by #835)
+Future versions of Fig are going to be rebranded to fit alongside the suite of Docker orchestration tools (the other ones currently being Machine and Swarm). The new name is Compose.
+A number of things need to be done to make this happen:
+Rename the GitHub project
+Create a new PyPi package
+Rename the Python module
+Rename the fig executable to compose (see below)
+Python stub at bin/fig
+Binaries built by script/build-osx and script/build-linux
+Update the Dockerfile
+Rename fig.yml to compose.yml
+Deprecate FIG_* environment variables, introduce COMPOSE_* equivalents
+Update name in docs, including all instances of:
+fig executable
+fig.yml
+“Fig”
+Move docs over to docs.docker.com
+Convert markup
+Rejig it for the CSS
+Update name in README.md, ROADMAP.md and CONTRIBUTING.md
+Remove rebranding plans from ROADMAP.md
+Check that we haven’t messed up the word “config” (or any of its derivatives) anywhere
+Executable name
+For now, the executable will be named compose for consistency with machine and swarm. In future, orchestration tools might move to Git-style subcommands (e.g. docker compose), at which point we’ll be freer to pick an easier-to-type shorthand. In any case, executable naming is a discussion to be had at a wider scope than just Compose.

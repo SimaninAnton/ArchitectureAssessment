@@ -1,0 +1,1 @@
+docker-compose fails where identical (?) docker command line does not

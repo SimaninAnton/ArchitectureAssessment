@@ -1,0 +1,1 @@
+Add support for :z and :Z to change SELinux labels on the fly

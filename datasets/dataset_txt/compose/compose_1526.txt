@@ -1,0 +1,4 @@
+mtibben commented on 12 Apr 2017
+Using run --volumes replaces all volumes in the docker-compose config.
+It would be more useful to me to be able to specify the volumes to mount in addition to the ones in config. Perhaps --append-volumes or --add-volumes?
+2

@@ -1,0 +1,7 @@
+Contributor
+thieman commented on 26 May 2015
+docker-compose up --help promises a timeout option that appears to do absolutely nothing. Compose takes the standard 10 seconds to stop the running containers when I run the up command with my containers already started, regardless of what I pass here.
+> docker-compose up --help
+    -t, --timeout TIMEOUT  When attached, use this timeout in seconds
+                           for the shutdown. (default: 10)
+The timeout is also broken for restart in 1.2, though this has since been fixed: #1311. There seems to be a larger systemic issue of the docstrings not actually being tied to CLI functionality, which results in showing misleading information to end users and is extremely frustrating. Would be great to see this addressed.

@@ -1,0 +1,1 @@
+[Proposal] yml config merging should take empty arrays as a volontary attempt to reset the key

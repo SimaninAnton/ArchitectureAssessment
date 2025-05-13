@@ -1,0 +1,44 @@
+Contributor
+saulshanabrook commented on 3 Jul 2014
+I am getting a timeout when I try to import a MySQL saved database
+$ fig run db mysql --socket /var/run/mysqld/mysqld.sock  -u root -p '$MYSQL_DATABASE' < ~/Downloads/paddle8_production_2014-06-30.sql
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.4.2', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/command.py", line 31, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/command.py", line 50, in perform_command
+    return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/usr/local/lib/python2.7/site-packages/fig/cli/main.py", line 229, in run
+    container = service.create_container(one_off=True, **container_options)
+  File "/usr/local/lib/python2.7/site-packages/fig/service.py", line 145, in create_container
+    container_options = self._get_container_create_options(override_options, one_off=one_off)
+  File "/usr/local/lib/python2.7/site-packages/fig/service.py", line 274, in _get_container_create_options
+    container_options['name'] = self.next_container_name(one_off)
+  File "/usr/local/lib/python2.7/site-packages/fig/service.py", line 246, in next_container_name
+    return '_'.join(bits + [str(self.next_container_number(one_off=one_off))])
+  File "/usr/local/lib/python2.7/site-packages/fig/service.py", line 249, in next_container_number
+    numbers = [parse_name(c.name)[2] for c in self.containers(stopped=True, one_off=one_off)]
+  File "/usr/local/lib/python2.7/site-packages/fig/service.py", line 65, in containers
+    for container in self.client.containers(all=stopped):
+  File "/usr/local/lib/python2.7/site-packages/fig/packages/docker/client.py", line 405, in containers
+    res = self._result(self._get(u, params=params), True)
+  File "/usr/local/lib/python2.7/site-packages/fig/packages/docker/client.py", line 68, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/lib/python2.7/site-packages/requests/sessions.py", line 395, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/requests/sessions.py", line 383, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python2.7/site-packages/requests/sessions.py", line 486, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/requests/adapters.py", line 387, in send
+    raise Timeout(e)
+requests.exceptions.Timeout: HTTPConnectionPool(host='172.16.42.43', port=4243): Read timed out. (read timeout=60)

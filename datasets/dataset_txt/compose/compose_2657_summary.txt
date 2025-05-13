@@ -1,0 +1,1 @@
+Variable expansion is broken if compose is installed as a container

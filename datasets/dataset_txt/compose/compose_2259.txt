@@ -1,0 +1,46 @@
+brunocascio commented on 2 Jul 2016 •
+edited
+Hi!
+I have this config file:
+version: '2'
+
+services:
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    image: brunocascio/nginx
+    volumes_from:
+      - app
+    volumes:
+      - /var/log/nginx
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - app:fpm
+    restart: always
+  app:
+    image: php:fpm
+    container_name: app
+    working_dir: /var/www/html/
+    volumes:
+      - ./app/:/var/www/html
+    restart: always
+  composer:
+    container_name: composer
+    image: composer/composer:alpine
+    command: ["install"]
+    working_dir: /var/www/html
+    volumes_from:
+      - app
+  mysql:
+    container_name: mysql
+    image: mysql
+    volumes:
+     - /var/lib/mysql
+    env_file: ./mysql/.mysql_env
+    restart: always
+it's work when execute docker-compose up but when reboot the system, the volume ./app/:/var/www/html is not mounted.
+Docker version 1.11.2, build b9f10c9
+docker-compose version 1.8.0-rc1, build 9bf6bc6
+Any Help?

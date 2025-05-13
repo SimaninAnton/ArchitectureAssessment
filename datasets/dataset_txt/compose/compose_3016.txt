@@ -1,0 +1,22 @@
+Contributor
+aanand commented on 4 Dec 2015
+Right now, you can put both service and container names in volumes_from:
+db:
+  image: postgres
+  volumes_from: ["data", "something-else"]
+
+data:
+  image: tianon/true
+  volumes: ["/var/lib/postgresql/data"]
+Compose will interpret the data entry in volumes_from as referring to the data service, and the something-else entry as referring to an already-created container.
+The same is true of net: you can type net: "container:<container-name>" or net: "container:<service-name>".
+This is error-prone: if you mistype a service name, you'll get an error saying that no such container exists, which is misleading. Furthermore, it makes it harder to tell what's going on for someone who's not aware that you can mix container and service names.
+We should make the distinction explicit.
+net
+In the case of net, I think net: "container:<service-name>" should become net: "service:<service-name>". Both uses of net are uncommon, so we needn't make them especially concise.
+volumes_from
+In the case of volumes_from, it's less obvious what to do:
+We could rule that container and service names must be prefixed with container: or service:.
+We could rule that container names must be prefixed with container:, and un-prefixed names are assumed to be service names. This is probably how most people use volumes_from, so it makes sense to make the default case more concise.
+We could rule the opposite way: service names must be prefixed with service:, and un-prefixed names are assumed to be container names. This means that the container name case maps to the Docker CLI's --volumes-from=container-name flag, but also means that most users will have to do more typing.
+I personally like option 2 best.

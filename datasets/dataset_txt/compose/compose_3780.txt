@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 27 Mar 2015
+#972 made containers schedule onto the same node when running Compose apps on Swarm. We should probably document this in SWARM.md.

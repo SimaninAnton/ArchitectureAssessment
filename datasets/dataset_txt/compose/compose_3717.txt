@@ -1,0 +1,2 @@
+colinrymer commented on 17 Apr 2015
+Docker 1.6 adds support for the --log-driver option. It'd be great to be able to set this in the docker-compose.yml file.

@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 12 Jul 2014
+https://github.com/orchardup/fig/blob/master/fig/project.py#L138-L139
+It's missing a test and clearly doesn't work (client isn't defined).

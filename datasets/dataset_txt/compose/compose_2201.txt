@@ -1,0 +1,3 @@
+elliotchance commented on 27 Jul 2016
+There should be an option that still shows the build steps, but not the actual progress bars which spray a huge amount of output on CI servers since the docker commands expect that your using a terminal that has the control codes to write over previous lines.
+38

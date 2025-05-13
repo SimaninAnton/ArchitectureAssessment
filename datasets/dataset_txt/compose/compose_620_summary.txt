@@ -1,0 +1,1 @@
+File system events are not propagated to services in bind volumes

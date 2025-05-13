@@ -1,0 +1,1 @@
+`docker-compose version` broken in 1.3.1

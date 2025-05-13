@@ -1,0 +1,112 @@
+Vad1mo commented on 1 May 2015
+Currently compose extends is very verbose.
+We use extends in the way that we have a base file and then for each environment we replace the significant parts that we want to override or have different.
+In the current state of extends if you want to achieve the same you need almost rewrite everything.
+Look at out actual example and how verbose it is. There are only two lines that matter.
+common.yaml
+elasticsearch:
+  image: zinvoice/elasticsearch
+  hostname: elasticsearch
+  restart: always
+  dns: 172.17.42.1
+  ports:
+    - "9200:9200"
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+    - /data/elasticsearch:/opt/elasticsearch/data/elasticsearch
+
+logstash:
+  image: zinvoice/logstash
+  hostname: logstash
+  dns: 172.17.42.1
+  restart: always
+  ports:
+    - "5000:5000"
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+
+kibana:
+  image: zinvoice/kibana
+  hostname: kibana
+  dns: 172.17.42.1
+  restart: always
+  ports:
+    - "5601:5601"
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+
+logspout:
+  image: zinvoice/logspout
+  hostname: logspout
+  command: logstash://logstash.docker:5000
+  restart: always
+  dns: 172.17.42.1
+  ports:
+    - "8003:8000"
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+
+doorman:
+  image: zinvoice/doorman
+  hostname: doorman
+  restart:  always
+  dns: 172.17.42.1
+  ports:
+    - "8085:8085"
+child.yaml
+elasticsearch:
+  extends:
+    file: ../common.yml
+    service: elasticsearch
+
+logstash:
+  extends:
+    file: ../common.yml
+    service: logstash
+
+kibana:
+  extends:
+    file: ../common.yml
+    service: kibana
+
+logspout:
+  extends:
+    file: ../common.yml
+    service: logspout
+
+doorman:
+  environment:
+    - DOORMAN_GITHUB_APPID=xxxxxxxx
+    - DOORMAN_GITHUB_APPSECRET=xxxxxx
+  links:
+    - nginxtrusted
+  extends:
+    file: ../common.yml
+    service: doorman
+With the new extends feature one would add a global_extends/import like this:
+extended_child.yaml
+global_extends: 
+ - common.yaml
+ - extra.yaml 
+
+doorman:
+  environment:
+    - DOORMAN_GITHUB_APPID=xxxxxxxx
+    - DOORMAN_GITHUB_APPSECRET=xxxxxx
+Thats it.
+Advantages
+A less verbose code is easy to maintain and understand
+You can add remove service in the base.yaml without adding/removing entries in the children. (Missing a container in Prod because someone forgot to ad it as into the prod.yaml.
+You can aggregate services into one.
+The configuration can be easily created by CI or or maintained by an application.
+You have a nice overview what gets set and you can check in this in a repo.
+This will make #1377 and #495 obsolete and 75 +1er happy :)
+Main featues
+append nodes that are declared in parent yaml
+modify/overwrite nodes declared in parent
+add new nodes
+the only thing you can't do is to removed nodes
+see examples in #1380 (comment)

@@ -1,0 +1,1 @@
+1.5.0-rc2: Compose does not remove the network during rm

@@ -1,0 +1,1 @@
+Running `docker-compose run` from different shell scripts in same folder can lead to race condition leading to error & abort

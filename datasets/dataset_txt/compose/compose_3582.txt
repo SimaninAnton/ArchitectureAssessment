@@ -1,0 +1,16 @@
+pangloss commented on 6 Jun 2015
+If I have a basic docker compose compose config as follows, and run docker-compose up -d db, then later run docker-compose up -d --no-recreate api, the api container does not appear to actually be linked to the db, and none of the expected environment variables are present in the api instance.
+data:
+  build: docker/api-data/
+db:
+  build: docker/db/
+  volumes_from:
+    - data
+api:
+  build: .
+  links:
+    - db:db
+  volumes:
+    - ./:/app
+  volumes_from:
+    - data

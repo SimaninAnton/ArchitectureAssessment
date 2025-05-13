@@ -1,0 +1,6 @@
+augnustin commented on 7 Jun 2017
+I am an extended user of docker-compose but I really suck at docker-only.
+Correct me if I'm wrong, but from the usage I have had, all the docker-compose commands correspond to one/several docker commands, don't they?
+Eg. docker-compose run web /bin/bash => docker exec project_name_web /bin/bash -it
+Wouldn't it make sense to have in the verbose/debug mode the possibility to output the equivalent docker command to increase user awareness of how the docker cli works?
+Cheers

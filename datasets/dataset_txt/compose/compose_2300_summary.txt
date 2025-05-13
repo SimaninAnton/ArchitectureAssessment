@@ -1,0 +1,1 @@
+Containerised docker-compose ignores shell environment

@@ -1,0 +1,1 @@
+Restarting service `docker-compose restart my_service` takes longer then the actual restart.

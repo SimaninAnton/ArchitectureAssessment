@@ -1,0 +1,21 @@
+echupriyanov commented on 12 Feb 2016
+I'm having an issue using rexray driver with docker-compose 1.6.
+I have following very simple file:
+version: "2"
+services:
+  mysql:
+    image: sameersbn/mysql:latest
+    volumes:
+      - mydata:/var/lib/mysql
+
+volumes:
+  mydata:
+    driver: "rexray"
+    driver_opts:
+      volumetype: "gp2"
+      size: 5
+Given that file I suppose, that DE will create volume with Rexray volume driver?
+But really volume is created with 'local' driver instead.
+And I even can enter any string as driver parameter, and volume will be created with 'local' driver.
+But if I describe volume as external, provided existing rexray volume name, it will be successfully created and mounted.
+Is it a bug or I'm doing something wrong?

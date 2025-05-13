@@ -1,0 +1,27 @@
+cstorey commented on 3 Oct 2017
+We're running:
+Client:
+ Version:      17.03.2-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   7392c3b/17.03.2-ce
+ Built:        Wed Aug  9 22:45:09 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.2-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   7392c3b/17.03.2-ce
+ Built:        Wed Aug  9 22:45:09 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+As part of our integration test setup, we use docker-compose to start an integration-test container, that in turn depends on a database. For the integration-test container, we specify:
+    volumes:
+      - .:/app
+To ensure that the application build directory is available to the test process. This is all fine and dandy when running directly on a docker host; but our CI workers themselves run inside docker containers, and we bind-mount the docker socket into the ci worker container so we can make use of docker compose.
+So, when we start docker compose from inside of the CI container from working directory /workspace/widget; it quite reasonably runs the equivalent of: docker run -v /workspace/widget:/app my-image my-lovely-tests. However, because /workspace/widget means something different on the host as compared to the container, and docker-compose doesn't seem to take this into account; the docker demon tries to bind mount /workspace/widget from the host into the test container, resulting in an empty directory under /app.
+A confounding factor is that dockerd seems to auto-magically create the source path /workspace/widget on the host, where I'd expect it to fail because it doesn't exist on the host.
+Based on a quick skim of mount_namespaces.7, it would appear that the required information would be available to docker-compose itself via /proc/self/mountinfo; alternatively, it might well ask dockerd directly (although that requires more work).
+For now, I should be able to mitigate this by avoiding the need for the volumes specifier.
+Thanks,

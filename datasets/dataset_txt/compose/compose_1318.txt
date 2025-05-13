@@ -1,0 +1,5 @@
+dead10ck commented on 14 Jul 2017 •
+edited
+When using a compose file that has multiple services, it appears that the output of docker-compose up is broken. It appears that only the last service to get printed gets modified, where it should be modifying all lines that were printed. It brings the services up correctly, so the bug appears to be limited to the output of the command. Both kill and rm seem to be fine. See the asciicast to see the behavior I see.
+This is on Arch linux, using docker-compose v1.14.0, GNOME Terminal 3.24.2, and fish v 2.6.0, though the same behavior happens in bash 4.4.12.
+1

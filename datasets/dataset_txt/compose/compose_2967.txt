@@ -1,0 +1,21 @@
+zachary-russell commented on 25 Dec 2015
+I have spent the past few day working on creating a docker swarm on Digtital Ocean.
+I am using one server as a kv-store server running console according to this guide. Becasue i'm on Digital Ocean, i'm using private networking on DO so the machines can communicate with each other.
+I then create a hive master and slave, and start the overlay network, which is running on all machines. Here is my docker-compose.yml
+proxy:
+    image: tutum/haproxy 
+    ports:
+        - "1936:1936"
+        - "80:80"
+
+web:
+    image: tutum/hello-world
+    expose:
+        - "80"
+So when I do this it creates the 2 containers. HAProxy is running because I can access the stats at port 1936 at http://<ip-address>:1936, however, when I try to go to the web server/load balancer at port 80 I get connection refused. I everything seems to be connected though, when I run docker-compose ps:
+       Name                      Command               State                                 Ports
+--------------------------------------------------------------------------------------------------------------------------------
+splashcloud_proxy_1   python /haproxy/main.py          Up      104.236.109.58:1936->1936/tcp, 443/tcp, 104.236.109.58:80->80/tcp
+splashcloud_web_1     /bin/sh -c php-fpm -d vari ...   Up      80/tcp
+The only thing I can think of is that it's not linking to the web container, but i'm not sure how to troubleshoot this.
+I'd appreciate any help on this.

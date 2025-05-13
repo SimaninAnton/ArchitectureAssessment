@@ -1,0 +1,2 @@
+jmreicha commented on 9 Feb 2016
+I was experimenting with the restart: always option and noticed that if a container exists unexpected and restart if you are tailing all of the logs docker-compose logs that the log stream breaks for the container that has issues. Other log streams continue working.

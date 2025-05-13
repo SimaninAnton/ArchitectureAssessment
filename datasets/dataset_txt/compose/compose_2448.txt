@@ -1,0 +1,17 @@
+kazagistar commented on 29 Apr 2016
+$ docker-compose ps
+ERROR: SSL error: hostname '192.168.99.101' doesn't match 'localhost'
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+$ env | grep DOCKER
+DOCKER_HOST=tcp://192.168.99.101:2376
+DOCKER_MACHINE_NAME=companyname
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/Users/username/.docker/machine/machines/companyname
+Versions:
+docker-compose version 1.7.0, build unknown
+Docker version 1.11.0, build 4dc5990
+docker-machine version 0.7.0, build a650a40
+OSX 10.10.5
+I checked to make sure I didn't have any proxies in my network preferences (not that I ever set any).
+2

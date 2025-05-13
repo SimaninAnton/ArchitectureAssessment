@@ -1,0 +1,12 @@
+RotemEmergi commented on 24 Jul 2016 •
+edited
+Hello ,
+I have installed docker on red het 7 and it's succeeded.
+I tried to install the compose with this command: +1:
+curl -L https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s-uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+When I run the command
+docker-compose --version
+And got
+bash: docker-compose: command not found
+How can I fix it?

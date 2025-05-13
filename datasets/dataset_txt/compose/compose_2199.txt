@@ -1,0 +1,148 @@
+kminehart commented on 27 Jul 2016 •
+edited
+Bad title. Out of storage space, not memory. My bad!
+It's a 10.4gb container, too.
+My free space:
+[I] ⋊> ~ on master ⨯ df -h                                                                      12:24:07
+Filesystem      Size  Used Avail Use% Mounted on
+dev             3.9G     0  3.9G   0% /dev
+run             3.9G  908K  3.9G   1% /run
+/dev/sda4        27G  9.1G   17G  36% /
+tmpfs           3.9G   53M  3.9G   2% /dev/shm
+tmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup
+tmpfs           3.9G   68K  3.9G   1% /tmp
+/dev/sda1        42G   16G   25G  39% /home
+/dev/sda2        42G   20G   20G  50% /var
+/dev/sda5       1.3G   32M  1.3G   3% /boot
+tmpfs           790M   12K  790M   1% /run/user/1000
+Docker version:
+[I] ⋊> ~ on master ⨯ docker version                                                             12:26:12
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.6.2
+ Git commit:   b9f10c9
+ Built:        Tue Jun 21 00:43:14 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.6.2
+ Git commit:   b9f10c9
+ Built:        Tue Jun 21 00:43:14 2016
+ OS/Arch:      linux/amd64
+[I] ⋊> ~ on master ⨯ docker info                                                                12:26:13
+Containers: 1
+ Running: 0
+ Paused: 0
+ Stopped: 1
+Images: 19
+Server Version: 1.11.2
+Storage Driver: devicemapper
+ Pool Name: docker-8:2-2359321-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 529.5 MB
+ Data Space Total: 107.4 GB
+ Data Space Available: 23.61 GB
+ Metadata Space Used: 2.29 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.145 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.131 (2016-07-15)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: host bridge null
+Kernel Version: 4.6.4-1-ARCH
+Operating System: Arch Linux
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 7.706 GiB
+Name: crockford
+ID: HO2U:ELWR:LDB3:PMEY:5YOJ:D7YJ:2HJA:PVYG:45K2:J6KI:D6WO:4RUE
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Registry: https://index.docker.io/v1/
+docker-compose version:
+[I] ⋊> ~ on master ⨯ docker-compose info                                                        12:26:15
+No such command: info
+
+Commands:
+  build              Build or rebuild services
+  config             Validate and view the compose file
+  create             Create services
+  down               Stop and remove containers, networks, images, and volumes
+  events             Receive real time events from containers
+  exec               Execute a command in a running container
+  help               Get help on a command
+  kill               Kill containers
+  logs               View output from containers
+  pause              Pause services
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pulls service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  unpause            Unpause services
+  up                 Create and start containers
+  version            Show the Docker-Compose version information
+[I] ⋊> ~ on master ⨯ docker-compose version                                                     12:26:31
+docker-compose version 1.7.1, build 6c29830
+docker-py version: 1.8.1
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+[I] ⋊> ~ on master ⨯                
+Example error output:
+[N] ⋊> ~/W/W/cocagne on master ⨯ docker build .         
+Successfully built fe04178f1351
+[N] ⋊> ~/W/W/cocagne on master ⨯ docker-compose build         
+mysql uses an image, skipping
+Building vitess
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 58, in main
+    command()
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 109, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 213, in build
+    force_rm=bool(options.get('--force-rm', False)))
+  File "/usr/lib/python3.5/site-packages/compose/project.py", line 300, in build
+    service.build(no_cache, pull, force_rm)
+  File "/usr/lib/python3.5/site-packages/compose/service.py", line 718, in build
+    buildargs=build_opts.get('args', None),
+  File "/usr/lib/python3.5/site-packages/docker/api/build.py", line 54, in build
+    path, exclude=exclude, dockerfile=dockerfile, gzip=gzip
+  File "/usr/lib/python3.5/site-packages/docker/utils/utils.py", line 103, in tar
+    t.add(os.path.join(root, path), arcname=path, recursive=False)
+  File "/usr/lib/python3.5/tarfile.py", line 1938, in add
+    self.addfile(tarinfo, f)
+  File "/usr/lib/python3.5/tarfile.py", line 1966, in addfile
+    copyfileobj(fileobj, self.fileobj, tarinfo.size)
+  File "/usr/lib/python3.5/tarfile.py", line 244, in copyfileobj
+    dst.write(buf)
+  File "/usr/lib/python3.5/tempfile.py", line 483, in func_wrapper
+    return func(*args, **kwargs)
+OSError: [Errno 28] No space left on device
+So what ended up happening to me was:
+I was working with a fairly small root partition, so eventually, a docker-compose build filled up the last available bits of space on my root partition.
+I was forced to shrink my home partition, and create a separate /var partition, and copy and remove my old /var folder to my new partition.
+Now this happens, despite clearly having enough space.

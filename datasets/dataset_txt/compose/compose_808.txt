@@ -1,0 +1,14 @@
+joewreschnig commented on 12 Mar 2018 •
+edited
+The compose file validator has very little consistency in how it formats errors. Some messages include filename and some do not, some use "Bad thing X in service Y" and others "Service X has invalid Y", some provide a full YAML path and others a separate service and subkey.
+This makes it difficult to integrate its output with other programs for e.g. inline editor support.
+Ideally, the format would be the de facto standard filename:line:column: message. But probably the line number information is too difficult to route all the way through the YAML load + jsonschema + post validation functions, so an alternate form might be:
+<filename>: in service <service>: <subpath>: <message>
+<filename>: service <service>: <message> # if the problem is service-level
+
+<filename>: in volume <volume>: <subpath>: <message>
+<filename>: volume <volume>: <message> # if the problem is volume-level
+
+# And so on for other top-level objects
+
+<filename>: <key>: <message> # if the problem isn't in a service / volume / etc

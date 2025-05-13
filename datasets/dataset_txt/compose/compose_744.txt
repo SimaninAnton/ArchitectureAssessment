@@ -1,0 +1,4 @@
+Contributor
+funkyfuture commented on 12 Apr 2018
+The github release page for 1.21.0 Changes section lists changes that are from some release in the past.
+The CHANGES.md doesn't include any information about the 1.21.0 release at all.

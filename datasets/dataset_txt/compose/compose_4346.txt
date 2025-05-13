@@ -1,0 +1,31 @@
+Contributor
+shanejonas commented on 16 Apr 2014
+Here is my output logs:
+5195 INFO: building PYZ (ZlibArchive) out00-PYZ.toc
+8421 INFO: checking PKG
+8421 INFO: rebuilding out00-PKG.toc because out00-PKG.pkg is missing
+8421 INFO: building PKG (CArchive) out00-PKG.pkg
+objdump: section '.dynamic' mentioned in a -j option, but not found in any input file
+11307 INFO: checking EXE
+11308 INFO: rebuilding out00-EXE.toc because fig missing
+11308 INFO: building EXE from out00-EXE.toc
+Traceback (most recent call last):
+  File "/usr/local/bin/pyinstaller", line 9, in <module>
+    load_entry_point('PyInstaller==2.1', 'console_scripts', 'pyinstaller')()
+  File "/usr/local/lib/python2.7/dist-packages/PyInstaller/main.py", line 88, in run
+    run_build(opts, spec_file, pyi_config)
+  File "/usr/local/lib/python2.7/dist-packages/PyInstaller/main.py", line 46, in run_build
+    PyInstaller.build.main(pyi_config, spec_file, **opts.__dict__)
+  File "/usr/local/lib/python2.7/dist-packages/PyInstaller/build.py", line 1924, in main
+    build(specfile, kw.get('distpath'), kw.get('workpath'), kw.get('clean_build'))
+  File "/usr/local/lib/python2.7/dist-packages/PyInstaller/build.py", line 1873, in build
+    execfile(spec)
+  File "/code/fig.spec", line 17, in <module>
+    console=True )
+  File "/usr/local/lib/python2.7/dist-packages/PyInstaller/build.py", line 1173, in __init__
+    self.__postinit__()
+  File "/usr/local/lib/python2.7/dist-packages/PyInstaller/build.py", line 309, in __postinit__
+    self.assemble()
+  File "/usr/local/lib/python2.7/dist-packages/PyInstaller/build.py", line 1227, in assemble
+    outf = open(self.name, 'wb')
+IOError: [Errno 13] Permission denied: '/code/dist/fig'

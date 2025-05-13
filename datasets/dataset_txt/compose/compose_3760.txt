@@ -1,0 +1,4 @@
+thalescm commented on 2 Apr 2015
+Currently the docker-compose scale command creates random ports for the new containers.
+Is there a way to specify a port for the new containers?
+2

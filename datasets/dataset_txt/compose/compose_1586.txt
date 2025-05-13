@@ -1,0 +1,13 @@
+pauloddr commented on 21 Mar 2017
+I am using Docker Compose to run a Rails application that has a component to read from the .env file as well (Dotenv: https://github.com/bkeepers/dotenv).
+After trying to figure out why my environment variables were getting all messed up whenever I ran the app using Compose, I found out about Compose's ability to automatically read from .env, and realized it was affecting Dotenv's workflow, which ignores variables set by system.
+Example:
+.env: VAR=0 (default value)
+.env.development: VAR=1
+Expected behavior: VAR == 1
+Upon launching the app in development, Dotenv will read from .env.development first and set VAR to 1 (because a system variable is not expected to be set). When it falls back to .env, VAR is already set so it won't be touched. This is how Dotenv's workflow works.
+Received behavior: VAR == 0
+Compose will have read from .env and set VAR to 0 in the system/container before launching the app. So when Dotenv reads .env.development, it will skip VAR because value will already be set by system.
+I could set the development value directly in .env, but then, the same thing would happen in .env.test or any other local environment.
+I don't generally use .env for Compose, so I'd like an option to disable this specific magic. Or just remove it, since I can already achieve the exact same thing using env_file, if I need it.
+Thanks.

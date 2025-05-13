@@ -1,0 +1,12 @@
+keturn commented on 18 Oct 2017
+I'm pretty sure this used to work:
+docker-compose run --rm foo ls -l
+But now it fails with
+/bin/ls: /bin/ls: cannot execute binary file
+I believe this is because somehow bash is getting set as the entrypoint (despite the fact that bash does not appear in docker-compose.yml nor the Dockerfile ... perhaps in the image the Dockerfile inherits FROM?), so it's trying to run ls as a bash script.
+This works, but I find it a more awkward command line to construct:
+docker-compose run --rm --entrypoint 'ls -l' foo
+docker-compose version 1.16.1, build 6d1ac21
+docker-py version: 2.5.1
+CPython version: 2.7.12
+on OS X

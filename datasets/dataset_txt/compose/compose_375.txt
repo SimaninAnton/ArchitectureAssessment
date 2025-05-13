@@ -1,0 +1,18 @@
+Contributor
+adamchainz commented on 30 Nov 2018
+Description of the issue
+This seems to be a repeat of #5871 . There's a version 1.23.2 on PyPI but the changelog was last updated for 1.23.0: https://github.com/docker/compose/blob/master/CHANGELOG.md
+This is not reassuring - both from an upgrade perspective (I want to be sure the new version won't need changes on my codebase) and security (is the new version legitimate?).
+Context information (for bug reports)
+N/A
+Steps to reproduce the issue
+See new version on PyPI
+Not see changelog entry
+Observed result
+Missing versions in changelog
+Expected result
+Every version in changelog
+Stacktrace / full error message
+N/A
+Additional information
+N/A

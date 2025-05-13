@@ -1,0 +1,24 @@
+thecjharries commented on 5 Dec 2017
+The official docs show docker network is capable of specifying the subnet, gateway, and a few other things.
+network supports subnet, gateway, and a few other other things.
+The schema only defines subnet and explicitly states there are no additionalProperties.
+This docker-compose.yml
+version: '3'
+
+services:
+  illustrate_network_issue:
+    image: alpine:latest
+    networks:
+      broken_config:
+
+networks:
+  broken_config:
+    ipam:
+      driver: default
+      config:
+        - subnet: '10.47.0.0/24'
+          gateway: '10.47.0.254'
+leads to this error:
+$ docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+networks.broken_config.ipam.config value Additional properties are not allowed ('gateway' was unexpected)

@@ -1,0 +1,1 @@
+Docker-compose --exit-code-from is ignored

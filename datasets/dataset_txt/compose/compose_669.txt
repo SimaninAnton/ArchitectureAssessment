@@ -1,0 +1,12 @@
+rhuanbarreto commented on 16 May 2018
+Just for the start. This is not an issue about environment variable expansion.
+I have a definition for a MariaDB:
+image: mariadb:10.2
+restart: always
+environment:
+- MYSQL_USER=blabla
+- MYSQL_PASSSWORD=123$abc
+This raises the warning: Variable abc is not set. Defaulting to a blank string.
+There is lots of topic talking about environment variable expansion. But none of them talk about $ escaping.
+Can you help?
+5

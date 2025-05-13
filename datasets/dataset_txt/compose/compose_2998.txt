@@ -1,0 +1,11 @@
+citec commented on 10 Dec 2015
+It would be very useful to have a 'list' command to list all containers defined in the docker-compose.yml file.
+Ex: docker-compose list
+Output:
+    apache
+    mysql
+It could have some options, for example:
+-i (show images)
+    output: apache (repo/apacheimg:latest)
+-d (show dependencies)
+-s (show status: up|exit)

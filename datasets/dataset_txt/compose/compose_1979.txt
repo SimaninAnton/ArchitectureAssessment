@@ -1,0 +1,19 @@
+zkanda commented on 27 Oct 2016
+Hello, is there a way to use shell commands in docker-compose.yml file?
+Here is my use case:
+ version: '2'
+ services:
+   ci:
+     image: jenkins
+     volumes:
+       - ./data:/var/jenkins_home
+       - /var/run/docker.sock:/var/run/docker.sock
+       - $(command -v docker):/usr/bin/docker
+     groupadd:
+       - $(stat -c %g /var/run/docker.sock)
+     ports:
+       - "8080:8080"
+       - "50000:50000"
+Currently it's giving me this error:
+ERROR: Invalid interpolation format for "volumes" option in service "ci": "${command -v docker}:/usr/bin/docker"
+20

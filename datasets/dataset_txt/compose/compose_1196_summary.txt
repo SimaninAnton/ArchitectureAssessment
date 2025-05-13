@@ -1,0 +1,1 @@
+Ideas for improving perf of back-to-back docker-compose calls

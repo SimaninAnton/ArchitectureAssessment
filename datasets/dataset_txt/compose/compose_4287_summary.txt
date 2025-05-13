@@ -1,0 +1,1 @@
+BUG: C-p C-q should 'detach' from the container

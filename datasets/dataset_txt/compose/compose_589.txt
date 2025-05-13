@@ -1,0 +1,10 @@
+abitrolly commented on 6 Jul 2018
+Description of the issue
+Running docker-compose with mounted volumes on Fedora/CentOS gives permission denied errors, because docker-compose doesn't set SELinux permissions unless explicit :z :Z flags are given from the command line.
+Also moby/moby#30934 states that :z :Z are not default, because using it outside of project directory will relabel files and directories, breaking permissions if somebody mounts some home or system directory as container volume.
+Steps to reproduce the issue
+Run docker-compose on Fedora with SELinux
+Observed result
+Permission denied errors from apps inside container.
+Proposal
+For development docker-compose never leaves the scope of single directory with project sources. I believe that 80% of cases can be covered if docker-compose automatically labels files in project directory and gives warnings with no action for all mounts outside.

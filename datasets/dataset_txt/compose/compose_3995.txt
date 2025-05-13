@@ -1,0 +1,10 @@
+jbulchergist commented on 14 Jan 2015
+I have a data container build from scratch with nothing but a file called /true init, so that fig is able to start up the container (it would be nice if I didn't even need that file). Fig starts the container fine the first time, but attempting to run fig up on the service after bringing it down results in an odd message:
+Cannot start container 12341234...: exec: "/bin/echo": stat /bin/echo: no such file or directory
+I don't want fig runing echo - I want to run /true, if anything.
+FROM scratch
+
+COPY true /true
+
+CMD [ "/true" ]
+Shouldn't fig respect CMD? Can I make it respect CMD?

@@ -1,0 +1,38 @@
+aslheyr commented on 20 May 2016 •
+edited
+Here’s an example Compose file defining two custom networks:
+basic.yml
+version: '2'
+
+services:
+  proxy:
+    build: ./proxy
+    networks:
+      - front
+  app:
+    build: ./app
+    networks:
+      - front
+      - back
+  db:
+    image: postgres
+    networks:
+      - back
+
+networks:
+  front:
+    external:
+      name: front_network
+  back:
+    external:
+      name: back_network
+basic.dev.yml
+version: '2'
+
+services:
+app:
+   ports:
+     - "80:8080"
+When docker-compose -f basic.yml -f basic.dev.yml up is executed, the mapping no works
+but, when create and later start are executed, the mapping works.... or maybe not
+1

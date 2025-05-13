@@ -1,0 +1,8 @@
+moxiegirl commented on 16 Nov 2015
+Can you check if this is correct?
+https://docs.docker.com/compose/install/
+the statement "Install Docker Engine version 1.7.1 or greater:"
+If I go here
+https://github.com/docker/compose/releases
+then I see
+another statement "Note that Compose 1.5.1 requires Docker 1.8.0 or later."

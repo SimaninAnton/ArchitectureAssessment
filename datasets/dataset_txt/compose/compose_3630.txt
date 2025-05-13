@@ -1,0 +1,6 @@
+robwithhair commented on 21 May 2015
+When you run docker-compose up -d by default all containers start. It would be really handy to be able to mark one type of container not to start by default but only to start when named, such as docker-compose up -d unit_test_runner for example.
+This would mean a team of devs could use the docker-compose up -d command to start a development environment but without starting containers which are used for unit or functional testing unless they have dependencies to other containers. Don't know if this could be tied into the docker-compose scale command so you specify an ideal number of containers to start and if you specify 0 then none get started by default unless they are depended on by another container or they are specified in the up command.
+Thanks all, loving compose. Keep up the good work. Can't wait until swarm has automatic failover and inter-machine networking. Gonna be awesome.
+Rob
+9

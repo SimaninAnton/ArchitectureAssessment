@@ -1,0 +1,35 @@
+BentCoder commented on 22 Jun 2019
+Hi,
+When I try to start "application" containers I get errors below. The reason is because the monitoring_fluent_bit container is not running yet. However, it would be nice if there was an "graceful" start option under logging.options so if the monitoring_fluent_bit container is not running/available yet, the application services should still run. Does that make sense?
+Thanks
+ERROR: for app_php_1 Cannot start service app_php: failed to initialize logging driver: dial tcp 127.0.0.1:24224: connect: connection refused
+ERROR: for app_php Cannot start service app_php: failed to initialize logging driver: dial tcp 127.0.0.1:24224: connect: connection refused
+ERROR: Encountered errors while bringing up the project.
+application compose
+version: "3.4"
+
+services:
+  app_php:
+    ...
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: "monitoring_fluent_bit"
+        mode: "non-blocking"
+        max-buffer-size: "2m"
+  app_nginx:
+    ...
+  app_mysql:
+    ...
+monitoring compose
+version: "3.4"
+
+services:
+  monitoring_fluent_bit:
+    image: "fluent/fluent-bit:1.0.4"
+    ...
+  monitoring_es:
+    ...
+  monitoring_kibana:
+    ...
+2

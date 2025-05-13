@@ -1,0 +1,4 @@
+lmmarsano commented on 17 Apr 2016
+Specifically the UTS namespace mode option and probably some others.
+I suggest reviewing the current options to ensure nothing's missed.
+6

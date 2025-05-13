@@ -1,0 +1,1 @@
+Executing command inside container using docker-compose exec breaks mount from /sda2

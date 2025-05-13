@@ -1,0 +1,3 @@
+sourav82 commented on 27 Feb 2015
+Looks like it is just command-line not a service ...
+I would like to access docker-compose remotely and possibly POST a yml file to it to create the environment. Does it expose any REST API for those tasks?

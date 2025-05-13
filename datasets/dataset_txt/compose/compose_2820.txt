@@ -1,0 +1,20 @@
+mmarzantowicz commented on 8 Feb 2016
+Step 1:
+$ cat docker-compose.yml 
+version: "2"
+
+services:
+    testnet:
+        image: fedora:23
+        dns: 192.168.1.1
+        command: /bin/bash
+Step 2:
+$ docker-compose -f docker-compose.yml run testnet
+Step 3:
+[root@bbd9f61098fb /]# cat /etc/resolv.conf 
+search xxx.yyy.tld
+nameserver 127.0.0.11
+options ndots:0
+As you can see, dns option is ignored by docker-compose and some garbage is set instead. This prevents my containers from starting up because they require to use mentioned DNS server. BTW, what kind of shit is 127.0.0.11, and how it get to resolve.conf?
+With version 1 of yaml file everything is working as expected (nameserver is set correctly).
+3

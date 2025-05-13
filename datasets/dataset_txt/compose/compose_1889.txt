@@ -1,0 +1,7 @@
+christhomas commented on 29 Nov 2016
+Hi guys,
+I am just wondering how to you manage a large number of container definitions in docker-compose, because I have an application now which is migrating to microservices, it has 20 subdomains, each of which is in 15 countries, each service has multiple volumes and each one runs on its own network, meaning 20 networks also, one per microservice.
+A problem I have seeing is that this means I have 300 services defined in a file which is about 4000 lines of yaml.
+The problem is that starting or stopping any service in this configuration, takes like 5 minutes and I am wondering what is holding it up for so long.
+Maybe this is a problem with how I am configuring everything, that there is a better way, but right now I am not experienced enough to see it.
+Thanks for your advice.

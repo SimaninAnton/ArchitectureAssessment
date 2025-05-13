@@ -1,0 +1,21 @@
+Contributor
+andrerom commented on 15 Feb 2017
+Context:
+Most applications already have defaults for the environment variables they support, and furthermore in several applications there is logic connecting one variable with another, for instance global dev flag automatically disabling caching and enabling debug unless config says otherwise.
+Possible Solution:
+By allowing compose to support optional environment variables we can solve:
+having to replicate defaults in our .env fields and/or our docker-compose.yml files
+forcing users to define all or nothing on env variables when switching global dev flags but having issues as debug flag being now set to false as default is set for production
+_Side: This part can also be solved with additional .env files, however you end up having to duplicate defaults exponentially with the complexity of the applications environment variables inter variable dependencies.
+Format might be whatever, but here is one possible syntax for it:
+services:
+  app:
+    image: php:7.1-fpm
+    environment:
+     - ?SYMFONY_ENV
+     - ?SYMFONY_DEBUG
+     - ?SYMFONY_HTTP_CACHE
+     - DATABASE_USER
+     - DATABASE_PASSWORD
+     - DATABASE_NAME
+     - DATABASE_HOST=db

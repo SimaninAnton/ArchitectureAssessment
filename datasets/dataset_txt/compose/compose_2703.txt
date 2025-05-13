@@ -1,0 +1,4 @@
+mblaschke commented on 26 Feb 2016
+Since 1.6.1 isn't able to talk to non-TLS docker hosts (eg. local environments). 1.6.0 was working without TLS.
+docker-compose build
+ERROR: TLS configuration is invalid - make sure your DOCKER_TLS_VERIFY and DOCKER_CERT_PATH are set correctly.

@@ -1,0 +1,160 @@
+nhooey commented on 24 Jun 2019 •
+edited
+Description of the issue
+When attempting to bring up a container with docker-compose up --build, I get the following vague error message, without any context:
+ERROR: Service 'elasticsearch' failed to build: max depth exceeded
+The error should state what "depth" is, and have more information.
+In this particular case, the problem seems to be stateful because it's now happening with no changes to the docker-compose.yml file, after a reboot. I'm not sure yet what state could have changed.
+Context information (for bug reports)
+Output of docker-compose version
+$ docker-compose --version
+docker-compose version 1.23.2, build 1110ad01
+Output of docker version
+$ docker --version
+Docker version 18.09.2, build 6247962
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+# docker-compose.yml
+version: '2.0'
+
+services:
+
+  nginx:
+    image: nginx:1.17.0-alpine
+
+    ports:
+      - 80:80
+      - 443:443
+
+    volumes:
+      - ./compose/nginx/conf.d:/etc/nginx/conf.d
+      - ./compose/certbot/conf:/etc/letsencrypt
+      - ./compose/certbot/www:/var/www/certbot
+
+  certbot:
+    image: certbot/certbot
+
+    volumes:
+      - ./compose/certbot/conf:/etc/letsencrypt
+      - ./compose/certbot/www:/var/www/certbot
+
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  thingie-ui:
+    image: registry.gitlab.com/barrowts/thingie/thingie-ui:latest
+
+    env_file: ./compose/thingie-ui/environment.properties
+
+    ports:
+      - 5000:5000
+    networks:
+      - default
+    depends_on:
+      - thingie-api
+
+  thingie-api:
+    image: registry.gitlab.com/barrowts/thingie/thingie-api:latest
+
+    environment:
+      # Using 'create-drop' causes errors with PostgreSQL
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: postgres
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${THINGIE_POSTGRES_PASSWORD}
+      ELASTICSEARCH_HOST: elasticsearch
+
+    volumes:
+      - thingie-data-api:/usr/share/thingie-api
+      - ./compose/thingie-api:/etc/thingie
+    ports:
+      - 8080:8080
+    networks:
+      - default
+    depends_on:
+      - postgresql
+      - elasticsearch
+
+  postgresql:
+    extends:
+      file: compose/postgresql.yaml
+      service: postgresql
+
+  elasticsearch:
+    extends:
+      file: compose/elasticsearch.yaml
+      service: elasticsearch
+
+volumes:
+  thingie-data-api:
+    driver: local
+  thingie-data-elasticsearch:
+    driver: local
+  thingie-data-postgresql:
+    driver: local
+
+networks:
+  default:
+# elasticsearch.yaml
+version: '2.0'
+
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+
+    build:
+      context: elasticsearch
+      dockerfile: Dockerfile
+
+    environment:
+      ES_HOME: "/usr/share/elasticsearch"
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+    volumes:
+      - thingie-data-elasticsearch:/usr/share/elasticsearch/data:delegated
+    ports:
+      - 9200:9200
+    networks:
+      - default
+
+volumes:
+  thingie-data-elasticsearch:
+    driver: local
+
+networks:
+  default:
+Steps to reproduce the issue
+Run docker-compose up --build $service
+Observe error message
+Observed result
+ERROR: Service 'elasticsearch' failed to build: max depth exceeded
+Expected result
+An error message with more context.
+Stacktrace / full error message
+Full output:
+docker-compose up --build --abort-on-container-exit postgresql elasticsearch
+Building elasticsearch
+Step 1/5 : FROM docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+ ---> 18a552c86b4d
+Step 2/5 : COPY config "/usr/share/elasticsearch/config/"
+ ---> Using cache
+ ---> 12542a1cafff
+Step 3/5 : USER root
+ ---> Using cache
+ ---> 6b2debe5e5c1
+Step 4/5 : RUN chown -R elasticsearch:elasticsearch config
+ ---> Using cache
+ ---> d56dc5971872
+Step 5/5 : USER elasticsearch
+ ---> Running in 4fb4262888b7
+ERROR: Service 'elasticsearch' failed to build: max depth exceeded
+Additional information
+Mac OS 10.14.5 (18F132)
+Docker Compose and friends all installed with Homebrew

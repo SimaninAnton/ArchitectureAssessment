@@ -1,0 +1,1 @@
+UnicodeEncodeError: 'ascii' codec can't encode character u'\ufffd' in position 66: ordinal not in range(128)

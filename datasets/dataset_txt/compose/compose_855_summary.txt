@@ -1,0 +1,1 @@
+From 1.9.0, call_docker implementation does not respect options like -H

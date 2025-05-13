@@ -1,0 +1,1 @@
+Can't use linked resource with log driver

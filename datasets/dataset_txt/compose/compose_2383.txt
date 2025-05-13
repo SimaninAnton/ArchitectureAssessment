@@ -1,0 +1,18 @@
+Contributor
+sanmai-NL commented on 19 May 2016
+docker-compose.yml:
+version: '2'
+services:
+  alpine:
+    image: "alpine:latest"
+    restart: unlesss-stopped
+In the previous, unlesss-stopped is an invalid value for the restart policy name.
+sudo docker-compose up
+Does not complain, and a container is created and started with an incorrect restart policy. Incorrect, based on docker inspect output.
+In contrast, this fails:
+sudo docker create --restart='unlesss-stopped' alpine
+docker: invalid restart policy unlesss-stopped.
+See 'docker create --help'.
+Context
+docker-compose version 1.7.1, build 6c29830
+Docker version 1.11.1, build 5604cbe

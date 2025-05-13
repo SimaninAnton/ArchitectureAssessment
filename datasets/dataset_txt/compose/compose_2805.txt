@@ -1,0 +1,27 @@
+jpetazzo commented on 9 Feb 2016
+What I have
+5 nodes cluster
+Compose 1.6.0
+Swarm 1.1.0
+Engine 1.10.0
+What I do
+With the following docker-compose.yml:
+www:
+  image: nginx
+  ports:
+    - "8888:80"
+I run:
+docker-compose up -d
+docker-compose up -d --force-recreate
+What I expect to see
+Container is created, then recreated.
+What I see instead
+Container is created, but when trying to recreate it, I see:
+Recreating repro_www_1
+ERROR: unable to find a node that satisfies container==a0e31139c706d24a739b88034e1f0b266eb049b6b304580c3b29bf4535d1c958
+(Where a0e3... is the ID of the existing container.)
+Cause
+Compose provides a placement constraint to force the new container to be on the same host as the old one. But when there is a port mapping, this fails, even if the container has been stopped first, because Swarm doesn't deal with port mappings the same way as Engine does (a stopped container is still considered to use the port).
+I attached the logs of docker inspect (before recreating the container) and the verbose output of docker-compose up -d.
+inspect.log.txt
+compose.log.txt

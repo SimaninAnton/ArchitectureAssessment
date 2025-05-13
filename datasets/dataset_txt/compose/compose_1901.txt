@@ -1,0 +1,30 @@
+a1exus commented on 27 Nov 2016
+My environment:
+# docker-compose version
+docker-compose version 1.8.1, build 878cff1
+docker-py version: 1.10.3
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+# 
+I'm seeing following WARNING message:
+# docker-compose ps
+WARNING: The ELK variable is not set. Defaulting to a blank string.
+    Name              Command          State                    Ports                   
+---------------------------------------------------------------------------------------
+nginx_nginx_1   nginx -g daemon off;   Up      0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp 
+#
+Per Environment variables in Compose - Docker:
+Substituting environment variables in Compose files
+# grep ELK docker-compose.yaml 
+        gelf-address: "udp://${ELK}:12201"
+# 
+The “env_file” configuration option
+# grep -A1 env_file docker-compose.yaml 
+    env_file:
+      - docker-compose.env
+# grep ELK docker-compose.env 
+ELK=172.17.0.2
+# 
+Please advise.
+19
+2

@@ -1,0 +1,23 @@
+Garito commented on 14 May 2015
+Hi!
+Could someone explain why I'm getting this error?
+The compose section for the container:
+MongoConnector:
+build: ./conf/mongoconnector/
+links:
+- es
+- MongoDB
+command: mongo-connector -m MongoDB:27017 -t es:9200 -d elastic_doc_manager
+The Dockerfile at ./conf/mongoconnector/
+FROM ubuntu
+MAINTAINER Garito garito@gmail.com
+RUN apt-get -y update
+RUN apt-get -y install python
+RUN apt-get -y install python-pip
+RUN mkdir -p /usr/src/app/
+WORKDIR /usr/src/app
+COPY requirements.txt /usr/src/app/
+RUN pip install -r requirements.txt
+The requirements.txt file at ./conf/mongoconnector:
+mongo-connector
+It seems to try to use image instead of build?

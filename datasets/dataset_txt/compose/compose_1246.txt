@@ -1,0 +1,4 @@
+ps1dr3x commented on 25 Aug 2017
+I think this is likely a feature request, sorry if there is already something similar, i found the docs not very clear on this, except the part for individual containers.
+Suppose that you have a small project with a docker-compose file and 5 services, and that you need to fastly pass the current "docker-compose snapshot" to a collegue (containers with actual volumes, not images), so that he can run the exact environment with the same "docker-compose start" command, is it possible to achieve that?
+I think that it would be pretty if there were easy commands like "docker-compose export" and "docker-compose import". I see that this is a problem that afflicts lots of docker users, and there is very little information about.

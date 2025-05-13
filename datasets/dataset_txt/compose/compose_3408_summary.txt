@@ -1,0 +1,1 @@
+`docker-compose restart` doesn't restart stopped containers

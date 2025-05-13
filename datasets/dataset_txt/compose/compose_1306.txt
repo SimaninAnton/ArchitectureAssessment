@@ -1,0 +1,4 @@
+cheyang commented on 19 Jul 2017 •
+edited
+According to issue swarm mode + (--net=host), docker service create --network=host is ready in 17.06.
+Now we are waiting for the compose v3 to support network: host. Thanks.

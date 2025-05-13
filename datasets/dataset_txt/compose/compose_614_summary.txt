@@ -1,0 +1,1 @@
+Failed to execute script docker-compose - docker-credential-osxkeychain returned 1

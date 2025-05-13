@@ -1,0 +1,68 @@
+yangpulse-gm commented on 21 Jul 2017
+Trying to run docker-compose up -d:
+PS C:\TNI\gm.marketing.inventory\gm.marketing.inventory.git> docker-compose up -d
+Building application
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose\cli\main.py", line 68, in main
+  File "compose\cli\main.py", line 118, in perform_command
+  File "compose\cli\main.py", line 926, in up
+  File "compose\project.py", line 401, in up
+  File "compose\service.py", line 311, in ensure_image_exists
+  File "compose\service.py", line 888, in build
+  File "site-packages\docker\api\build.py", line 141, in build
+  File "site-packages\docker\utils\build.py", line 14, in tar
+  File "site-packages\docker\utils\utils.py", line 100, in create_archive
+  File "tarfile.py", line 1881, in gettarinfo
+WindowsError: [Error 3] The system cannot find the path specified: u'C:\\TNI\\gm.marketing.inventory\\gm.marketing.inven
+tory.git\\application\\api\\node\\node\\node_modules\\npm\\node_modules\\node-gyp\\node_modules\\path-array\\node_module
+s\\array-index\\node_modules\\es6-symbol\\node_modules\\es5-ext\\node_modules\\es6-iterator\\test\\is-iterable.js'
+Failed to execute script docker-compose
+This is our docker-compose.yaml:
+version: '2'
+services:
+  database:
+    image: gmmarketinginventory/database:0.3.1
+    build: ./database
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210:11210"
+    links:
+      - elasticsearch
+    depends_on:
+      - redis
+  application:
+    image: gmmarketinginventory/application:0.1.5
+    build: ./application
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+      - "1099:1099"
+      - "9875:9875"
+    depends_on:
+      - redis
+    links:
+      - database
+      - redis
+      - elasticsearch
+    environment:
+      - ENCRYPTION_SEED=ForLocalDockerUseOnly
+      - spring.profiles.active=local-docker,processing-node,gifgods-processing-node,market-processing-node,dealer-processing-node,offer-processing-node
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Duser.timezone=GMT
+      - CATALINA_OPTS=-Dcom.sun.management.jmxremote -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.rmi.port=1099 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
+  redis:
+    image: gmmarketinginventory/redis:1.0.0
+    build: ./redis
+    ports:
+      - "7000-7005:7000-7005"
+  elasticsearch:
+    image: gmmarketinginventory/elasticsearch:1.0.0
+    build: ./elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+      - "9091:9091"
+    depends_on:
+      - redis
+Any idea?
+2

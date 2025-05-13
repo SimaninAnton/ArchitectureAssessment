@@ -1,0 +1,6 @@
+unhashable commented on 2 Mar 2016
+I'd like to be able to do something like:
+docker-compose logs --exit
+where the all the logs are displayed, and then the program exits w a 0.
+Currently, the logs command blocks, which makes it difficult to use from CI.
+Thoughts?

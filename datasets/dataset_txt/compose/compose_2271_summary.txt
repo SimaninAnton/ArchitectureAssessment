@@ -1,0 +1,1 @@
+`docker tag -f` deprecated in v.1.12.x

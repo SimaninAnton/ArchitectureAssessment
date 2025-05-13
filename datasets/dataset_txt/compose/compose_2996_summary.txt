@@ -1,0 +1,1 @@
+Make docker compose generated runtime name available inside the container

@@ -1,0 +1,26 @@
+RafPe commented on 28 Dec 2015
+I have been trying to run simple container with adding dns servers like
+     dns: 172.17.0.1
+and also
+     dns: 
+       - 172.17.0.1
+       - 8.8.8.8
+In both cases I get the output from compose like
+ERROR: json: cannot unmarshal string into Go value of type []string
+Docker engine is
+Containers: 6
+Images: 180
+Server Version: 1.9.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 192
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.19.0-30-generic
+Operating System: Ubuntu 15.04
+CPUs: 2
+Total Memory: 3.36 GiB
+and compose is just downloaded.
+Has anyone seen this before ?

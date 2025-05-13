@@ -1,0 +1,1 @@
+How to configure docker-compose for storing data of Elastic search out-side of docker container?

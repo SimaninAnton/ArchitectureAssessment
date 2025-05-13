@@ -1,0 +1,49 @@
+muxalko commented on 24 Oct 2018 •
+edited
+Hello Dear Support!
+Is your feature request related to a problem? Please describe.
+My problem is that compose only supports TCP and UDP port protocol types when exposing services ports, although it was already [implemented]
+(moby/moby#9689 (comment)) in docker since 18.03.
+And explained here
+You can also bind UDP and SCTP (typically used by telecom protocols such as SIGTRAN, Diameter, and S1AP/X2AP) ports by adding a trailing /udp or /sctp. For example:
+
+$ docker run -d -p 127.0.0.1:80:5000/udp training/webapp python app.py
+Trying to run the following:
+$ docker-compose run -p 3868:3868/sctp diameter
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 873, in run
+  File "compose/cli/main.py", line 1328, in run_one_off_container
+  File "compose/service.py", line 326, in create_container
+  File "compose/service.py", line 856, in _get_container_create_options
+  File "compose/service.py", line 1637, in build_container_ports
+  File "site-packages/docker/utils/ports.py", line 65, in split_port
+  File "site-packages/docker/utils/ports.py", line 43, in _raise_invalid_port
+ValueError: Invalid port "3868:3868/sctp", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+[35556] Failed to execute script docker-compose
+The same with TCP is success:
+golan@ppcc-cgr-ptk-node-01:~/cgrates_docker$ docker-compose run -p 3868:3868/tcp diameter
+2018/11/11 06:02:49 <c60f53b> [INFO] Starting Diameter service  OK
+I was wandering if you are planning to align compose acceptable values to respect expose port using SCTP protocol and convert to correct docker commands.
+If I understand correctly, that concludes only extending the list of allowed values (tcp,udp,sctp)
+Describe the solution you'd like
+I would like docker-compose to respect sctp as it is an industry standard and widely used in telco's environments.
+The example docker-compose.yml could look like:
+version: "3.x"
+services:
+  diameter:
+      image: diameter
+      container_name: diameter
+      ports:
+          - "3868:3868/sctp"
+Describe alternatives you've considered
+I've considered running docker manually with -p flag.
+For example ... -p 3868:3868/sctp
+Additional context
+As an additional context, I can provide few links related:
+https://docs.docker.com/network/links/
+http://laforge.gnumonks.org/blog/20170503-docker-overhyped/
+Thanks,
+Michael

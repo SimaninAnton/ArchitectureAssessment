@@ -1,0 +1,8 @@
+nickcodefresh commented on 22 May 2015
+Hi,
+I tried running my container via docker-composer with a mem_limit: 2024m setting
+[tomcat@app-02 11:09:12 0 int PlaylistServiceBuild]$ docker-compose up
+Recreating playlistservicebuild_configServer_1...
+Cannot start container b91d396ae3c3ec49934be7e52716f0cddf317e917feec108dcd13e49b47cfeb1:  (exit status 1)
+It turns out that the box didn't have enough free memory, but there's nothing to indicate this in the error code (and no logs). Would be better to throw a more descriptive error.
+Nick

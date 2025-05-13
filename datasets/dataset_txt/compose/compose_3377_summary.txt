@@ -1,0 +1,1 @@
+net host options does not show ports in ps

@@ -1,0 +1,194 @@
+Cally99 commented on 20 Dec 2018 •
+edited
+I'm having an issue with one package that requires the requests dependency to work
+when I add the dependency matchbook to my requirements.txt file it will not install and throw an error saying no module named requests. I've tried the version specified in the dependencies repo and the latest version of requests and I still get an error saying no module named requests. The strange thing is that if I run with pip install -r requirements.txt without using docker containers on host OS it works fine and all packages install successfully. When I try with docker compose it fails. Is the workaround to make your dockerfile install each dependency in an order?
+system
+mac osSierra
+docker
+compose 1.23.2
+engine 18.09.0
+python 3.6.6
+requirements.txt
+dj-database-url==0.5.0
+Django==2.0.6
+django-configurations==2.0
+django-cors-headers==2.2.1
+django-templated-mail==1.1.1
+djangorestframework==3.8.2
+djoser==1.1.5
+psycopg2==2.7.5
+pytz==2017.2
+requests
+django-celery-results
+django-celery-beat
+celery
+flower
+amqp==2.3.2
+billiard==3.5.0.4
+vine==1.1.4
+python-dateutil==2.6.0
+matchbook
+Can anyone suggest a workaround or am I missing something?
+This bug is very simple to replicate.
+clone this repo
+https://github.com/danjac/spacenews
+add matchbook &requests to requirements.txt
+install without docker to see that its functioning.
+Then try to install with docker.
+docker-compose up-d
+Building django
+Step 1/10 : FROM python:3.6
+3.6: Pulling from library/python
+54f7e8ac135a: Already exists
+d6341e30912f: Already exists
+087a57faf949: Already exists
+5d71636fb824: Already exists
+0c1db9598990: Already exists
+2eeb5ce9b924: Pull complete
+a8c530378055: Pull complete
+687ed2fb2a0d: Pull complete
+620aea26e853: Pull complete
+Digest: sha256:fc34d5b6cf5d00a6139a74370dc27ddc9ce18303e2210d0f199a6050cc29aa45
+Status: Downloaded newer image for python:3.6
+ ---> 1ec4d11819ad
+Step 2/10 : ENV PYTHONUNBUFFERED 1
+ ---> Running in 1d3f1c2a0684
+Removing intermediate container 1d3f1c2a0684
+ ---> 3ade2e6e4db2
+Step 3/10 : RUN apt-get update && apt-get install -y postgresql-client
+ ---> Running in a2fea64b0896
+Get:1 http://security.debian.org/debian-security stretch/updates InRelease [94.3 kB]
+Ign:2 http://deb.debian.org/debian stretch InRelease
+Get:3 http://deb.debian.org/debian stretch-updates InRelease [91.0 kB]
+Get:4 http://deb.debian.org/debian stretch Release [118 kB]
+Get:5 http://deb.debian.org/debian stretch Release.gpg [2434 B]
+Get:6 http://security.debian.org/debian-security stretch/updates/main amd64 Packages [461 kB]
+Get:7 http://deb.debian.org/debian stretch-updates/main amd64 Packages [5152 B]
+Get:8 http://deb.debian.org/debian stretch/main amd64 Packages [7089 kB]
+Fetched 7862 kB in 4s (1935 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  distro-info-data lsb-release postgresql-client-9.6 postgresql-client-common
+Suggested packages:
+  lsb postgresql-9.6 postgresql-doc-9.6
+The following NEW packages will be installed:
+  distro-info-data lsb-release postgresql-client postgresql-client-9.6
+  postgresql-client-common
+0 upgraded, 5 newly installed, 0 to remove and 14 not upgraded.
+Need to get 1447 kB of archives.
+After this operation, 6078 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian stretch/main amd64 distro-info-data all 0.36 [5810 B]
+Get:2 http://deb.debian.org/debian stretch/main amd64 lsb-release all 9.20161125 [27.1 kB]
+Get:3 http://deb.debian.org/debian stretch/main amd64 postgresql-client-common all 181+deb9u2 [79.2 kB]
+Get:4 http://deb.debian.org/debian stretch/main amd64 postgresql-client-9.6 amd64 9.6.10-0+deb9u1 [1279 kB]
+Get:5 http://deb.debian.org/debian stretch/main amd64 postgresql-client all 9.6+181+deb9u2 [55.8 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 1447 kB in 0s (3408 kB/s)
+Selecting previously unselected package distro-info-data.
+(Reading database ... 30223 files and directories currently installed.)
+Preparing to unpack .../distro-info-data_0.36_all.deb ...
+Unpacking distro-info-data (0.36) ...
+Selecting previously unselected package lsb-release.
+Preparing to unpack .../lsb-release_9.20161125_all.deb ...
+Unpacking lsb-release (9.20161125) ...
+Selecting previously unselected package postgresql-client-common.
+Preparing to unpack .../postgresql-client-common_181+deb9u2_all.deb ...
+Unpacking postgresql-client-common (181+deb9u2) ...
+Selecting previously unselected package postgresql-client-9.6.
+Preparing to unpack .../postgresql-client-9.6_9.6.10-0+deb9u1_amd64.deb ...
+Unpacking postgresql-client-9.6 (9.6.10-0+deb9u1) ...
+Selecting previously unselected package postgresql-client.
+Preparing to unpack .../postgresql-client_9.6+181+deb9u2_all.deb ...
+Unpacking postgresql-client (9.6+181+deb9u2) ...
+Setting up distro-info-data (0.36) ...
+Setting up lsb-release (9.20161125) ...
+Setting up postgresql-client-common (181+deb9u2) ...
+Setting up postgresql-client-9.6 (9.6.10-0+deb9u1) ...
+update-alternatives: using /usr/share/postgresql/9.6/man/man1/psql.1.gz to provide /usr/share/man/man1/psql.1.gz (psql.1.gz) in auto mode
+Setting up postgresql-client (9.6+181+deb9u2) ...
+Removing intermediate container a2fea64b0896
+ ---> 7b47f8fa2267
+Step 4/10 : ADD . /app
+ ---> f8c1a069ffb5
+Step 5/10 : WORKDIR /app
+ ---> Running in 0df757c34a32
+Removing intermediate container 0df757c34a32
+ ---> 118ff6b2d0b0
+Step 6/10 : COPY requirements.txt /app/requirements.txt
+ ---> f15ecf6b4aed
+Step 7/10 : RUN pip install --upgrade pip
+ ---> Running in 98b49ad8e1a2
+Requirement already up-to-date: pip in /usr/local/lib/python3.6/site-packages (18.1)
+Removing intermediate container 98b49ad8e1a2
+ ---> 5d7ff8040e8d
+Step 8/10 : RUN pip3 install --upgrade setuptools
+ ---> Running in 6f870b21ec2d
+Collecting setuptools
+  Downloading https://files.pythonhosted.org/packages/37/06/754589caf971b0d2d48f151c2586f62902d93dc908e2fd9b9b9f6aa3c9dd/setuptools-40.6.3-py2.py3-none-any.whl (573kB)
+Installing collected packages: setuptools
+  Found existing installation: setuptools 40.6.2
+    Uninstalling setuptools-40.6.2:
+      Successfully uninstalled setuptools-40.6.2
+Successfully installed setuptools-40.6.3
+Removing intermediate container 6f870b21ec2d
+ ---> af399169b545
+Step 9/10 : RUN cat requirements.txt | xargs pip install
+ ---> Running in c2f63640d0c0
+Collecting dj-database-url==0.5.0
+  Downloading https://files.pythonhosted.org/packages/d4/a6/4b8578c1848690d0c307c7c0596af2077536c9ef2a04d42b00fabaa7e49d/dj_database_url-0.5.0-py2.py3-none-any.whl
+Collecting Django==2.0.6
+  Downloading https://files.pythonhosted.org/packages/56/0e/afdacb47503b805f3ed213fe732bff05254c8befaa034bbada580be8a0ac/Django-2.0.6-py3-none-any.whl (7.1MB)
+Collecting django-configurations==2.0
+  Downloading https://files.pythonhosted.org/packages/67/e1/523610a7ccb9ed4b14ba63d0f6a192d5acb68f4b920259a8a57018f60112/django_configurations-2.0-py2.py3-none-any.whl
+Collecting django-cors-headers==2.2.1
+  Downloading https://files.pythonhosted.org/packages/b7/c4/429717535e06746f2174479f8deb77dfb1530ca3faec243a37c650162792/django_cors_headers-2.2.1-py2.py3-none-any.whl
+Collecting django-templated-mail==1.1.1
+  Downloading https://files.pythonhosted.org/packages/f3/ec/0f42b730e17ca087aa79a7aadecff7957a867709f04bd0354e72120e9f68/django_templated_mail-1.1.1-py3-none-any.whl
+Collecting djangorestframework==3.8.2
+  Downloading https://files.pythonhosted.org/packages/90/30/ad1148098ff0c375df2a30cc4494ed953cf7551fc1ecec30fc951c712d20/djangorestframework-3.8.2-py2.py3-none-any.whl (923kB)
+Collecting djoser==1.1.5
+  Downloading https://files.pythonhosted.org/packages/9f/cf/d985a0a453a02c018a68ea69de6c9482bbb345ec85037355601a0023525f/djoser-1.1.5-py3-none-any.whl
+Collecting psycopg2==2.7.5
+  Downloading https://files.pythonhosted.org/packages/5e/d0/9e2b3ed43001ebed45caf56d5bb9d44ed3ebd68e12b87845bfa7bcd46250/psycopg2-2.7.5-cp36-cp36m-manylinux1_x86_64.whl (2.7MB)
+Collecting pytz==2017.2
+  Downloading https://files.pythonhosted.org/packages/55/62/e7cd0e15b76062d298413f14bb4ec3cd8568a22d274427f9c3c7286969f4/pytz-2017.2-py2.py3-none-any.whl (484kB)
+Collecting requests
+  Downloading https://files.pythonhosted.org/packages/7d/e3/20f3d364d6c8e5d2353c72a67778eb189176f08e873c9900e10c0287b84b/requests-2.21.0-py2.py3-none-any.whl (57kB)
+Collecting django-celery-results
+  Downloading https://files.pythonhosted.org/packages/54/d7/209e2753f14bff0158c2775cd9bef48e7ef29ee850c53cfa6de08d062da5/django_celery_results-1.0.4-py2.py3-none-any.whl
+Collecting django-celery-beat
+  Downloading https://files.pythonhosted.org/packages/3f/83/5f58d45449ba3d82e5e691c712f1133f3b9d3f01105bed8292e85cba56e0/django_celery_beat-1.4.0-py2.py3-none-any.whl
+Collecting celery
+  Downloading https://files.pythonhosted.org/packages/e8/58/2a0b1067ab2c12131b5c089dfc579467c76402475c5231095e36a43b749c/celery-4.2.1-py2.py3-none-any.whl (401kB)
+Collecting flower
+  Downloading https://files.pythonhosted.org/packages/48/7f/344a8f93cbd6669b4fd03c04d8f9a06e9023da7b61145dea5836433bbbe5/flower-0.9.2.tar.gz (1.3MB)
+Collecting amqp==2.3.2
+  Downloading https://files.pythonhosted.org/packages/7f/cf/12d4611fc67babd4ae250c9e8249c5650ae1933395488e9e7e3562b4ff24/amqp-2.3.2-py2.py3-none-any.whl (48kB)
+Collecting billiard==3.5.0.4
+  Downloading https://files.pythonhosted.org/packages/87/ac/9b3cc065557ad5769d0626fd5dba0ad1cb40e3a72fe6acd3d081b4ad864e/billiard-3.5.0.4.tar.gz (150kB)
+Collecting vine==1.1.4
+  Downloading https://files.pythonhosted.org/packages/10/50/5b1ebe42843c19f35edb15022ecae339fbec6db5b241a7a13c924dabf2a3/vine-1.1.4-py2.py3-none-any.whl
+Collecting python-dateutil==2.6.0
+  Downloading https://files.pythonhosted.org/packages/40/8b/275015d7a9ec293cf1bbf55433258fbc9d0711890a7f6dc538bac7b86bce/python_dateutil-2.6.0-py2.py3-none-any.whl (194kB)
+Collecting matchbook
+  Downloading https://files.pythonhosted.org/packages/ac/58/b87980437049b2ffd2c15217e56607782d9e8bb05e1014ec2bb5653639aa/matchbook-0.0.7.tar.gz
+    Complete output from command python setup.py egg_info:
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/tmp/pip-install-57wrk9n7/matchbook/setup.py", line 3, in <module>
+        from matchbook import __version__
+      File "/tmp/pip-install-57wrk9n7/matchbook/matchbook/__init__.py", line 1, in <module>
+        from matchbook.apiclient import APIClient
+      File "/tmp/pip-install-57wrk9n7/matchbook/matchbook/apiclient.py", line 1, in <module>
+        from matchbook.baseclient import BaseClient
+      File "/tmp/pip-install-57wrk9n7/matchbook/matchbook/baseclient.py", line 1, in <module>
+        import requests
+    ModuleNotFoundError: No module named 'requests'
+    
+    ----------------------------------------
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-install-57wrk9n7/matchbook/
+ERROR: Service 'django' failed to build: The command '/bin/sh -c cat requirements.txt | xargs pip install' returned a non-zero code: 123
+(venv) macs-MBP:spacenews mac$ ```

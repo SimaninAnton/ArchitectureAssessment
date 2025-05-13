@@ -1,0 +1,3 @@
+krasi-georgiev commented on 4 Nov 2015
+When I am deploying a machine I don't care about the host's hostname and domainname , but inside the containers I need to set custom values.
+the problem is that for any service with the host=net option configured it ignores any values for the hostname and domainname in the yaml file istelf.

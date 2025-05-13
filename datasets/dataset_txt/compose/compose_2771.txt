@@ -1,0 +1,24 @@
+lmesz commented on 15 Feb 2016
+Sorry, maybe it is answered in another place, but I didn't find the solution. So my problem is the following.
+We use tomcat and we pass a lot of values to CATALINA_OPTS during image builds, but not all of them cause some of them determined when the container starts. I would like to extend the CATALINA_OPTS variable during service starting.
+Here is an example image.
+FROM alpine
+
+ENV EXAMPLE_VARIABLE 42
+
+ADD test_script.sh /
+
+CMD ["/test_script.sh"]
+The content of the test_script.sh is the following:
+#!/bin/sh
+
+echo $EXAMPLE_VARIABLE
+The compose file is looks like this:
+test:
+    build: .
+    environment:
+        - EXAMPLE_VARIABLE=$$EXAMPLE_VARIABLE 56
+So when I built the image and say docker-compose up.
+Now i see: " $EXAMPLE_VARIABLE 56" in the output
+Is it possible somehow to reach to see "42 56" in the console ?
+2

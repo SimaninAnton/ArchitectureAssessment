@@ -1,0 +1,17 @@
+philwinder commented on 25 May 2016 •
+edited
+Are there any known issues regarding hangs when building with swarm? I'm unable to make it reproducible, other than say that it happens all the time, even with the simplest of dockerfiles.
+Setup: docker-toolbox on OSX, with one swarm master and two swarm nodes.
+Connect to swarm with eval $(docker-machine env --swarm swarm-master).
+Build with docker-compose: docker-compose build OR build with docker, docker build -t test .
+Will then hang at random places. Usually when building the Dockerfile, but also sometimes when building the code (e.g. downloading java dependencies). With --verbose logging, all you see is:
+639c270113c9: Pull complete
+101f9c82f4ce: Pull complete
+Digest: sha256:d146aae7b497e4c667a87f2a1412cb1d75da24b31814609611179579f37b6d34
+Status: Downloaded newer image for node:4.4.4
+ ---> 1a93433cee73
+Step 2 : RUN mkdir /usr/src/app
+ ---> Running in 855bff7f2e7a
+ ---> 9f9a4cb1b0a5
+And it stops there. In our application it most often gets stuck at a mkdir RUN command or an EXPOSE command.
+Thanks.

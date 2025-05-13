@@ -1,0 +1,1 @@
+the use of the -p flag should set COMPOSE_PROJECT_NAME value

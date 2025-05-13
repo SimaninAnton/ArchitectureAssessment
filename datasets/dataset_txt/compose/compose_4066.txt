@@ -1,0 +1,26 @@
+yonkeltron commented on 2 Dec 2014
+Consider a fig.yml with the following entry:
+web:
+  build: .
+  command: /usr/local/rvm/bin/rvm all do bundle exec foreman start
+  ports:
+    - "4000"
+  links:
+    - db
+    - redis
+  environment:
+    RAILS_ENV: production
+As specified in the documentation, upon scaling with fig scale web=1, fig correctly assigns a random port:
+         Name                       Command               State            Ports
+-----------------------------------------------------------------------------------------
+proj_db_1           /docker-entrypoint.sh postgres       Up      0.0.0.0:49155->5432/tcp
+proj_redis_1        /entrypoint.sh redis-server          Up      0.0.0.0:49156->6379/tcp
+proj_web_1         /usr/local/rvm/bin/rvm all ...        Up      0.0.0.0:49157->4000/tcp
+However, the container proj_web_1 has no way to know that it's been assigned port 49157! The problem only compounds itself when scaling up to n > 1. Consider the following:
+$ fig scale web=2
+proj_web_2...
+$ fig ps
+...
+proj_web_1     /usr/local/rvm/bin/rvm all ...   Up      0.0.0.0:49157->4000/tcp
+proj_web_2     /usr/local/rvm/bin/rvm all ...   Up      0.0.0.0:49158->4000/tcp
+Could the randomly-assigned port be exposed in an environment variable somehow?

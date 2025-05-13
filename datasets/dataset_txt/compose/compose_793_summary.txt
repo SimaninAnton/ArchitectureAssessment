@@ -1,0 +1,1 @@
+Symbolic linked docker-compose.yml is losing its real file current directory

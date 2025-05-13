@@ -1,0 +1,3 @@
+hordemark commented on 25 Nov 2014
+In docker, could use docker run --name XXX. But in fig, I can not specify container name,
+What should I do

@@ -1,0 +1,12 @@
+ghost commented on 28 Feb 2018
+I have a container acting as a reverse proxy which forwards to other containers that are hosting websites.
+One of the hosting container needs to know the ip of proxy.
+When ever docker starts the proxy container, I would like to run a script on the docker host machine, that would in turn setup the website hosting container with the proper ip. Can this be done, and is it a usual way of doing things?
+For more details :
+I use an nginx reverse proxy in combination with nextcloud.
+I need to set the trusted_proxies parameter on nextcloud which requires an IP.
+I start nginx last so that I can setup my upstream values using the container names:
+upstream nextcloudserver {
+    server nextcloud_server;
+}
+Cheers!

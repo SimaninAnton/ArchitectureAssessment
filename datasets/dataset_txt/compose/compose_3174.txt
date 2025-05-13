@@ -1,0 +1,3 @@
+hyperfocus1338 commented on 26 Oct 2015
+Wrote my question/bug here on SO: http://stackoverflow.com/questions/33350985/docker-compose-environment-variables-specified-with-env-file-parameter-not-worki
+Is it okay to post SO links here or should I move the question?

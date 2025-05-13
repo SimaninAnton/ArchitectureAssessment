@@ -1,0 +1,5 @@
+AceHack commented on 27 Jan 2018
+Please add --platform or come up with an alternative solution to support running linux and windows containers both on windows LCOW.
+See resolved docker issue for the same here
+moby/moby#33854
+Still would like to take advantage of multi-arch tags so explicit tags for a specific OS would not be an option. Thanks.

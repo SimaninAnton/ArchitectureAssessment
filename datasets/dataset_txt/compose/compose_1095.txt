@@ -1,0 +1,4 @@
+cschol commented on 6 Nov 2017
+Currently, the SHA256 sums are provided as text on the Releases page.
+Would it be possible to provide the checksums as downloadable files for integration in an automated packaging process?
+Thanks.

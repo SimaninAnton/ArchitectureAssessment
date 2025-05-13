@@ -1,0 +1,36 @@
+thochra commented on 31 Jan 2017
+I made a terminal dashboard which is using docker-compose logs command to display logs of some services.
+With the colorama.init() (compose/compose/cli/colors.py) introduced in version 1.10 for Windows terminal coloration, piped commands seem not being able to display colors.
+NodeJS example
+'use strict';
+let spawn = require('child_process').spawn;
+
+const CWD="YOUR_COMPOSE_PROJECT_DIR";
+
+function appendToBox(data) {
+  if (data instanceof Buffer) {
+    data = data.toString();
+  }
+  data = data.replace(/\n$/, ''); // Avoid double new line
+  console.log(data);
+}
+
+
+let tail = spawn(
+  'docker-compose',
+  ['logs', '--tail=1'],
+  {cwd: CWD}
+);
+
+tail.stdout.on('data', appendToBox);
+tail.stderr.on('data', appendToBox);
+tail.on('exit', (code) => {
+  appendToBox('child process exited with code ' + code);
+});
+Command line example
+docker-compose logs --tail=1 | tee
+Manual workaround
+Comment the line colorama.init() in file /usr/lib/python3.6/site-packages/compose/cli/colors.py.
+Tested on Archlinux, I suppose your install dir may eventually vary depending on your distribution.
+Issue resolution
+If colorama is for Windows only could it be possible to run the colorama.init() only with that OS context ?

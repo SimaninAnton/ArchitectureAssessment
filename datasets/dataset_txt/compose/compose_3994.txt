@@ -1,0 +1,18 @@
+jbulchergist commented on 14 Jan 2015
+I have a private repository secured with a self-signed certificate. I have the ca.crt in the appropriate location (/etc/docker/...), and docker pull works. fig, however, does not respect the ca.crt:
+# fig pull
+Pulling data (myimage)...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 56, in perform_command
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 225, in pull
+  File "/code/build/fig/out00-PYZ.pyz/fig.project", line 184, in pull
+  File "/code/build/fig/out00-PYZ.pyz/fig.service", line 434, in pull
+  File "/code/build/fig/out00-PYZ.pyz/docker.client", line 733, in pull
+  File "/code/build/fig/out00-PYZ.pyz/docker.auth.auth", line 69, in resolve_repository_name
+  File "/code/build/fig/out00-PYZ.pyz/docker.auth.auth", line 48, in expand_registry_url
+docker.errors.DockerException: HTTPS endpoint unresponsive and insecure mode isn't enabled.

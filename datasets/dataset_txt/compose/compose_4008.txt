@@ -1,0 +1,5 @@
+relwell commented on 7 Jan 2015
+When working in an environment where you're modifying one or more containers and reloading them, I find I get bit a lot by omitting the --no-recreate flag. Recreating linked services often have undesirable side effects for other services that are already linked to those, so I usually have to blow away all my containers and rebuild them when I make this mistake. So it can be somewhat a costly problem in terms of build time. I have a couple of suggestions for how to make workflows a little less troublesome:
+Keep --no-recreate as the non-default behavior, but allow a "recreate: false" value for a given service definition in fig.yml; add --recreate flag to override that behavior from the command line
+Introduce a global option set in the environment, such as FIG_DEFAULT_NO_RECREATE=1 that, when detected, will apply to all services
+Either of these separately would be big time-savers for my use case.

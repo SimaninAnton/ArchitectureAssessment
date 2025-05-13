@@ -1,0 +1,1 @@
+`docker-compose bundle` doesn't work with locally built images

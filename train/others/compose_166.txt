@@ -1,0 +1,3 @@
+normander commented on 27 May 2019 •
+edited
+Hi, is there any option to configure docker-compose to accept unknown field in single service for third party application? It will be useful like a optional feature. Did you considered it?

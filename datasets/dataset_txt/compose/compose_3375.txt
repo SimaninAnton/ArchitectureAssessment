@@ -1,0 +1,4 @@
+dkirrane commented on 14 Aug 2015
+I'm hitting this issue on Ubuntu 14.04
+root@XYZ:/opt# docker-compose --version
+docker-compose: error while loading shared libraries: /tmp/_MEI56hCBu/libz.so.1: file too short

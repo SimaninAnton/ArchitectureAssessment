@@ -1,0 +1,1 @@
+Compose Cannot Use docker-credential-gcloud on Windows

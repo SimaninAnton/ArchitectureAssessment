@@ -1,0 +1,2 @@
+imaia commented on 27 Dec 2016
+Imagine you have a container with your project and that project has a few static files that you want served by a http server. Then you have another container, a nginx container, that has access to the volume with the static files through volumes_from. Imagine you want to update your volume with content every time you reload your container. What should you do? Right now, for what I see, you have to remove the container and add it again. Is there another way? Shouldn't there be a easier way?

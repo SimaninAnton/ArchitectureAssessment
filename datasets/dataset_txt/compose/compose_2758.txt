@@ -1,0 +1,10 @@
+Contributor
+AvdN commented on 17 Feb 2016
+While using migrate-compose-file-v1-to-v2.py it added all my host based volumes to
+the toplevel volumes and included a external: true to each of them.
+This leads to:
+ERROR: Validation failed in file './new.yml', reason(s):
+volumes value Additional properties are not allowed ('${DOCKERBASE}/extrausers', '${DOCKERBASE}/log', were unexpected)
+AFAIKT only name volumes should be in there, and those should have service names. So
+anything with "/" in the name (i.e. all hosts paths that do not consist of an environment variable only) should be excluded from that mapping. These can easily be excluded by changing (in get_named_volumes()) the line if spec.is_named_volume to if spec.is_named_volume # and '/' not in spec.external (maybe import os and use os.dirsep instead.)
+After that the converted file builds and works (assuming the PR for putting quotes around the version is applied as well).

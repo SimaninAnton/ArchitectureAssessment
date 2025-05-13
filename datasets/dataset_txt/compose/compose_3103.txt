@@ -1,0 +1,2 @@
+nathanleclaire commented on 12 Nov 2015
+It would be nice if docker-compose --version showed also the Git SHA which the "binary" was compiled with. Having some struggles with compiling Compose, I wanted to verify that I was in fact using the correct version.

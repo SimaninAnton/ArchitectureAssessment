@@ -1,0 +1,1 @@
+Document the -v flag for docker-compose rm

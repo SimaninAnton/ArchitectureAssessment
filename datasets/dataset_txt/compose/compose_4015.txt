@@ -1,0 +1,4 @@
+olalonde commented on 5 Jan 2015
+I have the following problem. My web front end uses a node.js process during development (enabling live reload, etc.) and in production, I only serve a pre-build dist/ folder using Nginx.
+What would be the best way to handle this? I have come up with 2 options. Have a different Dockerfile for production and development. In that case, my question is how can I specify which one to use in my fig.yml file? The other option would be to use two different virtual hosts in my nginx config but in that case, the development domain would still be accessible in production if someone else knows it. Another solution would be to tell Nginx which config file to use based on an environment variable, but I'm not sure how to do that.
+5

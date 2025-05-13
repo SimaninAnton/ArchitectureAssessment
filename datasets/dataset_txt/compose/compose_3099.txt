@@ -1,0 +1,3 @@
+igr commented on 12 Nov 2015
+On docker 1.9.0c and compose 1.5.0.
+I have linked containers. Docker compose DOES NOT update etc hosts. The very same configuration on 1.8.0 worked.

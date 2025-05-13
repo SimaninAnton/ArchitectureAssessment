@@ -1,0 +1,1 @@
+Homepage example breaks on Fedora 20 (docker 1.3.1)

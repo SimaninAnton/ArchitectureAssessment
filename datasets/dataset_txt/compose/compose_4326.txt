@@ -1,0 +1,3 @@
+dronov commented on 13 May 2014
+Hi. I'm trying to use fig with docker at Ruby on Rails development. I've made all instructions from tutorial and everything goes well. But when I need to add new gems to Gemfile the command 'fig run web bundle update' after that is not working. Rebuilding the container is not working too. Bundle has ran well but it didn't make any changes and rails project is not working.
+What have I done wrong?

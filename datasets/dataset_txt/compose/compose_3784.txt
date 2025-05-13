@@ -1,0 +1,18 @@
+razic commented on 27 Mar 2015
+Hey.
+Just downloaded the latest versions:
+Docker version 1.5.0, build a8a31ef (via homebrew)
+docker-compose 1.2.0rc2 (via github)
+machine version 0.2.0 (45f08d9) (via github)
+And I'm having weird cert path issues:
+$ machine create -d virtualbox dev && $(machine env dev)
+$ docker ps
+FATA[0000] Couldn't read ca cert "/Users/razic/.docker/machine/machines/dev"/ca.pem: open "/Users/razic/.docker/machine/machines/dev"/ca.pem: no such file or directory
+Some debugging:
+$ machine env dev
+export DOCKER_TLS_VERIFY=1
+export DOCKER_CERT_PATH="/Users/razic/.docker/machine/machines/dev"
+export DOCKER_HOST=tcp://192.168.99.100:2376
+But the weirdest part is:
+$ DOCKER_CERT_PATH="/Users/razic/.docker/machine/machines/dev" docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES

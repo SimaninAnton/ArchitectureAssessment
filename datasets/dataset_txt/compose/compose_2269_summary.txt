@@ -1,0 +1,1 @@
+compose doesn't unmount volumes on recreation [ v 1.2.1 ]

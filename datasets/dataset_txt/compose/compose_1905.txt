@@ -1,0 +1,39 @@
+bschlinker commented on 25 Nov 2016
+I'm setting pid: host for one of the services in my docker-compose.yml file. This works as expected if I just use this file -- however, if I apply an override file, this option no longer works and the container will have its own PID namespace.
+This was working in 1.8, so this appears to be a regression. Adding pid: host to the override file does not appear to resolve the problem. There may be other settings that are also being overridden incorrectly as a result of this regression.
+The example below demonstrates this -- the PID printed by the container's entrypoint.sh script is a very low number because it is running in its own PID namespace. If I don't use the override file, the PID printed is a much higher number because it is in the host's namespace.
+I'll poke around in a few days if I get a chance to see what recent changes could have caused this. For the moment I've reverted to 1.8.
+$ docker-compose -f docker-compose.yml -f docker-compose-prod.yml up --build
+Building netconfig
+...
+Attaching to dockercomposeerror_netconfig_1
+netconfig_1  | My PID = 6
+$ docker-compose -f docker-compose.yml up --build
+Building netconfig
+...
+Attaching to dockercomposeerror_netconfig_1
+netconfig_1  | My PID = 22083
+Example files:
+docker-compose.yml
+version: '2'
+
+services:
+  netconfig:
+    build: .
+    privileged: true
+    pid: host
+docker-compose-prod.yml
+version: '2'
+
+services:
+  netconfig:
+    ports:
+      - "179:179/tcp"
+      - "1194:1194/udp"
+Dockerfile
+FROM debian:stable
+ADD entrypoint.sh /test/entrypoint.sh
+CMD bash /test/entrypoint.sh
+entrypoint.sh
+#!/bin/bash
+echo "My PID = $$"

@@ -1,0 +1,7 @@
+Contributor
+edsrzf commented on 2 Mar 2017
+#4428 added the --parallel flag to the pull command. What needs to be done to get that to the point where it's the default? Off the top of my head:
+Some experience with --parallel to gather feedback.
+Better, more detailed output. I have some ideas here.
+Do we need anything else? Is there any reason that parallel pulling should never become the default?
+4

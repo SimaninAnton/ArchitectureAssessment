@@ -1,0 +1,17 @@
+bperel commented on 7 Feb 2017
+Using the following docker-compose.yml:
+version: '2.1'
+services:
+  db:
+    image: "<my_image>"
+    healthcheck:
+      disable: true
+I get the following error when running docker-compose up :
+$ docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services.db: 'healthcheck'
+According to the documentation, "healthcheck" should be supported with the currently installed versions:
+$ docker --version
+Docker version 1.13.0, build 49bf474
+$ docker-compose --version
+docker-compose version 1.9.0, build 2585387

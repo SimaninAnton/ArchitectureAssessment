@@ -1,0 +1,30 @@
+ahmetb commented on 14 Oct 2015
+I am getting this error every now and then when I run docker-compose up -d with a big (>1 GB) image, such as hansenms/gadgetron_no_cuda (1.2 GB). The error line reads as:
+requests.exceptions.ReadTimeout: UnixHTTPConnectionPool(host='localhost', port=None):
+  Read timed out. (read timeout=60)
+I know that there is a --timeout=10 argument to docker-compose up but that defaults to 10 seconds (the error msg above says 60) and this argument reference says:
+“Use this timeout in seconds for container shutdown **when attached or when containers are already running.”
+So I guess that's not going to fix this... Is there another way I can extend the timeout for the request made to the docker engine to pull the image down from registry?
+Error stack:
+Creating compose_gt01_1...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 39, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 495, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 274, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 377, in execute_convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 284, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.container", line 42, in create
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 245, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 252, in create_container_from_config
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 128, in _post_json
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 83, in _post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 508, in post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 465, in request
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 573, in send
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 433, in send
+requests.exceptions.ReadTimeout: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)

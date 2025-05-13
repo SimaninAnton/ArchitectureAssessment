@@ -1,0 +1,4 @@
+stevenewey commented on 9 Sep 2015
+I had a private registry user with a password containing the characters > and }
+On the registry side I could see authentication failing when using docker-compose pull, but not when using docker pull.
+Removing these characters from the password and trying again, and docker-compose pull works. So I suspect there's an issue with reading the password from the docker config.

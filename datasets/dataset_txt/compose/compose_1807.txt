@@ -1,0 +1,3 @@
+stfa commented on 10 Jan 2017
+A java/tomcat webapp is not seeing host file entries made by compose extra_hosts, the host file entry is made and is observed when bashing into the container. Could it be that the host file entry is being made after the java application startup thus it doesn't see the addition to /etc/hosts?
+1

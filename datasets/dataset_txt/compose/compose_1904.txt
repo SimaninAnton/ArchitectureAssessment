@@ -1,0 +1,23 @@
+jeffallen commented on 25 Nov 2016 •
+edited
+I have docker-compose installed in a venv with Python26 (required for the product I am working on).
+I get this:
+(venv) jra@donut:~/unifield/automafield/testfield$ docker-compose port uf-server 8069
+Traceback (most recent call last):
+File "/home/jra/venv/bin/docker-compose", line 7, in
+from compose.cli.main import main
+File "/home/jra/venv/lib/python2.6/site-packages/compose/cli/main.py", line 20, in
+from ..bundle import get_image_digests
+File "/home/jra/venv/lib/python2.6/site-packages/compose/bundle.py", line 28
+IGNORED_KEYS = {'build'}
+^
+SyntaxError: invalid syntax
+$ type docker-compose
+docker-compose is hashed (/home/jra/venv/bin/docker-compose)
+$ type python
+python is hashed (/home/jra/venv/bin/python)
+$ python
+Python 2.6.9 (default, Mar 6 2016, 02:31:36)
+[GCC 5.3.1 20160225] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+This is the first of many syntax errors in bundle.py.

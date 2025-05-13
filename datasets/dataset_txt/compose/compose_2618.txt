@@ -1,0 +1,37 @@
+sylvainpiron commented on 16 Mar 2016
+Hi,
+I'm using docker-compose version 1.6.2, build 4d72027
+version: '2'
+services:
+  nginx:
+    build: .
+    command: nginx
+    ports:
+      - "80:80"
+    networks:
+      - site1_network
+      - site2_network
+      - site3_network
+      - site4_network
+      - site5_network
+    external_links:
+      - web_1:web1
+      - web_2:web2
+      - web_3:web3
+      - web_4:web4
+      - web_5:web5
+networks:
+  site1_network:
+    external: true
+  site2_network:
+    external: true
+  site3_network:
+    external: true
+  site4_network:
+    external: true
+  site5_network:
+    external: true
+nginx does a reverse proxy
+All containers are up and host detected in nginx with 4 networks and work well.
+With 5 networks it's stop working.
+Thanks for your help

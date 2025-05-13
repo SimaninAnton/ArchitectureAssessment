@@ -1,0 +1,1 @@
+Flush log buffer when printing logs

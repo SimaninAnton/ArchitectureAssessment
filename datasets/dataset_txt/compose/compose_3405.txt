@@ -1,0 +1,14 @@
+zdexter commented on 7 Aug 2015
+The extends directive documentation currently states:
+Compose copies configurations from the original service over to the local one, except for links and volumes_from. These exceptions exist to avoid implicit dependencies—you always define links and volumes_from locally. This ensures dependencies between services are clearly visible when reading the current file. Defining these locally also ensures changes to the referenced file don’t result in breakage.
+I am not exactly sure what the justification for 'explicit dependencies' is. It's fine if you want to redefine links locally in every child configuration, but having to seems like a matter of mere aesthetic preference that collides with some quite common use cases.
+Imagine a dev==prod approach, in which various child configurations inherit from a base configuration, with only environment variables and host volumes being different, like so:
+- base.yaml
+    - development.yaml
+    - staging.yaml # Oops, someone forgot `links` here but no tests caught it
+    - production.yaml
+I have found that forced-explicit links (and volumes_from, but to a lesser extent) specification is quite problematic for the following reasons:
+A developer may omit a links specification in a child .yaml file, but will not catch it until production.yaml is used. In other words, it's hard to test that the links specification is correct without actually using a particular configuration. Since one would usually use development.yaml, nobody really notices this. If links were inherited, one would be testing the values of that directive all the time.
+links is quite likely to be the same in development and production in many common use cases, such as the above. In my compose usage, there is no utility in explicit links specification, from an aesthetic perspective - it has simply never been helpful.
+Data storage requirements are likely to be different in different environments, so forced specification of volumes_from in children, while still weird, is less of a problem in practice.
+I think developers should have the flexibility to specify links in base configuration files and have extends provide the values to children.

@@ -1,0 +1,1 @@
+Docker-compose up does not show output unless you specify a service

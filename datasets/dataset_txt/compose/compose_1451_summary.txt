@@ -1,0 +1,1 @@
+Support --endpoint-mode for swarm containers

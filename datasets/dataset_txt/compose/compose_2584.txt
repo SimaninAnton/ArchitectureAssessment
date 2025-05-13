@@ -1,0 +1,31 @@
+sebglon commented on 24 Mar 2016
+I have an image, than i build with docker build -t myapp:latest .
+FROM busybox
+COPY index.html /usr/local/apache2/htdocs/index.html
+VOLUME /usr/local/apache2/htdocs/
+My index.html is
+<html>
+<body>
+<h1>APP V1</h1>
+</body>
+</html>
+My compose is:
+app:
+   image: myapp:latest
+server:
+   image: httpd
+   ports:
+     - 8080:80
+   volume_from:
+     - app
+If i run compose with docker-compose up -d, i get on http://localhost:8080: APP V1
+if i change index.html with APP V2, i build my image with the same tag: docker build -t myapp:latest .
+When i run docker-compose up -d i show:
+Recreating demo_app_1
+Recreating demo_server_1
+But when i refresh my browser with the same URL, i always see APP V1 but no APP V2
+If i mase docker-compose rm and docker-compose up -d this is OK
+I have not see warning;
+Thanks for you
+docker-compose 1.5.2
+docker 1.8.2

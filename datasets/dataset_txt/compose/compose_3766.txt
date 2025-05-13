@@ -1,0 +1,16 @@
+phemmer commented on 1 Apr 2015
+I'm trying to run several containers with TTY mode enabled (tty: true in config). When I enable TTY mode, commands such as compose up and compose logs do not show the container's output. However I can run docker logs $cid and the output shows up just fine.
+The output does show up when the container exits, but not until then. And when it does show up, the first several bytes of the stream are missing. For example:
+hello:
+  image: busybox
+  command: sh -c 'echo hello world; sleep 2; echo done'
+  tty: true
+# compose up
+Recreating code_hello_1...
+Attaching to code_hello_1
+hello_1 | rld
+hello_1 | done
+code_hello_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Both lines showed up at the exact same time instead of having a 2 second pause, and note that the hello wo is missing.
+This is using current master 43369cd

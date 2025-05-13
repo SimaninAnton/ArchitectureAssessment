@@ -1,0 +1,9 @@
+Contributor
+johnharris85 commented on 29 May 2016
+What are people's thoughts on this? I guess depends_on is used in two ways:
+To start some kind of initial setup / state container that facilities the others in some way then die.
+To represent an actual dependency that needs to be up for the dependents to function.
+In the case of 1, clearly stopping dependent containers when the dependency stops is not desirable. In the case of 2, maybe it is (as the assumption is that dependent containers cannot function without the dependency).
+This could be implemented with a flag to stop like docker-compose stop app -d (also stop dependent containers). It would also need to be decided what should happen if the container just exits for whatever reason (without an explicit stop), desired behaviors may also be different depending on what the restart policies are.
+Maybe implementing this in compose is trying to be too clever anyway, and users / applications should explicitly manage how their container / application handles a dependency going down.
+Opinions?

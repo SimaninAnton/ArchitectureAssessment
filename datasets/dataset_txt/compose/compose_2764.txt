@@ -1,0 +1,20 @@
+miganga commented on 16 Feb 2016
+I have this docker compose yml below,
+version: '2'
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - "4000:4000"
+    links:
+      - redis
+    expose:
+      - "6379"
+      - "22"
+  redis:
+    build:
+      context: .
+      dockerfile: Dockerfile-redis
+I can ping redis container from nodejs. I am wondering how I can map 6379 port from nodejs to redis in the automation process.

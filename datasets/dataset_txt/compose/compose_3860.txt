@@ -1,0 +1,7 @@
+TMiguelT commented on 6 Mar 2015
+So from what I understand, at the moment, if you already have everything running, then you want to rebuild and restart one single container, you have to:
+docker kill :id
+docker-compose up -d --no-recreate
+Is there a more explicit way to pass in the 'name' of an image (i.e. one of the keys in the docker-compose.yml file) and just say rebuild this one? If there isn't, can I make this as a suggestion? It would be very useful, for example:
+docker-compose rebuild database
+Or perhaps in general, could we have the option to pass in a docker-compose image id into the commands kill, build, and up? I know you can manually do this using plain docker but the advantages of using compose are that it'll come up for docker-compose ps, and it will have the automatically generated image name that compose makes.

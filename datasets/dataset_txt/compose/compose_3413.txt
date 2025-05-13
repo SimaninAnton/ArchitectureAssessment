@@ -1,0 +1,43 @@
+ProbablyRusty commented on 4 Aug 2015
+I have seen this issue for a while, across a few different docker-compose versions, and within multiple infrastructures.
+Essentially, docker-compose fails when trying to pull an image from a private repository. It complains of the HTTPS endpoint on the registry being unresponsive, when in fact it is not.
+Here is one actual case of this:
+Registry is reachable on HTTPS with a valid cert, trusted by this client:
+# curl https://registry.acme.private
+"\"docker-registry server\""
+Manual pull of the image works fine:
+# docker pull registry.acme.private/tester
+Pulling repository registry.acme.private/tester
+8c2e06607696: Download complete 
+cf2616975b4a: Download complete 
+6ce2e90b0bc7: Download complete 
+Status: Downloaded newer image for registry.acme.private/tester:latest
+But, using this docker-compose.yml:
+# cat docker-compose.yml 
+Tester:
+  image: registry.acme.private/tester
+...docker-compose fails:
+# docker-compose up
+Pulling Tester (registry.acme.private/tester:latest)...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 32, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 471, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 245, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 318, in execute_convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 212, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 243, in ensure_image_exists
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 713, in pull
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 590, in pull
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.auth.auth", line 60, in resolve_repository_name
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.auth.auth", line 39, in expand_registry_url
+docker.errors.DockerException: HTTPS endpoint unresponsive and insecure mode isn't enabled.
+Here is the docker-compose version:
+# docker-compose -v
+docker-compose version: 1.3.3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

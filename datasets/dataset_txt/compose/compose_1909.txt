@@ -1,0 +1,13 @@
+etc0de commented on 23 Nov 2016 •
+edited
+Base problem:
+While migrating my services to version: '2' compose files, I sorely lacked a way to define a network that can be used by multiple container groups (each of them with a separate docker-compose.yml).
+What I tried:
+I defined a shared network in just one docker-compose.yml and used the "default" -> "external" -> "name" reference in the other docker-compose.yml gorups - but now if I use docker-compose up in the wrong order it will break if the network isn't present yet. "Don't do that then" sadly is not a good solution to this, because with larger network bundles there is no natural place to put this and also startup scripts shouldn't need to adhere to some random implicit order due to this weird limitation to avoid breakage on first boot after a reinstall (it is something you're absolutely predestined to forget about, and then make your life hard when larger host migrations or reinstalls are done).
+If I try to define such a shared network in all docker-compose.yml files, it'll get prefixed differently for each of them and I'll also get errors about subnet overlaps (no kidding, I was trying to create a shared network!).
+Proposed solution:
+Therefore, please add a way to define an explicitly global (NOT prefixed with docker-compose folder), explicitly shared (NOT causing an error if defined with same options in another docker-compose.yml group) network that can be used by multiple, separate docker-compose.yml grouped services. It should be created as soon as the first such group using it launches and it turns out to be missing, and otherwise just reused.
+Why this is needed:
+This is quite a natural use case for anyone migrating from V1 since there every container could talk to every other, and there is also no obvious reason why multiple docker-compose.yml groups should never be able to talk to each other. As a result, this problem has made my migration quite challenging and I'm now at a quite suboptimal point (a random container group needs to be launched first since it defines the networks used by the others), and you'll probably also make the migration challenging for quite some other folks with a similar setup. Therefore: it would be super neat if you could add this!
+PS: Sorry if this is already present, but I really couldn't find it anywhere in the docs
+8

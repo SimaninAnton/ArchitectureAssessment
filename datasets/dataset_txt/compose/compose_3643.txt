@@ -1,0 +1,38 @@
+quickwind commented on 16 May 2015
+In our project we have a yaml file for test automation env startup, in it we have dbserver (Postgres DB) and redis, and other service containers using these, in order for the DB server to be ready before any service can connect to it, I need to start dbserver container first and wait for its ready, then start the services, but I found when I did this in 2 rounds of docker-compose command like following, it doesn't work on RHEL or more specifically CentOS in our case:
+docker-compose -f test/test.yaml up -d dbserver redis
+Creating test_dbserver_1...
+Creating test_redis_1...
+sleep 1m
+docker-compose -f test/test.yaml up -d --no-recreate
+Creating test_consul_1...
+Creating test_registrator_1...
+Creating test_notificationService_1...
+Creating test_reportService_1...
+After these commands executed, I found dbserver is not reachable from services (and more strangely the /etc/hosts can not be opened when attaching shell into the service container, said no permission), but same setup works perfectly on ubuntu servers.
+docker info output:
+Containers: 0
+Images: 412
+Storage Driver: devicemapper
+Pool Name: docker-253:1-966-pool
+Pool Blocksize: 65.54 kB
+Backing Filesystem: xfs
+Data file: /dev/loop0
+Metadata file: /dev/loop1
+Data Space Used: 3.703 GB
+Data Space Total: 107.4 GB
+Data Space Available: 43.19 GB
+Metadata Space Used: 11.58 MB
+Metadata Space Total: 2.147 GB
+Metadata Space Available: 2.136 GB
+Udev Sync Supported: true
+Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+Library Version: 1.02.93-RHEL7 (2015-01-28)
+Execution Driver: native-0.2
+Kernel Version: 3.10.0-123.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+CPUs: 4
+Total Memory: 7.641 GiB
+Name: xxxxxxx
+ID: NQXV:CWMI:32GK:BNJX:5R2E:OEON:VXXR:MLLP:65IM:VDDT:BYDL:2CZU

@@ -1,0 +1,4 @@
+atrauzzi commented on 9 Feb 2016
+Right now when I specify a service when doing docker-compose run, it creates a new container based off the original.
+I feel like there's a missing flag to run a process in the existing service's container. If I'm doing one-off commands that require setup steps, sequential runs of docker-compose run are effectively run in fresh copies of the service.
+1

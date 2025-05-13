@@ -1,0 +1,9 @@
+joeyhub commented on 10 Nov 2017 •
+edited
+I want to try version 3 but I've immediately run into trouble with the lack of extends support.
+There is an easy way around this which is to not use the YML for the master data and instead have it generated from another source that can manage things such as deduplication (templating it, or extending it putting back things like extends, etc).
+However, the YML format is a bit like SGML is to XML and isn't so widely supported. The sheer majority of packaging or like systems out there will use JSON as support is ubiqitous and the syntax is simple.
+Almost every language I might want to use comes with JSON as standard but YML is often a dependency that has to be installed separately.
+I don't believe this would be a difficult thing to change and is generally unlikely to break anything.
+Unless someone strangely has a .json file with the same name as yml, perhaps already porting one to the other and automatically looking for the file in the current directory now picks up the JSON and similar such issues. Docker Composer currently also ignores the extension (if you use -f x.json it will still be parsed as yml).
+If docker already supports this (I have untested suspicions) it would be great to have documentation. There is also some inconsistency if you look at the documentation for docker compose files, it mentions that they are YAML but all the other file types around it such as credentials and logging are JSON based.

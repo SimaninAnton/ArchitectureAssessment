@@ -1,0 +1,3 @@
+kladkogex commented on 22 Feb 2017
+docker network connect needs to accept --mac-address as parameter.
+This causes lots of issues for us.

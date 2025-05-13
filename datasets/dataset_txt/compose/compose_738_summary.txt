@@ -1,0 +1,1 @@
+nginx can't connect to docker embedded dns

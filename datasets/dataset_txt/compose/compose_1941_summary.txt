@@ -1,0 +1,1 @@
+composer .env not read under macOS Sierra

@@ -1,0 +1,16 @@
+Farjad commented on 12 Nov 2015
+Hi,
+So I am running Docker 1.9, swarm (swarm:latest), docker-compose 1.5
+I am able to create networks/run containers without docker-compose.
+As soon as I try to do it using docker-compose I get issues:
+no networking enabled:
+compose.service.create_container: Creating test_web_1
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name=u'test_web_1', image='centos', labels={u'com.docker.compose.service': u'web', u'com.docker.compose.project': u'test', 'com.docker.compose.config-hash': '3b7b598f89eef07df2019f3efc89eed7057e5b708c3d921e49cdcfe59a2fd232', 'com.docker.compose.version': u'1.5.0', u'com.docker.compose.oneoff': u'False', 'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': 'default', 'Links': [], 'PortBindings': {'5000/tcp': [{'HostPort': '80', 'HostIp': ''}]}, 'Binds': [], 'ExtraHosts': [], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment={u'MONGO_HOST': u'counter_mongo_1'}, detach=True, ports=['5000'])
+ERROR: compose.cli.main.main: 404 page not found
+with networking:
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'test')
+compose.project.ensure_network_exists: Creating network "test" with driver "overlay"
+compose.cli.verbose_proxy.proxy_callable: docker create_network <- (u'test', driver='overlay')
+ERROR: compose.cli.main.main: No such network: create
+However, if I point the docker client/compose to local docker instead of swarm docker-compose works. When I point it to swarm, docker client works, compose does not.
+Any help would be appreciated.

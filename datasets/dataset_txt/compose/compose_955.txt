@@ -1,0 +1,80 @@
+yanchenw commented on 9 Jan 2018
+When I have the following simple Dockerfile and docker-compose.yml file:
+Dockerfile:
+FROM microsoft/aspnetcore:2.0
+docker-compose.yml:
+version: '3'
+
+services:
+  test:
+    image: test
+    build:
+      context: .
+      dockerfile: Dockerfile
+docker build works:
+C:\repos\test>docker build .
+Sending build context to Docker daemon  3.072kB
+Step 1/1 : FROM microsoft/aspnetcore:2.0
+ ---> 5d17208fc00e
+Successfully built 5d17208fc00e
+But docker-compose build gives me the following error:
+C:\repos\test>docker-compose build
+Building test
+Step 1/1 : FROM microsoft/aspnetcore:2.0
+ERROR: Service 'test' failed to build: failed to get layer for image sha256:5d17208fc00e80366e43d4fccc3322f3ea14078d94d101f297e2ebeb04d231ec: layer does not exist
+docker version:
+Client:
+ Version:       17.12.0-ce
+ API version:   1.35
+ Go version:    go1.9.2
+ Git commit:    c97c6d6
+ Built: Wed Dec 27 20:05:22 2017
+ OS/Arch:       windows/amd64
+
+Server:
+ Engine:
+  Version:      17.12.0-ce
+  API version:  1.35 (minimum version 1.24)
+  Go version:   go1.9.2
+  Git commit:   c97c6d6
+  Built:        Wed Dec 27 20:15:52 2017
+  OS/Arch:      windows/amd64
+  Experimental: true
+docker info:
+Containers: 1
+ Running: 0
+ Paused: 0
+ Stopped: 1
+Images: 2
+Server Version: 17.12.0-ce
+Storage Driver: windowsfilter (windows) lcow (linux)
+ LCOW:
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: ics l2bridge l2tunnel nat null overlay transparent
+ Log: awslogs etwlogs fluentd gelf json-file logentries splunk syslog
+Swarm: inactive
+Default Isolation: hyperv
+Kernel Version: 10.0 16299 (16299.15.amd64fre.rs3_release.170928-1534)
+Operating System: Windows 10 Pro
+OSType: windows
+Architecture: x86_64
+CPUs: 8
+Total Memory: 31.93GiB
+Name: dockerperf
+ID: DIWT:ANQC:XSU2:TFVL:ZJYV:EUZU:GB2W:X2GV:M6NJ:ABJC:C2YO:3UCS
+Docker Root Dir: C:\ProgramData\Docker\lcow
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: -1
+ Goroutines: 31
+ System Time: 2018-01-08T16:14:44.7277848-08:00
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+2

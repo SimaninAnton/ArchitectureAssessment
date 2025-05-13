@@ -1,0 +1,7 @@
+Contributor
+aanand commented on 14 Apr 2016
+As per the warning message:
+$ docker-compose rm
+WARNING: Not including one-off containers created by `docker-compose run`.
+To include them, use `docker-compose rm --all`.
+This will be the default behavior in the next version of Compose.

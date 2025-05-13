@@ -1,0 +1,10 @@
+robininfo-edsx commented on 11 Dec 2017
+When I use docker-compose start before a docker-compose up I obtain the following result:
+Starting mongo         ... done
+Starting elasticsearch ... done
+Starting transporter   ... done
+Starting pdf           ... done
+Starting back          ... done
+Starting front         ... done
+ERROR: No containers to start
+This behaviour is pretty strange as the output is contradictory it says that it start all containers but the errors say the opposite.

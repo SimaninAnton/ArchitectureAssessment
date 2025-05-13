@@ -1,0 +1,31 @@
+gaertner-mike commented on 10 Nov 2016 •
+edited
+as per documentation docker-compose will read the .env in the cwd and set the variables. Currently under macOS (Version 10.12.1 (16B2555)) this is not working
+$ docker -v
+Docker version 1.12.3, build 6b644ec
+
+$ docker-machine -v
+docker-machine version 0.8.2, build e18a919
+
+$ docker-compose -v
+docker-compose version 1.8.1, build 878cff1
+
+$ cat .env
+TAG=v1
+
+$ docker-compose run db env
+HOSTNAME=56d63067833d
+TERM=xterm
+MYSQL_VERSION=5.7.16-1debian8
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+SHLVL=0
+HOME=/root
+MYSQL_MAJOR=5.7
+no_proxy=*.local, 169.254/16
+GOSU_VERSION=1.7
+the variable TAG is not exported to the container, db is defined as
+version: "2"
+services:
+  db:
+    image: mysql

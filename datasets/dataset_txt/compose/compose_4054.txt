@@ -1,0 +1,5 @@
+karellm commented on 7 Dec 2014
+Hi,
+I'm trying to setup a development environment for a project using fig. My web container has tmux installed and I want to be able to fig up or fig run into this tmux session.
+The problems I see are that fig run doesn't forward ports (#163) and that fig up doesn't attach a tty and thus throw an open terminal failed: not a terminal error.
+Any suggestion on how I am supposed to get this running?

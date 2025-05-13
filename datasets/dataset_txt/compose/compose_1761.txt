@@ -1,0 +1,3 @@
+stefanopaganucci commented on 24 Jan 2017
+depends_on condition directive is not working while using multiple docker-compose configuration files.
+Executing docker-compose config prints service_started instead of service_healthy.

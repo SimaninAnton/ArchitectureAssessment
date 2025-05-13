@@ -1,0 +1,50 @@
+leon0707 commented on 25 Aug 2019 •
+edited
+Description of the issue
+Unable to use environment variables in nginx configuration
+Context information (for bug reports)
+https://docs.docker.com/samples/library/nginx/#using-environment-variables-in-nginx-configuration
+This is the document can be found on official website.
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+Output of docker version
+Version:           18.09.2
+Output of docker-compose config
+version: "3.5"
+services:
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - 80:80
+    environment:
+      - DOMAIN_NAME=localhost
+      - UWSGI_PORT=3000
+    command: /bin/bash -c "envsubst '${DOMAIN_NAME},${UWSGI_PORT}' < /etc/nginx/sites-enabled/uwsgi.conf > /etc/nginx/sites-enabled/uwsgi.conf && exec nginx -g 'daemon off;'"
+uwsgi.conf
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Host $server_name;
+proxy_redirect off;
+
+server {
+    listen 80;
+    server_name ${DOMAIN_NAME};
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass uwsgi:${UWSGI_PORT};
+    }
+}
+Steps to reproduce the issue
+docker-compose up
+Observed result
+docker-compose up
+WARNING: The DOMAIN_NAME variable is not set. Defaulting to a blank string.
+WARNING: The UWSGI_PORT variable is not set. Defaulting to a blank string.
+Expected result
+The DOMAIN_NAME, UWSGI_PORT variables should have value
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.

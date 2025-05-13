@@ -1,0 +1,39 @@
+brunocascio commented on 23 Dec 2016 •
+edited
+I'm trying to recreate the containers after to rebuild an image (using docker-compose up -d --build --force-recreate) and I seem that it does not work properly. Now, I'm using docker-compose down && docker-compose up -d but would be cool if I can recreate them without the down command.
+version: '2.1'
+
+services:
+  wordpress:
+    build: .
+    image: fbt-wpsite:${VERSION:-latest}
+    volumes:
+      - ./uploads:/var/www/html/wp-content/uploads
+    depends_on:
+      - mysql
+    env_file: .env
+    environment:
+      - VIRTUAL_HOST=$DOMAIN
+      - VIRTUAL_PORT=9000
+    restart: unless-stopped
+
+  mysql:
+    image: mariadb
+    volumes:
+      - ./.mysql:/var/lib/mysql
+    env_file: .env
+    restart: unless-stopped
+
+  server:
+    image: jwilder/nginx-proxy
+    ports:
+      - ${PORT:-80}:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: unless-stopped
+Dockerfile:
+FROM wordpress:4-php7.0-apache
+
+COPY ./plugins /var/www/html/wp-content/plugins
+COPY ./theme /var/www/html/wp-content/themes/fbt
+1

@@ -1,0 +1,1 @@
+fig throw KeyError: u'Id' when i run fig up in latest version

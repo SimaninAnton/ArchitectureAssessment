@@ -1,0 +1,70 @@
+technowar commented on 1 Mar 2016
+Why am I getting this error when running docker-compose up.
+I am running this on my Linux with
+Docker version 1.10.1, build 9e83765
+docker-machine version 0.6.0, build e27fb87
+docker-compose version 1.6.0, build d99cad
+However, this config works on a Mac. I'm not sure what's wrong with the config that it won't work with Linux.
+��web_1     | [PM2] Spawning PM2 daemon
+web_1     | [PM2] PM2 Successfully daemonized
+web_1     | [PM2][ERROR] script not found : /app/server.js
+web_1     | script not found : /app/server.js
+web_1     | ┌──────────┬────┬──────┬─────┬────────┬─────────┬────────┬────────┬──────────┐
+web_1     | │ App name │ id │ mode │ pid │ status │ restart │ uptime │ memory │ watching │
+web_1     | └──────────┴────┴──────┴─────┴────────┴─────────┴────────┴────────┴──────────┘
+web_1     |  Use `pm2 show <id|name>` to get more details about an app
+docker-compose.yml
+version: '2'
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+    links:
+      - mongodb
+      - redis
+    ports:
+      - "80:3000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb/btg
+      - REDIS_URL=redis://redis
+  redis:
+    image: redis:3.0
+  mongodb:
+    image: mongo:3.0
+Dockerfile
+from node:argon
+
+RUN mkdir /deps
+ADD ./package.json /deps
+WORKDIR /deps
+RUN npm install --ignore-scripts --unsafe-perm
+ENV NODE_PATH=/deps/node_modules
+
+EXPOSE 3000
+
+WORKDIR /app
+COPY . /app
+
+CMD /deps/node_modules/.bin/pm2 start --watch server.js && /deps/node_modules/.bin/pm2 logs
+Project directory
+.
+├── app
+│   ├── routes
+│   │   ├── .js
+│   │   └── .js
+│   └── views
+│       ├── .html
+│       ├── .html
+│       ├── .html
+│       └── partials
+│           ├── .html
+│           └── .html
+├── docker-compose.yml
+├── Dockerfile
+├── package.json
+├── public
+│   └── css
+│       └── .css
+├── README.md
+└── server.js

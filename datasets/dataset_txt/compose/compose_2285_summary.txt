@@ -1,0 +1,1 @@
+environment variables in yml file ignored while building containers

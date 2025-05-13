@@ -1,0 +1,8 @@
+DarylGraves commented on 22 Jul 2019 •
+edited
+I am trying to install Docker-Compomse on Raspbian but the below doesn't work but is in all the documentation (sometimes with a `, othertimes with a $)
+curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s-uname -m` -o /usr/local/bin/docker-compose
+All I get is a file with "Not Found "as the contents. I've also tried going directly to that site in a browser but just get a "404 page not found" style error.
+I was wondering if I'm meant to replace the "$uname" with something my github username but everywhere I've seen this documented, this is never clarified.
+Edit: Github is breaking the URL a bit but the full unedited link can be found here
+1

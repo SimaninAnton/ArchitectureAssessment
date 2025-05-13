@@ -1,0 +1,126 @@
+josh-byster commented on 24 May 2019 •
+edited
+Description of the issue
+Edit: please see comment below for followup information.
+Running docker-compose down -v does not seem to remove named volumes in the same sense as described in the documentation and #2838.
+Context information (for bug reports)
+I'm running a redis service and I have the following in my .yml file:
+redis:
+  image: redis
+  container_name: redis-store
+  expose:
+    - 6379
+  volumes:
+    - red_data:/data
+Output of docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.5.0
+CPython version: 3.7.3
+OpenSSL version: OpenSSL 1.0.2r  26 Feb 2019
+Edit: after writing I realized this was an out-of-date version since my PATH was off, but now I upgraded to 1.23.2 which seems to correspond with the current Docker Desktop for Mac compose version. I went through the same exact steps and got the same issue with this newer version.
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  app:
+    build:
+      context: /Users/joshbyster/Downloads/redis-test
+    command: sh -c 'npm run start:dev'
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      REDIS_URL: redis://redis-store:6379
+    links:
+    - redis
+    network_mode: bridge
+    ports:
+    - 3000:3000/tcp
+    volumes:
+    - /Users/joshbyster/Downloads/redis-test:/var/www/app:rw
+    - fe_modules:/var/www/app/node_modules:rw
+  redis:
+    container_name: redis-store
+    expose:
+    - 6379
+    image: redis
+    network_mode: bridge
+    volumes:
+    - red_data:/data:rw
+version: '2.1'
+Steps to reproduce the issue
+As expected, after running docker-compose up and exiting using Ctrl-C, running docker volume ls results in the following:
+DRIVER              VOLUME NAME
+local               fe_modules
+local               red_data
+Also as expected, if I try to run docker volume rm red_data, I get that the volume is in use.
+If I then run docker-compose down -v, I get:
+Removing redis-test_app_1 ... done
+Removing redis-store      ... done
+Which is again what I expect.
+However, running docker volume ls, I get:
+docker volume ls
+DRIVER              VOLUME NAME
+local               fe_modules
+local               red_data
+Observed result
+The named volumes are not deleted. Anonymous volumes are (when I change the .yml file to use an anonymous volume).
+Thus, when I go to run docker-compose up, the data in red_data is still there.
+Expected result
+Per the documentation, by running docker-compose down -v, named volumes should be removed.
+Remove named volumes declared in the volumes
+section of the Compose file and anonymous volumes
+attached to containers.
+Stacktrace / full error message
+Workflow demonstrating what happens for full clarity:
+❯ docker-compose ps
+Name   Command   State   Ports
+------------------------------
+
+❯ docker volume ls
+DRIVER              VOLUME NAME
+
+❯ docker-compose up -d
+Creating redis-store ... done
+Creating redis-test_app_1 ... done
+
+❯ docker volume ls
+DRIVER              VOLUME NAME
+local               fe_modules
+local               red_data
+
+
+❯ docker-compose down -v
+Stopping redis-test_app_1 ... done
+Stopping redis-store      ... done
+Removing redis-test_app_1 ... done
+Removing redis-store      ... done
+
+❯ docker volume ls
+DRIVER              VOLUME NAME
+local               fe_modules
+local               red_data
+Additional information
+OS version / distribution, docker-compose install method, etc.
+macOS Mojave 10.14.4, I believe Docker Compose was installed through the CE OS X app if I'm not mistaken.

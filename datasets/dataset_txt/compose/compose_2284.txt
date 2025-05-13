@@ -1,0 +1,29 @@
+sameersbn commented on 24 Jun 2016
+Lately I've been noticing the following error message quite frequently with docker-compose up:
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+Increasing the COMPOSE_HTTP_TIMEOUT only seems to delay the error. Is this a known issue and/or is there a workaround for this?
+I'm using ubuntu 16.04, please find below the output of docker-compose version and docker version. I'd also like to note that I see this issue with docker for mac beta, docker-machine, etc.
+$ docker-compose version
+docker-compose version 1.7.1, build 6c29830
+docker-py version: 1.8.1
+CPython version: 2.7.11+
+OpenSSL version: OpenSSL 1.0.2g-fips  1 Mar 2016
+$ docker version
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 22:00:43 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 22:00:43 2016
+ OS/Arch:      linux/amd64
+92
+2

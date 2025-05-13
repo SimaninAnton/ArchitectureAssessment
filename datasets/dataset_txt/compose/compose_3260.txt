@@ -1,0 +1,61 @@
+hiimtaylorjones commented on 28 Sep 2015
+Hey all,
+I'm currently configuring docker-compose on my Linux Mint machine. The problem is, I'm able to build the web aspect of my project without errors. However, when it comes to running the rails server, rails console, or really anything that involves the rails command, I'm getting the following errors:
+web_1 | Could not locate Gemfile or .bundle/ directory
+/myapp/Gemfile not found
+Any idea what's going on here. Posting my docker-compose.yml and related files below.
+Docker Version: 1.8.2
+Docker Machine Version: 0.4.0
+Docker Compose Version: 1.4.2
+docker-compose.yml
+db:
+  image: postgres:9.4.1
+  ports:
+    - "5432:5432"
+
+web:
+  extends:
+    file: common.yml
+    service: webapp
+  build: .
+  command: bundle exec thin -D start
+  ports:
+      - "3000:3000"
+  links:
+      - db
+Common.yml
+webapp:
+  environment:
+      RAIL_ENV: development
+  volumes:
+      - .:/myapp
+Dockerfile
+FROM ruby:2.2.2
+
+ENV LANG C.UTF-8
+
+RUN apt-get update -qy
+RUN apt-get upgrade -y
+RUN apt-get update -qy
+RUN apt-get install -y build-essential
+
+# for postgres
+RUN apt-get install -y libpq-dev
+
+# for nokogiri
+RUN apt-get install -y libxml2-dev libxslt1-dev
+
+# for capybara-webkit
+#RUN apt-get install -y libqt4-webkit libqt4-dev xvfb
+
+# for a JS runtime
+RUN apt-get install -y nodejs
+
+ENV APP_HOME /myapp
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+ADD Gemfile* $APP_HOME/
+RUN bundle install
+
+ADD . $APP_HOME

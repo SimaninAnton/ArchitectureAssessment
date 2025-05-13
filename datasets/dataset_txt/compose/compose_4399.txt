@@ -1,0 +1,6 @@
+Contributor
+mauvm commented on 18 Feb 2014
+Is it possible to run a command in a running service (Docker container)? Here's my usecase:
+I'm running Laravel as web (with a mounted /code folder) and a MySQL server as db. My default web command is php artisan serve, but I want to run php artisan migrate in the same container (to propagate the database). Also I need to make a backup script for the db service (to make sure no data gets lost).
+Any way of doing these things with Fig?
+One option would be to setup an SSH server in the web service, which allows me to open a new login shell. But I was wondering if their is a better of doing this?

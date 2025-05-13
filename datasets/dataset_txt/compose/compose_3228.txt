@@ -1,0 +1,20 @@
+Ry7n commented on 8 Oct 2015
+This is probably working as intended, but using docker-compose logs turns out output that isn't valid JSON, e.g.:
+nginx | 2010/08/23 15:25:35 [error] This is some random log "with quotes".
+app_1 | { "msg": "Hello world" }
+app_2 | { "msg": "Hello as well" }
+This means that my JSON log entries can't be piped to JQ, and I can't use Amazon's CloudWatch Logs Filters. I'd love if docker-compose allowed me to tweak this so I could have a docker-compose.yml like:
+nginx:
+  # the default
+  log_format: text
+app_1:
+  log_format: json
+app_2:
+  log_format: json
+And be be able to do something like:
+$ docker-compose logs --json
+{ "docker": "nginx", "log": "This is some random log \"with quotes\"." }
+{ "docker": "app_1", "log": { "msg": "Hello world" } }
+{ "docker": "app_2", "log": { "msg": "Hello as well" } }
+I'm fine if docker-compose trusts that logs I say are JSON actually are valid JSON. From the look of things, that wouldn't be a terrifically challenging pull request, if you'd entertain it.
+1

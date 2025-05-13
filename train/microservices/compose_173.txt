@@ -1,0 +1,61 @@
+BentCoder commented on 17 May 2019
+Hi,
+I have a service called app_source which is used as data container. I copy application code into /app folder of this container/image and link it with a named volume called data_volume. This named volume is then used by other service called app_php so that the application code is accessible/runnable in it's container. This all works fine at the end of the build process.
+The problem I am facing is at build time. When I run ls on /app folder, it seems empty. Hence reason I cannot run specific commands (such as composer install) in Dockerfile. So the question is, is there a solution for /app content availability at build time?
+docker-compose.yml
+version: "3"
+
+services:
+
+  app_source:
+    build:
+      context: "../.."
+      dockerfile: "docker/source/Dockerfile"
+    volumes:
+      - "data_volume:/app"
+
+  app_php:
+    build:
+      context: "./php"
+    volumes:
+      - "data_volume:/app"
+    depends_on:
+      - "app_source"
+
+volumes:
+  data_volume:
+docker/source/Dockerfile
+FROM tianon/true
+
+COPY . /app
+docker/php/Dockerfile
+FROM php:7.2.13-fpm-alpine3.8
+
+WORKDIR /app
+
+RUN ls -l /app # This is empty at build time
+
+CMD ["php-fpm", "--nodaemonize"]
+At the end of the build
+$ sudo ls -la /var/lib/docker/volumes/data_volume/_data/
+-rw-r--r-- 1 root root   1443 May 16 20:05 composer.json
+drwxr-xr-x 8 root root   4096 May 17 10:52 src
+$ docker exec -it app_php_1 ls -l /app
+-rw-r--r--    1 root     root          1443 May 16 19:05 composer.json
+drwxr-xr-x    8 root     root          4096 May 17 09:52 src
+$ docker inspect data_volume
+[
+    {
+        "CreatedAt": "2019-05-17T10:52:41+01:00",
+        "Driver": "local",
+        "Labels": {
+            "com.docker.compose.project": "source",
+            "com.docker.compose.version": "1.21.2",
+            "com.docker.compose.volume": "data_volume"
+        },
+        "Mountpoint": "/var/lib/docker/volumes/data_volume/_data",
+        "Name": "data_volume",
+        "Options": null,
+        "Scope": "local"
+    }
+]

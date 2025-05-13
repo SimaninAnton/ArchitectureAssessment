@@ -1,0 +1,1 @@
+Add --quiet or --silent option to docker-compose

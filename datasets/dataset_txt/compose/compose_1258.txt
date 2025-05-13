@@ -1,0 +1,12 @@
+junneyang commented on 16 Aug 2017
+my .env:
+RETRIES=3
+my docker-compose.yaml:
+    healthcheck:
+      test: nc -v -w 5 -z localhost ${AUTH_SERVER_PORT}
+      interval: ${INTERVAL}
+      timeout: ${TIMEOUT}
+      retries: ${RETRIES}
+when docker-compose config, it says:
+retries contains an invalid type, it should be a number
+how to solve this problem, thanks very much!

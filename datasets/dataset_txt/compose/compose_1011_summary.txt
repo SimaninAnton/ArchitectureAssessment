@@ -1,0 +1,1 @@
+docker Error response from daemon: pull access denied for portiacrawl, repository does not exist or may require 'docker login'.

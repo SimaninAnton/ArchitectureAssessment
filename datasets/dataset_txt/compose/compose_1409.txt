@@ -1,0 +1,15 @@
+MrHash commented on 6 Jun 2017 •
+edited
+According to documentation at https://docs.docker.com/compose/compose-file/#link_local_ips this should be supported:
+version: "3.2"
+networks:
+  test_net:
+    driver: bridge
+services:
+  alpine:
+    image: alpine:latest
+    networks:
+      test_net:
+        link_local_ips:
+          - 192.168.1.10
+A simple workaround to this issue would be appreciated. thanks

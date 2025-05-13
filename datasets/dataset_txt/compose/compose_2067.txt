@@ -1,0 +1,28 @@
+sblackstone commented on 14 Sep 2016 •
+edited
+I'm trying to create a "defaults" block in docker-compose.yml so that I can use that definition in my other services..
+However, docker-compose doesn't allow any keys other than "services" at the root.
+It would nice to be able to define blocks outside services for this purpose..
+minimal example:
+version: '2'
+
+default: &default
+  image: my_app
+  build: .    
+  volumes:
+    - .:/app
+  environment:      
+    RAILS_ENV: development
+    DATABASE_URL: mysql2://dba:abcd1234@10.0.0.1/my_database
+
+services:      
+  app:
+    <<: *default
+    ports:
+      - "3000:3000"
+    command: /app/docker-up.sh
+
+  delayed_job_default:
+    <<: *default
+    command: bin/delayed_job --queue default run
+In the actual config in my application, I ended up defining default within services and giving it a dummy command, like echo "not a service"

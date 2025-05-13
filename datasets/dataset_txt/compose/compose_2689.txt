@@ -1,0 +1,9 @@
+ro0NL commented on 29 Feb 2016
+Hi,
+For our container we have the home directory configured as volume, ie;
+container:
+    volumes:
+        - "./www:/var/www"
+/var/www is the user's home directory within the container.
+I noticed each time I stop/rm/up the container the .bashrc file is reset to some system-default file. If I create a new file in this volume it stays persisted.
+Fairly new to docker.. so perhaps i'm overlooking something?

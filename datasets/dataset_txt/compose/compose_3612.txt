@@ -1,0 +1,37 @@
+fundon commented on 27 May 2015
+$ boot2docker ip                                                                                                                                                                     
+192.168.59.103
+$ $(boot2docker shellinit)                                                                                                                                                           
+Writing /Users/fundon/.boot2docker/certs/boot2docker-vm/ca.pem
+Writing /Users/fundon/.boot2docker/certs/boot2docker-vm/cert.pem
+Writing /Users/fundon/.boot2docker/certs/boot2docker-vm/key.pem
+$ docker-compose ps                                                                                                                                                                  
+Couldn't connect to Docker daemon - you might need to run `boot2docker up`.
+$ boot2docker version                                                                                                                                                                
+Boot2Docker-cli version: v1.6.2
+Git commit: cb2c3bc
+
+$ docker version                                                                                                                                                                     
+Client version: 1.6.2
+Client API version: 1.18
+Go version (client): go1.4.2
+Git commit (client): 7c8fca2
+OS/Arch (client): darwin/amd64
+Server version: 1.6.2
+Server API version: 1.18
+Go version (server): go1.4.2
+Git commit (server): 7c8fca2
+OS/Arch (server): linux/amd64
+
+$ docker-compose --version                                                                                                                                                           
+docker-compose 1.2.0
+
+$ python -v
+Python 2.7.10
+
+# Mac OSX Orignal Openssl
+$ openssl version                                                            
+OpenSSL 0.9.8zf 19 Mar 2015
+
+$ brew install --force openssl
+OpenSSL 1.0.2a 19 Mar 2015

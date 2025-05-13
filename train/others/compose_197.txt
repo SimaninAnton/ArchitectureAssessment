@@ -1,0 +1,12 @@
+montanaflynn commented on 28 Apr 2019
+Is your feature request related to a problem? Please describe.
+For development we have several containers we want to use such as postgres, elasticsearch, kibana, etc... and the docker-compose.yml file has several of these as services such as postgres, elasticsearch and kibana. Sometimes we don't want to run kibana as it's mostly used for debugging.
+Another scenario is developing microservices where we want a full environment but also the ability to toggle one service off to develop it locally.
+Describe the solution you'd like
+Adding an --exclude-service flag would allow us to use our existing docker-compose files without having to comment out specific services before running docker-compose to remove specific services.
+docker-compose up --exclude-service kibana
+Describe alternatives you've considered
+Commenting out the services we don't want to start, having multiple docker-compose files that are identical except for each combination of services (impractical when you have several services)
+Additional context
+I think this is a common request, I found some issues asking for optional services that were somewhat related.
+Having --exclude-service along with being able to specify which services to start like this docker-compose up postgres elasticsearch widget-api --exclude-service user-api would work well to allow users to have one master docker-compose.yml file and specify at runtime which services to start.

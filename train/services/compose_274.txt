@@ -1,0 +1,14 @@
+squarewave24 commented on 25 Feb 2019 •
+edited
+I am running a Flask app succesfully in a docker container, but when i try to disable auto reloading (while trying to fix/troubleshoot signal only works in main thread error), i get this error after starting.
+redis_1  | 1:M 25 Feb 2019 14:27:57.797 * Ready to accept connections
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.30/containers/xxx/wait HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker wait -> {'Error': None, 'StatusCode': 1}
+api_flask_1 exited with code 1
+after changing this variable in docker-compose.yml
+    environment:
+      - ENVIRONMENT=docker
+      - FLASK_APP=api/app.py
+      - FLASK_DEBUG=0
+perhaps it has something to do with environment variable ?
+setting it back to FLASK_DEBUG=1 fixes the issue and app loads as expected.

@@ -1,0 +1,147 @@
+FatherShawn commented on 27 Mar 2018 •
+edited
+Description of the issue
+Use of docker-machine config with docker-compose exec may have been broken by #5722
+The following command works:
+docker-compose $(docker-machine config machine_name) ps
+The following command does not:
+docker-compose $(docker-machine config machine_name) exec cli ls
+Context information (for bug reports)
+Output of "docker-compose version"
+
+docker-compose version 1.20.1, build unknown
+docker-py version: 3.1.4
+CPython version: 2.7.10
+OpenSSL version: LibreSSL 2.2.7
+Output of "docker version"
+
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version:  go1.10
+ Git commit:  0520e24
+ Built: unknown-buildtime
+ OS/Arch: darwin/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:  18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built:  Wed Mar 21 23:14:54 2018
+  OS/Arch:  linux/amd64
+  Experimental: false
+Output of docker-machine version
+
+docker-machine version 0.14.0, build 89b8332
+Output of "docker-compose config"
+
+networks:
+  internal: {}
+  proxy:
+    external:
+      name: proxynet
+services:
+  cli:
+    depends_on:
+    - database
+    - php
+    - web
+    environment:
+      PHP_IDE_CONFIG: serverName=mysite.dpulp
+      XDEBUG_HOST: 192.168.99.1
+    image: digitalpulp/cli:7.1-alpine-cli-1.0.11
+    networks:
+      internal: null
+    volumes:
+    - /Users/dpshawn/DockerSites/mysite:/var/www:rw
+    working_dir: /var/www/docroot/
+  database:
+    environment:
+      MYSQL_DATABASE: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_ROOT_PASSWORD: dpulp
+      MYSQL_USER: drupal
+    image: digitalpulp/mariadb:10.2.13
+    networks:
+      internal: null
+    ports:
+    - 3306/tcp
+    volumes:
+    - db:/var/lib/mysql:rw
+  front-end:
+    depends_on:
+    - web
+    environment:
+      THEME_NAME: mysite
+    image: digitalpulp/front-end:1.0.13
+    networks:
+      internal: null
+    volumes:
+    - /Users/dpshawn/DockerSites/mysite:/var/www:rw
+    working_dir: /var/www/docroot/themes/custom/mysite
+  php:
+    environment:
+      XDEBUG_HOST: 192.168.99.1
+    image: digitalpulp/php:7.1-alpine-fpm-1.0.6
+    networks:
+      internal: null
+    volumes:
+    - /Users/dpshawn/DockerSites/mysite:/var/www:rw
+    working_dir: /var/www/docroot/
+  solr:
+    environment:
+      SOLR_HEAP: 1024m
+    image: wodby/drupal-solr:8-5.5-2.3.0
+    networks:
+      internal: null
+  web:
+    depends_on:
+    - database
+    - php
+    environment:
+      DOCROOT: /var/www/docroot
+      SERVER_NAME: mysite.dpulp
+      VIRTUAL_HOST: mysite.dpulp
+    image: digitalpulp/nginx:stable-alpine-1.0.0
+    networks:
+      internal: null
+      proxy: null
+    volumes:
+    - /Users/dpshawn/DockerSites/mysite:/var/www:rw
+    working_dir: /var/www/docroot/
+version: '3.0'
+volumes:
+  db: {}
+Steps to reproduce the issue
+Use docker-machine to create a docker environment.
+Execute docker-compose $(docker-machine config machine_name) exec cli ls
+Observed result
+invalid argument "=tcp://192.168.99.100:2376" for "-H, --host" flag: Invalid bind address format: =tcp://192.168.99.100:2376
+Expected result
+autoload.php  index.php     modules       robots.txt    themes        web.config
+core          libraries     profiles      sites         update.php
+Additional information
+It is the exact form of the option output from docker-machine config that fails:
+docker-machine config dp-docker
+--tlsverify
+--tlscacert="/Users/dpshawn/.docker/machine/machines/dp-docker/ca.pem"
+--tlscert="/Users/dpshawn/.docker/machine/machines/dp-docker/cert.pem"
+--tlskey="/Users/dpshawn/.docker/machine/machines/dp-docker/key.pem"
+-H=tcp://192.168.99.100:2376
+All other forms of setting this option succeed:
+docker-compose --tlsverify --tlscacert="/Users/dpshawn/.docker/machine/machines/dp-docker/ca.pem" --tlscert="/Users/dpshawn/.docker/machine/machines/dp-docker/cert.pem" --tlskey="/Users/dpshawn/.docker/machine/machines/dp-docker/key.pem" --host tcp://192.168.99.100:2376 exec cli ls
+autoload.php  index.php     modules       robots.txt    themes        web.config
+core          libraries     profiles      sites         update.php
+docker-compose --tlsverify --tlscacert="/Users/dpshawn/.docker/machine/machines/dp-docker/ca.pem" --tlscert="/Users/dpshawn/.docker/machine/machines/dp-docker/cert.pem" --tlskey="/Users/dpshawn/.docker/machine/machines/dp-docker/key.pem" --host='tcp://192.168.99.100:2376' exec cli ls
+autoload.php  index.php     modules       robots.txt    themes        web.config
+core          libraries     profiles      sites         update.php
+docker-compose --tlsverify --tlscacert="/Users/dpshawn/.docker/machine/machines/dp-docker/ca.pem" --tlscert="/Users/dpshawn/.docker/machine/machines/dp-docker/cert.pem" --tlskey="/Users/dpshawn/.docker/machine/machines/dp-docker/key.pem" --host=tcp://192.168.99.100:2376 exec cli ls
+autoload.php  index.php     modules       robots.txt    themes        web.config
+core          libraries     profiles      sites         update.php
+docker-compose --tlsverify --tlscacert="/Users/dpshawn/.docker/machine/machines/dp-docker/ca.pem" --tlscert="/Users/dpshawn/.docker/machine/machines/dp-docker/cert.pem" --tlskey="/Users/dpshawn/.docker/machine/machines/dp-docker/key.pem" -H=tcp://192.168.99.100:2376 exec cli ls
+invalid argument "=tcp://192.168.99.100:2376" for "-H, --host" flag: Invalid bind address format: =tcp://192.168.99.100:2376
+macOS 10.13.3, docker-compose and docker-machine installed by Homebrew. docker-machine using virtualbox driver with boot2docker.

@@ -1,0 +1,1 @@
+Entrypoint broken in Docker 1.7.0

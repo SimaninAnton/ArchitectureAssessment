@@ -1,0 +1,2 @@
+harto commented on 4 Mar 2014
+Unless I'm mistaken, there doesn't appear to be a way to define --volumes-from via fig.yml.

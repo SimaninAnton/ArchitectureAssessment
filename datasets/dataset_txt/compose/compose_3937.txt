@@ -1,0 +1,9 @@
+Vrakfall commented on 10 Feb 2015
+I saw 1 or 2 issues talking about supporting dashes or dots in container names and some arguments why it cannot be done for now but I found nothing about uppercase or underscores.
+In fact, the problem in which I often find myself stuck is that I cannot separate different words in a single container name (in the fig.yml). Perhaps I'm mistaking or I didn't find the right convention to name my containers but I'm currently forced to use names like mysqldatacontainer when I would like to call them more like mysqlDataContainer or even mysql_data_container.
+If I use some uppercase, I end up with this error:
+Invalid repository name (appname_mysqlDataContainer), only [a-z0-9-_.] are allowed
+and this one if I use a _ or a -:
+Invalid service name "mysql_data_container" - only [a-zA-Z0-9] are allowed
+That's why I'm proposing to allow at least one more character or to allow the uppercase in order to make long names more readable (if I didn't miss any way of doing it). We could even use it later as a coding convention.
+What do you guys think about that ?

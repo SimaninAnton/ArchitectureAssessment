@@ -1,0 +1,15 @@
+storytime commented on 23 Jun 2017 •
+edited
+https://stackoverflow.com/questions/44725482/docker-compose-wait-for-without-sleep-command
+When I run: docker-compose run tests condition: service_healthy is ignored, docker-compose starts only app container (but dont do condition: service_healthy)
+ tests:
+    build:
+      context: .
+      dockerfile: TestDocker
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - myNetwork
+docker-compose version 1.11.2, build f963d76
+Docker version 17.03.1-ce, build c6d412e

@@ -1,0 +1,63 @@
+Contributor
+bhuisgen commented on 6 May 2018
+Description of the issue
+docker-compose images outputs only the first existing tag of a container image. It can be confusing if you specify a different tag in the compose file. The images command should output the same tag as the service definition to be more consistent of what the user wants.
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version: 18.04.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 3d479c0
+ Built: Tue Apr 10 18:22:52 2018
+ OS/Arch: linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.04.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 3d479c0
+  Built: Tue Apr 10 18:20:59 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+services:
+  backuppc:
+    depends_on:
+    - consul
+    environment:
+      CONSUL_AGENT: consul
+      CONSUL_CHECKTYPE: tcp
+      CONSUL_KEYPREFIX: local/muse/
+      CONSUL_PORT: '8500'
+      CONSUL_SERVICENAME: backuppc
+      CONSUL_SERVICEPORT: '9000'
+      CONSUL_SERVICETAGS: local,backuppc
+      ENV: local
+    image: bhuisgen/alpine-backuppc:prod
+    restart: unless-stopped
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - backuppc:/var/www:rw
+    - /media/storage/data/backup/backuppc:/var/lib/backuppc:rw
+Steps to reproduce the issue
+Tag your service image as prod and use it for your service
+Tag your service image with a new tag like dev
+Run docker-compose images
+Observed result
+$ docker-compose images
+        Container                        Repository                 Tag       Image Id      Size  
+--------------------------------------------------------------------------------------------------
+muse_backuppc_1              bhuisgen/alpine-backuppc              dev      297e8777904d   94.1 MB
+docker-compose outputs the first existing tag of the image.
+Expected result
+$ docker-compose images
+        Container                        Repository                 Tag       Image Id      Size  
+--------------------------------------------------------------------------------------------------
+muse_backuppc_1              bhuisgen/alpine-backuppc              prod     297e8777904d   94.1 MB
+docker-compose should output the service tag as it's the same image ID.

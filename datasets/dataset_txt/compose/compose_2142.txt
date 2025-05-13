@@ -1,0 +1,43 @@
+fifthecho commented on 17 Aug 2016
+When attempting to use docker-compose on Docker for Windows, when I run docker-compose up I get the following error:
+Creating network "core_default" with the default driver
+Creating volume "core_redis" with local driver
+Creating volume "core_mongo" with local driver
+Creating core_redis_1
+Creating core_mongo_1
+
+ERROR: for redis  HTTPConnectionPool(host='127.0.0.1', port=2375): Read timed out. (read timeout=60)
+
+ERROR: for mongo  HTTPConnectionPool(host='127.0.0.1', port=2375): Read timed out. (read timeout=60)
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 61, in main
+  File "compose\cli\main.py", line 113, in perform_command
+  File "contextlib.py", line 35, in __exit__
+  File "compose\cli\errors.py", line 56, in handle_connection_errors
+TypeError: log_timeout_error() takes exactly 1 argument (0 given)
+docker-compose returned -1
+However, docker network ls returns:
+NETWORK ID          NAME                DRIVER              SCOPE
+ebbd865db905        bridge              bridge              local
+92a7cb9266f4        host                host                local
+b2005441d806        none                null                local
+e48cd344017e        core_default    bridge              local
+And docker volume ls returns:
+DRIVER              VOLUME NAME
+local               291cbd550d937768a7380e33968014651be2061f72231a3b015bd3302d910a7a
+local               311b7b623f4d0d08d76c9fb2d15d0860199bbd272cf8b863805fbd3dc381e85b
+local               3ed4f2b282317550c99c52b80947505802af800a5b0f2814e2e6044bdd657501
+local               54dc3ff7c8bb626dffb862f840887639d4a339595351062ae0a0c042b635e82f
+local               844f306aa2cb8b7bab01848b5015b468bab07fa0ab09de21e46a52465aa7f240
+local               ba8b0ff02600901218a1bbf4f0213519ac1641dc11039e572f2d062854e9c416
+local               bbc29e0c1bbc4a5a3b174698400c69643fa663876a3f85629ae825c06e7b834b
+local               core_mongo
+local               core_redis
+And docker ps -l returns:
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+3c2c821aaa34        mongo               "/entrypoint.sh mongo"   3 minutes ago       Created                                 core_mongo_1
+9d70b43b1830        redis               "docker-entrypoint.sh"   3 minutes ago       Created                                 core_redis_1
+If I manually docker start the containers, then everything starts working as expected with compose, but it appears that there is in issue within compose with the address it attempts to run the docker start from.
+It would be very nice for docker-compose to work as expected as currently we're provisioning containers using Vagrant and I'd like to remove that tool from our developer dependencies if possible.
+11

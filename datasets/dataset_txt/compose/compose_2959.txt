@@ -1,0 +1,9 @@
+pcfreak30 commented on 30 Dec 2015
+If you do
+volumes:
+- web/:/var/www/html
+Then it will parse it as web:/var/www/html and create volume "web". The web folder does not exist beforehand. This was working in 1.7.
+If you do
+volumes:
+- ./web/:/var/www/html
+It works as expected.

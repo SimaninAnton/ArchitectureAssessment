@@ -1,0 +1,4 @@
+nazar-pc commented on 29 Nov 2015
+There is currently possibility to specify cpuset, which will be applied to all containers.
+But what if I want docker-compose scale x=8 and assign exactly one core for each container?
+Maybe, some kind of cyclic map can be added, so that if I run 16 containers - each core will get 2 containers?

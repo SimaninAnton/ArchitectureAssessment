@@ -1,0 +1,12 @@
+pedrofurtado commented on 5 Jul 2018 •
+edited
+Is it possible to pass ENV variables (from .env file) in docker-compose.yml with a structure like this below?
+version: '3'
+
+services:
+  somename:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      args:
+        - "MY_ARG=${MY_ENV_VAR}"

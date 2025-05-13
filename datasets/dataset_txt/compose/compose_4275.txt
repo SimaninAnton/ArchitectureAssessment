@@ -1,0 +1,45 @@
+kakawait commented on 22 Jul 2014
+I'm using MacOS on network with a http proxy. Thus I often set the following env variables:
+http_proxy=http://USER:PASSWORD@HOST:PORT
+https_proxy=http://USER:PASSWORD@HOST:PORT
+but when these envs variables are set fig does not work anymore (see stacktrace)
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.5.0', 'console_scripts', 'fig')()
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 31, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 50, in perform_command
+    return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 328, in up
+    recreate=recreate
+  File "/Library/Python/2.7/site-packages/fig/project.py", line 169, in up
+    for (_, container) in service.recreate_containers():
+  File "/Library/Python/2.7/site-packages/fig/service.py", line 163, in recreate_containers
+    containers = self.containers(stopped=True)
+  File "/Library/Python/2.7/site-packages/fig/service.py", line 69, in containers
+    for container in self.client.containers(all=stopped):
+  File "/Library/Python/2.7/site-packages/fig/packages/docker/client.py", line 432, in containers
+    res = self._result(self._get(u, params=params), True)
+  File "/Library/Python/2.7/site-packages/fig/packages/docker/client.py", line 69, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/Library/Python/2.7/site-packages/requests/sessions.py", line 395, in get
+    return self.request('GET', url, **kwargs)
+  File "/Library/Python/2.7/site-packages/requests/sessions.py", line 383, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Library/Python/2.7/site-packages/requests/sessions.py", line 486, in send
+    r = adapter.send(request, **kwargs)
+  File "/Library/Python/2.7/site-packages/requests/adapters.py", line 387, in send
+    raise Timeout(e)
+requests.exceptions.Timeout: HTTPConnectionPool(host='#HOST#', port=#PORT#): Read timed out. (read timeout=60)
+ps: I just edited the #HOST# #PORT# that matching the proxy host and port
+ps1: All images are local
+I don't really need proxy for fig/docker because I'm working with local image but It a bit annoying to unset env.
+I think the program used proxy because it set, but maybe add some documentation to counter the problem, for example by adding env no_proxy= (but I need to find which http address I should add on no_proxy)

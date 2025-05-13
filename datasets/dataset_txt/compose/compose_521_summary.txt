@@ -1,0 +1,1 @@
+Proposal: SERVICE argument optional when only one defined

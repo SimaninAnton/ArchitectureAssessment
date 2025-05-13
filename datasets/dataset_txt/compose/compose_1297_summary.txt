@@ -1,0 +1,1 @@
+compose file version 3.0 removed support for init

@@ -1,0 +1,1 @@
+[Error] image not found: compose cannot find a local image

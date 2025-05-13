@@ -1,0 +1,6 @@
+AndreKR commented on 30 Dec 2016
+I am running docker-compose version 1.9.0, build 2585387 and in the inline help there is an option "push - Push service images".
+The lead me to think I could have a service defined in my docker-compose.yml that has build: and image: set. Then I could run docker-compose build and it would build the image locally and tag it with the registry and name I specified. Then I could run docker-compose push or docker-compose push web (for a single service) to push that service's freshly built image to my registry.
+In reality, yes, I can build the image with docker-compose build and it is correctly tagged. I could then manually push it with docker push to my registry if I know the image tag. However, docker-compose push does nothing. It doesn't give any error, it just exits successfully after about one second but nothing arrives at the registry. Same when I specify a service name: docker-compose push web
+Is docker-compose push meant for something else?
+11

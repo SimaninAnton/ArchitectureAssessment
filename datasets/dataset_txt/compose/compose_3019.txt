@@ -1,0 +1,2 @@
+blackxored commented on 4 Dec 2015
+Compose locally works flawlessly, but as soon as you switch it to point to a remote host, it takes ages (>2h) to complete a build command. Running it verbosely shows nothing else that being stuck on sending auth info, and then the rest of the process completes in <1 min. I wonder if I'm doing something wrong, or if it wasn't supposed to be used that way (as opposed to docker pushin' to a private registry or something), but it's really hindering my deployments.

@@ -1,0 +1,1 @@
+Naming convention for services cannot include _ or - / didn't see it mentioned in docs

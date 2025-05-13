@@ -1,0 +1,60 @@
+andrewgy8 commented on 28 Jun 2017
+Im trying to use docker-compose up -d in the Gitlab CI for deploying my project to a staging server hosted on Digital Ocean. The server has a gitlab CI runner installed.
+When I run the command docker-compose up -d I get the non-descriptive traceback
+ERROR: for nginx  expected string or buffer
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 926, in up
+    scale_override=parse_scale_args(options['--scale']),
+  File "/usr/lib/python2.7/site-packages/compose/project.py", line 424, in up
+    get_deps
+  File "/usr/lib/python2.7/site-packages/compose/parallel.py", line 69, in parallel_execute
+    raise error_to_reraise
+TypeError: expected string or buffer
+ERROR: Job failed: exit code 1
+All the other containers run properly with:
+Creating foo_data_1 ... 
+Creating foo_data_1
+
+Creating foo_data_1 ... done
+Creating foo_postgres_1 ... 
+Creating foo_postgres_1
+
+Creating foo_postgres_1 ... done
+Creating foo_web_1 ... 
+Creating foo_web_1
+
+Creating foo_web_1 ... done
+This is what my gitlab-ci.yml file looks like:
+image: docker:latest
+stages:
+  - test
+  - build
+  - deploy
+
+# When using dind, it's wise to use the overlayfs driver for
+# improved performance.
+variables:
+  DOCKER_DRIVER: overlay
+
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+  - apk add --no-cache python py2-pip
+  - pip install --no-cache-dir docker-compose
+  - chmod +x /usr/local/bin/docker-compose
+  - docker-compose -v
+
+staging:
+  stage: deploy
+  script:
+    - docker-compose build
+    - docker-compose up -d
+And I have followed the suggestions in this issue to no avail.

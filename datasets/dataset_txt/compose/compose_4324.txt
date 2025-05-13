@@ -1,0 +1,6 @@
+andrewcstewart commented on 17 May 2014
+When trying to run fig on OS X, getting:
+bash: /usr/local/bin/fig: cannot execute binary file
+Installed according to directions:
+$ curl -L https://github.com/orchardup/fig/releases/download/0.4.1/darwin > /usr/local/bin/fig
+$ chmod +x /usr/local/bin/fig

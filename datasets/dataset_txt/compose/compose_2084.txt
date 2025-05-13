@@ -1,0 +1,34 @@
+matthuisman commented on 9 Sep 2016 •
+edited
+I'm trying to do zero downtime (using nginx-proxy).
+I don't want to have to change the docker-compose.yml for each change.
+So far, the way I see is to have
+  app1:
+    build: ./site1/
+  app2:
+    extends: app1
+Then do
+docker-compose build --no-cache app1 app2
+docker-compose stop app1
+docker-compose up -d --force-recreate app1
+docker-compose stop app2
+docker-compose up -d --force-recreate app2
+This works, but seems unnecessary to have two containers in the yml and running all the time.
+My idea was to:
+Duplicate container
+Stop original container
+Build new container
+Start new container
+Stop and delete the duplicate container.
+I can do ducker run -d --name temp myapp
+But, this doesn't seem to copy all the environment variables etc.
+I can do docker-compose scale app=2 which does what I want.
+I can actually build the new image before scale, and the new scaled image uses the new image.
+But, dropping scale back to 1 will stop the new image, and not the original old image.
+Would be cool if scaling down would use first in, first out.
+(At present - it's last in, first out)
+That would make updates very easy
+docker-compose build app
+docker-compose scale app=2
+docker-compose scale app=1
+Any ideas?

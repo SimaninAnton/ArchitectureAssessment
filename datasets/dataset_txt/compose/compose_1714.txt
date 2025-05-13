@@ -1,0 +1,36 @@
+myuseringithub commented on 8 Feb 2017 •
+edited
+Hi, getting this error in volume section of docker inspect command:
+"Err": "create proxy_data: VolumeDriver.Create: {"Error":"googleapi: Error 400: Invalid value for field 'resource.name': 'proxy_data'. Must be a match of regex '(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)', invalid"}\n",
+using RexRay as volume driver in the following Docker Stack:
+version: "3"
+
+volumes: 
+  data:
+    driver: rexray
+    driver_opts:
+      size: "100"
+      volumetype: "pd-ssd"
+
+services:
+  proxy:
+    image: vfarcic/docker-flow-proxy
+    volumes:
+      - "data:/cfg/"
+    deploy:
+      replicas: 1
+Expected behavior:
+Volume creation in GCE ("disk") using RexRay.
+Actual behavior:
+Throws error for invalid naming, caused by the addition of underscore to the volume name. As stated in the docs this is the default behavior of Docker Compose.
+In the example below, instead of attempting to create a volume called [projectname]_data, Compose will look for an existing volume simply called data and mount it into the db service’s containers.
+https://docs.docker.com/compose/compose-file/#external
+Question/Request:
+A way to alter Docker Compose default behavior of prefixing volume name when creating a new volume ?
+Version & Info:
+Using Google Cloud Platform to store volume (disk) data.
+Local Host Docker version 1.13.1-rc1, build 2527cfc
+Server Remote Docker version 1.13.0, build 49bf474
+RexRay version 0.3.3
+Temporary workaround:
+Using external volume, with an already created volume in GCE with specific name. i.e. not using RexRay or docker volume create ...

@@ -1,0 +1,14 @@
+mbeccati commented on 11 Jan 2018
+After upgrading the latest version of Docker for Windows 17.12.0-ce-win46 (15048), I wasn't able to start a container that was using a manually defined bind volume anymore.
+The error was as follows:
+ERROR: for project_fpm  Cannot create container for service fpm: error while mounting volume with options: type='none' device='/d/project/' o='bind': no such file or directory
+After some investigation, I found out that the latest Docker version apparently prefixes the /host_mnt directory when creating a bound volume, so I've changed my docker-compose accordingly:
+volumes:
+  project-source:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/host_mnt/d/project/"
+This looks like a BC break, and most likely docker-compose should do that transparently.
+9

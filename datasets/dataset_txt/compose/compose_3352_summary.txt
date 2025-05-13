@@ -1,0 +1,1 @@
+`dockerfile` and `image` shouldn't be allowed in combination

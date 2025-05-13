@@ -1,0 +1,5 @@
+cjerdonek commented on 30 Mar 2016
+In Docker Compose 1.5.1, I'm noticing that docker-compose run sends stderr from the running process to stdout of the process calling run. Is this intended?
+This comment states that--
+docker-compose prints informational messages to stderr, and container output to the same stream as it was written to in the container (stdout or stderr).
+but this isn't what I'm observing.

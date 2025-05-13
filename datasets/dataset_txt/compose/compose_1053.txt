@@ -1,0 +1,26 @@
+bitsofinfo commented on 29 Nov 2017 •
+edited
+Today I can't see a way to externalize the name of a secret referenced in a compose file. It must be statically declared in the compose file. Instead I should be able to do the below (same as w/ external network names)
+EXISTING BEHAVIOR
+services:
+  app:
+      secrets:
+        - my_hardwired_secret_name
+
+...
+
+secrets:
+  my_hardwired_secret_name:
+    external: true
+DESIRED BEHAVIOR:
+services:
+  app:
+      secrets:
+        - some_secret_alias
+
+...
+
+secrets:
+  some_secret_alias:
+    external: 
+       name: ${SECRET_NAME_1}

@@ -1,0 +1,1 @@
+Docker-Compose build stores a temporary file in /tmp and ignores Docker's TMPDIR

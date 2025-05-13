@@ -1,0 +1,1 @@
+fig up hangs when the container exits on startup

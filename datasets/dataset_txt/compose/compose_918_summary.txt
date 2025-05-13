@@ -1,0 +1,1 @@
+service must be mapping not a none type in docker-compose

@@ -1,0 +1,1 @@
+docker-compose up with options are printing the version when the version option is not specified

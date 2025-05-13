@@ -1,0 +1,12 @@
+jayd3e commented on 31 May 2014
+I have an app that could potentially have a few different commands run within it, and all of them are required for development purposes. Is there a way I can have fig just launch to a bash process? Something like:
+web:
+  build: .
+  command: /bin/bash
+  links:
+   - db
+   - redis
+db:
+  image: orchardup/postgresql
+redis:
+  image: orchardup/redis

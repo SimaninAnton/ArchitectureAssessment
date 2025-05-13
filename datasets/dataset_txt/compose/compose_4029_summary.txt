@@ -1,0 +1,1 @@
+Fig does not exit if container stops before attaching

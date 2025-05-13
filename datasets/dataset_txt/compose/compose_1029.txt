@@ -1,0 +1,20 @@
+breitsmiley commented on 7 Dec 2017
+After updating docker compose from version 1.17.1 to version 1.18.0-rc1 has been appeared error:
+ERROR: for php_php72_1  Cannot create container for service php72: invalid mount config for type "bind": invalid mount path: 'web' mount path must be absolute
+
+ERROR: for php72  Cannot create container for service php72: invalid mount config for type "bind": invalid mount path: 'web' mount path must be absolute
+ERROR: Encountered errors while bringing up the project.
+I use long syntax for bind mounts. If this change to short syntax everything works well
+My docker-compose.yml file contents:
+version: '3.4'
+
+services:
+  php72:
+    image: php:alpine
+    ports:
+      - "80:8080"
+    volumes:
+      - type: bind
+        source: ./web
+        target: /var/www/html/
+    command: ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]

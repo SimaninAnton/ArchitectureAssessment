@@ -1,0 +1,38 @@
+BentCoder commented on 12 May 2019
+Hi,
+I am not sure if this is a bug or me so leaving it as a question for now.
+I cannot use build command and it generates error below. However I can use other docker-compose ... commands.
+vagrant@server:/app$ docker-compose build
+
+Building app_php
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1052, in up
+  File "compose/cli/main.py", line 1048, in up
+  File "compose/project.py", line 466, in up
+  File "compose/service.py", line 329, in ensure_image_exists
+  File "compose/service.py", line 1047, in build
+  File "site-packages/docker/api/build.py", line 154, in build
+  File "site-packages/docker/utils/build.py", line 30, in tar
+  File "site-packages/docker/utils/build.py", line 82, in exclude_paths
+  File "site-packages/docker/utils/build.py", line 124, in walk
+  File "site-packages/docker/utils/build.py", line 124, in <genexpr>
+  File "site-packages/docker/utils/build.py", line 124, in walk
+  File "site-packages/docker/utils/build.py", line 124, in <genexpr>
+  File "site-packages/docker/utils/build.py", line 124, in walk
+  File "site-packages/docker/utils/build.py", line 124, in <genexpr>
+  File "site-packages/docker/utils/build.py", line 100, in walk
+PermissionError: [Errno 13] Permission denied: '/proc/tty/driver'
+[18950] Failed to execute script docker-compose
+OS is Debian 9 and the directory info is:
+vagrant@server:/app$ ls -l /proc/tty/driver
+ls: cannot open directory /proc/tty/driver: Permission denied
+
+vagrant@server:/app$ ls -l /proc/tty/
+total 0
+dr-x------ 2 root root 0 May 11 22:57 driver
+-r--r--r-- 1 root root 0 May 11 22:57 drivers
+dr-xr-xr-x 2 root root 0 May 11 22:57 ldisc
+-r--r--r-- 1 root root 0 May 11 22:57 ldiscs

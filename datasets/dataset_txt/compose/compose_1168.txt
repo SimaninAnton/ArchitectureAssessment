@@ -1,0 +1,5 @@
+etc0de commented on 6 Oct 2017
+Running docker-compose run from different shell scripts in same folder can lead to race condition leading to error & abort:
+ERROR: Cannot create container for service hermes: b'Conflict. The container name "/dockerbug150728952675791742_hermes_run_216" is already in use by container "7d3242d7020a3849afef92010eec6f1c515f80abf9a9a62018180e43a20c8514". You have to remove (or rename) that container to be able to reuse that name.'
+Since this impacts the ability to use docker-compose from automated scripts, it would be nice if this special case could be somehow caught and resolved automatically in a way that avoids that error.
+1

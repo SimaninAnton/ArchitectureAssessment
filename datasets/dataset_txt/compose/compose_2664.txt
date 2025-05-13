@@ -1,0 +1,49 @@
+hanneshapke commented on 6 Mar 2016
+When I run docker-compose -f dev.yml build, the build fails with an error
+postgres uses an image, skipping
+Building django
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+However, start the default docker machine doesn't solve the issue. I noticed that the verbose error message is similar to issue #2927 but again the suggested fix doesn't work.
+docker-compose --verbose -f dev.yml build
+compose.config.config.find: Using configuration files: ./dev.yml
+docker.auth.auth.load_config: Couldn't find 'auths' or 'HttpHeaders' sections
+docker.auth.auth.parse_auth: Found entry (registry=u'https://index.docker.io/v1/', username=u'hh')
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/compose/cli/main.py", line 55, in main
+  File "/compose/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/compose/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/compose/compose/cli/main.py", line 172, in perform_command
+  File "/compose/compose/cli/command.py", line 52, in project_from_options
+  File "/compose/compose/cli/command.py", line 85, in get_project
+  File "/compose/compose/cli/command.py", line 68, in get_client
+  File "/compose/venv/lib/python2.7/site-packages/docker/api/daemon.py", line 78, in version
+  File "/compose/venv/lib/python2.7/site-packages/docker/utils/decorators.py", line 47, in inner
+  File "/compose/venv/lib/python2.7/site-packages/docker/client.py", line 112, in _get
+  File "/compose/venv/lib/python2.7/site-packages/requests/sessions.py", line 477, in get
+  File "/compose/venv/lib/python2.7/site-packages/requests/sessions.py", line 465, in request
+  File "/compose/venv/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+  File "/compose/venv/lib/python2.7/site-packages/requests/adapters.py", line 415, in send
+requests.exceptions.ConnectionError: ('Connection aborted.', error(2, 'No such file or directory'))
+docker-compose returned -1
+My versions are:
+Docker version 1.10.2, build c3959b1
+docker-machine version 0.1.0
+docker-compose version 1.6.0, build d99cad6
+My dev.yml looks like this
+postgres:
+  image: postgres:9.5
+  volumes:
+    - /data/dev/renooble_cnn_demo/postgres:/var/lib/postgresql/data
+
+django:
+  dockerfile: Dockerfile-dev
+  build: .
+  command: python /app/manage.py runserver_plus 0.0.0.0:8000
+  volumes:
+    - .:/app
+  ports:
+    - "8000:8000"
+  links:
+    - postgres
+Do you have any suggestions why docker-compose is failing while creating the build?

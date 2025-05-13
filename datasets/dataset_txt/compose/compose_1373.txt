@@ -1,0 +1,4 @@
+kam1sh commented on 21 Jun 2017
+The problem is: even if i added {"bip": "192.168.100.1/24"} in /etc/docker/daemon.json and it changes docker network "bridge", docker-compose up still creates networks in 172.27.0.0/16!
+I thought, there was some global config file for docker-compose, but i couldn't find it.
+Is there any way to change this behavior? Except describing custom networks in docker-compose.yml or attaching containers to external network "bridge" (previously i used this way, but network_mode: bridge doen't work with networks: default: aliases: ... for the same service)

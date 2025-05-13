@@ -1,0 +1,7 @@
+ghost commented on 20 Jul 2015
+Hi,
+For the Debian package of Docker Compose in Stretch (Debian Testing), a manual page was written by Dariusz Dwornikowski dariusz.dwornikowski@cs.put.poznan.pl. You can get it at:
+https://bugs.debian.org/cgi-bin/bugreport.cgi?msg=31;filename=docker-compose.1;att=1;bug=792518
+It would be great if you could include it upstream.
+Regards,
+Carl Chenet chaica@debian.org

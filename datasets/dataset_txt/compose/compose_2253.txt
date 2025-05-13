@@ -1,0 +1,14 @@
+jylin commented on 4 Jul 2016
+Supposed I have a docker-compose.yml file like this:
+version: '2'
+services:
+        base:
+                build: ./base
+                image: my-base
+        service:
+                container_name: my-service
+                build: ./service
+                image: my-service
+                ports:
+                        - 80:80
+I mainly keep the "base" target in my compose file as a convenient way to build everything. In other words, I'm sort of using docker-compose.yml as a Makefile. This way I can just do docker-compose up --build to rebuild and re-run everything. However, the base image doesn't have an entrypoint, so if you run it, then it will quit right away. It would be nice if there were some way to specify that a service is not runnable so that compose doesn't even try to start it.

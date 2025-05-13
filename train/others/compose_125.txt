@@ -1,0 +1,5 @@
+zgfh commented on 21 Jul 2019 •
+edited
+Is your feature request related to a problem? Please describe.
+should we add autocomplete for compose? it will be easy to use
+eg: if we want exec some service, it can tab all service

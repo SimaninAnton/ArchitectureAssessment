@@ -1,0 +1,7 @@
+dblooman commented on 19 Oct 2016
+I have a compose setup that requires connecting out to the host machine to use a .Net app. As I understand it, you can do the following
+    extra_hosts:
+      - "dockerhost:192.168.1.115"
+This works great, but you can't use this with team members unless you wrap compose around a script. This is hard as we have a mix of macOS and Windows.
+network_mode: host doesn't work with links though. Is there a way to link containers and connect to a host IP address?
+5

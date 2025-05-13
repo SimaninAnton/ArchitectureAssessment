@@ -1,0 +1,1 @@
+Declare default environment variables in (CUSTOM) file

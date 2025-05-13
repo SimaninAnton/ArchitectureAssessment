@@ -1,0 +1,1 @@
+New field `network_mode` for v2 format

@@ -1,0 +1,19 @@
+Contributor
+dtenenba commented on 15 Aug 2015
+I have a docker-compose.yml like this:
+moscato1cytoscape:
+    image: "dtenenba/cytoscape"
+    ports:
+     - "3023:9000"
+If I run it with docker-compose up it fails.
+If I run what seems to be the identical command line:
+docker run --rm --name moscato1cytoscape -p 3023:9000 dtenenba/cytoscape
+It works. Why does this fail under docker-compose?
+The expected result is that the container stays running and in the end port 3023 receives requests ,as verified by telnet localhost 3023. What happens with docker-compose is the server started in the container as its CMD fails with an error and the container is stopped. it seems like it really shouldn't matter why the container doesn't start properly; I'd expect it to function identically both from the docker command line and from docker-compose.
+FYI, the image dtenenba/cytoscape is based on the Dockerfile at https://github.com/dtenenba/bioc_docker/tree/master/cytoscape .
+This is on ubuntu 14.04 LTS with
+$ docker --version
+Docker version 1.8.1, build d12ea79
+and
+$ docker-compose --version
+docker-compose version: 1.4.0

@@ -1,0 +1,6 @@
+CrimsonGlory commented on 3 May 2018
+In 1.21.0, we introduced a change to how project names are sanitized for
+internal use in resource names. This caused issues when manipulating an
+existing, deployed application whose name had changed as a result.
+This release properly detects resources using "legacy" naming conventions.
+How does exactly compose detect resources using legacy naming conventions?

@@ -1,0 +1,12 @@
+viossat commented on 29 Jun 2016
+For security reasons, it could be useful to only allow (and deny?) a network's access from outside to a specific list of IP addresses. That requires iptables rules.
+version: '2'
+services:
+  ... monitoring, backup or any internal stuff
+networks:
+  default:
+    driver_opts:
+      allow:
+        - 1.1.1.1
+        - 1.1.1.2
+1

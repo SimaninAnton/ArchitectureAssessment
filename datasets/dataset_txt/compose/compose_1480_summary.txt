@@ -1,0 +1,1 @@
+Progress markers are not shown correctly for `docker-compose up`

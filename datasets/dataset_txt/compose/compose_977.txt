@@ -1,0 +1,24 @@
+pulkitsinghal commented on 30 Dec 2017 •
+edited
+Problem
+An image which I had built the day before ... failed to build while complaining about not being able to COPY some content because the target directory already existed.
+My Guess
+I think this is a bug that occurs because the cache or something is messed up and is reusing a version of the intermediate container hash from the previous day which means the directory which should not yet exist when building the image ... already does exist and the build fails.
+I suspect that this may be limited to the scenario when someone runs a second build from a remote git repo.
+Workaround
+After I pruned the previous images and intermediate hashes, the image was built fine.
+Versions of docker used
+$ docker -v
+Docker version 17.05.0-ce, build 89658be
+$ docker-compose -v
+docker-compose version 1.16.1, build 6d1ac21
+Steps to Reproduce
+Clone a repo (for example in my case https://github.com/ShoppinPal/node-worker)
+Let it auto build when you run docker-compose up
+Switch to another directory
+Here create a docker-compose.yml that builds from same repo but remotely (without cloning)
+version: '2'
+services:
+  worker-framework:
+    build: https://github.com/ShoppinPal/node-worker.git
+Run docker-compose up and the build will fail this time because of the bug I described above

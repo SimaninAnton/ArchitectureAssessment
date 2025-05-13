@@ -1,0 +1,1 @@
+Web application launched with docker-compose up is slower than docker-compose run

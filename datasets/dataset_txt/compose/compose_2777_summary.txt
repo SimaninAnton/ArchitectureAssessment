@@ -1,0 +1,1 @@
+docker-compose 1.6 on ubuntu 14.04

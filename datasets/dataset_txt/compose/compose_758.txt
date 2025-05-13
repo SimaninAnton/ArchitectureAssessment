@@ -1,0 +1,76 @@
+dalexander-trc commented on 3 Apr 2018
+Description of the Issue
+Attempting to network some Docker containers together via Environment Variables. Variables are returning string literals instead of the interpolated values needed to access neighboring containers.
+Docker-Compose Version
+docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Docker Version
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Wed Mar 21 23:06:28 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:14:32 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+docker-compose.yml
+Shortened for brevity.
+version: '3'
+
+services:
+  db:
+    build: ./postgresql94
+    ports:
+      - "5433:5432"
+    volumes:
+      - "postgres94_data:/var/lib/postgresql/data"
+  geoserver:
+    build: ./geoserver213
+    ports:
+      - "8080:8080"
+    volumes:
+      - "c:/geoserver:/var/local/geoserver"
+    depends_on:
+      - db
+  api:
+    build: ./python27
+    command: > 
+      bash -c "python manage.py runserver --noreload 0.0.0.0:8000"
+    volumes:
+      - "c:/server:/code"
+    ports:
+      - "5678:5678"
+      - "8000:8000"
+    environment:
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_PORT=5432
+      - DJANGO_SERVER_NAME="localhost"
+      - DJANGO_DNS_NAME=geoserver
+    depends_on:
+      - geoserver
+
+volumes:
+  postgres94_data: 
+Steps to reproduce the issue
+Attempt to declare container environment variables that link to another container. In this case, DJANGO_DNS_NAME should link to the geoserver container.
+Spin up the containers, log into the container with declared variables,
+Echo the result of that environment variable.
+Actual Result
+The string literal is returned... "geoserver"
+Expected Result
+The interpolated value is returned
+Additional information
+OS: Windows 10 Enterprise

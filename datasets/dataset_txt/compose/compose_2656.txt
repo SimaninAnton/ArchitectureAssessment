@@ -1,0 +1,10 @@
+S-YOU commented on 8 Mar 2016
+Following up on this issue in docker repo moby/moby#20997
+Detail info are posted in the issue too, using docker-compose 1.6.2
+Following trigger docker daemon crashed everytime
+version: '2'
+services:
+    app:
+        image: myproject
+But docker run myproject works fine, never experience crash yet.
+Or, myproject is the problem?

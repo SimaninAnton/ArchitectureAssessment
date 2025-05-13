@@ -1,0 +1,6 @@
+hackzilla commented on 20 Jun 2014
+my-symfony:
+    image: docker.ukwm.local:5000/ukwm/my-symfony
+Invalid name: my-symfony
+It seems - & _ are invalid characters for use in a service name.
+However I can't see this documented.

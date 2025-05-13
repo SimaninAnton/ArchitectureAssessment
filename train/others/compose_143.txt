@@ -1,0 +1,16 @@
+chrismaes87 commented on 2 Jul 2019
+Is your feature request related to a problem? Please describe.
+docker-compose up --exit-code-from test will return exit code 0 if another service ends before the tests finish (even if that other container exits with non-zero exit code).
+Describe the solution you'd like
+any kind of flag or combination of flags that would make sure that a docker-compose exit code 0 would mean: the test service really ran until it cleanly exited with code 0
+So either change --exit-code-from behavior to return non-zero exit code if the test service exit prematurely, either create a new flag that could have this behavior.
+Describe alternatives you've considered
+I have created a bash script to force this behavior; but it uses grep, so not the best solution:
+https://gist.github.com/chrismaes87/7297d34d356b07a00a5da5f8e425326c
+Additional context
+I asked a question on stackoverflow without much response, I have seen similar questions on the web. Nobody seems to have a solution for this.
+https://stackoverflow.com/questions/56834838/docker-compose-up-exit-code-from-exits-without-error-when-system-under-test-cr/56849037#56849037
+my question is related with these issues:
+#5966
+#5894
+2

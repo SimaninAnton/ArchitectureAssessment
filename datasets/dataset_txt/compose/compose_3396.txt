@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 10 Aug 2015
+Both the Linux and Mac binaries bundle an out-of-date OpenSSL. We should either keep up with the latest compatible version (currently 1.0.1p) or find out if we can get PyInstaller to build a binary that links against it dynamically.

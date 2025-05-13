@@ -1,0 +1,3 @@
+Contributor
+d11wtq commented on 2 Jul 2014
+As with the native docker client, the command to invoke should be optional, because some docker images put fairly complex commands in the CMD line. In effect, fig doesn't let docker run the default command.

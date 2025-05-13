@@ -1,0 +1,3 @@
+gregwebs commented on 1 Mar 2014
+In my fig.yml I gave a single value db instead of an array - db and I get the error message: No such service: d
+If the input types are validated, it is easy to give an error message such as: expected a list, got a single value "db".

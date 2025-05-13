@@ -1,0 +1,4 @@
+ashatrov commented on 28 Dec 2015
+When i use docker-compose --x-networking up it create subnet for each containers group (for each folder with docker-compose.yml) with 172.18.0.0/16, 172.19.0.0/16 .... etc.
+In our office network we already have 172.18.. and I can not connect to these machines from containers.
+I want to specify subnet when I start containers group with docker-compose --x-networking

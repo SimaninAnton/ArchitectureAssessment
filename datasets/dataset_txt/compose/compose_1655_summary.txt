@@ -1,0 +1,1 @@
+compose does not make use of config.json for "events" daemon command.

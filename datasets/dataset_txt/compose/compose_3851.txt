@@ -1,0 +1,17 @@
+frntn commented on 11 Mar 2015
+Context
+I have :
+a local docker client setup to talk to my local swarm manager
+a local swarm manager setup to talk to 2 remote nodes node1 and node2
+the remote nodes runs a docker daemon binded on a specific ip:port.
+What I do
+When using my local docker client I can manage my remote containers via swarm without any problem.
+But then I have started using compose...
+What I get
+Everything is fine at first docker-compose up -d run, but then almost every re-run I get this kind of error :
+Cannot start container 340e6fb486471188187308b56b3122ec674f2dde8fad77c7f8532c096a074abb: container 1c90731f5d12ce0752e3e60a575e17259f46794fa88745eba65917eb2d7e32c2 not found, impossible to mount its volumes
+Searching around it turns out the first sha1 "xxxxx" is on node1 while the sha1 "yyyyy" is on node2 (!)
+What I expected
+Well... I'd like every layer to be created on the same node.
+What I think
+I'll dig into it later but I think it's an issue with the constraint:key==value environment variable

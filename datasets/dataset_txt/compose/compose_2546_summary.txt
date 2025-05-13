@@ -1,0 +1,1 @@
+scaling with load balancer requires --force-recreate (at least in version 1) -- it shouldn't

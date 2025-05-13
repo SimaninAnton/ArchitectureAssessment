@@ -1,0 +1,37 @@
+whoward commented on 7 May 2016
+Just noticed this today - external networks seem to add the invalid external_name key
+source file:
+version: '2'
+
+networks:
+  rabbitmq:
+    external:
+      name: rabbitmq_default
+
+services:
+  web:
+    build: .
+    ports:
+      - '7000:8080'
+    networks:
+      - default
+      - rabbitmq
+result of docker-compose config
+networks:
+  rabbitmq:
+    external:
+      name: rabbitmq_default
+    external_name: rabbitmq_default
+services:
+  web:
+    build:
+      context: /app
+    networks:
+      default: null
+      rabbitmq: null
+    ports:
+    - 7000:8080
+version: '2.0'
+volumes: {}
+I also noticed the networks section of a service seems to be converted from an array to a dict. Dunno if thats bad or not - probably not great.
+Ran this with the HEAD version (1.8.0dev) as well as 1.7.0

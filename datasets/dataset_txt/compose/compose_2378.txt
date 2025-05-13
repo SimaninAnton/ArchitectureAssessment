@@ -1,0 +1,4 @@
+peterwillcn commented on 20 May 2016
+docker-compose -f $yml up -d
+WARNING: Found orphan containers (xxx_12345_aaaa_1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+Creating xxx_12345_aaaa_1

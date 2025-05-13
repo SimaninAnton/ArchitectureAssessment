@@ -1,0 +1,15 @@
+andergmartins commented on 6 Apr 2015
+Running the container using docker command works:
+$ docker run ........ -p "8086:8080".....
+Returns this: 0.0.0.0:8086->8080/tcp
+But using compose, It seems to not forward the port:
+Here is part of my compose file:
+api:
+    image: .....
+    links:
+        - .......
+    ports:
+        - "8086:8080"
+Running it:
+$ docker-compose run api
+Returns this: 8080/tcp

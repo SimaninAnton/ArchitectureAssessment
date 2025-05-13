@@ -1,0 +1,54 @@
+hyperfocus1337 commented on 6 Jan 2017 •
+edited
+First posted here: operable/cog#1285
+Downloaded all the compose files from the installation guide: http://cog-book.operable.io/#_installing_and_running_cog_with_docker_compose
+Populated the environment variables SLACK_API_TOKEN and COG_HOST.
+Run docker-compose up, output:
+[user@pc cog]$ docker-compose up
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.9.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 65, in main
+    command()
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 114, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python3.5/site-packages/compose/cli/command.py", line 36, in project_from_options
+    environment=environment
+  File "/usr/lib/python3.5/site-packages/compose/cli/command.py", line 103, in get_project
+    config_data = config.load(config_details)
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 323, in load
+    service_dicts = load_services(config_details, main_file)
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 414, in load_services
+    service_config = merge_services(service_config, next_config)
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 405, in merge_services
+    for name in all_service_names
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 405, in <dictcomp>
+    for name in all_service_names
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 704, in merge_service_dicts_from_files
+    new_service = merge_service_dicts(base, override, version)
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 769, in merge_service_dicts
+    md.merge_field(field, merge_unique_items_lists, default=[])
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 728, in merge_field
+    self.override.get(field, default))
+  File "/usr/lib/python3.5/site-packages/compose/config/config.py", line 788, in merge_unique_items_lists
+    return sorted(set().union(base, override))
+TypeError: unorderable types: int() < str()
+Docker version:
+Client:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.7.4
+ Git commit:   7392c3b0ce
+ Built:        Wed Dec 28 22:26:08 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.7.4
+ Git commit:   7392c3b0ce
+ Built:        Wed Dec 28 22:26:08 2016
+ OS/Arch:      linux/amd64
+Latest Manjaro linux, kernel version:
+4.8.15-1-MANJARO
+Thanks for your help.

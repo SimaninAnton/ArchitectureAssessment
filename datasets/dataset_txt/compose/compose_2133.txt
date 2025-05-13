@@ -1,0 +1,48 @@
+bobbypriambodo commented on 21 Aug 2016
+This issue has the same title as #1189 because I believe it asked about the same problem.
+I'm developing a Node.js app using docker and docker-compose, and I've been wanting to develop a dependency-less development environment for my app.
+Basically I want this:
+Having a Dockerfile with ADD directive for use in production or CI, and
+Having docker-compose.yml with volumes for development.
+Here's what I have so far:
+Dockerfile
+FROM node:6
+
+...
+
+RUN npm i -g nodemon
+
+# cache node_modules
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm i
+RUN mkdir -p /app && cp -a /tmp/node_modules /app/
+
+WORKDIR /app
+ADD . /app
+
+EXPOSE 7000
+
+CMD ["./bin/start.sh"]
+docker-compose.yml
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "7000:7000"
+    volumes:
+      - .:/app
+    links:
+      - mysql
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+The problem is in the following lines:
+RUN cd /tmp && npm i
+RUN mkdir -p /app && cp -a /tmp/node_modules /app/
+It successfully installed the NPM dependencies (based on the docker-compose build output) but I believe the /app directory is then overriden by the volumes, effectively erasing the copied node_modules directory. Running docker-compose up will not work since the container will also have no node_modules.
+The expected behavior that I'm looking for is that cp -a /tmp/node_modules /app/ will copy the node_modules dir to the host machine through the mounted volume.
+For now I can manually do this by running npm i on the host machine (but implies I have Node.js installed, therefore not allowing me to have dependency-less dev env) or docker-compose run --rm web npm i (this can only be run after the image finished building). However both approach will result in running npm i twice (on build and on standalone running) and seems inefficient.
+Is there a way to do this? Or is there other approach that can achieve my objective?

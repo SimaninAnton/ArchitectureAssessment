@@ -1,0 +1,26 @@
+kennu commented on 10 Apr 2014
+The "fig logs" command sometimes gives this error:
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.3.2', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in     sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 30, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in     dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 47, in     perform_command    
+    return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 133, in logs
+    LogPrinter(containers, attach_params={'logs': True}).run()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/log_printer.py", line 21, in run
+    sys.stdout.write(line)
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 23-139: ordinal     not in range(128)
+A quick fix would be to use:
+sys.stdout.write(line.encode('utf-8'))
+A manual workaround in the shell is to use this environment variable:
+PYTHONIOENCODING=utf_8 fig logs

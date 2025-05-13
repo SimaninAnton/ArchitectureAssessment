@@ -1,0 +1,4 @@
+hanks commented on 13 Aug 2015
+Run docker-compose -f xxx.yml -p a-b up is ok, but when run docker-compose -f xxx.yml -p a-b rm, the result is No stopped containers.
+docker-compose version: 1.4.0
+Sorry for this issue, should stop container firstly

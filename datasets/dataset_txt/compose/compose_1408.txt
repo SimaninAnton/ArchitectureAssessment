@@ -1,0 +1,47 @@
+budnik commented on 7 Jun 2017 •
+edited
+I had recently reinstalled Ubuntu 17.04, and having issues with docker-compose run:
+I have tried different versions of compose from 1.10 to 1.14-rc1
+Here's output of docker info:
+Containers: 44
+Running: 4
+Paused: 0
+Stopped: 40
+Images: 16
+Server Version: 17.06.0-ce-rc1
+Storage Driver: btrfs
+Build Version: Btrfs v4.9.1
+Library Version: 102
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: bridge host macvlan null overlay
+Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 3addd840653146c90a254301d6c3a663c7fd6429
+runc version: 992a5be178a62e026f4069f443c6164912adbf09
+init version: 949e6fa
+Security Options:
+apparmor
+seccomp
+Profile: default
+Kernel Version: 4.10.0-22-generic
+Operating System: Ubuntu 17.04
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 7.702GiB
+Name: dmytro-XPS-13-9343
+ID: HFVZ:FMAO:RFPH:QYN3:JI5Z:H6NK:MICA:5SHS:D2QP:FSW7:T7HX:NTI5
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+127.0.0.0/8
+Live Restore Enabled: false

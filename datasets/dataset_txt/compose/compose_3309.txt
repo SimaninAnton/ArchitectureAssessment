@@ -1,0 +1,33 @@
+brunze commented on 7 Sep 2015
+Hi! I have a web container where I run Nginx with upstream set to server app:8080;. app is a container running unicorn. When I up everything at the start it's all working fine but if I issue a docker-compose restart app then Nginx stops being able to route to the upstream server with the error:
+connect() failed (113: No route to host) while connecting to upstream
+I have to also restart the web container for it to start working again. I checked the hosts file but the IP of the app container remains the same after restarting the web container.
+I'm I missing some detail about how docker-compose works?
+My docker-composer-yml:
+dbdata:
+  image: postgres:9.4.4
+
+db:
+  image: postgres:9.4.4
+  volumes_from:
+    - dbdata
+  env_file: .env
+
+app:
+  build: .
+  links:
+    - db
+  volumes:
+    - .:/app
+
+web:
+  image: nginx:1.9
+  ports:
+    - '3000:80'
+    - '3443:443'
+  links:
+    - app
+  volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf
+  volumes_from:
+    - app

@@ -1,0 +1,12 @@
+Yajo commented on 13 Nov 2014
+When I first run a fig with a volume mounted, it usually fails because of SELinux context.
+The fix is to run this:
+chcon -Rt svirt_sandbox_file_t ./something
+Would be nice to have that automated in fig.yml, to ensure SELinux never disturbs development:
+app:
+    build: .
+    volumes:
+        - ./something:/mountpoint
+        - other:/other:ro
+    chcon:
+        - ./something: svirt_sandbox_file_t

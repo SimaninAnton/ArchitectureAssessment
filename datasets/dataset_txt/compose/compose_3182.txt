@@ -1,0 +1,60 @@
+christianbundy commented on 24 Oct 2015
+We have an machine that's having an issue where host volumes aren't being mounted inside of the container on docker-compose up. We're running Arch x86_64 with Linux 4.2.3, Docker version 1.8.3, build f4bf5c7-dirty, and docker-compose version: 1.4.2. Here's our config:
+docker-compose.yml
+db:
+  image: postgres:9.4
+wsgi:
+  build: app
+  links:
+    - db
+  environment:
+    LM_PROD:
+  restart: always
+web:
+  build: web
+  links:
+    - wsgi
+  ports:
+   - "80:80"
+   - "443:443"
+  volumes_from:
+    - wsgi
+  restart: always
+dev:
+  build: app
+  links:
+    - db
+  ports:
+    - "8000:8000"
+  volumes:
+    - ./app/:/mnt/app/
+  environment:
+    LM_DEBUG: "true"
+    LM_PROD:
+  restart: always
+While wsgi service works just fine (which uses the same ./app directory), the dev service doesn't. Even stranger, it seems that we're able to get host volumes mounted inside the container just fine with a shell command that does the same thing.
+docker build -t dev app
+db_link="$(docker run -d  postgres:9.4)"
+docker run \
+  --restart=always \
+  -p 8000:8000 \
+  --link "$db_link:db" \
+  -e "LM_DEBUG=true" \
+  -e "LM_PROD=$LM_PROD" \
+  -v "$(pwd)/app/:/mnt/app/" \
+  dev
+Weird, right? Here are our logs, showing that the file ./app/util/start isn't being mounted to /mnt/app/util/start, whereas it's definitely there when we build the directory (as opposed to mounting a host volume).
+$ docker-compose up
+Creating locationmanagement_db_1...
+Creating locationmanagement_wsgi_1...
+Creating locationmanagement_web_1...
+Creating locationmanagement_dev_1...
+Attaching to locationmanagement_db_1, locationmanagement_wsgi_1, locationmanagement_web_1, locationmanagement_dev_1
+dev_1 | /bin/sh: 1: /mnt/app/util/start: not found
+locationmanagement_dev_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping locationmanagement_dev_1... error
+Stopping locationmanagement_web_1... done
+Stopping locationmanagement_wsgi_1... done
+Stopping locationmanagement_db_1... done
+And the results of lxc-checkconfig:

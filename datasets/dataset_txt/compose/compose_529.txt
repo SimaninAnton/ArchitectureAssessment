@@ -1,0 +1,50 @@
+nik-kor commented on 17 Aug 2018
+Description of the issue
+I have a bunch of services for tasks. Some tasks expect a bunch of environment variables, some not.
+if I'm running the task and not passing env variables - docker-compose prints warning.
+More details in next sections(removed from here to not duplicate).
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+services:
+  task-1:
+    environment:
+      ENV_VAR_1: ''
+    image: busybox
+  task-2:
+    image: busybox
+version: '3.0'
+Steps to reproduce the issue
+docker-compose run --rm task-2 ls
+Observed result
+See WARNING: The ENV_VAR_1 variable is not set. Defaulting to a blank string.
+Expected result
+Don't see any warnings about environment variables that won't be used in my task
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

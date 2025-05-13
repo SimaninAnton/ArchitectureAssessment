@@ -1,0 +1,4 @@
+sourav82 commented on 27 Mar 2015
+I would like to understand how docker-compose provide names to the containers.
+I noticed it is in the form <present_directory_name>_<service_name>_1.
+What is this 1 at last component? If the directory name (or the project name) is "test" and service name "web" (inside yml), it would be test_web_1. Is there any possibility for it to be "test_web_2" or "test_web_3" etc.?

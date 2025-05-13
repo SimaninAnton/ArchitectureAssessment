@@ -1,0 +1,10 @@
+mctwynne commented on 17 Nov 2017 •
+edited
+Docker version 17.10.0-ce, build f4ffd25
+docker-compose version 1.17.0, build ac53b73
+Ubuntu 16.04
+If my docker file only contains "FROM ubuntu:16.04" and no RUN commands that require network access everything is OK. If I add a RUN apt-get update, or anything that requires network access, it fails. This is because the MTU is not being set during this process. I can watch the MTU of the bridge and veth interface change once I get to the command line of the container, but it doesn't change while the Dockerfile is running. Is this a bug? Is there a way around this?
+EDIT: I should include that this issue is with an Ubuntu cloud image that I'm running in a VM. This also fails with:
+Docker version 17.09.0-ce, build afdb6d4
+docker-compose version 1.16.1, build 6d1ac21
+Linux ubuntu 4.4.0-87-generic

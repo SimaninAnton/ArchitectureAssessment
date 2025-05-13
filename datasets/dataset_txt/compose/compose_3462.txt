@@ -1,0 +1,6 @@
+moxiegirl commented on 18 Jul 2015
+In 1.8 boot2docker is deprecated and replaced with docker-machine
+./compose/docs/django.md:you're using Boot2docker, `boot2docker ip` will tell you its address).
+./compose/docs/index.md:If you're using [Boot2docker](https://github.com/boot2docker/boot2docker), then `boot2docker ip` will tell you its address and you can open `http://ip-from-boot2docker:5000` in a browser. 
+./compose/docs/rails.md:you're using Boot2docker, `boot2docker ip` will tell you its address).
+./compose/docs/wordpress.md:Docker daemon (if you're using Boot2docker, `boot2docker ip` will tell you its

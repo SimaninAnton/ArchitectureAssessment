@@ -1,0 +1,14 @@
+k2xl commented on 20 Jan 2017 •
+edited
+I'm trying to figure out the hierarchy of how docker compose does environment variables
+If I have a compose file that uses a env_file, does that override anything defined in the docker-compose?
+What about environment variables defined in the compose file that inherit from the host (without the equal sign)? And what about environment variables defined in another extended file? I couldn't find documentation related to the ordering.
+A more clear example:
+env_file: .env
+environment:
+  - MYVAR=123
+  - MYVAR2
+.env:
+MYVAR=321
+MYVAR2=hello
+The docs say that the shell values take precedent, but let's assume MYVAR2 is NOT defined on the host, will that get overridden by values in the .env?

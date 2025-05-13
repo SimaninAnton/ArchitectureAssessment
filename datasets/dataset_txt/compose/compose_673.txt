@@ -1,0 +1,25 @@
+charles-e commented on 14 May 2018
+Trying docker-compose up with the following:
+version: "3"
+services:
+postgres-db :
+image: postgres
+ports:
+"5432:5432"
+networks:
+backend
+deploy:
+replicas: 1
+restart_policy:
+condition: on-failure
+environment:
+POSTGRES_DB: "drizl"
+POSTGRES_USER: "user"
+POSTGRES_PASSWORD: "password"
+Expected behavior
+brings up postgres container
+Actual behavior
+Creating _config_postgres_1 ... error
+ERROR: for _config_postgres_1 Cannot create container for service postgres: b'Invalid container name (config_postgres_1), only [a-zA-Z0-9][a-zA-Z0-9.-] are allowed'
+Information
+The reason for the problem is that the containing directory was named "_Config". Changing the name to not start with an underscore fixed the issue. Apparently nobody names directories using leading underscore characters.

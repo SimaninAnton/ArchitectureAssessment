@@ -1,0 +1,12 @@
+riquito commented on 7 Jul 2015
+I want to deploy different services using the same image but with a different configuration file.
+Currently to achieve that I can
+build as many images that inherit from a common image plus a different COPY in each
+mount a single file volume
+The first solution isn't feasible and the second it's overkill. I just want to copy a file, not keep it in sync
+Proposed configuration:
+myservice:
+    image: foo/bar
+    copy:
+        - src:dest
+112

@@ -1,0 +1,11 @@
+ebuildy commented on 27 Mar 2019
+Is your feature request related to a problem? Please describe.
+Using the image docker/compose, the entrypoint is docker-compose bin, this makes the image difficult to use inside CI tools such as GitlabCI that require a shell.
+Also, as an official Docker® image, this image should work like image docker (see https://github.com/docker-library/docker/blob/6e5ccf3c71e86b98bb75600b4309ccf1bc87775e/18.06/docker-entrypoint.sh), they can execute docker command or default shell command.
+Describe the solution you'd like
+The entrypoint of docker/compose image should have the same logic than docker image. Or you could create a new flavor docker/compose:sh that have default shell entrypoint.
+Describe alternatives you've considered
+I can override the entrypoint or create a new public Docker image, extending docker/compose with the same entrypoint logic than docker image.
+Additional context
+gitlabCI Docker executor
+4

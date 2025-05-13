@@ -1,0 +1,1 @@
+Binary on darwin fails with "illegal instruction" on some machines

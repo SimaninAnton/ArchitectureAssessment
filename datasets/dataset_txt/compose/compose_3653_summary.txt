@@ -1,0 +1,1 @@
+Use labels to identify images instead of name convention

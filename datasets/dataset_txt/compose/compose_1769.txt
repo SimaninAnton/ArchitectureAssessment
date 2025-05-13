@@ -1,0 +1,10 @@
+HackerWilson commented on 23 Jan 2017
+first, I defined the healthcheck section in compose file like this:
+healthcheck:
+  test: ...
+  interval: 1m30s
+  timeout: 10s
+  retries: 3
+then I use docker-compose config > compose.yml to generate the whole compose file to be used by deploy. when I use docker stack deploy -c compose.yml srv to create the stack, error:
+services.nginx.healthcheck.interval must be a string
+maybe docker-compose config should parse the time into string?

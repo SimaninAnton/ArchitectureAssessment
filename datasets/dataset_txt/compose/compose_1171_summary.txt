@@ -1,0 +1,1 @@
+Semantics of volumes specified in docker-compose from within a container are unclear.

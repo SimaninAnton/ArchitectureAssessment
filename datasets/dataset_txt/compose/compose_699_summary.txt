@@ -1,0 +1,1 @@
+docker-compose cannot use gcloud credential helper on Linux (pyinstaller release)

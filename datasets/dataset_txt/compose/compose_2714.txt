@@ -1,0 +1,2 @@
+jeffkile commented on 23 Feb 2016
+The swarm documentation here: https://github.com/docker/compose/blob/master/SWARM.md was recently changed to point to this link: https://docs.docker.com/compose/swarm/ Which gives a 404 not found error

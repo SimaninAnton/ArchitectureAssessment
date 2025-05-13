@@ -1,0 +1,49 @@
+jessehallam commented on 18 Jun 2018
+Description of the issue
+docker login
+error getting credentials - err: exit status 1, out: Cannot autolaunch D-Bus without X11 $DISPLAY
+This error appears on a fresh Ubuntu Server 18.04 install. It has virtually nothing installed except docker and docker-compose. This error only occurs when docker-compose is installed.
+Typing sudo apt remove docker-compose clears the error. Login now occurs using the normal docker prompt.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.17.1, build unknown
+docker-py version: 2.5.1
+CPython version: 2.7.15rc1
+OpenSSL version: OpenSSL 1.1.0g 2 Nov 2017
+Output of "docker version"
+Client:
+Version: 17.12.1-ce
+API version: 1.35
+Go version: go1.10.1
+Git commit: 7390fc6
+Built: Wed Apr 18 01:23:11 2018
+OS/Arch: linux/amd64
+Server:
+Engine:
+Version: 17.12.1-ce
+API version: 1.35 (minimum version 1.12)
+Go version: go1.10.1
+Git commit: 7390fc6
+Built: Wed Feb 28 17:46:05 2018
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+ubuntu@:~$ docker-compose config
+ERROR:
+Can't find a suitable configuration file in this directory or any
+parent. Are you in the right directory?
+    Supported filenames: docker-compose.yml, docker-compose.yaml
+Steps to reproduce the issue
+sudo apt install docker
+sudo apt install docker-compose
+docker login
+Observed result
+error getting credentials - err: exit status 1, out: Cannot autolaunch D-Bus without X11 $DISPLAY
+Expected result
+The normal docker login prompt.
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Welcome to Ubuntu 18.04 LTS (GNU/Linux 4.15.0-1010-aws x86_64)
+This machine was built using Amazon AWS's Canonical Ubuntu 18.04 AMI. It has virtually nothing installed on it, except for docker, docker-compose and sshd.

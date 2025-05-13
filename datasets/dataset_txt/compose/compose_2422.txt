@@ -1,0 +1,11 @@
+nhooey commented on 7 May 2016 •
+edited
+Pull request #2204 documented the double-dollar sign ($$VARIABLE) escaping in the documentation, how about putting the same suggestion in the error message:
+Change this:
+WARNING: The VARIABLE variable is not set. Defaulting to a blank string.
+To this:
+WARNING: The VARIALBE variable is not set. Defaulting to a blank string.
+         Did you forget to escape VARIABLE with two dollar signs like this: `$$VARIABLE`
+         in your docker-compose.yml file?
+Would make the error message much more useful and less misleading.
+12

@@ -1,0 +1,114 @@
+basickarl commented on 7 Mar 2018 •
+edited
+I've renamed run.sh to docker-compose_run.sh in the following code. Can't seem to locate a file that is in the current directory.
+image that gitlab-ci.yml is using (using docker executor)
+FROM debian:stretch
+
+# Set Bash as default shell
+RUN rm /bin/sh && \
+    ln --symbolic /bin/bash /bin/sh
+
+    # apt-get
+RUN apt-get update && \
+    apt-get install -y \
+    # Install SSH
+ openssh-client \
+ openssh-server \
+ openssl \
+    # Install cURL
+    curl \
+    # Install git
+    git \
+    # Install locales
+    locales \
+    # Install Python
+    python3 \
+    python-dev \
+    python3-pip \
+    # Build stuff
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common
+
+# Install Docker
+    # Add Docker’s official GPG key
+RUN curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | apt-key add - && \
+    # Set up the stable repository
+    add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+   $(lsb_release -cs) \
+   stable" && \
+    # Update package index
+    apt-get update && \
+    # Install Docker CE
+    apt-get install -y docker-ce
+
+    # pip
+RUN pip3 install \
+    # Install Docker Compose
+    docker-compose
+
+# Set locale
+RUN sed --in-place '/en_US.UTF-8/s/^# //' /etc/locale.gen && \
+    locale-gen && \
+    # Set system locale (add line)
+    echo "export LANG=en_US.UTF-8" >> /etc/profile && \
+    # Set system timezone (add line)
+    echo "export TZ=UTC" >> /etc/profile
+gitlab-ci.yml
+Lint from image:
+  <<: *temp
+  stage: Lint
+  script:
+    - ls -a
+    - cat docker-compose.lint.yml
+    - . docker-compose_run.sh -f docker-compose.lint.yml up --remove-orphans --force-recreate --abort-on-container-exit
+job:
+...
+$ ls -a
+.
+..
+.clocignore
+.dockerignore
+.eslintignore
+.eslintrc.json
+.git
+.gitignore
+.gitlab-ci.yml
+.nvmrc
+.nyc_output
+Dockerfile
+README.md
+__.gitlab-ci.yml
+bin
+build.sh
+build_and_test.sh
+coverage
+docker-compose.lint.yml
+docker-compose.test.yml
+docker-compose_run.sh
+lib
+package-lock.json
+package.json
+stop.sh
+test
+test.sh
+wait-for-vertica.sh
+$ cat docker-compose.lint.yml
+version: "3"
+
+services:
+  ei:
+    image: lint:1
+    environment:
+      - NODE_ENV=test
+    entrypoint: ["npm", "run", "lint"]
+$ . docker-compose_run.sh -f docker-compose.lint.yml up --remove-orphans --force-recreate --abort-on-container-exit
+.IOError: [Errno 2] No such file or directory: u'./docker-compose.lint.yml'
+ERROR: Job failed: exit code 1
+I also tried setting COMPOSE_FILE: "docker-compose.lint.yml" in the gitlab file via variables for the specific job, same result.

@@ -1,0 +1,6 @@
+Contributor
+schmunk42 commented on 27 Oct 2014
+I created an base image with instructions like:
+ONBUILD RUN /app/init --env=Dotenv --overwrite=n
+I was expecting to see fig running these commands, when using the image, since they should be executed the next time the image is build. But fig just says: frontend uses an image, skipping and I have to issue the commands manually with fig.
+Am I missing something or is this a current limitation?

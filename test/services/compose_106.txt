@@ -1,0 +1,141 @@
+raiskila commented on 20 Aug 2019
+Description of the issue
+When pressing Ctrl-C on docker-compose up on the Mac, one of three things seems to happen:
+docker-compose gracefully stops the containers and exits cleanly
+docker-compose kills the containers without waiting and exits cleanly
+docker-compose exits with "ERROR: Aborting.", leaving the containers running
+These three behaviors seem to happen with almost equal probability on my machine. Below is verbatim console output of three subsequent runs of docker-compose up on a project with three containers. Reproduction repo link
+$ docker-compose up
+Starting compose-test_app_1      ... done
+Starting compose-test_nginx_1    ... done
+Starting compose-test_postgres_1 ... done
+Attaching to compose-test_app_1, compose-test_postgres_1, compose-test_nginx_1
+postgres_1  | 2019-08-19 19:02:22.936 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgres_1  | 2019-08-19 19:02:22.936 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgres_1  | 2019-08-19 19:02:22.939 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres_1  | 2019-08-19 19:02:22.950 UTC [23] LOG:  database system was shut down at 2019-08-19 19:02:19 UTC
+postgres_1  | 2019-08-19 19:02:22.954 UTC [1] LOG:  database system is ready to accept connections
+app_1       | [2019-08-19 19:02:23 +0000] [1] [INFO] Starting gunicorn 19.9.0
+app_1       | [2019-08-19 19:02:23 +0000] [1] [INFO] Listening at: http://127.0.0.1:8000 (1)
+app_1       | [2019-08-19 19:02:23 +0000] [1] [INFO] Using worker: sync
+app_1       | [2019-08-19 19:02:23 +0000] [7] [INFO] Booting worker with pid: 7
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping compose-test_app_1      ... done
+Stopping compose-test_postgres_1 ... done
+Stopping compose-test_nginx_1    ... done
+
+$ docker-compose ps
+         Name                        Command              State    Ports
+------------------------------------------------------------------------
+compose-test_app_1        gunicorn app:app                Exit 0        
+compose-test_nginx_1      nginx -g daemon off;            Exit 0        
+compose-test_postgres_1   docker-entrypoint.sh postgres   Exit 0        
+
+$ docker-compose up
+Starting compose-test_app_1      ... done
+Starting compose-test_nginx_1    ... done
+Starting compose-test_postgres_1 ... done
+Attaching to compose-test_app_1, compose-test_nginx_1, compose-test_postgres_1
+postgres_1  | 2019-08-19 19:02:30.532 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgres_1  | 2019-08-19 19:02:30.532 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgres_1  | 2019-08-19 19:02:30.534 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres_1  | 2019-08-19 19:02:30.544 UTC [23] LOG:  database system was shut down at 2019-08-19 19:02:24 UTC
+postgres_1  | 2019-08-19 19:02:30.548 UTC [1] LOG:  database system is ready to accept connections
+app_1       | [2019-08-19 19:02:30 +0000] [1] [INFO] Starting gunicorn 19.9.0
+app_1       | [2019-08-19 19:02:30 +0000] [1] [INFO] Listening at: http://127.0.0.1:8000 (1)
+app_1       | [2019-08-19 19:02:30 +0000] [1] [INFO] Using worker: sync
+app_1       | [2019-08-19 19:02:30 +0000] [8] [INFO] Booting worker with pid: 8
+Killing compose-test_app_1       ... done
+Killing compose-test_postgres_1  ... done
+Killing compose-test_nginx_1     ... done
+
+$ docker-compose ps
+         Name                        Command               State     Ports
+--------------------------------------------------------------------------
+compose-test_app_1        gunicorn app:app                Exit 137        
+compose-test_nginx_1      nginx -g daemon off;            Exit 137        
+compose-test_postgres_1   docker-entrypoint.sh postgres   Exit 137        
+
+$ docker-compose up
+Starting compose-test_app_1      ... done
+Starting compose-test_postgres_1 ... done
+Starting compose-test_nginx_1    ... done
+Attaching to compose-test_postgres_1, compose-test_app_1, compose-test_nginx_1
+postgres_1  | 2019-08-19 19:02:38.714 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgres_1  | 2019-08-19 19:02:38.714 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgres_1  | 2019-08-19 19:02:38.717 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres_1  | 2019-08-19 19:02:38.734 UTC [24] LOG:  database system was interrupted; last known up at 2019-08-19 19:02:30 UTC
+app_1       | [2019-08-19 19:02:38 +0000] [1] [INFO] Starting gunicorn 19.9.0
+app_1       | [2019-08-19 19:02:38 +0000] [1] [INFO] Listening at: http://127.0.0.1:8000 (1)
+app_1       | [2019-08-19 19:02:38 +0000] [1] [INFO] Using worker: sync
+app_1       | [2019-08-19 19:02:38 +0000] [7] [INFO] Booting worker with pid: 7
+postgres_1  | 2019-08-19 19:02:38.847 UTC [24] LOG:  database system was not properly shut down; automatic recovery in progress
+postgres_1  | 2019-08-19 19:02:38.848 UTC [24] LOG:  invalid record length at 0/1654238: wanted 24, got 0
+postgres_1  | 2019-08-19 19:02:38.848 UTC [24] LOG:  redo is not required
+postgres_1  | 2019-08-19 19:02:38.857 UTC [1] LOG:  database system is ready to accept connections
+^CERROR: Aborting.
+
+$ docker-compose ps
+         Name                        Command              State    Ports  
+--------------------------------------------------------------------------
+compose-test_app_1        gunicorn app:app                Up              
+compose-test_nginx_1      nginx -g daemon off;            Up      80/tcp  
+compose-test_postgres_1   docker-entrypoint.sh postgres   Up      5432/tcp
+
+$ docker-compose stop
+Stopping compose-test_app_1      ... done
+Stopping compose-test_postgres_1 ... done
+Stopping compose-test_nginx_1    ... done
+I'm using Terminal.app and as far as I know, I wasn't accidentally inputting multiple Ctrl-C keystrokes (I set the key repeat delay to something very long, and I'm not using a butterfly keyboard mechanism).
+This bug is similar to #2904, #3317, and #3347, which are closed. It's probably a good idea to have an issue open about this.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.1
+ API version:       1.40
+ Go version:        go1.12.5
+ Git commit:        74b1e89
+ Built:             Thu Jul 25 21:18:17 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.1
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.5
+  Git commit:       74b1e89
+  Built:            Thu Jul 25 21:17:52 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  app:
+    build:
+      context: /Users/janne/Code/compose-test
+  nginx:
+    image: nginx
+  postgres:
+    image: postgres:11
+    volumes:
+    - /var/lib/postgresql/data
+version: '3.0'
+Additional information
+OS version / distribution, docker-compose install method, etc.
+macOS Mojave 10.14.6 (18G87) running Docker Desktop 2.1.0.1 (37199)
+10

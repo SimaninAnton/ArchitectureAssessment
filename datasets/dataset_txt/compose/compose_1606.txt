@@ -1,0 +1,10 @@
+bitliner commented on 12 Mar 2017
+Imagine the following scenario
+docker-compose file, with a client and a server service.
+There is a link between client and server.
+I apply scale=10
+Questions:
+By default, every server will be linked to each client, correct?
+How the routing works? Is there any policy? How client-i-th knows which is the server-i-th to send request to?
+Is there a way to link client-1 with only server-1, client-2 with only server-2 etc?
+If it is already explained in the documentation, where can I find this information?

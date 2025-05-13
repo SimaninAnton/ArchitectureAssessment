@@ -1,0 +1,192 @@
+jtyberg commented on 12 Aug 2016
+docker-compose bundle is not creating a bundle file with the correct image digest.
+I'm trying to create bundle files using docker-compose bundle so that I can deploy them to various environments using docker deploy.
+My environment:
+docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+
+docker info
+Containers: 1
+ Running: 0
+ Paused: 0
+ Stopped: 1
+Images: 115
+Server Version: 1.12.0
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 380
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host null overlay
+Swarm: active
+ NodeID: 5ozf6nuyw1jgzujh7eyk9jzro
+ Is Manager: true
+ ClusterID: 6vwuhafh0rjt00ncer0i7tpme
+ Managers: 1
+ Nodes: 1
+ Orchestration:
+  Task History Retention Limit: 5
+ Raft:
+  Snapshot interval: 10000
+  Heartbeat tick: 1
+  Election tick: 3
+ Dispatcher:
+  Heartbeat period: 5 seconds
+ CA configuration:
+  Expiry duration: 3 months
+ Node Address: 192.168.65.2
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.16-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 1.954 GiB
+Name: moby
+ID: 7KFD:TFYW:46DS:JMJY:BIOW:QJM4:X623:YGRM:ZUPK:PFVK:57G6:UIZJ
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 46
+ Goroutines: 145
+ System Time: 2016-08-12T16:07:53.602383016Z
+ EventsListeners: 1
+Username: jtyberg
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+I have the following configuration, test.yml:
+version: "2"
+services:
+  nginx:
+    build:
+      context: nginx
+    image: ${REGISTRY}/nginx:0.0.1
+    environment:
+      - NGINX_HOST=${NGINX_HOST}
+    ports:
+      - "80:80"
+      - "443:443"
+    command: >
+      /bin/sh -c "envsubst '$$NGINX_HOST'< /etc/nginx/nginx.template.conf
+      > /etc/nginx/nginx.conf
+      && nginx -g 'daemon off;'"
+I setup a local registry (on my laptop) and create a bundle:
+NGINX_HOST=localhost REGISTRY=localhost:5000 \
+  docker-compose -f test.yml bundle -o dev.dab --push-images
+The content of dev.dab is correct, docker-compose bundle pushes my the image to my local repo, and everything is great:
+{
+  "Services": {
+    "nginx": {
+      "Args": [
+        "/bin/sh", 
+        "-c", 
+        "envsubst '$NGINX_HOST'< /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+      ], 
+      "Env": [
+        "NGINX_HOST=localhost"
+      ], 
+      "Image": "localhost:5000/nginx@sha256:4219c3f66dea15b86300098f0154a666ffb213736052c86830f091a2410a97ed", 
+      "Networks": [
+        "default"
+      ], 
+      "Ports": [
+        {
+          "Port": 80, 
+          "Protocol": "tcp"
+        }, 
+        {
+          "Port": 443, 
+          "Protocol": "tcp"
+        }
+      ]
+    }
+  }, 
+  "Version": "0.1"
+}
+Now I want to create a new bundle file with the intention to deploy it to a remote cluster of Docker Engines running in swarm-mode.
+If I change my environment variables to point to a different host and remote registry, and run docker-compose config, the config shows that the image repo is correct (registry.my.domain/nginx:0.0.1):
+NGINX_HOST=my.domain REGISTRY=registry.my.domain \
+  docker-compose -f test.yml config
+
+networks: {}
+services:
+  nginx:
+    build:
+      context: /Users/jtyberg/projects/internal/blackbox/infra/services/nginx
+    command: '/bin/sh -c "envsubst ''$NGINX_HOST''< /etc/nginx/nginx.template.conf
+      > /etc/nginx/nginx.conf && nginx -g ''daemon off;''"
+
+      '
+    environment:
+      NGINX_HOST: my.domain
+    image: registry.my.domain/nginx:0.0.1
+    ports:
+    - 80:80
+    - 443:443
+version: '2.0'
+volumes: {}
+However, docker-compose generates a bundle file that contains the existing digest from the local registry instead of pushing the image to the remote registry and creating a new digest:
+NGINX_HOST=my.domain REGISTRY=registry.my.domain \
+  docker-compose -f test.yml bundle -o new.dab --push-images
+new.dab:
+{
+  "Services": {
+    "nginx": {
+      "Args": [
+        "/bin/sh", 
+        "-c", 
+        "envsubst '$NGINX_HOST'< /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+      ], 
+      "Env": [
+        "NGINX_HOST=my.domain"
+      ], 
+      "Image": "localhost:5000/nginx@sha256:4219c3f66dea15b86300098f0154a666ffb213736052c86830f091a2410a97ed", 
+      "Networks": [
+        "default"
+      ], 
+      "Ports": [
+        {
+          "Port": 80, 
+          "Protocol": "tcp"
+        }, 
+        {
+          "Port": 443, 
+          "Protocol": "tcp"
+        }
+      ]
+    }
+  }, 
+  "Version": "0.1"
+}
+docker-compose tags the existing image using the remote registry:
+docker images
+localhost:5000/nginx       0.0.1               879a8a471c78        21 hours ago        61.03 MB
+registry.my.domain/nginx   0.0.1               879a8a471c78        21 hours ago        61.03 MB
+but I expect the bundle file to contain:
+...
+"Image": "registry.my.domain/nginx@sha256:<new sha>", 
+...
+and the image to be pushed to the remote registry, which is not happening.
+docker inspect 879a8a471c78
+[
+    {
+        "Id": "sha256:879a8a471c78013acc69abb385c4584ee9cc2b8bd51312ee19f49d5f43e2b15c",
+        "RepoTags": [
+            "localhost:5000/nginx:0.0.1",
+            "registry.my.domain/nginx:0.0.1"
+        ],
+        "RepoDigests": [
+            "localhost:5000/nginx@sha256:4219c3f66dea15b86300098f0154a666ffb213736052c86830f091a2410a97ed"
+        ],
+...

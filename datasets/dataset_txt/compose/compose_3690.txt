@@ -1,0 +1,6 @@
+gregaumann commented on 24 Apr 2015
+When I run docker-compose --version on a host with noexec set on /tmp I get the following error:
+docker-compose: error while loading shared libraries: libz.so.1: failed to map segment from shared object: Operation not permitted
+This is docker-compose version 1.2.0 running on Centos 6
+A google search turned up the same error happening with another application and they attributed it to noexec being set on /tmp http://admin-ahead.com/portal/knowledgebase/4/error-while-loading-shared-libraries-libzso1-failed-to-map-segment-from-shared-object-Operation-not-permitted.html
+This server has noexec set on /tmp and the error message is the same so I expect that is the cause. Trying to set TMP to another location without noexec didn't work.

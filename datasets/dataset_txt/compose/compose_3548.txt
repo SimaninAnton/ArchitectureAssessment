@@ -1,0 +1,5 @@
+moxiegirl commented on 21 Jun 2015
+GitHub-Flavored-Markdown supports the ``` method. Hugo doesn't handle GFM. Hugo delegate all its markdown rendering to Blackfriday (a Go lib). https://github.com/russross/blackfriday34
+So, they render as lines. Using indent is the correct method.
+We need to switch to the indent method in the compose docs. The docs.docker.com files are using https://highlightjs.org/ which supports a lot of formats including YAML and Dockerfiles.
+Closes https://github.com/docker/docs-base/issues/41

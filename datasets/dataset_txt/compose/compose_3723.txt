@@ -1,0 +1,3 @@
+ailjushkin commented on 15 Apr 2015
+I've tried to add volumes into an yml file, but it creates new empty dir on the host and replaces directory inside of a container. I need to get container's /usr/local dir to be mounted on the host machine in ~/container/usr/local, but insteard of it i get empty /usr/local dir inside of container without installed programs in it.
+My goal is to deploy jar file into the talend esb from outside of container not modifying an image.

@@ -1,0 +1,4 @@
+davidpaulhunt commented on 20 Nov 2014
+As a new Fig user, 99% of the Fig tools are awesome and "accessible"; people can jump in and start using. It would be nice, however, that if fig up creates and starts containers then perhaps fig down should stop the containers.
+Having fig start/stop and fig up/kill is confusing at first.
+Would just be a nice feature. Thanks.

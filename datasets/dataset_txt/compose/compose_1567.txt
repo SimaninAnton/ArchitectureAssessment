@@ -1,0 +1,37 @@
+webyneter commented on 24 Mar 2017 •
+edited
+I've got two docker-compose config files, conf.yml and conf.override.yml. The latter overrides my_service service from the former like this:
+version: '2'
+services:
+  my_service:
+    image: tianon/true
+The problem is, when I
+docker-compose -f conf.yml -f conf.override.yml up -d
+it hangs with Building my_service message, while pulling the underlying image first solves the issue:
+docker pull tianon/true
+docker-compose -f conf.yml -f conf.override.yml up -d
+Host configuration:
+uname -a:
+Linux webyneter-pc 4.8.0-41-generic #44-Ubuntu SMP Fri Mar 3 15:27:17 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+docker version:
+Client:
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   60ccb22
+ Built:        Thu Feb 23 11:07:40 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.0-ce
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   60ccb22
+ Built:        Thu Feb 23 11:07:40 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+docker-compose version:
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 2.7.12+
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016

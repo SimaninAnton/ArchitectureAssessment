@@ -1,0 +1,1 @@
+Bring up specific container with depends_on doesn't destroy dependent containers

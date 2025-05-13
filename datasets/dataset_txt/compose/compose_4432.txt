@@ -1,0 +1,24 @@
+Contributor
+bfirsh commented on 22 Jan 2014
+± % fig up                                                                                  !73
+Recreating myapp_db_1...
+Recreating myapp_web_1...
+Attaching to myapp_db_1, myapp_web_1
+myapp_db_1 | 140122 13:07:06 [Note] /usr/sbin/mysqld: ready for connections.
+myapp_db_1 | Version: '5.5.34-0ubuntu0.12.04.1-log'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  (Ubuntu)
+myapp_web_1 |
+myapp_web_1 |
+myapp_web_1 |
+myapp_web_1 |
+myapp_web_1 |
+myapp_web_1 |
+fig logs works:
+± % fig logs web                                                                            !71
+Attaching to myapp_web_1
+myapp_web_1 | => Booting Thin
+myapp_web_1 | => Rails 3.2.16 application starting in development on http://0.0.0.0:3020
+myapp_web_1 | => Call with -d to detach
+myapp_web_1 | => Ctrl-C to shutdown server
+myapp_web_1 | A server is already running. Check /code/tmp/pids/server.pid.
+myapp_web_1 | Exiting
+(Note that this is after I have run fig up.)

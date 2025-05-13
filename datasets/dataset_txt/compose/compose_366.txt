@@ -1,0 +1,8 @@
+yangaws commented on 7 Dec 2018
+Hi,
+What I noted recently is, docker-compose and docker-py require on different version range of module requests (although there's overlap).
+docker-compose requires 'requests >= 2.6.1, != 2.11.0, != 2.12.2, != 2.18.0, < 2.21'
+docker-py requires 'requests >= 2.14.2, != 2.18.0'
+Hence if I have requests 2.12.4 installed, there will be version conflict when using docker-compose and during installation "pip install -U docker-compose won't discover it".
+I know I can upgrade requests to a version that lies in the overlap of two requirement ranges. But I was wondering what's the point for a module and its dependency both managed by docker to have different version requirement ranges? Is that possible if we make ranges the same?
+Thanks!

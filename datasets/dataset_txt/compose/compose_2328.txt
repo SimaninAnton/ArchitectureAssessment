@@ -1,0 +1,7 @@
+mvdstam commented on 6 Jun 2016
+When recreating containers with docker-compose up, it seems that docker-compose runs the docker stop command prior to re-creating the new containers if there already were existing containers. This means that first a SIGTERM signal is sent to shutdown the container.
+I would like the option to specify which signal is sent when containers are being stopped prior to being recreated, such as a SIGQUIT, so containers running php-fpm and nginx can be stopped gracefully.
+Example:
+docker-compose up -d -s SIGQUIT
+Thoughts?
+3

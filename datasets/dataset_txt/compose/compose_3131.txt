@@ -1,0 +1,12 @@
+Contributor
+alunduil commented on 6 Nov 2015
+I use environment variable declarations like the following:
+  environment:
+   - API_DEBUG=true
+   - DATASTORE_URL=http://${ETCD_PORT_2379_TCP_ADDR}:${ETCD_PORT_2379_TCP_PORT}
+   - KUBERNETES_URL=http://${KUBERNETESAPISERVER_PORT_8080_TCP_ADDR}:${KUBERNETESAPISERVER_PORT_8080_TCP_PORT}
+With compose-1.5 this seems to pass through empty strings:
+DATASTORE_URL=http://:
+KUBERNETES_URL=http://:
+How do we get the correct behaviour of passing these variables through as written (without any needless mangling)?
+This breaks our ability to use compose to deploy testing environments that function correctly.

@@ -1,0 +1,2 @@
+thedug commented on 9 Apr 2015
+Any reason why fig would not respond to control-c?

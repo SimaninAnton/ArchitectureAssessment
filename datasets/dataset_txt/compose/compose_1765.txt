@@ -1,0 +1,24 @@
+Contributor
+shin- commented on 24 Jan 2017
+On Ubuntu 16.04:
+$ docker-compose -f 就吃饭/docker-compose.yml config/home/joffrey/work/compose/compose/config/config.py:234: UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal
+  if filenames == ['-']:
+Traceback (most recent call last):
+  File "/home/joffrey/.envs/compose/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.11.0.dev0', 'console_scripts', 'docker-compose')()
+  File "/home/joffrey/work/compose/compose/cli/main.py", line 64, in main
+    command()
+  File "/home/joffrey/work/compose/compose/cli/main.py", line 110, in perform_command
+    handler(command, options, command_options)
+  File "/home/joffrey/work/compose/compose/cli/main.py", line 305, in config
+    compose_config = get_config_from_options(self.project_dir, config_options)
+  File "/home/joffrey/work/compose/compose/cli/command.py", line 46, in get_config_from_options
+    config.find(base_dir, config_path, environment)
+  File "/home/joffrey/work/compose/compose/config/config.py", line 242, in find
+    filenames = [os.path.join(base_dir, f) for f in filenames]
+  File "/home/joffrey/.envs/compose/lib/python2.7/posixpath.py", line 73, in join
+    path += '/' + b
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe5 in position 1: ordinal not in range(128)
+On Windows:
+docker-compose -f "C:\Users\husun\documents\visual studio 2017\Projects\测试中文\docker-compose.yml" up -d --build
+ERROR: compose.cli.main.main: .IOError: [Errno 22] invalid mode ('r') or filename: 'C:\\Users\\husun\\documents\\visual studio 2017\\Projects\\????\\docker-compose.yml'

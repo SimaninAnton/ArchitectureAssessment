@@ -1,0 +1,29 @@
+rmoehn commented on 2 Jan 2016
+When I run docker-compose up, it terminates after a while (one minute) with the message:
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+The container keeps running. There are other issues where people reported the same message, but, as far as I know, always immediately when running the command.
+To reproduce, write a Compose file:
+test:
+    image: nginx
+    container_name: test-nginx
+    ports:
+        - "127.0.0.1:8082:80"
+    tty: true
+And run:
+$ docker-compose -f test-compose.yml up test
+Creating test-nginx
+Attaching to test-nginx
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED       STATUS              PORTS                             NAMES
+a5d78569e30d        nginx               "nginx -g 'daemon off"   7 minutes ago Up 7 minutes        443/tcp, 127.0.0.1:8082->80/tcp   test-nginx
+The ERROR output consistently occurs approximately one minute after no other output has been made. So, if you send a request to the server twenty seconds after docker-compose has printed »Attaching to test-nginx« output and the server prints a log line, the ERROR comes twenty seconds later.
+The problem occurs with other images, too. I chose nginx because it's a small thing that runs forever.
+The problem also occurs without the ports entry.
+The problem also occurs when you run docker-compose logs instead of up.
+The problem doesn't occur when tty: false.
+On my machine (Debian Stretch), the problem used to not occur until after the second-but-last system upgrade or so. I'm not sure whether it actually was the upgrade, though. Cargo-culting another upgrade doesn't help.

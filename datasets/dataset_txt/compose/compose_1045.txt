@@ -1,0 +1,6 @@
+ghost commented on 1 Dec 2017 •
+edited by ghost
+They arent parsing quotes right at all.....
+Spend two hours trying to point the build: to http:// (flat text file) on github but they do some strange parsing to the quotes.
+Needs to be EOL for sure.
+I just straight up switched to a .git and it worked fine..

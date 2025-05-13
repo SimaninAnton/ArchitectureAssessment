@@ -1,0 +1,10 @@
+zffocussss commented on 10 May 2019
+Hi Team:
+I am using bitbucket+docker-compose+shell script to deploy services.
+my work way is docker-compose build && docker-compose up -d.
+what I expect :
+the above process is exited once some errors(abnormal) show s.
+what it is actually:
+I have some bad configuration to cause image built with error.I can see the errors explicit there.but the build show itself successful and continue to docker-compose up -d.
+I hope it exited as actually errors are present.as it is a part of my deploying service on prod environment.I hope everything goes well and exit once any errors are born.
+please help me.thanks.

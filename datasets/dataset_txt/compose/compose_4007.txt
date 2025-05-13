@@ -1,0 +1,69 @@
+mikekelly commented on 8 Jan 2015
+Indeterminate hanging while creating containers during a fig up.
+@aanand @bfirsh I caught hanging behaviour while running with the verbose option, but I haven't managed to figure out the conditions to reproduce. Here's the output right up until the hanging starts:
+Creating project_container_1...
+docker containers <- (all=True)
+docker containers -> (list with 21 items)
+docker images <- (name=u'project_container')
+docker images -> (list with 1 items)
+docker create_container <- (name=u'project_container_1', image=u'project_container', environment={}, command='./figrun.sh', volumes={u'/code': {}}, ports=[u'4188'])
+docker create_container -> {u'Id': u'036c7d5c45582068dfaea2ccf04c22b3825b126a9c8ae6577c6ee8bacbd4a827',
+ u'Warnings': None}
+docker inspect_container <- (u'036c7d5c45582068dfaea2ccf04c22b3825b126a9c8ae6577c6ee8bacbd4a827')
+docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': True,
+             u'AttachStdin': False,
+             u'AttachStdout': True,
+             u'Cmd': [u'./figrun.sh'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+docker containers <- (all=False)
+docker containers -> (list with 20 items)
+docker containers <- (all=False)
+The hanging can be stopped by running fig ps in another terminal session, at which point the fig up immediately continues (but will sometimes fail again further on).
+If left to hang the command exits with the following stack trace:
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==1.0.1', 'console_scripts', 'fig')()
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/command.py", line 28, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/command.py", line 56, in perform_command
+    handler(project, command_options)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/main.py", line 427, in up
+    insecure_registry=insecure_registry,
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/project.py", line 174, in up
+    for (_, container) in service.recreate_containers(insecure_registry=insecure_registry):
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/service.py", line 199, in recreate_containers
+    container = self.create_container(insecure_registry=insecure_registry, **override_options)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/service.py", line 178, in create_container
+    return Container.create(self.client, **container_options)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/container.py", line 37, in create
+    response = client.create_container(**options)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/docker/client.py", line 526, in create_container
+    return self.create_container_from_config(config, name)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/docker/client.py", line 533, in create_container_from_config
+    res = self._post_json(u, data=config, params=params)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/docker/client.py", line 236, in _post_json
+    return self._post(url, data=json.dumps(data2), **kwargs)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/docker/client.py", line 73, in _post
+    return self.post(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 500, in post
+    return self.request('POST', url, data=data, json=json, **kwargs)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 457, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 569, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/Cellar/python/2.7.6/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/adapters.py", line 422, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='192.168.59.103', port=2376): Read timed out. (read timeout=60)
+1

@@ -1,0 +1,255 @@
+foxx commented on 26 Jun 2016 •
+edited
+There seems to be an extended delay when using Ctrl+C to terminate docker-compose up.
+Compose version: 1.6.2 and 1.8.0-rc1
+OS: Ubuntu 14.04.4 LTS (Trusty)
+When using docker run the containers terminate gracefully in under 1 second. However in Compose they take around 10 seconds, unless you hit Ctrl+C again to force it.
+Here is a small case to reproduce;
+$ cat docker-compose.yml
+version: '2'
+services:
+  dispatcher:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+
+$ cat Dockerfile
+FROM node:latest
+ADD test.js /tmp/test.js
+CMD sleep 1000
+Here's the debug;
+$ docker-compose --verbose up
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.8.0-rc1, build 9bf6bc6
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=3.13.0-86-generic, Os=linux, BuildTime=2016-06-01T21:47:50.269346868+00:00, ApiVersion=1.23, Version=1.11.2, GitCommit=b9f10c9, Arch=amd64, GoVersion=go1.5.4
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'wtf_default')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {u'Containers': {},
+ u'Driver': u'bridge',
+ u'EnableIPv6': False,
+ u'IPAM': {u'Config': [{u'Gateway': u'172.20.0.1/16',
+                        u'Subnet': u'172.20.0.0/16'}],
+           u'Driver': u'default',
+           u'Options': None},
+ u'Id': u'238914049f7b03814c755824f031f5f387cfabb5d9df432743b514755cde71b7',
+ u'Internal': False,
+ u'Labels': {},
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=wtf', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=wtf', u'com.docker.compose.service=dispatcher', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'100'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sleep', u'100'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                      u'NPM_CONFIG_LOGLEVEL=info',
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- (u'wtf_dispatcher')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sleep', u'100'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=wtf', u'com.docker.compose.service=dispatcher', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- (u'wtf_dispatcher')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sleep', u'100'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'100'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sleep', u'100'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                      u'NPM_CONFIG_LOGLEVEL=info',
+...
+compose.parallel.feed_queue: Pending: set([<Service: dispatcher>])
+compose.parallel.feed_queue: Starting producer thread for <Service: dispatcher>
+compose.service.start_container_if_stopped: Starting wtf_dispatcher_1
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206', stderr=True, stream=True, stdout=True)
+compose.cli.verbose_proxy.proxy_callable: docker attach -> <generator object _multiplexed_response_stream_helper at 0x7fdae05b75a0>
+compose.cli.verbose_proxy.proxy_callable: docker start <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.parallel.feed_queue: Pending: set([])
+compose.cli.verbose_proxy.proxy_callable: docker start -> None
+compose.parallel.parallel_execute_iter: Finished processing: <Service: dispatcher>
+compose.parallel.feed_queue: Pending: set([])
+Attaching to wtf_dispatcher_1
+compose.cli.verbose_proxy.proxy_callable: docker events <- (decode=True, filters={u'label': [u'com.docker.compose.project=wtf', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker events -> <generator object _stream_helper at 0x7fdae05b77d0>
+^CGracefully stopping... (press Ctrl+C again to force)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=wtf', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'100'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sleep', u'100'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                      u'NPM_CONFIG_LOGLEVEL=info',
+...
+Stopping wtf_dispatcher_1 ...
+compose.parallel.feed_queue: Pending: set([<Container: wtf_dispatcher_1 (226d7a)>])
+compose.parallel.feed_queue: Starting producer thread for <Container: wtf_dispatcher_1 (226d7a)>
+compose.cli.verbose_proxy.proxy_callable: docker stop <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206', timeout=10)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'100'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sleep', u'100'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                      u'NPM_CONFIG_LOGLEVEL=info',
+...
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'100'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sleep', u'100'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                      u'NPM_CONFIG_LOGLEVEL=info',
+...
+compose.cli.verbose_proxy.proxy_callable: docker wait <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'226d7af874580f221a27d059778fdd4ef19fd6a70ccb4f2a6f109280b7475206')
+compose.cli.verbose_proxy.proxy_callable: docker stop -> None
+compose.cli.verbose_proxy.proxy_callable: docker wait -> 137
+Stopping wtf_dispatcher_1 ... done
+compose.parallel.feed_queue: Pending: set([])

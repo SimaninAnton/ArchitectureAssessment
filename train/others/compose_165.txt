@@ -1,0 +1,17 @@
+tinyzimmer commented on 29 May 2019
+Is your feature request related to a problem? Please describe.
+I am playing around with the idea of having docker-compose testing configurations in my repositories at work. These could get used to execute unit tests inside a docker container. For example, in one project I side-load a redis instance to perform test cases against. Then for my unit tests I can run something like this:
+docker-compose -f docker-compose-test.yml run --rm test_service make test
+I like how it takes care of the side-loading for me, but I think it would be cool if it cleaned up after itself when it was finished.
+Describe the solution you'd like
+I'd like to be able to pass a switch that will tell docker-compose to stop deps when it's done. I took a stab at it on a local fork and got something like this to work:
+docker-compose -f docker/docker-compose-test.yml  run --rm --stop-deps test_service make test
+Where the --stop-deps tells compose to stop dependency links when the run command exits. It was pretty easy to implement, basically just adding a check to the remove_container() function that gets defined:
+        if options['--stop-deps']:
+            if deps:
+                project.stop(service_names=deps)
+Describe alternatives you've considered
+I dunno, I could think of some other approaches too probably. It's kinda a pain in my Makefile the way I'm doing it now. Essentially catching if the test fails and calling another make target that will docker-compose down && exit 1.
+Additional context
+I guess I'm just wondering if this would be a worth while feature. If so, I'd happily open up a PR with what I did locally.
+1

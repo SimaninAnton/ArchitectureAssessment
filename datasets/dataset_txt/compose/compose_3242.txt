@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 2 Oct 2015
+We've just merged the docs for using compose in a container, but the script currently points at dnephin/docker-compose. We should move the image to something like dockercompose/compose (to match dockerswarm/). Or we could make it an "official" image and just call it "compose".
+We also need to update our release process docs to bump the version in this script and publish the new image.

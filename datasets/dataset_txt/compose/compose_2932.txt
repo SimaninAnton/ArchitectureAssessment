@@ -1,0 +1,37 @@
+maxcnunes commented on 12 Jan 2016
+Based in the example for environment variables is possible to override configurations based in the key:
+https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
+# original service
+environment:
+  - FOO=original
+  - BAR=original
+
+# local service
+environment:
+  - BAR=local
+  - BAZ=local
+
+# result
+environment:
+  - FOO=original
+  - BAR=local
+  - BAZ=local
+But this same approach does not work for volumes:
+# original service
+volumes:
+  - /tmp/foo:/tmp/original
+  - /tmp/bar:/tmp/original
+
+# local service
+volumes:
+  - /tmp/bar:/tmp/local
+  - /tmp/baz:/tmp/local
+
+# result
+volumes:
+  - /tmp/foo:/tmp/original
+  - /tmp/bar:/tmp/original
+  - /tmp/bar:/tmp/local
+  - /tmp/baz:/tmp/local
+Docker 1.8.3
+Compose 1.5.2

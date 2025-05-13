@@ -1,0 +1,6 @@
+viveky4d4v commented on 28 Oct 2016
+I am using compose in swarm with overlay network , I use to get below error almost every ~4 commands -
+ERROR: for wsgi_2  HTTPSConnectionPool(host='192.168.99.91', port=3376):       Read timed out. (read timeout=60)
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting      COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+What's the reason for this & how we can get rid of this ?

@@ -1,0 +1,10 @@
+beatscode commented on 17 May 2016
+Say I have two services that expose ports 80 via Dockerfiles.
+service1:
+    ports:
+        -  "8083:80"
+service2:
+    ports:
+        -  "8084:80"
+Wouldn't need to be remapped to specific ports as they might clash. However, I find that connecting from a linked container on ports 8083/84 were not possible. I noticed that port 80 was open within a linked container regardless of my mapping. Am I to assume that remapping ports is unnecessary if the Image contains EXPOSE statements?
+I found that no matter what port mapping I used the EXPOSED port was used anyway. For instance setting "8089:6379" on a redis container would not open 8089 to linked containers but 6379 was still available. Could someone clarify when one would use ports/expose in their docker compose file?

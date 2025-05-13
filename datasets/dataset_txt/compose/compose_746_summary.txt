@@ -1,0 +1,1 @@
+Compose is failing if dockerfile specified in the context's path

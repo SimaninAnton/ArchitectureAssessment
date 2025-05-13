@@ -1,0 +1,13 @@
+hans-d commented on 13 May 2015
+# main.yml
+main:
+  build: .
+
+# test.yml
+test:
+  extends:
+    file: main.yml
+    service: main
+
+> docker-compose -f test.yml build
+test uses an image, skipping

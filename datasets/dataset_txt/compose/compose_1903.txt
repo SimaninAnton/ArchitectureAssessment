@@ -1,0 +1,8 @@
+dimsav commented on 25 Nov 2016
+Hello, and thank you for this amazing software.
+There seems to be an issue with recognizing what services are running when we a custom docker file.
+docker-compose -f docker-compose.custom.yml up
+Now if we run docker-compose ps on the same directory, even though the services in that file will be running, ps won't show them in the list.
+I don't know if this is the same issue or not, but additionally running docker-compose run {service} {command} won't work if the command is in this docker-compose.custom.yml file.
+Version: docker-compose version 1.8.1, build 878cff1
+Thank you for your time.

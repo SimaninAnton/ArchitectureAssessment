@@ -1,0 +1,46 @@
+atrauzzi commented on 8 Oct 2015
+I have the following docker-compose.yaml file:
+data:
+  container_name: project_dev_data
+  image: busybox
+  volumes:
+    - /var/lib/mysql
+    - ./storage:/var/www/storage
+
+mysql:
+  container_name: project_dev_mysql
+  image: mariadb
+
+  ports:
+    - "3306:3306"
+
+  volumes_from:
+    - data
+
+  environment:
+    MYSQL_ROOT_PASSWORD:
+    MYSQL_DATABASE: project
+    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+web:
+
+  container_name: project_dev_web
+  build: .
+
+  volumes_from:
+    - data
+
+  links:
+    - mysql:mysql
+
+  ports:
+    - "8000:8000"
+    - "8080:8080"
+
+  volumes:
+    - .:/var/www
+    - ~/.ssh:/root/.ssh
+
+  volumes_from:
+    - data
+During development, the container uses the bind mount .:/var/www to gain live access to my source. Unfortunately, this appears to be failing as my source contains a startup script and my entrypoint barfs when I try to start the container.

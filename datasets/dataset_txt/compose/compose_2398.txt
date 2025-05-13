@@ -1,0 +1,8 @@
+Dexus commented on 13 May 2016
+Hello,
+please make it possible to connect to later scaled worker from the main web worker.
+I habe this project:
+web
+memcached
+database
+later i start 3 new memcached but i don't get the benefits of them because i cant connect from the worker to the 3 new memcached server.

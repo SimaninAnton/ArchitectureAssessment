@@ -1,0 +1,1 @@
+missing slash at docker-compose rm

@@ -1,0 +1,3 @@
+0x78f1935 commented on 25 Sep 2017
+To see more information please check out the issue on stack overflow:
+https://stackoverflow.com/questions/46405633/docker-compose-up-very-slow-but-docker-compose-run-on-linux-very-fast

@@ -1,0 +1,50 @@
+m3talstorm commented on 5 Sep 2018
+Versions:
+Docker: 18.06.0-ce
+Docker-compose: 1.22.0
+Docker-compose.yml: 2.4
+Overview:
+Currently I have a single docker-compose.yml file which contains 2 dozen services, out of these servies there are some which I do not want to stop when I docker-compose down. They can be logically grouped into "configuration/discovery stack", "logging stack", "persistence stack", "application stack", etc (note: the general use of 'stack' not a specific docker stack).
+For example, the configuration/discovery stack is a cluster of 3 etcd services and a registrator. Multiple other stacks depend on this, and this should be rarely taken down (docker-compose down), were as the stacks that depend on it could be taken down at any time.
+If all these stacks are put into a single docker-compose.yml file they are all started and stopped together (unless you docker stop a specific containers - painful)
+If these stacks are seperated into individual files then I can docker-compose -f mutliple files at the same time, but the docker-compose down will bring them all down as well
+Problem:
+Most of the services use depends_on to specify start order (+ healthchecks), when depends_on is validated it only checks to see if the current service_config (and any merged configs ... multiple -f) contains the service name, it does not check to see if these containers are already running outside of compose (like external_links does). This means that in the below example, if elasticsearch has a depends_on on registrator it will error with ERROR: Service 'elasticsearch' depends on service 'registrator' which is undefined.
+extends also doesn't seem to solve the problem because its just config copying/merging.
+Is there a way of achieving this?
+Goal setup:
+docker-compose.etcd.yml
+services:
+- registrator
+- etcd1
+- etcd2
+- etcd3
+
+networks:
+- etcd: (driver:bridge)
+docker-compose.elk.yml
+services:
+- kibana
+- logstash
+- elasticsearch
+
+networks:
+- elk: (driver:bridge)
+- etcd: (external:true)
+docker-compose.app.yml
+services:
+- service1
+- service2
+- service3
+- etc
+
+networks:
+- elk: (external:true)
+- etcd: (external:true)
+General operation:
+docker-compose -f docker-compose.etcd.yml up
+docker-compose -f docker-compose.elk.yml up
+docker-compose -f docker-compose.app.yml up
+...
+docker-compose -f docker-compose.app.yml down
+12

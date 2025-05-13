@@ -1,0 +1,84 @@
+iainfogg commented on 12 Apr 2017
+I'm experimenting with using TeamCity's Docker agent image to add an extra agent to our build server (the build server itself has TeamCity installed normally, it's not using Docker for the main TeamCity server).
+The Docker agent image downloads a copy of my application, but when it runs docker-compose to run a command in the container defined in docker-compose.yml, the files from the folder where docker-compose.yml is do not appear inside the container - a folder exists, but it's empty.
+The docker-compose.yml file currently is:
+version: '2'
+services:
+  php:
+    build: docker/build/php/.
+    volumes:
+     - .:/var/test/folder
+    networks:
+     - appnet
+networks:
+  appnet:
+    driver: "bridge"
+The networks stuff is in there because there's going to be another service containing a database, but I've commented that out until I can resolve this issue.
+The Dockerfile that's in the build folder specified above is:
+FROM php:5.6
+RUN apt-get update && apt-get install -y \
+        php5-intl php5-mongo \
+        && echo "extension=/usr/lib/php5/20131226/mongo.so" | tee /usr/local/etc/php/conf.d/ext-mongo.ini
+WORKDIR /var/test/folder
+If I run it on my Mac, I go into /var/test/folder and see the files from the host. However, if I exec into the Docker TeamCity agent, and from there, exec into the php container, I have a folder /var/test/folder but it is empty. Because it's empty, obviously I am unable to do any of the build steps which were the point of using the TeamCity agent!
+Docker version on the Ubuntu host:
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:45:26 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:45:26 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Docker version inside the TeamCity agent:
+Client:
+ Version:      1.13.0
+ API version:  1.25
+ Go version:   go1.7.3
+ Git commit:   49bf474
+ Built:        Tue Jan 17 09:58:26 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:45:26 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Docker compose version inside the TeamCity agent:
+docker-compose version 1.12.0, build b31ff33
+docker-py version: 2.2.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Docker version on my Mac, which is working:
+Client:
+ Version:      17.04.0-ce
+ API version:  1.28
+ Go version:   go1.7.5
+ Git commit:   4845c56
+ Built:        Wed Apr  5 06:06:36 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.04.0-ce
+ API version:  1.28 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   4845c56
+ Built:        Tue Apr  4 00:37:25 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+Docker compose version on my Mac:
+docker-compose version 1.12.0, build b31ff33
+docker-py version: 2.2.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016

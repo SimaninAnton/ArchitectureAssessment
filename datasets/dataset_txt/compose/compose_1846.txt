@@ -1,0 +1,17 @@
+jkinkead commented on 17 Dec 2016
+This is very similar to #3622 .
+If I have a compose service with a build clause, and the image you're building has a FROM that uses my private repository, it fails with an unauthorized error.
+Compose file:
+version: '2'
+services:
+  broken:
+    build:
+      context: '.'
+Dockerfile:
+FROM my.private.repo/image:tag
+CMD ["echo", "built"]
+Output:
+Building broken
+Step 1 : FROM my.private.repo/image:tag
+ERROR: Service 'broken' failed to build: Get https://my.private.repo/v2/image/manifests/tag: unauthorized: Unauthorized
+I'm using Docker for Mac, version 1.12.3 (13776). docker-compose -v: docker-compose version 1.8.1, build 878cff1

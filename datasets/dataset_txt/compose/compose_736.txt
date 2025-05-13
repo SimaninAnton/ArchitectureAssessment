@@ -1,0 +1,58 @@
+betonetotbo commented on 17 Apr 2018
+I created a private registry on my docker host (192.168.15.249):
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+At my windows machine (192.168.15.66) I have set DOCKER_HOST=tcp://192.168.15.249:2375.
+And when I try to build my compose (from windows) it hangs :
+>docker-compose --verbose build
+compose.config.config.find: Using configuration files: .\docker-compose.yaml
+docker.utils.config.find_config_file: Trying paths: ['C:\\Users\\Roberto\\.docker\\config.json', 'C:\\Users\\Roberto\\.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.utils.config.find_config_file: Trying paths: ['C:\\Users\\Roberto\\.docker\\config.json', 'C:\\Users\\Roberto\\.dockercfg']
+docker.utils.config.find_config_file: No config file found
+urllib3.connectionpool._new_conn: Starting new HTTP connection (1): 192.168.15.249
+urllib3.connectionpool._make_request: http://192.168.15.249:2375 "GET /v1.25/version HTTP/1.1" 200 541
+compose.cli.command.get_client: docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+compose.cli.command.get_client: Docker base_url: http://192.168.15.249:2375
+compose.cli.command.get_client: Docker version: Platform={'Name': ''}, Components=[{'Name': 'Engine', 'Version': '18.03.0-ce', 'Details': {'ApiVersion': '1.37', 'Arch': 'amd64', 'BuildTime': '2018-03-21T23:08:52.000000000+00:00', 'Experimental': 'false', 'GitCommit': '0520e24', 'GoVersion': 'go1.9.4', 'KernelVersion': '3.16.0-44-generic', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.03.0-ce, ApiVersion=1.37, MinAPIVersion=1.12, GitCommit=0520e24, GoVersion=go1.9.4, Os=linux, Arch=amd64, KernelVersion=3.16.0-44-generic, BuildTime=2018-03-21T23:08:52.000000000+00:00
+compose.service.build: Building nginx
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='D:\\JJW\\srcBesser2\\git\\patomuxi-docker', tag='localhost:5000/nginx', rm=True, forcerm=False, pull=False, nocache=False, dockerfile=None, cache_from=None, labels=None, buildargs={}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None})
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.utils.config.find_config_file: Trying paths: ['C:\\Users\\Roberto\\.docker\\config.json', 'C:\\Users\\Roberto\\.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.api.build._set_auth_headers: No auth config found
+When I run the same command in docker host via SSH (192.168.15.249) it works fine:
+root@dockerhost:~/docker/patomuxi-docker# docker-compose --verbose build
+compose.config.config.find: Using configuration files: ./docker-compose.yaml
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.25/version HTTP/1.1" 200 541
+compose.cli.command.get_client: docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 2.7.8
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: KernelVersion=3.16.0-44-generic, Components=[{u'Version': u'18.03.0-ce', u'Name': u'Engine', u'Details': {u'KernelVersion': u'3.16.0-44-generic', u'Os': u'linux', u'BuildTime': u'2018-03-21T23:08:52.000000000+00:00', u'ApiVersion': u'1.37', u'MinAPIVersion': u'1.12', u'GitCommit': u'0520e24', u'Arch': u'amd64', u'Experimental': u'false', u'GoVersion': u'go1.9.4'}}], Arch=amd64, BuildTime=2018-03-21T23:08:52.000000000+00:00, ApiVersion=1.37, Platform={u'Name': u''}, Version=18.03.0-ce, MinAPIVersion=1.12, GitCommit=0520e24, Os=linux, GoVersion=go1.9.4
+compose.service.build: Building nginx
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, labels=None, target=None, nocache=False, container_limits={u'memory': None}, isolation=None, cache_from=None, network_mode=None, platform=None, tag='localhost:5000/nginx', buildargs={}, forcerm=False, gzip=False, rm=True, path='/root/docker/patomuxi-docker', dockerfile=None, extra_hosts=None, shmsize=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.utils.config.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.api.build._set_auth_headers: No auth config found
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.25/build?q=False&pull=False&t=localhost%3A5000%2Fnginx&nocache=False&forcerm=False&rm=True HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x7fd56c189370>
+Step 1/2 : FROM nginx:1.12.2
+ ---> 1b155f07a3fa
+Step 2/2 : COPY nginx.conf /etc/nginx/conf.d/default.conf
+ ---> Using cache
+ ---> 88093417ca3a
+Successfully built 88093417ca3a
+Successfully tagged localhost:5000/nginx:latest
+compose.cli.verbose_proxy.proxy_callable: docker close <- ()
+compose.cli.verbose_proxy.proxy_callable: docker close -> None

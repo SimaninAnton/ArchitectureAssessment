@@ -1,0 +1,23 @@
+Contributor
+aanm commented on 31 May 2015
+I'm unable to run the script/test on my machine. It freezes while it is "Waiting for Docker to start..."
+Step 14 : ENTRYPOINT /usr/local/bin/docker-compose
+ ---> Running in 50d639d7a1b1
+ ---> 6de4b8e88cdb
+Removing intermediate container 50d639d7a1b1
+Successfully built 6de4b8e88cdb
++ docker run --rm --volume=/var/run/docker.sock:/var/run/docker.sock -e DOCKER_VERSIONS -e TAG=docker-compose:6c27e42 --entrypoint=script/test-versions docker-compose:6c27e42
+Running lint checks
+Running tests against Docker default
+Waiting for Docker to start...
+$ sudo docker version
+Client version: 1.6.2
+Client API version: 1.18
+Go version (client): go1.4.2
+Git commit (client): 7c8fca2
+OS/Arch (client): linux/amd64
+Server version: 1.6.2
+Server API version: 1.18
+Go version (server): go1.4.2
+Git commit (server): 7c8fca2
+OS/Arch (server): linux/amd64

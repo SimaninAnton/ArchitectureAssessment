@@ -1,0 +1,1 @@
+Downscaling causes whole stack to shutdown

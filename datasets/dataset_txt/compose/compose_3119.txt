@@ -1,0 +1,22 @@
+nathanleclaire commented on 10 Nov 2015
+Consider:
+leader:
+  container_name: rethinkleader
+  image: rethinkdb
+  labels:
+    - com.nathanleclaire.rethinkcluster
+  environment:
+    - affinity:label!=com.nathanleclaire.rethinkcluster
+  expose:
+    - "8080:8080"
+  restart: always
+follower:
+  image: rethinkdb
+  labels:
+    - com.nathanleclaire.rethinkcluster
+  command: rethinkdb --bind all --join rethinkleader:28015
+  environment:
+    - affinity:label!=com.nathanleclaire.rethinkcluster
+  restart: always
+Running this doesn't forward 8080 to 8080 on the leader instance for me. Let me know if you're unable to dupe.
+IIRC, Swarm will schedule -p 8080:8080 just fine (won't schedule on nodes where that port is already in use), so it might be worth just throwing the API request over the fence anyway.

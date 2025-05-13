@@ -1,0 +1,6 @@
+pydolan commented on 8 Dec 2015
+I recently described on Stackoverflow some confusion I have/had regarding the extending services feature of Docker Compose. As I note there, I was confused on whether all configuration files need to be added to all CLI commands. From what I can tell, they are needed. While this may seem obvious to some, I think it would be useful to explicitly state this in the documentation.
+In the setup I describe on that Stackoverflow post, I was using docker-compose.yml to define my "base" setup and then override this with files like docker-compose.test.yml and docker-compose.dev.yml. It's easy to forget to specify the -f docker-compose.yml -f docker-compose.test.yml on each command I run, thus getting potentially problematic commands run.
+In the documentation, it might also be helpful to suggest an optional renaming of docker-compose.yml to docker-compose.base.yml if users want to avoid accidentally running Compose commands with the wrong configuration.
+Let me know if I'm misunderstanding standing how things work or if I'm misunderstanding the intention of this feature.
+Thanks!

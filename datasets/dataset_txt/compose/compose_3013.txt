@@ -1,0 +1,9 @@
+Contributor
+aanand commented on 4 Dec 2015
+In the next version of the Compose file format, we plan to make changes to the basic structure of the file (see #2421, #2478). We will preserve existing behaviour for users of the old file format.
+This means we have a good opportunity to make other potentially-backwards-incompatible changes to the configuration format, as long as they only apply to files using the new version. If users are upgrading their files anyway, it's less hassle to make other required changes at that time.
+Here are some proposed changes it'd be good to get in:
+Make net and volumes_from's container/service support explicit
+Move logging configuration under logging key
+New build config section
+Image and build together - not itself backwards-incompatible, but the implied changes to override logic (image will no longer override build, and vice versa) will be.

@@ -1,0 +1,4 @@
+Contributor
+joakimr-axis commented on 11 Mar 2019
+There is no real need to use bash for the test scripts, when they could easily be made POSIX compatible.
+I will provide a pull request for this.

@@ -1,0 +1,1 @@
+deploy.replicas doesn't work with environment variables

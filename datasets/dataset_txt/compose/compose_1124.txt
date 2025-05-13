@@ -1,0 +1,5 @@
+stestagg commented on 25 Oct 2017
+Hi,
+The docker-compose package on pypi gives a false implication that there is a python client library for docker-compose.
+#4542 makes it clear that this isn't the case, and that the python library is just an internal piece of tooling.
+Given this, it would be nicer from a community perspective if you remove this library from pypi, and just ship the code as part of your own distribution directly.

@@ -1,0 +1,24 @@
+mathroc commented on 16 Nov 2016
+you can reproduce this with thoses 2 files:
+version: '2'
+services:
+    test:
+        build: .
+        tmpfs: /mnt/tmpfs
+FROM alpine:3.4
+
+VOLUME /mnt/tmpfs
+
+CMD /bin/sh
+then run:
+docker-compose up -d this one works
+docker-compose up -d --force-recreate this one fails with this message:
+Recreating tmp_test_1
+ERROR: for test Cannot create container for service test: Duplicate mount point '/mnt/tmpfs'
+ERROR: Encountered errors while bringing up the project.
+version of Docker : Docker version 1.12.2, build bb80604
+and tested with 2 versions of docker compose:
+docker-compose version 1.8.0, build f3628c7
+docker-compose version 1.9.0-rc4, build 181a4e9
+At first I thought it was the same issue as moby/moby#23301 but if this was still an issue the first docker-compose up -d should have failed too. So I'm not sure if this is a problem with docker-compose or with docker itself as I don't really know what docker-compose does on --force-recreate
+5

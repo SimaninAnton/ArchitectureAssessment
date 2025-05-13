@@ -1,0 +1,4 @@
+Hronom commented on 26 Dec 2017
+Trying to execute docker-compose up -d -t 180 but it fails with -d and --timeout cannot be combined.
+$ docker-compose -v
+docker-compose version 1.18.0, build 8dd22a9

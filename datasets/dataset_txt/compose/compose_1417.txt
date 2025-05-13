@@ -1,0 +1,67 @@
+lipingxue commented on 2 Jun 2017
+I am trying to use vSphere Docker Volume Service with "docker stack deploy" command to deploy a stack with the following compose file.
+version: '3'
+
+services:
+   db:
+     image: mariadb
+     deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.role == worker
+     environment:
+       MYSQL_ROOT_PASSWORD: rootpasswd
+       MYSQL_USER: wp
+       MYSQL_PASSWORD: wppasswd
+       MYSQL_DATABASE: wp
+     volumes:
+       - mariadb@sharedVmfs-0:/var/lib/mysql
+
+   web:
+     image: wordpress:latest
+     deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+     depends_on:
+       - db
+     ports:
+       - "8080:80"
+     environment:
+       WORDPRESS_DB_USER: wp
+       WORDPRESS_DB_PASSWORD: wppasswd
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_NAME: wp
+
+volumes:
+   mariadb@sharedVmfs-0:
+     driver: vsphere
+     driver_opts:
+       size: 1Gb
+       diskformat: zeroedthick
+                                                            
+In that compose file, the volume is created by vSphere Docker Volume Service, and has the format like vol_name@datastore (mariadb@sharedVmfs-0 in the compose file). But I got the following error:
+root@sc-rdops-vm02-dhcp-52-237:~# docker stack deploy -c docker-compose-vsphere.yml wordpress
+mariadb@sharedVmfs-0 Additional property mariadb@sharedVmfs-0 is not allowed
+It looks to me that volume name including special characters like "@" cannot be used in the compose file.
+I know one of the workaround is to pre-create the volume mariadb@sharedVmfs-0 , and then mark the volume as "external" in the compose file like this:
+volumes:
+   mariadb:
+     external:
+        name:  mariadb@sharedVmfs-0
+It seems that most docker API can support volume name with special characters for volumes created by volume plugin, for example, I can create the volume mariadb@sharedVmfs-0 - using the volume plugin:
+root@sc-rdops-vm02-dhcp-52-237:~# docker volume create --driver=vsphere --name=mariadb@sharedVmfs-0 -o size=1gb
+mariadb@sharedVmfs-0
+root@sc-rdops-vm02-dhcp-52-237:~# 
+root@sc-rdops-vm02-dhcp-52-237:~# 
+root@sc-rdops-vm02-dhcp-52-237:~# docker volume ls
+DRIVER              VOLUME NAME
+vsphere:latest      mariadb@sharedVmfs-0
+So this seems a bug for docker compose.

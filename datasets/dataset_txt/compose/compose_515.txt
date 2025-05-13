@@ -1,0 +1,5 @@
+falnyr commented on 5 Sep 2018
+Description of the issue
+Back in docker-compose v2.1 there was a possibility to make a dependency based on a healthy service. In version 3 this option is missing as described here: https://stackoverflow.com/questions/52104625/docker-compose-check-if-mysql-connection-is-ready-version-3. Since Docker recognizes the difference between Healthy/Unhealthy service I am wondering why is this not supported any more.
+Let's say I need to start a workload with multiple services connecting to the same database: making a dependency. With the approach as described in the stackoverflow post I would need to create custom entrypoints for every single service which seems crazy to me.
+I am using docker-compose version 1.22.0, build f46880fe, Docker version 18.06.1-ce, build e68fc7a.

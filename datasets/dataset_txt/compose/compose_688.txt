@@ -1,0 +1,31 @@
+herrmondlicht commented on 8 May 2018
+Hello, fellows!
+I'm trying to use docker-compose to run a composition with node server and a mongodb, which must use a docker volume to store its data. However, when I execute the docker-compose down command, I lose all data that I've saved once before. When I docker volume list, I'm able to list the volume created by docker-compose.
+I don't want to set a place in the host server to have the mongo data, if I use the ./data path as volume, data is persistent. However I want to easily manipulate it with docker volume and such..
+Here's a sample
+version: '3.4'
+services:
+  nodeserver:
+    build: .
+    container_name: "c-name"
+    ports:
+      - 3001:3001
+      - 80:80
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mvertes/alpine-mongo (if I use mongo I get the same behavior)
+    volumes:
+      - mongo-data:/var/data
+    container_name: "mongodb-service"
+    ports:
+     - 27017:27017
+volumes:
+  mongo-data:
+Versions:
+docker-compose: 1.21.1
+docker: 18.04.0-ce, build 3d479c0af6
+system: Linux
+Thanks in advance

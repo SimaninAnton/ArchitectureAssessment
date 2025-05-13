@@ -1,0 +1,4 @@
+pataquets commented on 16 Jul 2015
+AFAIK, when you scale down a service, the excess containers get an stop command.
+However, they can get killed prematurely if the stop is not quick enough.
+Allowing for a stop timeout as it's done in 'docker stop' would solve this.

@@ -1,0 +1,128 @@
+tillda commented on 9 Jul 2014
+On my OSX (10.9, Docker 1.1.0, boot2docker 1.1.0) the tutorial that is on Fig homepage (http://orchardup.github.io/fig/) gives a following log resulting in exit code 2 (see end).
+I'm not sure what to do, because I don't use python at all and I'm new to Docker..
+It looks like the /code dir is not created, because docker run cdc18ed4ed6f ls /code results in cannot access /code: No such file or directory.
+Downloading/unpacking flask (from -r requirements.txt (line 1))
+  Running setup.py (path:/tmp/pip_build_root/flask/setup.py) egg_info for package flask
+
+    warning: no files found matching '*' under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'docs'
+    warning: no previously-included files matching '*.pyo' found under directory 'docs'
+    warning: no previously-included files matching '*.pyc' found under directory 'tests'
+    warning: no previously-included files matching '*.pyo' found under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'examples'
+    warning: no previously-included files matching '*.pyo' found under directory 'examples'
+    no previously-included directories found matching 'docs/_build'
+    no previously-included directories found matching 'docs/_themes/.git'
+Downloading/unpacking redis (from -r requirements.txt (line 2))
+  Running setup.py (path:/tmp/pip_build_root/redis/setup.py) egg_info for package redis
+
+    warning: no previously-included files found matching '__pycache__'
+    warning: no previously-included files matching '*.pyc' found under directory 'tests'
+Downloading/unpacking Werkzeug>=0.7 (from flask->-r requirements.txt (line 1))
+  Running setup.py (path:/tmp/pip_build_root/Werkzeug/setup.py) egg_info for package Werkzeug
+
+    warning: no files found matching '*' under directory 'werkzeug/debug/templates'
+    warning: no files found matching '*' under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'docs'
+    warning: no previously-included files matching '*.pyo' found under directory 'docs'
+    warning: no previously-included files matching '*.pyc' found under directory 'tests'
+    warning: no previously-included files matching '*.pyo' found under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'examples'
+    warning: no previously-included files matching '*.pyo' found under directory 'examples'
+    no previously-included directories found matching 'docs/_build'
+Downloading/unpacking Jinja2>=2.4 (from flask->-r requirements.txt (line 1))
+  Running setup.py (path:/tmp/pip_build_root/Jinja2/setup.py) egg_info for package Jinja2
+
+    warning: no files found matching '*' under directory 'custom_fixers'
+    warning: no previously-included files matching '*' found under directory 'docs/_build'
+    warning: no previously-included files matching '*.pyc' found under directory 'jinja2'
+    warning: no previously-included files matching '*.pyc' found under directory 'docs'
+    warning: no previously-included files matching '*.pyo' found under directory 'jinja2'
+    warning: no previously-included files matching '*.pyo' found under directory 'docs'
+Downloading/unpacking itsdangerous>=0.21 (from flask->-r requirements.txt (line 1))
+  Running setup.py (path:/tmp/pip_build_root/itsdangerous/setup.py) egg_info for package itsdangerous
+
+    warning: no previously-included files matching '*' found under directory 'docs/_build'
+Downloading/unpacking markupsafe (from Jinja2>=2.4->flask->-r requirements.txt (line 1))
+  Downloading MarkupSafe-0.23.tar.gz
+  Running setup.py (path:/tmp/pip_build_root/markupsafe/setup.py) egg_info for package markupsafe
+
+Installing collected packages: flask, redis, Werkzeug, Jinja2, itsdangerous, markupsafe
+  Running setup.py install for flask
+
+    warning: no files found matching '*' under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'docs'
+    warning: no previously-included files matching '*.pyo' found under directory 'docs'
+    warning: no previously-included files matching '*.pyc' found under directory 'tests'
+    warning: no previously-included files matching '*.pyo' found under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'examples'
+    warning: no previously-included files matching '*.pyo' found under directory 'examples'
+    no previously-included directories found matching 'docs/_build'
+    no previously-included directories found matching 'docs/_themes/.git'
+  Running setup.py install for redis
+
+    warning: no previously-included files found matching '__pycache__'
+    warning: no previously-included files matching '*.pyc' found under directory 'tests'
+  Running setup.py install for Werkzeug
+
+    warning: no files found matching '*' under directory 'werkzeug/debug/templates'
+    warning: no files found matching '*' under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'docs'
+    warning: no previously-included files matching '*.pyo' found under directory 'docs'
+    warning: no previously-included files matching '*.pyc' found under directory 'tests'
+    warning: no previously-included files matching '*.pyo' found under directory 'tests'
+    warning: no previously-included files matching '*.pyc' found under directory 'examples'
+    warning: no previously-included files matching '*.pyo' found under directory 'examples'
+    no previously-included directories found matching 'docs/_build'
+  Running setup.py install for Jinja2
+
+    warning: no files found matching '*' under directory 'custom_fixers'
+    warning: no previously-included files matching '*' found under directory 'docs/_build'
+    warning: no previously-included files matching '*.pyc' found under directory 'jinja2'
+    warning: no previously-included files matching '*.pyc' found under directory 'docs'
+    warning: no previously-included files matching '*.pyo' found under directory 'jinja2'
+    warning: no previously-included files matching '*.pyo' found under directory 'docs'
+  Running setup.py install for itsdangerous
+
+    warning: no previously-included files matching '*' found under directory 'docs/_build'
+  Running setup.py install for markupsafe
+
+    building 'markupsafe._speedups' extension
+    x86_64-linux-gnu-gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I/usr/include/python2.7 -c markupsafe/_speedups.c -o build/temp.linux-x86_64-2.7/markupsafe/_speedups.o
+    x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -D_FORTIFY_SOURCE=2 -g -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security build/temp.linux-x86_64-2.7/markupsafe/_speedups.o -o build/lib.linux-x86_64-2.7/markupsafe/_speedups.so
+Successfully installed flask redis Werkzeug Jinja2 itsdangerous markupsafe
+Cleaning up...
+ ---> 98171080b029
+Removing intermediate container f5c9f0ac9513
+Successfully built 98171080b029
+Attaching to figtest_redis_1, figtest_web_1
+redis_1 | error: "Read-only file system" setting key "vm.overcommit_memory"
+redis_1 | [10] 09 Jul 06:35:13.046 # You requested maxclients of 10000 requiring at least 10032 max file descriptors.
+redis_1 | [10] 09 Jul 06:35:13.046 # Redis can't set maximum open files to 10032 because of OS error: Operation not permitted.
+redis_1 | [10] 09 Jul 06:35:13.046 # Current maximum open files is 1024. maxclients has been reduced to 4064 to compensate for low ulimit. If you need higher maxclients increase 'ulimit -n'.
+redis_1 |                 _._
+redis_1 |            _.-``__ ''-._
+redis_1 |       _.-``    `.  `_.  ''-._           Redis 2.8.9 (00000000/0) 64 bit
+redis_1 |   .-`` .-```.  ```\/    _.,_ ''-._
+redis_1 |  (    '      ,       .-`  | `,    )     Running in stand alone mode
+redis_1 |  |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+redis_1 |  |    `-._   `._    /     _.-'    |     PID: 10
+redis_1 |   `-._    `-._  `-./  _.-'    _.-'
+redis_1 |  |`-._`-._    `-.__.-'    _.-'_.-'|
+redis_1 |  |    `-._`-._        _.-'_.-'    |           http://redis.io
+redis_1 |   `-._    `-._`-.__.-'_.-'    _.-'
+redis_1 |  |`-._`-._    `-.__.-'    _.-'_.-'|
+redis_1 |  |    `-._`-._        _.-'_.-'    |
+redis_1 |   `-._    `-._`-.__.-'_.-'    _.-'
+redis_1 |       `-._    `-.__.-'    _.-'
+redis_1 |           `-._        _.-'
+redis_1 |               `-.__.-'
+redis_1 |
+redis_1 | [10] 09 Jul 06:35:13.049 # Server started, Redis version 2.8.9
+redis_1 | [10] 09 Jul 06:35:13.049 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+redis_1 | [10] 09 Jul 06:35:13.049 * The server is now ready to accept connections on port 6379
+web_1   | python: can't open file 'app.py': [Errno 2] No such file or directory
+figtest_web_1 exited with code 2
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping figtest_redis_1...

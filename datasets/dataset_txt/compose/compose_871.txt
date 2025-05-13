@@ -1,0 +1,36 @@
+mtoothman commented on 15 Feb 2018 •
+edited
+I'm intermittently unable to execute docker-compose up due to an encoding error. This can occasionally be resolved by removing and recreating ~/.docker/config.json by docker login again, but the problem quickly recurs after bringing up a few services. Any ideas?
+$ docker-compose --version
+docker-compose version 1.18.0, build 8dd22a9
+$ docker --version
+Docker version 17.12.0-ce, build c97c6d6
+$ locale
+LANG="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_CTYPE="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_ALL=
+$ docker-compose up
+Building my-service
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/main.py", line 959, in up
+  File "compose/project.py", line 452, in up
+  File "compose/service.py", line 324, in ensure_image_exists
+  File "compose/service.py", line 967, in build
+  File "site-packages/docker/api/build.py", line 250, in build
+  File "site-packages/docker/api/build.py", line 297, in _set_auth_headers
+  File "site-packages/docker/auth.py", line 97, in resolve_authconfig
+  File "site-packages/docker/auth.py", line 125, in _resolve_authconfig_credstore
+  File "site-packages/dockerpycreds/store.py", line 25, in get
+  File "site-packages/dockerpycreds/store.py", line 57, in _execute
+  File "subprocess.py", line 711, in __init__
+  File "subprocess.py", line 1343, in _execute_child
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+Failed to execute script docker-compose

@@ -1,0 +1,2 @@
+arun-gupta commented on 30 Mar 2016
+https://docs.docker.com/swarm/install-w-machine/ and https://docs.docker.com/swarm/provision-with-machine/ seems to have an overlap and should be cleaned up.

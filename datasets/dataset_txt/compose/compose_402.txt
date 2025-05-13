@@ -1,0 +1,164 @@
+rynnova commented on 16 Nov 2018 •
+edited
+Description of the issue
+When using secrets with docker-compose on Windows, even with Linux containers, it fails, citing files which do physically exist do not.
+A quick workaround involves replacing secrets with bind mounts, but I'd like the docker-compose.override.yml to only have to override secret locations for development, not require an entirely different structure from production.
+A minimal docker-compose.yml to reproduce this:
+version: '3.7'
+services:
+  web:
+    image: nginx:alpine
+    secrets:
+      - root_certificate
+      - intermediate
+
+secrets:
+  root_certificate:
+    file: ./root.crt
+  intermediate:
+    file: ./intermediate.crt
+Simply using docker-compose up will raise the error message below.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+configs:
+  app-configuration:
+    file: C:\Users\Me\Source\Repos\App\Vue2Spa\appsettings.Development.json
+  server-configuration:
+    file: C:\Users\Me\Source\Repos\App\server.conf
+  web-configuration:
+    file: C:\Users\Me\Source\Repos\App\web.conf
+secrets:
+  intermediate:
+    file: C:\Users\Me\Source\Repos\App\intermediate.crt
+  root_certificate:
+    file: C:\Users\Me\Source\Repos\App\root.crt
+services:
+  app:
+    build:
+      context: C:\Users\Me\Source\Repos\App
+    configs:
+    - source: app-configuration
+      target: /app/appsettings.json
+    image: registry.corp.company.com/team/app:dev
+    links:
+    - db
+    secrets:
+    - source: intermediate
+    - source: root_certificate
+  db:
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      SA_PASSWORD: Password
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    volumes:
+    - data:/var/opt/mssql:rw
+  web:
+    configs:
+    - source: server-configuration
+      target: /etc/nginx/conf.d/default.conf
+    - source: web-configuration
+      target: /etc/nginx/nginx.conf
+    image: nginx:alpine
+    links:
+    - app
+    ports:
+    - published: 8080
+      target: 80
+    - published: 4433
+      target: 443
+    secrets:
+    - source: intermediate
+    - source: root_certificate
+version: '3.7'
+volumes:
+  data: {}
+Steps to reproduce the issue
+Start with Docker on Windows using Linux Containers.
+Use the above configuration with a simple image for the application.
+docker-compose up
+The below error message will occur.
+However, once you replace the secrets with normal bind mounts, it works just fine.
+Observed result
+Compose does not understand secrets when used from a Windows system on Linux containers.
+Expected result
+It should not have startup errors, only runtime due to incomplete webserver configuration.
+Stacktrace / full error message
+WARNING: Some services (app, web) use the 'configs' key, which will be ignored. Compose does not support 'configs' configuration - use `docker stack deploy` to deploy to a swarm.
+WARNING: The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use `docker stack deploy`.
+
+app3_db_1 is up-to-date
+Creating app3_app_1 ... error
+
+ERROR: for app3_app_1  Cannot create container for service app: invalid mount
+config for type "bind": bind mount source path does not exist: /host_mnt/c/Users/Me/Source/Repos/App/intermediate.crt
+
+ERROR: for app  Cannot create container for service app: invalid mount config
+for type "bind": bind mount source path does not exist: /host_mnt/c/Users/Me/Source/Repos/App/intermediate.crt
+ERROR: Encountered errors while bringing up the project.
+Additional information
+I am using Windows 10 on a 64-bit machine. The image for the application is an ASP .NET application. Here's the associated Dockerfile:
+# Node modules
+FROM node:alpine as node-modules
+RUN apk update && apk add python make gcc g++
+WORKDIR /app
+COPY Vue2Spa/package.json .
+COPY Vue2Spa/npm-shrinkwrap.json .
+COPY Vue2Spa/webpack.config.vendor.js .
+COPY Vue2Spa/.babelrc .
+RUN npm i
+
+# .net Core
+FROM microsoft/dotnet:2.1-sdk-alpine as dotnet
+WORKDIR /source
+COPY . .
+WORKDIR /source/Vue2Spa
+RUN dotnet restore Vue2Spa.csproj
+RUN dotnet build -c Release Vue2Spa.csproj
+RUN dotnet publish -c Release Vue2Spa.csproj
+
+# Vue.js
+FROM node-modules as javascript
+COPY --from=dotnet /source/Vue2Spa/appsettings.json .
+COPY Vue2Spa/webpack.config.js .
+COPY Vue2Spa/ClientApp ClientApp/
+RUN npm run build
+
+# Application
+FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine
+WORKDIR /app
+COPY --from=javascript /app/wwwroot wwwroot/
+COPY --from=dotnet /source/Vue2Spa/bin/Release/netcoreapp2.1/publish/ .
+
+ENV ASPNETCORE_URLS=https://+:443
+EXPOSE 443
+CMD ["dotnet", "Vue2Spa.dll"]

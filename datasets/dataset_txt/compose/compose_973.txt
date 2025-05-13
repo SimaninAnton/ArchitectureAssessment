@@ -1,0 +1,12 @@
+AnthonyMastrean commented on 3 Jan 2018
+The Docker CLI can show health status
+$ docker container ls --filter name=example_example_1
+CONTAINER ID        IMAGE            COMMAND                  CREATED             STATUS                 PORTS                                     NAMES
+6e9eef9909f7        example:latest   "nginx -g 'daemon ..."   5 hours ago         Up 5 hours (healthy)   80/tcp, 443/tcp, 0.0.0.0:8080->8080/tcp   example_example_1
+But, the Docker Compose CLI does not
+$ docker-compose ps example
+         Name            Command          State                       Ports
+------------------------------------------------------------------------------------------------
+example_example_1   nginx -g daemon off;   Up      443/tcp, 80/tcp, 0.0.0.0:8080->8080/tcp
+It might be nice to display the same health status, especially for those of us using Compose 2.1 and the depends_on / condition / service_healthy feature.
+1

@@ -1,0 +1,13 @@
+a1exus commented on 16 Nov 2016 •
+edited
+I'm using macOS 10.12.1 (16B2555) and trying to follow Command-line completion - Docker:
+$ curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose > /usr/local/etc/bash_completion.d/docker-compose
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 10552  100 10552    0     0  96288      0 --:--:-- --:--:-- --:--:--  119k
+$ ls -la /usr/local/etc/bash_completion.d/docker-compose 
+-rw-r--r--  1 alexus  admin  10552 Nov 15 22:13 /usr/local/etc/bash_completion.d/docker-compose
+$ 
+yet, completion still unavailable( I also would like to get completion going for docker as well.
+Please advise.
+1

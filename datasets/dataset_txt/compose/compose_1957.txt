@@ -1,0 +1,43 @@
+patrickleet commented on 3 Nov 2016
+I've set up a vagrant machine running windows server 2016, and set the DOCKER_HOST to point to that VM, and have configured docker-compose to use my external network, so I'm able to access the site that is running in the windows VM in my browser. The only piece I cannot get to work is mounting volumes, so changes from development on my mac are reflected in the windows container.
+➜ docker-compose --version       
+docker-compose version 1.9.0-rc2, build a2da43b
+➜ docker version                                                              
+Client:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Thu Oct 27 00:09:21 2016
+ OS/Arch:      darwin/amd64
+ Experimental: true
+
+Server:
+ Version:      1.12.2-cs2-ws-beta
+ API version:  1.25
+ Go version:   go1.7.1
+ Git commit:   050b611
+ Built:        Tue Oct 11 02:35:40 2016
+ OS/Arch:      windows/amd64
+docker-compose.yml
+version: '2.1'
+
+networks:
+
+  default:
+    external:
+      name: nat
+
+services:
+
+  site:
+    build: .
+    ports:
+      - '80:80'
+    volumes:
+      - .:/c/site
+Maybe this isn't possible yet. I've tried a whole bunch of slightly different configs, including an absolute path to my current directory, just /site, and c:/site
+I've also tried with just Docker, so maybe it would be better to post on docker/docker
+➜ docker run --name mysite -d -p 80:80 -v .:/c/site site 
+docker: Error response from daemon: invalid bind mount spec ".:/c/site": invalid volume specification: '.:\c\site'.
+This would complete my development workflow on Mac for windows, so hopefully it is something I'm doing wrong!

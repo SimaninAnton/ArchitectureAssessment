@@ -1,0 +1,5 @@
+hadim commented on 7 Apr 2015
+I would like to retrieve the name of a container or id (called data for example) from running containers started with docker-compose.
+I need it to be able to backup volume inside this container with this command for example:
+docker run --volumes-from DATA_CONTAINER_NAME -v $(pwd):/backups ubuntu tar zcvf /backups/backup.tar.gz /var/lib/mysql /var/www/html
+Thank you

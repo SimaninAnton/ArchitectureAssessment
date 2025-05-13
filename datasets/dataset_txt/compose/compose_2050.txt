@@ -1,0 +1,21 @@
+danse commented on 22 Sep 2016
+Hello, this error seems to have popped up multiple times, but i think that i am meeting a new flavour of it. The error appears when i run docker-compose build or other commands. Here is the full stacktrace:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 61, in main
+  File "compose/cli/main.py", line 113, in perform_command
+  File "compose/cli/main.py", line 219, in build
+  File "compose/project.py", line 298, in build
+  File "compose/project.py", line 165, in get_services
+  File "compose/project.py", line 136, in get_service
+  File "compose/project.py", line 555, in __init__
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xef in position 5: ordinal not in range(128)
+docker-compose returned -1
+These are my versions:
+ ~ $ python --version
+Python 2.7.12
+ ~ $ docker --version
+Docker version 1.12.1, build 23cf638
+ ~ $ docker-compose --version
+docker-compose version 1.8.0, build f3628c7
+I am working on Ubuntu 16.04. Where should i look?

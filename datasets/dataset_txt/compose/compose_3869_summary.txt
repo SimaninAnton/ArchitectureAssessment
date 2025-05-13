@@ -1,0 +1,1 @@
+docker-compose build does not work with -f path under certain conditions

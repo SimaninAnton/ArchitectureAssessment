@@ -1,0 +1,10 @@
+goodspark commented on 17 Nov 2018
+Is your feature request related to a problem? Please describe.
+I'm trying to install poetry and docker-compose in a virtualenv but since they depend on different jsonschema major versions they become incompatible when running together in the venv.
+poetry: >=3, <4
+docker-compose: >=2.5.1, <3
+Describe the solution you'd like
+docker-compose to update its jsonschema dependency to >=3, <4.
+Describe alternatives you've considered
+I could just put the two in different venvs. I'm lazy and just want all my tools available in a single venv so I don't have to hop around so much.
+1

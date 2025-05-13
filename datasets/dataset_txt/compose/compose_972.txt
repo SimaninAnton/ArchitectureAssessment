@@ -1,0 +1,41 @@
+chrisgilbert commented on 3 Jan 2018 •
+edited
+Version: docker-compose version 1.17.1, build 6d101fb
+Platform: Windows
+@damtur discovered an issue where docker-compose.exe build throws a cryptic error when there is a blank line (a single space) in the .dockerignore file. It seems to be a windows specific problem. Removing the line, or just the space character fixes it.
+Stack trace:
+PS E:\src\repro> docker-compose up -d --build
+Building frontend-watch
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 68, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 952, in up
+  File "compose\project.py", line 431, in up
+  File "compose\service.py", line 302, in ensure_image_exists
+  File "compose\service.py", line 923, in build
+  File "site-packages\docker\api\build.py", line 148, in build
+  File "site-packages\docker\utils\build.py", line 13, in tar
+  File "site-packages\docker\utils\build.py", line 38, in exclude_paths
+  File "site-packages\docker\utils\build.py", line 124, in get_paths
+  File "site-packages\docker\utils\build.py", line 60, in should_include
+  File "site-packages\docker\utils\build.py", line 133, in match_path
+  File "ntpath.py", line 529, in relpath
+ValueError: path is on drive , start on drive E:
+Failed to execute script docker-compose
+Reproducing:
+Add the following files to a new directory and run docker-compose.exe build
+dockercompose.yml
+version: '3.2'
+
+services:
+  frontend-watch:
+    image: frontend-build 
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+.dockerignore
+[ This just needs to be any line with just spaces on it - whether it is interspersed with other lines makes no difference ]
+Dockerfile
+FROM kkarczmarczyk/node-yarn:8.0-wheezy as frontend-build
+1

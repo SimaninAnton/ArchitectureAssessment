@@ -1,0 +1,125 @@
+dongluochen commented on 27 Feb 2016
+This is related to Docker swarm issue 1859. When docker-compose tries to scale web instance to 3000. It generates 3000 network connections to DOCKER_HOST simultaneously. I think both client (compose) and swarm manager cannot handle such load. I see a list of errors from it before compose exits. While swarm manager should handle such burst gracefully by queuing requests or rejecting requests. It'd be good that compose also have some rate limiting mechanism.
+docker-compose.yml:
+web:
+  image: nginx
+  restart: always
+  labels:
+    com.docker.swarm.reschedule-policies: "[\"on-node-failure\"]"
+Creating and starting 2998 ... done
+Creating and starting 2999 ... done
+Creating and starting 3000 ... done
+
+ERROR: for 2  Get http://dong-coreos-9:2375/containers/0a9c180197ef697633208e467aff9c62350ed14634be0a3e27771941ff397658/json: dial tcp 172.19.35.107:2375: socket: too many open files 
+ERROR: for 5  Get http://dong-coreos-6:2375/containers/fe6874e3bee55c793787e6093b1dec547a59423be3085c2bba034fb0acf4d902/json: dial tcp 172.19.35.104:2375: socket: too many open files 
+ERROR: for 7  Container created but refresh didn't report it back 
+ERROR: for 8  Container created but refresh didn't report it back 
+ERROR: for 10  Get http://dong-coreos-15:2375/containers/de495e005bc2371f8d225a0c084da647ce8860683df75746e388c87021a98813/json: dial tcp 172.19.35.113:2375: socket: too many open files 
+ERROR: for 13  Post http://dong-coreos-11:2375/v1.15/containers/32c3cef02a790a0d558307a80e7db04e2726160426c3a46ac64a5efc9fad6536/start: dial tcp 172.19.35.109:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 14  Post http://dong-coreos-13:2375/v1.15/containers/create?name=crash_web_14: dial tcp 172.19.35.111:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 17  Post http://dong-coreos-10:2375/v1.15/containers/e480a8dfb6db690e9db28d15ae36306d6b72765c8abed71615a64cb44d491261/start: dial tcp 172.19.35.108:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 19  Post http://dong-coreos-8:2375/v1.15/containers/create?name=crash_web_19: dial tcp 172.19.35.106:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 20  Get http://dong-coreos-13:2375/containers/99c7d2493c8d4e341febd5d59aaf5f65938dda2f85f4871d705cab49efae0a29/json: dial tcp 172.19.35.111:2375: socket: too many open files 
+ERROR: for 23  Container created but refresh didn't report it back 
+ERROR: for 24  Post http://dong-coreos-7:2375/v1.15/containers/create?name=crash_web_24: dial tcp 172.19.35.105:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 30  Post http://dong-coreos-9:2375/v1.15/containers/create?name=crash_web_30: dial tcp 172.19.35.107:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 31  Post http://dong-coreos-7:2375/v1.15/containers/create?name=crash_web_31: dial tcp 172.19.35.105:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 32  Get http://dong-coreos-11:2375/v1.15/containers/70cb4302da191052461d1bdd2ed8b459038a88087cb382074e623acea1ac003a/json: dial tcp 172.19.35.109:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 34  Post http://dong-coreos-14:2375/v1.15/containers/create?name=crash_web_34: dial tcp 172.19.35.112:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 36  Container created but refresh didn't report it back 
+ERROR: for 37  Post http://dong-coreos-10:2375/v1.15/containers/create?name=crash_web_37: dial tcp 172.19.35.108:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 40  Get http://dong-coreos-7:2375/containers/859d86ba8edc822f9e31fd6e0dd05446199438ff42e35c5986134e5927e8382f/json: dial tcp 172.19.35.105:2375: socket: too many open files 
+ERROR: for 41  Get http://dong-coreos-14:2375/containers/88beba7163ff993309e782eee0233a732378c8efbc04fb2d6b155addb568030f/json: dial tcp 172.19.35.112:2375: socket: too many open files 
+ERROR: for 44  Post http://dong-coreos-14:2375/v1.15/containers/create?name=crash_web_44: dial tcp 172.19.35.112:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 47  Container created but refresh didn't report it back 
+ERROR: for 49  Get http://dong-coreos-8:2375/containers/bc61287142a28039063f2486c3564271e7e5c64237734216a0faee853e544b3c/json: dial tcp 172.19.35.106:2375: socket: too many open files 
+ERROR: for 55  Container created but refresh didn't report it back 
+ERROR: for 56  Get http://dong-coreos-12:2375/containers/9d6bae0dc7dcc36214613795afa369291234e20896eda7139936f32f7a3e8545/json: dial tcp 172.19.35.110:2375: socket: too many open files 
+ERROR: for 57  Post http://dong-coreos-11:2375/v1.15/containers/create?name=crash_web_57: dial tcp 172.19.35.109:2375: socket: too many open files. Are you trying to connect to a TLS-enabled daemon without TLS? 
+ERROR: for 58  Container created but refresh didn't report it back 
+ERROR: for 59  ('Connection aborted.', error(24, 'Too many open files')) 
+ERROR: Couldn't connect to Docker daemon at http://172.19.29.201:3375 - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+Network connection changes.
+core@ip-172-19-231-118 ~/crash $ ../docker-compose scale web=3000         
+Creating and starting 3000 ... 
+Creating and starting 3001 ... 
+...
+
+core@ip-172-19-231-118 ~ $ for i in {1..100}; do netstat -an | grep -i 3375 | wc -l; sleep 2; done
+0
+1
+2
+2
+2
+2
+2
+552
+1306
+1904
+2420
+2441
+2442
+2442
+2442
+2442
+2441
+2441
+2441
+2441
+2441
+2447
+2474
+2477
+2483
+2520
+2843
+2899
+2899
+2899
+2899
+2899
+2899
+2899
+2899
+2848
+2637
+2092
+1870
+1544
+1469
+1422
+1335
+1296
+1264
+1224
+1209
+1190
+1170
+1143
+1088
+1043
+996
+939
+854
+524
+336
+336
+336
+336
+125
+100
+99
+99
+99
+98
+98
+98
+98
+79
+20
+19
+20
+1
+1

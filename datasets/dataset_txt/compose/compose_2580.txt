@@ -1,0 +1,22 @@
+krisskross commented on 24 Mar 2016
+Here's an example of a docker-compose.yml that have an app host container that use a docker volume container dep.
+dep:
+    image: docker.company.com/volume-dep:0.0.3
+app:
+    image: docker.company.com/app:0.0.24
+    restart: always
+    volumes_from:
+        - dep
+    entrypoint: /usr/local/bin/start_supervisord.sh
+Dockerfile dep
+FROM alpine:3.3
+ADD /app/dep-fat.jar /app/dep-fat.jar
+VOLUME /app
+ENTRYPOINT /usr/bin/tail -f /dev/null
+Dockerfile app
+FROM isuper/java-oracle:jdk_8
+# some more stuff to initalize supervisord to run the runnable java jar
+EXPOSE 8080
+This all works fine when doing docker-compose up for the first time. But if the version of the docker volume container dep is upgraded without changing the version of the app container the new volume mount version doesn't take effect after doing docker-compose stop && docker-compose up. Docker compose says that the containers are recreated, but the changes isn't visible inside the host container app. The procedure works if doing docker-compose stop && docker-compose rm && docker-compose up.
+Is this the wrong procedure/configuration or is it a bug?
+Using latest docker and docker-compose.

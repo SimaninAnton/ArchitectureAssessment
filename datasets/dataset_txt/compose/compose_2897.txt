@@ -1,0 +1,25 @@
+anadale commented on 20 Jan 2016
+I have docker-compose.yml file in folder nowsd:
+version: 2
+volumes:
+  data:
+    driver: local
+  ugc:
+    driver: local
+services:
+  web:
+    image: busybox
+    volumes:
+      - data:/var/log
+      - ugc:/var/ugc
+$ docker-compose up
+Starting nowsd_web_1
+Attaching to nowsd_web_1
+nowsd_web_1 exited with code 0
+$ docker volume ls
+DRIVER              VOLUME NAME
+local               nowsd_data
+local               data
+local               ugc
+local               nowsd_ugc
+You can see that two extra unscoped volumes has been created. When I inspect container nowsd_web_1 i can see that volumes data and ugc are attached to container instead of nowsd_data and nowsd_ugc respectively.

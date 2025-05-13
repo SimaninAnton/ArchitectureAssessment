@@ -1,0 +1,5 @@
+mikehaertl commented on 30 Sep 2015
+Each time I use docker-compose up to restart an existing set of containers, I see huge amounts of old log messages dumped to the screen.
+This was not the case before 1.4.0. Older versions did only output new messages.
+I don't need this and suggest a feature to turn that off (unless there already is one, which I couldn't find).
+5

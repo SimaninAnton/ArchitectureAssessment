@@ -1,0 +1,16 @@
+krzysztofp commented on 21 Dec 2017 •
+edited
+Before:
+$ docker-compose build
+Building frontend
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+Solution:
+$ sudo chown -R ubuntu:ubuntu .
+After:
+$ docker-compose build
+Building frontend
+Step 1/10 : FROM node:latest
+latest: Pulling from library/node
+As you can see - I did have directories utilized by the frontend service owned by root.
+So I modified the owner of these directories and now the build is running - but the message is really, really confusing - can we add more meaningful message when there's a access issue?

@@ -1,0 +1,4 @@
+Iristyle commented on 31 Oct 2018
+This the same thing as #1070. There are nightly builds at https://dl.bintray.com/docker-compose/master/ for Linux and OSX, but not for Windows.
+I left the comment at the end of #1070, but this deserves its own issue.
+Thanks for the consideration!

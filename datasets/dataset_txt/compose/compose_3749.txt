@@ -1,0 +1,4 @@
+fabiokung commented on 7 Apr 2015
+As specified here: jamiemccrindle/dockerception.
+Currently build in a docker-compose.yml file does not allow custom build pipelines (other than docker build -t <tag> <path>) to be specified. Either extend what can be done with the build property, or introduce something else to make it possible to build runtime containers using an intermediate build container that outputs the build context as a tar stream.
+1

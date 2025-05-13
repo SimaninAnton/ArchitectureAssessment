@@ -1,0 +1,2 @@
+tomaszulberti commented on 31 Dec 2015
+I am trying to solve another issue, and when I try to run the integration tests some of the tests build an image. But there is an issue on the container because some of them are doing apt-get update they will fail because of timeout.

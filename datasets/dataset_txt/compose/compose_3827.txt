@@ -1,0 +1,19 @@
+terbooter commented on 17 Mar 2015
+I can start my container in two ways:
+Using console commands (bash script)
+Using docker-compose util
+Before each start I remove all containers and remove all images
+In first case I made
+docker build -t web-image .
+docker run --restart=always -d -v $(pwd)/www:/app -p 82:80 web-image
+Container working as expected. In folder /app I have my mounted project files
+In second case I have docker-compose.yml config file
+web:
+  build: .  
+  volumes:
+    - www:/app
+  ports:
+    - "82:80"
+  restart: always
+docker-compose up -d 
+In this case container folder /app is empty

@@ -1,0 +1,1 @@
+when using docker-compose, meet a strange problem. please help me

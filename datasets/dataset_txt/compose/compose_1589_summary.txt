@@ -1,0 +1,1 @@
+Not possibe to set environment variable to empty string

@@ -1,0 +1,1 @@
+docker-compose pull from private registry in parallel mode

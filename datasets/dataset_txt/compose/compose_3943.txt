@@ -1,0 +1,60 @@
+thecatwasnot commented on 9 Feb 2015
+TLDR: volumes_from directive builds but doesn't run the container, container volumes are never actually bound to anything, thus not providing volume data. Fix is to add a link as well as volumes_from in docker-compose.yml
+I have a data container that builds, and as part of build seeds my volume with data, that nginx will then serve.
+docker-compose.yml
+ web:
+  image: nginx
+  volumes_from:
+    - blog
+  ports:
+    - "80:80"
+blog:
+  build: .
+And Dockerfile for blog:
+FROM ruby:2.1-wheezy
+MAINTAINER Cole Teeter thecatwasnot@gmail.com
+
+RUN apt-get update \
+  && apt-get install apt-transport-https \
+  && curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+  && echo 'deb https://deb.nodesource.com/node wheezy main' > /etc/apt/sources.list.d/nodesource.list \
+  && echo 'deb-src https://deb.nodesource.com/node wheezy main' >> /etc/apt/sources.list.d/nodesource.list \
+  && apt-get update \
+  && apt-get -y install nodejs
+
+RUN mkdir -p /usr/src/blog \
+  && mkdir -p /etc/nginx/sites-enabled/blog \
+  && mkdir -p /usr/share/nginx/html
+
+COPY docker/nginx-sites.conf /etc/nginx/sites-enabled/blog/
+RUN ln -s /usr/src/blog/ /usr/share/nginx/html/blog
+
+WORKDIR /usr/src/blog
+COPY Gemfile /usr/src/blog/
+COPY Gemfile.lock /usr/src/blog/
+RUN bundle install
+
+COPY . /usr/src/blog/
+
+RUN bundle exec jekyll build
+
+VOLUME ["/etc/nginx/sites-enabled/blog","/usr/share/nginx/html/blog"]
+CMD ["/bin/true"]
+Problem is, if I just do a docker-compose up web it never runs the blog container, only builds it, and more critically, never binds the volumes it describes to anything.
+core@core-01 ~ $ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS                      PORTS               NAMES
+9e7eec9980c1        blog_blog:latest    "/bin/true"            3 minutes ago                                                       blog_blog_1         
+1ea00b726ef0        nginx:1             "nginx -g 'daemon of   8 minutes ago       Exited (0) 13 seconds ago                       blog_web_1          
+core@core-01 ~ $ docker inspect -f {{.Volumes}} blog_blog_1
+<no value>
+core@core-01 ~ $ docker start blog_blog_1
+blog_blog_1
+core@core-01 ~ $ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS                          PORTS               NAMES
+9e7eec9980c1        blog_blog:latest    "/bin/true"            4 minutes ago       Exited (0) 4 seconds ago                            blog_blog_1         
+1ea00b726ef0        nginx:1             "nginx -g 'daemon of   9 minutes ago       Exited (0) About a minute ago                       blog_web_1          
+core@core-01 ~ $ docker inspect -f {{.Volumes}} blog_blog_1
+map[/etc/nginx/sites-enabled/blog:/var/lib/docker/vfs/dir/76513d43ec6cb15c118165a46778f5e497f98c90ea6012f9c0f98da4ac0e80f6 /usr/share/nginx/html/blog:/var/lib/docker/vfs/dir/59104cf9907d1707f3dd2835ddaf6d8517ecfa592c1ac1e32d58a6d8b47cbaa7]
+core@core-01 ~ $ docker -v
+Docker version 1.3.3, build 54d900a
+I'm not sure if this is intended behavior or not. I expected for the volumes_from directive to basically let me get at the data in the blog service container. I can get around it by also linking blog to the web service.

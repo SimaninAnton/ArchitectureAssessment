@@ -1,0 +1,52 @@
+nm2107 commented on 20 Dec 2019
+Hello,
+Thank you for your work on this project :) .
+I have a break in my deploy workflow since the v1.25.0 due to the Only pull images that can't be built change.
+Here's a snippet of my docker-compose file :
+version: '3.7'
+services:
+  db:
+    image: acme/project:api-db-${IMAGE_TAG}
+    build:
+      context: docker/db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${DATABASE_NAME}
+    volumes:
+      - 'db_data:/var/lib/mysql'
+  mercure:
+    image: dunglas/mercure:v0.7.2
+    environment:
+      - JWT_KEY=${MERCURE_JWT_KEY}
+      - DB_PATH=/var/lib/mercure/updates.db
+      - HISTORY_SIZE=1000
+      - READ_TIMEOUT=30s
+    volumes:
+      - 'mercure_data:/var/lib/mercure'
+    restart: always
+Here's the workflow :
+build docker images : docker-compose build
+push the images to a registry : docker-compose push
+deploy on a staging server :
+# first, scp the docker-compose file
+# ...
+# docker-compose.staging.yml                    100% 1832     1.8KB/s   00:00    
+
+# then, configure the IMAGE_TAG env var and deploy the app
+ssh -t user@staging-server '\
+ cd /home/user/app && \
+ export IMAGE_TAG=dev-b20bb77ba99c8a6dd10472f630a999b60815228a && \
+ docker-compose -f docker-compose.staging.yml pull --include-deps && \
+ docker-compose -f docker-compose.staging.yml up -d --no-build --remove-orphans && \
+ docker-compose -f docker-compose.staging.yml ps'
+
+Pulling mercure ... 
+
+ERROR: Service 'db' needs to be built, but --no-build was passed.
+Connection to staging-server closed.
+The issue comes when I want to pull the images from the registry. Only the images for services having the image key only are pulled, not the ones for the services having both image and build keys.
+It seems to be due to the Only pull images that can't be built feature of v1.25.0 (v1.24.1 doesn't have this issue).
+Can this feature be optional thanks to a CLI arg ? Or at least have a CLI arg to get back to the previous behavior ?
+Thank you :)
+2

@@ -1,0 +1,4 @@
+unhashable commented on 11 Feb 2017 •
+edited
+Currently HEALTH CHECK is only honored when docker-compose up is ran.
+I'd like to have the same be true with docker-compose run (perhaps with an option).

@@ -1,0 +1,12 @@
+arun-gupta commented on 4 Dec 2015
+There should be an ability to override the command for one service.
+For example, for the following Compose file:
+mycouchbase:
+  build: .
+  ports:
+    - 8091:8091
+    - 8092:8092 
+    - 8093:8093 
+    - 11210:11210
+docker-compose up mycouchbase bash
+This will simplify service debugging.

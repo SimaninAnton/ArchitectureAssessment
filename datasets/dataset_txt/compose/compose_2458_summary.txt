@@ -1,0 +1,1 @@
+Compose file: Allow top-level `custom` key

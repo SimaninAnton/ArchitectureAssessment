@@ -1,0 +1,16 @@
+Contributor
+cameronmaske commented on 20 Jan 2014
+I noticed the output from commands (set either in a Dockerfile, or in fig.yml) does not currentlf log out.
+Here is a simple example that might demonstrate what I mean more clearly.
+For a simple fig.yml file
+echo:
+    image: ubuntu
+    command: echo hello
+The result from running fig up is
+Creating FigExperiment_echo_1...
+Attaching to FigExperiment_echo_1
+But I think it would be incredibly useful if the command from the container is also outputted, e.g.
+Creating FigExperiment_echo_1...
+Attaching to FigExperiment_echo_1
+hello 
+I noticed that docker-py's client start and create_container don't support the attach option currently, so I'm not to sure how involved a fix this might be.

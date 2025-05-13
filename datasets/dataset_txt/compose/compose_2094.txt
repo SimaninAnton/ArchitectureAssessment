@@ -1,0 +1,4 @@
+boyvinall commented on 5 Sep 2016 •
+edited
+It'd be great if the warning message from moby/moby#1395 was propagated through to the docker-compose output when you run containers. I see it's there if you docker-compose build but not for docker-compose up.
+Thanks

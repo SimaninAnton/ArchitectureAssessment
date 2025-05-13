@@ -1,0 +1,10 @@
+ksmithut commented on 5 May 2015
+When loading the bash completion, it's giving me the following errors:
+$ . /usr/local/etc/bash_completion.d/docker-compose
+-bash: /usr/local/etc/bash_completion.d/docker-compose: line 97: syntax error near unexpected token `('
+-bash: /usr/local/etc/bash_completion.d/docker-compose: line 97: `          _filedir y?(a)ml'
+Notes and System Specs:
+Macbook Pro (Retina, 15-inch, Mid 2014)
+OS X 10.10.3
+installed via homebrew brew install docker-compose
+Let me know if you need any further information to help in resolving the issue.

@@ -1,0 +1,42 @@
+gak commented on 30 Dec 2014
+I need a feature where you can override a service with another. I've started the implementation and will create a pull request once I have a good set of tests done.
+Here are the details:
+Allows the ability to have templates, where your fig.yml can override another
+service, optionally in another file (e.g. template.yml).
+template can either be a string or dictionary.
+When template is a string, it specifies the path to the template, where the
+same service name will be used.
+When template is a dictionary, you may specify path and service as the
+keys. path is the path to the template and service is the name of the
+service to override in the specified template. path or service may be
+omitted defaulting to the same template file, or same service name.
+For example, this would use busybox:latest with the command /bin/bash (same as the other examples below):
+fig.yml
+myservice:
+  template: template.yml
+  command: /bin/bash
+template.yml
+myservice:
+  image: busybox:latest
+  command: /bin/sleep 10
+Another example, this one runs in a single file:
+fig.yml
+template_service:
+  image: busybox:latest
+  command: /bin/sleep 10
+myservice:
+  command: /bin/bash
+  template:
+    service: template_service
+A final example, referencing another file and service:
+fig.yml
+myservice:
+  template:
+    path: template.yml
+    service: template_service
+  command: /bin/bash
+template.yml
+template_service:
+  image: busybox:latest
+  command: /bin/sleep 10
+I made a choice to have the "string" point to a template file rather than a service name (in the same file), only because that's how I plan to structure my fig files, so it was more appropriate as a default for my project.

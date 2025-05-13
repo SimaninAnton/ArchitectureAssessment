@@ -1,0 +1,22 @@
+darkn3rd commented on 7 May 2016 •
+edited
+DESCRIPTION
+On Ubuntu Trusty Tahr 14.04, pip install of docker-compose does not install all the dependencies it seems, so running docker-compose results in traceback:
+$ sudo pip install docker-compose
+$ docker-compose
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2749, in <module>
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 446, in _build_master
+    return cls._build_from_requirements(__requires__)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 459, in _build_from_requirements
+    dists = ws.resolve(reqs, Environment())
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 628, in resolve
+    raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: backports.ssl-match-hostname>=3.5
+This can be fixed by updating the dependent package:
+$ sudo pip install backports.ssl_match_hostname --upgrade
+29
+1

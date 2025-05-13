@@ -1,0 +1,179 @@
+bergtwvd commented on 9 Feb 2016
+Using Docker 1.10, Compose 1.6.0 / 1.5.x / 1.4.x, and Swarm 1.1.0.
+I set up a swarm with 4 nodes. The swarm master is started on node 1 with:
+docker run -p 5000:2375 -it swarm --debug manage -H tcp://0.0.0.0:2375 "nodes://x.x.x.[65:68]:2375"
+I set DOCKER_HOST to point to the swarm master.
+I use the following compose YML file for test purposes:
+web:
+  image: busybox
+  container_name: web
+docker-compose-1.4.2 -f myfile.yml up => WORKS OK
+docker-compose-1.5.0 -f myfile.yml up => EVENTUALLY TIMES OUT
+docker-compose-1.5.1 -f myfile.yml up => EVENTUALLY TIMES OUT
+docker-compose-1.5.2 -f myfile.yml up => EVENTUALLY TIMES OUT
+docker-compose-1.6.0 -f myfile.yml up => EVENTUALLY TIMES OUT
+It seems that a change introduced in 1.5.0 causes a problem in combination with swarm 1.6.0.
+See also docker/swarm#1765.
+LOGS:
+bergtwvd@app-docker01:~$ docker-compose-1.4.2 -v
+docker-compose version: 1.4.2
+bergtwvd@app-docker01:~$ docker-compose-1.4.2 --verbose -f vesselsim.yml up
+Compose version 1.4.2
+Docker base_url: http://x.x.x.65:5000
+Docker version: KernelVersion=3.13.0-76-generic, Os=linux, BuildTime=Thu Feb  4 08:55:18 UTC 2016, ApiVersion=1.22, Version=swarm/1.1.0, GitCommit=a0fd82b, Arch=amd64, GoVersion=go1.5.3
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bergtwvd', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 4 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bergtwvd', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 4 items)
+docker inspect_image <- ('busybox')
+docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bergtwvd', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker inspect_image <- ('busybox')
+docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+Creating web...
+docker create_container <- (name='web', image='busybox', labels={u'com.docker.compose.service': u'web', u'com.docker.compose.project': u'bergtwvd', 'com.docker.compose.config-hash': 'cc0180c5c01e45757e4d15a397a4804a7ac9bca5899c5024383855554986e776', 'com.docker.compose.version': u'1.4.2', u'com.docker.compose.oneoff': u'False', 'com.docker.compose.container-number': '1'}, host_config={'Links': [], 'PortBindings': {}, 'Binds': [], 'ExtraHosts': [], 'LogConfig': {'Type': u'json-file', 'Config': {}}, 'VolumesFrom': []}, environment={}, detach=True)
+docker create_container -> {u'Id': u'f440e330110dcc4a70295e41842dc62ef24bb5af168f1e40c32b425e9433c03b'}
+docker inspect_container <- (u'f440e330110dcc4a70295e41842dc62ef24bb5af168f1e40c32b425e9433c03b')
+docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+             u'Hostname': u'f440e330110d',
+...
+docker start <- (u'f440e330110dcc4a70295e41842dc62ef24bb5af168f1e40c32b425e9433c03b')
+docker start -> None
+docker inspect_container <- (u'f440e330110dcc4a70295e41842dc62ef24bb5af168f1e40c32b425e9433c03b')
+docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+             u'Hostname': u'f440e330110d',
+...
+Attaching to web
+docker attach <- (u'f440e330110dcc4a70295e41842dc62ef24bb5af168f1e40c32b425e9433c03b', stderr=1, logs=1, stream=1, stdout=1)
+docker attach -> <generator object _multiplexed_response_stream_helper at 0x7fc2f893f780>
+docker wait <- (u'f440e330110dcc4a70295e41842dc62ef24bb5af168f1e40c32b425e9433c03b')
+docker wait -> 0
+web exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=bergtwvd', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 5 items)
+bergtwvd@app-docker01:~$
+bergtwvd@app-docker01:~$ docker-compose -v
+docker-compose version 1.6.0, build d99cad6
+bergtwvd@app-docker01:~$ docker-compose --verbose -f vesselsim.yml up
+compose.config.config.find: Using configuration files: ./vesselsim.yml
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'', username=u'bergtwvd')
+compose.cli.command.get_client: docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http://x.x.x.65:5000
+compose.cli.command.get_client: Docker version: KernelVersion=3.13.0-76-generic, Os=linux, BuildTime=Thu Feb  4 08:55:18 UTC 2016, ApiVersion=1.22, Version=swarm/1.1.0, GitCommit=a0fd82b, Arch=amd64, GoVersion=go1.5.3
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bergtwvd', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bergtwvd', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('busybox')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bergtwvd', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('busybox')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+compose.service.build_container_labels: Added config hash: 21713a75902bd287bdc5a8448ed0219763c54eb1ee8bb2234763fc687a235d2f
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (memswap_limit=None, links=[], devices=None, pid_mode=None, log_config={'Type': u'', 'Config': {}}, cpu_quota=None, read_only=None, dns=None, volumes_from=[], port_bindings={}, security_opt=None, extra_hosts=None, cgroup_parent=None, network_mode=None, cap_add=None, restart_policy=None, dns_search=None, privileged=False, binds=[], ipc_mode=None, mem_limit=None, cap_drop=None, ulimits=None)
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': [],
+ 'Links': [],
+ 'LogConfig': {'Config': {}, 'Type': u''},
+ 'NetworkMode': 'default',
+ 'PortBindings': {},
+ 'VolumesFrom': []}
+compose.service.create_container: Creating web
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name='web', image='busybox', labels={u'com.docker.compose.service': u'web', u'com.docker.compose.project': u'bergtwvd', u'com.docker.compose.config-hash': '21713a75902bd287bdc5a8448ed0219763c54eb1ee8bb2234763fc687a235d2f', u'com.docker.compose.version': u'1.6.0', u'com.docker.compose.oneoff': u'False', u'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': 'default', 'Links': [], 'PortBindings': {}, 'Binds': [], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment={}, detach=True)
+compose.cli.verbose_proxy.proxy_callable: docker create_container -> {u'Id': u'2b7a42b1e3f38469906f7f0805ddd35dce725fd97a56417a237f3e19d8d79c43'}
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'2b7a42b1e3f38469906f7f0805ddd35dce725fd97a56417a237f3e19d8d79c43')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+             u'Hostname': u'2b7a42b1e3f3',
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'2b7a42b1e3f38469906f7f0805ddd35dce725fd97a56417a237f3e19d8d79c43')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+             u'Hostname': u'2b7a42b1e3f3',
+...
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'2b7a42b1e3f38469906f7f0805ddd35dce725fd97a56417a237f3e19d8d79c43', stderr=True, stream=True, stdout=True)
+ERROR: compose.cli.main.main: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+bergtwvd@app-docker01:~$

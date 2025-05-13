@@ -1,0 +1,98 @@
+movebean commented on 6 Nov 2017
+I encounter one problem, If I run service from "docker service create" it will be all right, but then when I "docker stop" one task one the host, It will restart again and again, the status of the task always be "Created" and another one will been created before the previous one became "Up" , and I saw the output of /var/log/syslog, It keep reporting : msg="fatal task error" error="starting container failed: No such network: pingservice-net" module=node/agent/taskmanager node.id=tl467koxx0iyxz02eanlx35tf service.id=uqzr60ot8ps5x4v2778vjwrol task.id=kjbzncohj2g5jphvqptd83aj0, but the network "pingservice-net" which I have create at the very begining.
+I create the network by:
+docker network create -d overlay pingservice-net
+and I create the service by:
+docker service create --name pingservice -d
+--network=pingservice-net
+--constraint 'node.labels.bandwidth == large'
+--mode=global
+--mount type=bind,source=$PWD/pingcfg1/log,destination=/log
+--mount type=bind,source=$PWD/pingsvr,destination=/app
+--mount type=bind,source=$PWD/pingcfg1,destination=/app/cfg
+-p 18008:18008/udp
+uttne/pingsvr:newest
+my docker version:
+Client:
+Version: 17.10.0-ce
+API version: 1.33
+Go version: go1.8.3
+Git commit: f4ffd25
+Built: Tue Oct 17 19:04:16 2017
+OS/Arch: linux/amd64
+Server:
+Version: 17.10.0-ce
+API version: 1.33 (minimum version 1.12)
+Go version: go1.8.3
+Git commit: f4ffd25
+Built: Tue Oct 17 19:02:56 2017
+OS/Arch: linux/amd64
+Experimental: false
+Here is the detail of the syslog:
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.382121787+08:00" level=warning msg="Couldn't run auplink before unmount /var/lib/docker/aufs/mnt/7ff3c618cdba71fba1ae1694797e02b20da89436c7ef51622e2226868665c614: exec: "auplink": executable file not found in $PATH"
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.397801788+08:00" level=error msg="fatal task error" error="starting container failed: No such network: pingservice-net" module=node/agent/taskmanager node.id=tl467koxx0iyxz02eanlx35tf service.id=uqzr60ot8ps5x4v2778vjwrol task.id=m9qclf83sbxqpqq9cilg1il9k
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.469071763+08:00" level=error msg="wait not found for raft request id 5f81927b4007" raft_id=32091b084c18e423
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.472329168+08:00" level=error msg="wait not found for raft request id 5f81927b4008" raft_id=32091b084c18e423
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.479722340+08:00" level=error msg="wait not found for raft request id 5f81927b4009" raft_id=32091b084c18e423
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.535169079+08:00" level=error msg="wait not found for raft request id 5f81927b400a" raft_id=32091b084c18e423
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.703013112+08:00" level=error msg="wait not found for raft request id 5f81927b400b" raft_id=32091b084c18e423
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.024764] IPVS: Creating netns size=2192 id=668
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.095531] IPVS: Creating netns size=2192 id=669
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.153888] br0: renamed from ov-001001-ti2fa
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1324]: Could not generate persistent MAC address for vx-001001-ti2fa: No such file or directory
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.180876] vxlan0: renamed from vx-001001-ti2fa
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.196404] device vxlan0 entered promiscuous mode
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.196737] br0: port 1(vxlan0) entered forwarding state
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.196749] br0: port 1(vxlan0) entered forwarding state
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:47.957652464+08:00" level=error msg="wait not found for raft request id 5f81927b400c" raft_id=32091b084c18e423
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1356]: Could not generate persistent MAC address for veth197bb0d: No such file or directory
+Nov 6 19:23:47 iZbp12pbmzw561xu32vf6sZ kernel: [447875.257495] veth0: renamed from veth197bb0d
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1354]: Could not generate persistent MAC address for vetha0d68be: No such file or directory
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.276420] device veth0 entered promiscuous mode
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.276653] br0: port 2(veth0) entered forwarding state
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.276664] br0: port 2(veth0) entered forwarding state
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.345295] eth0: renamed from vetha0d68be
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:48.096710370+08:00" level=info msg="Node join event for 49fddf8162c6/10.25.171.142"
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1451]: Could not generate persistent MAC address for veth6c062c6: No such file or directory
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.447207] device veth7c34406 entered promiscuous mode
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.447365] docker_gwbridge: port 2(veth7c34406) entered forwarding state
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.447384] docker_gwbridge: port 2(veth7c34406) entered forwarding state
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1452]: Could not generate persistent MAC address for veth7c34406: No such file or directory
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.473259] eth1: renamed from veth6c062c6
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.499756] aufs au_opts_verify:1597:dockerd[30387]: dirperm1 breaks the protection by the permission bits on the lower branch
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:48.229556491+08:00" level=warning msg="Couldn't run auplink before unmount /var/lib/docker/aufs/mnt/9cf933fcde2b75ceeee9d0796d4712cfab968ccccf1e2ea9e80a637716bc43e7-init: exec: "auplink": executable file not found in $PATH"
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:48.254260606+08:00" level=warning msg="Couldn't run auplink before unmount /var/lib/docker/aufs/mnt/9cf933fcde2b75ceeee9d0796d4712cfab968ccccf1e2ea9e80a637716bc43e7: exec: "auplink": executable file not found in $PATH"
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ kernel: [447875.525951] aufs au_opts_verify:1597:dockerd[30387]: dirperm1 breaks the protection by the permission bits on the lower branch
+Nov 6 19:23:48 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:48.310187714+08:00" level=error msg="wait not found for raft request id 5f81927b400d" raft_id=32091b084c18e423
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.332505] br0: port 2(veth0) entered disabled state
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.332555] br0: port 1(vxlan0) entered disabled state
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.333311] ov-001001-ti2fa: renamed from br0
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.348391] device veth0 left promiscuous mode
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.348418] ov-001001-ti2fa: port 2(veth0) entered disabled state
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.364206] device vxlan0 left promiscuous mode
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.364229] ov-001001-ti2fa: port 1(vxlan0) entered disabled state
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.400994] vx-001001-ti2fa: renamed from vxlan0
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1513]: Could not generate persistent MAC address for vx-001001-ti2fa: No such file or directory
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.426022] veth197bb0d: renamed from veth0
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1533]: Could not generate persistent MAC address for veth197bb0d: No such file or directory
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.484991] vetha0d68be: renamed from eth0
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.532916] docker_gwbridge: port 2(veth7c34406) entered disabled state
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.533055] veth6c062c6: renamed from eth1
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.565778] docker_gwbridge: port 2(veth7c34406) entered disabled state
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.567993] device veth7c34406 left promiscuous mode
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447877.567998] docker_gwbridge: port 2(veth7c34406) entered disabled state
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447878.044030] IPVS: __ip_vs_del_service: enter
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447878.044035] IPVS: __ip_vs_del_service: enter
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447878.172078] IPVS: __ip_vs_del_service: enter
+Nov 6 19:23:50 iZbp12pbmzw561xu32vf6sZ kernel: [447878.172084] IPVS: __ip_vs_del_service: enter
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:52.479575939+08:00" level=error msg="wait not found for raft request id 5f81927b400e" raft_id=32091b084c18e423
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ kernel: [447879.860950] aufs au_opts_verify:1597:dockerd[30387]: dirperm1 breaks the protection by the permission bits on the lower branch
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1610]: Could not generate persistent MAC address for vethef8a6e1: No such file or directory
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1608]: Could not generate persistent MAC address for veth0cb2abc: No such file or directory
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ kernel: [447879.885200] veth184: renamed from vethef8a6e1
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ dockerd[1471]: time="2017-11-06T19:23:52.622768469+08:00" level=error msg="wait not found for raft request id 5f81927b400f" raft_id=32091b084c18e423
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ kernel: [447879.900539] device veth184 entered promiscuous mode
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1653]: Could not generate persistent MAC address for veth3c154ec: No such file or directory
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ systemd-udevd[1654]: Could not generate persistent MAC address for veth63136e3: No such file or directory
+Nov 6 19:23:52 iZbp12pbmzw561xu32vf6sZ kernel: [447879.904347] device veth63136e3 entered promiscuous mode
+Is there anyone can help me?

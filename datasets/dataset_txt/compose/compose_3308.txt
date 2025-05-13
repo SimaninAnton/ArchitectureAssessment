@@ -1,0 +1,9 @@
+tedkornish commented on 8 Sep 2015
+I have a trivial Haskell webservice in a container and a trivial Python webservice in a container. When I run docker-compose up haskell-web-service, the process hangs on Attaching to haskellwebservice_haskell-web-service_1 and doesn't give any further output, which isn't the expected behavior. However, when I start up the Flask app, it behaves as expected.
+I disproved the hypothesis that the process wasn't able to run properly in the container by opening up a shell inside the container (docker-compose run haskell-web-service bash) and starting up the app manually (haskell-web-service), where it worked as expected.
+Further explanation and code for reproducing (or not, which would also be interesting) here: https://github.com/tedkornish/docker-compose-hanging.
+Would be curious to see if anyone else can reproduce. Everything is included in the repository, so it should be as simple as
+git clone https://github.com/tedkornish/docker-compose-hanging.git
+cd docker-compose-hanging
+docker-compose up
+And seeing if the Haskell container hangs on attaching but the Python one doesn't. (warning: Haskell app may take 10ish min to download and compile dependencies)

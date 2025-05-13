@@ -1,0 +1,57 @@
+marcusdb commented on 10 Dec 2017
+docker-compose version 1.16.1, build 6d1ac21 silently ignore the "networks" option when the service extends from another one.
+This version 3.3 docker-compose file :
+test1.yml
+version: '3.3'
+services:
+  node:
+    stop_grace_period: 30s
+    image: 'node'
+    hostname: "{{.Service.Name}}-{{.Task.Slot}}"
+    environment:
+      - LOGSPOUT=ignore
+    ports:
+      - '9001:9001'
+    command: node app/user/index.js
+and
+test2.yml
+version: '3.3'
+services:
+  node:
+      healthcheck:
+        test:
+          - CMD
+          - curl
+          - '-f'
+          - 'http://localhost:9001/ping'
+        interval: 30s
+        timeout: 1s
+        retries: 2
+      restart: unless-stopped
+      stdin_open: true
+      tty: true
+the output of docker-compose -f test1.yml -f test2.yml config
+services:
+  node:
+    command: node app/user/index.js
+    environment:
+      LOGSPOUT: ignore
+    healthcheck:
+      interval: 30s
+      retries: 2
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:9001/ping
+      timeout: 1s
+    hostname: '{{.Service.Name}}-{{.Task.Slot}}'
+    image: node
+    ports:
+    - published: 9001
+      target: 9001
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+version: '3.3'
+stop_grace_period is gone!!!

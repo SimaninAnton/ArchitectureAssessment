@@ -1,0 +1,4 @@
+adityacs commented on 16 May 2017
+When trying to deploy service with docker stack deploy, docker is not able to pick node.
+When I try to create the service manually it works correctly.
+Kindly help me with this.

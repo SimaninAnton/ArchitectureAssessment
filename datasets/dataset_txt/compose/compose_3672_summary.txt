@@ -1,0 +1,1 @@
+`pull` doesn't error out when image not found

@@ -1,0 +1,1 @@
+self referencing docker-compose results in infinite loop (eventual timeout)

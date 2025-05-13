@@ -1,0 +1,15 @@
+Contributor
+bfirsh commented on 5 Sep 2015
+This is unnecessarily verbose:
+base:
+  ...
+web:
+  extends:
+    service: base
+  ...
+You should be able to just do this:
+base:
+  ...
+web:
+  extends: base
+  ...

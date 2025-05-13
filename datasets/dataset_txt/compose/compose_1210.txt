@@ -1,0 +1,25 @@
+naijab commented on 10 Sep 2017
+This is my docker-compose.yml
+db:
+    image: mariadb:10.1
+    container_name: lemp_mariadb
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD="123132123"
+
+pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: lemp-phpmyadmin
+    links:
+      - "db:db"
+    restart: always
+    ports:
+      - "8000:80" 
+I try to login with
+user: root
+pass: 123132123
+error with #2003 - Can't connect to MySQL server on 'db' (111 "Connection refused") — The server is not responding.
+and mysqli_real_connect(): (HY000/2003): Can't connect to MySQL server on 'db' (111 "Connection refused")
+please help me :D

@@ -1,0 +1,5 @@
+krasi-georgiev commented on 17 Nov 2015
+docker compose 1.5.1
+Debian jessie
+a short video
+http://screencast.com/t/8y6okQgn

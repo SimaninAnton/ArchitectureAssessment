@@ -1,0 +1,36 @@
+joggienl commented on 24 Apr 2016 •
+edited
+If I try to run a docker-compose exec command it always gives me this error:
+D:\Path\> docker-compose exec some-container some-command
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 57, in main
+  File "compose\cli\main.py", line 108, in perform_command
+  File "compose\cli\main.py", line 347, in exec_command
+NameError: global name 'ExecOperation' is not defined
+docker-compose returned -1
+Is there a known bug on this message? My guess is that this has something to do with this message Interactive mode is not yet supported on Windows. when you use docker-compose run but I'm not sure..
+Thanks for any help in advance!
+Some more system information:
+D:\> docker version
+Client:
+ Version:      1.11.0
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   4dc5990
+ Built:        Wed Apr 13 18:13:28 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.11.0
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   4dc5990
+ Built:        Wed Apr 13 19:36:04 2016
+ OS/Arch:      linux/amd64
+
+D:\> docker-compose version
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015

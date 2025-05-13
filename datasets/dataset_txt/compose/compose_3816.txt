@@ -1,0 +1,48 @@
+mestihudson commented on 19 Mar 2015
+Hi,
+I was trying to pull an image from private registry and I received this message:
+[root@baleia sinesp-seguranca]# docker-compose up
+Creating sinespseguranca_ldap_1...
+Pulling image baleia:5000/sinesp.ldap:latest...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 445, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 184, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 259, in recreate_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 242, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 824, in pull
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.auth.auth", line 67, in resolve_repository_name
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.auth.auth", line 46, in expand_registry_url
+docker.errors.DockerException: HTTPS endpoint unresponsive and insecure mode isn't enabled.
+[root@baleia sinesp-seguranca]# 
+This is my docker-compose.yml file content:
+ldap:
+  image: baleia:5000/sinesp.ldap
+  command: /run.sh
+  ports:
+    - "389:389"
+    - "9830:9830"
+  environment:
+    ADMIN_DOMAIN: sinesp.bsa.serpro
+    SERVER_IDENTIFIER: sinesp
+    FULL_MACHINE_NAME: ldap.sinesp.bsa.serpro
+    CONFIG_DIR_ADMIN_PWD: password1
+    ROOT_DN_PWD: password2
+    SUFFIX: dc=sinesp,dc=bsa,dc=serpro
+  hostname: ldap.sinesp.bsa.serpro
+And this is my /etc/sysconfig/docker file content:
+# /etc/sysconfig/docker
+
+# Modify these options if you want to change the way the docker daemon runs
+OPTIONS=--selinux-enabled -H fd:// --insecure-registry baleia:5000
+
+# Location used for temporary files, such as those created by
+# docker load and build operations. Default is /var/lib/docker/tmp
+# Can be overriden by setting the following environment variable.
+# DOCKER_TMPDIR=/var/tmp
+I have got to push that image on my private registry. What is wrong?

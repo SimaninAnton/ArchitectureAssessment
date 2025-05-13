@@ -1,0 +1,4 @@
+gdm85 commented on 30 Jul 2015
+I noticed that if I change the exposed volumes in docker-compose.yml, the corresponding images won't be rebuilt.
+Sorry if this report is bogus, I am new to docker-compose, but can anyone confirm/deny?
+Edit: the issue seems to happen only if I have running containers, thus compose is not stopping them

@@ -1,0 +1,7 @@
+ilovezfs commented on 21 Jun 2018
+https://pypi.org/project/docker-compose/ does not have an sdist download for 1.21.2
+This makes it impossible to do for example
+pip2 install --no-binary :all: awsebcli
+as it will error out
+No matching distribution found for docker-compose<1.22.0,>=1.21.2 (from awsebcli)
+Please post an sdist for the latest version. Thanks!

@@ -1,0 +1,7 @@
+k0pernikus commented on 25 Nov 2015
+This will work:
+$ docker-compose up -d some_image
+This won't:
+$ docker-compose up some_image -d
+ERROR: No such service: -d
+It should not matter where the -d option flag is passed when running the command. Both should behave the same.

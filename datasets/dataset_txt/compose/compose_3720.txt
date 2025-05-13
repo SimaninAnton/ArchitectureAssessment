@@ -1,0 +1,8 @@
+Nelrohd commented on 16 Apr 2015
+Hi,
+I was wondering how to specify dependencies for a docker. For example I need to build my coreweb before webapplication because webapplication use FROM coreweb in its Dockerfile. However when building containers, docker-compose add the PROJECTNAME_ prefix before container's name so when I create multiple docker-compose.yml for local, dev, stage environments, it names it for example local_coreweb and my container isn't found when building webapplication.
+coreweb:
+  build: ../Dockerfile/web-application/core/
+webapplication:
+  build: ../Dockerfile/web-application
+Any idea? I did some search in the issues but nothing good was found.

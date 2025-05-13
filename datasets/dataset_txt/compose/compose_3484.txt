@@ -1,0 +1,22 @@
+tippenein commented on 9 Jul 2015
+Every docker-compose command fails with AttributeError: 'list' object has no attribute 'items'
+My docker-compose looks like this:
+db:
+  image: postgres:9.4
+  ports:
+    - "5432"
+web:
+  build: .
+  command: yesod devel
+  environment:
+    - HOST=0.0.0.0
+    - PGUSER=postgres
+    - PGPASS
+    - PGHOST=db
+  stdin_open: true
+  volumes:
+   - .:/app
+  ports:
+   - "3000:3000"
+  links:
+   - db

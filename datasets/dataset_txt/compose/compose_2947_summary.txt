@@ -1,0 +1,1 @@
+Docker-compose up with dns as string fails in 1.5.2 on OSX

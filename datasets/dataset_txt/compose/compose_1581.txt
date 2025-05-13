@@ -1,0 +1,20 @@
+mstenta commented on 21 Mar 2017 •
+edited
+I couldn't find an existing issue for this, so here goes...
+I updated from Compose 1.8.0 to 1.11.2 yesterday and I could no longer start my containers. The following warning was displayed:
+WARNING: no logs are available with the 'awslogs' log driver
+My docker-compose.yml file is using the awslogs log driver like this:
+services:
+www:
+  logging:
+    driver: awslogs
+    options:
+      awslogs-group: 'Production'
+      awslogs-stream: 'www'
+After some debugging and tracing through the code that creates that warning, I came across the following issue and pull request which was part of the Docker Compose 1.8.1 release:
+#3873
+#3942
+This appears to be the cause of my issue. It sounds like support for log drivers was dropped except for 'json-file' and 'journald'.
+I see that the original issue (#3873) points to this as the rationale: https://docs.docker.com/engine/admin/logging/overview/#limitations-of-logging-drivers
+I'm not sure I understand this... could someone provide more context on this decision? Docker itself supports logging to many different logging drivers. Docker Compose should too.
+Does Docker Compose rely on the docker logs command for its log streaming? Can someone point me to some code so I can understand this better? Is there any other way? Not being able to use the full features of Docker's logging drivers is a big missing piece from Docker Compose right now.

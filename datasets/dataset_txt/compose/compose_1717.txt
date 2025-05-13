@@ -1,0 +1,92 @@
+Member
+ebriney commented on 7 Feb 2017
+I don't know if there is a real issue there.
+But it failed on both macOS 10.11 and 10.12.
+[STDOUT  ] 2017-02-07 13:59:55.068: =================================== FAILURES ===================================
+[STDOUT  ] 2017-02-07 13:59:55.068: _____________________ CLITestCase.test_run_handles_sigint ______________________
+[STDOUT  ] 2017-02-07 13:59:55.069: tests/acceptance/cli_test.py:1438: in test_run_handles_sigint
+[STDOUT  ] 2017-02-07 13:59:55.069:     'running'))
+[STDOUT  ] 2017-02-07 13:59:55.069: tests/acceptance/cli_test.py:63: in wait_on_condition
+[STDOUT  ] 2017-02-07 13:59:55.069:     raise AssertionError("Timeout: %s" % condition)
+[STDOUT  ] 2017-02-07 13:59:55.069: E   AssertionError: Timeout: waiting for container to be running
+[STDOUT  ] 2017-02-07 13:59:55.069: ----------------------------- Captured stdout call -----------------------------
+[STDOUT  ] 2017-02-07 13:59:55.069: Running process: 30770
+[STDOUT  ] 2017-02-07 13:59:55.069: __________________ CLITestCase.test_up_handles_force_shutdown __________________
+[STDOUT  ] 2017-02-07 13:59:55.069: tests/integration/testcases.py:59: in wrapper
+[STDOUT  ] 2017-02-07 13:59:55.069:     return f(self, *args, **kwargs)
+[STDOUT  ] 2017-02-07 13:59:55.069: tests/acceptance/cli_test.py:1069: in test_up_handles_force_shutdown
+[STDOUT  ] 2017-02-07 13:59:55.069:     wait_on_condition(ContainerCountCondition(self.project, 2))
+[STDOUT  ] 2017-02-07 13:59:55.069: tests/acceptance/cli_test.py:63: in wait_on_condition
+[STDOUT  ] 2017-02-07 13:59:55.070:     raise AssertionError("Timeout: %s" % condition)
+[STDOUT  ] 2017-02-07 13:59:55.070: E   AssertionError: Timeout: waiting for counter count == 2
+[STDOUT  ] 2017-02-07 13:59:55.070: ----------------------------- Captured stdout call -----------------------------
+[STDOUT  ] 2017-02-07 13:59:55.070: Running process: 30936
+[STDOUT  ] 2017-02-07 13:59:55.070: ----------------------------- Captured stderr call -----------------------------
+[STDOUT  ] 2017-02-07 13:59:55.070: Killing sleepscomposefile_simple_1 ...
+[STDOUT  ] 2017-02-07 13:59:55.070: Killing sleepscomposefile_another_1 ...
+[STDOUT  ] 2017-02-07 13:59:55.070: �[1A�[2K
+Killing sleepscomposefile_another_1 ... done
+�[1B�[2A�[2K
+Killing sleepscomposefile_simple_1 ... done
+�[2BRemoving sleepscomposefile_simple_1 ...
+[STDOUT  ] 2017-02-07 13:59:55.070: Removing sleepscomposefile_another_1 ...
+[STDOUT  ] 2017-02-07 13:59:55.070: �[2A�[2K
+Removing sleepscomposefile_simple_1 ... done
+�[2B�[1A�[2K
+Removing sleepscomposefile_another_1 ... done
+�[1B
+[STDOUT  ] 2017-02-07 13:59:55.070: --------------- coverage: platform darwin, python 2.7.13-final-0 ---------------
+[STDOUT  ] 2017-02-07 13:59:55.070: Name                           Stmts   Miss Branch BrMiss  Cover   Missing
+[STDOUT  ] 2017-02-07 13:59:55.071: --------------------------------------------------------------------------
+[STDOUT  ] 2017-02-07 13:59:55.071: compose/__init__                   3      0      0      0   100%
+[STDOUT  ] 2017-02-07 13:59:55.071: compose/__main__                   4      4      0      0     0%   1-6
+[STDOUT  ] 2017-02-07 13:59:55.082: compose/bundle                   134     31     54     12    77%   45, 50-51, 56-57, 61, 65-83, 100-102, 112-118, 124-129, 132
+[STDOUT  ] 2017-02-07 13:59:55.083: compose/cli/__init__               0      0      0      0   100%
+[STDOUT  ] 2017-02-07 13:59:55.085: compose/cli/colors                21      0      8      1    97%
+[STDOUT  ] 2017-02-07 13:59:55.091: compose/cli/command               75     11     22      7    81%   25-29, 86-91, 132
+[STDOUT  ] 2017-02-07 13:59:55.095: compose/cli/docker_client         45      5     14      3    86%   41, 52-53, 59, 61
+[STDOUT  ] 2017-02-07 13:59:55.098: compose/cli/docopt_command        38      5      8      3    83%   13-14, 29, 35, 46
+[STDOUT  ] 2017-02-07 13:59:55.104: compose/cli/errors                82     16     18     11    73%   46-47, 78-79, 94, 97-99, 103, 108-115
+[STDOUT  ] 2017-02-07 13:59:55.107: compose/cli/formatter             34     11      8      2    69%   14-18, 24-30
+[STDOUT  ] 2017-02-07 13:59:55.118: compose/cli/log_printer          129     51     44     24    57%   67-72, 75-99, 103-105, 109-114, 118, 140-151, 155-157, 191-193, 205-208, 223-226, 235
+[STDOUT  ] 2017-02-07 13:59:55.166: compose/cli/main                 459    267    137    101    38%   25-38, 90-91, 96-106, 117-120, 129-130, 135-140, 168-170, 243, 268-316, 332-339, 355-357, 389-390, 401-415, 432-490, 502, 516-518, 533-547, 560-561, 574-580, 593-619, 630, 644, 665-687, 729, 731, 753-764, 772-773, 787-788, 800-802, 811-829, 837-838, 882-917, 929-932, 951-952, 956-961, 965-974, 986, 991, 997, 1003, 1006, 1009, 1018, 1037, 1043-1044, 1057-1063, 1077, 1097-1110, 1114, 1118-1120, 1124-1131
+[STDOUT  ] 2017-02-07 13:59:55.167: compose/cli/signals               12      1      0      0    92%   12
+[STDOUT  ] 2017-02-07 13:59:55.173: compose/cli/utils                 70     25     16     10    59%   34-43, 51-53, 60-66, 74, 78, 88-101, 109-110, 125-126
+[STDOUT  ] 2017-02-07 13:59:55.177: compose/cli/verbose_proxy         35     12     10      2    69%   36-39, 42-47, 50-60
+[STDOUT  ] 2017-02-07 13:59:55.177: compose/config/__init__            9      0      0      0   100%
+[STDOUT  ] 2017-02-07 13:59:55.245: compose/config/config            580     18    273     21    95%   230, 241, 398-411, 498, 631, 677, 680, 1039
+[STDOUT  ] 2017-02-07 13:59:55.252: compose/config/environment        83     13     30      8    81%   33, 67-75, 82-85, 98, 105
+[STDOUT  ] 2017-02-07 13:59:55.254: compose/config/errors             19      2      0      0    89%   32-36
+[STDOUT  ] 2017-02-07 13:59:55.260: compose/config/interpolation      61      1     24      1    98%   96
+[STDOUT  ] 2017-02-07 13:59:55.265: compose/config/serialize          53      8     28      7    81%   13-14, 33, 38, 42, 53, 83, 88
+[STDOUT  ] 2017-02-07 13:59:55.269: compose/config/sort_services      44      1     18      1    97%   56
+[STDOUT  ] 2017-02-07 13:59:55.281: compose/config/types             148     17     64     17    84%   50, 78, 86, 99-104, 109, 174-175, 183, 200, 214, 244, 255
+[STDOUT  ] 2017-02-07 13:59:55.302: compose/config/validation        204      7    108      9    95%   242-243, 265, 284, 320, 402-404
+[STDOUT  ] 2017-02-07 13:59:55.304: compose/const                     23      0      0      0   100%
+[STDOUT  ] 2017-02-07 13:59:55.318: compose/container                156     14     36     10    88%   86, 120-127, 153, 196, 214, 220, 223, 257
+[STDOUT  ] 2017-02-07 13:59:55.320: compose/errors                    17      1      0      0    94%   12
+[STDOUT  ] 2017-02-07 13:59:55.332: compose/network                  118     12     44      5    90%   41-56, 60, 84-85, 102, 191, 227
+[STDOUT  ] 2017-02-07 13:59:55.345: compose/parallel                 143      2     38      0    99%   127-128
+[STDOUT  ] 2017-02-07 13:59:55.350: compose/progress_stream           75      9     41     11    83%   33, 57, 66, 69, 75, 80, 85-86, 111
+[STDOUT  ] 2017-02-07 13:59:55.384: compose/project                  321     30    113     19    89%   53, 141, 151, 197-198, 301-308, 311-315, 364, 458-459, 462-463, 543-544, 550-553, 568, 573-576, 579, 594, 607-608, 611
+[STDOUT  ] 2017-02-07 13:59:55.456: compose/service                  601     34    254     21    94%   83-84, 236-237, 316-317, 429, 464, 479-480, 562, 568, 599, 809-810, 826, 890, 899-903, 906-921, 1201
+[STDOUT  ] 2017-02-07 13:59:55.457: compose/state                      0      0      0      0   100%
+[STDOUT  ] 2017-02-07 13:59:55.460: compose/timeparse                 22      0      4      0   100%
+[STDOUT  ] 2017-02-07 13:59:55.466: compose/utils                     78      5     26      3    92%   23, 72-76, 122, 132
+[STDOUT  ] 2017-02-07 13:59:55.474: compose/volume                    81      2     22      1    97%   62, 118
+[STDOUT  ] 2017-02-07 13:59:55.474: --------------------------------------------------------------------------
+[STDOUT  ] 2017-02-07 13:59:55.474: TOTAL                           3977    615   1462    310    83%
+[STDOUT  ] 2017-02-07 13:59:56.411: Coverage HTML written to dir coverage-html
+[STDOUT  ] 2017-02-07 13:59:56.412: =========================== short test summary info ============================
+[STDOUT  ] 2017-02-07 13:59:56.412: SKIP [1] tests/unit/config/config_test.py:2217: windows paths
+[STDOUT  ] 2017-02-07 13:59:56.412: SKIP [1] tests/unit/cli/command_test.py:38: windows separator
+[STDOUT  ] 2017-02-07 13:59:56.412: SKIP [1] tests/integration/service_test.py:1022: Broken on 1.11.0rc1
+[STDOUT  ] 2017-02-07 13:59:56.412: ============== 2 failed, 812 passed, 3 skipped in 2565.16 seconds ==============
+[STDOUT  ] 2017-02-07 13:59:57.007: Exception TypeError: "'NoneType' object is not callable" in <function _removeHandlerRef at 0x10b5e8140> ignored
+[STDOUT  ] 2017-02-07 13:59:57.038: ERROR: InvocationError: '/Users/docker/go/src/github.com/docker/pinata/tests/cases/_tmp/compose-1.11.0-rc1/.tox/py27/bin/py.test -v --cov=compose --cov-report html --cov-report term --cov-config=tox.ini tests'
+[STDOUT  ] 2017-02-07 13:59:57.039: py34 create: /Users/docker/go/src/github.com/docker/pinata/tests/cases/_tmp/compose-1.11.0-rc1/.tox/py34
+[STDOUT  ] 2017-02-07 13:59:57.040: ERROR: InterpreterNotFound: python3.4
+[STDOUT  ] 2017-02-07 13:59:57.040: ___________________________________ summary ____________________________________
+[STDOUT  ] 2017-02-07 13:59:57.040: ERROR:   py27: commands failed
+[STDOUT  ] 2017-02-07 13:59:57.040: SKIPPED:  py34: InterpreterNotFound: python3.4
+[�[0m�[1m�[1;31m[FAIL  ]�[0m] 2017-02-07 13:59:57.054: pinata.backend.compose.compose_integration         2576.590s

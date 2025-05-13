@@ -1,0 +1,42 @@
+smelike commented on 12 Oct 2018
+Execute the command
+[root@localhost ~]# curl -L https://github.com/docker/compose/releases/download/1.23.0-rc2/docker-compose-`uname -s-uname -m` -o /usr/local/bin/docker-compose
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+0 9 0 9 0 0 21 0 --:--:-- --:--:-- --:--:-- 61
+Context information (for bug reports)
+[root@localhost ~]# ll /usr/local/bin/
+total 20964
+-rwxr-xr-x 1 root root 9 Oct 12 00:16 docker-compose
+-rwxr-xr-x 1 root root 4839 Aug 3 14:10 erb
+-rwxr-xr-x 1 root root 548 Aug 3 14:10 gem
+-rwxr-xr-x 1 root root 192 Aug 3 14:10 irb
+-rwxr-xr-x 1 root root 589 Aug 3 14:10 rake
+-rwxr-xr-x 1 root root 940 Aug 3 14:10 rdoc
+-rwxr-xr-x 1 root root 190 Aug 3 14:10 ri
+-rwxr-xr-x 1 root root 21432601 Aug 3 14:04 ruby
+Output of "docker-compose version"
+[root@localhost ~]# /usr/local/bin/docker-compose --version
+/usr/local/bin/docker-compose: line 1: Not: command not found
+Output of "docker version"
+[root@localhost ~]# docker --version
+docker - version 1.5
+Copyright 2003, Ben Jansens ben@orodu.net
+Usage: docker [OPTIONS]
+Options:
+-help Show this help.
+-display DISLPAY The X display to connect to.
+-border The width of the border to put around the
+system tray icons. Defaults to 1.
+-vertical Line up the icons vertically. Defaults to
+horizontally.
+-wmaker WindowMaker mode. This makes docker a
+fixed size (64x64) to appear nicely in
+in WindowMaker.
+Note: In this mode, you have a fixed
+number of icons that docker can hold.
+-iconsize SIZE The size (width and height) to display
+icons as in the system tray. Defaults to
+Output of "docker-compose config"
+[root@localhost ~]# docker-compose config
+/usr/local/bin/docker-compose: line 1: Not: command not found

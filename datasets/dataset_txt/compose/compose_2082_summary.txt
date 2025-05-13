@@ -1,0 +1,1 @@
+In v2 file format, environment variables of linked container weren't passed to the other container.

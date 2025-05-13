@@ -1,0 +1,32 @@
+tvvignesh commented on 21 Apr 2019
+I am running compose with close to 50+ containers and everything works well except for 1 problem.
+I am using multiple user defined networks like this for my containers:
+my-service:
+    env_file:
+     - ./.env
+    build:
+      context: ${ROOT_DIR}/my-service
+      args: 
+        app_port: ${NODEJS_SERVICE_PORT}
+        debug_port: ${DEBUG_SERVICE_PORT}
+    command: npm run debug
+    container_name: my-service
+    restart: unless-stopped
+    depends_on:
+      - container-1
+    volumes:
+      - ${ROOT_PLATFORM}/my-service/src:/app/server/src
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - ${NODEJS_SERVICE_PORT}:8350
+      - ${DEBUG_SERVICE_PORT}:9229
+    networks:
+      - network1
+      - network2
+      - network3
+And when I do docker inspect on this container after running compose, I do see that the container has joined all the 3 networks with different IP assigned to each of the network.
+But, the interesting thing I see is that, the application (in this case Node.js) binding is done only to one of the IPs in one of the networks (I tested this by doing a curl to the URL). But, if I say, remove one of the networks/reorder the networks, then I am able to access the IPs properly.
+I am not sure if docker compose provides a service discovery option (I am currently using the default DNS without doing any change).
+Also, this behaviour appears like a race condition - It works sometimes and it does not work the rest of the times. It is causing a lot of trouble when I share the compose with rest of the developers in my team.
+May I know how to solve this issue? Is this a bug? This has been a pain for me for so long time now. Kindly help.
+Thanks.

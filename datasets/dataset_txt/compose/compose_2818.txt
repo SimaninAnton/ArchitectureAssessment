@@ -1,0 +1,27 @@
+Contributor
+jgsqware commented on 8 Feb 2016
+Hello,
+when you create a network in docker-compose, you can see it in the log when the creation is done
+Creating network "contrib_default" with the default driver
+However, it's not the same for Volume.
+I expect something like:
+Creating Volume "contrib_clair-data" with the default driver
+🐳 〔default〕➜  contrib git:(develop) docker-compose up -d
+Creating network "contrib_default" with the default driver
+Creating clair
+Creating hyperclair_dev
+Creating registry
+Creating auth
+Creating hyperclair
+🐳 〔default〕➜  contrib git:(develop) docker volume ls
+DRIVER              VOLUME NAME
+local               90f7961046a7b545199d0e7cd739b25286d764bc6ee2c763bd6eb0147606e25b
+local               11e10cfd723ad02c5136a14c61187854f7d5c2d02a8c0f6b37cd3ad41aec2e53
+local               174022a4616e81395c5feb80a567e456c042a9d3984c7212193035e5182d1a40
+local               46f40889b0bc99419650a6b098ebbf2717c742cdf9be961401559815af71a672
+local               c6fd2336d72eef540a2e8e996f2c67043386eea7c163e37b0f5a261a0f511749
+local               36a85ac92bfcc150dcc594f0a6a3327925af342f2aab840a9b6f7a900ca5e015
+local               contrib_clair-data
+local               2a88aad1fc5bc27dd87ddb207c47c20bd9dc9d7a5e2af5370047fd0ca483eb4c
+local               78c6a7f594cfcf5d856311426786d762928bd675eba1dc5791f3b54c65ad7d41
+local               5a207163e75caa3e48fb69663de6ca4b37c06db6d570ff10e24eb36182b4de58

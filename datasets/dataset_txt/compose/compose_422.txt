@@ -1,0 +1,31 @@
+Contributor
+hartwork commented on 1 Nov 2018
+# docker-compose up
+Starting xxxxxxxxxxxxxxxxxxxxxx_1     ... done
+Starting yyyyyyyyyyyyyyyyyyyyyyyyyy_1 ... done
+Recreating zzzzzzzzzzzzzzzzzzzzzz_1   ... done
+Attaching to xxxxxxxxxxxxxxxxxxxxxx_1, yyyyyyyyyyyyyyyyyyyyyyyyyy_1, zzzzzzzzzzzzzzzzzzzzzz_1
+Traceback (most recent call last):
+  File "/usr/lib/python-exec/python3.6/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.23.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib64/python3.6/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib64/python3.6/site-packages/compose/cli/main.py", line 127, in perform_command
+    handler(command, command_options)
+  File "/usr/lib64/python3.6/site-packages/compose/cli/main.py", line 1106, in up
+    cascade_starter = log_printer.run()
+  File "/usr/lib64/python3.6/site-packages/compose/cli/log_printer.py", line 87, in run
+    for line in consume_queue(queue, self.cascade_stop):
+  File "/usr/lib64/python3.6/site-packages/compose/cli/log_printer.py", line 255, in consume_queue
+    raise item.exc
+  File "/usr/lib64/python3.6/site-packages/compose/cli/log_printer.py", line 161, in tail_container_logs
+    queue.put(QueueItem.new(presenter.present(container, item)))
+  File "/usr/lib64/python3.6/site-packages/compose/cli/log_printer.py", line 27, in present
+    prefix = container.name_without_project.ljust(self.prefix_width)
+  File "/usr/lib64/python3.6/site-packages/compose/container.py", line 85, in name_without_project
+    return '{0}_{1}{2}'.format(self.service, self.number, '_' + self.slug if self.slug else '')
+  File "/usr/lib64/python3.6/site-packages/compose/container.py", line 99, in slug
+    return truncate_id(self.full_slug)
+  File "/usr/lib64/python3.6/site-packages/compose/utils.py", line 168, in truncate_id
+    if ':' in value:
+TypeError: argument of type 'NoneType' is not iterable

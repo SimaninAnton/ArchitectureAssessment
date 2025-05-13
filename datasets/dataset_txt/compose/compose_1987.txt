@@ -1,0 +1,7 @@
+JohannesBertens commented on 25 Oct 2016
+The dos command prompt does not work with the Docker-Compose color system:
+�[91mnpm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@^1.0.0 (node_modules/chokidar/node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.0.14: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+�[0m�[91mnpm info ok
+�[0m ---> b2c1355760cc
+Removing intermediate container 1b52421c3b8c

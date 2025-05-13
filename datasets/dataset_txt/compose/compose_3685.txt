@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 24 Apr 2015
+Currently, docker-compose up deletes and recreates every container, so as to make sure any changes to docker-compose.yml have been picked up. Instead, it should inspect container configuration to see if they need recreating, and do the minimum necessary.

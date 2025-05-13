@@ -1,0 +1,48 @@
+gabipetrovay commented on 30 Mar 2016
+$ printenv | grep DOCKER
+DOCKER_HOST=tcp://<remote_ip>:2376
+$ docker-machine ls
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER    ERRORS
+default   -        virtualbox   Running   tcp://<local_ip>:2376               v1.10.3   
+ssu       *        generic      Running   tcp://<remote_ip>:2376              v1.10.3   
+$ docker-compose build
+db uses an image, skipping
+Building users-api
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+On the remote machine docker is running and I can connect to it using docker-machine ssh ssu:
+$ docker-machine ssh ssu
+...
+ubuntu@ssu:~$ sudo docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+node                latest              86cbce15c689        5 days ago          644.3 MB
+hello-world         latest              690ed74de00f        5 months ago        960 B
+Why isn't docker-compose up or build command run on the remote active docker machine? The commands above are NOT run from the Docker Terminal. This is because I want to execute only remote docker commands and not use the default machine.
+I am using Mac and docker-compose version 1.6.2, build 4d72027
+$ docker-compose --verbose up
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'https://appengine.gcr.io', username=u'_token')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://bucket.gcr.io', username=u'_token')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://eu.gcr.io', username=u'_token')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://index.docker.io/v1/', username=u'gabipetrovay')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://gcr.io', username=u'_token')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://us.gcr.io', username=u'_token')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://asia.gcr.io', username=u'_token')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://b.gcr.io', username=u'_token')
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 56, in main
+  File "compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "compose/cli/docopt_command.py", line 26, in dispatch
+  File "compose/cli/main.py", line 189, in perform_command
+  File "compose/cli/command.py", line 52, in project_from_options
+  File "compose/cli/command.py", line 85, in get_project
+  File "compose/cli/command.py", line 68, in get_client
+  File "site-packages/docker/api/daemon.py", line 78, in version
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 112, in _get
+  File "site-packages/requests/sessions.py", line 477, in get
+  File "site-packages/requests/sessions.py", line 465, in request
+  File "site-packages/requests/sessions.py", line 573, in send
+  File "site-packages/requests/adapters.py", line 415, in send
+requests.exceptions.ConnectionError: ('Connection aborted.', BadStatusLine('\x15\x03\x01\x00\x02\x02\n',))

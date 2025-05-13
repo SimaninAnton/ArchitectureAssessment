@@ -1,0 +1,33 @@
+sherland commented on 7 Dec 2016
+(Using docker 1.13.0-rc2-beta31 on windows 10 with windows containers. Docker-compose version 1.9.0)
+I have multiple containers configured that expose services on https. (port 443) Due to certificate validation, I have to use the same dns-name outside of and inside the container. I would assume that when domainname is configured on a service, the other services would be able to resolve it correctly. (IE: if service-name is s1 and domainname is test.local, another container would be able to ping s1.test.local successfully. I have tried a lot of different options in the compose file, but some of the network options appear to be off limits since "networking is still a little finicky" in windows 10 according a comment on issue 4149
+Simple repo
+On Windows 10, install latest docker beta and switch to windows containers
+Save docker-compose.yml (see bellow) in a new folder named compose
+Start the services s1 and s2 by navigating to the compose folder and enter: docker-compose up -d
+Start powershell inside the container hosting the s2 service. I run this command from powershell: docker exec -it $(docker ps --filter name=compose_s2_1 -q) powershell
+In the container, first enter hostname. (As expected this returns s2.test.local)
+Enter ping s1 to verify that s1 is responding. (This will as expected print the ip of s1):
+Enter ping s1.test.local This returns Ping request could not find host s1.test.local. Please check the name and try again.
+I would expect this to work, but are there any configuration options that i'm missing?
+docker-compose.yml
+version: '2.1'
+services:
+   s1:
+     image: microsoft/windowsservercore
+     hostname: s1
+     domainname: test.local
+     entrypoint: ping -t localhost
+
+   s2:
+     image: microsoft/windowsservercore
+     hostname: s2
+     domainname: test.local
+     entrypoint: ping -t localhost
+     depends_on:
+       - s1
+
+networks:
+   default:
+     external:
+      name: "nat"

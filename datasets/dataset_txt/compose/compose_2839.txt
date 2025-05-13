@@ -1,0 +1,88 @@
+miko2u commented on 4 Feb 2016
+When you start to after you have created the first container has NIC name has different.
+My script is inconvenient because it relies on the NIC.
+(Already overlay network "internal" has created)
+# docker-compose.yml
+version: 2
+
+services:
+  centos:
+    image: centos:6
+    stdin_open: true
+    tty: true
+    hostname: centos
+    container_name: centos
+    restart: always
+
+networks:
+  default:
+    external:
+      name: internal
+First startup, not eth0(instead of eth2)
+$ docker-compose up -d
+$ docker exec -it centos ifconfig
+eth1      Link encap:Ethernet  HWaddr 02:42:AC:12:00:06
+          inet addr:172.18.0.6  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet6 addr: fe80::42:acff:fe12:6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:8 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:648 (648.0 b)  TX bytes:648 (648.0 b)
+
+eth2      Link encap:Ethernet  HWaddr 02:42:0A:00:00:06
+          inet addr:10.0.0.6  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet6 addr: fe80::42:aff:fe00:6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1450  Metric:1
+          RX packets:8 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:648 (648.0 b)  TX bytes:648 (648.0 b)
+But, restart container, eth0
+$ docker-compose restart
+$ docker exec -it centos ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:0A:00:00:06
+          inet addr:10.0.0.6  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet6 addr: fe80::42:aff:fe00:6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1450  Metric:1
+          RX packets:14 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:7 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1108 (1.0 KiB)  TX bytes:578 (578.0 b)
+
+eth1      Link encap:Ethernet  HWaddr 02:42:AC:12:00:05
+          inet addr:172.18.0.5  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet6 addr: fe80::42:acff:fe12:5/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:13 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:7 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1066 (1.0 KiB)  TX bytes:578 (578.0 b)
+Here are the versions of things that I'm running.
+$ docker-compose version
+docker-compose version 1.6.0rc2, build 695c692
+docker-py version: 1.7.0-rc3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+$
+$ docker version
+Client:
+ Version:      1.10.0-rc4
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   6b8415b
+ Built:        Wed Feb  3 23:03:44 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.0-rc4
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   6b8415b
+ Built:        Wed Feb  3 23:03:44 2016
+ OS/Arch:      linux/amd64
+$
+$ uname -rp
+3.10.0-327.4.5.el7.x86_64 x86_64
+$ cat /etc/centos-release
+CentOS Linux release 7.2.1511 (Core)

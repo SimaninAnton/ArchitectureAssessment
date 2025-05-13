@@ -1,0 +1,1 @@
+[docker compose] Once docker service not able to connect with another docker service on local machine

@@ -1,0 +1,6 @@
+dmc2015 commented on 14 Dec 2017 •
+edited
+My docker services require a network to work properly. I intend to share my compose file but I don't want someone to have to create a network with the right parameters each time.
+I would like the network to be created during the build process, in the docker-compose file.
+Is it possible to put a command key at a higher level than the services that need a network?
+If it is thought to be feasible and worthwhile, I wouldn't mind working on it and making a pull request.

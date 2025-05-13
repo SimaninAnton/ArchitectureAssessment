@@ -1,0 +1,32 @@
+lockie commented on 1 Mar 2018
+Hello.
+I'm trying to auto-generate docker-compose config file from several unrelated microservices. Unfortunately, this fails because of incorrect build context path in resulting file. Let me illustrate.
+Suppose we have the following file tree:
+$ tree
+.
+├── A
+│   └── docker-compose.yml
+└── B
+    └── docker-compose.yml
+with A/docker-compose.yml containing
+version: '3'
+services:
+    a:
+        build: .
+and B/docker-compose.yml containing
+version: '3'
+services:
+    b:
+        build: .
+Now let's check out docker-compose config output:
+docker-compose -f A/docker-compose.yml -f B/docker-compose.yml config
+services:
+  a:
+    build:
+      context: /tmp/dc/A
+  b:
+    build:
+      context: /tmp/dc/A
+version: '3.0'
+That is clearly incorrect, because build path for service b should be /tmp/dc/B in this particular case, but it is /tmp/dc/A instead - probably because a service was first in the command line.
+Could this be fixed?..

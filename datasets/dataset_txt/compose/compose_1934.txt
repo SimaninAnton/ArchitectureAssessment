@@ -1,0 +1,31 @@
+DhairyashilBhosale commented on 14 Nov 2016 •
+edited
+Version Used:
+Docker-compose = 1.3.2
+Docker = 1.12.3
+Os: Ubuntu-14.04LTS
+- 1: docker-compose.yml
+`
+elk: 
+
+image: elasticsearch:latest       
+
+ports:  
+
+    - "9200:9200"
+    - "9300:9300"
+
+volumes:
+  - ./Elasticsearch/data:/etc/elasticsearch/data
+  - ./Elasticsearch/config/elasticsearch.yml:/etc/elasticsearch/config/elasticsearch.yml
+
+command: bash -c "service elasticsearch start"
+
+tty : true
+`
+- 2: $ docker-compose up
+Creating elkdockerdir_elk_1... Attaching to elkdockerdir_elk_1 elk_1 | [2016-11-14T06:28:18,458][INFO ][o.e.n.Node ] [] initializing ... elk_1 | [2016-11-14T06:28:18,573][INFO ][o.e.e.NodeEnvironment ] [UERHECj] using [1] data paths, mounts [[/usr/share/elasticsearch/data (/dev/sda6)]], net usable_space [409.6gb], net total_space [442.8gb], spins? [possibly], types [ext4] elk_1 | [2016-11-14T06:28:18,573][INFO ][o.e.e.NodeEnvironment ] [UERHECj] heap size [1.9gb], compressed ordinary object pointers [true] elk_1 | [2016-11-14T06:28:18,576][INFO ][o.e.n.Node ] [UERHECj] node name [UERHECj] derived from node ID; set [node.name] to override elk_1 | [2016-11-14T06:28:18,579][INFO ][o.e.n.Node ] [UERHECj] version[5.0.0], pid[1], build[253032b/2016-10-26T05:11:34.737Z], OS[Linux/3.13.0-32-generic/amd64], JVM[Oracle Corporation/OpenJDK 64-Bit Server VM/1.8.0_111/25.111-b14] elk_1 | [2016-11-14T06:28:19,066][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [aggs-matrix-stats] elk_1 | [2016-11-14T06:28:19,066][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [ingest-common] elk_1 | [2016-11-14T06:28:19,066][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [lang-expression] elk_1 | [2016-11-14T06:28:19,066][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [lang-groovy] elk_1 | [2016-11-14T06:28:19,066][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [lang-mustache] elk_1 | [2016-11-14T06:28:19,066][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [lang-painless] elk_1 | [2016-11-14T06:28:19,066][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [percolator] elk_1 | [2016-11-14T06:28:19,067][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [reindex] elk_1 | [2016-11-14T06:28:19,067][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [transport-netty3] elk_1 | [2016-11-14T06:28:19,067][INFO ][o.e.p.PluginsService ] [UERHECj] loaded module [transport-netty4] elk_1 | [2016-11-14T06:28:19,067][INFO ][o.e.p.PluginsService ] [UERHECj] no plugins loaded elk_1 | [2016-11-14T06:28:19,149][WARN ][o.e.d.s.g.GroovyScriptEngineService] [groovy] scripts are deprecated, use [painless] scripts instead elk_1 | [2016-11-14T06:28:20,424][INFO ][o.e.n.Node ] [UERHECj] initialized elk_1 | [2016-11-14T06:28:20,424][INFO ][o.e.n.Node ] [UERHECj] starting ... elk_1 | [2016-11-14T06:28:20,571][INFO ][o.e.t.TransportService ] [UERHECj] publish_address {172.17.0.2:9300}, bound_addresses {[::]:9300} elk_1 | [2016-11-14T06:28:20,576][INFO ][o.e.b.BootstrapCheck ] [UERHECj] bound or publishing to a non-loopback or non-link-local address, enforcing bootstrap checks elk_1 | ERROR: bootstrap checks failed elk_1 | max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144] elk_1 | [2016-11-14T06:28:20,587][INFO ][o.e.n.Node ] [UERHECj] stopping ... elk_1 | [2016-11-14T06:28:20,608][INFO ][o.e.n.Node ] [UERHECj] stopped elk_1 | [2016-11-14T06:28:20,608][INFO ][o.e.n.Node ] [UERHECj] closing ... elk_1 | [2016-11-14T06:28:20,620][INFO ][o.e.n.Node ] [UERHECj] closed elkdockerdir_elk_1 exited with code 78 Gracefully stopping... (press Ctrl+C again to force)
+3: $ docker ps -a
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES a8799b8fe969 elasticsearch:latest "/docker-entrypoint.s" About a minute ago Exited (78) About a minute ago elkdockerdir_elk_1
+Questions:
+1: How to run docker-compose.yml with commands i.e. command: bash -c "service elasticsearch start" for given docker-compose and docker version ?

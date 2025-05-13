@@ -1,0 +1,1 @@
+Command ${PWD} is not resolved correctly as Enviroment Variable on Windows 10

@@ -1,0 +1,71 @@
+Frondor commented on 18 Jun 2018 •
+edited
+Description of the issue
+.dockerignore file with ** wildcards is no longer (worked few days ago) white-listing directories with ! marks
+For instance: .dockerignore file
+**
+!single-page-app/
+!mysql/
+should ignore everything on that folder, except the contents of those two folders.
+If I write !single-page-app/* instead, the .json files at single-page-app root are being copied but deep-nested directories and files inside that folder are not.
+Already tried with simply !single-page-app without success
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:       18.03.0
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Fri Mar 23 08:3
+ OS/Arch:       windows
+ Experimental:  false
+ Orchestrator:  swarm
+Output of "docker-compose config" (shortened)
+  nginx:
+    build:
+      context: C:\Users\Fede\Documents\dockerizate\docker
+      dockerfile: ./nginx/Dockerfile
+    command: /bin/sh -c "envsubst '$$NGINX_PORT' < /etc/nginx/conf.d/nginx-app.
+emplate
+      > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    container_name: nginx
+    depends_on:
+    - restful_api
+    environment:
+      NGINX_PORT: '80'
+    image: dockerizate/nginx
+    ports:
+    - 80:80/tcp
+    - 443:443/tcp
+    restart: unless-stopped
+    volumes:
+    - /c/Users/Fede/Documents/dockerizate/docker/nginx/nginx-app.template:/etc/
+ginx/conf.d/nginx-app.template:rw
+    - /c/Users/Fede/Documents/dockerizate/docker/nginx/certs:/etc/ssl/certs:rw
+Steps to reproduce the issue
+git clone --recursive git@github.com:dockerizate/docker.git
+cd docker && docker-compose build nginx
+Observed result
+$ docker-compose build nginx
+Building nginx
+Step 1/12 : FROM node:8.11.1-alpine as builder
+ ---> e707e7ad7186
+Step 2/12 : USER node
+ ---> Using cache
+ ---> f32818998102
+Step 3/12 : RUN mkdir -p /tmp/app && mkdir -p /tmp/web
+ ---> Using cache
+ ---> ae6e69fce96a
+Step 4/12 : WORKDIR /tmp/app
+ ---> Using cache
+ ---> c6a9545ea642
+Step 5/12 : COPY ./single-page-app/package*.json ./
+ERROR: Service 'nginx' failed to build: COPY failed: no source files were specif
+ied
+Expected result
+Just build

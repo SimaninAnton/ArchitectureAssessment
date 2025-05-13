@@ -1,0 +1,19 @@
+FrederikNS commented on 13 Apr 2016
+Atleast since version 1.6.0 I have had erratic behaviour when pressing ctrl-c to stop a "docker-compose up". Sometimes the containers are stopped gracefully, and sometimes it "aborts", leaving all the containers running.
+I'm still seeing the issue in docker-compose 1.6.2 with docker 1.10.3.
+The following is the input and output in my terminal:
+$ docker-compose up
+Starting masqueradeservice_masquerade_1
+Attaching to masqueradeservice_masquerade_1
+masquerade_1 | [2016-04-13 07:15:50,600] [INFO]: Server started at http://0.0.0.0:7777
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping masqueradeservice_masquerade_1 ... done
+$ docker-compose up
+Starting masqueradeservice_masquerade_1
+Attaching to masqueradeservice_masquerade_1
+masquerade_1 | [2016-04-13 07:16:02,684] [INFO]: Server started at http://0.0.0.0:7777
+^CERROR: Aborting.
+$ docker ps
+CONTAINER ID        IMAGE                          COMMAND              CREATED             STATUS              PORTS                    NAMES
+0b6551bb0b31        masqueradeservice_masquerade   "python server.py"   9 minutes ago       Up 20 seconds   0.0.0.0:7777->7777/tcp   masqueradeservice_masquerade_1
+5

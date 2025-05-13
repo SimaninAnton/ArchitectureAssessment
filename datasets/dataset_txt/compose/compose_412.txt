@@ -1,0 +1,71 @@
+abilous-ti commented on 7 Nov 2018 •
+edited
+Description of the issue
+Currently I have a single docker-compose.yml file which contains 3 services, two services depends on 3rd service
+"depends_on": ["service3"],
+"network_mode": "service:service3",
+"restart": "always"
+If I restart the OS, sometimes 1st and 2nd services do not start and s status of the containers is
+Exited (255)
+docker inspect command show error:
+"ExitCode": 255,
+"Error": "cannot join network of a non running container: cd8b33ccf2a0cc7b84d06302d641676a05f7a2fbba2cf72f77a8d339e29fd76f",
+Context information (for bug reports)
+Output of docker-compose version
+1.22.0
+Output of docker version
+17.12.0-ce
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  service1:
+    container_name: service1
+    depends_on:
+    - service3
+    image: repository/service1
+    network_mode: service:service3
+    restart: always
+    volumes:
+    - /folder/device:/folder/device:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+    - /etc/logrotate.conf:/etc/logrotate.conf:rw
+    - /etc/crontab:/etc/crontab:rw
+  service3:
+    cap_add:
+    - NET_ADMIN
+    command: --config /vpn/openvpn.conf --auth-nocache
+    container_name: service3
+    devices:
+    - /dev/net/tun
+    image: repository/service3
+    network_mode: bridge
+    restart: always
+    volumes:
+    - /folder/vpn:/vpn:rw
+  service2:
+    command: folder
+    container_name: service2
+    depends_on:
+    - service3
+    image: repository/service2
+    network_mode: service:service3
+    restart: always
+    volumes:
+    - /folder/device/persistent_storage:/folder/device/persistent_storage:rw
+    - /folder/device/qos:/folder/device/qos:rw
+version: '3.3'
+Steps to reproduce the issue
+docker-compose -f docker-compose.yml up -d
+sudo reboot
+Observed result
+service1 and service2 failed to start
+"ExitCode": 255,
+"Error": "cannot join network of a non running container: cd8b33ccf2a0cc7b84d06302d641676a05f7a2fbba2cf72f77a8d339e29fd76f",
+Expected result
+service1 and service2 must be running after reboot and must be started after service3
+Stacktrace / full error message
+"ExitCode": 255,
+            "Error": "cannot join network of a non running container: cd8b33ccf2a0cc7b84d06302d641676a05f7a2fbba2cf72f77a8d339e29fd76f",
+Additional information
+OS version - Ubuntu 16.04
+1

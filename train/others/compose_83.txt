@@ -1,0 +1,5 @@
+benlumia007 commented on 11 Oct 2019
+when i do docker-compose up -d, it takes a while to start the process, same when i do docker-compose restart.
+in other words, there's a delay of few seconds before it begins to restart containers or stopping containers.
+27
+2

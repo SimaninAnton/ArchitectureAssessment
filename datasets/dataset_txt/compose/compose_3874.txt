@@ -1,0 +1,41 @@
+razic commented on 4 Mar 2015
+Not sure what's going on here... but it appears that there may be some very weird hardcoded values in the code.
+My docker-compose.yml:
+web:
+  build: .
+  ports:
+    "8080:8080"
+  links:
+    - "redisReads:redisReads"
+    - "redisWrites:redisWrites"
+    - "redisEphemeral:redisEphemeral"
+redisReads:
+  image: redis
+redisWrites:
+  image: redis
+redisEphemeral:
+  image: redis
+and running:
+compose stop && compose rm --force && compose build && compose up
+results in:
+Creating polka_redisEphemeral_1...
+Creating polka_redisReads_1...
+Creating polka_redisWrites_1...
+Creating polka_web_1...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 445, in up
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.project", line 183, in up
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 258, in recreate_containers
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 226, in create_container
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 437, in _get_container_create_options
+TypeError: cannot concatenate 'str' and 'list' objects
+My username is not ben and I have no users named ben.
+/cc @benlangfeld
+Compose version (darwin 64):
+docker-compose 1.1.0-rc2

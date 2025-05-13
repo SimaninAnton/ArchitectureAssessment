@@ -1,0 +1,35 @@
+bitver commented on 7 Sep 2016
+In this configuration docker-compose up shows cat: /tmp/my-templates/mysite.template: Is a directory but mysite.template is file with small nginx config. What's wrong I'm doing or this is the bug?
+docker-compose.yml:
+app-d-webserver:
+  image: nginx
+  container_name: app-d-webserver
+  volumes:
+  - ./nginx:/tmp/my-templates
+  ports:
+  - "8080:80"
+  command: /bin/bash -c "cat /tmp/my-templates/mysite.template;"
+Windows 10, latest
+docker-compose version:
+docker-compose version 1.8.0, build d988a55
+docker-py version: 1.9.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+docker version:
+docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      linux/amd64
+BTW, after restarting docker daemon No such file or directory, what? I don't understand at all.

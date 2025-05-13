@@ -1,0 +1,1 @@
+Stack trace when an override file is empty

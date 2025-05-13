@@ -1,0 +1,17 @@
+Contributor
+AvdN commented on 17 Feb 2016
+With version 1 files I have two comments at the beginning of the docker-compose file:
+# author: Anthon van der Neut <a.van.der.neut@ruamel.eu>
+# description: mongo container
+that I then extract in dc2service using ruamel.yaml and include this information into service file for Systemd/Upstart . Of course I could follow the YACF principle (Yet Another Configuration File) so often seen in python projects, but with 1.6.0 and the version 2.0 file format I could easily do:
+version: '2'
+user-data:
+  author: Anthon van der Neut <a.van.der.neut@ruamel.eu>
+  description: mongo container
+services:
+   .......
+Unfortunately docker-compose complains about user-data being an unexpected additional property.
+For the toplevel mapping in version 2, I propose we get one or more keys reserved for user specific data, with the only requirement being that the corresponding value is a valid YAML construct i.e. the whole file stays parsable YAML. This could be one key, with the recommendation that its corresponding value is a mapping (for flexibility), or alternatively docker-compose could ignore all toplevel keys that have a certain prefix ("user-data-")
+Something similar is e.g. done in container file formats like TIFF to allow inclusion of additional (vendor specific) information. That key's name should of course be something that is certainly not going to be used in docker-compose, so "user-data", "non-dc-data".
+The docker-compose developers could then always cherry-pick information, that they consider useful for other projects (hopefully like my author/description) and decide them to be inserted under some other property, or maybe even warrant their own toplevel property.
+1

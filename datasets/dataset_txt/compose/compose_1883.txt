@@ -1,0 +1,19 @@
+chriskuehl commented on 1 Dec 2016
+Currently when we pull a service, we get ~250 lines of output from all of those docker pulls, e.g. for one:
+latest: Pulling from <image>
+facbe8646a28: Already exists
+bd381b657b53: Already exists
+e47365100b8e: Already exists
+867bfbd54d6f: Already exists
+dd3fc7e38d00: Already exists
+cb9570be0c65: Already exists
+2d267d57a2d2: Already exists
+605b533cab72: Already exists
+d0365f70627e: Already exists
+f3332529f20d: Already exists
+02ee2eba26fc: Already exists
+c249d4f9ca9a: Already exists
+Digest: sha256:5471df1a8659ec455fb3aa6adaba626de51364b617b6ab7583b5515f7d01f8c3
+Status: Image is up to date for localhost:26000/<image>:latest
+We have 20+ services, so this becomes an awful lot of output, even in the case where all of these are no-ops. It adds a considerable amount of noise to our logs, which can make debugging harder.
+Would it be possible to add an option to be quiet on pulls (maybe only printing output when there is a failure)?

@@ -1,0 +1,19 @@
+jberkus commented on 4 Oct 2015
+Setup:
+serviceA:
+image: serviceA:1.0.1
+command: --switch-that-fails=1
+serviceB:
+image: serviceB:1.0.2
+links:
+- serviceA:serviceA
+The way it is now (docker compose 1.4.2):
+docker_compose up
+the entrypoint script for serviceA image fails
+serviceB container starts up anyway
+the link hostname inside serviceB for "serviceA" is not set: "serviceA hostname not known"
+serviceB container is up, but producing confusing errors
+The way it should be:
+docker_compose up
+the entrypoint script for serviceA image fails
+serviceB does not start, or immediately shuts down

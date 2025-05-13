@@ -1,0 +1,67 @@
+Abson commented on 31 Dec 2019 •
+edited
+my docker-compose.yml is that:
+version: "3.3"
+
+services:
+  chat-service:
+    env_file: 
+      - chat-service.env
+    image: ${SERVICE_IMAGE_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile-chat-service
+    # 设置参数
+    entrypoint: "/app/micro-using-chat-service --server_advertise=${SERVICE_HOST}:${SERVICE_PORT} 
+    --registry_address=${SERVICE_HOST}:2379 --broker_advertise=${SERVICE_HOST}:${SERVICE_BROKER_PORT}"
+    ports:
+      - ${SERVICE_PORT}:8961
+      - ${SERVICE_BROKER_PORT}:8962
+my chat-service.env is that
+#define chat-service container env
+SERVICE_IMAGE_NAME=micro-chat-service
+SERVICE_HOST=0.0.0.0
+SERVICE_PORT=6967
+SERVICE_BROKER_PORT=6968
+COMPOSE_CONFIG=./docker-compose.yml
+When I run docker-compose config in shell, there is the error output:
+WARNING: The SERVICE_HOST variable is not set. Defaulting to a blank string.
+WARNING: The SERVICE_PORT variable is not set. Defaulting to a blank string.
+WARNING: The SERVICE_BROKER_PORT variable is not set. Defaulting to a blank string.
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.chat-service.ports contains an invalid type, it should be a number, or an object
+services.chat-service.ports contains an invalid type, it should be a number, or an object
+And I run docker-compose version, the output is that:
+docker-compose version 1.25.0, build 0a186604
+docker-py version: 4.1.0
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
+My docker version is that:
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea838
+ Built:             Wed Nov 13 07:50:12 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea838
+  Built:            Wed Nov 13 07:48:43 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+There is something wrong with me?

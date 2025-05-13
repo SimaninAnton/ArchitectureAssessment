@@ -1,0 +1,1 @@
+Fig truncates stdout output after an idle period

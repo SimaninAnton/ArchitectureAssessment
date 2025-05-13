@@ -1,0 +1,46 @@
+giovannicandido commented on 20 Oct 2018 •
+edited
+Description of the issue
+Simple docker-compose up with any docker-compose.yml file
+Context information (for bug reports)
+Docker for windows on Windows 10 Professional
+docker commands works great
+Output of docker-compose version
+Totally empty
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker version
+(paste here)
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+Totally empty
+Steps to reproduce the issue
+run docker-compose up
+Observed result
+Stops imediatelly, Totally empty
+Expected result
+You know
+Stacktrace / full error message
+How? Where is the logs?
+(paste here)
+Additional information
+Windows 10/Docker for windows
+Reinstalled, reseted, no effect
+OS version / distribution, docker-compose install method, etc.

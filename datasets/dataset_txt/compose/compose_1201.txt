@@ -1,0 +1,19 @@
+rayjohnson commented on 19 Sep 2017
+I’m trying to create a network that will get an IP from a IPAM driver. The following docker command works great:
+docker network create -d qnet --ipam-driver=qnet --ipam-opt=iface=eth1 qnet-dhcp-eth1
+However, I’d like to have this work from my compose file. Here is what I have for the network section of the compose file:
+networks:
+  back:
+    driver: customer-driver-1
+  front:
+    ipam:
+      driver: qnet
+      options:
+        iface: eth1
+When I try this, however, I get a weird error:
+Creating network “mywordpress_front” with the default driver
+ERROR: ipv4 pool is empty
+DESKTOP-8O0TNFC
+Do I have the syntax wrong in the compose file?
+Or is it a bug? Or worse - not supported?
+Ray

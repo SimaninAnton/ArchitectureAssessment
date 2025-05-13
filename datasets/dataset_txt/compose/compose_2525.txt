@@ -1,0 +1,66 @@
+nathanleclaire commented on 8 Apr 2016
+Using: 1.7.0-rc1
+(Docker 1.11.0-rc3 via boot2docker)
+To duplicate:
+version: '2'
+
+volumes:
+  myvol:
+    driver: local
+
+services:
+  foo:
+    image: alpine
+    volumes:
+      - myvol:/opt/foo
+    command: sh -c 'echo hi from foo >>/opt/foo/out'
+
+  bar:
+    image: alpine
+    volumes:
+      - myvol:/opt/bar
+    command: sh -c 'echo hi from bar >>/opt/bar/out'
+
+  quux:
+    image: alpine
+    volumes:
+      - myvol:/some/arbitrary/dir
+    command: sh -c 'cat /some/arbitrary/dir/out'
+Running from a fairly clean daemon state (no volumes or containers):
+$ docker-compose run foo
+Creating volume "demo_myvol" with local driver
+$ docker-compose run bar
+$ docker-compose run quux
+hi from foo
+hi from bar
+hi from bar
+Seems there was an extra run of bar that wasn't asked for.
+If I clean up and try again, it seems there is an equal chance that foo, bar, or both, have been accidentally run more times than requested.
+$ docker rm -f $(docker ps -aq) && docker volume rm demo_myvol
+...
+
+$ docker-compose run foo && docker-compose run bar && docker-compose run quux
+Creating volume "demo_myvol" with local driver
+hi from foo
+hi from foo
+hi from bar
+
+$ docker rm -f $(docker ps -aq) && docker volume rm demo_myvol
+...
+
+$ docker-compose run foo && docker-compose run bar && docker-compose run quux
+Creating volume "demo_myvol" with local driver
+hi from foo
+hi from foo
+hi from bar
+hi from bar
+
+$ docker rm -f $(docker ps -aq) && docker volume rm demo_myvol
+...
+
+$ docker-compose run foo && docker-compose run bar && docker-compose run quux
+Creating volume "demo_myvol" with local driver
+hi from foo
+hi from foo
+hi from bar
+hi from bar

@@ -1,0 +1,8 @@
+Contributor
+samueljsb commented on 22 Aug 2019
+Is your feature request related to a problem? Please describe.
+When using the Formatter in a wrapper script to format a table like compose, it's frustrating to have to create an instance of the class just to call the table method.
+Describe the solution you'd like
+I presume the Formatter class is intended to be a container for multiple formatters, even if only one exists currently. Accordingly, it should be made a static method so no object has to be init-ed.
+Describe alternatives you've considered
+The method could be taken out of the class altogether but this would be a dramatic API change. The proposed change does not break the existing API.

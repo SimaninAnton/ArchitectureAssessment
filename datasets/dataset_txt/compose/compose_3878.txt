@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 2 Mar 2015
+We need to figure out whether building Windows binaries is feasible with a Python version of Compose. We don't need to add Windows support to Compose yet (e.g. supporting Windows paths, etc)
+This will inform whether Compose will need either a different method of installation on Windows or perhaps even a rewrite in Go.

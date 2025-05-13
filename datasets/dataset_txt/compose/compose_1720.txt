@@ -1,0 +1,4 @@
+gabriel30 commented on 6 Feb 2017
+I have a problem with a debian container in a cluster model. I'm starting a process in 3 containers that needs to communicate each other over a specific port, but during the process of initial communication an exception associated to the TCP buffer size its generated.
+Following this post https://developer.ibm.com/answers/questions/236787/getting-warning-message-dcsv9413w-failed-to-set-bu/ I tried to change the settings net.ipv4.tcp_rmem and net.ipv4.tcp_wmem but the file with the definition does not exist in the container ("ex. /proc/sys/net/ipv4/tcp_rmem"), I tried to create it but It's not posible and reading another posts, it looks like docker does not allow to change this kind of setting. Anyone can help?
+2

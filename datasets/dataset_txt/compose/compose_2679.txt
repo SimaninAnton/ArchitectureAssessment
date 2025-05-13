@@ -1,0 +1,2 @@
+daniel-smith-kaazing commented on 3 Mar 2016
+As we work with a lot of OEMs our support and QA test scenarios often involve sets of hosts/VMs/containers that need to know each other's IP on startup. Further it would greatly simplify setup of these scenarios if the IP of each container could be fixed on startup. Please add support for the docker run --ip option in Docker compose.

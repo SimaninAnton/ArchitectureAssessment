@@ -1,0 +1,21 @@
+MrMMorris commented on 6 Feb 2015
+With fig, I could do something like this:
+image: 50ff1e85c429
+and it would use the local image.
+Now, with compose 1.1.0-rc2, I get this:
+Pulling image 50ff1e85c429:latest...
+Pulling repository 50ff1e85c429
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 445, in up
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.project", line 183, in up
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 258, in recreate_containers
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.service", line 243, in create_container
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 37, in stream_output
+  File "/Users/ben/fig/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 50, in print_output_event
+compose.progress_stream.StreamOutputError: Error: image library/50ff1e85c429:latest not found

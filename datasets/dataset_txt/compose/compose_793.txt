@@ -1,0 +1,47 @@
+01e9 commented on 17 Mar 2018
+Directory structure
+├── docker
+│   ├── docker-compose.common.yml
+│   ├── linux
+│   │   ├── docker-compose.override.yml
+│   │   └── docker-compose.yml -> ../docker-compose.common.yml
+│   └── windows
+│       ├── docker-compose.override.yml
+│       ├── docker-compose.yml -> ../docker-compose.common.yml
+│       └── httpd.conf
+└── src
+    └── index.html
+
+4 directories, 7 files
+File docker/docker-compose.common.yml
+version: "3.4"
+services:
+    static_server:
+        image: httpd
+        volumes:
+            - "../src:/usr/local/apache2/htdocs:ro"
+File docker/linux/docker-compose.override.yml
+version: "3.4"
+services:
+    static_server:
+        ports: [ "80:80" ]
+Execute ~/test-project/docker$ docker-compose -f docker-compose.common.yml config
+services:
+  static_server:
+    image: httpd
+    volumes:
+    - /home/o/test-project/src:/usr/local/apache2/htdocs:ro
+version: '3.4'
+OK: Correct path /home/o/test-project/src
+Execute ~/test-project/docker/linux$ docker-compose config
+services:
+  static_server:
+    image: httpd
+    ports:
+    - published: 80
+      target: 80
+    volumes:
+    - /home/o/test-project/docker/src:/usr/local/apache2/htdocs:ro
+version: '3.4'
+BAD: Wrong path /home/o/test-project/docker/src
+Source files test-project.zip

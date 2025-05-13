@@ -1,0 +1,3 @@
+kennu commented on 26 Dec 2014
+There seems to be a dependency problem with a Fig configuration that has one shared database container and two application containers using it. When one of the application containers is recreated (with fig up -d), Fig also recreates the shared database container, but it does not recreate the other application container. This causes the Docker link to go stale, and the non-recreated application no longer works.
+I think that when Fig recreates a container, it should also recreate all the containers that are linked to it. Otherwise they stop working.

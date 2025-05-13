@@ -1,0 +1,20 @@
+obenziane2 commented on 31 May 2018 •
+edited
+Description of the issue
+I'm trying to have vagrant (virtualbox) machine to be able to connect to Docker container. The bridge network is not an option here.. can someone please suggest a solution ?
+Anyway i can assign an IP to a container reachable/pingable from vagrant or at least a host ?
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 5a3f1a3
+Output of "docker version"
+18.03.1-ce
+Output of "docker-compose config"
+Steps to reproduce the issue
+I'm trying to have vagrant (virtualbox) machine to be able to connect to Docker container. The bridge network is not an option here.. can someone please suggest a solution ?
+Anyway i can assign an IP to a container reachable/pingable from vagrant or at least a host ?
+Observed result
+Expected result
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

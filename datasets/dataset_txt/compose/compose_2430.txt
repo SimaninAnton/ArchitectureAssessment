@@ -1,0 +1,15 @@
+bikestra commented on 4 May 2016 •
+edited
+After rebooting the host machine, I cannot start the docker daemon anymore due to timeout error; the log can be seen below. It seems like the time limit is very short though, probably just a second. Is it possible to increase this time limit? I am using Docker 1.11.1, build 5604cbe.
+DEBU[0000] docker group found. gid: 999
+DEBU[0000] Listener created for HTTP on unix (/var/run/docker.sock)
+INFO[0000] previous instance of containerd still alive (16065)
+DEBU[0000] containerd connection state change: CONNECTING
+DEBU[0000] containerd connection state change: READY
+DEBU[0000] Using default logging driver json-file
+DEBU[0000] Golang's threads limit set to 230130
+DEBU[0000] received past containerd event: &types.Event{Type:"live", Id:"", Status:0x0, Pid:"", Timestamp:0x572a30cc}
+INFO[0000] [graphdriver] using prior storage driver "aufs"
+DEBU[0000] Using graph driver aufs
+DEBU[0001] Cleaning up old mountid : start.
+FATA[0001] Error starting daemon: timeout`

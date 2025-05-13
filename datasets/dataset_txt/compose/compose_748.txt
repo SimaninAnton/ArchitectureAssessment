@@ -1,0 +1,130 @@
+maratsal commented on 10 Apr 2018
+Description of the issue
+During docker upgrade with live-restore enabled (over daemon.json file), containers started with docker-compose are stopping. Not sure if that is supposed to be like that and it is docker-compose limitations?
+When I start containers with docker run command on the same host with the same version of docker, upgrade doesn't impact running containers.
+Context information (for bug reports)
+We start docker containers with docker compose yml file.
+Output of "docker-compose version"
+# docker-compose version
+docker-compose version 1.8.1, build 878cff1
+docker-py version: 1.10.3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+# 
+
+but i tried on later versions (up to 1.12) too with the same result.
+Output of "docker version"
+# docker version
+Client:
+ Version:      1.12.6
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   78d1802
+ Built:        Tue Jan 10 20:38:45 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.6
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   78d1802
+ Built:        Tue Jan 10 20:38:45 2017
+ OS/Arch:      linux/amd64
+#
+Output of "docker-compose config"
+# docker-compose config
+networks:
+  core-net:
+    driver: bridge
+services:
+  container4:
+    container_name: container4
+    image: localregistry/container4:latest
+    logging:
+      driver: journald
+    network_mode: host
+    ports:
+    - 3002:3002
+    restart: unless-stopped
+  container3:
+    container_name: container3
+    image: localregistry/container3:latest
+    logging:
+      driver: journald
+    network_mode: host
+    ports:
+    - 6970:6970
+    restart: unless-stopped
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+  container2:
+    container_name: container2
+    image: localregistry/container2:latest
+    logging:
+      driver: journald
+    networks:
+      core-net: null
+    ports:
+    - 9000:9000
+    - 8070:8070
+    restart: unless-stopped
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+  container1:
+    container_name: container1
+    image: localregistry/container1:latest
+    logging:
+      driver: journald
+    network_mode: host
+    ports:
+    - 1337:1337
+    - 8337:8337
+    restart: unless-stopped
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+  mysql:
+    container_name: mysql
+    image: localregistry/mysql:latest
+    logging:
+      driver: journald
+    networks:
+      core-net: null
+    ports:
+    - 3306:3306
+    restart: unless-stopped
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+  nginx:
+    container_name: nginx
+    image: localregistry/nginx:latest
+    logging:
+      driver: journald
+    networks:
+      core-net: null
+    ports:
+    - 80:8080
+    restart: unless-stopped
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+version: '2.0'
+volumes: {}
+# 
+Steps to reproduce the issue
+start application with docker-compose
+try to upgrade docker by command apt-get install docker-engine=1.13*
+Observed result
+containers stopped (crashed)
+Expected result
+containers running
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+OS version - 16.04.4 LTS (Xenial Xerus)
+docker-compose copied to the /usr/bin/ from local copy of specified version.

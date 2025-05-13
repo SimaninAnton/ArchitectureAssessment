@@ -1,0 +1,94 @@
+ducminhnguyen commented on 11 Jan 2019 •
+edited
+Description of the issue
+when I run docker-compose on a remote host over ssh tunnel, docker compose would randomly hang the remote machine, any other attempts to connect to the machine again is not possible. Only a restart would work.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+docker version
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:23 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:02:44 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  overlay: {}
+services:
+  grafana:
+    image: grafana/grafana:5.4.2
+    networks:
+      overlay: null
+    ports:
+    - published: 30001
+      target: 3000
+    volumes:
+    - grafana-data:/var/lib/grafana:rw
+  m3db:
+    build:
+      context: /home/ld-sgdev/minhduc_nguyen/deploy/prometheus-deploy/m3-0.4.8/m3-0.4.8
+      dockerfile: docker/m3dbnode/Dockerfile
+    image: m3dbnode:0.4.8
+    networks:
+      overlay: null
+    ports:
+    - published: 7201
+      target: 7201
+    - published: 7203
+      target: 7203
+    volumes:
+    - m3db-data:/var/lib/m3db:rw
+    - /home/ld-sgdev/minhduc_nguyen/deploy/prometheus-deploy/conf/test/m3db.yml:/etc/m3dbnode/m3dbnode.yml:rw
+  prometheus:
+    build:
+      context: /home/ld-sgdev/minhduc_nguyen/deploy/prometheus-deploy/prometheus
+    image: prometheus:0.1
+    networks:
+      overlay: null
+    ports:
+    - published: 9090
+      target: 9090
+    volumes:
+    - /home/ld-sgdev/minhduc_nguyen/deploy/prometheus-deploy/conf/live/prometheus.yml:/etc/prometheus/prometheus.yml:rw
+    - /data/prometheus/nodes:/etc/prometheus/nodes:rw
+    - prometheus-data:/etc/prometheus/data:rw
+version: '3.2'
+volumes:
+  grafana-data: {}
+  m3db-data: {}
+  prometheus-data: {}
+Steps to reproduce the issue
+Run docker-compose up -d and docker-compose down repeatedly
+At some random docker-compose down the machine will hang
+Run docker-compose up and Ctrl+C mid build will sometimes hang the remote machine as well
+Observed result
+Remote machine is hanged and cannot be connected to anymore
+Expected result
+docker-compose down is successful remote machine operate normally
+Stacktrace / full error message
+channel 0: open failed: connect failed: Connection timed out
+stdio forwarding failed
+ssh_exchange_identification: Connection closed by remote host
+Additional information
+OS version / distribution, docker-compose install method, etc.
+OS: Linux 4.15.0-21-generic #22~16.04.1+3 SMP Mon Aug 6 20:13:57 +08 2018 x86_64 x86_64 x86_64 GNU/Linux
+Docker compose install with: sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose

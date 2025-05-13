@@ -1,0 +1,31 @@
+antoineco commented on 22 Apr 2015
+Running docker-compose up with a build instruction gives me the following error (verbose mode):
+Creating flb_api_1...
+docker containers <- (all=True)
+docker containers -> (list with 2 items)
+docker containers <- (all=False)
+docker containers -> (list with 2 items)
+docker containers <- (all=False)
+docker containers -> (list with 2 items)
+docker images <- (name=u'flb_api')
+docker images -> (list with 0 items)
+Building api...
+docker build <- (u'/home/core/flb', rm=True, tag=u'flb_api', nocache=False, stream=True)
+docker build -> <generator object _stream_helper at 0x2578820>
+Cannot locate specified Dockerfile: Dockerfile
+The corresponding docker-compose.yml:
+api:
+  build: .
+  links:
+  - db
+  - cache
+db:
+  image: postgres
+cache:
+  image: redis
+My docker-compose.yml is stored in the same directory as the Dockerfile.
+/home/core/flb
+|_  Dockerfile
+|_  docker-compose.yml
+|_  ...
+Tested on both Linux and Max OS X.

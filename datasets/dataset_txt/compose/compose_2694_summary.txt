@@ -1,0 +1,1 @@
+Not able to use private git repo for build context in Docker Compose 1.6.2

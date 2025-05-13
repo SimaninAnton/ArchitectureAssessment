@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 26 Mar 2014
+$ docker run compose up
+Update, 2015-03-10: #619 is the first step towards this, but we still have to pass loads of options to docker run to make it work properly. Next step is figuring out if we can make any changes to Docker so we don't have to pass these options – e.g. some way of setting default options for an image, some way of passing the Docker socket through to the container, etc.

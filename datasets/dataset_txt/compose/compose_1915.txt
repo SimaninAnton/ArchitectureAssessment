@@ -1,0 +1,4 @@
+petomalina commented on 20 Nov 2016
+There could be a possibility to install the dependencies via yarn instead of npm.
+ng new with npm: ~58 sec
+ng new with yarn: ~25 sec

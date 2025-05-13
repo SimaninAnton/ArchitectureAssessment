@@ -1,0 +1,15 @@
+oleynikd commented on 11 Aug 2015
+Hi, I read almost all I could find, but I still can't get it to work.
+I'm getting errors when trying to docker-compose up
+If I'm:
+pip install -U docker-compose==1.4.0rc3
+docker-compose up
+I get:
+SSL error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:590)
+If I'm:
+curl -L https://github.com/docker/compose/releases/download/1.4.0rc3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+docker-compose up
+I get:
+Illegal instruction: 4
+Please HELP!

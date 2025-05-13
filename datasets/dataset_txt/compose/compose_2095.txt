@@ -1,0 +1,43 @@
+toniher commented on 4 Sep 2016
+Hello,
+I've a Docker composer file similar to:
+version: '2'
+services:
+    db:
+        image: mariadb:10.1
+        volumes:
+            - "./.data/db:/var/lib/mysql"
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: test
+            MYSQL_DATABASE: test
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+    test:
+        depends_on:
+            - db
+        links:
+            - db:db
+        build:
+            context: .
+            args:
+                MYSQL_HOST: db
+                MYSQL_DATABASE: test
+                MYSQL_USER: test
+                MYSQL_PASSWORD: test
+        ports:
+            - "8000:80"
+        restart: always
+Inside test container Dockerfile:
+FROM ...
+
+...
+ARG MYSQL_HOST 127.0.0.1
+
+RUN set -x; echo $MYSQL_HOST
+
+RUN script ... --param $MYSQL_HOST
+However MYSQL_HOST variable (which I would expect to be the internal IP of the other container) is not being translated into the other container name.
+There might be a way to be done as it is retrieved by doing:
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' db
+?

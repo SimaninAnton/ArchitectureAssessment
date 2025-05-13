@@ -1,0 +1,1 @@
+docker-compose run kills the container while docker run does not

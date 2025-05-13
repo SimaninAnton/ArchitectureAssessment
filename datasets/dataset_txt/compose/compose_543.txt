@@ -1,0 +1,14 @@
+Skn0tt commented on 7 Aug 2018
+Description of the issue
+When supplying the docker-compose.yml-File via piping, you cannot specify another file with -f.
+This makes overriding configs from for example docker-app hard, because you need to create temporary files.
+Context information
+Steps to reproduce the issue
+Create two configs: docker-compose.yml and docker-compose.dev.yml (which overrides some values in the first one)
+cat docker-compose.yml | docker-compose -f - -f docker-compose.dev.yml up
+Observed result
+ERROR: .FileNotFoundError: [Errno 2] No such file or directory: './-'
+Expected result
+It starts the instance.
+Additional information
+macOS High Sierra, installed via SH (I think).

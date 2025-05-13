@@ -1,0 +1,11 @@
+mcandre commented on 30 Mar 2017
+We expect docker-compose rm [-f] to completely remove the containers managed by docker-compose. For example, docker-compose rm -f && docker-compose up should be enough to completely wipe the containers and launch a new set. For example, when troubleshooting a Kafka cluster from zoidbergwill/docker-compose-kafka, users want a convenient way to wipe and recreate the entire stack in docker-compose, to eliminate any mistakes in the current configuration.
+What actually happens, is that docker-compose rm only sees the containers that are currently running. As a workaround, users have to do a really awkward series of
+$ docker-compose up
+(Wait for containers to come up)
+(Send docker-compose up a kill signal with Control+C)
+(Wait for docker-compose up to die a certain way)
+
+$ docker-compose rm -f
+$ docker-compose up
+This sucks, please fix.

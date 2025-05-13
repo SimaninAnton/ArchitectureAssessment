@@ -1,0 +1,26 @@
+Contributor
+mauvm commented on 4 Mar 2014
+My fig.yml:
+mysql:
+    image: orchardup/mysql
+    ports:
+        - "3306:3306"
+    volumes:
+        - ./mysql:/var/lib/mysql
+    environment:
+        MYSQL_DATABASE: laravel
+And this is what I get when running fig up:
+$ fig up
+Creating figmysqltest_mysql_1...
+Pulling image orchardup/mysql...
+Attaching to figmysqltest_mysql_1
+figmysqltest_mysql_1 | 140304 14:12:13 [Warning] Using unique option prefix key_buffer instead of key_buffer_size is deprecated and will be removed in a future release. Please use the full name instead.
+figmysqltest_mysql_1 | ERROR: 1005  Can't create table 'db' (errno: 13)
+figmysqltest_mysql_1 | 140304 14:12:13 [ERROR] Aborting
+figmysqltest_mysql_1 |
+figmysqltest_mysql_1 | 140304 14:12:13 [Note] /usr/sbin/mysqld: Shutdown complete
+figmysqltest_mysql_1 |
+Note that I ran docker-osx destroy && docker-osx shell first.
+The error isn't thrown when the volume to /var/lib/mysql isn't mounted.
+Also running the container in the VM itself works perfectly fine, so it seems to be a bug in Fig.
+Any idea what might cause this? I couldn't find the reason as to why the container tries to create the db table.

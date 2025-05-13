@@ -1,0 +1,9 @@
+pzhao5 commented on 27 Dec 2018 •
+edited
+Background: I am using golang with Buffalo framework to build Http service.
+Try to run this in Travis-CI with 7GB while only 5GB of Memory was used. (Which 1GB allocated for the system and 4 GB for Docker in my investigation).
+I was trying to 1) Pump up the Docker memory from 4GB to 5GB if that help, I searched for a while. I can't figure out a way to bump it up. Maybe anyone can help on here.
+I am using docker-composer.yml version 3. Try with deploy flag on my service, and it won't work as expected since it was not run with swarm?
+Try to understand why it would exit as 137 error code. Which currently, I have put --verbose, but it does not have enough information for me to understand why.
+Anyone who can help, I will be greatly appreciated.
+1

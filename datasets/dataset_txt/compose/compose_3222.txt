@@ -1,0 +1,58 @@
+jefflaplante commented on 11 Oct 2015
+I have a question for the group about docker-compose running across a swarm cluster - I have a container that two other containers are using the volumes of. This constrains all three containers to running on a single docker host. How can I scale these three containers with docker-compose to run multiples sets of these three containers across docker hosts? I can scale the primary container (service) with compose however when I then try to scale the other two services I get a constraint error as docker-compose tries to satisfy the volume_from dependency for ALL of the primary container's that I scaled up rather than just finding the container of the same name on the same host where the dependent services should be scheduled to run.
+seed_app:
+  image: registry/seed:1.0.1
+  ports:
+   - ":3000"
+  volumes:
+   - /app_dir
+  environment:
+   - affinity:container!=~seed_app*
+  restart: always
+  mem_limit: 1G
+
+generic_app:
+  image: registry/generic_app
+  ports:
+   - ":3000"
+  volumes_from:
+   - seed_app
+  restart: always
+  mem_limit: 1G
+
+  nginx:
+    image: nginx
+    ports:
+     - ":80"
+    volumes_from:
+     - seed_app
+    restart: always
+    mem_limit: 256M
+$ docker-compose -p dev -f dev-test.yml  ps
+      Name                     Command               State                  Ports
+-------------------------------------------------------------------------------------------------
+dev_seed_app_1       /start.sh                       Up      10.0.1.1:32825->3000/tcp
+dev_nginx_1              /start.sh                        Up     10.0.1.1:32826->80/tcp
+dev_generic_app_1   /start.sh                        Up      10.0.1.1:32824->3000/tcp
+
+$ docker-compose -p dev -f dev-test.yml scale seed_app=3
+The "seed_app" service specifies a port on the host. If multiple containers for this service are created on a single host, the port will clash.
+Creating and starting 2... done
+Creating and starting 3... done
+
+$ docker-compose -p dev -f dev-test.yml ps
+      Name                     Command               State                  Ports
+-------------------------------------------------------------------------------------------------
+dev_nginx_1              /start.sh                        Up     10.0.1.1:32826->80/tcp
+dev_generic_app_1   /start.sh                        Up      10.0.1.1:32824->3000/tcp
+dev_seed_app_1       /start.sh                       Up      10.0.1.1:32825->3000/tcp
+dev_seed_app_2       /start.sh                       Up      10.0.1.2:32824->3000/tcp
+dev_seed_app_3       /start.sh                       Up      10.0.1.3:32844->3000/tcp
+
+$ docker-compose -p dev -f dev-test.yml scale generic_app=3
+The “generic_app" service specifies a port on the host. If multiple containers for this service are created on a single host, the port will clash.
+Creating and starting 2... error
+Creating and starting 3... error
+
+ERROR: for 2  Unable to find a node fulfilling all dependencies: --volumes-from=b05f20d151bf578fd4059941f19a5885c48f447f8dd0cc1915f63fc82dcbfcfc --volumes-from=91f5e8f93905112b729b1f0d02de328070e5dd3ed01c27e3bddbbdfe5d05c89f --volumes-from=1657569a183d4228018f4643be77d0841016e39f4161e29e4be72409f0d6a0b7
+ERROR: for 3  Unable to find a node fulfilling all dependencies: --volumes-from=b05f20d151bf578fd4059941f19a5885c48f447f8dd0cc1915f63fc82dcbfcfc --volumes-from=91f5e8f93905112b729b1f0d02de328070e5dd3ed01c27e3bddbbdfe5d05c89f --volumes-from=1657569a183d4228018f4643be77d0841016e39f4161e29e4be72409f0d6a0b7```

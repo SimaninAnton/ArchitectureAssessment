@@ -1,0 +1,10 @@
+vidarl commented on 15 Oct 2014
+I am aware of ongoing discussion about "The project name should be configurable", #45"
+However, I think it should be easy to simply name and tag images and containers explicitly, like this:
+ubuntu:
+  build: dockerfiles/ubuntu
+  image_name: nickname/ubuntu:latest
+web:
+  image: nickname/ubuntu:latest
+  image_name: nickname/apache:2.4
+  container_name:web

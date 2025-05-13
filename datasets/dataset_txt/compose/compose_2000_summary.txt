@@ -1,0 +1,1 @@
+Failed to kill docker-compose process

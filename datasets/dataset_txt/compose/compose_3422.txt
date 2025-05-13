@@ -1,0 +1,6 @@
+tarunlalwani commented on 30 Jul 2015
+Hello,
+I am in this situation where I want to run one of the image as a part of docker-compose, but that image should do it work and then exit. But as soon as that container exits the whole composition is taken down.
+Is there a way to allow running containers which are allowed to exit from a composition once the work is done?
+Regards,
+Tarun

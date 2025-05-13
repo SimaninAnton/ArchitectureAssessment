@@ -1,0 +1,9 @@
+ionelmc commented on 21 May 2017
+Eg, if I have this service:
+services:
+ test:
+  image: ubuntu
+  volumes: 
+  - ${PWD}:/foo
+And I run docker-compose run -v /x:/y test the /foo volume will no longer be mounted.
+This can't be intentional behavior can it? It's too surprising (nor it is documented).

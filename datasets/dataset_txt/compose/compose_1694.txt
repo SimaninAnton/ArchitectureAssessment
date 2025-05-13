@@ -1,0 +1,11 @@
+mostolog commented on 13 Feb 2017
+As commented in docker/distribution#2160 and trying to converge in all docker products, not any hostname-related value should contain underscores "_"
+Currently, even for V3, compose/stack containers seems to be created like project_service and that seems to be an undesired behavior.
+cc @thaJeztah @stevvooe
+Regards
+Related (opened within this repo):
+#4442
+#4002
+#3912
+#229
+6

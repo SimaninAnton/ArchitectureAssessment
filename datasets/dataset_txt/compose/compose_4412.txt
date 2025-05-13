@@ -1,0 +1,7 @@
+ahromis commented on 5 Feb 2014
+I was having issues with the cert chain, so I followed what is on this thread for docker-osx: moby/moby#3683 . I'm able to do a docker login just fine using a new binary on mac os x.
+However when using fig and having the Dockerfile pull from the same private registry I get the following error using fig build:
+Step 1 : FROM ssl-repo.com/image
+Pulling repository ssl-repo.com/image
+Error: Authentication is required.
+Does fig read the .dockercfg? Any other ideas on what the issue could be here?

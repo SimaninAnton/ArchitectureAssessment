@@ -1,0 +1,20 @@
+mkungla commented on 23 Sep 2016
+on Fedora 25 4.8.0-0.rc7.git0.1.fc25.x86_64 I get following error with
+docker-compose up -d
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.8.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 61, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 110, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 35, in project_from_options
+    environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 110, in get_project
+    host=host, environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 82, in get_client
+    environment=environment, tls_version=get_tls_version(environment)
+  File "/usr/lib/python2.7/site-packages/compose/cli/docker_client.py", line 73, in docker_client
+    return Client(**kwargs)
+TypeError: __init__() got an unexpected keyword argument 'user_agent'
+2

@@ -1,0 +1,23 @@
+rdxmb commented on 22 Sep 2017 •
+edited
+version: '3.3'
+
+services:
+
+  container:
+    image: phusion/baseimage
+    container_name: mycontainer
+    volumes:
+    - type: bind
+      source: /mnt
+      target: /mnt
+      bind-propagation: shared
+the last line seems to be ignored, as the propagation when starting the container is rprivate - which is the default. When running the service with
+docker service create --mount type=bind,src=/mnt,target=/mnt,bind-propagation=shared --name bind-propagation phusion/baseimage
+the propagation indeed is shared.
+root@docker-single-host:~# docker-compose --version
+docker-compose version 1.16.1, build 6d1ac21
+root@docker-single-host:~# docker --version
+Docker version 17.06.2-ce, build cec0b72
+This can be checked via
+docker inspect --format "{{json .Mounts}}" <CONTAINER>

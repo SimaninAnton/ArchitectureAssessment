@@ -1,0 +1,1 @@
+Docker-compose run command doesnt map ports

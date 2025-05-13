@@ -1,0 +1,146 @@
+koopakuningas commented on 10 May 2017
+The following never exits docker-compose (until ctrl + c):
+λ kalle [~/test/abort_on_container_exit] → cat docker-compose.yml 
+version: "2"
+
+
+services:
+    loop1:
+        image: ubuntu:14.04
+        command: bash -c 'for i in {1..5}; do echo $$i && sleep 1; done'
+        tty: true
+        stop_signal: SIGKILL
+
+    loop2:
+        image: ubuntu:14.04
+        command: bash -c 'for i in {1..10}; do echo $$i && sleep 1; done'
+        tty: true
+        stop_signal: SIGKILL
+
+λ kalle [~/test/abort_on_container_exit] → docker-compose up --force-recreate --abort-on-container-exit
+Recreating abortoncontainerexit_loop2_1 ... 
+Recreating abortoncontainerexit_loop1_1 ... 
+Recreating abortoncontainerexit_loop2_1
+Recreating abortoncontainerexit_loop1_1 ... done
+Attaching to abortoncontainerexit_loop2_1, abortoncontainerexit_loop1_1
+loop2_1  | 
+loop1_1  | 
+loop2_1  | 4
+loop1_1  | 4
+loop2_1  | 5
+loop1_1  | 5
+loop2_1  | 6
+loop2_1  | 7
+loop2_1  | 8
+loop2_1  | 9
+loop2_1  | 10
+^CGracefully stopping... (press Ctrl+C again to force)
+
+λ kalle [~/test/abort_on_container_exit] → 
+The following works as expected:
+λ kalle [~/test/abort_on_container_exit] → cat docker-compose.yml 
+version: "2"
+
+
+services:
+    loop1:
+        image: ubuntu:14.04
+        command: bash -c 'for i in {1..5}; do echo $$i && sleep 1; done'
+        stop_signal: SIGKILL
+
+    loop2:
+        image: ubuntu:14.04
+        command: bash -c 'for i in {1..10}; do echo $$i && sleep 1; done'
+        stop_signal: SIGKILL
+
+λ kalle [~/test/abort_on_container_exit] → docker-compose up --force-recreate --abort-on-container-exit
+Recreating abortoncontainerexit_loop2_1 ... 
+Recreating abortoncontainerexit_loop1_1 ... 
+Recreating abortoncontainerexit_loop1_1
+Recreating abortoncontainerexit_loop1_1 ... done
+Attaching to abortoncontainerexit_loop2_1, abortoncontainerexit_loop1_1
+loop2_1  | 1
+loop1_1  | 1
+loop2_1  | 2
+loop1_1  | 2
+loop2_1  | 3
+loop1_1  | 3
+loop2_1  | 4
+loop1_1  | 4
+loop2_1  | 5
+loop1_1  | 5
+loop2_1  | 6
+abortoncontainerexit_loop1_1 exited with code 0
+Aborting on container exit...
+Stopping abortoncontainerexit_loop2_1 ... done
+
+λ kalle [~/test/abort_on_container_exit] → 
+Versions:
+λ kalle [~/test/abort_on_container_exit] → docker info
+Containers: 12
+ Running: 0
+ Paused: 0
+ Stopped: 12
+Images: 332
+Server Version: 17.05.0-ce
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 277
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 9048e5e50717ea4497b757314bad98ea3763c145
+runc version: 9c2d8d184e5da67c95d601382adf14862e4f2228
+init version: 949e6fa
+Security Options:
+ apparmor
+Kernel Version: 4.4.0-45-generic
+Operating System: Ubuntu 14.04.5 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 15.61GiB
+Name: kdev
+ID: VVH2:G2QY:55G3:YXNT:ETVY:G7A2:5KYE:SLTE:ZAD2:XEL5:JHCV:2KJA
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Username: koopakuningas
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ kyy-registry:80
+ 127.0.0.0/8
+Live Restore Enabled: false
+WARNING: No swap limit support
+λ kalle [~/test/abort_on_container_exit] → docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:06:06 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:06:06 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+λ kalle [~/test/abort_on_container_exit] → docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.2.1
+CPython version: 2.7.6
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+4

@@ -1,0 +1,45 @@
+jmunson commented on 3 Oct 2018 •
+edited
+Description of the issue
+If your docker-compose.yml file contains multiple usages of the same image used for multiple services, then when you docker-compose push it tries to push that image once for every time it is used. The server side processing of this is handled correctly for me, saying layer already exists, but it is still added wasted time as it verifies each layer N times where N = number of times you referenced the image.
+Context information (for bug reports)
+Output of "docker-compose version"
+❯ docker-compose version
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f 25 May 2017
+Output of "docker version"
+docker version
+Client:
+Version: 18.06.1-ce
+API version: 1.38
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:25:02 2018
+OS/Arch: linux/amd64
+Experimental: false
+Server:
+Engine:
+Version: 18.06.1-ce
+API version: 1.38 (minimum version 1.12)
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:26:30 2018
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+Omitting as I haven't made a minimal reproduction, let me know if you need one.
+Steps to reproduce the issue
+1.Define two services in docker-compose.yml using the same image (specifically a private registry one, but shouldn't matter)
+2.run docker-compose push
+3.
+Observed result
+One push per usage of image:tag
+Expected result
+One push per unique image:tag
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Fedora f28, dnf

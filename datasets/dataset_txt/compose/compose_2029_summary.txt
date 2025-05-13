@@ -1,0 +1,1 @@
+Interpolation of environment variables in `volumes` section

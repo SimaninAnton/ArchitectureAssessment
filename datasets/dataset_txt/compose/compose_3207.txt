@@ -1,0 +1,11 @@
+crhuber commented on 14 Oct 2015
+I am trying to run docker-compose ps and docker-compose logs and neither are showing any output.
+> sudo docker-compose -f /opt/docker-compose/server1-compose.yml ps
+Name   Command   State   Ports 
+------------------------------
+
+> sudo docker-compose -f /opt/docker-compose/server1-compose.yml logs
+Attaching to 
+Both commands are returning intended output. What is wrong here?
+docker-compose version: 1.4.2
+Docker version 1.7.1, build 786b29d

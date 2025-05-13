@@ -1,0 +1,6 @@
+KevinSjoberg commented on 8 Feb 2018
+If I run docker run -td --rm --name mycontainer myimage bash it boots up, daemonizes the container and return the container id. No problem.
+Running docker ps confirms it's up and running.
+If I run docker-compose run -d --rm --name mycontainer myservice bash it boots up, daemonizes the container and returns the container name. No problem.
+Running docker ps confirms it's not up and running at all, but exited immediately.
+Why is this?

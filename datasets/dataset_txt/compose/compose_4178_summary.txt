@@ -1,0 +1,1 @@
+Couldn't connect to Docker daemon at http+unix://var/run/docker.sock

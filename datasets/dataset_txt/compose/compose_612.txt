@@ -1,0 +1,12 @@
+itscaro commented on 23 Jun 2018 •
+edited
+When docker-compose is used in a directory starting with a hyphen, I got this error ERROR: invalid reference format
+This directory is managed by CI, if the name is too long CI truncates it. I tried to copy the same directory to /tmp/test and it works, that's why I am pretty sure that's it's the hyphen which causes error.
+./-YBZRWL2U6Q3ZFFXUHJHC4PCM3NVRR4YJMCWHQPESIYNDVAK57M6A# docker-compose build app
+Building app
+ERROR: invalid reference format
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Thank you

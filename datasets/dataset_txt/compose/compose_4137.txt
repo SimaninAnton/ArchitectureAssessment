@@ -1,0 +1,53 @@
+magegu commented on 29 Oct 2014
+hi guys,
+My development fig starts a postgres db and a Play server app (jvm + scala + sbt) in development mode.
+The start is successful but when the app binds the port and starts the server in the foreground, the web container exists and the environments shuts down. When I use the same "sbt run" CMD in my local environment the server keeps running in foreground until I hit CTLC-D or C.
+These are my configs:
+fig.yml
+web:
+  build: .
+  command: sbt run
+  links:
+   - db
+  ports:
+   - "9000:9000"
+db:
+  image: postgres:9.3
+Dockerfile
+FROM williamyeh/scala:latest
+ADD . /code
+WORKDIR /code
+log
+➜  backend git:(master) fig up
+Recreating backend_db_1...
+Recreating backend_web_1...
+Attaching to backend_db_1, backend_web_1
+db_1  | LOG:  database system was shut down at 2014-10-25 21:56:55 UTC
+db_1  | LOG:  database system is ready to accept connections
+db_1  | LOG:  autovacuum launcher started
+web_1 | [info] Loading project definition from /code/project
+web_1 | [warn] There may be incompatibilities among your library dependencies.
+web_1 | [warn] Here are some of the libraries that were evicted:
+web_1 | [warn]  * com.typesafe.sbt:sbt-native-packager:0.7.4 -> 0.8.0-M2
+web_1 | [warn] Run 'evicted' to see detailed eviction warnings
+web_1 | [info] Set current project to pipe (in build file:/code/)
+web_1 | [info] Updating {file:/code/}root...
+[info] Resolving jline#jline;2.11 ...
+web_1 | [info] Done updating.
+web_1 | [warn] Scala version was updated by one of library dependencies:
+web_1 | [warn]  * org.scala-lang:scala-library:(2.11.1, 2.11.0) -> 2.11.2
+web_1 | [warn] To force scalaVersion, add the following:
+web_1 | [warn]  ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+web_1 | [warn] Run 'evicted' to see detailed eviction warnings
+web_1 |
+web_1 | --- (Running the application from SBT, auto-reloading is enabled) ---
+web_1 |
+web_1 | [info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+web_1 |
+web_1 | (Server started, use Ctrl+D to stop and go back to the console...)
+web_1 |
+web_1 |
+web_1 | [success] Total time: 9 s, completed Oct 27, 2014 8:24:29 AM
+backend_web_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping backend_db_1...

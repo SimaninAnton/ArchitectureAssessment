@@ -1,0 +1,3 @@
+ilonajulczuk commented on 7 Feb 2015
+I use fig in development and in tests. CI doesn't use caching to make sure that we don't use outdated versions, as a result it always builds and pulls the images it needs. The whole process could be much faster if fig did this preparation process in parallel.
+Could it be possible to add --parallel flag or something? I've looked into the code and it looks like anyone though about concurrency there and it will involve some bigger changes. Maybe it would be better to have standalone extension?

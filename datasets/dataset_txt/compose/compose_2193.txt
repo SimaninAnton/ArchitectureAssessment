@@ -1,0 +1,10 @@
+5f6b3fb8 commented on 29 Jul 2016 •
+edited
+I recently opened issue #3781 which ended up being my own mistake. I think my mistake would be easier to identify if a helpful message was printed, calling out the unrecognized option.
+Repro:
+docker-compose -tv
+Expected:
+Unrecognized option '-t'
+--Help Text--
+Actual:
+--Version String--

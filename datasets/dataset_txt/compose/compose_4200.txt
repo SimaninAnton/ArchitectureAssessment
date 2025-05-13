@@ -1,0 +1,34 @@
+jmedding commented on 1 Sep 2014
+With the following Dockerfile:
+FROM ubuntu:14.04
+RUN mkdir -p /tmp
+RUN mkdir -p /tmp/subdir
+RUN touch /tmp/container
+And a fig.yml:
+test:
+build: .
+volumes:
+- /tmp/subdir:/tmp/subdir
+command: ls -l /tmp
+I see the contents of the container's tmp dir, as expected after running fig build and fig up
+If I then change the volume to point to /tmp like so in fig.yml
+test:
+build: .
+volumes:
+- /tmp:/tmp/
+command: ls -l /tmp
+I will see the contents of the local(host?) /tmp dir, as expected after running fig build and fig up
+If I then change back to the original fig.yml file and run fig build and fig up I still see the contents of the local(host) /tmp directory, which is not expected. I should see the container files.
+If I run fig run test ls -l /tmp I see the contents of the container directory, which is what I want, but strange because fig up gives different results for the same command.
+I can fix this by running fig rm at this point, afterwhich both fig up and fig run test ls -l /tmp will give the same results, as expected.
+I am running:
+fig 0.5.2
+Client version: 1.2.0
+Client API version: 1.14
+Go version (client): go1.3.1
+Git commit (client): fa7b24f
+OS/Arch (client): linux/amd64
+Server version: 1.2.0
+Server API version: 1.14
+Go version (server): go1.3.1
+Git commit (server): fa7b24f

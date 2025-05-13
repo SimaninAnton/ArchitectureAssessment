@@ -1,0 +1,9 @@
+pcgeek86 commented on 16 Sep 2016
+In the docker build command, you can specify an alternate Docker file name using the --file parameter. It would be great if docker-compose up supported the same concept.
+Docker Compose Version: 1.8.0
+Cheers,
+Trevor Sullivan
+Docker Captain
+Microsoft MVP: Cloud & Data Center Management
+https://trevorsullivan.net
+https://twitter.com/pcgeek86

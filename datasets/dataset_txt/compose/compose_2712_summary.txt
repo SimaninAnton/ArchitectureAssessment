@@ -1,0 +1,1 @@
+Composefile v2 & default bridge network ERROR: b'Network-scoped alias is supported only for containers in user defined networks'

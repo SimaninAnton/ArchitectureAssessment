@@ -1,0 +1,15 @@
+NJUShenbin commented on 12 Dec 2016 •
+edited
+I installed docker compose on windows by pip and it shows
+Successfully installed docker-compose-1.9.0
+But when I use docker compose command
+PS F:\> docker-compose --version
+
+//output
+Microsoft.VC90.CRT.manifest could not be extracted!
+I also download the docker-compose-Windows-x86_64.exe from https://github.com/docker/compose/releases. Error is the same as above:
+PS F:\> .\docker-compose-Windows-x86_64.exe
+
+//output
+Microsoft.VC90.CRT.manifest could not be extracted!
+I can't find the solution on Google.It may be related to pyinstaller/pyinstaller#1866.

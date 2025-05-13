@@ -1,0 +1,16 @@
+plaindocs commented on 4 Sep 2014
+Hi Guys,
+Trying to run through the Getting Started with Django on Linux Mint:
+$ fig --version
+fig 0.5.2
+
+$ docker -v
+Docker version 1.2.0, build fa7b24f
+But running $ fig run web django-admin.py startproject figexample .
+.... snip ...
+
+Step 6 : ADD . /code/
+ ---> 24d453a8017f
+Removing intermediate container 8581492d0a70
+Successfully built 24d453a8017f
+CommandError: /code/manage.py already exists, overlaying a project or app into an existing      directory won't replace conflicting files

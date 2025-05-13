@@ -1,0 +1,6 @@
+bscheshirwork commented on 31 Mar 2017
+I have a two cronjob for run php service in same time.
+Only one run command execute correctly
+Cannot create container for service php: Conflict. The container name "/folder_php_run_1" is already in use by container {hashhere}. You have to remove (or rename) that container to be able to reuse that name.
+Command exited with non-zero status 1
+3

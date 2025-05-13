@@ -1,0 +1,1 @@
+Mounting into a copied folder results in broken files?

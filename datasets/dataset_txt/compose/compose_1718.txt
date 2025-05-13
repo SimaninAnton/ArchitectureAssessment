@@ -1,0 +1,6 @@
+akatrevorjay commented on 7 Feb 2017 •
+edited
+This is rather problematic with volumes for instance. This is a recent regression since 1.9.x.
+One of the big gotchas is it thinks the docker daemon just closes the connection, when in reality it's sending it bad data that it never seems to know about.
+Kudos.
+1

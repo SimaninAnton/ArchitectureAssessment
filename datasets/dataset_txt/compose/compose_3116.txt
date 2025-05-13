@@ -1,0 +1,7 @@
+tomfotherby commented on 10 Nov 2015
+We often run into timeout issues when using docker-compose in circleci to run unit tests, for example:
+$docker-compose run yiic create_unit_test_db
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+The problem is that the exit code that docker-compose returns is zero, meaning the build continues, whereas it should be stopped.
+compose v1.5.0. It was installed with sudo pip install --upgrade docker-compose as part of the circle.yml file.

@@ -1,0 +1,18 @@
+Grummfy commented on 22 Jun 2017
+Hello,
+I would like to know if it's possible, when we mount a host directory into the container to declare this volume as a named one. The idea is to allow reuse between several containers. Here is an example
+version: 'X'
+
+services:
+  myservice:
+    image: test/demo
+    volumes:
+      - config-volume:/path/in/container/config
+  myotherservice:
+    image: test/other
+    volumes:
+      - config-volume:/path/in/container/config
+
+volumes:
+  config-volume: /my/path/
+but the config-volume, even when I read the docs carefully I don't see/understand a way to declare it inside the docker-volume config file. Did I miss something?

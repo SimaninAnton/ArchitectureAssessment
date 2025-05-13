@@ -1,0 +1,98 @@
+Contributor
+jgsqware commented on 11 Mar 2016
+Description of problem:
+When I run the following docker-compose.yml, I receive this error:
+Creating gitlab_gitlab_1
+ERROR: Invalid port specification: "541342"
+If I remove the mapping on port 22 or mapping it directly on 22:22 it's working
+docker-compose.yml:
+version: "2"
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:8.5.5-ce.0
+    hostname: myurl
+    environment:
+      - GITLAB_OMNIBUS_CONFIG="external_url 'http://myurl:9080/';"
+    ports:
+      - 9443:443
+      - 9080:80
+      - 9022:22
+    restart: always
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+
+volumes:
+  gitlab-config:
+    driver: local
+  gitlab-logs:
+    driver: local
+  gitlab-data:
+    driver: local
+docker-compose version:
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+docker version:
+Client:
+ Version:      1.10.0
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   590d5108
+ Built:        Thu Feb  4 18:18:11 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.10.1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   9e83765
+ Built:        Thu Feb 11 20:39:58 2016
+ OS/Arch:      linux/amd64
+docker info:
+Containers: 9
+ Running: 3
+ Paused: 0
+ Stopped: 6
+Images: 658
+Server Version: 1.10.1
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 593
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: bridge null host
+Kernel Version: 4.1.17-boot2docker
+Operating System: Boot2Docker 1.10.1 (TCL 6.4.1); master : b03e158 - Thu Feb 11 22:34:01 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.956 GiB
+Name: node-p0
+ID: AIJP:REWR:2XN5:JW7N:BJ57:6EOB:EYTY:3YE3:T3SV:EFTF:HPSL:AL34
+Debug mode (server): true
+ File Descriptors: 34
+ Goroutines: 49
+ System Time: 2016-03-11T09:10:29.919725939Z
+ EventsListeners: 0
+ Init SHA1:
+ Init Path: /usr/local/bin/docker
+ Docker Root Dir: /mnt/sda1/var/lib/docker
+Labels:
+ provider=virtualbox
+uname -a:
+Darwin p0-buildserver.local 14.5.0 Darwin Kernel Version 14.5.0: Tue Sep  1 21:23:09 PDT 2015; root:xnu-2782.50.1~1/RELEASE_X86_64 x86_64
+Environment details (AWS, VirtualBox, physical, etc.):
+VirtualBox
+VBoxManage -v
+5.0.14r105127
+How reproducible:
+docker-compose up -d
+2

@@ -1,0 +1,35 @@
+akhildangore commented on 18 Jan 2017
+Hi Team,
+How should i write below service into docker compose file V3.
+specially -name etcd and -discovery=https://discovery.etcd.io/a293d6cc552a66e68f4b5e52ef163d68.
+docker service create \
+--name etcd \
+--replicas 1 \
+--network mynet \
+-p 2379:2379 \
+-p 2380:2380 \
+-p 4001:4001 \
+-p 7001:7001 \
+elcolio/etcd:latest \
+-name etcd \
+-discovery=https://discovery.etcd.io/a293d6cc552a66e68f4b5e52ef163d68.
+here is my docker compose file.
+version: "3"
+
+services:
+
+  etcd:
+    image: elcolio/etcd:latest
+    networks:
+      - mynet
+    ports:
+      - 2379:2379
+      - 2380:2380
+      - 4001:4001
+      - 7001:7001
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels: [APP=ETCD]
+      placement:
+        constraints: [node.role == manager]

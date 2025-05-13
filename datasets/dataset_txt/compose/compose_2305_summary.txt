@@ -1,0 +1,1 @@
+COMPOSE_HTTP_TIMEOUT is set but incorrect value is print when timeout is reached

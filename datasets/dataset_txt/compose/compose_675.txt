@@ -1,0 +1,69 @@
+mikromika commented on 13 May 2018
+Basic info from Host:
+docker --version
+Docker version 18.03.0-ce, build 0520e24
+docker-compose version
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.6.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+cat /etc/lsb-release
+DISTRIB_ID=LinuxMint
+DISTRIB_RELEASE=17.3
+DISTRIB_CODENAME=rosa
+DISTRIB_DESCRIPTION="Linux Mint 17.3 Rosa"
+uname -r
+3.19.0-32-generic
+docker volume ls
+DRIVER VOLUME NAME
+local core_monitx
+Created automatic via docker-compose up
+**
+ERROR: for "client" 'NoneType' object has no attribute 'get' !!
+"client" is service.
+is it
+$ docker-compose up
+monit-server is up-to-date
+Recreating 627b99b3abb7_627b99b3abb7_monit-client ...
+ERROR: for 627b99b3abb7_627b99b3abb7_monit-client 'NoneType' object has no attribute 'get'
+ERROR: for client 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+File "bin/docker-compose", line 6, in
+File "compose/cli/main.py", line 71, in main
+File "compose/cli/main.py", line 124, in perform_command
+File "compose/cli/main.py", line 959, in up
+File "compose/project.py", line 479, in up
+File "compose/parallel.py", line 80, in parallel_execute
+AttributeError: 'NoneType' object has no attribute 'get'
+Failed to execute script docker-compose
+https://gist.github.com/mikromika/72fcc3a46925de3cd15b793d0d8aa3c1
+case if flie is not shown
+version: '3.2'
+services:
+client:
+container_name: monit-client
+image: alpine-core-client:3.7.1-core
+networks:
+monit:
+ipv4_address: 172.40.0.3
+volumes:
+- type: volume
+source: monitx
+target: /data
+core:
+container_name: monit-server
+image: alpine-core-server:3.7.1-core
+networks:
+monit:
+ipv4_address: 172.40.0.2
+volumes:
+monitx:
+networks:
+monit:
+ipam:
+driver: default
+config:
+- subnet: 172.40.0.0/16
+Queston is: can I troubleshoot this somehow or wait for patch ?
+Do you need more info ?
+... Mika.

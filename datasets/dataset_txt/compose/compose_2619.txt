@@ -1,0 +1,29 @@
+gittycat commented on 16 Mar 2016
+In a swarm environment, volumes_from fails to see a container or service not listed in the compose file itself.
+It's best explained with a simple example. I start with two swarm nodes (node01, node02). Consul is used for service disco.
+docker network create -d overlay backbone
+docker run --name vault --net backbone -v data:/stuff alpine:3.3 /bin/true
+docker-compose up -d with the following file
+version: '2'
+services:
+  app:
+    image: alpine:3.3
+    volumes_from:
+      - vault
+    networks:
+      - backbone
+    command: /bin/true
+
+networks:
+  backbone:
+    external: true
+This results in
+ERROR: Service "app" mounts volumes from "vault", which is not the name of a service or container.
+I get the same result if I create a second compose file to define a vault service and backbone networks before executing the above compose file.
+I've also toyed with external_links without success.
+A similar but simpler issue was explained here #1972. In that case, the service referenced by volumes_from is defined in the same compose file.
+docker: 1.10.3
+docker-compose: 1.6.2
+docker-swarm: 1.1.3
+amazonec2
+3

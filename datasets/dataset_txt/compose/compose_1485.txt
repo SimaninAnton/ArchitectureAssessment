@@ -1,0 +1,23 @@
+gcavalcante8808 commented on 4 May 2017
+Hello Folks,
+I'm trying to use the following docker-compose.yml:
+version: '2.1'
+volumes:
+db-data:
+app-tmp:
+services:
+  db:
+    image: postgres:9.6
+    restart: unless-stopped
+    pids_limit: 150
+    volumes:
+     - "db-data:/var/lib/postgresql/data"
+    env_file:
+     - clair.env
+When I try to run the containers, the following error is returned:
+     Unsupported config option for services.db: 'pids_limit'
+I'm using the documenation available at: https://docs.docker.com/compose/compose-file/compose-file-v2/#pidslimit and I have the following docker-compose version:
+$ docker-compose --version
+docker-compose version 1.12.0, build b31ff33
+Can someone point me to the right way or syntax?
+Thanks in advance.

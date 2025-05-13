@@ -1,0 +1,59 @@
+mic0331 commented on 19 Sep 2016
+When building windows containers a compose file like:
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/code
+    links:
+      - db
+  db:
+    image: mongo:3.2.9
+with a docker file like:
+FROM python:3.5
+
+ENV APP_ROOT /code
+
+WORKDIR ${APP_ROOT}
+ADD ./requirements.txt ${APP_ROOT}/
+RUN pip install -r requirements.txt
+
+ADD . ${APP_ROOT}/
+
+EXPOSE 5000
+
+CMD ["python", "manage.py", "runserver"]
+The local volume is not shared with the container. Doing docker logs on the web container:
+python: can't open file 'manage.py': [Errno 2] No such file or directory
+When running docker-compose --verbose config
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+networks: {}
+services:
+  db:
+    image: mongo:3.2.9
+  web:
+    build:
+      context: C:\Users\mic03\Projects\flaskbook\flaskbook_prj
+    links:
+    - db
+    ports:
+    - 5000:5000
+    volumes:
+    - /c/Users/mic03/Projects/flaskbook/flaskbook_prj:/code:rw
+version: '2.0'
+volumes: {}
+The command net share c confirm access has been granted to the drives:
+PS C:\Users\mic03\Projects\flaskbook\flaskbook_prj> net share c
+Share name        C
+Path              C:\
+Remark
+Maximum users     No limit
+Users
+Caching           Caching disabled
+Permission        DESKTOP-VFK5FP7\DockerHost, FULL
+
+The command completed successfully.
+Running the container without docker-compose is working. Any idea ?

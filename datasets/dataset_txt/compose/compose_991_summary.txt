@@ -1,0 +1,1 @@
+Compose services only can connect to each other by IP

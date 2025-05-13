@@ -1,0 +1,1 @@
+logs doesn't exit if the container is already stopped

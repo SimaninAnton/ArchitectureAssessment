@@ -1,0 +1,1 @@
+add -w--workdir= option to docker-compose run

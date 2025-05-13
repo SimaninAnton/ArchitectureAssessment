@@ -1,0 +1,8 @@
+ivstas commented on 15 Jul 2016
+Is it possible to provide ability to set a name for network in docker-compose file?
+Like this:
+networks:
+  custom_network:
+    name: custom_network_name
+Thanks in advance!
+79

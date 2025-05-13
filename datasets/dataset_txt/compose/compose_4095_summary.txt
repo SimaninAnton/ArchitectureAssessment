@@ -1,0 +1,1 @@
+Fig build fails in folders with names containing capital letters

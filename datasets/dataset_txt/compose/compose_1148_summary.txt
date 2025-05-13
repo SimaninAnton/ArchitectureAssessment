@@ -1,0 +1,1 @@
+Unable to mount volumes on Windows 10: UnboundLocalError: local variable 'cells_to_erase' referenced before assignment

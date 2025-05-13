@@ -1,0 +1,90 @@
+bsilva-bentlabs commented on 1 Jul 2016 •
+edited
+Output of docker-compose --version:
+docker-compose version 1.7.0, build 0d7bf73
+Output of docker version:
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:11 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:11 2016
+ OS/Arch:      linux/amd64
+Output of docker info:
+Containers: 6
+ Running: 0
+ Paused: 0
+ Stopped: 6
+Images: 11
+Server Version: 1.11.2
+Storage Driver: devicemapper
+ Pool Name: docker-253:6-33682944-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 1.576 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 8.645 GB
+ Metadata Space Used: 4.084 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.143 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107-RHEL7 (2015-12-01)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: null host bridge
+Kernel Version: 3.10.0-327.13.1.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 5.671 GiB
+Name: endure.enphaseenergy.com
+ID: TJHR:2MAD:ZFJV:BRSQ:2R46:4PYL:YQJD:A24O:TMAQ:ZV7J:DLA3:I3W6
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled
+Additional environment details (AWS, VirtualBox, physical, etc.):
+CentOS 7, Docker installed from official repo.
+Steps to reproduce the issue:
+Install docker-compose
+Write some compose .yml files that set the restart policies for services.
+Describe the results you received:
+including these lines appears to work as expected:
+restart: on_failure:3
+restart: always
+However, including this line:
+restart: no
+Results in an error message of:
+ERROR: Validation failed in file './docker-compose.email.yml', reason(s):
+services.dev_email_service.restart contains an invalid type, it should be a string
+changing the line to read:
+restart: "no"
+work as expected.
+Describe the results you expected:
+Would not expect to have to put "no" in quotes, as the other policies do not require quotes and the manual does not describe quotes as required.
+Additional information you deem important (e.g. issue happens only occasionally):
+Also tested on a Ubuntu 16.04 system running the same versions of docker and docker-compose.
+Same results.
+7

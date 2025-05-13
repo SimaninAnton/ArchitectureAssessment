@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 26 Dec 2014
+I'm seeing two test failures on master locally:
+test_kill_interrupted_service (tests.integration.cli_test.CLITestCase)
+test_kill_signal_sigint (tests.integration.cli_test.CLITestCase)
+These were added recently #611 (9abdd33). For some reason they aren't failing in wercker.
+I'm not sure how these tests pass. From what I can see the SIGINT should actually shutdown the container, but the tests expect the container to be running after a SIGINT.
+Am I missing something?

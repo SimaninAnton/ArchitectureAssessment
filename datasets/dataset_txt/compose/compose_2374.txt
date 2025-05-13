@@ -1,0 +1,31 @@
+abhaykumarsomani commented on 21 May 2016 •
+edited
+I was trying to pull an image from a local repository and I am getting this error.
+Snippet of my command and error:
+linux-dwzm:/home/docker # docker pull 164.99.163.4/abhaysomani/sles12
+Using default tag: latest
+Pulling repository 164.99.163.4/abhaysomani/sles12
+json: cannot unmarshal object into Go value of type string
+and while searching, I get this error:
+linux-dwzm:/home/docker # docker search 164.99.163.4/abhaysomani/sles12
+Error response from daemon: Unexpected status code 404
+However, if I try to search/pull hello-world image, it works perfectly.
+docker version info :
+linux-dwzm:~ # docker version
+Client:
+Version: 1.10.3
+API version: 1.22
+Go version: go1.5.3
+Git commit: 9e83765
+Built:
+OS/Arch: linux/amd64
+Server:
+Version: 1.10.3
+API version: 1.22
+Go version: go1.5.3
+Git commit: 9e83765
+Built:
+OS/Arch: linux/amd64
+My pull/search commands works perfectly with docker 1.6. I upgraded to the latest docker and started getting this error. If I downgrade and try again, everything works fine again.
+I researched a bit and found that this thing got broken in version 1.8.1-43.3. It worked in version 1.7.1-40.1.
+@dnephin : is this issue similar/side-effect to the issue #2515

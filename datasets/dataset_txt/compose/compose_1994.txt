@@ -1,0 +1,22 @@
+piqoni commented on 22 Oct 2016 •
+edited
+I am on Windows 7 using docker-compose version 1.8.1, build 004ddae.
+My file has a name of blå.jpg and docker-compose up fails as below:
+$ docker-compose up -d
+Building web
+Traceback (most recent call last):
+File "", line 3, in
+File "compose\cli\main.py", line 62, in main
+File "compose\cli\main.py", line 114, in perform_command
+File "compose\cli\main.py", line 835, in up
+File "compose\project.py", line 382, in up
+File "compose\service.py", line 305, in ensure_image_exists
+File "compose\service.py", line 727, in build
+File "site-packages\docker\api\build.py", line 55, in build
+File "site-packages\docker\utils\utils.py", line 95, in tar
+File "tarfile.py", line 2007, in add
+File "tarfile.py", line 1879, in gettarinfo
+WindowsError: [Error 2] The system cannot find the file specified: 'C:\Users\U
+ser\project\image\bla\xb0.jpg'
+docker-compose returned -1
+Any suggestion?

@@ -1,0 +1,7 @@
+kklepper commented on 2 Apr 2016
+I use dockercloud-haproxy to load balance web (and db) and docker-compose version 1 as version 2 does not work.
+Scaling is fine but does not work unless --force-recreate is used which recreates every service.
+Recreation is not necessary except for the load balancer and wastes time, especially in the case of databases shutting down and restarting, linearly related to the number of scaled services.
+Using docker-compose restart --force-recreate lb results in an error (unerstandably), while docker-compose restart lbpretends to restart the service but does not achieve the desired result. Why? It should resolve the problem hands down.
+Of course, manipulating the dockercloud-haproxy-mechanisms (python code) will fix this, but the resolution should not be left to user code. docker-compose should resolve this issue.
+Or am I overlooking something here?

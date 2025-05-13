@@ -1,0 +1,32 @@
+tvaughan commented on 25 Mar 2016
+I'm trying to specify the value of a variable only once. For example:
+$ cat Dockerfile 
+FROM ubuntu:1510
+MAINTAINER "Tom Vaughan <tvaughan@tocino.cl>"
+
+ARG SOME_PORT
+ENV SOME_PORT $SOME_PORT
+
+EXPOSE $SOME_PORT
+
+$ cat docker-compose.yml 
+version: "2"
+services:
+  example:
+    environment:
+      - SOME_PORT="3000"
+    build:
+      context: .
+      args:
+        - SOME_PORT=$SOME_PORT
+    ports:
+      - $SOME_PORT:$SOME_PORT
+
+$ docker-compose config
+WARNING: The SOME_PORT variable is not set. Defaulting to a blank string.
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+services.example.ports is invalid: Invalid port ":", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+MacOS X El Capitan
+$ docker-compose --version
+docker-compose version 1.6.2, build 4d72027
+What am I doing wrong? Thanks!

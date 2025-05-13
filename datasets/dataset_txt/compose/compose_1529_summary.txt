@@ -1,0 +1,1 @@
+Getting error when trying to start a celerywork container with docker-compose up.

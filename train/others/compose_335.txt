@@ -1,0 +1,51 @@
+pauldraper commented on 8 Jan 2019 •
+edited
+Description of the issue
+docker-compose log output shows the name of the container. This is helpful for debugging.
+However, docker-compose is not consistent about this.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+version: '2.4'
+services:
+  foo:
+    command: ['sleep', 'infinity']
+    container_name: baz_foo
+    image: ubuntu:18.04
+    init: true
+Steps to reproduce the issue
+Run docker-compose up when the current directory's name is bar.
+Run docker-compose up when the current directory's name is baz.
+Observed result
+In the first case, the logs show baz_foo.
+In the second case, the logs show foo_1.
+Expected result
+In both cases, the logs show the container's name: baz_foo.
+Stacktrace / full error message
+N/A
+Additional information
+N/A

@@ -1,0 +1,19 @@
+jdmarshall commented on 5 Feb 2016
+I'm seeing false sharing of Docker layers while using Docker-compose that I can't reproduce by using Docker itself.
+Scenario: I have two projects, foo, and bar. Both have a website served from an nginx container. Since they work similarly, they have essentially the same project structure. The only difference between them is the nginx root (/usr/share/nginx/foo vs /usr/share/nginx/bar) and the contents of /etc/nginx
+Dockerfiles therefore look very similar. In fact they're identical up until line 5 and this is the problem.
+FROM nginx:1.9.9
+
+RUN rm /etc/nginx/nginx.conf
+COPY nginx /etc/nginx
+
+COPY dist /usr/share/nginx/foo
+and the second one:
+FROM nginx:1.9.9
+
+RUN rm /etc/nginx/nginx.conf
+COPY nginx /etc/nginx
+
+COPY dist /usr/share/nginx/bar
+If I build them via docker-compose, both images contain the sites-available for the first project I built, apparently because it erroneously assumes that the layer can be pulled from the cache of a different Dockerfile.
+If I build them from docker, I see the expected behavior (ie, no sharing between the builds). I don't understand why this is different behavior from Docker, but this is clearly not what people would expect.

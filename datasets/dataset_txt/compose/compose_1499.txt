@@ -1,0 +1,3 @@
+gorzell commented on 27 Apr 2017
+The current documentation states that you can use either the .yml or .yaml extension for your compose file, however this does not appear to hold true for the docker-compose.override file. In that case only .yml seems to work. It would be really nice if the behavior here was consistent.
+1

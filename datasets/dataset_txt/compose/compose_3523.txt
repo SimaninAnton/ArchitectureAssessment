@@ -1,0 +1,18 @@
+catuss-a commented on 29 Jun 2015
+Hello guys,
+I got this error when trying to use my custom certs. It works fine with docker so I suppose it comes from docker-compose. I looked back at the older issues and I already tried many versions of openssl.
+I don't use boot2docker but my own vm made with vagrant/vbox. Docker CLI on my host (OSX) can easily talks with docker daemon located on the guest OS (ubuntu/trusty64).
+I generated the certs by following the docker documentation.
+$ docker-compose up
+SSL error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:581)
+$ docker run hello-world
+Hello from Docker.
+[...]
+$ docker -v
+Docker version 1.6.2, build 7c8fca2
+$ docker-compose -v
+docker-compose version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+$ openssl version
+OpenSSL 1.0.1o 12 Jun 2015

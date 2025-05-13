@@ -1,0 +1,23 @@
+durera commented on 19 Apr 2017 •
+edited
+What I want to do is separate my environment specific tweaks into an override.yml, nothing fancy there ... however my overrides will be exactly the same for every single service deployed & I want to avoid having to write out the same override for every single service (and continually add new sections to the override as new services are introduced).
+Instead I would like to create one definition that says "apply to this override to every single service". Does such a concept exist already that I am perhaps missing?
+Example ...
+docker-compose.yml:
+  aservice:
+    image: whatever1
+    environment:
+      FOO: BAR
+another docker-compose.yml:
+  anotherservice:
+    image: whatever2
+my docker-compose.override.yml:
+  <magickeyword>:
+    environment:
+      FLIBBLE: flobble
+    dns:
+      - server1
+      - server2
+Now, every service deployed would have DNS server1 & server2 and the environment variable FLIBBLE.
+I realise I could do this if all services were extending the same base service as I could apply the override to that, but is there anyway to set global/default override without a common extension?
+At the moment I have a hack that involves a generated override scanning for any defined services and generate the override file on the fly, but it seems like a use case that I can't be the first person to run into so wondered if perhaps I have just missed the obvious solution to this in compose.

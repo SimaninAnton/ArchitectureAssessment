@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 3 Sep 2015
+This has come up a couple times in the last week (most recently in #1972).
+Commands like stop, kill, ps, logs, port, restart, rm, start only need to know the list of service names, not any part of the service definition.
+Commands like build, pull only need to care about one or two fields from the service definition (build and dockerfile for build, image for pull).
+If we could split our config validation into two phases (a top level service name validation, and a full validation) we could support that first group of commands.
+The second group would be more work, and require a three phase validation.
+50

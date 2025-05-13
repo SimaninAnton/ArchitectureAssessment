@@ -1,0 +1,1 @@
+Error when doing anything in docker-compose

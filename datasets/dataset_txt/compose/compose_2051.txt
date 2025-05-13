@@ -1,0 +1,16 @@
+toussa commented on 22 Sep 2016
+Hello,
+I couldn't find a way to use the "nocopy" flag when using a named volume, as docker do in its "docker run" command :
+-v, --volume=[host-src:]container-dest[:]: Bind mount a volume.
+The comma-delimited options are [rw|ro], [z|Z],
+[[r]shared|[r]slave|[r]private], and [nocopy].
+The 'host-src' is an absolute path or a name value.
+If neither 'rw' or 'ro' is specified then the volume is mounted in
+read-write mode.
+The nocopy modes is used to disable automatic copying requested volume
+path in the container to the volume storage location.
+For named volumes, copy is the default mode. Copy modes are not supported
+for bind-mounted volumes.
+--volumes-from="": Mount all volumes from the given container(s)
+Is there a way to reproduce this behavior in the docker-compose file ?
+If not, do you think that could be a feature to add ?

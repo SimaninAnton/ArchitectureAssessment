@@ -1,0 +1,6 @@
+Odin8448 commented on 1 Jun 2016
+Hi guys, right now i use docker-compose 1.7 and it's great.
+Though, it would be nice to cluster some services together.
+Maybe scale the cluster.
+Make links between clusters, and so on.
+Thank you!

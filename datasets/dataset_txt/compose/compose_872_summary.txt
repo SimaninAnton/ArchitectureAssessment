@@ -1,0 +1,1 @@
+Is pull --parallel smart enough?

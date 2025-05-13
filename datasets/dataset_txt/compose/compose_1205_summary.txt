@@ -1,0 +1,1 @@
+Can't write data to redis from docker container using docker-compose.yml.

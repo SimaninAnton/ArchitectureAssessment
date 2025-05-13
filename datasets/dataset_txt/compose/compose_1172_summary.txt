@@ -1,0 +1,1 @@
+docker-compose is not setting ENV variable for the n-th container in docker-compose.yaml

@@ -1,0 +1,68 @@
+Oyabi commented on 21 Dec 2015
+I'm new to docker and try to convert my actual web stack in it.
+Currently I use this configuration:
+varnish -> nginx -> php-fpm -> mysql
+I have already convert php-fpm and nginx and now tries varnish.
+When I run my image with a command, all is fine but when I put it in docker-compose my container restart indefinitely.
+Command:
+name="varnish"
+
+cd $installDirectory/$name
+
+docker build -t $name .
+docker rm -f $(docker ps -a | grep $name | cut -d' ' -f1)
+
+docker run -d -P --name $name \
+        -p 80:80 \
+        --link nginx:nginx \
+        -v /home/webstack/varnish/:/etc/varnish/ \
+        -t $name
+My docker-compose.yml:
+php-fpm:
+  restart: always
+  build: ./php-fpm
+  volumes:
+    - "/home/webstack/www/:/var/www/"
+
+nginx:
+  restart: always
+  build: ./nginx
+  ports:
+    - "8080:8080"
+  volumes:
+    - "/home/webstack/nginx/:/etc/nginx/"
+    - "/home/webstack/log/:/var/log/nginx/"
+    - "/home/webstack/www/:/var/www/"
+  links:
+    - "php-fpm:php-fpm"
+
+varnish:
+  restart: always
+  build: ./varnish
+  ports:
+    - "80:80"
+  volumes:
+    - "/home/webstack/varnish/:/etc/varnish/"
+  links:
+    - "nginx:nginx"
+I have no result with docker logs webstack_varnish_1 and docker ps -a result show:
+688c5aace1b3        webstack_varnish    "/bin/bash"              16 seconds ago      Restarting (0) 5 seconds ago   0.0.0.0:80->80/tcp   
+Here you can see my Dockerfile:
+FROM debian:jessie
+
+# Update apt sources
+RUN apt-get -qq update
+RUN apt-get install -y curl apt-transport-https
+RUN sh -c "curl https://repo.varnish-cache.org/GPG-key.txt | apt-key add -"
+RUN echo "deb https://repo.varnish-cache.org/debian/ jessie varnish-4.1" > /etc/apt/sources.list.d/varnish-cache.list
+
+# Update the package repository
+RUN apt-get -qq update
+
+# Install varnish
+RUN apt-get install -y varnish
+
+# Expose port 80
+EXPOSE 80
+What I am doing wrong please?
+Regards.

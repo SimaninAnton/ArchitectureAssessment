@@ -1,0 +1,4 @@
+jaswdr commented on 30 Nov 2016
+Sometimes is important to not bind the port's specified in docker-compose.yml file or skipping it, like when running in CI environment, single run with multi nodes, etc.
+Is there any option to skip the port binding in compose or docker ?
+Thanks.

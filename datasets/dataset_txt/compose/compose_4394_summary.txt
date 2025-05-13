@@ -1,0 +1,1 @@
+Safe way to determine services have been build

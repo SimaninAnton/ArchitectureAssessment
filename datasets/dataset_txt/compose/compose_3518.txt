@@ -1,0 +1,5 @@
+ahmetb commented on 1 Jul 2015
+Hi folks, I've been thinking about allowing empty project names (-p '') to compose. I simply want to have containers named blog_1, cache_1, db_1; not dirname_blog_1, dirname_cache_1, dirname_db_1.
+This can be done by allowing empty string value to --project/-p flag. If the flag is not specified at all, it can look at the dirname for the value; otherwise it would just omit it. It would look like this:
+docker-compose -p "" up -d
+WDYT?

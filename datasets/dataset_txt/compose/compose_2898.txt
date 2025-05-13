@@ -1,0 +1,4 @@
+luizgama commented on 20 Jan 2016
+curl -L https://github.com/docker/compose/releases/download/1.6.0/docker-compose-`uname -s-uname -m` > /usr/local/bin/docker-compose
+should be
+curl -L https://github.com/docker/compose/releases/download/1.6.0-rc1/docker-compose-`uname -s-uname -m` > /usr/local/bin/docker-compose

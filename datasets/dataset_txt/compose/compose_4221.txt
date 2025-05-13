@@ -1,0 +1,2 @@
+prologic commented on 22 Aug 2014
+I'm not sure, but fig doesn't currently seem to support the optional 3rd parameter ro or rw for --volume

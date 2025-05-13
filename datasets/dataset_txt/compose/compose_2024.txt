@@ -1,0 +1,7 @@
+bayboraoren commented on 4 Oct 2016
+in https://github.com/docker/compose/blob/master/docs/install.md
+....
+Mac OS X installation
+Windows installation
+Ubuntu installation
+other system installations

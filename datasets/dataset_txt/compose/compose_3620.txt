@@ -1,0 +1,4 @@
+Contributor
+kojiromike commented on 26 May 2015
+The contribution documentation says that there's a bug in PyInstaller that affects Mavericks, but not Mountain Lion. The linked issue (http://www.pyinstaller.org/ticket/807) is gone now. PyInstaller seems to have moved to github. Is it still an issue? (Perhaps it has been resolved in Mavericks by this point.)
+I have Yosemite and I have not had an issue using that build script on it. Would it be more relevant to compare Mavericks to Yosemite now?

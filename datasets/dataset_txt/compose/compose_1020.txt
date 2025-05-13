@@ -1,0 +1,10 @@
+nupurbansal8 commented on 11 Dec 2017
+Check CONTRIBUTING guideline first and here is the list to help us investigate the problem.
+fluentd or td-agent version : fluentd:v0.12-debian
+Environment information : CentOS Linux release 7.1.1503 (Core)
+Your configuration : I have used fluentd with docker-compose to run as a container. fluentd.conf file is:
+@type forward type forward send_timeout 60s buffer_type file buffer_path /var/log/td-agent/test11/td-agent.buffer buffer_chunk_limit 8M buffer_queue_limit 128 flush_interval 5s max_retry_wait 300 disable_retry_limit recover_wait 10s heartbeat_type udp heartbeat_interval 1s phi_threshold 16 retry_limit 50 hard_timeout 60s host 192.170.X.X port 24226 weight 60
+This file is used to read docker logs and transfer to another td-agent on an external server.
+Your problem explanation : I am getting following error on running docker-compose up:
+2017-12-11 05:51:21 +0000 [error]: unexpected error error_class=Errno::EACCES error=#<Errno::EACCES: Permission denied @ dir_s_mkdir - /var/log/td-agent>
+And am not able to receive logs in my kibana attached to the td-agent on external server.

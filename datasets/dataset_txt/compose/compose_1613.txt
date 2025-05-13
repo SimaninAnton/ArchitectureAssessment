@@ -1,0 +1,43 @@
+Novex commented on 10 Mar 2017
+When configuration changes in the networks block of the docker-compose.yml it looks like docker doesn't recreate the network and apply the latest change.
+Eg. running docker-compose up with the following docker-compose.yml
+version: '3'
+
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - 80
+      - 443
+    networks:
+      secret_network:
+
+networks:
+  secret_network:
+results in docker ps showing that the ports are correctly exposed
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                           NAMES
+f438fcb53922        nginx:alpine        "nginx -g 'daemon ..."   5 seconds ago       Up 4 seconds        0.0.0.0:32805->80/tcp, 0.0.0.0:32804->443/tcp   insightinformatics_web_1
+However, if we change the docker-compose.yml to the following and run docker-compose up again
+version: '3'
+
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - 80
+      - 443
+    networks:
+      secret_network:
+
+networks:
+  secret_network:
+    internal: true    # oops, forgot this!
+then docker ps shows that the ports are still exposed when they should no longer be
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                           NAMES
+f438fcb53922        nginx:alpine        "nginx -g 'daemon ..."   2 minutes ago       Up 7 seconds        0.0.0.0:32807->80/tcp, 0.0.0.0:32806->443/tcp   insightinformatics_web_1
+Manually running docker network rm insightinformatics_secret_network to remove the network, then rerunning docker-compose up has the expected effect and secret_network is now internal and docker ps shows no ports are exposed.
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+f438fcb53922        nginx:alpine        "nginx -g 'daemon ..."   6 minutes ago       Up 10 seconds                           insightinformatics_web_1
+I'm not sure what expected behaviour is here, but I was expecting it to update the network config in the same way that container config would be updated if a change was made and then applied.
+Docker version 1.13.0, build 49bf474
+docker-compose version 1.11.2, build f963d76f

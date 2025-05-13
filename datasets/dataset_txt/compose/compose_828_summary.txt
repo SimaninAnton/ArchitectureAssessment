@@ -1,0 +1,1 @@
+Hangs on `docker.api.build._set_auth_headers: Sending auth config (u'auths')`

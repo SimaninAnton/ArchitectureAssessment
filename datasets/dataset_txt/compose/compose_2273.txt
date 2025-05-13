@@ -1,0 +1,25 @@
+Contributor
+andrerom commented on 27 Jun 2016 •
+edited
+base.yml
+  app:
+    build: .
+    image: myimage
+dev.yml
+  app:
+    build: {}
+    image: php:7.0-fpm
+    volumes:
+     - .:/var/www/html
+On Travis, using docker-compose -f base.yml -f dev.yml --verbose up -d --no-build gives:
+compose.cli.command.get_client: docker-compose version 1.8.0-rc1, build 9bf6bc6
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=3.19.0-33-generic, Os=linux, BuildTime=2016-06-01T21:47:50.269346868+00:00, ApiVersion=1.23, Version=1.11.2, GitCommit=b9f10c9, Arch=amd64, GoVersion=go1.5.4
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- (u'php:7.0-fpm')
+ERROR: compose.cli.main.main: Service 'app' needs to be built, but --no-build was passed.
+Possible reason
+As I can't reproduce this locally, neither on docker machine or docker for mac, I'm guessing this has to do with something effecting merge rules. If so maybe it would be an idea to add support for build: ~ to null out build config in a proper way.

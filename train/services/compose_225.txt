@@ -1,0 +1,89 @@
+winhung commented on 9 Apr 2019
+Description of the issue
+I run the dlv exec command from a docker-compose file and get the error message, "could not launch process: fork/exec ./: permission denied".
+I have set security_opt: - seccomp:unconfined, privileged: true but it has been unsuccessful.
+However, using the same settings, dlv debug will work.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.4
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        d14af54266
+ Built:             Wed Mar 27 18:34:51 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.4
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       d14af54
+  Built:            Wed Mar 27 18:04:46 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  example:
+    build:
+      context: /home/winhung/go/src/testRemoteDebugDocker
+    command: dlv exec --listen=:2345 --headless --api-version=2 --log ./
+    ports:
+    - 2345:2345/tcp
+    privileged: true
+    security_opt:
+    - seccomp:unconfined
+version: '2.3'
+Dockerfile used
+FROM golang:1.11.4
+WORKDIR /go/src/testRemoteDebugDocker
+ADD . .
+RUN go get -u github.com/derekparker/delve/cmd/dlv && \
+go build -gcflags "all=-N -l" -o testme
+Steps to reproduce the issue
+Make Dockerfile that will install Delve and compile the Go binary with '-gcflags "all=-N -l" '
+Make docker-compose file that has same properties to the example given
+docker-compose -f docker-compose.yml up --build --abort-on-container-exit
+Observed result
+Creating testremotedebugdocker_example_1 ... done
+Attaching to testremotedebugdocker_example_1
+example_1 | API server listening at: [::]:2345
+example_1 | 2019-04-09T02:56:17Z info layer=debugger launching process with args: [./]
+example_1 | could not launch process: fork/exec ./: permission denied
+testremotedebugdocker_example_1 exited with code 1
+Expected result
+Not seeing an error about fork/exec ./: permission denied.
+Docker container is listening and waiting for remote debugging to commence.
+Stacktrace / full error message
+[winhung@x testRemoteDebugDocker]$ make debug
+docker-compose -f docker-compose.yml up --build --abort-on-container-exit
+Building example
+Step 1/4 : FROM golang:1.11.4
+ ---> dd46c1256829
+Step 2/4 : WORKDIR /go/src/testRemoteDebugDocker
+ ---> Using cache
+ ---> 29e563fe78d8
+Step 3/4 : ADD . .
+ ---> 5678da8cda07
+Step 4/4 : RUN go get -u github.com/derekparker/delve/cmd/dlv && go build -gcflags "all=-N -l" -o testme
+ ---> Running in 46c45449066a
+Removing intermediate container 46c45449066a
+ ---> 39aff5aed1ee
+
+Successfully built 39aff5aed1ee
+Successfully tagged testremotedebugdocker_example:latest
+Creating testremotedebugdocker_example_1 ... done
+Attaching to testremotedebugdocker_example_1
+example_1  | API server listening at: [::]:2345
+example_1  | 2019-04-09T02:56:17Z info layer=debugger launching process with args: [./]
+example_1  | could not launch process: fork/exec ./: permission denied
+testremotedebugdocker_example_1 exited with code 1
+Aborting on container exit...
+make: *** [debug] Error 1

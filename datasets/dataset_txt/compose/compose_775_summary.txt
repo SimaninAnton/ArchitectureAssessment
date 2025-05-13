@@ -1,0 +1,1 @@
+Got UnicodeDecodeError when docker-compose.yml file encoding differ terminal encoding under windows

@@ -1,0 +1,19 @@
+bigdrum commented on 12 Feb 2015
+I use upstart and fig up to keep a bundle of containers running. If the any container exits, fig would exit and upstart would restart it. This works fine most of time. But occasionally (once per several day) fig would get stuck and do not exit.
+I noticed the following exception at the end of the log when it stucked:
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/code/build/fig/out00-PYZ.pyz/threading", line 552, in __bootstrap_inner
+  File "/code/build/fig/out00-PYZ.pyz/threading", line 505, in run
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.multiplexer", line 41, in _enqueue_output
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.log_printer", line 59, in _make_log_generator
+  File "/code/build/fig/out00-PYZ.pyz/fig.container", line 141, in wait
+  File "/code/build/fig/out00-PYZ.pyz/docker.client", line 940, in wait
+  File "/code/build/fig/out00-PYZ.pyz/docker.client", line 73, in _post
+  File "/code/build/fig/out00-PYZ.pyz/requests.sessions", line 425, in post
+  File "/code/build/fig/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/code/build/fig/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/code/build/fig/out00-PYZ.pyz/requests.adapters", line 378, in send
+ConnectionError: UnixHTTPConnectionPool(host='localhost', port=None): Max retries exceeded with url: /run/docker.sock/v1.12/containers/55b10e13d8449801bfac24d58134f7a71a6f61412021e104369e776a2039872e/wait (Caused by <class 'socket.error'>: [Errno 111] Connection refused)
+afaick, if container.wait() throws, fig just crashes the thread and leaves the multiplexer waiting on the queue forever. And fig won't exit if there are containers that are still doing fine.
+It seems the log printer should send insert STOP to the queue when there is any uncaught exception thrown in the thread.

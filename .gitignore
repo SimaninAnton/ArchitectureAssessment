@@ -1,3 +1,41 @@
+# Виртуальное окружение
+.venv
+poetry.lock
 
-#idea
-/.idea
+# Файлы PyCharm
+.idea
+*.iml
+*.xml
+
+# Файлы python
+__pycache__/
+*.pyc
+
+/test_temp
+/train_temp
+
+# Датасеты не связанные с курсовой
+certbot.json
+django_rest_framework.json
+flask.json
+keras.json
+mitmproxy.json
+pipenv.json
+requests.json
+scikit-learn.json
+scrapy.json
+spaCy.json
+tornado.json
+
+# Обработанные датасеты
+certbot
+django_rest_framework
+flask
+keras
+mitmproxy
+pipenv
+requests
+scikit_learn
+scrapy
+spaCy
+tornado

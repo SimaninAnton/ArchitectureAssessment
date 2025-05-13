@@ -1,0 +1,1 @@
+Using docker-compose with multiple configuration files disables network_mode: "host" for services

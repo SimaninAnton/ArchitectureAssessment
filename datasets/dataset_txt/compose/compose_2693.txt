@@ -1,0 +1,121 @@
+Vad1mo commented on 29 Feb 2016
+I have an application and a database compose file. Now I want to make the db accessible from the zservices_default network where I have some applications trying to access the DB.
+#DB
+version: '2'
+
+services:
+  mongo:
+    image: mongo    
+    networks:
+      - zservices_default
+    expose:
+      - "27017"
+    command: mongod
+
+networks:
+  zservices_default:
+    external: true      
+#Application in zservices_default network
+version: '2'
+
+services:
+  config-server:
+    image: z/config-server
+    hostname: config-server 
+    expose:
+      - "8888"
+
+  eureka-server:
+    image: z/eureka-server
+    hostname: eureka-server    
+    depends_on: 
+      - config-server
+    expose:
+      - "8761"    
+# all default here. Creates the default network zservices_default
+db$ docker network ls
+NETWORK ID          NAME                 DRIVER
+91c122cc8b54        db_default           bridge              
+e39cb8dcca62        appsupport_default   bridge              
+15aa47f83c6f        bridge               bridge              
+7bf63ebf1a46        none                 null                
+93a40ea11915        host                 host                
+7e5c079754eb        zservices_default    bridge  
+$ docker network inspect zservices_default | grep mongo provides an empty result
+$ docker network inspect zservices_default 
+[
+    {
+        "Name": "zservices_default",
+        "Id": "de2a39fb2ced7207f12a61c605f5a6afe9a5180b1e027f0995332d5f0e28bb18",
+        "Scope": "local",
+        "Driver": "bridge",
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1/16"
+                }
+            ]
+        },
+        "Containers": {,
+            "b2054fb31adff646881222afeb58c404e970e56f19d08e37523a427d4ecd716a": {
+                "Name": "zservices_config-server_1",
+                "EndpointID": "409bcd1937af39660b19d3bcd063b7af65c8b52ad3e2e713c4e196509c265674",
+                "MacAddress": "02:42:ac:12:00:03",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            },
+            "cc33260e9299755c08e7a8bbe32a0c1aef60075493a4d34a0078e69f0195d036": {
+                "Name": "zservices_eureka-server_1",
+                "EndpointID": "18ff2de831a0b6881ed1ad6560e5adf69c5804806f8b08c7923a24a57bf2878c",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {}
+    }
+]
+$docker-compose -f db-compose.yml up -d
+WARNING: Some networks were defined but are not used by any service: zservices_default
+Creating network "db_default" with the default driver
+Creating db_metabase_1
+Creating db_mongo_1
+Creating db_mmsagent_1
+The interesting is the Warning message:
+WARNING: Some networks were defined but are not used by any service: zservices_default
+It appears to me that compose tries to create zservices_default or does not treat the network as external.
+Docker info
+$ docker info
+Containers: 45
+ Running: 23
+ Paused: 0
+ Stopped: 22
+Images: 307
+Server Version: 1.10.2-rc1
+Storage Driver: overlay
+ Backing Filesystem: extfs
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins: 
+ Volume: local
+ Network: bridge null host
+Kernel Version: 4.2.0-30-generic
+Operating System: Ubuntu 14.04.4 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 20.91 GiB
+Name: elaaiun
+ID: DPPI:CGB3:6IGE:BOZR:5R5Z:RQER:L3ZQ:QA3I:FLQU:GICK:RR5D:B7KD
+Debug mode (server): true
+ File Descriptors: 251
+ Goroutines: 391
+ System Time: 2016-02-28T23:51:50.552170803+01:00
+ EventsListeners: 0
+ Init SHA1: 4ab2894d774b4a1ff53ce399a6fafd4b2a68b39e
+ Init Path: /usr/lib/docker/dockerinit
+ Docker Root Dir: /var/lib/docker
+WARNING: No swap limit support

@@ -1,0 +1,1 @@
+ease distribution packaging: don't set upper bounds for versions of dependencies

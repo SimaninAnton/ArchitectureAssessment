@@ -1,0 +1,2 @@
+GaretJax commented on 22 Oct 2014
+It would be great if we could specify a signal number in the fig.yml file. Fig would then use it with docker kill -s SIGNAL instead of docker stop when stopping a container.

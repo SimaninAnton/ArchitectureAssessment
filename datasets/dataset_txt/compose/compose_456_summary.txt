@@ -1,0 +1,1 @@
+docker-compose broken on Docker Toolbox 18.06.1-ce Windows 10

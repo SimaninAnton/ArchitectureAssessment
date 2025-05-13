@@ -1,0 +1,1 @@
+Publish docker-compose to the Docker's repository

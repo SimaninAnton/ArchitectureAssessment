@@ -1,0 +1,12 @@
+victordombrovskiy commented on 3 Sep 2017 •
+edited
+The following command fails, trying to pull image from the Docker Hub:
+$ docker-compose up -d
+Pulling web-server (web-server:staging)...
+ERROR: repository web-server not found: does not exist or no pull access
+But I just want to use a local version of the image, which exists:
+$ docker images
+REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+web-server           staging             b94573990687        7 hours ago         365MB
+Why Docker doesn't search among locally stored images?
+4

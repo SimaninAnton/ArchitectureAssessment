@@ -1,0 +1,36 @@
+brikou commented on 23 Feb 2016
+Here is my configuration:
+# docker-compose.yml
+version: '2'
+
+services:
+    hello:
+        image: alpine
+        network_mode: bridge
+# docker-compose.override.yml
+version: '2'
+
+services:
+    hello:
+        volumes:
+            - .:/mnt
+Everything is ok with regular docker-compose.yml...
+docker-compose -f docker-compose.yml config
+networks: {}
+services:
+  hello:
+    image: alpine
+    network_mode: bridge
+version: '2.0'
+volumes: {}
+But using docker-compose.override.yml drops network_mode, see...
+docker-compose config
+networks: {}
+services:
+  hello:
+    image: alpine
+    volumes:
+    - /tmp/foo:/mnt:rw
+version: '2.0'
+volumes: {}
+I guess this is a bug, anybody can help me to bypass this?

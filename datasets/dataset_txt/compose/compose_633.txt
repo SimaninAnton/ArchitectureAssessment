@@ -1,0 +1,31 @@
+ahstro commented on 7 Jun 2018
+Description of the issue
+urllib3 released version 1.23 on June 5th, and it breaks docker-compose.
+Context information (for bug reports)
+docker-compose version 1.21.2, build unknown
+Client:
+ Version:      18.05.0-ce
+ API version:  1.37
+ Go version:   go1.10.2
+ Git commit:   f150324782
+ Built:        Wed May 16 22:27:45 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.05.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.10.2
+  Git commit:   f150324782
+  Built:        Wed May 16 22:28:17 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Steps to reproduce the issue
+Upgrade urllib3
+Run docker-compose
+Observed result
+An error is thrown, saying docker-compose depends on urllib3 version <1.23
+Expected result
+docker-compose to work as usual

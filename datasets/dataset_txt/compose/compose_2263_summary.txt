@@ -1,0 +1,1 @@
+The parameters that can be passed to "restart:" in a docker-compose file are inconsistent.

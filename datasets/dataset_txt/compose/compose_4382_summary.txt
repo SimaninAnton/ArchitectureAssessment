@@ -1,0 +1,1 @@
+Add support for DOCKER_HOST without schema or host

@@ -1,0 +1,9 @@
+sandywater commented on 12 Nov 2014
+When I try and fig up or fig pull I get
+SSL error: [Errno 1] _ssl.c:510: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+If I try and do a fig up --allow-insecure-ssl, I get:
+Couldn't connect to Docker daemon - you might need to run `boot2docker up`.
+Running docker pull redis works fine.
+NOTE: I am in a corp proxied environment, so I think fig is not using the proxy/ssl ca cert that I put into the boot2docker vm.
+Also I am running OSX 10.9
+Thank you.

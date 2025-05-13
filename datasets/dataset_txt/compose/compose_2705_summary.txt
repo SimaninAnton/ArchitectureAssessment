@@ -1,0 +1,1 @@
+`dockerfile` service value documentation wrongly states it doesn't work with `image`

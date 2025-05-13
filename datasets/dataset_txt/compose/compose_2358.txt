@@ -1,0 +1,7 @@
+Contributor
+denismakogon commented on 25 May 2016
+The idea here is to enable TOSCA features and functions within compose files. Example of TOSCA orchestration can be seen here or here.
+The idea is to give an ability to use container attributes in setup of another container.
+For example if i setting up DB i want to get its public IP and pass it directly to setup process to another container.
+For now compose YAML looks approximately close to what TOSCA simple profile offers, but remain to be a simple YAML standard.
+TOSCA parser - https://pypi.python.org/pypi/tosca-parser

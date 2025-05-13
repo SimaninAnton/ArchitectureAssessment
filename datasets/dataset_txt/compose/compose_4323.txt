@@ -1,0 +1,65 @@
+luiselizondo commented on 21 May 2014
+I have a fig file with 3 containers, a redis container, a mongodb container and a nodejs container. With docker 0.9 everything works, buth with docker 0.11 I get an error with the web (nodejs) container:
+web_1 | panic: runtime error: index out of range
+web_1 | 
+web_1 | goroutine 1 [running]:
+web_1 | runtime.panic(0xa4d6c0, 0x1417cb7)
+web_1 |     /usr/local/go/src/pkg/runtime/panic.c:266 +0xb6
+web_1 | github.com/dotcloud/docker/pkg/libcontainer/nsinit.LoadContainerEnvironment(0xc2100c2e70, 0x59, 0xc210038960)
+web_1 |     /go/src/github.com/dotcloud/docker/pkg/libcontainer/nsinit/init.go:155 +0x126
+web_1 | github.com/dotcloud/docker/pkg/libcontainer/nsinit.Init(0xc2100c2e70, 0xc210038840, 0x59, 0x7fffd0548874, 0x0, ...)
+web_1 |     /go/src/github.com/dotcloud/docker/pkg/libcontainer/nsinit/init.go:35 +0x9a
+web_1 | github.com/dotcloud/docker/daemon/execdriver/native.func·001(0xc21000a240, 0xc21001ef90, 0x7fffd0548864)
+web_1 |     /go/src/github.com/dotcloud/docker/daemon/execdriver/native/driver.go:49 +0x308
+web_1 | github.com/dotcloud/docker/sysinit.executeProgram(0xc21000a240, 0xc21000a240, 0xadef80)
+web_1 |     /go/src/github.com/dotcloud/docker/sysinit/sysinit.go:18 +0xbc
+web_1 | github.com/dotcloud/docker/sysinit.SysInit()
+web_1 |     /go/src/github.com/dotcloud/docker/sysinit/sysinit.go:59 +0x564
+web_1 | main.main()
+web_1 |     /go/src/github.com/dotcloud/docker/docker/docker.go:37 +0x67
+web_1 | 
+web_1 | goroutine 3 [syscall]:
+web_1 | os/signal.loop()
+web_1 |     /usr/local/go/src/pkg/os/signal/signal_unix.go:21 +0x1e
+web_1 | created by os/signal.init·1
+web_1 |     /usr/local/go/src/pkg/os/signal/signal_unix.go:27 +0x31
+web_1 | 
+web_1 | goroutine 4 [syscall]:
+web_1 | runtime.goexit()
+web_1 |     /usr/local/go/src/pkg/runtime/proc.c:1394
+web_1 | 
+web_1 | goroutine 6 [runnable]:
+web_1 | text/template/parse.lexText(0xc210070800, 0xc0b298)
+web_1 |     /usr/local/go/src/pkg/text/template/parse/lex.go:228 +0x35e
+web_1 | text/template/parse.(*lexer).run(0xc210070800)
+web_1 |     /usr/local/go/src/pkg/text/template/parse/lex.go:198 +0x40
+web_1 | created by text/template/parse.lex
+web_1 |     /usr/local/go/src/pkg/text/template/parse/lex.go:191 +0x117
+Both redis and mongodb containers work as expected. If I start the container using docker everything works.
+This is my fig.yml file for reference:
+web:
+  build: .
+  links:
+   - mongodb:mongodb
+   - redis:redis
+  ports:
+   - "3000:3000"
+  volumes:
+   - "/var/www/dbman:/var/www"
+   - "/root/.ssh/:/root/.ssh"
+   - "/var/log/docker:/var/log/supervisor"
+  volumes_from:
+   - DBMAN_FILES
+  environment:
+   - MONGODB_DATABASE: dbman
+   - PORT: 3000
+redis:
+  image: dockerfile/redis
+  expose:
+   - "6379:6379"
+mongodb:
+  image: luis/mongodb
+  expose:
+   - "27017"
+  volumes_from: DBMAN_DBDATA
+Any help will be appreciated.

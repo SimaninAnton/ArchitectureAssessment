@@ -1,0 +1,11 @@
+Contributor
+bfirsh commented on 29 Jul 2015
+We currently have some lightweight documentation about how to use Compose in production, but this could do with improvements:
+How to manage releases, particularly when deploying through the Docker Hub (e.g. in development build images, in production use image from Hub)
+A step-by-step guide to deploying a Compose app from dev through to production
+Some examples of how to deploy apps using init scripts
+Some examples of how to deploy apps using Swarm
+How to deploy apps on a single server (particularly useful for internal tools, etc)
+Resources
+Examples of production Compose files
+22

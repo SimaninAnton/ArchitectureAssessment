@@ -1,0 +1,6 @@
+NoumanSaleem commented on 16 Jan 2015
+Seems like a recurring issue of keeping Fig and Docker run flags in sync. How about a freeform flags option so people aren't blocked until fig.yml has proper support?
+myapp
+  build: ../myapp
+  dns: xxx.xxx.xx.x
+  flags: --dns-search=my.domain

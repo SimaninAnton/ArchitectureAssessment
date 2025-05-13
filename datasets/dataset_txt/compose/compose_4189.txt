@@ -1,0 +1,72 @@
+Contributor
+benlangfeld commented on 11 Sep 2014
+Fig config:
+xmpp:
+  image: rroemhild/ejabberd
+Running using fig up:
+➭ fig up
+Creating Desktop_xmpp_1...
+Pulling image rroemhild/ejabberd...
+176e9c6e9a63: Download complete
+511136ea3c5a: Download complete
+2758ea31b20b: Download complete
+25c55ec6c1ab: Download complete
+dae3606452c3: Download complete
+fa5288457082: Download complete
+b9e56c8f2cf5: Download complete
+ee29dd93135e: Download complete
+0242e4aa09f6: Download complete
+4b3bc71bf115: Download complete
+7199f74109c4: Download complete
+86f4d07d07a1: Download complete
+2405a4a8393f: Download complete
+4992334151d1: Download complete
+4b13eec461ad: Download complete
+6e99e99c266b: Download complete
+daff0e684c31: Download complete
+5eca1fb0689a: Download complete
+7f706e424da9: Download complete
+92b3512d23ea: Download complete
+5fa47784865c: Download complete
+26ce25704399: Download complete
+2bae9c4db05e: Download complete
+Attaching to Desktop_xmpp_1
+xmpp_1 | Eshell V5.10.4  (abort with ^G)
+xmpp_1 | (ejabberd@localhost)1> *** Terminating erlang (ejabberd@localhost)
+Desktop_xmpp_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Running using Docker directly, according to the instructions for the image:
+➭ docker run -d -i -p 5222:5222 -p 5269:5269 -p 5280:5280 rroemhild/ejabberd
+223c8d70becd22bc15b9ff946c5872c0603282d0fd27cfd674b86ddbbfe84316
+{15:43}~/Desktop [2.1.2]
+➭ docker logs 223c8d70becd22bc15b9ff946c5872c0603282d0fd27cfd674b86ddbbfe84316
+Eshell V5.10.4  (abort with ^G)
+(ejabberd@localhost)1> 01:32:06.224 [info] Application lager started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.236 [info] Application sasl started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.255 [info] Application crypto started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.264 [info] Application asn1 started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.265 [info] Application public_key started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.280 [info] Application ssl started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.284 [info] Application p1_yaml started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.293 [info] Application p1_tls started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.298 [info] Application p1_xml started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.302 [info] Application p1_stringprep started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.306 [info] Application p1_zlib started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.308 [info] Application p1_cache_tab started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:06.529 [info] Application mnesia started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:07.958 [info] FQDN used to check DIGEST-MD5 SASL authentication: 223c8d70becd
+(ejabberd@localhost)1> 01:32:07.982 [info] Application p1_iconv started on node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:08.043 [info] Reusing listening port for 5222
+(ejabberd@localhost)1> 01:32:08.044 [info] Reusing listening port for 5269
+(ejabberd@localhost)1> 01:32:08.044 [info] Reusing listening port for 5280
+(ejabberd@localhost)1> 01:32:08.044 [info] ejabberd community is started in the node ejabberd@localhost
+(ejabberd@localhost)1> 01:32:08.044 [info] Application ejabberd started on node ejabberd@localhost
+Running using Docker w/o -i:
+1 ↵ ➭ docker run -d -p 5222:5222 -p 5269:5269 -p 5280:5280 rroemhild/ejabberd
+07b6a39095b767407fcd264d676aaee6e7b1bcbd1c117566cb6e48a2883627f1
+{15:45}~/Desktop [2.1.2]
+➭ docker logs 07b6a39095b767407fcd264d676aaee6e7b1bcbd1c117566cb6e48a2883627f1
+Eshell V5.10.4  (abort with ^G)
+(ejabberd@localhost)1> *** Terminating erlang (ejabberd@localhost)
+It seems the -i option (-i, --interactive=false Keep STDIN open even if not attached) is what Fig is missing, but there doesn't appear to be a way to set this using Fig.
+Can anyone validate my thinking?

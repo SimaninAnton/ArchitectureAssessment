@@ -1,0 +1,20 @@
+adililhan commented on 13 Nov 2017
+Hi there,
+my docker-compose.yml is like this:
+version: "3"                                                                                                                                                                                                       
+                                                                                                                                                                                                                   
+services:                                                                                                                                                                                                          
+    myservice:                                                                                                                                                                                                        
+        build: ./mycode                                                                                                                                                                                               
+        volumes:                                                                                                                                                                                                   
+            - ./logs:/data/log                                                                                                                                                                                     
+        ports:                                                                                                                                                                                                     
+            - "80:80"                                                                                                                                                                                              
+        tmpfs:                                                                                                                                                                                                     
+            - /exampledir
+that works. i'd like to specify the tmpfs size. There is a parameter in the Engine that is called as tmpfs-size *
+I just had a look into the Docker Compose's instruction **. I didn't see such as parameter.
+How can i set the tmpfs size through through the docker-compose.yml file? Is there a way to do it?
+*: https://docs.docker.com/engine/admin/volumes/tmpfs/#specify-tmpfs-options
+**: https://docs.docker.com/compose/compose-file/#tmpfs
+2

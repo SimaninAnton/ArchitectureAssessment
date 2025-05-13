@@ -1,0 +1,57 @@
+erichonkanen commented on 5 Jul 2015
+Currently Im working on a new project using both docker and microservices for the first time... compose is a neat and convenient tool but the one thing I wish it had were the ability to decouple extended services/repos more cleanly, aka not have to put the links in the top level docker-compose.yml.
+This would allow having a single "master" compse.yml that simple imports the necessary services and then builds them via their own docker-compose.yml...
+When working with microservices this would allow spinning up an entire multi-service/app project in one command AND also allow still spinning up any individual service on it's own when working on that specific service... As it is right now you are forced to put links in the top-level repo/compose.yml and use extends, which makes it not possible to run compose locally unless you make a separate file...
+Something like this would be sweet:
+orchestrate.yml
+service-content:
+  import:
+    file: ../service-content/docker-compose.yml
+
+service-auth:
+  import:
+    file: ../service-auth/docker-compose.yml
+
+service-accounting:
+  import:
+    file: ../service-accounting/docker-compose.yml
+
+logger:
+  image: voodoo/logger
+
+discovery:
+  image: voodoo/findme
+OR
+orchestrate.yml
+include:
+    name: service-content
+    file: ../service-content/docker-compose.yml
+
+include:
+    name: service-auth
+    file: ../service-auth/docker-compose.yml
+
+include:
+    name: service-accounting
+    file: ../service-accounting/docker-compose.yml
+
+logger:
+  image: voodoo/logger
+
+discovery:
+  image: voodoo/findme
+service-content/docker-compose.yml
+web-db:
+  image: postgres:latest
+
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
+  links:
+    - web-db
+Which would make containers prefixed by the top-level import name e.g. service-content_web-db_1
+What are your thoughts on something like this?

@@ -1,0 +1,6 @@
+ssiegl-iwes commented on 8 Mar 2017
+Hello,
+would it be possible to add the limits for disk space per container with docker compose.
+Like: https://github.com/docker/docker/blob/master/docs/reference/commandline/run.md#set-storage-driver-options-per-container
+BR
+Stefan

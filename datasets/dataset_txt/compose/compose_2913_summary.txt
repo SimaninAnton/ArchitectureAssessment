@@ -1,0 +1,1 @@
+Proposal: Docker-compose build --push and private registries.

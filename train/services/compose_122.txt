@@ -1,0 +1,235 @@
+haminhcong commented on 22 Jul 2019 •
+edited
+Description of the issue
+I am using Ansible with docker compose to deploy docker container to Virtual Machine.
+When ansible script running to deploy new container version, I have to shutdown and clean old docker container by this script:
+- name: Stop existing old my_fancy_app services stack if exists
+  shell:
+    cmd: "docker-compose --verbose --log-level DEBUG -p my_fancy_app -f {{service_name}}.yml down --timeout {{service_shutdown_timeout}}"
+    chdir: "{{working_dir}}"
+  register: my_fancy_app_down_output
+  retries: 3
+  delay: 20
+  until: my_fancy_app_down_output.rc == 0
+  when: service_docker_compose_details.stat.exists == True
+
+- debug:
+    msg: "{{my_fancy_app_down_output}}"
+  when: service_docker_compose_details.stat.exists == True
+
+- name: Delete old service docker compose file
+  file:
+    state: absent
+    path: "{{working_dir}}/{{service_name}}.yml"
+  when: service_docker_compose_details.stat.exists == True
+Howerver, sometime docker-compose down commant run and return exit code 0 but my old container is still not cleaned after this command complete and return exit code 0:
+Logs: https://gist.github.com/haminhcong/f3e8909a823338ba17b8e61598c3acdb
+When I start new container later, because old container is not cleaned, then new container is failed to start:
+Start container ansible code:
+- name: Start service containers
+  shell:
+    cmd: "docker-compose --verbose --log-level DEBUG -p my_fancy_app -f {{service_name}}.yml up -d --timeout {{start_container_timeout}}"
+    chdir: "{{working_dir}}"
+
+- name: wait for service port up
+  wait_for:
+    host: "127.0.0.1"
+    port: "{{service_port}}"
+    timeout: 360
+
+- name: wait for service list refresh
+  shell:
+    cmd: "sleep {{refresh_service_list_timeout}}"
+Logs: https://gist.github.com/haminhcong/a9eb716a925f67d17fed003de92ed0bb
+Context information (for bug reports)
+Output of docker-compose version
+$ docker-compose -v
+docker-compose version 1.22.0, build f46880f
+(paste here)
+Output of docker version
+docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:23:03 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:25:29 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+Here is my docker-compose config for mange my service.
+docker-compose -p my_fancy_app -f my-app-service.yml config
+
+services:
+  my-app-service:
+    command:
+    - --spring.cloud.config.uri=http://192.168.1.195:8088
+    - --spring.cloud.config.label=v2.40
+    - --spring.profiles.active=production
+    - --server.port=8075
+    container_name: my-app-service
+    entrypoint: java -Xms512m -Xmx3090m -Djava.security.egd=file:///dev/urandom -jar
+      /app/my-app-service.jar
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    healthcheck:
+      interval: 30s
+      retries: 10
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:8075/actuator/health
+      timeout: 15s
+    image: 192.168.1.50:8090/myapp/production/my-app-service:2.40.1
+    mem_limit: 5368709120
+    network_mode: host
+    restart: always
+    stop_signal: SIGINT
+    volumes:
+    - myapp_logs:/app/log:rw
+version: '2.4'
+volumes:
+  myapp_logs: {}
+In my VM, I also have an another docker compose stack to manage helper containers for my service container (logging, monitoring...). This docker-compose stack is long-running stack, and not down-up when i deploy new service version, only docker-compose service stack above is down-up.
+$ docker-compose -p my_fancy_app -f docker-compose.yml config
+networks:
+  monitor: {}
+services:
+  autoheal:
+    container_name: auto-restart-unhealthy
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: all
+    image: 192.168.1.50:8090/willfarrell/autoheal:latest
+    mem_limit: 67108864
+    restart: always
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+  blackbox-exporter:
+    command: --config.file=/config/blackbox.yml
+    container_name: blackbox-exporter
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    image: 192.168.1.50:8090/prom/blackbox-exporter:latest
+    mem_limit: 268435456
+    networks:
+      monitor: null
+    ports:
+    - 9115:9115/tcp
+    restart: always
+    volumes:
+    - /u01/blackbox:/config:rw
+  cadvisor:
+    container_name: cadvisor
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    image: 192.168.1.50:8090/google/cadvisor:latest
+    mem_limit: 268435456
+    networks:
+      monitor: null
+    ports:
+    - 8002:8080/tcp
+    restart: always
+    volumes:
+    - /:/rootfs:rshared
+    - /var/run:/var/run:rshared
+    - /sys:/sys:rshared
+    - /var/lib/docker:/var/lib/docker:rshared
+    - /cgroup:/cgroup:rshared
+  cron:
+    container_name: cron-clean-old-log
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    image: 192.168.1.50:8090/cron-clean-old-log:latest
+    mem_limit: 268435456
+    restart: always
+    volumes:
+    - myapp_logs:/myapp:rw
+  fluentd:
+    container_name: fluentd
+    environment:
+      FLUENT_UID: '1001'
+      RUBY_GC_HEAP_OLDOBJECT_LIMIT_FACTOR: '1.2'
+      TZ: Asia/Ho_Chi_Minh
+    image: 192.168.1.50:8090/fluentd:latest
+    mem_limit: 536870912
+    network_mode: host
+    ports:
+    - 24224:24224/tcp
+    restart: always
+    sysctls:
+      net.core.somaxconn: ' 1024'
+      net.ipv4.ip_local_port_range: ' 10240 65535'
+      net.ipv4.tcp_rmem: ' 4096 12582912 16777216'
+      net.ipv4.tcp_slow_start_after_idle: ' 0'
+      net.ipv4.tcp_tw_reuse: ' 1'
+      net.ipv4.tcp_wmem: ' 4096 12582912 16777216'
+    ulimits:
+      nofile:
+        hard: 65536
+        soft: 65536
+    volumes:
+    - /u01/fluentd:/fluentd/etc:rw
+    - myapp_logs:/myapp:rw
+    - myapp_log_pos:/fluentd/log:rw
+  jaeger-agent:
+    command: '--collector.host-port=192.168.1.195:14267
+
+      '
+    container_name: jaeger
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    image: 192.168.1.50:8090/jaegertracing/jaeger-agent:latest
+    mem_limit: 268435456
+    network_mode: host
+    restart: always
+  node-exporter:
+    command: '--path.procfs=/host/proc --path.sysfs=/host/sys --collector.filesystem.ignored-mount-points
+      ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+
+      '
+    container_name: node-exporter
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    image: 192.168.1.50:8090/prom/node-exporter:latest
+    mem_limit: 268435456
+    networks:
+      monitor: null
+    ports:
+    - 9100:9100/tcp
+    restart: always
+    volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+version: '2.4'
+volumes:
+  myapp_log_pos: {}
+  myapp_logs: {}
+Steps to reproduce the issue
+(This case sometime occur, not all time)
+Use ansible to start container stack with docker-compose up -d command
+Use ansible to stop and remove container stack by docker-compose down command
+Use ansible to start container stack by docker-compose up -d command
+Observed result
+Sometime docker conmpose down command not stop and remove container stack compeletely, but still retun exit code 0, old container still exist.
+Expected result
+If docker-compose down return exit code 0, the container stack should clean and remove completely
+Stacktrace / full error message
+docker-compose down command log: https://gist.github.com/haminhcong/f3e8909a823338ba17b8e61598c3acdb
+docker-compose up command log: https://gist.github.com/haminhcong/a9eb716a925f67d17fed003de92ed0bb
+Additional information
+OS Version: Centos 7
+OS version / distribution, docker-compose install method, etc.
+1

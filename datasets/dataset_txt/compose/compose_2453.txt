@@ -1,0 +1,31 @@
+andypillip commented on 26 Apr 2016 •
+edited
+Hi folks.
+After installing docker and docker-compose through DNF on my F23, I'm getting the mentioned error:
+$ docker-compose 
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.2.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 558, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2682, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2355, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2361, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 14, in <module>
+    from ..project import NoSuchService, ConfigurationError
+  File "/usr/lib/python2.7/site-packages/compose/project.py", line 6, in <module>
+    from .config import get_service_name_from_net, ConfigurationError
+ImportError: cannot import name get_service_name_from_net
+Version information about docker-compose from repo:
+Version : 1.2.0
+Release : 4.fc22
+I tried with docker from Fedora's updates repo as well as the dockerrepo.
+Version from dockerrepo:
+Version : 1.11.0
+Release : 1.fc22
+Version from updates:
+Version : 1.8.2
+Release : 7.gitcb216be.fc22

@@ -1,0 +1,52 @@
+weeger commented on 6 Aug 2018 •
+edited
+Hi everyone,
+Same issue as https://stackoverflow.com/questions/41637505/how-to-persist-data-in-a-dockerized-postgres-database-using-volumes
+When I mount my data volume, it remains empty in my host. Using /var/lib/postgresql/data instead /var/lib/postgresql does not helps. Giving 755 permission on whole data directory finally share files, but why and how to make it working with default access ?
+docker-compose version 1.17.0, build ac53b73
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Wed Mar 21 23:10:01 2018
+ OS/Arch:       linux/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:08:31 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+services:
+  test_postgres:
+    container_name: test_postgres
+    environment:
+      POSTGRES_DB: weeha
+      POSTGRES_PASSWORD: weehe
+      POSTGRES_USER: wooho
+    image: postgres:10.4
+    restart: always
+    volumes:
+    - ./data:/var/lib/postgresql/data:rw
+version: '2.0'
+Steps to reproduce the issue
+Use the given docker-compose.yml
+run docker-compose up -d
+run ls -la ./data
+run docker exec -ti test_postgres ls -la /var/lib/postgresql/data
+Observed result
+./data is empty
+/var/lib/postgresql/data is not empty
+Expected result
+./data and /var/lib/postgresql/data should have the same contents
+Additional information
+Ubuntu 16.x

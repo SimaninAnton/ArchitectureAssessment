@@ -1,0 +1,7 @@
+ericychoi commented on 28 Jan 2017
+Would it be possible to specify network_alias without explicit dependency? For instance:
+serviceA: 
+  links:
+    - B:serviceB
+serviceB:
+This will make docker-compose up A bring up B automatically. But what if you don't want that and merely want it available (and addressable by its alias: B) whenever it is up?

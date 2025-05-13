@@ -1,0 +1,12 @@
+Contributor
+kevinsimper commented on 19 Apr 2015
+If i have a docker-compose.yml file where i extend a service with another from a file for an example called config/development.yml.
+It works fine after the first docker-compose up, if i then change a value, an enviroment variable in this case
+common:
+  environment:
+    - DB_HOST=docker.dev:27017
+to
+common:
+  environment:
+    - DB_HOST=docker.dev:9000
+and do a docker-compose restart backend, then DB_HOST will still be the old value before the edit, but if I do a docker-compose stop - docker-compose start, then DB_HOST is the correct value.

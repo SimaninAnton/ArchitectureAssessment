@@ -1,0 +1,3 @@
+jimmyxian commented on 26 Nov 2015
+When create container, compose should set MemorySwappiness default value -1.
+Related issue: docker/swarm#1411

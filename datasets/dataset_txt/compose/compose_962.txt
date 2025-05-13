@@ -1,0 +1,13 @@
+fryder commented on 6 Jan 2018
+I have the similar problem
+Version 3
+creditcard-monk:
+build:
+context: ./creditcard
+dockerfile: Dockerfile
+args:
+JAR_FILE: target/creditcard-1.0.0.jar
+My requirement is that the jar is present in target directory of creditcard (mentioned in context)
+My docker file copies this jar file to the container lib directory .and its failing as the builds are done under docker-lib temp directories.
+failed to build: COPY failed: stat /var/lib/docker/tmp/docker-builder347176151/target/creditcard-1.0.0.jar: no such file or directory
+Please help

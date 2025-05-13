@@ -1,0 +1,46 @@
+dmc2015 commented on 15 Dec 2017 •
+edited
+I was wondering if there are known issues with using hostname to access a web service inside of a container?
+I can access http://elasticsearch.dev:9200 in a variety of ways:
+From a local running app that is not containerized
+From my browser using this name as well as localhost and my internal ip, with the correct port
+But I can't access this web service in side of my container.
+Snippet of docker-compose.yml
+es:
+    container_name: elasticsearch
+    hostname: elasticsearch.dev
+    networks:
+      - united_net
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    command: elasticsearch
+    ports:
+      - "9200:9200"
+Docker Version
+Client:
+Version: 17.09.1-ce
+API version: 1.32
+Go version: go1.8.3
+Git commit: 19e2cf6
+Built: Thu Dec 7 22:22:25 2017
+OS/Arch: darwin/amd64
+Server:
+Version: 17.09.1-ce
+API version: 1.32 (minimum version 1.12)
+Go version: go1.8.3
+Git commit: 19e2cf6
+Built: Thu Dec 7 22:28:28 2017
+OS/Arch: linux/amd64
+Experimental: true
+Docker Compose Version
+docker-compose version 1.17.1, build 6d101fb
+docker-py version: 2.5.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j 26 Sep 2016

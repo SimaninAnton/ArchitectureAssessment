@@ -1,0 +1,22 @@
+Contributor
+Dahca commented on 11 Dec 2017
+I found this issue while working on a fix for issue #4337.
+By running the following sequence of commands on this example repository:
+git checkout tags/test2_run1
+docker-compose build
+docker rmi --force dctest_service1
+docker-compose build
+docker-compose up
+Compose fails because the old image is never properly rebuilt from the old container:
+WARNING: The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use `docker stack deploy`.
+
+Recreating dctest_service1_1 ... error
+
+ERROR: for dctest_service1_1  no such image: sha256:bb41503c2e723478308998afc7df0886fac0811621b70d61b28ca36418a41bb7: No such image: sha256:bb41503c2e723478308998afc7df0886fac0811621b70d61b28ca36418a41bb7
+
+ERROR: for service1  no such image: sha256:bb41503c2e723478308998afc7df0886fac0811621b70d61b28ca36418a41bb7: No such image: sha256:bb41503c2e723478308998afc7df0886fac0811621b70d61b28ca36418a41bb7
+ERROR: Encountered errors while bringing up the project.

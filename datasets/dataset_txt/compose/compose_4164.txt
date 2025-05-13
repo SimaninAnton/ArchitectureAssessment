@@ -1,0 +1,4 @@
+pgodel commented on 17 Oct 2014
+I have followed the instructions to download the 1.0.0 release and when I execute the binary I get:
+$ ~/Downloads/fig-Darwin-x86_64 --version
+Illegal instruction: 4

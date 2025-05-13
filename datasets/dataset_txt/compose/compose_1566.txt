@@ -1,0 +1,47 @@
+reypm commented on 26 Mar 2017
+I have the following definition in my docker-compose.yml file:
+    version: '3'
+    services:
+        mysqldb:
+            image: mysql:5.6
+            healthcheck:
+                test: "exit 0"
+            env_file: .env_mysql
+            environment:
+                MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+                MYSQL_DATABASE: ${MYSQL_DATABASE}
+                MYSQL_USER: ${MYSQL_USER}
+                MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            volumes:
+                - ./dump:/docker-entrypoint-initdb.d
+And this is how the file .env_mysql looks like (values are just examples):
+    MYSQL_ROOT_PASSWORD=pass1
+    MYSQL_DATABASE=db1
+    MYSQL_USER=user1
+    MYSQL_PASSWORD=pass2
+This is the result of run the command docker-compose up:
+    > docker-compose up
+    WARNING: The MYSQL_ROOT_PASSWORD variable is not set. Defaulting to a blank string.
+    WARNING: The MYSQL_PASSWORD variable is not set. Defaulting to a blank string.
+    WARNING: The MYSQL_USER variable is not set. Defaulting to a blank string.
+    WARNING: The MYSQL_DATABASE variable is not set. Defaulting to a blank string.
+    Creating network "dockeramp_default" with the default driver
+    Pulling mysqldb (mysql:5.6)...
+    ...
+    Status: Downloaded newer image for mysql:5.6
+    Creating dockeramp_mysqldb_1
+    Attaching to dockeramp_mysqldb_1
+    mysqldb_1  | error: database is uninitialized and password option is not specified
+    mysqldb_1  |   You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD
+    dockeramp_mysqldb_1 exited with code 1
+Besides the value I have in the example above I have tried this other combinations of file name:
+.env-mysql => didn't work
+mysql.env => didn't work
+Only .env is accepted which is the opposite said here. Is this a bug? It's intended to be like it's? Can any test this and see if it's a problem on my side or a common problem from docker-compose?
+As an addition I am running Docker for Windows and I have the following version of Docker and Docker Compose respectively installed:
+> docker-compose -v
+docker-compose version 1.11.2, build f963d76f
+
+> docker -v
+Docker version 17.03.1-ce-rc1, build 3476dbf
+18

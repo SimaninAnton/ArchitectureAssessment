@@ -1,0 +1,36 @@
+agladysh commented on 28 Jun 2017 •
+edited
+$ cat docker-compose.yml
+version: "3"
+services:
+  bug:
+    image: hello-world
+    ports:
+      - "8000:8000"
+$ docker-compose up
+ERROR: for bug  expected string or buffer
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 926, in up
+    scale_override=parse_scale_args(options['--scale']),
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 424, in up
+    get_deps
+  File "/usr/local/lib/python2.7/dist-packages/compose/parallel.py", line 69, in parallel_execute
+    raise error_to_reraise
+TypeError: expected string or buffer
+$ docker-compose --version
+docker-compose version 1.14.0, build c7bdf9e
+$ docker --version
+Docker version 17.05.0-ce, build 89658be
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 17.04
+Release: 17.04
+Codename: zesty
+21

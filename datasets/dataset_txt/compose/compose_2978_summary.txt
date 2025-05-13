@@ -1,0 +1,1 @@
+docker-compose scale service=2 doesn't update /etc/hosts files when using --x-networking

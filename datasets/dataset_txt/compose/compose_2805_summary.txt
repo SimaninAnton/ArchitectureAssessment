@@ -1,0 +1,1 @@
+Compose cannot recreate a container on Swarm if the container has an host port mapping

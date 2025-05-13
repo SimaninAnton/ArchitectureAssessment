@@ -1,0 +1,8 @@
+Alphapage commented on 17 Jan 2019
+Hello,
+I tried docker-compose 1.24 rc1.
+I used: docker-compose -H "ssh://user@ip" build but it fails with this error: Couldn't connect to Docker daemon at http+docker://ssh - is it running? (which seems to be a generic error, but not the underlying one).
+It runs as expected locally, but fails using the previous command.
+I can't find any info: what does the host option expect to do ?
+I thought it will build my local image and send to the remote host. Or is it only a feature to run docker-compose as if I was connected to the remote host (so no local capabilities) ?
+Thank you in advance for your help.

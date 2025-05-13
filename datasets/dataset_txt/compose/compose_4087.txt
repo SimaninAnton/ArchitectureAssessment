@@ -1,0 +1,8 @@
+kayleg commented on 22 Nov 2014
+Running fig scale api=2 creates the following with output from fig ps:
+            Name                          Command               State           Ports
+---------------------------------------------------------------------------------------------
+testcom_api_1   pm2 start /app/app.js --wa ...   Up      0.0.0.0:49153->80/tcp
+testcom_api_2   pm2 start /app/app.js --wa ...   Up      0.0.0.0:49154->80/tcp
+Running fig port api 80 only returns the first container when we expected it to return both, is this intended?
+Trying to use the fig port --index=1 api 80 or fig port --index=2 api 80 returns "No container found for api_1" and "No container found for api_2" respectively

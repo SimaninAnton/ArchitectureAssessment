@@ -1,0 +1,15 @@
+digitalkaoz commented on 20 Oct 2014
+docker-py is 0.5.3
+Traceback (most recent call last):
+  File "/usr/local/Cellar/fig/1.0.0/libexec/bin/fig", line 9, in <module>
+    load_entry_point('fig==1.0.0', 'console_scripts', 'fig')()
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/main.py", line 31, in main
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/docopt_command.py", line 21, in sys_dispatch
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/command.py", line 28, in dispatch
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/docopt_command.py", line 24, in dispatch
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/command.py", line 51, in perform_command
+  File "build/bdist.macosx-10.10-intel/egg/fig/cli/main.py", line 119, in build
+  File "build/bdist.macosx-10.10-intel/egg/fig/project.py", line 166, in build
+  File "build/bdist.macosx-10.10-intel/egg/fig/service.py", line 394, in build
+  File "build/bdist.macosx-10.10-intel/egg/fig/progress_stream.py", line 22, in stream_output
+KeyError: 'id'

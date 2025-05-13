@@ -1,0 +1,7 @@
+CMeza99 commented on 7 Jul 2019
+Description of the issue
+Classifier for Python 3.5 missing in setup.py
+Context information (for bug reports)
+Python 3.5 seems to satisfy the python_requires line in setup.py
+Output of docker-compose version
+Commit 3d693f3

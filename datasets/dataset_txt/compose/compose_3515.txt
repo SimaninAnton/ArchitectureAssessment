@@ -1,0 +1,11 @@
+Contributor
+jeffk commented on 2 Jul 2015
+This comment in #551 indicates that the following syntax should work for passing SSH_AUTH_SOCK into a container:
+volumes:
+    - $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+environment:
+    - SSH_AUTH_SOCK
+However, resolve_host_path in config.py does exactly as it's named, it resolves the host path but not the container path.
+This means that the snippet pasted above results in a volume like this:
+['/tmp/ssh-4NokVWqj63/agent.10499:$SSH_AUTH_SOCK']
+Instead of resolve_host_paths/resolve_host_path, the functions should probably be resolve_path/resolve_paths and resolve both host and container paths.

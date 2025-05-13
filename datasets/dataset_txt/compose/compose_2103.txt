@@ -1,0 +1,6 @@
+colincgn commented on 1 Sep 2016
+I have a situation where I needed to run the docker daemon with --bip=192.168.50.1/24 flag, this made sure that my containers get started in that network range by default, thanks to the newly configured docker0 bridge.
+As expected, every time I execute docker run ...... my containers get the appropriate IP in the 192 network.
+The issue with docker-compose up is that the containers get created in their own network, using a default network of 172.X.X.X, now I know that I can create my own network and configure it accordingly, which is what I did in my compose file, however it feels as if compose's default network should "default" to the docker0 interface?
+Using Docker Machine on Virtual Box with docker version 1.12 on Windows 7.
+1

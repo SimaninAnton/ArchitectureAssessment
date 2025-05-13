@@ -1,0 +1,8 @@
+philtay commented on 31 Oct 2016
+The --network option for docker build has been recently merged. Please support it in Compose too. Something like this:
+build:
+  context: ./dir
+  networks:
+    - some-network
+    - other-network
+11

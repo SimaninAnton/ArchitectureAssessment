@@ -1,0 +1,9 @@
+rrrrroman commented on 11 Jul 2017
+I have a .env file that defines all my variables and when I run docker-compose scale thing=X the container is scaled, but it's not using the correct environment variables. It just reads the .env file and ignores any variables I have set in my shell.
+$ docker-compose -v
+docker-compose version 1.11.1, build 7c5d5e4
+So if I have a .env file that looks like this:
+FOO=BAR
+and then in my shell I set it to:
+FOO=BAZ
+and run the scale command - the containers receive FOO=BAR instead of FOO=BAZ.

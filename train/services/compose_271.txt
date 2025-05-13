@@ -1,0 +1,83 @@
+Contributor
+CatEars commented on 3 Mar 2019
+Description of the issue
+If I create a simple docker compose file without a secret attached to any container, run docker-compose up, then add the secret, and run docker-compose up again, then the secret is not added.
+Context information (for bug reports)
+I ran this with the version of docker-compose from the master branch at commit b09d8802
+Output of docker-compose version
+docker-compose version 1.24.0dev, build unknown
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.4
+ Git commit:        e68fc7a
+ Built:             Mon Oct  1 14:25:31 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       e68fc7a
+  Built:            Mon Oct  1 14:25:33 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+secrets:
+  A:
+    file: /home/catears/code/compose/tests/rmme/docker-compose.yml
+services:
+  nginx:
+    command: ls /run/secrets
+    image: nginx
+    secrets:
+    - source: A
+version: '3.5'
+Steps to reproduce the issue
+version: '3.5'
+
+services:
+  nginx:
+    image: nginx
+    command: ls /run/secrets
+
+    # Run once, uncomment me, and run again!
+    # secrets:
+    #   - A
+secrets:
+  A:
+    file: ./docker-compose.yml
+Using the above compose-file, run docker-compose up.
+Wait until it fails (no secrets so /run/secrets doesn't exist).
+Uncomment/Add the A secret.
+Run docker-compose up again.
+Observed result
+The following output:
+Starting rmme_nginx_1 ... done
+Attaching to rmme_nginx_1
+nginx_1  | ls: cannot access '/run/secrets': No such file or directory
+rmme_nginx_1 exited with code 2
+Expected result
+The following output (which happens if you do not have a container beforehand):
+Creating rmme_nginx_1 ... done
+Attaching to rmme_nginx_1
+nginx_1  | A
+rmme_nginx_1 exited with code 0
+I poked around the source code and it seems to me that when starting a project, compose will compare the configurations using the result of Service.config_dict() and adding the following diff, seemed to solve it for me.
+diff --git a/compose/service.py b/compose/service.py
+index 6483f4f3..fc51eaac 100644
+--- a/compose/service.py
++++ b/compose/service.py
+@@ -686,6 +686,7 @@ class Service(object):
+             'links': self.get_link_names(),
+             'net': self.network_mode.id,
+             'networks': self.networks,
++            'secrets': self.secrets,
+             'volumes_from': [
+                 (v.source.name, v.mode)
+                 for v in self.volumes_from if isinstance(v.source, Service)
+I'd love to do a PR for this, but I do not know how to properly write a test for it. Also, I don't know if it is correct to recreate the container because the secret was missing, but I figured this might be the case because volumes_from, image_id and networks changes would cause compose to recreate a container.

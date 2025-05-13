@@ -1,0 +1,5 @@
+Contributor
+johndmulhausen commented on 24 Sep 2016
+We are soon going to be serving the docs in GitHub pages soon and the gh-pages branch here is publishing to http://docker.github.io/compose
+See: docker/docker.github.io#14
+Sadly, we need that URL for the real docs, currently at https://docs.docker.com/compose

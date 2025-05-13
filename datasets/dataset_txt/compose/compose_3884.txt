@@ -1,0 +1,20 @@
+dimaip commented on 1 Mar 2015
+Hi! I often get the following error on our Centos 6.5 server when executing docker-compose up -d:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 155, in logs
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 205, in containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 519, in containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 81, in _get
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 395, in get
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 387, in send
+requests.exceptions.Timeout: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
+Any idea what's happening?
+1

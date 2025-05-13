@@ -1,0 +1,7 @@
+JLarky commented on 3 Mar 2016
+I want to say sorry that I didn't look into better place to say that, but I hope it will work out :)
+I think that compose install instructions can be made more clear --- https://docs.docker.com/compose/install/
+instead of talking about sudo -i and exit what if you would just use these commands:
+$ curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > docker-compose
+$ chmod +x docker-compose
+$ sudo mv docker-compose /usr/local/bin/docker-compose

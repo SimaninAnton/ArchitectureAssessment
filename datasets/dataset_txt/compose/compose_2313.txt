@@ -1,0 +1,23 @@
+allamand commented on 10 Jun 2016
+Hello,
+I would like to be able to use env-var in my docker-compose.yml files in order to use my services in differents instances .
+Example :
+services:
+  elasticsearch:
+    volumes:
+      - ${MACHINE_PREFIX}-elastic:/usr/share/elasticsearch/data
+    networks:
+      - net
+      - ${MACHINE_MASTER_NAME}1/consul_default
+
+networks:
+  net:
+    driver: overlay
+  ${MACHINE_MASTER_NAME}1/consul_default:
+    external: true
+
+volumes:
+  ${MACHINE_PREFIX}-elastic:
+    external: true
+The var is replaced in the service section, but in networks and volumes section it is not.
+Would it be possible to add this feature ?

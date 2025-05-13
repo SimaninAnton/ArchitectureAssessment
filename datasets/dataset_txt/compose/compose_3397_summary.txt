@@ -1,0 +1,1 @@
+Proposal: Check if Container Exists in docker-compose.yml

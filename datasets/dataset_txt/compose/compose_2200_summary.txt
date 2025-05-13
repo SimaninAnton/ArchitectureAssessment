@@ -1,0 +1,1 @@
+Should docker-compose restart a dependent service when dep version changes

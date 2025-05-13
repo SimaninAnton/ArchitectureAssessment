@@ -1,0 +1,1 @@
+Error message when image and container has same name is confusing

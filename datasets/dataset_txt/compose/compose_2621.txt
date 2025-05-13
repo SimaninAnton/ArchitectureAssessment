@@ -1,0 +1,4 @@
+cdrage commented on 16 Mar 2016
+Stupid question.
+But is there a way to use both docker machine and compose to specify what particular host to deploy on?
+I know I can do this for multi-host networking. But how can I specify which hosts deploy what with docker-machine? For example. Redis on foobar-server-1, mysql on foobar-server-2, etc.

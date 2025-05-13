@@ -1,0 +1,13 @@
+khs1994 commented on 26 Nov 2017
+docker-compose.test.yml
+version: "3"
+
+services:
+  php:
+    image: php:7.1.11-fpm-alpine3.4
+docker-compose -f docker-compose.test.yml pull
+Pulling php (php:7.1.11-fpm-alpine3.4)...
+7.1.11-fpm-alpine3.4: Pulling from library/php
+7.1.11-fpm-alpine3.4: Pulling from library/php
+ERROR: no matching manifest for windows/amd64 in the manifest list entries
+5

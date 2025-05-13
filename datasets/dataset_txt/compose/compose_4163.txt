@@ -1,0 +1,26 @@
+kanzure commented on 17 Oct 2014
+Step 5 : ADD https://rtdata.dtcc.com/payload.tgz /tmp/
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.5.2', 'console_scripts', 'fig')()
+  File "/home/vagrant/src/fig/fig/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/home/vagrant/src/fig/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/home/vagrant/src/fig/fig/cli/command.py", line 28, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/home/vagrant/src/fig/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/home/vagrant/src/fig/fig/cli/command.py", line 49, in perform_command
+    handler(project, command_options)
+  File "/home/vagrant/src/fig/fig/cli/main.py", line 119, in build
+    project.build(service_names=options['SERVICE'], no_cache=no_cache)
+  File "/home/vagrant/src/fig/fig/project.py", line 166, in build
+    service.build(no_cache)
+  File "/home/vagrant/src/fig/fig/service.py", line 404, in build
+    all_events = stream_output(build_output, sys.stdout)
+  File "/home/vagrant/src/fig/fig/progress_stream.py", line 22, in stream_output
+    image_id = event['id']
+KeyError: 'id'
+branch master
+More details available or forthcoming (still investigating).

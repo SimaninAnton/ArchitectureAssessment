@@ -1,0 +1,36 @@
+datpham23 commented on 3 Aug 2016 •
+edited
+docker-compose up works fine but with --abort-on-container-exit i'm getting the following error.
+docker-compose.yml
+
+version: '2'
+services:
+   app:
+    build: .
+    image: app
+    ports:
+     - "4000:4000"
+    depends_on:
+     - rethinkdb
+  rethinkdb:
+    image: rethinkdb
+    ports:
+     - "8080:8080"
+     - "28015:28015"
+     - "29015:29015"
+docker-compose up --abort-on-container-exit
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 61, in main
+  File "compose/cli/main.py", line 113, in perform_command
+  File "compose/cli/main.py", line 835, in up
+  File "compose/project.py", line 379, in up
+  File "compose/project.py", line 177, in get_services_without_duplicate
+  File "compose/project.py", line 165, in get_services
+  File "compose/project.py", line 136, in get_service
+  File "compose/project.py", line 555, in __init__
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+docker-compose returned -1
+macos 10.11.5
+Docker version 1.12.0, build 8eab29e
+docker-compose version 1.8.0, build f3628c7

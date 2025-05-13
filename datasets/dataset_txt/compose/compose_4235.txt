@@ -1,0 +1,13 @@
+dsyer commented on 14 Aug 2014
+I can see traces of it everywhere, e.g. in /etc/hosts:
+172.17.0.198    848fdb642137
+127.0.0.1   localhost
+...
+172.17.0.193    web_1
+...
+and
+$ env | grep web
+...
+WEB_1_NAME=web_1
+...
+so fig has injected it in there somehow, but not in a very accessible way. It would be great to be able to discover that at runtime.

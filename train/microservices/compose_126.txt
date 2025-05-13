@@ -1,0 +1,30 @@
+iamKurt commented on 19 Jul 2019 •
+edited
+Is your feature request related to a problem? Please describe.
+Error message when trying to create a dynamic network name in a Compose file.
+Describe the solution you'd like
+I am trying to create isolated networks for my CI builds and am trying to build them based on a dynamically built network name from an environment variable.
+Additional context
+Currently, the Compose file does not correctly expand variables defined in a network name.
+In the Compose file, I have defined the network as:
+networks:
+  ${NET}:
+    external: true
+Running docker-compose config does not show any errors. Here’s the abbreviated output of that command:
+networks:
+  $${NET}:
+    external: true
+    name: $${NET}
+  postgresql:
+    environment:
+      POSTGRES_PASSWORD: ''
+      POSTGRES_USER: test
+    image: postgres:11.3
+    networks:
+      app_network_1: null
+version: '3.7'
+So, it shows the network being read from the environment variable. And I can see that network when I docker network ls, but Compose complains and fails to start the services:
+$ docker-compose -f docker-compose-ci.yml up -d
+WARNING: Some networks were defined but are not used by any service: ${NET}
+ERROR: Service "app" uses an undefined network "app_network_1"
+Theoretically, it should work. Is something either missing or not happening correctly here?

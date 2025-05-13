@@ -1,0 +1,5 @@
+vingrad commented on 14 Jun 2016
+How can I define the custom IP for containers in compose-file? I use overlay network with network_mode: my-net
+So I cannot specify the IP via networks, because I get the following error:
+ERROR: 'network_mode' and 'networks' cannot be combined
+2

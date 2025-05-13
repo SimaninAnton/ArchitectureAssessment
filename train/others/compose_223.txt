@@ -1,0 +1,19 @@
+jadon1979 commented on 11 Apr 2019 •
+edited
+Scenario:
+SomeService
+conf files are stored in /etc/someservice/conf.d
+the directory contains a, b, and c conf files.
+Your task is to add|override conf files in this directory given particular environments (dev, staging|feature, etc). You cannot map the conf.d directory, using volumes, because that will override the conf.d directory and destroy the current conf files. Option 1: Add these files as individual entries under volumes. Ultimately, you may end up with quite a few files, going numerous places, and a very large volumes key. Option 2: Add a copy, add, or inject key in the docker-compose that allows you to specify a file, or directory, to copy over.
+svc:
+  ...
+  copy:
+    - ./services/someservice/conf.d:/etc/someservice/conf.d
+  ...
+...
+This would copy the files from the local conf.d directory and add or replace files in the image's conf.d directory.
+"Why wouldn't you just add the service as a separate image?"
+I would still have the same issue with handling multiple confs on-the-fly.
+"Why wouldn't you just handle it in the dockerfile?"
+There are numerous reasons and all of them are why docker-compose exist.
+1

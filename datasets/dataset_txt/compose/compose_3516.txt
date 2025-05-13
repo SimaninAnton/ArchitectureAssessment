@@ -1,0 +1,3 @@
+ibnesayeed commented on 2 Jul 2015
+Now that Compose is slowly getting ready for production and there has been some interest on using Snappy Ubuntu on production servers, I think it is the right time to provide Snappy package of Compose. People trying to install it in a traditional way are facing read only file system error. And here is a quick guide on how to package snappy apps.
+2

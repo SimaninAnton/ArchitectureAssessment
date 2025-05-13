@@ -1,0 +1,1 @@
+Volume defined using volumes_from is not updated when stopping, recreating and starting the source service

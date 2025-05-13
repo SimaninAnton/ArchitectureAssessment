@@ -1,0 +1,10 @@
+Contributor
+dnephin commented on 13 Aug 2015
+Related to #1858 (cc @aanand, @mnowster since this just came up)
+If we attach the log printer to a container that has already exited, it never gets the "end of log" condition and docker-compose logs doesn't exist (the same is true for up).
+In a way, this is related to the problem described in #1115, where logs for containers created by scale are not picked up.
+I think we can fix both of those issues by adjusting the way we find containers to log. Instead of sending in a list of containers, we can do something like this:
+start a thread which tails events (related to #1510)
+when it receives a "create" event that matches the service name we want to print logs for, create a new thread to consume logs for that container
+(in the case of up) start the containers
+proceed with log tailing until all containers have exited (which will change the exit condition as well I think)

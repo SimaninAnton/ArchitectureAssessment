@@ -1,0 +1,21 @@
+thomaslitton commented on 26 May 2016
+For my local docker daemon i have SSL on, but client auth turned off.
+This configuration works fine when using docker, but docker-compose doesn't seem to accept it.
+This is on windows:
+DOCKER_CERT_PATH=d:\certs\local
+DOCKER_HOST=tcp://localdocker:2376
+DOCKER_MACHINE_NAME=dev
+DOCKER_TLS_VERIFY=0
+DOCKER_TOOLBOX_INSTALL_PATH=D:\Program Files\Docker Toolbox
+D:\projects\Monitoring\mon-infrastructure>docker ps
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS
+NAMES
+d0d97e84e916 pc_local "./entry-point.sh" 3 hours ago Up 3 hours 0.0.0.0:9292->9
+292/tcp pc_local
+01c66bd95db3 ag_local "bundle exec puma -C " 24 hours ago Up 24 hours 0.0.0.0:9294->9
+292/tcp ag_local
+D:\projects\Monitoring\mon-infrastructure>docker-compose pull
+ERROR: TLS configuration is invalid - make sure your DOCKER_TLS_VERIFY and DOCKER_CERT_PATH are set correctly.
+You might need to run eval "$(docker-machine env default)"
+D:\projects\Monitoring\mon-infrastructure>
+1

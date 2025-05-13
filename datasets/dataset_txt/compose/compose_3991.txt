@@ -1,0 +1,5 @@
+mindtrades commented on 16 Jan 2015
+I am on OS X Yosemite and i have boot2docker and fig installed and i followed the tutorial to create the django app
+http://www.fig.sh/django.html
+and i created all 3 files along with dockerfile , when i run fig run web django-admin.py start project as per tutorial fig.ml runs , created 8 different versions of postgres , but django app is not created and gives the error Cannot build a directory without a Dockerfile
+And i tried taking help on irc and did not get any solution . I am having the issue still and i am not able to use docker .

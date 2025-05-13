@@ -1,0 +1,6 @@
+Contributor
+Knetic commented on 9 Jun 2016 •
+edited
+Docker (as of 1.10.0) supports a flag --oom-score-adj, which allows adjustment of the oom-killer scoring for a container. This is useful because it allows you to protect your service from the oom-killer, or at least give it an idea of the priority of your containers so that it doesn't go wild and kill the important ones first.
+I didn't see any documentation about how to wire this flag into a Compose manifest in the reference docs, nor did I find anything in the github issues/pr tracker by searching for "oom", so I assume it's unimplemented.
+I'm down make a PR to wire up this flag, but first wanted to raise the issue first in case there was something I missed or if there was a reason it wasn't there.

@@ -1,0 +1,2 @@
+blacktop commented on 3 Aug 2016
+I am expecting to see https://docs.docker.com/v1.8/compose/env/ when I link two containers together, but they are not getting set in gliderlabs/alpine images, but if I do it manually with docker-engine it does get set?

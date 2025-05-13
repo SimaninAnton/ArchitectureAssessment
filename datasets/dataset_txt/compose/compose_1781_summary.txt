@@ -1,0 +1,1 @@
+Errors when using docker compose v2 and latest release

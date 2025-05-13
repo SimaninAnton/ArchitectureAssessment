@@ -1,0 +1,39 @@
+brylie commented on 23 Aug 2018 •
+edited
+Description of the issue
+When running docker-compose up while connected to an OpenVPN proxy, I get the following error:
+ERROR: could not find an available, non-overlapping IPv4 address pool among the defaults to assign to the network
+Several other people have experienced this issue, and discussed it on StackOverflow
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:09:56 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:07:55 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Steps to reproduce the issue
+connect to an OpenVPN proxy
+run docker-compose up in a project
+rage quit
+Observed result
+ERROR: could not find an available, non-overlapping IPv4 address pool among the defaults to assign to the network
+Expected result
+Docker compose should be able to find an IPv4 address pool
+Additional information
+OS: Kubuntu 18.04

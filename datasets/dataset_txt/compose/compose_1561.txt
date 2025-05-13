@@ -1,0 +1,9 @@
+rivaros commented on 28 Mar 2017 •
+edited
+This is basically a question about named volumes.
+Starting from version 3 file format docker-compose does not allow volumes-from which was deprecated in favor of named volumes.
+But there is a problem - with named volumes you cannot bind to local host folder & make it persistent.
+So, for example, if I want to share my project folder among nginx, fpm and mysql docker containers, I need to specify a volume mapping setting for each of them.
+It's not possible to just create one named volume mapped to project folder & then simply reuse it in all containers.
+Why this is not possible? I am aware of the third-party docker plugin like https://github.com/CWSpear/local-persist but as all third-party things, this does not make me feel I should use it (is it stable or maybe it is slow). Are there any particular reasons (drawbacks) why it was not implemented in the core?
+38

@@ -1,0 +1,18 @@
+marfillaster commented on 25 Jun 2016 •
+edited
+The recently released beta can mount windows host directory using this test command
+docker run --rm -v c:/Users:/data alpine ls /data
+However, it is not working when used in compose under the volumes key:
+ alpine:
+   image: alpine
+ volumes:
+       - c:/Users:/data
+We get this error instead
+C:\> docker-compose run alpine ls /data
+ERROR: Named volume " c:/Users" is used in service "alpine" but no declaration was found in the volumes section.  
+Workaround
+volumes:
+     - $PROJECT_PATH:/data
+
+PROJECT_PATH=/c/Users docker-compose run alpine ls /data
+1

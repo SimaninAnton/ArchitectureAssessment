@@ -1,0 +1,18 @@
+blackrosezy commented on 10 Sep 2014
+Docker (v 1.2.0) now has an option for restart so containers can auto restart after machine/host reboot:
+https://docs.docker.com/reference/commandline/cli/#run
+--restart=""  Restart policy to apply when a container exits (no, on-failure[:max-retry], always)
+Can we have that option in fig.yml? An e.g:
+web:
+  image: test/myweb
+  restart: always
+db:
+  image: test/mydb
+  restart: always
+or more brilliant way, it will restart app stack (web and db):
+restart: always
+web:
+  image: test/myweb
+db:
+  image: test/mydb
+Thanks.

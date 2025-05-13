@@ -1,0 +1,1 @@
+Provide a proper way to define a network shared with multiple docker-compose.yml container groups

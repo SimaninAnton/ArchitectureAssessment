@@ -1,0 +1,1 @@
+docker-compose run fails with error message "Invalid bind address format"

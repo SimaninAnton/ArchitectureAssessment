@@ -1,0 +1,18 @@
+zrml commented on 8 Jul 2016 •
+edited
+Hi:
+I'm trying to specify a private IP address range (10.0.0) in my compose file as:
+networks:
+cdev:
+driver: bridge
+driver_opts:
+com.docker.network.enable_ipv4: "true"
+ipam:
+config:
+- subnet: 10.0.0.0/24
+- gateway: 10.0.0.1
+It gives me
+"ERROR: Invalid subnet : invalid CIDR address" even though is part of the standard private addresses as per the std you point out in your documentation
+https://tools.ietf.org/html/rfc1918
+I suspect it might be something else though...
+Thank you

@@ -1,0 +1,12 @@
+abuckenheimer commented on 6 Dec 2017
+I'm running into an issue where I can't create a container with a logging override:
+Traceback (most recent call last):
+  ...
+  File "/home/ubuntu/dev/cosmos/app/hydrogen/hydrogen/docker.py", line 77, in test
+    c = d.create_container(command=shlex.split(s.test_command), logging={})
+  File "/home/ubuntu/miniconda3/lib/python3.6/site-packages/compose/service.py", line 295, in create_container
+    return Container.create(self.client, **container_options)
+  File "/home/ubuntu/miniconda3/lib/python3.6/site-packages/compose/container.py", line 46, in create
+    response = client.create_container(**options)
+TypeError: create_container() got an unexpected keyword argument 'logging'
+Looking at the source in service.py I think the relevant issue is here we try to pop off HOST_CONFIG_KEYS so we can add them instead nested inside the 'host_config' option of container_options. However HOST_CONFIG_KEYS does not define 'logging' thus leaving the option at the top level and causing the container to barf on init as this is unexpected. I think this should be fixed in one line just by adding 'logging' to the HOST_CONFIG_KEYS and would be happy to make a pr for this.

@@ -1,0 +1,42 @@
+derflocki commented on 13 Sep 2018
+Description of the issue
+The .env file is only evaluated in $CWD when calling docker-compose
+My folder structure is like
+~/projects
+.env
+docker-compose.yml
+|-- project-1
+|-- project-2
+|-- ...
+With no .env file present, docker-compose behaves the same if called inside ~/projects or any of its subfolder. However the .env file is only evaluated in the $CWD.
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:       17.12.0-ce
+ API version:   1.35
+ Go version:    go1.9.2
+ Git commit:    c97c6d6
+ Built: Wed Dec 27 20:11:19 2017
+ OS/Arch:       linux/amd64
+
+Server:
+ Engine:
+  Version:      17.12.0-ce
+  API version:  1.35 (minimum version 1.12)
+  Go version:   go1.9.2
+  Git commit:   c97c6d6
+  Built:        Wed Dec 27 20:09:53 2017
+  OS/Arch:      linux/amd64
+  Experimental: false
+Steps to reproduce the issue
+git clone https://gist.github.com/derflocki/810406d1d8db145ffaa469f42c05e65a
+docker-compose up -d
+docker-compose ps
+cd httpd && docker-compose ps
+Observed result
+The first docker-compose ps shows httpd as running. Inside the folder httpd docker-compose ps shows nothing
+Expected result
+both should habe the same output

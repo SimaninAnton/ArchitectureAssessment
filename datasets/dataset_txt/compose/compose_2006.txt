@@ -1,0 +1,2 @@
+fsword commented on 13 Oct 2016
+When I use docker compose to define my services, I can set up volume mapping. But bundle command does not support the feature, is there another way to do the same thing?

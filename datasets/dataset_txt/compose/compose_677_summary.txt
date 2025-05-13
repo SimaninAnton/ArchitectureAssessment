@@ -1,0 +1,1 @@
+Extensions fail with "additional properties are not allowed"

@@ -1,0 +1,60 @@
+cotta0322 commented 9 days ago
+Description of the issue
+Use Japanese environment Windows.（SJIS）
+If path contains Japanese, "docker-compose -f path config" generates UnicodeDecodeError.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.2, build 698e2846
+docker-py version: 4.1.0
+CPython version: 2.7.16
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea
+ Built:             Wed Nov 13 07:22:37 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea
+  Built:            Wed Nov 13 07:29:19 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Steps to reproduce the issue
+Use Windows with Japanese environment.
+Install Docker for Windows.（Ver.2.2.0.0）
+Execute docker-compose -f path config
+This does not occur if you specify docker-compose.yml in the current directory.
+OK=> PS D:\あ> docker-compose config
+NG=> PS D:\あ> docker-compose -f D:\あ\docker-compose.yml config
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 72, in main
+  File "compose\cli\main.py", line 122, in perform_command
+  File "compose\cli\main.py", line 325, in config
+  File "compose\cli\command.py", line 91, in get_config_from_options
+  File "compose\cli\command.py", line 106, in get_config_path_from_options
+  File "compose\cli\command.py", line 102, in unicode_paths
+  File "encodings\utf_8.py", line 16, in decode
+UnicodeDecodeError: 'utf8' codec can't decode byte 0x82 in position 3: invalid start byte
+[12160] Failed to execute script docker-compose
+Additional information
+It happened when I upgraded "Docker for windows" today.
+3

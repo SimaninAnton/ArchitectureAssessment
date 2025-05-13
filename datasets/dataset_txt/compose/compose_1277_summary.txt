@@ -1,0 +1,1 @@
+"compose up" exits with status 0 when terminated with a signal

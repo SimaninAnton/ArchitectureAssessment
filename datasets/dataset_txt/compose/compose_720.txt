@@ -1,0 +1,45 @@
+ianblenke commented on 24 Apr 2018
+Description of the issue
+In the latest version of docker-compose, the computed COMPOSE_PROJECT_NAME now includes dashes where before those dashes were removed from the computed project name.
+Context information (for bug reports)
+docker-compose version 1.21.0, build 5920eb0
+Docker version 18.04.0-ce, build 3d479c0
+The docker-compose.yml in use:
+https://github.com/sofwerx/swx-devops/blob/master/aws/swx-blueteam/swx-blueteam.yml
+Steps to reproduce the issue
+While in the swx-blueteam directory, docker-compose versions up to 1.20.1 compute the project name as swxblueteam
+Upgrading docker mac now includes docker-compose version 1.21.0
+While in the swx-blueteam directory, docker-compose 1.21.0 now computes the project name as swx-blueteam
+Observed result
+The computed COMPOSE_PROJECT_NAME now includes dashes, where it previously would strip them.
+This causes the docker-compose to proceed to create new docker network and volume resources, and attempt to recreate all containers with the new project name, which conflicts with the existing deployed containers that used the previous project name.
+Expected result
+Principle of least surprise is to not change behaviors like this without announcing the behavior change.
+Stacktrace / full error message
+$ /usr/local/bin/docker-compose-1.21.0 up -d traefik
+Creating network "swx-blueteam_default" with driver "bridge"
+Creating volume "swx-blueteam_traefik-ssl" with local driver
+Creating volume "swx-blueteam_mariadb-data" with local driver
+Creating volume "swx-blueteam_magento-data" with local driver
+Creating volume "swx-blueteam_elasticsearch-data" with local driver
+Creating volume "swx-blueteam_sourcegraph-config" with local driver
+Creating volume "swx-blueteam_sourcegraph-data" with local driver
+Creating volume "swx-blueteam_gdelt-data" with local driver
+Creating volume "swx-blueteam_bimserver-logs" with local driver
+Creating volume "swx-blueteam_bimserver-database" with local driver
+Creating traefik ... error
+
+ERROR: for traefik  Cannot create container for service traefik: Conflict. The container name "/traefik" is already in use by container "2fd2705e01bccb40ce082bc4120de0498b6aeba0d4fc5c4743318f8ba0af14b7". You have to remove (or rename) that container to be able to reuse that name.
+
+ERROR: for traefik  Cannot create container for service traefik: Conflict. The container name "/traefik" is already in use by container "2fd2705e01bccb40ce082bc4120de0498b6aeba0d4fc5c4743318f8ba0af14b7". You have to remove (or rename) that container to be able to reuse that name.
+ERROR: Encountered errors while bringing up the project.
+Additional information
+Using Mac High Sierra, latest docker mac release, which includes the latest Darwin binary build of docker-compose 1.21.0. Undoubtedly this impacts all of the latest builds.
+Workaround
+For the time being, I can explicitly use:
+export COMPOSE_PROJECT_NAME=swxblueteam
+Which allows me to use the latest docker-compose 1.21.0 while still retaining the old directory structure and the existing project name without the dash in it.
+The downside here is that I have dozens of these environments in that repo that have dashes in them, so I must now set that environment variable in all of them for them to behave correctly.
+Renaming the directory I run docker-compose from will cause grief with submodules, so I would rather avoid having to go through that pain as well.
+This seems to be some kind of oversight, or planned obsolesce that I was not prepared for.
+1

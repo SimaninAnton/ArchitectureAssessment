@@ -1,0 +1,1 @@
+Exceptions when running fig over ssh with xterm

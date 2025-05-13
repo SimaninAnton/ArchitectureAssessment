@@ -1,0 +1,45 @@
+kenjones-cisco commented on 23 Nov 2015
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.6
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+OS:
+Linux entcon-dev 3.13.0-65-generic #105-Ubuntu SMP Mon Sep 21 18:50:58 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+docker-compose.yml
+consul1:
+  container_name: consul1
+  build: .
+  command: "agent -join consul3 -config-dir=/config"
+  ports:
+    - "8301"
+    - "8302"
+    - "8400"
+    - "8500"
+    - "8600"
+
+consul2:
+  container_name: consul2
+  build: .
+  command: "agent -join consul3 -config-dir=/config"
+  ports:
+    - "8301"
+    - "8302"
+    - "8400"
+    - "8500"
+    - "8600"
+
+consul3:
+  container_name: consul3
+  build: .
+  command: "agent -bootstrap-expect 3 -config-dir=/config"
+  ports:
+    - "8301"
+    - "8302"
+    - "8400"
+    - "8500"
+    - "8600"
+When using the command:
+docker-compose --x-networking up -d
+On Docker Engine 1.9.0 it successfully starts and connect to each other each time.
+On Docker Engine 1.9.1 only consul3 starts successfully, the other two consul1, consul2 both fail because consul3 is unknown. Using docker inspect to identify where the hosts file is located, the file is missing any entries for the other containers.
+I had started with progrium/consul before I switched over to my own images, but even if you use that image and pass in all the configurations as part of the command the same behavior can be seen using that image.

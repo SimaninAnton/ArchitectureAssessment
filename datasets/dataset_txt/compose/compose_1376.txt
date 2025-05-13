@@ -1,0 +1,35 @@
+PlugIN73 commented on 20 Jun 2017
+Hi guys! I just updated to version 1.14 via pip and got error:
+ (master) hexlet$ make compose-bash
+docker-compose run web bash
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python3.5/dist-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/local/lib/python3.5/dist-packages/compose/cli/main.py", line 115, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/local/lib/python3.5/dist-packages/compose/cli/command.py", line 37, in project_from_options
+    override_dir=options.get('--project-directory'),
+  File "/usr/local/lib/python3.5/dist-packages/compose/cli/command.py", line 91, in get_project
+    config_data = config.load(config_details)
+  File "/usr/local/lib/python3.5/dist-packages/compose/config/config.py", line 379, in load
+    service_dicts = load_services(config_details, main_file)
+  File "/usr/local/lib/python3.5/dist-packages/compose/config/config.py", line 475, in load_services
+    service_config = merge_services(service_config, next_config)
+  File "/usr/local/lib/python3.5/dist-packages/compose/config/config.py", line 466, in merge_services
+    for name in all_service_names
+  File "/usr/local/lib/python3.5/dist-packages/compose/config/config.py", line 466, in <dictcomp>
+    for name in all_service_names
+  File "/usr/local/lib/python3.5/dist-packages/compose/config/config.py", line 853, in merge_service_dicts_from_files
+    new_service = merge_service_dicts(base, override, version)
+  File "/usr/local/lib/python3.5/dist-packages/compose/config/config.py", line 929, in merge_service_dicts
+    merge_ports(md, base, override)
+  File "/usr/local/lib/python3.5/dist-packages/compose/config/config.py", line 962, in merge_ports
+    md[field] = [item for item in sorted(merged.values())]
+TypeError: unorderable types: NoneType() < str()
+Makefile:72: recipe for target 'compose-bash' failed
+make: *** [compose-bash] Error 1
+ (master) hexlet$ cat ^C
+ (master) hexlet$ docker-compose --version
+docker-compose version 1.14.0, build c7bdf9e

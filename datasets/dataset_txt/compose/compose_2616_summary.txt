@@ -1,0 +1,1 @@
+"docker-compose logs | head" breaks and leaves container running

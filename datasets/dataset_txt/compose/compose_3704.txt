@@ -1,0 +1,11 @@
+phlegx commented on 21 Apr 2015
+With the current version (1.2.0 with Docker 1.6.0 on ubuntu trusty ) when trying to run the image like:
+docker-compose run application_name
+I'm getting the following error.
+HTTPS endpoint unresponsive and insecure mode isn't enabled
+The SSL certificate however is valid and the URL is correct. This is my very basic configuration:
+web:
+   image: example.com/application_name:latest
+With docker run it pulls the image just fine:
+docker run example.com/application_name:latest
+Any ideas what might be causing this?

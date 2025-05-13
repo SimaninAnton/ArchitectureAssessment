@@ -1,0 +1,32 @@
+xiaods commented on 1 Oct 2014
+reproduce step:
+git clone https://github.com/minnowlab/giggle.git
+cd giggle
+fig build
+fig up
+then report below log always, anyone came across it?
+$ fig up
+Recreating giggle_db_1...
+Recreating giggle_web_1...
+Attaching to giggle_db_1, giggle_web_1
+db_1  | LOG:  database system was shut down at 2014-09-29 23:53:05 UTC
+db_1  | LOG:  database system is ready to accept connections
+db_1  | LOG:  autovacuum launcher started
+web_1 | /myapp/vendor/bundle/ruby/2.1.0/gems/pg-0.17.1/lib/pg.rb:4:in `require': cannot load such file -- pg_ext (LoadError)
+web_1 |         from /myapp/vendor/bundle/ruby/2.1.0/gems/pg-0.17.1/lib/pg.rb:4:in `<top (required)>'
+web_1 |         from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.2/lib/bundler/runtime.rb:76:in `require'
+web_1 |         from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.2/lib/bundler/runtime.rb:76:in `block (2 levels) in require'
+web_1 |         from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.2/lib/bundler/runtime.rb:72:in `each'
+web_1 |         from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.2/lib/bundler/runtime.rb:72:in `block in require'
+web_1 |         from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.2/lib/bundler/runtime.rb:61:in `each'
+web_1 |         from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.2/lib/bundler/runtime.rb:61:in `require'
+web_1 |         from /usr/local/lib/ruby/gems/2.1.0/gems/bundler-1.7.2/lib/bundler.rb:133:in `require'
+web_1 |         from /myapp/config/application.rb:7:in `<top (required)>'
+web_1 |         from /myapp/vendor/bundle/ruby/2.1.0/gems/railties-4.1.6/lib/rails/commands/commands_tasks.rb:79:in `require'
+web_1 |         from /myapp/vendor/bundle/ruby/2.1.0/gems/railties-4.1.6/lib/rails/commands/commands_tasks.rb:79:in `block in server'
+web_1 |         from /myapp/vendor/bundle/ruby/2.1.0/gems/railties-4.1.6/lib/rails/commands/commands_tasks.rb:76:in `tap'
+web_1 |         from /myapp/vendor/bundle/ruby/2.1.0/gems/railties-4.1.6/lib/rails/commands/commands_tasks.rb:76:in `server'
+web_1 |         from /myapp/vendor/bundle/ruby/2.1.0/gems/railties-4.1.6/lib/rails/commands/commands_tasks.rb:40:in `run_command!'
+web_1 |         from /myapp/vendor/bundle/ruby/2.1.0/gems/railties-4.1.6/lib/rails/commands.rb:17:in `<top (required)>'
+web_1 |         from bin/rails:4:in `require'
+web_1 |         from bin/rails:4:in `<main>'

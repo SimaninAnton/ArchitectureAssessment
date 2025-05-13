@@ -1,0 +1,119 @@
+morfikov commented on 21 Jan 2019
+I want to lock a Firefox browser inside of a Docker container. The browser is started as a regular user and not root. I want also that the browser profile (~/.mozilla/ dir) be persistent. I couldn't achieve this using the docker-compose.yml file, but I've read that I can do it via dockerfile by using the following in it:
+USER morfitest
+RUN mkdir /home/morfitest/.mozilla
+VOLUME ["/home/morfitest/.mozilla"]
+The container works fine, except that it doesn't really mounts the volume when docker-compose up is issued for the first time, or when docker-compose down was used before. So for instance when I type docker-compose up, close the browser, and again type docker-compose up -- then it works. But when I type docker-compose down and docker-compose up, Firefox starts new session. When I close the browser again and type docker-compose up, Firefox can see the old session (the one before the new one). Is that normal?
+$  docker-compose version
+docker-compose version 1.21.0, build unknown
+docker-py version: 3.4.1
+CPython version: 3.7.2
+OpenSSL version: OpenSSL 1.1.1a  20 Nov 2018
+$ docker version
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:53 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:02:44 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+$ docker-compose config
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 10.10.2.0/24
+      driver: default
+    name: firefox
+services:
+  browser:
+    build:
+      context: /media/Zami/docker-firefox
+      dockerfile: dockerfile
+    container_name: firefox
+    domainname: local
+    environment:
+      DISPLAY: :0.0
+    hostname: firefox
+    image: firefox:morfitest
+    logging:
+      driver: syslog
+      options:
+        syslog-address: tcp://192.168.43.247:514
+        tag: firefox-morfitest
+    networks:
+      default:
+        ipv4_address: 10.10.2.10
+    restart: "no"
+    volumes:
+    - /tmp/.X11-unix:/tmp/.X11-unix:rw
+version: '3.6'
+Here's the dockerfile:
+FROM debian:sid
+
+RUN apt-get update && apt-get install -y \
+    firefox \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN useradd \
+      --create-home \
+      --home-dir /home/morfitest/ \
+      --shell /bin/bash \
+      --uid 1000 \
+      --user-group \
+      morfitest
+
+USER morfitest
+
+ENV HOME /home/morfitest
+
+RUN mkdir /home/morfitest/.mozilla
+VOLUME ["/home/morfitest/.mozilla"]
+
+WORKDIR /home/morfitest/
+
+CMD /usr/bin/firefox
+I'm using Debian Sid,
+$ apt-cache policy docker-ce
+docker-ce:
+  Installed: 5:18.09.1~3-0~debian-buster
+  Candidate: 5:18.09.1~3-0~debian-buster
+  Version table:
+ *** 5:18.09.1~3-0~debian-buster 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+        100 /var/lib/dpkg/status
+     5:18.09.0~3-0~debian-buster 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+     18.06.1~ce~3-0~debian 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+     18.06.0~ce~3-0~debian 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+     18.03.1~ce-0~debian 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+     18.03.0~ce-0~debian 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+     17.12.1~ce-0~debian 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+     17.12.0~ce-0~debian 500
+        500 https://download.docker.com/linux/debian buster/stable amd64 Packages
+
+$ apt-cache policy docker-compose
+docker-compose:
+  Installed: 1.21.0-3
+  Candidate: 1.21.0-3
+  Version table:
+ *** 1.21.0-3 990
+        990 https://deb.debian.org/debian sid/main amd64 Packages
+        100 /var/lib/dpkg/status

@@ -1,0 +1,6 @@
+DanielDent commented on 15 Jan 2016
+The documentation says ip:port:port. The following does not work:
+ports:
+- "2000:0000:60:1244::2:80:80"
+The syntax may require clarification for IPv6 addresses, the colon operator has many meanings in this string.
+7

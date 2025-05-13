@@ -1,0 +1,48 @@
+bfallik commented on 27 Jan 2017
+$ docker version
+Client:
+ Version:      1.13.0
+ API version:  1.24 (downgraded from 1.25)
+ Go version:   go1.7.3
+ Git commit:   49bf474
+ Built:        Wed Jan 18 16:20:26 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.12.6
+ API version:  1.24 (minimum version )
+ Go version:   go1.6.3
+ Git commit:   d5236f0
+ Built:        Fri Jan 20 05:47:10 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+I'm trying to use docker-compose build but the command hangs:
+$ docker-compose build --force-rm
+Building integration-test-go
+^CERROR: Aborting.
+docker-compose.yml contains
+version: '2'
+services:
+  integration-test-go:
+    build:
+      context: go
+      dockerfile: go/Dockerfile
+and go/.dockerignore has
+bin/
+coverage/
+The same invocation via docker build completes in about a minute:
+$ time docker build --force-rm=true go
+...
+Step 10 : ADD ./Makefile $GOPATH/Makefile
+ ---> 7291ce227751
+Removing intermediate container e69e54d81655
+Step 11 : ADD ./src/ $GOPATH/src/
+ ---> 690cf13fd4ae
+Removing intermediate container 9649280eddff
+Successfully built 690cf13fd4ae
+
+real 1m49.268s
+user 0m3.688s
+sys 0m2.501s
+Any idea what's going on here?
+16

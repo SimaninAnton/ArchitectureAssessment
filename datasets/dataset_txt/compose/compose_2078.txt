@@ -1,0 +1,15 @@
+dangreen commented on 10 Sep 2016
+With docker_py-1.9 all ok, but with docker_py-1.10 docker-compose doesn't work:
+ubuntu@box1398:~$ docker-compose
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2749, in <module>
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 446, in _build_master
+    return cls._build_from_requirements(__requires__)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 459, in _build_from_requirements
+    dists = ws.resolve(reqs, Environment())
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 632, in resolve
+    raise VersionConflict(dist,req) # XXX put more info here
+pkg_resources.VersionConflict: (six 1.5.2 (/usr/lib/python2.7/dist-packages), Requirement.parse('six>=1.10.0'))

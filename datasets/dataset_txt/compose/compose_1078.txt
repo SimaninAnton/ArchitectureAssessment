@@ -1,0 +1,43 @@
+sl86866848 commented on 14 Nov 2017
+Followed Hyperledger Fabric instruction to install it.
+Please execute the following command from within the directory into which you will extract the platform-specific binaries:
+curl -sSL https://goo.gl/5ftp2f | bash
+That is what showed in my command；
+*C:*WINDOWS\system32>curl -sSL https://goo.gl/5ftp2f | bash
+===> Downloading platform binaries
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+100 22.6M 100 22.6M 0 0 4295k 0 0:00:05 0:00:05 --:--:-- 5083k
+===> Pulling fabric Images
+==> FABRIC IMAGE: peer
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+==> FABRIC IMAGE: orderer
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+==> FABRIC IMAGE: couchdb
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+==> FABRIC IMAGE: ccenv
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+==> FABRIC IMAGE: javaenv
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+==> FABRIC IMAGE: kafka
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+==> FABRIC IMAGE: zookeeper
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+==> FABRIC IMAGE: tools
+/bin/bash: line 18: docker: command not found
+/bin/bash: line 19: docker: command not found
+===> Pulling fabric ca Image
+==> FABRIC CA IMAGE
+/bin/bash: line 27: docker: command not found
+/bin/bash: line 28: docker: command not found
+===> List out hyperledger docker images
+/bin/bash: line 44: docker: command not found**
+Anybody know have to figure it out?
+Thank you!

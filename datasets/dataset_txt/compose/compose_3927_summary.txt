@@ -1,0 +1,1 @@
+Add support for different Dockerfile (Docker 1.5.0)

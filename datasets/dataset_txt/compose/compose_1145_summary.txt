@@ -1,0 +1,1 @@
+Variable expansion with variable default doesn't work

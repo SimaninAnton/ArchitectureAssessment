@@ -1,0 +1,99 @@
+oleksiipysanko commented on 23 Mar 2017
+Hi, I have an odd problem with one of linked containers in my compose setup.
+Software:
+MacOS 10.12.3 (firewall disabled)
+docker 17.03.0-ce, build 60ccb22
+docker-compose 1.11.2, build dfed245
+I have 4 containers for postgresql, nginx, api and web (as customer) (under node). Nginx serves as a proxy server for both node apps. Everything is working fine except that nginx container can't connect to web no matter what I try, while api works as expected.
+Dockerfiles:
+api
+FROM node:latest
+
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' > /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN apt-get update && apt-get install -y postgresql-client-9.6
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY . /usr/src/app
+
+RUN yarn install --no-lockfile
+
+CMD ["bash", "./deploy/start.sh"]
+customer
+FROM node:latest
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY . /usr/src/app
+
+RUN yarn install --no-lockfile
+RUN ./node_modules/.bin/webpack
+
+CMD ["node", "server.js"]
+nginx
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+nginx.conf
+worker_processes 2;
+
+events { worker_connections 1024; }
+
+http {
+  server {
+    listen 3000;
+
+    location / {
+      proxy_pass http://api:3000;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+    }
+  }
+
+  server {
+    listen 3001;
+
+    location / {
+      proxy_pass http://customer:3001;
+    }
+  }
+}
+docker-compose.yml
+version: '3'
+services:
+  api:
+    build: 
+      context: ../api
+      dockerfile: ./deploy/Dockerfile
+    depends_on:
+      - db
+    links:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: ''
+      POSTGRES_USER: oleksiipysanko
+  customer:
+    build: 
+      context: ../web-customer
+      dockerfile: ./deploy/Dockerfile
+    environment:
+      NODE_ENV: production
+      port: 3001
+  nginx:
+    build: ./nginx
+    links:
+      - api
+      - customer
+    ports:
+      - '3000:3000'
+      - '3001:3001'
+I've exec'ed into customer container and run curl http://localhost:3001 - it returns html as expected. Though when running curl http://customer:3001 from nginx container I get Connection refused. Though requests to api container are working as they should at the same time. Also, I'm seeing 502 Nginx page when browsing localhost:3001, so it exposes 3001 for nginx container, but fails to connect to customer for some reason
+Am I missing something here? Been struggling with this problem for more then 3hrs already and can't see solution. Please, let me know

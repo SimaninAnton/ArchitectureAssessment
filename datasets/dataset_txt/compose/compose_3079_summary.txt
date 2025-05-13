@@ -1,0 +1,1 @@
+Upgrading docker-compse 1.5.1 environment variable evaluated to None when using extends

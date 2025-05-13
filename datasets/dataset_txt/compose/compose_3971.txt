@@ -1,0 +1,3 @@
+kameshsampath commented on 26 Jan 2015
+Right now we don't have the ability to add project name to the fig.yml, it will be great to add as then fig.yml will be one source of informaiton about the project.
+-Kamesh

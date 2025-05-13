@@ -1,0 +1,1 @@
+not setting env variables shouldn't trigger a warning when building

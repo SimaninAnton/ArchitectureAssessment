@@ -1,0 +1,6 @@
+actionless commented on 12 Nov 2014
+If only key is defined for environment variable
+and it's not set from host
+then it's passing to the container as a blank env var.
+Is it possible not to pass them into container if they're not set on host
+but still pass blank env var into container if it's blank on host?

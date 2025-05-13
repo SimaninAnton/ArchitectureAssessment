@@ -1,0 +1,1 @@
+[1.15.0] Nested extends cause services to not be discovered

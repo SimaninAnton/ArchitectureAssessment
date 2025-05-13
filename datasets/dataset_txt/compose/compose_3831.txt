@@ -1,0 +1,25 @@
+pospispa commented on 16 Mar 2015
+My use case:
+I have a .yml file like:
+my_app:
+  image: my_app:latest
+test:
+  image: my_test_env:latest
+  links:
+  - my_app:link_to_my_app
+  command python my_test.py
+my_app is usually composed from several microservices. Images of the microservices are built on different physical machines and pushed to the same registry. All images are tagged with current build number and with tag latest.
+My problem is that at the time I want to start the test described in the .yml file there may be an image my_app:latest
+available locally, however, there may be even a newer latest image available in the registry. That's why I need to do pull before the test starts in order to be sure that I really test the latest version of my_app.
+As far as I know there is neither docker-compose pull command nor docker-compose up --pull switch to force docker-compose to check if there is a newer version of my_app image in the registry.
+So I propose that a new docker-compose feature is implemented that will do pull of all images in a .yml file before services from the .yml file are started.
+Note: this new feature will deal only with images marked with:
+  image: image_name
+in the .yml file. It won't influence "to be built" images marked with:
+  build:
+Note: I know that there is a workaround: I can parse all image names from the .yml file and do separate docker pull on each of them. However, it would be more convenient for me if the docker-compose will do the job.
+I can think only of two ways how to implement the new feature in the user interface:
+docker-compose pull
+docker-compose up --pull
+I prefer the docker-compose pull option.
+I would like to hear what others think.

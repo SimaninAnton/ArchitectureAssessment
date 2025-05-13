@@ -1,0 +1,75 @@
+AndrewKhodyakov commented on 18 Jan 2019
+Description of the issue
+I cant search similar issue - its seems that environs variables can be readed with errors from docker-compose.yml in case the they are contain $ characters.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.2.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks: {}
+services:
+  my_serv:
+    build:
+      context: /home/ajet/work_repo/temp/p
+    environment:
+      MY_ENV: my_mega_pa$word 
+version: '2.0'
+volumes: {}
+Steps to reproduce the issue
+1.mkdir ./temp & cd ./temp
+and create docker-compose.yml with text:
+version: '2'
+services:
+
+    my_serv:
+        build: ./p
+        environment:
+            - MY_ENV=my_mega_pa$$word
+mkdir ./p & cd ./p
+and create Docker file:
+FROM python:3.6-slim
+WORKDIR /opt
+COPY docker-entrypoint.sh ./
+ENTRYPOINT ["./docker-entrypoint.sh"]
+and docker-entrypoint.yml:
+#!/bin/sh
+echo $MY_ENV
+In the end you should have next output for
+ls -l ../temp/*
+-rwxrwxr-x 1 user user  115 янв 18 15:40 ../temp/docker-compose.yml
+../temp/p:
+total 8
+-rwxrwxr-x 1 user user  23 янв 18 16:30 docker-entrypoint.sh
+-rw-rw-r-- 1 user user 101 янв 18 16:29 Dockerfile
+build and up container
+sudo docker-compose up my_serv
+Observed result
+my_serv_1  | my_mega_pa$word
+temp_my_serv_1 exited with code 0
+Expected result
+my_serv_1  | my_mega_pa$$word
+temp_my_serv_1 exited with code 0
+Stacktrace / full error message
+no stacktrace
+Additional information
+As you can see above sudo docker-compose config commands output already contain error in $MY_ENV

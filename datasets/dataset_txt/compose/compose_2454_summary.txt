@@ -1,0 +1,1 @@
+".env" file not read relative to docker-compose.yml file

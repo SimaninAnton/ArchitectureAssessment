@@ -1,0 +1,11 @@
+snicolai commented on 22 Nov 2014
+$ sysctl -n machdep.cpu.brand_string
+Intel(R) Core(TM)2 Duo CPU     T7500  @ 2.20GHz
+
+$ fig --version
+Illegal instruction: 4
+I believe the loader stub that is compiled for use by pyinstaller is compiled for newer processors than the Core 2 Duo above. I also have seen it crash on a mid 2010 Mac Pro, which supposedly has Two 2.4GHz Quad-Core Intel Xeon E5620 “Westmere” processors.
+fig runs fine on a retina macbook pro:
+$ sysctl -n machdep.cpu.brand_string
+Intel(R) Core(TM) i7-3650M CPU @ 2.40Ghz
+All machines are running Mavericks 10.9.5.

@@ -1,0 +1,14 @@
+Wilfred commented on 23 Nov 2017
+If I have an image that defines a volume, the container ends up with an anonymous docker volume. This leads to issues like #4476 where I can't add volumes_from: if I've previously forgotten it.
+Another use case I've encountered is when you have an image that populates a volume:
+FROM base/almost_empty:1.0.0
+
+ENV AIRFLOW_HOME /usr/local/airflow
+COPY ./foo ${AIRFLOW_HOME}/stuff/foo/
+
+VOLUME ${AIRFLOW_HOME}/stuff
+In this case, when I update to a newer version of my image, I want a new volume with the latest version of foo.
+At the moment, I can do docker-compose down && docker-compose up, but this recreates every single container in my docker-compose.yml.
+Alternatively, I can do docker-compose rm xyz && docker-compose up. However assumes that I know which containers to run docker-compose rm on.
+Would you be willing to add a --force-recreate-volumes argument? This would be a huge help for these use cases.
+8

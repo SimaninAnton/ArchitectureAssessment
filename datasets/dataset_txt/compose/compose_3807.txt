@@ -1,0 +1,6 @@
+Member
+crosbymichael commented on 23 Mar 2015
+Problem
+On Quick Start section under Create a Docker image, the Dockerfile copies over the current directory into the image and the Docker-compose.yml file mounts the current directory inside of the container, both actions result in code being under /code directory. For beginners this example makes more complicated to understand how the data got there.
+Solution
+Break up the example into two parts, explicitly showing how to both actions end up having the /code files inside of the running container.

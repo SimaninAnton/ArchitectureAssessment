@@ -1,0 +1,67 @@
+anentropic commented on 29 Feb 2016
+maybe I'm tripping but I thought this docker/swarm#251 was going to/had been be fixed by the new overlay networking support
+I've gone through a round of upgrading everything to the latest docker versions
+the mem_limit in my compose yml works now, but as a result I can't start my entire set of containers... due to large amount being (correctly) allocated for one of them
+$ docker info
+Containers: 8
+Images: 14
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 2
+ oceania-1: ****:2376
+  └ Status: Healthy
+  └ Containers: 1
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.026 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=digitalocean, storagedriver=aufs
+ oceania-master: ****:2376
+  └ Status: Healthy
+  └ Containers: 7
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 1 GiB / 1.026 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=digitalocean, storagedriver=aufs
+CPUs: 2
+Total Memory: 2.052 GiB
+Name: 0dc444daa840
+$ docker-compose -f docker-compose/live.yml -p oceania up -d
+nginx is up-to-date
+oceania_redis_1 is up-to-date
+oceania_elasticsearch_1 is up-to-date
+Creating oceania_myapp_1
+ERROR: no resources available to schedule container
+there's a big allocation for the elasticsearch, then it gets stuck trying to start the next one instead of scheduling it to the empty node
+I have:
+version: 2
+
+networks:
+  oceania:
+    driver: overlay
+
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    networks:
+      - oceania
+
+  redis:
+    image: redis
+    networks:
+      - oceania
+    expose:
+      - 6379
+    restart: unless-stopped
+
+  elasticsearch:
+    image: elasticsearch:1.7.4
+    networks:
+      - oceania
+    expose:
+      - 9200
+      - 9300
+    mem_limit: 1G
+    restart: unless-stopped
+
+etc
+Am I trying to do something that's not possible yet? Or something is broken in my swarm?

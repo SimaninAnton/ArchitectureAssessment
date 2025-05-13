@@ -1,0 +1,5 @@
+Contributor
+marksteve commented on 25 Jun 2014
+docker-py allows limiting of host address for port bindings:
+c.start(container_id, port_bindings={1111: ('127.0.0.1', 4567)})
+Not sure what's a good convention. Maybe 127.0.0.1:3306:3306 works.

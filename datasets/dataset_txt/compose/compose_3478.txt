@@ -1,0 +1,5 @@
+delfick commented on 12 Jul 2015
+Hello,
+Are we able to get https://github.com/docker/compose/blob/master/compose/cli/docker_client.py put into docker-py itself so other libraries don't have to replicate this logic?
+i.e. I expect docker.Client() to search for DOCKER_HOST and related tls environment variables.
+Thanks.

@@ -1,0 +1,60 @@
+pnathan commented on 25 Mar 2015
+High-level overview:
+docker build . successfully builds my docker image.
+docker-compose up instead does not work.
+Given the below files, when I do "docker-compose up" in a directory with all of them, I get a list of output; critically, the networking does not appear to work:
+web_1 |     trivial-mimes trivial-types trivial-utf-8 xsubseq
+web_1 |
+web_1 | debugger invoked on a SB-BSD-SOCKETS:HOST-NOT-FOUND-ERROR in thread
+web_1 | #<THREAD "main thread" RUNNING {1003037183}>:
+web_1 |   Name service error in "getaddrinfo": -2 (Name or service not known)
+However, when I do the (theoretically?) same operation in Docker by performing docker run, the appropriate splatter is delivered onto the terminal.
+Expected behavior: docker-compose up behaves identically to docker build and docker run.
+Observed behavior: docker-compose up does not appear to have networking capabilities fully baked, causing the bringup of the service to fail.
+Here are the files:
+docker-compose.yml
+# a basic service.
+web:
+  build: .
+  ports:
+   - "5000:8000"
+Dockerfile
+run apt-get update
+run apt-get install -y curl
+run apt-get install -y bzip2
+run apt-get install -y sudo
+run curl -L -O  http://prdownloads.sourceforge.net/sbcl/sbcl-1.2.6-x86-64-linux-binary.tar.bz2
+run tar xjf /sbcl-1.2.6-x86-64-linux-binary.tar.bz2
+
+run apt-get install -y make
+
+run cd sbcl-1.2.6-x86-64-linux/ && sudo bash install.sh
+run echo "hello"
+add http://beta.quicklisp.org/quicklisp.lisp /quicklisp.lisp
+run sbcl --load /quicklisp.lisp --eval '(quicklisp-quickstart:install)' --eval '(quit)'
+add ./hello.lisp /hello.lisp
+cmd sbcl --load /hello.lisp
+hello.lisp
+(require "sb-posix")
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+(defparameter *pwd* (concatenate 'string (sb-posix:getcwd) "/"))
+(push *pwd* asdf:*central-registry*)
+
+(ql:quickload :ningle)
+
+(defvar *app* (make-instance 'ningle:<app>))
+
+(setf (ningle:route *app* "/")
+      "Welcome to ningle!")
+
+(clack:clackup *app*)
+
+(loop while t
+      do
+         (format t "heartbeat")
+         (sleep 60))

@@ -1,0 +1,6 @@
+diamantn commented on 1 Jul 2017
+I've been searching to see if this was already opened and didn't find anything.
+you cannot type:
+docker-compose -f docker-compose.someName.yml ps
+So you can't use docker-compose ps with those containers even though you've used docker-compose to run them.
+What am I missing here?

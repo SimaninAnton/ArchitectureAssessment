@@ -1,0 +1,22 @@
+IAMtheIAM commented on 28 Jun 2019 •
+edited
+Description of the issue
+docker-compose run -d myservice
+docker attach myservice
+results in no colors in output
+However,
+docker-compose run myservice results in colorful output.
+So, the -d somehow stops the colors from work, because colors work fine in foreground mode.
+Also, if I try
+docker-compose up           // <--- colors work here
+then detach without stopping the containers
+then reconnect with
+docker-compose up         // <-- no colors
+it will reconnect but with no colors
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+Output of docker version
+Docker version 18.09.6, build 481bc77
+Question
+How do I get colors when "attaching" to existing docker-compose services started through run or up?

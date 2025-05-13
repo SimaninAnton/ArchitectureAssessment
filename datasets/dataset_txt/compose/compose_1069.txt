@@ -1,0 +1,22 @@
+mephi42 commented on 20 Nov 2017
+Possibly related to #4889.
+If I read #5271 correctly, it should have been fixed in 1.17.0.
+I have 1.17.1, and the following happens:
+$ docker-compose --version
+docker-compose version 1.17.1, build unknown
+
+$ cat docker-compose.yml
+version: '2'
+services:
+  first:
+    image: busybox
+  second:
+    image: busybox
+
+$ docker-compose up first & docker-compose up second
+Creating network "test_default" with the default driver
+Creating network "test_default" with the default driver
+
+$ docker network ls | grep test
+f0bc895730b9        test_default             bridge              local
+ce81ba1d168e        test_default             bridge              local

@@ -1,0 +1,43 @@
+prologic commented on 16 Feb 2016
+Traceback:
+Traceback (most recent call last):
+  File "/Users/prologic/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/Users/prologic/lib/python2.7/site-packages/compose/cli/main.py", line 55, in main
+    command.sys_dispatch()
+  File "/Users/prologic/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Users/prologic/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Users/prologic/lib/python2.7/site-packages/compose/cli/main.py", line 174, in perform_command
+    handler(project, command_options)
+  File "/Users/prologic/lib/python2.7/site-packages/compose/cli/main.py", line 360, in ps
+    project.containers(service_names=options['SERVICE'], stopped=True) +
+  File "/Users/prologic/lib/python2.7/site-packages/compose/project.py", line 361, in containers
+    filters={'label': self.labels(one_off=one_off)})]))
+  File "/Users/prologic/lib/python2.7/site-packages/docker/api/container.py", line 69, in containers
+    res = self._result(self._get(u, params=params), True)
+  File "/Users/prologic/lib/python2.7/site-packages/docker/utils/decorators.py", line 47, in inner
+    return f(self, *args, **kwargs)
+  File "/Users/prologic/lib/python2.7/site-packages/docker/client.py", line 112, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/Users/prologic/lib/python2.7/site-packages/requests/sessions.py", line 477, in get
+    return self.request('GET', url, **kwargs)
+  File "/Users/prologic/lib/python2.7/site-packages/requests/sessions.py", line 465, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/prologic/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/prologic/lib/python2.7/site-packages/requests/adapters.py", line 370, in send
+    timeout=timeout
+  File "/Users/prologic/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 544, in urlopen
+    body=body, headers=headers)
+  File "/Users/prologic/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 341, in _make_request
+    self._validate_conn(conn)
+  File "/Users/prologic/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 761, in _validate_conn
+    conn.connect()
+  File "/Users/prologic/lib/python2.7/site-packages/requests/packages/urllib3/connection.py", line 238, in connect
+    ssl_version=resolved_ssl_version)
+  File "/Users/prologic/lib/python2.7/site-packages/requests/packages/urllib3/contrib/pyopenssl.py", line 255, in ssl_wrap_socket
+    ctx = OpenSSL.SSL.Context(_openssl_versions[ssl_version])
+KeyError: 5
+This has consistently been happening the moment I upgraded client and server to 1.10.1 -- I can no longer manage services with docker-compose.

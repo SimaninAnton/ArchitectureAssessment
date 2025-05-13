@@ -1,0 +1,1 @@
+The error "ERROR: network network_main_net id ... has active endpoints" isn't particularly useful and blocks `docker-compose down`

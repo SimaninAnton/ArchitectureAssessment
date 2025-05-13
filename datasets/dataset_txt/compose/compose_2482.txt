@@ -1,0 +1,10 @@
+Contributor
+simonvanderveldt commented on 18 Apr 2016 •
+edited
+If you run a container and pass an env var from the host just like you'd do with docker run -e ENV_VAR the env var gets set to None inside the container that's started.
+Example commands:
+export ENV_VAR='foo`
+docker-compose run -e ENV_VAR <servicename>
+IMHO the expected behaviour is that it works the same as docker run, i.e. if you only pass the host's env var name it's value should be set inside the container.
+I couldn't find an issue or PR for this, but it's difficult to search for env var and run, so I might have missed it.
+This is somewhat related to #363

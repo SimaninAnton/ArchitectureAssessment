@@ -1,0 +1,1 @@
+Docker compose fails to start service that use option network_mode: service. Cannot join network of a non running container

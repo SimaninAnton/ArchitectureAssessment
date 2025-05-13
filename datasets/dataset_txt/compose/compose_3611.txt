@@ -1,0 +1,18 @@
+skelethan commented on 28 May 2015
+I am observing behavior that may be by design but is unexpected & not clear from documentation.
+Scenario:
+base-compose.yml in /run
+volumes:
+- app_logs/:/app/logs
+
+extends-compose.yml in /run/release-ab
+volumes:
+- other-volume/:/container/volumes
+Results:
+/run/app_logs/
+/run/release-ab/other-volume/
+Since compose up is performed from the context of the extends-compose.yml, I would expect merged relative file paths to start from there i.e.
+/run/release-ab/app_logs/
+/run/release-ab/other-volume/
+Volume extension with relative file paths doesn't work for our use case in this behavior.
+Thanks for clarifying

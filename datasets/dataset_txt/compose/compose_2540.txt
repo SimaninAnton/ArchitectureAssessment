@@ -1,0 +1,26 @@
+rajasaur commented on 4 Apr 2016
+Im running
+docker-compose version 1.6.2, build 4d72027
+docker-machine version 0.6.0-rc1, build 174e390, which has
+docker server version: 1.10.0-dev and docker client version: 1.10.0-rc2
+When running a compose file like (in a folder called v4docker)
+version: "2"
+services:
+    nginx:
+        image: nginx
+        links:
+            - redis:test.redis
+    redis:
+        image: redis
+I was expecting "test.redis" to be available from the nginx container, but it doesnt seem to work. Only "v4docker_nginx_1" seems to be resolving properly from the nginx container.
+Investigating a bit, the docker inspect on the container showed this directory as where the hosts,resolve.conf,hostname are mounted.
+root@default:~# docker ps | grep nginx
+f5ad8a2f6986        nginx               "nginx -g 'daemon off"   17 minutes ago      Up 17 minutes       80/tcp, 443/tcp     v4docker_nginx_1
+Doing an inspect on this container (and checking for the folder from which the files are mounted onto the individual containers), it gives this:
+root@default:~# docker inspect f5ad8a2f6986 | grep ResolvConfPath
+        "ResolvConfPath": "/mnt/sda1/var/lib/docker/containers/f5ad8a2f6986e5166e7cdc02b192437aef79afe02bffc42ad5ffc1c0843c2171/resolv.conf",
+If I go into the /mnt/sda1/var/lib/docker/containers/f5ad8a2f6986e5166e7cdc02b192437aef79afe02bffc42ad5ffc1c0843c2171/ directory and look up hostconfig.json, it seems to have a links array, that contains the following:
+"Links":["v4docker_redis_1:redis_1","v4docker_redis_1:test.redis","v4docker_redis_1:v4docker_redis_1"]
+It looks like the same name (v4docker_redis_1) is now linked to three different aliases and only the last one wins (Since thats the only thing that resolves from my nginx container). I wanted the second one to be resolved, but that doesnt seem to happen.
+Not sure if my investigation is correct, but it would help to have an alias pointed to a service and be resolvable from those containers.
+Please let know if you need any further information.

@@ -1,0 +1,9 @@
+Contributor
+aanand commented on 15 May 2015
+We allow uppercase letters in service names, but Docker doesn't allow them in image names.
+When you use build, the name of the image we create is based on the service name. If it contains uppercase letters, Docker will refuse to create it.
+Some options:
+Don't allow uppercase letters in service names. Nice and strict, but backwards-incompatible.
+Do allow them, but convert to lowercase when generating an image name. This will break in the extremely unlikely scenario that two services have the same name with different case. We could check for and forbid that case if we felt like it.
+Wait for images to be searchable by label, use labels for images (which we're going to do anyway, see #1403), and stop naming images based on the service name altogether.
+But we've got to name them something, and it would be quite unhelpful not to incorporate the service name - right now it's nice that when I run docker images I can see which ones come from Compose, and what project/service they belong to.

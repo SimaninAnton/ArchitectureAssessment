@@ -1,0 +1,1 @@
+Assigning IP address in Docker Compose 3

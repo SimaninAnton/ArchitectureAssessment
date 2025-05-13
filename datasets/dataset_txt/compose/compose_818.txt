@@ -1,0 +1,23 @@
+Stretch96 commented on 7 Mar 2018 •
+edited
+According to the docker-compose run output:
+--entrypoint CMD      Override the entrypoint of the image.
+But, it doesn't overwrite, it gets appended, or fails because it reads the CMD as a SERVICENAME. To reproduce:
+Dockerfile:
+FROM busybox
+
+ENTRYPOINT ["echo","hello"]
+docker-compose.yml:
+version: '3'
+services:
+  test:
+    build:
+      context: .
+Result:
+$ docker-compose run test --entrypoint echo bye
+hello --entrypoint echo bye
+$ docker-compose run --entrypoint test echo bye
+ERROR: No such service: echo
+I've tried on a few different images, all with the same result.
+$ docker-compose -v
+docker-compose version 1.18.0, build 8dd22a9

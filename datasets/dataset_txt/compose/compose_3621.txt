@@ -1,0 +1,57 @@
+leandro-lucarella-sociomantic commented on 25 May 2015
+Following the exact steps described in the documentation: https://docs.docker.com/compose/
+I get this error when I get to run docker-compose up for the first time:
+Creating dock_redis_1...
+Pulling image redis:latest...
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/docker/client.py", line 117, in _raise_for_status
+    response.raise_for_status()
+  File "/usr/local/lib/python3.4/dist-packages/requests/models.py", line 831, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/compose/service.py", line 190, in create_container
+    return Container.create(self.client, **container_options)
+  File "/usr/local/lib/python3.4/dist-packages/compose/container.py", line 36, in create
+    response = client.create_container(**options)
+  File "/usr/local/lib/python3.4/dist-packages/docker/client.py", line 463, in create_container
+    return self.create_container_from_config(config, name)
+  File "/usr/local/lib/python3.4/dist-packages/docker/client.py", line 471, in create_container_from_config
+    return self._result(res, True)
+  File "/usr/local/lib/python3.4/dist-packages/docker/client.py", line 123, in _result
+    self._raise_for_status(response)
+  File "/usr/local/lib/python3.4/dist-packages/docker/client.py", line 119, in _raise_for_status
+    raise errors.APIError(e, response, explanation=explanation)
+docker.errors.APIError: 404 Client Error: Not Found ("b'No such image: redis:latest (tag: latest)'")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.2.0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python3.4/dist-packages/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python3.4/dist-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python3.4/dist-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python3.4/dist-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python3.4/dist-packages/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/usr/local/lib/python3.4/dist-packages/compose/cli/main.py", line 464, in up
+    do_build=not options['--no-build'],
+  File "/usr/local/lib/python3.4/dist-packages/compose/project.py", line 208, in up
+    do_build=do_build):
+  File "/usr/local/lib/python3.4/dist-packages/compose/service.py", line 214, in recreate_containers
+    **override_options)
+  File "/usr/local/lib/python3.4/dist-packages/compose/service.py", line 199, in create_container
+    stream_output(output, sys.stdout)
+  File "/usr/local/lib/python3.4/dist-packages/compose/progress_stream.py", line 18, in stream_output
+    event = json.loads(chunk)
+  File "/usr/lib/python3.4/json/__init__.py", line 312, in loads
+    s.__class__.__name__))
+TypeError: the JSON object must be str, not 'bytes'

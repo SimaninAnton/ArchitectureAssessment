@@ -1,0 +1,7 @@
+MatthewBooth commented on 23 Jan 2018
+This is a huge oversight. I'm not sure when the use-case would be that you want some variables within your project that build cannot access.
+I'm running Laravel, which of course uses .env files. docker-composer passes these along nicely and the system runs.
+Until I want to build an image and then composer (php) cannot generate autoload files because it can't find the .env file and therefore can't build an image.
+TL;DR
+My project needs some .env values and the Dockerfile has no way of knowing about them.
+3

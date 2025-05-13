@@ -1,0 +1,19 @@
+ColinHuang commented on 6 Apr 2017 •
+edited
+Encounter this issue in the v1.12 & v1.11:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+networks.test.ipam value Additional properties are not allowed ('driver_opts' was unexpected)
+It has been resolved at docker-py: docker/docker-py#1165
+networks part in docker-compose.yml:
+  networks:
+    internal:
+      driver: bridge
+      internal: true
+      ipam:
+        driver: default
+    onlyoffice:
+      driver: qnet
+      ipam:
+        driver: qnet
+        driver_opts:
+          iface: DEFAULT_NIC

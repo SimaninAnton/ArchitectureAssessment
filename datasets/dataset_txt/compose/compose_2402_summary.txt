@@ -1,0 +1,1 @@
+Compose cannot recreate a container on Swarm if the container has a host port mapping and uses volumes_from

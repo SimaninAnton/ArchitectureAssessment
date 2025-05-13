@@ -1,0 +1,46 @@
+Tico06 commented on 6 Jan 2017
+Hi There,
+I am developing an authorization plugin. My implementation is inspire from Develop a Docker Authorization Plugin in Python.
+It works like a charm when networks and containers are created manually with
+docker network create proxy_rdesk
+docker run -d -e "SOURCEIPPORT=:8000" -e "TARGETIPPORT=xpra-proxy:10000" \
+        --network="proxy_rdesk" --hostname="websock" --name="websock" -p 8000:8000 \
+        centos/websockify /home/websock/start_websockify.sh
+docker run -d --network="proxy_rdesk" --hostname="www" --name="www" -p 80:80 \
+        centos/apache /root/bin/start_httpd.sh
+Every commands are well validated by my authorization plugin.
+But when docker-compose is used with the following docker-compose.yml:
+version: '2.1'
+
+networks:
+  rdesk:
+    driver: bridge
+
+services:
+  websock:
+        image: centos/websockify
+        environment:
+        - SOURCEIPPORT=:8000
+        - TARGETIPPORT=xpra-proxy:10000
+        networks:
+        - rdesk
+        hostname: websock
+        container_name: websock
+        ports:
+        - 8000:8000
+        command: /home/websock/start_websockify.sh
+
+  www:
+        image: centos/apache
+        networks:
+        - rdesk
+        hostname: www
+        container_name: www
+        ports:
+        - 80:80
+        command: /root/bin/start_httpd.sh
+It fails at any object creation saying:
+plugin authz failed with error: Post http://%2Frun%2Fdocker%2Fplugins%2Fauthz.sock/AuthZPlugin.AuthZRes: http: ContentLength=637 with Body length 0
+I tried to increase processes and threads parameters in uwsgi with no chance... But I believe the issue is not coming from there as my uwsgi logs say it received requests and had responded.
+Any idea where to investigate ?
+thanks and regards,

@@ -1,0 +1,78 @@
+lsb commented on 22 Apr 2016
+Hello, thank you for your time.
+I have recently installed docker-machine on my Macbook (the non-beta, via VirtualBox), and I was interested in trying docker-compose.
+I went through the Getting Started documentation, and I encountered a few snags, and wanted to share them with you.
+The built container has no code.
+When running docker-compose up, I had gotten the error message web_1 | python: can't open file 'app.py': [Errno 2] No such file or directory.
+When I change the CMD in https://github.com/docker/compose/blame/ac82597ac10c9a0dbd3bf25ebde792e9cc71efc4/docs/gettingstarted.md#L70 to CMD pwd && ls -al && python app.py the output from the web container in docker-compose up becomes
+web_1    | /code
+web_1    | total 4
+web_1    | drwxr-xr-x  2 root root   40 Apr 21 21:52 .
+web_1    | drwxr-xr-x 58 root root 4096 Apr 22 00:48 ..
+web_1    | python: can't open file 'app.py': [Errno 2] No such file or directory
+I am not immediately aware of how to fix this.
+The redis client's hostname for redis is "redis".
+See https://github.com/docker/compose/blame/ac82597ac10c9a0dbd3bf25ebde792e9cc71efc4/docs/gettingstarted.md#L40
+This looks very elegant; however, I could not find the network setup to support this (versus Python blowing up when it can't resolve the name "redis"). To enable Python to connect to a Redis, I changed "redis" to localhost.
+All in all, I was able to run docker run --net host redis & docker run --net host web, after building the web container as specified in the Getting Started tutorial, but that did not use docker-compose.
+Thank you for your time.
+Lee
+$ docker version
+Client:
+ Version:      1.11.0
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   4dc5990
+ Built:        Wed Apr 13 18:13:28 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.11.0
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   4dc5990
+ Built:        Wed Apr 13 19:36:04 2016
+ OS/Arch:      linux/amd64
+
+$ docker-compose version
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+
+$ docker info
+Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 29
+Server Version: 1.11.0
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 65
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: bridge null host
+Kernel Version: 4.1.19-boot2docker
+Operating System: Boot2Docker 1.11.0 (TCL 7.0); HEAD : 32ee7e9 - Wed Apr 13 20:06:49 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 1.956 GiB
+Name: default
+ID: WXHD:5SSZ:UQJQ:NJVM:HSMC:UOQW:E5TD:WIUP:HP23:PMG2:VBP4:YUUK
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug mode (client): false
+Debug mode (server): true
+ File Descriptors: 12
+ Goroutines: 30
+ System Time: 2016-04-22T00:58:32.190560374Z
+ EventsListeners: 0
+Username: lsb857
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox

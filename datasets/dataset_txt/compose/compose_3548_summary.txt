@@ -1,0 +1,1 @@
+Remove ``` method from code samples in docs subdirectory

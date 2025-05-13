@@ -1,0 +1,3 @@
+chiefy commented on 15 Jun 2015
+ $ docker-compose up -d && docker-compose logs &> composer.log
+Someone correct me if I am wrong here, but what happens in the above is that nothing gets written to composer.log until docker-compose logs is killed, at which time stdout/stderr are unbuffered and written to composer.log?

@@ -1,0 +1,20 @@
+alexd88 commented on 20 Feb 2015
+Hello!
+My fig.yml:
+    image: myrepo/centos6.6-nginx:v1
+    ports:
+    - "80:80"
+    volumes:
+    - "/path/to/content:/content"
+    - "/path/to/default.conf:/etc/nginx/conf.d/default.conf:ro"
+
+fpm:
+    image: myrepo/centos6.6-phpfpm:v1
+    net: "container:web"
+    volumes:
+    - "/path/to/content:/content"
+Error occurs on net: "container:web":
+docker start <- (u'6b4543c9d43597164b2c664354700067d04b8d2d960e334fb4a31b40533bd04a', links=[], network_mode='container:fig_web_1', binds={u'/path/to/content'
+: {u'bind': u'/content', u'ro': False}}, dns=None, volumes_from=[u'69e3cc423462bc9d2b942228fead504925d9c156e5e75c680fe627ef7f6a3ce2'], port_bindings={}, privilege
+d=False)
+Cannot start container 6b4543c9d43597164b2c664354700067d04b8d2d960e334fb4a31b40533bd04a: cannot join network of a non running container: fig_web_1

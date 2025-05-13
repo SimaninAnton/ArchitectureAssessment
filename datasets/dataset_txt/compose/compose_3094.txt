@@ -1,0 +1,79 @@
+krasi-georgiev commented on 15 Nov 2015
+docker-compose version: 1.5.0rc3
+ftp:
+    restart: always
+    net: "host"
+    volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
+        - ../:/home
+        - ../proftpd/ftpd.passwd:/etc/proftpd/ftpd.passwd
+    image: vipconsult/proftpd
+docker-compose --verbose -f docker-compose-ftp-log.yml --x-networking  up -d
+
+compose.config.config.find: Using configuration files: ./docker-compose-ftp-log.yml
+docker.auth.auth.load_config: Trying /home/team/.docker/config.json
+docker.auth.auth.load_config: File doesn't exist
+docker.auth.auth.load_config: Trying /home/team/.dockercfg
+docker.auth.auth.load_config: File doesn't exist - returning empty config
+compose.cli.command.get_client: Compose version 1.5.0rc3
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.1.5-x86_64-linode61, Os=linux, BuildTime=Tue Nov  3 17:29:38 UTC 2015, ApiVersion=1.21, Version=1.9.0, GitCommit=76d6bc9, Arch=amd64, GoVersion=go1.4.2
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=docker', u'com.docker.compose.service=ftp', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True)
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=docker', u'com.docker.compose.service=ftp', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True)
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'docker')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {u'Containers': {},
+ u'Driver': u'bridge',
+ u'IPAM': {u'Config': [{}], u'Driver': u'default'},
+ u'Id': u'b42c9167c3471c5d0e00d5d6c9e097d48bd70b7d558ea69aa25d089ff0d2aea1',
+ u'Name': u'docker',
+ u'Options': {},
+ u'Scope': u'local'}
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('vipconsult/proftpd')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'Krasimir Georgiev <support@vip-consult.co.uk>',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh', u'-c', u'proftpd -n'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=docker', u'com.docker.compose.service=ftp', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('vipconsult/proftpd')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'Krasimir Georgiev <support@vip-consult.co.uk>',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh', u'-c', u'proftpd -n'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'],
+...
+compose.service.build_container_labels: Added config hash: 60b19fea87ade143e346d3863891391d4eab67b236d7d30cdb006f2eadb98ab6
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (read_only=None, extra_hosts={}, memswap_limit=None, links=[], security_opt=None, cgroup_parent=None, cap_add=None, restart_policy={u'MaximumRetryCount': 0, u'Name': u'always'}, dns_search=None, privileged=False, network_mode='host', binds=[u'/home/vipconsult/proftpd/ftpd.passwd:/etc/proftpd/ftpd.passwd:rw', u'/etc/localtime:/etc/localtime:ro', u'/etc/timezone:/etc/timezone:ro', u'/home/vipconsult:/home:rw'], ipc_mode=None, devices=None, dns=None, pid_mode=None, volumes_from=[], mem_limit=None, port_bindings={}, cap_drop=None, log_config={'Type': u'', 'Config': {}})
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': [u'/home/vipconsult/proftpd/ftpd.passwd:/etc/proftpd/ftpd.passwd:rw',
+           u'/etc/localtime:/etc/localtime:ro',
+           u'/etc/timezone:/etc/timezone:ro',
+           u'/home/vipconsult:/home:rw'],
+ 'ExtraHosts': [],
+ 'Links': [],
+ 'LogConfig': {'Config': {}, 'Type': u''},
+ 'NetworkMode': 'host',
+ 'PortBindings': {},
+ 'RestartPolicy': {u'MaximumRetryCount': 0, u'Name': u'always'},
+...
+compose.service.create_container: Creating docker_ftp_1
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (hostname='ftp', name=u'docker_ftp_1', image='vipconsult/proftpd', labels={u'com.docker.compose.service': u'ftp', u'com.docker.compose.project': u'docker', 'com.docker.compose.config-hash': '60b19fea87ade143e346d3863891391d4eab67b236d7d30cdb006f2eadb98ab6', 'com.docker.compose.version': u'1.5.0rc3', u'com.docker.compose.oneoff': u'False', 'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': 'host', 'Links': [], 'PortBindings': {}, 'Binds': [u'/home/vipconsult/proftpd/ftpd.passwd:/etc/proftpd/ftpd.passwd:rw', u'/etc/localtime:/etc/localtime:ro', u'/etc/timezone:/etc/timezone:ro', u'/home/vipconsult:/home:rw'], 'RestartPolicy': {u'MaximumRetryCount': 0, u'Name': u'always'}, 'ExtraHosts': [], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment={}, volumes={u'/etc/proftpd/ftpd.passwd': {}, u'/etc/localtime': {}, u'/etc/timezone': {}, u'/home': {}}, detach=True)
+ERROR: compose.cli.main.main: Conflicting options: -h and the network mode (--net)

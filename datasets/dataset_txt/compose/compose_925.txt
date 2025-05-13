@@ -1,0 +1,144 @@
+jeek120 commented on 20 Jan 2018
+I had a yaml like:
+version: "3"
+services:
+    nginx:
+        container_name: nginx
+        image: nginx
+        depends_on:
+            - check
+        ports:
+            - "80:80"
+        networks:
+            - nginx
+        volumes:
+            - ./nginx:/etc/nginx/conf.d
+            - ./check/check_web:/check_web
+    check:
+        build:
+           context: ./check/check_api
+        image: check:1
+        container_name: check
+        depends_on:
+            - mysql
+            - redis
+            - mongo
+        networks:
+            - nginx
+            - check
+        volumes:
+            - ./check/check_api/conf:/check/conf
+    mysql:
+        container_name: mysql
+        image: mysql:5.7
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+        networks:
+            - check
+        command: ['mysqld','--lower_case_table_names=1']
+    redis:
+        container_name: redis
+        image: redis:3
+        networks:
+            - check
+    mongo:
+        container_name: mongo
+        image: mongo
+        networks:
+            - check
+networks:
+    nginx:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.188.6.0/24
+    check:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.188.7.0/24
+I did a docker-compose up -d and saw the problem with my app, it couldn't connect to hostname redis,and look in /etc/host on mongo/redis/mysql service.
+tried docker-compose start,docker-compose stop,docker-compose rm,docker-compose up -d... not fixed
+docker exec -it mongo cat /etc/hosts:
+127.0.0.1 localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+192.188.7.2 5bbd75766563
+docker network inspect checkdocker_check
+[
+    {
+        "Name": "checkdocker_check",
+        "Id": "15519a87687978b115f579e2e61e2b35561a91659ff67d7343a9660c7b9d00e1",
+        "Created": "2018-01-19T12:37:00.540833429-05:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "192.188.7.0/24"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Containers": {
+            "40b75a4d53f7ad4a094263627a5aa20aba5b2827351f7c7fee020df80f80b942": {
+                "Name": "mysql",
+                "EndpointID": "5404b4da3e08892b7c8987fcf20e9d10c4a3f8bbb5815d7f8589f1fe282ab4ef",
+                "MacAddress": "02:42:c0:bc:07:04",
+                "IPv4Address": "192.188.7.4/24",
+                "IPv6Address": ""
+            },
+            "5bbd757665633968c43dc0d396da681de03059986a9fd84aace14c64c7dcd06f": {
+                "Name": "mongo",
+                "EndpointID": "5871456e9b45d0e1969880b30060e88ddd8f88adb455760347bf0f1c3460333b",
+                "MacAddress": "02:42:c0:bc:07:02",
+                "IPv4Address": "192.188.7.2/24",
+                "IPv6Address": ""
+            },
+            "c753eb1ed82afc6f8d0571b426d79fecf5c101070bd52c20df5e2032eae37b52": {
+                "Name": "redis",
+                "EndpointID": "d344f2e0b084a36da738c4d6e31028309f9d2df111c30a484875d798775b7ad8",
+                "MacAddress": "02:42:c0:bc:07:03",
+                "IPv4Address": "192.188.7.3/24",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "check",
+            "com.docker.compose.project": "checkdocker"
+        }
+    }
+]
+check service exit because cannot connect to other hosts
+cat /etc/issue
+Ubuntu 16.04.3 LTS \n \l
+docker version
+Client:
+ Version:      1.13.1
+ API version:  1.26
+ Go version:   go1.6.2
+ Git commit:   092cba3
+ Built:        Thu Nov  2 20:40:23 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.13.1
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.6.2
+ Git commit:   092cba3
+ Built:        Thu Nov  2 20:40:23 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+docker-compose version
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.6.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016

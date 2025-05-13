@@ -1,0 +1,10 @@
+joepio commented on 29 Feb 2016
+While I was running docker-compose up, my gateway connection was lost. This paused the download of the image (postgres). When my connection restored, the download did not automatically continue (perhaps an auto retry might fix this?).
+I CTRL+C'd, re-ran docker-compose up. The download progress bars were at the same spot, but the download did still not continue.
+I tried removing the image that was stuck (in this case: docker rmi 7268d8f794c4) and got an error:
+Failed to remove image (7268d8f794c4): Error response from daemon: No such image: 7268d8f794c4:latest
+So I tried to download a different image: Jenkins. It shares at least one dependency with Postgres (7268d8f794c4), and this one, too, is stuck in 'downloading'.
+I ended up removing and re-creating the VM.
+I could not reproduce this behaviour by pulling some image and turning off wifi and turning it on again.
+I could reproduce this by disconnecting and reconnecting the gateway.
+The image downloader needs a way to deal with downloads that are paused due to a lost connection to a gateway.

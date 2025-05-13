@@ -1,0 +1,13 @@
+fxdgear commented on 5 Nov 2014
+I noticed an inconsistency when when trying to build containers with invalid names.
+if the name includes a hyphen, the error is:
+$ fig build
+Invalid service name "foo-bar" - only [a-zA-Z0-9] are allowed
+Notice the uppercase letters in the regex.
+If renamed to be camel case:
+... 
+build output
+...
+Building FooBar...
+Invalid repository name (hub_FooBar), only [a-z0-9-_.] are allowed
+Now notice that Uppercase is not allowed, but also notice that hyphens and underscores and periods are allowed.

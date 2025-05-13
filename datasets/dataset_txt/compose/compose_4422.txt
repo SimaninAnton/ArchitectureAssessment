@@ -1,0 +1,5 @@
+joehillen commented on 28 Jan 2014
+Are there any plans to support plugins?
+Specifically, I'm considering replacing our Vagrant setup with Fig, and we use the salty-vagrant plugin.
+It would be awesome if fig could do the equivalent of
+vagrant plugin install vagrant-salt

@@ -1,0 +1,11 @@
+Rashmi-Margani commented on 29 Apr 2014
+after clone using command "git clone https://github.com/dotcloud/docker.git"
+"cd docker"
+following issues are not resolved.... please any one fix the issue....
+"vagrant up" command is not working
+issues as follows:
+D:\docker>vagrant up
+Vagrant failed to initialize at a very early stage:
+The home directory you specified is not accessible. The home
+directory that Vagrant uses must be both readable and writable.
+You specified: C:/Users/Acer/.vagrant.d

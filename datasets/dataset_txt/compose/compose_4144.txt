@@ -1,0 +1,28 @@
+wlepinski commented on 23 Oct 2014
+http://stackoverflow.com/questions/26532003/fig-apparently-not-using-volume-from-on-mysql-service
+I'm trying to setup a very simple setup of a mysql database using a data-container as repository using Fig.sh and Docker.
+The code below is self-explanatory:
+web:
+  build: .
+  command: php -S 0.0.0.0:8000 -t /code
+  ports:
+    - "8000:8000"
+  links:
+    - db
+  volumes:
+    - .:/code
+dbdata:
+  image: busybox
+  command: /bin/sh
+  volumes:
+    - /var/lib/mysql
+db:
+  image: mysql
+  volumes_from:
+    - dbdata
+  environment:
+    MYSQL_DATABASE: database
+    MYSQL_ROOT_PASSWORD: rootpasswd
+For some reason, if I run a command fig run --rm dbdata /bin/sh and then I cd into the directory /var/lib/mysql. The folder is empty. If I run fig run --rm db /bin/sh and cd into /var/lib/mysql the database is being created there.
+What am I doing wrong here? And taking advantage of the question, is this the correct setup or I should let the data inside the mysql container?
+Thanks.

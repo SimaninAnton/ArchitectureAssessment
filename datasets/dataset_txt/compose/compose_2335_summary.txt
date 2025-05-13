@@ -1,0 +1,1 @@
+Docker-compose links fail if the service has a base network

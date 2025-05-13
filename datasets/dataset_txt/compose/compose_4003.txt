@@ -1,0 +1,40 @@
+vu2srk commented on 9 Jan 2015
+If there's an empty folder / file referenced in the Dockerfile, fig breaks with a "no such file or directory" error. The build breaks only with fig.
+docker build
+runs fine and copies the folder onto the container.
+fig.yml:
+auth:
+    build: ./src/
+$ fig build
+Building auth...
+ ---> 6982822ffd01
+Step 1 : ENV HOME /root
+ ---> Using cache
+ ---> 22c709054994
+Step 2 : RUN /build/utilities.sh
+ ---> Using cache
+ ---> b22113419797
+Step 3 : RUN /build/ruby2.0.sh
+ ---> Using cache
+ ---> 15597c5dea30
+Step 4 : RUN sudo apt-get -y install postgresql-client postgresql postgresql-contrib
+ ---> Using cache
+ ---> 86f9b438a125
+Step 5 : RUN rm /etc/nginx/sites-enabled/default
+ ---> Using cache
+ ---> d7cb3ad48353
+Step 6 : RUN rm -f /etc/service/nginx/down
+ ---> Using cache
+ ---> 191dbf77cb97
+Step 7 : ADD webapp.conf /etc/nginx/sites-enabled/webapp.conf
+ ---> Using cache
+ ---> a159128f46e1
+Step 8 : ADD test /home/app/test
+Service 'auth' failed to build: test: no such file or directory
+The dockerfile line that broke the fig build was:
+ADD test /home/app/test
+where test is an empty folder.
+$ du -sh *
+4.0K    Dockerfile
+  0B    test
+4.0K    webapp.conf

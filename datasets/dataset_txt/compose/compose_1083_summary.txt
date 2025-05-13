@@ -1,0 +1,1 @@
+Compose on macOS, docker host on windows

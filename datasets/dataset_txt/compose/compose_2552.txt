@@ -1,0 +1,44 @@
+Contributor
+allencloud commented on 31 Mar 2016
+Hi, all,
+Today I ran into a strange case when run a docker-compose.yml against Swarm.
+And is there any possibility to avoid recreating containers if two docker nodes managed by swarm has images with different image ids?
+enviroment:
+1.One swarm;
+2.two docker engine managed by swarm;
+docker-compose.yml:
+db:
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+  image: daocloud.io/mysql:latest
+  restart: unless-stopped:0
+wordpress:
+  image: daocloud.io/wordpress:latest
+  links:
+  - db:mysql
+  ports:
+  - '80'
+  restart: unless-stopped:0
+when I execute docker-compose up -d, two containers will be created.And if I execute docker-compose up -d again, it should output:
+root_db_1 is up-to-date
+root_wordpress_1 is up-to-date
+while if I execute this command serveral times, sometime it will output:
+Recreating root_db_1
+Recreating root_wordpress_1
+I think this is ridiculous.
+When I try to find the root cause, I found in my swarm cluster there are:
+root@dhp-develop:~# docker images | grep mysql
+daocloud.io/mysql                                    latest              7a5866c2edbf        2 weeks ago         361.3 MB
+daocloud.io/mysql                                    latest              0ffe8484635b        4 weeks ago         361.3 MB
+two mysql images on different node are with different image id.
+when I dive deep into compose source code, and add some log to output:
+--------strategy's value ConvergenceStrategy.changed
+config_hash dict: {u'links': [], u'networks': [], u'image_id': u'sha256:0ffe8484635b730bddc042e83f15ad55f74a953cf3bdc8508407a34fea60ca4d', u'volumes_from': [], u'net': None, u'options': {'environment': {'MYSQL_ROOT_PASSWORD': 'root'}, 'image': 'daocloud.io/mysql:latest', 'restart': {u'MaximumRetryCount': 0, u'Name': u'unless-stopped'}}}
+containers : [<Container: root_db_1 (752782)>]
+----config_hash 872efdeadf4096b17aff21996f9881f6a9807de82442f19a99942b7fb4976d53
+config_hash dict: {u'links': [], u'networks': [], u'image_id': u'sha256:7a5866c2edbfc7d7bc1baf38622646a32e003481035844b3701b42093918f854', u'volumes_from': [], u'net': None, u'options': {'environment': {'MYSQL_ROOT_PASSWORD': 'root'}, 'image': 'daocloud.io/mysql:latest', 'restart': {u'MaximumRetryCount': 0, u'Name': u'unless-stopped'}}}
+----self.config_hash c2c10ef8c08ab0c8e7794b56e820a70a63a2274cf72ceeeeb85c0b2ea9112610
+----LABEL_CONFIG_HASH c2c10ef8c08ab0c8e7794b56e820a70a63a2274cf72ceeeeb85c0b2ea9112610
+root_db_1 has diverged: c2c10ef8c08ab0c8e7794b56e820a70a63a2274cf72ceeeeb85c0b2ea9112610 != 872efdeadf4096b17aff21996f9881f6a9807de82442f19a99942b7fb4976d53
+And is there any possibility to avoid recreating containers if two docker nodes managed by swarm has images with different image ids?
+1

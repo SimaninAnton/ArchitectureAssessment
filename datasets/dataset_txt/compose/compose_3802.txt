@@ -1,0 +1,8 @@
+pavlo commented on 24 Mar 2015
+Hey guys, it looks like Compose does not handle env. variables substitution if there're two vars like shown below:
+volumes:
+  - ${APP_DIR_ON_HOST}:${APP_DIR_ON_CONTAINER}
+in this case the first var (APP_DIR_ON_HOST) gets expanded just fine while the second one stays unchanged - it gets passed literally as a string ${APP_DIR_ON_CONTAINER}
+Shouldn't it expand the second one as well? I would expect that.
+Please let me know if you want me to provide more detailed example.
+P.

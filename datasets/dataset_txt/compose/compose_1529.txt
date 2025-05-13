@@ -1,0 +1,42 @@
+fabiobatalha commented on 11 Apr 2017 •
+edited by shin-
+$ docker-compose --version
+docker-compose version 1.11.2, build dfed245
+$ docker-compose -f docker-compose-dev.yml up
+doimanager_rabbitmq_1 is up-to-date
+doimanager_mongo_1 is up-to-date
+Creating doimanager_celeryworker_1
+
+ERROR: for celeryworker  Cannot start service celeryworker: oci runtime error: container_linux.go:247: starting container process caused "exec: \"celery -A crossref.tasks worker -l INFO\": executable file not found in $PATH"
+ERROR: Encountered errors while bringing up the project.
+But when running only the service that is getting the error message, it works fine!
+$ docker-compose -f docker-compose-dev.yml run --rm celeryworker celery -A crossref.tasks worker -l INFO
+/usr/local/lib/python3.5/site-packages/celery-4.0.2-py3.5.egg/celery/platforms.py:793: RuntimeWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the -u option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+
+ -------------- celery@384499cb8683 v4.0.2 (latentcall)
+---- **** -----
+--- * ***  * -- Linux-4.9.13-moby-x86_64-with-debian-8.7 2017-04-11 13:10:39
+-- * - **** ---
+- ** ---------- [config]
+- ** ---------- .> app:         tasks:0x7fb460cea6d8
+- ** ---------- .> transport:   amqp://guest:**@rabbitmq:5672//
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 4 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** -----
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+
+
+[tasks]
+  . crossref.tasks.register_doi
+  . crossref.tasks.request_doi_status
+
+[2017-04-11 13:10:39,590: INFO/MainProcess] Connected to amqp://guest:**@rabbitmq:5672//

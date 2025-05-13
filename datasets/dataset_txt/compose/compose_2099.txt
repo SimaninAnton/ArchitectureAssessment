@@ -1,0 +1,83 @@
+earthquakesan commented on 2 Sep 2016
+Information on docker
+(docker-compose)➜  docker-py git:(master) docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 22:00:36 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 22:00:36 2016
+ OS/Arch:      linux/amd64
+(docker-compose)➜  docker-py git:(master) docker info
+Containers: 1
+ Running: 1
+ Paused: 0
+ Stopped: 0
+Images: 938
+Server Version: 1.12.0
+Storage Driver: aufs
+ Root Dir: /home/ivan/datahdd/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 1043
+ Dirperm1 Supported: false
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: overlay bridge host null
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: apparmor
+Kernel Version: 3.13.0-43-generic
+Operating System: Ubuntu 14.04.5 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 15.56 GiB
+Name: ivan-Latitude-E6520
+ID: CHNG:7EAQ:6G5N:PDHL:I6U5:3R5K:FM7W:D5HB:IFKG:U75E:GRSU:IPTY
+Docker Root Dir: /home/ivan/datahdd/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Insecure Registries:
+ 127.0.0.0/8
+Running last docker-compose (installed with python setup.py develop):
+(docker-compose)➜  docker-hadoop git:(1.1.0-hadoop2.7.1) docker-compose version
+docker-compose version 1.9.0dev, build unknown
+docker-py version: 1.10.0-dev
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+The docker-compose.yml definition is taken from docker-hadoop repo.
+I run docker events in a terminal to track events.
+When I run the container with run command the event log is as expected (run from the root folder where hadoop.env is located):
+docker build -t namenode ./namenode
+docker run --env CLUSTER_NAME=test --env-file hadoop.env --name namenode namenode
+Event log:
+➜  docker events                                                                    
+2016-09-02T12:31:48.500381308+02:00 container create 2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738 (image=namenode, name=namenode)
+2016-09-02T12:31:48.505475181+02:00 container attach 2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738 (image=namenode, name=namenode)
+2016-09-02T12:31:48.759823778+02:00 network connect 52def9f24add00a01b7ef676403e5c16711fdee306d0f62e812a7a8cc4c5acb1 (container=2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738, name=bridge, type=bridge)
+2016-09-02T12:31:48.793532003+02:00 volume mount 8fa68fd7945eef718e346e09eb677b494abb629d5e6ba158ba9d4141a5baa766 (container=2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738, destination=/hadoop/dfs/name, driver=local, propagation=, read/write=true)
+2016-09-02T12:31:49.035122709+02:00 container start 2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738 (image=namenode, name=namenode)
+2016-09-02T12:32:19.035686470+02:00 container exec_create: /bin/sh -c curl -f http://localhost:50070/ || exit 1 2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738 (image=namenode, name=namenode)
+2016-09-02T12:32:19.035779967+02:00 container exec_start: /bin/sh -c curl -f http://localhost:50070/ || exit 1 2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738 (image=namenode, name=namenode)
+2016-09-02T12:32:19.139633212+02:00 container health_status: healthy 2c00d7cc27ff480c98d715d3e5ab7a2f76a1cba9564d056ec1f1083e2c250738 (image=namenode, name=namenode)
+When running docker-compose up namenode, docker-compose ignore the HEALTHCHECK definitions. The event log output is as follows:
+➜  docker events
+2016-09-02T12:33:25.176580532+02:00 container create fd3d24157a199c3af746b228d0f97b0c1977b29026ea6136e7fe96a6b9aa9365 (com.docker.compose.config-hash=9c2dad7c7ae18154f072691f28d0bb85c2b154282c23e4cd63e9f9daaa297d03, com.docker.compose.container-number=1, com.docker.compose.oneoff=False, com.docker.compose.project=dockerhadoop, com.docker.compose.service=namenode, com.docker.compose.version=1.9.0dev, image=bde2020/hadoop-namenode:1.0.0, name=namenode)
+2016-09-02T12:33:25.193247903+02:00 container attach fd3d24157a199c3af746b228d0f97b0c1977b29026ea6136e7fe96a6b9aa9365 (com.docker.compose.config-hash=9c2dad7c7ae18154f072691f28d0bb85c2b154282c23e4cd63e9f9daaa297d03, com.docker.compose.container-number=1, com.docker.compose.oneoff=False, com.docker.compose.project=dockerhadoop, com.docker.compose.service=namenode, com.docker.compose.version=1.9.0dev, image=bde2020/hadoop-namenode:1.0.0, name=namenode)
+2016-09-02T12:33:25.450790740+02:00 network connect 1fe5981e4e25ea0c89432229cd2b7ada9389296234c6040f70b8ca47dd0563b8 (container=fd3d24157a199c3af746b228d0f97b0c1977b29026ea6136e7fe96a6b9aa9365, name=hadoop, type=bridge)
+2016-09-02T12:33:25.818952483+02:00 container start fd3d24157a199c3af746b228d0f97b0c1977b29026ea6136e7fe96a6b9aa9365 (com.docker.compose.config-hash=9c2dad7c7ae18154f072691f28d0bb85c2b154282c23e4cd63e9f9daaa297d03, com.docker.compose.container-number=1, com.docker.compose.oneoff=False, com.docker.compose.project=dockerhadoop, com.docker.compose.service=namenode, com.docker.compose.version=1.9.0dev, image=bde2020/hadoop-namenode:1.0.0, name=namenode)
+Also docker ps will not show the status of the container:
+CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS               NAMES
+fd3d24157a19        bde2020/hadoop-namenode:1.0.0   "/entrypoint.sh /run."   52 seconds ago      Up 50 seconds                           namenode

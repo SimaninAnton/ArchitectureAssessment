@@ -1,0 +1,1 @@
+Docker compose: TypeError: You must specify a directory to build in path

@@ -1,0 +1,5 @@
+bitliner commented on 19 Dec 2016
+I run in a terminal docker-compose up
+and it prints to console the log entries for all contains.
+But if in another terminal I run docker-compose logs api to print log entires of one single container, then it prints to the console some more entry that it was not printed in the first terminal.
+This creates quite enough confusion to me, and it makes me think that docker-compose is not a reliable tool.

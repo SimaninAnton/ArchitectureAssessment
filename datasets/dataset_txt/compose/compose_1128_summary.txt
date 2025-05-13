@@ -1,0 +1,1 @@
+docker network rm NETWORK fails HNS failed with eerror: The parameter is incorrect

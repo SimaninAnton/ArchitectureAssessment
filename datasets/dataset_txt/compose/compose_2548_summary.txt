@@ -1,0 +1,1 @@
+docker-compose build under windows fails with "Cannot locate specified Dockerfile"

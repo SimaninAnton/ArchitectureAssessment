@@ -1,0 +1,1 @@
+Docker's container with --net=host is not reachable from the network

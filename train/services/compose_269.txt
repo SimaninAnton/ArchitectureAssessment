@@ -1,0 +1,76 @@
+liangming2003 commented on 6 Mar 2019
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+PS C:\Users\Administrator\Jenkins> docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+PS C:\Users\Administrator\Jenkins> docker version
+Client:
+ Version:           18.09.3
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        142dfcedca
+ Built:             02/28/2019 06:33:17
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.3
+  API version:      1.39 (minimum version 1.24)
+  Go version:       go1.10.8
+  Git commit:       142dfcedca
+  Built:            02/28/2019 06:31:15
+  OS/Arch:          windows/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+PS C:\Users\Administrator\Jenkins> docker-compose config
+networks:
+  default:
+    external:
+      name: nat
+services:
+  jenkins-agent:
+    build:
+      context: C:\Users\Administrator\Jenkins\agent
+    container_name: jenkins-agent
+    depends_on:
+    - jenkins-master
+    environment:
+      JENKINS_AGENT_ID: NET_00
+      JENKINS_MASTER_HOST: jenkins-master
+      JENKINS_SECRET: e7b42e02c05b39ed9d3c03857c818de62feadc181c96c5d62b3eca061875de1b
+    image: hd/jenkins-agent-on-windowsservercore:3.27
+    stdin_open: true
+    tty: true
+  jenkins-master:
+    build:
+      context: C:\Users\Administrator\Jenkins\master
+    container_name: jenkins-master
+    image: hd/jenkins-on-windowsservercore:2.138.3
+    ports:
+    - published: 8080
+      target: 8080
+    - published: 50000
+      target: 50000
+    stdin_open: true
+    tty: true
+    volumes:
+    - master-volume:c:\jenkins:rw
+version: '3.2'
+volumes:
+  master-volume: {}
+Steps to reproduce the issue
+docker-compose -f docker-compose.yml up --build
+Observed result
+Expected result
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Win Server 2019

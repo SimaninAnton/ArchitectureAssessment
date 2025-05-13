@@ -1,0 +1,14 @@
+tiry commented on 22 Jan 2016
+I am using compose variable interpolation because I would like to make part of the compose template configurable.
+This works for some parameters, however, there seems to be an issue with parameters that expect an integer value (tested against 1.5.2 and 1.6 dev).
+Typically, if I want to change the cpu-shares parameter I end up with an error :
+ERROR: json: cannot unmarshal string into Go value of type int64
+Looking at what happens in interpolation.py and checking the content of the interpolation result:
+when the cpu-shares is "hard coded" the resulting dict is
+{ ... 'cpu_shares': 1024 ... }
+when the cpu-shares is set to use a variable using cpu_shares: ${CPU_SHARES} the resulting dict is
+{ ... 'cpu_shares': '1024' ... }
+This looks to me like the root cause of the problem.
+I am not sure what the best approach would be:
+should I try to add a tentative cast after the Template(string).substitute ?
+should I add some post processing in config.py or in validate_against_fields_schema ?

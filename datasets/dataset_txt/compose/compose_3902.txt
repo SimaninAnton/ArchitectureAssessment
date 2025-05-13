@@ -1,0 +1,26 @@
+Ilya-Kuchaev commented on 21 Feb 2015
+Does anybody know if Fig can handle two or more links to one container? For ex. I have two node apps and have to use one mongodb database. For now the second container just does not see mongodb :(
+mongo:
+    image: mongo:latest
+    ports:
+        - "27017"
+dos:
+    build: ./democracyos
+    links:
+        - mongo
+        - notifier
+    ports:
+        - "3000:3000"
+    volumes:
+        - ./democracyos/app /app
+notifier:
+    build: ./notifier
+    links:
+        - mongo
+    ports:
+        - "9001"
+    volumes:
+        - ./notifier/app /app
+The dos container exits with
+Error: failed to connect to [undefined:27017]
+Please advise!

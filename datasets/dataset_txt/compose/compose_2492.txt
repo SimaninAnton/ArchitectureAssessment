@@ -1,0 +1,29 @@
+jaapz commented on 14 Apr 2016
+I have defined volumes in a compose file like this:
+version: '2'
+services:
+    nginx:
+        ...
+        volumes_from:
+            - web
+
+    web:
+        ...
+        volumes:
+            - /var/www/myapp/static
+The nginx container is configured to serve static files from the volume it gets from the web container. All other requests are proxied to the app running in the web container.
+Getting things up and running using docker-compose up works just fine. However the problem starts when I restart the running web containers.
+To have as little downtime as possible, I want to update the running web containers to the latest versions of my image, and recreate and restart them without having to do docker-compose down and docker-compose up. So I do:
+$ docker-compose pull web
+$ docker-compose stop web
+$ docker-compose rm -f web
+$ docker-compose start web
+This makes sure only the web containers are downed, and the nginx container can keep running and accepting requests and proxy requests to other containers.
+And even though static files in the defined volumes have changed, they are not updated in the nginx container.
+Basically what I need is the volumes defined in volumes_from to be re-attached or re-created when the source container is recreated. Is that possible?
+Versions
+$ docker --version
+Docker version 1.10.3, build 20f81dd
+$ docker-compose --version
+docker-compose version 1.6.2, build 4d72027
+3

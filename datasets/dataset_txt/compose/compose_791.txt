@@ -1,0 +1,16 @@
+lucaszanella commented on 19 Mar 2018
+I'm trying to setup some sysctl parameters on the docker-compose:
+services:
+  jscam:
+    build: ./dev
+    sysctls:
+      - kern.maxfiles=5242880
+      - kern.maxfilesperproc=524288
+    image: jscam
+    stdin_open: true
+    tty: true
+    network_mode: "host"
+    privileged: true
+I get
+Error response from daemon: OCI runtime create failed: sysctl "kern.maxfiles" is not in a separate kernel namespace: unknown
+I've found somewhere that I need privileged: true and there it is in the compose file, but I get this error above.

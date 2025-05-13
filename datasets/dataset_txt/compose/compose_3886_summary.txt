@@ -1,0 +1,1 @@
+Stopping `fig up` using CTRL+c does not always shutdown containers

@@ -1,0 +1,5 @@
+valentin-krasontovitsch commented on 26 Jun 2017
+Experienced behavior:
+When creating several containers with a compose file using docker-compose up with the option --abort-on-container-exit, and some containers are created successfully, and one container throws an error (for instance because the container name is already in use by a different container), compose exits, and the created containers remain in existence and running.
+Expected behavior (in my personal opinion):
+The created containers should be stopped and removed after the error is encountered.

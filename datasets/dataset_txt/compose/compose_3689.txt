@@ -1,0 +1,3 @@
+jdmarshall commented on 24 Apr 2015
+when using docker-compose scale service=2 docker will claim it has spun up service_1 and service_2 but upon running docker ps or connecting to one of the linked machines to see the hosts entries, it has instead created service_2 and service_3
+Obviously this causes problems when trying to configure things to talk to each other.

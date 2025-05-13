@@ -1,0 +1,50 @@
+bparker98 commented on 3 Feb 2017 •
+edited
+When trying to extend a service with a healthcheck defined you get the following stacktrace when doing docker-compose up
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.11.0.dev0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 88, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 137, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/command.py", line 36, in project_from_options
+    environment=environment
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/command.py", line 103, in get_project
+    config_data = config.load(config_details)
+  File "/usr/local/lib/python2.7/dist-packages/compose/config/config.py", line 331, in load
+    service_dicts = load_services(config_details, main_file)
+  File "/usr/local/lib/python2.7/dist-packages/compose/config/config.py", line 432, in load_services
+    return build_services(service_config)
+  File "/usr/local/lib/python2.7/dist-packages/compose/config/config.py", line 411, in build_services
+    for name, service_dict in service_config.items()
+  File "/usr/local/lib/python2.7/dist-packages/compose/config/config.py", line 396, in build_service
+    service_dict = process_service(resolver.run())
+  File "/usr/local/lib/python2.7/dist-packages/compose/config/config.py", line 658, in process_service
+    service_dict = process_healthcheck(service_dict, service_config.name)
+  File "/usr/local/lib/python2.7/dist-packages/compose/config/config.py", line 689, in process_healthcheck
+    hc['interval'] = parse_nanoseconds_int(raw['interval'])
+  File "/usr/local/lib/python2.7/dist-packages/compose/utils.py", line 120, in parse_nanoseconds_int
+    parsed = timeparse(value or '')
+  File "/usr/local/lib/python2.7/dist-packages/compose/timeparse.py", line 86, in timeparse
+    match = re.match(r'\s*' + TIMEFORMAT + r'\s*$', sval, re.I)
+  File "/usr/lib/python2.7/re.py", line 141, in match
+    return _compile(pattern, flags).match(string)
+TypeError: expected string or buffer
+This is due to it trying to parse the timeout and interval parameters more than once.
+Here are example yml files.
+base.yml
+services:
+  demo:
+    image: foobar:latest
+    entrypoint: ["/bin/bash", "-c", "echo foobar"]
+    healthcheck:
+      test: ["CMD", "/health.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 36
+extends.yml
+services:
+  demo:
+    extends:
+      file: base.yml
+      service: demo

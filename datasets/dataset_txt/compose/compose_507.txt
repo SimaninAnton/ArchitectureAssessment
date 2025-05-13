@@ -1,0 +1,70 @@
+ikhomutov commented on 11 Sep 2018
+ᐅ docker-compose version
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.5.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+ᐅ docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:23:18 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:22:21 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ᐅ docker-compose config
+services:
+  postgres_test:
+    container_name: pg1
+    image: postgres:latest
+  redis_test:
+    container_name: rs1
+    image: redis:latest
+version: '2.0'
+Steps to reproduce the issue
+Add service to the docker-compose.yml
+Fill container_name parameter
+Fire docker-compose up -d
+Type docker-compose stop <TAB>
+Expected result
+postgres_test  --      21 minutes, 725be2901800, postgres:latest
+redis_test  --      21 minutes, 4d9f54eb16ff, redis:latest
+Observed result
+pg1  --      21 minutes, 725be2901800, postgres:latest
+rs1  --      21 minutes, 4d9f54eb16ff, redis:latest
+The completion suggests list of containers instead of services
+Additional information
+If, instead, you point some string that includes '_' symbol as a container_name, the completion would suggest only a part of name that goes before '_', for example:
+ᐅ docker-compose config
+services:
+  postgres_test:
+    container_name: pg_test
+    image: postgres:latest
+  redis_test:
+    container_name: rs_test
+    image: redis:latest
+version: '2.0'
+ᐅ docker-compose ps
+ Name                Command               State    Ports  
+-----------------------------------------------------------
+pg_test   docker-entrypoint.sh postgres    Up      5432/tcp
+rs_test   docker-entrypoint.sh redis ...   Up      6379/tcp
+~/workspace/projects/docker-test 
+ᐅ docker-compose ps --service
+postgres_test
+redis_test
+~/workspace/projects/docker-test 
+ᐅ docker-compose stop
+pg  --  About a minute, 37d6db9d8c98, postgres:latest
+rs  --  About a minute, 8a3732fb8333, redis:latest

@@ -1,0 +1,5 @@
+psychok7 commented on 11 Jul 2016 •
+edited
+So i was wondering if it's possible to choose a custom docker-compose.yml file using the run command.
+Something like this docker-compose run -f dev.yml --service-ports --rm web
+Thanks

@@ -1,0 +1,2 @@
+ylavoie commented on 9 Jul 2017
+Even with version 3, dns_opt is still required to pass specific options like ndots and get around dns problems

@@ -1,0 +1,54 @@
+chandrahaslanka commented on 2 Jul 2019
+Description of the issue
+I have installed Docker Toolbox 18.09.3 which comes with Docker Compose 1.23.2 on a Windows 7 machine. I'm unable to run any docker-compose commands. All commands fail with the message:
+Error loading Python DLL 'C:\Users\xyz\AppData\Local\Temp\_MEI30322\python36.
+dll'.
+LoadLibrary: The specified procedure could not be found.
+I'm running all the commands from Docker QuickStart Terminal.
+I have tried upgrading to 1.24.1, but the issue still persists.
+I have referred to issues #6323, #5834 for help, but nothing seems to solve the issue.
+When I try to run docker-compose.exe through GUI, I get the following error dialog:
+While keeping the dialog open, if I look into ..\AppData\Local\Temp\_MEIxyz\ folder, I'm able to find both the python36.dll as well as the api-ms-win-crt-runtime-l1-1-0.dll
+Context information (for bug reports)
+Output of docker-compose version
+$ docker-compose version
+Error loading Python DLL 'C:\Users\xyz\AppData\Local\Temp\_MEI11882\python36.
+dll'.
+LoadLibrary: The specified procedure could not be found.
+Output of docker version
+$ docker version
+Client:
+ Version:           18.09.3
+ API version:       1.39
+ Go version:        go1.12
+ Git commit:        774a1f4eee
+ Built:             Mon Mar  4 10:36:44 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.7
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       2d0083d
+  Built:            Thu Jun 27 18:01:17 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+$ docker-compose up
+Error loading Python DLL 'C:\Users\xyz\AppData\Local\Temp\_MEI28042\python36.
+dll'.
+LoadLibrary: The specified procedure could not be found.
+Steps to reproduce the issue
+Install Docker Toolbox on Windows 7 SP1 (64-bit)
+Launch Docker QuickStart Terminal
+Run any docker-compose command
+Observed result
+Docker Compose exits with above error
+Expected result
+Docker Compose should bring up the containers
+Additional information
+Windows 7 SP1 (64-bit)
+Docker Compose installed as part of Docker Toolbox

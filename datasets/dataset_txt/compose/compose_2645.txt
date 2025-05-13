@@ -1,0 +1,87 @@
+HackerWilson commented on 11 Mar 2016
+I have written a compose file to deploy sentry, which is worked on my virtualbox centos7. but when i deployed it on server which is also centos7, i got the error: ERROR: No command specified.
+it is the log_api_error, does anyone meet it before?
+[root@localhost sentry]# docker-compose up
+Creating sentry-redis
+ERROR: No command specified
+the verbose output:
+[root@localhost sentry]# docker-compose --verbose up
+compose.config.config.find: Using configuration files: ./docker-compose.yml,./docker-compose.override.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=3.10.0-327.el7.x86_64, Os=linux, BuildTime=2016-03-10T15:39:25.114690686+00:00, ApiVersion=1.22, Version=1.10.3, GitCommit=20f81dd, Arch=amd64, GoVersion=go1.5.3
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'sentry_default')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {u'Containers': {},
+ u'Driver': u'bridge',
+ u'IPAM': {u'Config': [{u'Gateway': u'172.18.0.1/16',
+                        u'Subnet': u'172.18.0.0/16'}],
+           u'Driver': u'default',
+           u'Options': None},
+ u'Id': u'2bc0a63a40f4a6feaf019b9ffc6bbc99baf22bdd5622b1579551f5e9fd4f9f32',
+ u'Name': u'sentry_default',
+ u'Options': {},
+ u'Scope': u'local'}
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=redis', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=postgres', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=sentry', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=sentry-celery-worker', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=sentry-celery-beat', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=redis', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=postgres', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.project._get_convergence_plans: sentry has upstream changes (redis, postgres, postgres, redis)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=sentry', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.project._get_convergence_plans: sentry-celery-worker has upstream changes (redis, postgres)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=sentry-celery-worker', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.project._get_convergence_plans: sentry-celery-beat has upstream changes (redis, postgres)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=sentry-celery-beat', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('redis:latest')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'Imported from -',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': None,
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=sentry', u'com.docker.compose.service=redis', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('redis:latest')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'Imported from -',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': None,
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+compose.service.build_container_labels: Added config hash: c657b2cea596b4ae597955727a5e8ff812b8d0972bbf6f220e69fa835024ff0f
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (memswap_limit=None, links=[], devices=None, pid_mode=None, log_config={'Type': u'', 'Config': {}}, cpu_quota=None, read_only=None, dns=None, volumes_from=[], port_bindings={}, security_opt=None, extra_hosts=None, cgroup_parent=None, network_mode=u'sentry_default', cap_add=None, restart_policy=None, dns_search=None, privileged=False, binds=[u'/home/data/sentry/redis:/data:rw'], ipc_mode=None, mem_limit=None, cap_drop=None, ulimits=None)
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': [u'/home/data/sentry/redis:/data:rw'],
+ 'Links': [],
+ 'LogConfig': {'Config': {}, 'Type': u''},
+ 'NetworkMode': u'sentry_default',
+ 'PortBindings': {},
+ 'VolumesFrom': []}
+compose.service.create_container: Creating sentry-redis
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name='sentry-redis', image='redis:latest', labels={u'com.docker.compose.service': u'redis', u'com.docker.compose.project': u'sentry', u'com.docker.compose.config-hash': 'c657b2cea596b4ae597955727a5e8ff812b8d0972bbf6f220e69fa835024ff0f', u'com.docker.compose.version': u'1.6.2', u'com.docker.compose.oneoff': u'False', u'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': u'sentry_default', 'Links': [], 'PortBindings': {}, 'Binds': [u'/home/data/sentry/redis:/data:rw'], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment=[], volumes={u'/data': {}}, detach=True)
+ERROR: compose.cli.main.log_api_error: No command specified

@@ -1,0 +1,1 @@
+Latest versions of 'nginx' Docker image require full docker container name (with ID) in hostname in config.

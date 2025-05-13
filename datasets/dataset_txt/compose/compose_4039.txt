@@ -1,0 +1,3 @@
+kostko commented on 19 Dec 2014
+If you use fig run to run a command that outputs some text at first but then does not output anything for a while, then even if this command outputs something (like an error message) later on, the output is never displayed and fig simply exits. If the command is made to constantly produce output, this truncation does not happen.
+cc @mitar

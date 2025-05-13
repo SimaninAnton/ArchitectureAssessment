@@ -1,0 +1,7 @@
+unalterable commented on 13 Mar 2018
+Can i ask why there's no option to run only the dependencies of an application.
+The best advice i can find is https://loomchild.net/2016/01/22/start-only-dependencies-via-docker-compose/ which creates an issue:
+If i have a massive docker-compose.yml and i have a ticket that requires a new dependency, if i add it to my development config - and not my actual config, then my app is going to break on deployment. Which is the type of problem that containers are specifically meant to solve.
+Is there perhaps a better dev workflow i should be following? Or am i missing something? Like:
+docker-compose up --deps-only
+1

@@ -1,0 +1,1 @@
+`docker-compose build service` should not care about the other service's env file

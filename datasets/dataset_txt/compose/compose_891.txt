@@ -1,0 +1,6 @@
+hantsy commented on 6 Feb 2018
+I am using Docker Toolbox 18.01 under Windows 10 64bit.
+And I have set COMPOSE_CONVERT_WINDOWS_PATHS=1 in the .env file.
+But docker-compose does not create the folder if it does not exist in the container in volumes section.
+volumes:
+./ssl:/etc/nginx/targetssl

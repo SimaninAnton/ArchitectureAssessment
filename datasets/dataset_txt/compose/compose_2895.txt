@@ -1,0 +1,3 @@
+Contributor
+jzvelc commented on 20 Jan 2016
+Extended service defined in v2 format (compose 1.6.0) always gets recreated after running docker-compose up -d.

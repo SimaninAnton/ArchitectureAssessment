@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 31 Oct 2015
+Example:
+web:
+    image: "alpine:edge"
+    name: "different name"
+This config would be valid, but shouldn't be. I think name is included because we modify the config to move the name in as a field, but I think we should validate it separately as part of the "top level" validation instead.
+The example config should raise an error about an unsupported key.

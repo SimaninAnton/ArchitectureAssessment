@@ -1,0 +1,35 @@
+wting commented on 16 Sep 2016 •
+edited
+From the documentation:
+Compose preserves all volumes used by your services. When docker-compose up runs, if it finds any containers from previous runs, it copies the volumes from the old container to the new container. This process ensures that any data you’ve created in volumes isn’t lost.
+It states that volumes are preserved. However, what's not clear is that volumes are created and preserved even for containers that don't mount one.
+I've uploaded an example docker-compose.yml and Dockerfiles into wting/maybe_docker_compose_bug. Running it multiple times you'll notice that both containers continue appending timestamps demonstrating persistent state, despite only the web container containing a volume.
+╭─wting@nuc ~/tmp ‹python-2.7.12› 
+╰─➤  docker-compose up --build
+Building web
+Step 1 : FROM ubuntu:14.04
+ ---> 4a725d3b3b1c
+Step 2 : CMD echo $(date) >> /timestamp && cat /timestamp
+ ---> Using cache
+ ---> 1d236ac8fa9b
+Successfully built 1d236ac8fa9b
+Building cache
+Step 1 : FROM ubuntu:14.04
+ ---> 4a725d3b3b1c
+Step 2 : CMD echo $(date) >> /timestamp && cat /timestamp
+ ---> Using cache
+ ---> 1d236ac8fa9b
+Successfully built 1d236ac8fa9b
+Starting tmp_web_1
+Starting tmp_cache_1
+Attaching to tmp_cache_1, tmp_web_1
+cache_1  | Fri Sep 16 00:04:08 UTC 2016
+cache_1  | Fri Sep 16 00:04:16 UTC 2016
+cache_1  | Fri Sep 16 00:04:19 UTC 2016
+web_1    | Fri Sep 16 00:04:08 UTC 2016
+web_1    | Fri Sep 16 00:04:16 UTC 2016
+web_1    | Fri Sep 16 00:04:20 UTC 2016
+tmp_cache_1 exited with code 0
+tmp_web_1 exited with code 0
+╭─wting@nuc ~/tmp ‹python-2.7.12› ‹master•c47c3d7›
+╰─➤

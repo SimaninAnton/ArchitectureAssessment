@@ -1,0 +1,41 @@
+tze commented on 10 Nov 2016
+According to the documentation for env_file, a file relative to the referencing docker-compose.yml should be read by compose. However it looks like env_file is ignored completely until a .env file is present. When .env is present, the referenced env_file existence is validated, but the contents of the referenced env_file are still being ignored.
+Docker for windows
+docker-compose version 1.8.1, build 004ddae
+Docker version 1.12.3, build 6b644ec
+# docker-compose.yml
+version: '2'
+services:    
+    db:
+        env_file: conf.env
+        image: mariadb
+        ports:
+            - "$DB_PORT:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=$DB_MYSQL_ROOT_PASSWORD
+# conf.env    
+DB_PORT=13306
+DB_MYSQL_ROOT_PASSWORD=the-root-password
+$ ls -la
+total 14
+drwxr-xr-x 1    0 Nov 10 16:40 ./
+drwxr-xr-x 1    0 Nov 10 16:39 ../
+-rw-r--r-- 1   55 Nov 10 16:40 conf.env
+-rw-r--r-- 1  216 Nov 10 16:40 docker-compose.yml
+
+$ docker-compose.exe -p envfile up
+The DB_MYSQL_ROOT_PASSWORD variable is not set. Defaulting to a blank string.
+The DB_PORT variable is not set. Defaulting to a blank string.
+The Compose file '.\docker-compose.yml' is invalid because:
+services.db.ports is invalid: Invalid port ":3306", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+When changing env_file: conf.env to env_file: THERE-IS-NO-conf.env there is no error:
+$ docker-compose.exe -p envfile up
+The DB_MYSQL_ROOT_PASSWORD variable is not set. Defaulting to a blank string.
+The DB_PORT variable is not set. Defaulting to a blank string.
+The Compose file '.\docker-compose.yml' is invalid because:
+services.db.ports is invalid: Invalid port ":3306", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+But when a .env file is present, env_file is at least validated correctly (still env_file: THERE-IS-NO-conf.env)
+$ cp conf.env .env
+$ docker-compose.exe -p envfile up
+Couldn't find env file: C:\tmp\docker\THERE-IS-NO-conf.env
+Reverting back to env_file: conf.env appears to be working, since the file exists, but the contents of conf.env are still ignored and read from .env instead.

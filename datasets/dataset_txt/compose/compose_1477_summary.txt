@@ -1,0 +1,1 @@
+New "scale" field in service definition should allow use of env variables

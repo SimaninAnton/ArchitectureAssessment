@@ -1,0 +1,1 @@
+Inconsistent behaviour for '.env' File between older and newer docker-compose version

@@ -1,0 +1,5 @@
+Contributor
+bfirsh commented on 28 Feb 2014
+If a service has multiple containers and fig up -d is run, it stops everything and starts one container for each service. This is not very helpful.
+It should probably stop, recreate and start each container individually so you can do a rolling restart.
+The behaviour of fig up when there are multiple containers running in the background needs a bit of thought. The whole daemon/up workflow needs thinking out properly. Maybe there should be a fig recreate command which handles the recreation of daemonised containers and fig up should just attach or something.

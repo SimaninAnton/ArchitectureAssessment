@@ -1,0 +1,5 @@
+Contributor
+d11wtq commented on 5 Jul 2014
+If you do docker rm -f <container>, the meaning is "Remove , forcefully stopping it if it is running". In fig, the meaning of --force is just "Don't prompt me before removal".
+Since being able to quickly tear down the entire stack in one command is useful, I'd like to propose adding fig stop --rm, or including the meaning of docker rm -f in fig rm --force.
+Thoughts?

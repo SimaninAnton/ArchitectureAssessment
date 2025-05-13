@@ -1,0 +1,1 @@
+"inspect_network is not available for version" error while launching a docker-compose v2

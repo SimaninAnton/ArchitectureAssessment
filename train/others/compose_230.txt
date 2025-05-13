@@ -1,0 +1,13 @@
+nhooey commented on 5 Apr 2019
+Is your feature request related to a problem? Please describe.
+When I run:
+docker-compose build
+I get this error:
+thing1 uses an image, skipping
+thing2 uses an image, skipping
+...
+Describe the solution you'd like
+The error message should be more informative and suggest what to do.
+Describe alternatives you've considered
+None.
+6

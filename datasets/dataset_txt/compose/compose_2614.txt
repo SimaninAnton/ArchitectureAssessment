@@ -1,0 +1,26 @@
+ackris commented on 17 Mar 2016
+@ripcurl00d suggested me to post this here.
+Environment Details:
+VirtualBox
+Networking through NAT (adapter 1) and intnet (adapter 2)
+Docker Version:
+Client:
+version: 1.10.2
+
+Server:
+version: 1.10.2
+I followed the below installation procedure of docker-compose
+sudo apt-get update
+
+sudo apt-get install python-pip
+
+pip install docker-compose
+
+docker-compose version
+I am facing the below mentioned error while trying to check the installation docker-compose.
+/usr/local/bin/docker-compose: line 1: syntax error near unexpected token 'newline'
+
+/usr/local/bin/docker-compose: line: '<!DOCTYPE html>'
+Has anyone encountered this error? How to resolve this?
+_
+PS: I also tried to install docker-composethrough curl . Still faced the same error

@@ -1,0 +1,13 @@
+samber commented on 25 Aug 2016
+Hi guys !
+When doing a docker-compose -f /a/b/c/docker-compose.yml pull from /a -> it works.
+When doing a docker-compose -f /a/b/c/docker-compose.yml pull from /a/foo/bar -> it does not work:
+ERROR: .IOError: [Errno 2] No such file or directory: '/a/b/c/docker-compose.yml'
+Didn't investigate more on this problem.
+$ docker-compose  version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+5
+1

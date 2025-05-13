@@ -1,0 +1,1 @@
+Install command on releases page is missing -rc1 on release and may confuse users

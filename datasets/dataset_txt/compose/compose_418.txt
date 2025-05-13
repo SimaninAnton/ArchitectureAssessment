@@ -1,0 +1,78 @@
+Tra5is commented on 2 Nov 2018
+Description of the issue
+The isolation and storage_opt parameters added in Compose File version 2.1 are not used when multiple compose files are loaded.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.21.1, build 7641a569
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:48 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.24)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:21:42 2018
+  OS/Arch:      windows/amd64
+  Experimental: false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  testing:
+    image: microsoft\nanoserver:latest
+    mem_limit: 1000000000
+version: '2.3'
+Steps to reproduce the issue
+Use two compose files:
+PS > cat .\docker-compose.yml
+version: '2.3'
+services:
+  testing:
+    image: microsoft\nanoserver:latest
+    mem_limit: 1000000000
+    isolation: hyperv
+    storage_opt:
+        size: '100G'
+PS > cat .\docker-compose.override.yml
+version: '2.3'
+services:
+  testing:
+    image: microsoft\nanoserver:latest
+    isolation: hyperv
+docker-compose config result:
+PS > docker-compose config
+services:
+  testing:
+    image: microsoft\nanoserver:latest
+    mem_limit: 1000000000
+version: '2.3'
+Using a single file does not ignore the parameters:
+PS > docker-compose -f .\docker-compose.yml config
+services:
+  testing:
+    image: microsoft\nanoserver:latest
+    isolation: hyperv
+    mem_limit: 1000000000
+    storage_opt:
+      size: 100G
+version: '2.3'
+PS > docker-compose -f .\docker-compose.override.yml config
+services:
+  testing:
+    image: microsoft\nanoserver:latest
+    isolation: hyperv
+version: '2.3'
+Observed result
+The isolation and storage_opt parameters are missing in the combined config. A docker-compose run with the combined files results in the parameters not being applied. Using a single docker-compose file either by having no override in the same directory or by specifying a single file results in the parameters being picked up and used as expected.

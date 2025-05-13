@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 16 Feb 2014
+Pulling image orchardup.redis...
+This takes ages and should at least show some kind of progress status.

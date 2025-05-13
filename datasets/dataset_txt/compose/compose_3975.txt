@@ -1,0 +1,7 @@
+Contributor
+funkyfuture commented on 25 Jan 2015
+As described in #854 under undetermined circumstances it is possible that a started container will not have a network-bridge-interface attached.
+it is obviously not Compose's 'fault', but imo it should be aware of it and inform the user.
+therefore Compose should inspect whether a just-started container has all options it was invoked with. if there is a discrepancy it should abort all services and inform the user what that discrepancy was.
+furthermore there could be a retry-option, which would make sense in development-environments since they are more likely to fail due to often changing system-settings, like VPNs in my case.
+if there is affirmative feedback, i'm willing to work on that.

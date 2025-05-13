@@ -1,0 +1,19 @@
+bscheshirwork commented on 5 Jul 2018
+Description of the issue
+So many times I must run docker-compose from a specific place.
+.env file
+docker-compose.yml(and relative path start point for -f),
+-f docker-compose.yml -f docker-compose-2.yml
+default value of -p
+etc.
+But I wish run it from any location. Ordinary -f is solution, but in this case I cant use .env file.
+How about option, who change workdir before run command and restore it after.
+BASEDIR=$(pwd)
+targetdir = parse options to find -w or --workdir
+cd targetdir
+command = original command w/o option -w 
+exec command 
+cd BASEDIR
+if someone already use this way - please show me a bash alias / script
+Additional information
+OS Linux / any

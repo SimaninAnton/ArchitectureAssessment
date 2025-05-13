@@ -1,0 +1,14 @@
+Bigbhardwaj commented on 13 Jul 2018
+I am following Essential Angular for ASP.Net Core MVC book and, chapter 4,
+My .yml file
+services:
+database:
+image: "microsoft/mssql-server-linux:latest"
+ports:
+- 5100:1433
+environment:
+- ACCEPT_EULA=Y
+- SA_PASSWORD=mySecret123
+when I try to run command docker-compose up
+The CMD window hangs with below messages
+I Couldn't figure out the issue .

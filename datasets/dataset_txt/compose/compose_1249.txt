@@ -1,0 +1,5 @@
+taffyb commented on 23 Aug 2017
+What version of docker-compose should be used?
+I am using docker-compose version: 1.5.1 and getting '--file' is an invalid option. with this removed and replaced with '-d' I get
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+Unsupported config option for 'services' service: 'bimserver'

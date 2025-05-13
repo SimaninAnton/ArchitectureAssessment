@@ -1,0 +1,194 @@
+jamshid commented on 21 Mar 2016
+I'm trying to run some build environment caches (e.g. apt-cacher-ng and polipo) from a docker-compose.yml. I upgraded it to v2 format and I'm running with swarm.
+I'm trying publish each container with an internal ip/port available to all docker builds, e.g. 172.17.0.1:3142.
+I've switched the volume to use a fixed directory, to avoid issue 2866.
+I keep getting below error. Note d44cc9b9ef6e_ is getting repeated -- an older docker-compose bug that seems to have reappeared with Swarm.
+Seems to work fine on initial docker-compose up (after stop and rm -f).
+$ docker-compose up -d
+buildenv_dockerui_1 is up-to-date
+buildenv_npmlazy_1 is up-to-date
+buildenv_aptcacherng_1 is up-to-date
+Recreating d44cc9b9ef6e_d44cc9b9ef6e_buildenv_httpcache_1
+ERROR: unable to find a node that satisfies image==buildenv_httpcache
+$ docker-compose up -d
+buildenv_dockerui_1 is up-to-date
+buildenv_npmlazy_1 is up-to-date
+Recreating buildenv_aptcacherng_1
+Recreating d44cc9b9ef6e_d44cc9b9ef6e_d44cc9b9ef6e_buildenv_httpcache_1
+ERROR: unable to find a node that satisfies image==buildenv_httpcache
+ docker-compose config
+networks: {}
+services:
+  aptcacherng:
+    build:
+      args:
+        DOCKER_BUILD_CACHE_HOST: 172.17.0.1
+      context: /Users/jamshid/work/Dockerfiles/apt-cacher-ng
+    mem_limit: 500m
+    memswap_limit: 500m
+    ports:
+    - 172.17.0.1:3142:3142
+    restart:
+      MaximumRetryCount: 0
+      Name: always
+    volumes:
+    - /var/docker-build-caches/apt-cacher-ng:/var/cache/apt-cacher-ng:rw
+  artifactory:
+    build:
+      context: /Users/jamshid/work/Dockerfiles/artifactory
+    command: dumb-init /bin/sh -c "tail -n 0 -F /opt/jfrog/artifactory/tomcat/logs/catalina.out
+      & /tmp/runArtifactory.sh"
+    environment:
+      RUNTIME_OPTS: -Djava.security.egd=file:/dev/./urandom -Xms1000m -Xmx1500m
+      START_TMO: '120'
+    mem_limit: 2000m
+    memswap_limit: 0m
+    ports:
+    - 172.17.0.1:8081:8081
+    restart:
+      MaximumRetryCount: 0
+      Name: always
+    volumes:
+    - /var/docker-build-caches/artifactory-data:/var/opt/jfrog/artifactory/data:rw
+    - /var/docker-build-caches/artifactory-logs:/var/opt/jfrog/artifactory/logs:rw
+    - /var/docker-build-caches/artifactory-backup:/var/opt/jfrog/artifactory/backup:rw
+  curl:
+    build:
+      args:
+        APTCACHER_PROXY: http://172.17.0.1:3142
+        DOCKER_BUILD_CACHE_HOST: 172.17.0.1
+      context: /Users/jamshid/work/Dockerfiles/curl
+    depends_on:
+    - aptcacherng
+    - httpcache
+    entrypoint:
+    - curl
+    mem_limit: 256m
+  dockerui:
+    image: dockerui/dockerui
+    mem_limit: 100m
+    memswap_limit: 0m
+    ports:
+    - 9000:9000
+    privileged: true
+    restart:
+      MaximumRetryCount: 0
+      Name: always
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+  forward:
+    build:
+      args:
+        APTCACHER_PROXY: http://172.17.0.1:3142
+        DOCKER_BUILD_CACHE_HOST: 172.17.0.1
+        HTTP_PROXY: http://172.17.0.1:8123
+      context: /Users/jamshid/work/Dockerfiles/httpd
+    depends_on:
+    - aptcacherng
+    - httpcache
+    environment:
+      DOCKER_INTERFACE: 192.241.209.9
+      FORWARD_PROXY_HOST: null
+      FORWARD_PROXY_PORT: null
+    mem_limit: 500m
+    memswap_limit: 500m
+    ports:
+    - '80'
+    - '443'
+    - 8888:8888
+    restart:
+      MaximumRetryCount: 0
+      Name: always
+  httpcache:
+    build:
+      args:
+        APTCACHER_PROXY: http://172.17.0.1:3142
+        DOCKER_BUILD_CACHE_HOST: 172.17.0.1
+      context: /Users/jamshid/work/Dockerfiles/polipo
+    depends_on:
+    - aptcacherng
+    mem_limit: 500m
+    memswap_limit: 500m
+    ports:
+    - 172.17.0.1:8123:8123
+    restart:
+      MaximumRetryCount: 0
+      Name: always
+    volumes:
+    - /var/docker-build-caches/polipo:/var/cache/polipo:rw
+  npmlazy:
+    command: --show-config --port=80 --external-url=http://npmlazy1:8181
+    image: langrisha/npm-lazy
+    mem_limit: 500m
+    memswap_limit: 500m
+    ports:
+    - 172.17.0.1:8181:80
+    restart:
+      MaximumRetryCount: 0
+      Name: always
+    volumes:
+    - /var/docker-build-caches/npm_lazy:/root/.npm_lazy:rw
+  rsync:
+    build:
+      args:
+        APTCACHER_PROXY: http://172.17.0.1:3142
+        DOCKER_BUILD_CACHE_HOST: 172.17.0.1
+      context: /Users/jamshid/work/Dockerfiles/rsync
+    depends_on:
+    - aptcacherng
+    - httpcache
+    mem_limit: 256m
+version: '2.0'
+volumes: {}
+$ docker info
+Containers: 13
+ Running: 10
+ Paused: 0
+ Stopped: 3
+Images: 44
+Server Version: swarm/1.1.3
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 4
+ swarm-master: 192.241.209.9:2376
+  └ Status: Healthy
+  └ Containers: 7
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 4.064 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=digitalocean, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-21T01:44:00Z
+ swarm-node-1: 159.203.248.233:2376
+  └ Status: Healthy
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 4.064 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=digitalocean, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-21T01:44:00Z
+ swarm-node-2: 162.243.143.72:2376
+  └ Status: Healthy
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 4.064 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=digitalocean, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-21T01:44:00Z
+ swarm-node-3: 104.236.171.95:2376
+  └ Status: Healthy
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 4.064 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=digitalocean, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-21T01:44:06Z
+Plugins: 
+ Volume: 
+ Network: 
+Kernel Version: 3.16.0-4-amd64
+Operating System: linux
+Architecture: amd64
+CPUs: 8
+Total Memory: 16.26 GiB
+Name: swarm-master

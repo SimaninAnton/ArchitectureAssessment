@@ -1,0 +1,65 @@
+iamKurt commented on 15 Apr 2016
+Seems that every now and again, I'm getting an exception occurring when starting multiple services with compose. Everything is humming along, when all of a sudden:
+Exception in thread Thread-8:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 190, in watch_events
+  File "compose/project.py", line 343, in events
+  File "site-packages/docker/client.py", line 225, in _stream_helper
+  File "site-packages/requests/packages/urllib3/response.py", line 271, in read
+ProtocolError: ('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))
+
+Exception in thread Thread-5:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 149, in tail_container_logs
+  File "compose/cli/log_printer.py", line 179, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 438, in wait
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 116, in _post
+  File "site-packages/requests/sessions.py", line 508, in post
+  File "site-packages/requests/sessions.py", line 465, in request
+  File "site-packages/requests/sessions.py", line 573, in send
+  File "site-packages/requests/adapters.py", line 415, in send
+ConnectionError: ('Connection aborted.', error(61, 'Connection refused'))
+
+Exception in thread Thread-6:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 149, in tail_container_logs
+  File "compose/cli/log_printer.py", line 179, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 438, in wait
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 116, in _post
+  File "site-packages/requests/sessions.py", line 508, in post
+  File "site-packages/requests/sessions.py", line 465, in request
+  File "site-packages/requests/sessions.py", line 573, in send
+  File "site-packages/requests/adapters.py", line 415, in send
+ConnectionError: ('Connection aborted.', error(61, 'Connection refused'))
+Exception in thread Thread-7:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 149, in tail_container_logs
+  File "compose/cli/log_printer.py", line 179, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 438, in wait
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 116, in _post
+  File "site-packages/requests/sessions.py", line 508, in post
+  File "site-packages/requests/sessions.py", line 465, in request
+  File "site-packages/requests/sessions.py", line 573, in send
+  File "site-packages/requests/adapters.py", line 415, in send
+ConnectionError: ('Connection aborted.', error(61, 'Connection refused'))
+When this happens, the machine VM state seems to become corrupt and needs to be restarted:
+docker-compose down
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+3

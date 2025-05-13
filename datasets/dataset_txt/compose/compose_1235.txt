@@ -1,0 +1,37 @@
+jstoja commented on 31 Aug 2017
+Hello guys,
+I've been reading at several places that the push/pull from docker-compose to private repositories has been implemented but I cannot make it work.
+Some reproducible steps:
+$ docker-compose version
+docker-compose version 1.15.0, build e12f3b9
+docker-py version: 2.4.2
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+$ docker login registry.company.com
+Username (company): 
+Password: 
+Login Succeeded
+$ docker pull registry.company.com/documentation
+Using default tag: latest
+latest: Pulling from documentation
+3690ec4760f9: Pull complete 
+f8fdeb23f7ad: Pull complete 
+1ba450842ec7: Pull complete 
+3886e6ddf80b: Pull complete 
+0378f150616e: Pull complete 
+Digest: sha256:ec9eb827e46bf44f39ec029db0fbd26bad599ba8efe224b3b2d88934b1d0424e
+Status: Downloaded newer image for registry.company.com/documentation:latest
+$ docker-compose pull                       
+Pulling documentation (registry.company.com/documentation:latest)...
+ERROR: unauthorized: authentication required
+$ docker-compose push
+Pushing documentation (registry.company.com/documentation:latest)...
+The push refers to a repository [registry.company.com/documentation]
+79c4b842cd4a: Preparing
+9708155555f8: Preparing
+b91611bea4a8: Preparing
+148b5a1af9ed: Preparing
+011b303988d2: Preparing
+ERROR: unauthorized: authentication required
+If there is some special steps to have this working, I think having it on an issue/documentation would help next users to find the solution. If there is some additions to make it work, could you point to relevant starting points?
+1

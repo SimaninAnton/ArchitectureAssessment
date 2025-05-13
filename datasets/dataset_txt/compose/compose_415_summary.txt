@@ -1,0 +1,1 @@
+Compose file invalid because [...]. volumes contain an invalid type, it should be a string

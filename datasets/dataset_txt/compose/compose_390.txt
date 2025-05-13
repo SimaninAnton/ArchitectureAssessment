@@ -1,0 +1,41 @@
+boldt commented on 22 Nov 2018
+I am running a fresh Ubuntu 18.04:
+$ cat /etc/issue
+Ubuntu 18.04.1 LTS \n \l
+I added the APT apt-repositries as described here. I have docker 18.09.0 and docker-compose 1.22.0:
+root@srv:/docker# docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+root@srv:/docker# docker-compose version
+docker-compose version 1.22.0, build unknown
+docker-py version: 3.5.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+root@srv:/docker#
+I want to use docker-compose in a folder called /docker:
+root@srv:/docker# ls -l
+total 4
+-rwxr-xr-x 1 administrator docker 458 Nov 22 13:44 docker-compose.yml
+If I hit docker-compose up, I get the following error:
+ERROR:
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml
+Any idea? How can I debug that issue?

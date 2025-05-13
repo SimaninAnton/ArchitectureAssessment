@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 28 Oct 2014
+When I run fig up and hit Ctrl-C, the log output stops immediately. It'd be useful to keep on printing log output until the process stops.
+5

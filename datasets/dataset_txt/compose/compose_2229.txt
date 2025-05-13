@@ -1,0 +1,88 @@
+slawekgh commented on 14 Jul 2016 •
+edited by aanand
+[root@docker05 app]# docker version
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:11 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:11 2016
+ OS/Arch:      linux/amd64
+
+
+[root@docker05 app]# docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+My Dockerfiles:
+[root@docker05 app]# cat nginx/Dockerfile
+FROM nginx
+RUN apt-get -y update && apt-get install -y openssh-server
+CMD /bin/bash
+
+[root@docker05 app]# cat ubuntu/Dockerfile
+FROM ubuntu
+RUN apt-get -y update && apt-get install -y openssh-server
+CMD /bin/bash
+builds works great:
+[root@docker05 ubuntu]# docker build -t ubuntu_with_ssh .
+Successfully built c89bf770390b
+
+[root@docker05 nginx]# docker build -t nginx_with_ssh .
+Successfully built eef302216358
+images are ok:
+[root@docker05 nginx]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu_with_ssh     latest              c89bf770390b        39 minutes ago      217.9 MB
+nginx_with_ssh      latest              eef302216358        39 minutes ago      206.8 MB
+When run there 2 images from hand it works fine:
+[root@docker05 nginx]# docker run -tdi ubuntu_with_ssh
+ab93db4b46873654714b032897543574d897f320b6bbea311015b8874ecce141
+[root@docker05 nginx]# docker run -tdi nginx_with_ssh
+65fd469d01b3a3221c984870f487c738d01f90a80d61dd4081ba9108de804750
+
+[root@docker05 app]# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+65fd469d01b3        nginx_with_ssh      "/bin/sh -c /bin/bash"   2 minutes ago       Up 2 minutes        80/tcp, 443/tcp     hopeful_khorana
+ab93db4b4687        ubuntu_with_ssh     "/bin/sh -c /bin/bash"   2 minutes ago       Up 2 minutes                            lonely_bell
+BUT from docker-compose doesnt work:
+[root@docker05 app]# cat docker-compose.yml
+version: '2'
+services:
+  myapp1:
+    image: ubuntu_with_ssh
+  myapp2:
+    image: nginx_with_ssh
+    ports:
+    - "7080:80"
+
+[root@docker05 app]# docker-compose up -d
+Creating app_myapp2_1
+Creating app_myapp1_1
+
+[root@docker05 app]# docker-compose ps
+    Name             Command          State    Ports
+app_myapp1_1   /bin/sh -c /bin/bash   Exit 0
+app_myapp2_1   /bin/sh -c /bin/bash   Exit 0
+[root@docker05 app]#
+[root@docker05 app]#
+[root@docker05 app]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+[root@docker05 app]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+7bab1fbbd963        ubuntu_with_ssh     "/bin/sh -c /bin/bash"   13 seconds ago      Exited (0) 12 seconds ago                       app_myapp1_1
+8ef40fea0706        nginx_with_ssh      "/bin/sh -c /bin/bash"   14 seconds ago      Exited (0) 13 seconds ago                       app_myapp2_1
+docker logs - no info:
+[root@docker05 app]# docker logs 7bab1fbbd963
+[root@docker05 app]# docker logs 8ef40fea0706
+4

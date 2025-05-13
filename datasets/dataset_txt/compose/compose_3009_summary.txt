@@ -1,0 +1,1 @@
+docker-compose 1.51 with swarm not able to pull private image with using "docker.io/myrepo/my-app" image name pattern

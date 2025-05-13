@@ -1,0 +1,7 @@
+Contributor
+bfirsh commented on 8 Jan 2015
+You should be able to define a simple application with Fig and run it on Swarm with fig up -d.
+This work was started in #763. One remaining issue is that Swarm returns names with more slashes in it than the normal Docker daemon, so Fig needs to parse this correctly.
+Assumptions:
+links won't work
+volumes probably won't work

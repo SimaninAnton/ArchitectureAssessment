@@ -1,0 +1,3 @@
+brancz commented on 6 Jul 2015
+There are tools and services popping up that orient themselves on the docker-compose.yml specification. However for some use-cases it is necessary to extend this reference, but when trying to use the same docker-compose.yml in dev, test and prod it causes docker-compose to exit and say unsupported config options .... I propose a flag such as --ignore-unsupported which only skips an option and prints that compose skipped that option since it is unknown. Any thoughts?
+3

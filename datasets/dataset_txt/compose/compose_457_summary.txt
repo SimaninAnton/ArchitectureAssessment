@@ -1,0 +1,1 @@
+Cannot build service from git repo through ssh

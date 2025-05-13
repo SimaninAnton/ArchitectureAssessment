@@ -1,0 +1,5 @@
+Sabya1981 commented on 1 Aug 2017
+pip install docker-compose throws :
+Could not find a version that satisfies the requirement docker-compose (from versions: )
+No matching distribution found for docker-compose
+OS : Ubuntu 16.04.2 LTS

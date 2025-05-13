@@ -1,0 +1,1 @@
+Stack deploy for docker-compose.yml doesn't pick node

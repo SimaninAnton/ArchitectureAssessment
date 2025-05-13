@@ -1,0 +1,43 @@
+PMExtra commented on 27 Nov 2018 •
+edited
+First: Make a docker-compose.yml
+version: '3.4'
+
+services:
+  test:
+    image: alpine:latest
+    environment:
+      - ASCII_VARIABLE=${ASCII_VARIABLE}
+      - CHINESE_VARIABLE=${CHINESE_VARIABLE}
+      - JAPANESE_VARIABLE=${JAPANESE_VARIABLE}
+Second: Make the compose up by docker/compose image.
+docker run --name=compose \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v $(pwd):/test -w=/test \
+  -e "ASCII_VARIABLE=test" \
+  -e "CHINESE_VARIABLE=测试" \
+  -e "JAPANESE_VARIABLE=テスト" \
+  docker/compose:1.23.1 up -d
+Excepted: The values in the test container are same as the values I set.
+Actual: The unicode values were matched in the docker/compose container but were broken in the alpine(test) container.
+Check:
+Run docker inspect compose, I got the part:
+    "Env": [
+        "ASCII_VARIABLE=test",
+        "CHINESE_VARIABLE=测试",
+        "JAPANESE_VARIABLE=テスト",
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "GLIBC=2.28-r0"
+    ],
+Run docker inspect test, I got the part:
+    "Env": [
+        "ASCII_VARIABLE=test",
+        "CHINESE_VARIABLE=������",
+        "JAPANESE_VARIABLE=���������",
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+BTW
+If I create a .env file and pass through variables from it, then it will works all fine.
+But in my case, I'm using the gitlab-ci. It pass though variables from ci settings and it will set these variables as shell env. So I really don't want a .env file.
+Whatever, I think this is really a bug and should be fixed.
+1

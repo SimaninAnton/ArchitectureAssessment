@@ -1,0 +1,1 @@
+Pull with mixed private/public images fails with public image

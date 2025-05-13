@@ -1,0 +1,70 @@
+Contributor
+joeweoj commented on 18 Mar 2019
+Description of the issue
+After making a change to a service, any services marked as dependent (via depends_on) are recreated upon running docker-compose up
+My understanding was that unless the --always-recreate-deps flag was used with docker-compose up, dependent containers should not be recreated.
+This behaviour seems to be very similar to this old issue #3397 which was deemed to indeed be a bug and dependent containers should not always be restarted. I've had a look at the fix #5541 which was merged in for this and think the issue is caused simply by an extraneous not on this line.
+Steps to reproduce the issue
+Given the following example composition
+version: '3.7'
+services:
+  nginx1:
+    image: nginx:latest
+
+  nginx2:
+    image: nginx:latest
+    depends_on:
+    - nginx1
+docker-compose up -d
+change nginx1's image tag e.g.alpine
+docker-compose up -d
+Observed result
+nginx1 is recreated as expected
+nginx2 container is also recreated, despite having not been updated
+docker-compose up -d
+Recreating miscellany_nginx1_1 ... done
+Recreating miscellany_nginx2_1 ... done
+Expected result
+nginx1 is recreated as expected only.
+nginx2 container remains running
+docker-compose up -d
+Recreating miscellany_nginx1_1 ... done
+miscellany_nginx2_1 is up-to-date
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f130
+docker-py version: 3.5.1
+CPython version: 3.5.6
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  nginx1:
+    image: nginx:latest
+  nginx2:
+    depends_on:
+    - nginx1
+    image: nginx:latest
+version: '3.7'
+Additional information
+uname -a    
+Linux joebox 4.15.0-45-generic #48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux

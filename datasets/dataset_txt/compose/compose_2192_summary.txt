@@ -1,0 +1,1 @@
+1st line of .env file not read by docker-compose.yml file

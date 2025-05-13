@@ -1,0 +1,21 @@
+tarunlalwani commented on 6 Aug 2015
+I have a very simple docker-compose.yml file in docker-restart folder
+mysql:
+  image: mysql
+  environment:
+    - "MYSQL_ROOT_PASSWORD=root"
+ubuntu:
+  image: ubuntu:14.04
+  command: date
+Now if I run the below set of commands
+$ docker-compose up -d
+$ sleep 10
+$ docker-compose restart dockerrestart_ubuntu_1
+$ docker restart dockerrestart_ubuntu_1
+$ docker-compose restart dockerrestart_ubuntu_1
+$ docker restart dockerrestart_ubuntu_1
+If I check the logs, I would expect 5 date times, but only 3 appears, docker restart does restart and execute the container but docker-compose doesn't
+$ docker logs dockerrestart_ubuntu_1
+Thu Aug  6 07:01:12 UTC 2015
+Thu Aug  6 07:02:32 UTC 2015
+Thu Aug  6 07:03:14 UTC 2015

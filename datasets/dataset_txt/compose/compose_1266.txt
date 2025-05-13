@@ -1,0 +1,57 @@
+Umkus commented on 10 Aug 2017
+When generating docker-compose config from a combination of docker-compose.yml and a docker-compose.override.yml, compose might leave behind empty properties.
+Consider we have these two config files:
+# docker-compose.yml
+version: '2.2'
+services:
+    test:
+        logging:
+            driver: gelf
+            options:
+                gelf-address: localhost
+        image: busybox
+and
+# docker-compose.override.yml
+version: '2.2'
+services:
+    test:
+        logging:
+            driver: json-file
+Let's generate a new config out of these:
+$ docker-compose config > test.yml
+Here's the result:
+# test.yml
+services:
+  test:
+    image: busybox
+    logging:
+      driver: json-file
+      options: null  # <- The problem
+version: '2.2'
+Now if we try to use the generated config we'll get the following:
+$ docker-compose -f test.yml config
+ERROR: The Compose file './test.yml' is invalid because:
+services.test.logging.options contains an invalid type, it should be an object
+Versions:
+$ docker-compose version
+docker-compose version 1.15.0, build e12f3b9
+docker-py version: 2.4.2
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+$ docker version
+Client:
+ Version:      17.07.0-ce-rc1
+ API version:  1.31
+ Go version:   go1.8.3
+ Git commit:   8c4be39
+ Built:        Wed Jul 26 05:20:09 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.07.0-ce-rc1
+ API version:  1.31 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   8c4be39
+ Built:        Wed Jul 26 05:25:01 2017
+ OS/Arch:      linux/amd64
+ Experimental: true

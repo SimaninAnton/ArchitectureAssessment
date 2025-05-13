@@ -1,0 +1,4 @@
+Contributor
+aanand commented on 23 Jan 2015
+With the merging of moby/moby#8570, Docker 1.5 will support container renaming. This means we can stop creating an "intermediate container" when recreating containers - their only purpose is to free up the container name while preserving volumes.
+This will stop Compose working on Docker <1.5, but I think it's worth it: as well as generally reducing complexity, it'll remove the problem that #516 and #517 attempt to solve.

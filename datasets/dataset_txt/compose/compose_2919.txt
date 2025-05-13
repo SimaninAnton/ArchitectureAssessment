@@ -1,0 +1,58 @@
+wprl commented on 15 Jan 2016
+I seem to be able to create the host fine, but builds hang when I switch to the new env. Build works fine with the default env. Normal docker commands like docker run -i -t ubuntu /bin/bash work as expected.
+🕠  [wprl:~/Code/Abc] develop+ ± docker-machine create --driver digitalocean --digitalocean-access-token abc123 staging
+Creating SSH key...
+Creating Digital Ocean droplet...
+To see how to connect Docker to this machine, run: docker-machine env staging
+🕠  [wprl:~/Code/Abc] develop+ ± eval "$(docker-machine env staging)"
+🕠  [wprl:~/Code/Abc] develop+ ± docker-compose up
+Building elasticsearch...
+Running docker-compose build also hangs. I've tried separately building each container in my docker-compose.yml and each hangs. I've also tried deploying to AWS this way, with the same results.
+Here are the results with --verbose:
+🕖  [wprl:~/Code/Abc] wprl/deploy-staging+ ± docker-compose --verbose up -d
+Compose version 1.4.0
+Docker base_url: https://104.131.43.57:2376
+Docker version: KernelVersion=3.13.0-71-generic, Os=linux, BuildTime=Fri Nov 20 13:12:04 UTC 2015, ApiVersion=1.21, Version=1.9.1, GitCommit=a34a1d5, Arch=amd64, GoVersion=go1.4.2
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=elasticsearch', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=api', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=logstash', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=kibana', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=app', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=elasticsearch', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=api', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=logstash', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=kibana', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=abc', u'com.docker.compose.service=app', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 7 items)
+docker inspect_image <- (u'abc_elasticsearch')
+Building elasticsearch...
+docker build <- (pull=False, nocache=False, stream=True, tag=u'abc_elasticsearch', path='/Users/wprl/Code/Abc', rm=True, dockerfile='./Dockerfile-elasticsearch')

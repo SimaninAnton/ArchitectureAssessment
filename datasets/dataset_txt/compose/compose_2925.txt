@@ -1,0 +1,4 @@
+divyakumarjain commented on 13 Jan 2016
+Seems like containers created using --x-networking cannot access internet.
+Would like to know if there is any workaround
+1

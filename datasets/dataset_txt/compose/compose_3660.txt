@@ -1,0 +1,2 @@
+benbot commented on 6 May 2015
+This prevents the server from starting up the next time I call sudo docker-compose up

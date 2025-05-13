@@ -1,0 +1,42 @@
+EricTao2 commented on 8 Jul 2019
+CentOS Linux release 7.5.1804 (Core)
+Docker version 18.09.3, build 774a1f4
+docker-compose version 1.18.0, build 8dd22a9
+when i run docker-compose up in Python 3.6
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.18.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 121, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/command.py", line 37, in project_from_options
+    override_dir=options.get('--project-directory'),
+  File "/usr/lib/python3.6/site-packages/compose/cli/command.py", line 87, in get_project
+    config_details = config.find(project_dir, config_path, environment, override_dir)
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 278, in find
+    [ConfigFile.from_filename(f) for f in filenames],
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 278, in <listcomp>
+    [ConfigFile.from_filename(f) for f in filenames],
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 178, in from_filename
+    return cls(filename, load_yaml(filename))
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 1305, in load_yaml
+    return yaml.safe_load(fh)
+  File "/usr/lib64/python3.6/site-packages/yaml/__init__.py", line 94, in safe_load
+    return load(stream, SafeLoader)
+  File "/usr/lib64/python3.6/site-packages/yaml/__init__.py", line 70, in load
+    loader = Loader(stream)
+  File "/usr/lib64/python3.6/site-packages/yaml/loader.py", line 24, in __init__
+    Reader.__init__(self, stream)
+  File "/usr/lib64/python3.6/site-packages/yaml/reader.py", line 85, in __init__
+    self.determine_encoding()
+  File "/usr/lib64/python3.6/site-packages/yaml/reader.py", line 124, in determine_encoding
+    self.update_raw()
+  File "/usr/lib64/python3.6/site-packages/yaml/reader.py", line 178, in update_raw
+    data = self.stream.read(size)
+  File "/usr/lib64/python3.6/codecs.py", line 321, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbd in position 88: invalid start byte
+I used Compose for the first time.
+Is this a bug or i used it incorrectly?
+Thank you

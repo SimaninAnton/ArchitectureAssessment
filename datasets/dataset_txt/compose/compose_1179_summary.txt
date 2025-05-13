@@ -1,0 +1,1 @@
+docker-compose throws "NativeCommandError" when I run it in windows remote powershell.

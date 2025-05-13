@@ -1,0 +1,12 @@
+atrauzzi commented on 3 Oct 2015
+Traceback (most recent call last):
+  File "C:\Python27\Scripts\docker-compose-script.py", line 9, in <module>
+    load_entry_point('docker-compose==1.5.0.dev0', 'console_scripts', 'docker-compose')()
+  File "C:\Python27\lib\site-packages\compose\cli\main.py", line 51, in main
+    command.sys_dispatch()
+  File "C:\Python27\lib\site-packages\compose\cli\docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "C:\Python27\lib\site-packages\compose\cli\command.py", line 46, in dispatch
+    raise errors.ConnectionErrorGeneric(self.get_client().base_url)
+AttributeError: 'TopLevelCommand' object has no attribute 'get_client'
+Just trying things out on Windows, but getting this error. Builds work on OSX instances of docker-compose.

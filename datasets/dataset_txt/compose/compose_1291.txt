@@ -1,0 +1,6 @@
+Junkern commented on 28 Jul 2017 •
+edited
+(I wasn't sure whether to phrase the title as a statement or question)
+I am using the configs property in my docker-compose.yml file. I want to target a specific location, so I am using the long syntax with the target property: /lib/configuration.json
+Here comes the catch: My application has a default config (for local testing), which is placed under /lib/configuration.json as well. Is this (default) file overwritten/replaced with the "new" /lib/configuration.json (which is injected by the configs property)?
+I have tried it, but with no luck...

@@ -1,0 +1,68 @@
+Contributor
+mikesir87 commented on 13 Sep 2018
+Description of the issue
+Usage of -f appears to change the working/base directory for subsequent files and causes those files to fail if using relative paths for build (or other) directives.
+Context information (for bug reports)
+Given two compose files at different locations...
+/tmp/docker-compose.yml
+version: "3.7"
+services:
+  db:
+    image: mysql
+[project-root]/docker-compose.yml
+version: "3.7"
+services:
+  app:
+    build: ./
+and a Dockerfile at [project-root] (doesn't matter what's in it obviously), if, from the project-root directory, I run docker-compose -f /tmp/docker-compose.yml -f ./docker-compose.yml up, I get an error stating ERROR: Cannot locate specified Dockerfile: Dockerfile
+But, if I swap the order of the files, the error doesn't occur and the compose stack starts. Unfortunately, this means that the file overriding isn't happening the way I'd like it to happen.
+This is especially a problem when combined with the use case mentioned in #3440 (comment)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+When running with docker-compose -f /tmp/docker-compose -f ./docker-compose.yml, I get...
+docker-compose -f /tmp/docker-compose.yml -f ./docker-compose.yml config
+services:
+  app:
+    build:
+      context: /tmp
+  db:
+    image: mysql
+version: '3.7'
+With the files reversed, I get...
+services:
+  app:
+    build:
+      context: /path/to/project/root
+  db:
+    image: mysql
+version: '3.7'
+Steps to reproduce the issue
+(see above)
+Observed result
+The working directory has changed for other files, causing relative paths to fail.
+Expected result
+The working directory reverts back to where the command is being executed from for each file inclusion.
+Cute animal for fun

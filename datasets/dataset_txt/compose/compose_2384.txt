@@ -1,0 +1,17 @@
+iMerica commented on 19 May 2016 •
+edited
+docker-compose version 1.7.0, build 0d7bf73
+Run log with follow:
+$ docker-compose logs --follow web
+(wait a few minutes)
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 57, in main
+  File "compose/cli/main.py", line 108, in perform_command
+  File "compose/cli/main.py", line 414, in logs
+  File "compose/cli/log_printer.py", line 86, in run
+  File "compose/cli/log_printer.py", line 222, in consume_queue
+ssl.SSLError: ('The read operation timed out',)
+docker-compose returned -1
+This is happening on multiple computers in my office.
+3

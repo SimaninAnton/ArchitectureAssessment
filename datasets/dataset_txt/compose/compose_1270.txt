@@ -1,0 +1,31 @@
+dougrathbone commented on 7 Aug 2017
+Per SO post with noluck: https://stackoverflow.com/questions/45527969/unable-to-bind-windows-environment-variables-to-docker-compose-environment
+I currently have a compose file for a Windows .Net service, and I want to be able to pass through a user-space environment variable:
+Set from powershell:
+powershell [Environment]::SetEnvironmentVariable(\"PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE\", $env:computername, \"User\")
+(i've also tried "machine" space env variables as well using the above).
+To test after running the above:
+echo %PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE% from a new command prompt window.
+Docker compose file:
+    services:
+      myservice.commandline:
+        image: myservice.commandline:dev
+        build:
+          args:
+            source: ${DOCKER_BUILD_SOURCE}
+        volumes:
+          - .\myservice.commandline:C:\app
+          - ~\msvsmon:C:\msvsmon:ro
+        entrypoint: powershell -Command [System.Threading.Thread]::Sleep([System.Threading.Timeout]::Infinite)
+        environment:
+          - MY_VARIABLE_NAME=${PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE}
+        labels:
+          - "com.microsoft.visualstudio.targetoperatingsystem=windows"
+This does not work - the environment variable shows as blank.
+- MY_VARIABLE_NAME=${PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE} doesn't work.
+Is it possible to pass a windows environment variable through to a Docker Compose environment variable? This is easily accomplished using the *nix version of compose, so hoping i've just missed something.
+Background:
+${PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE} doesn't work.
+$PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE doesn't work.
+$(PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE) doesn't work.
+${%PREVIOUSLY_SET_WINDOWS_ENV_VARIABLE%} doesn't work.

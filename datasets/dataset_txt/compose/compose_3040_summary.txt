@@ -1,0 +1,1 @@
+building local dockerfile from compose, hits windows max path length error

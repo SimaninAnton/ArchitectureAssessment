@@ -1,0 +1,1 @@
+Getting a TypeError when using compose with engine 1.9-dev

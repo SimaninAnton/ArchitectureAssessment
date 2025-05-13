@@ -1,0 +1,20 @@
+carletes commented on 2 Oct 2016
+I have something like this in my docker-compose.yml:
+services:
+    foo:
+        volumes:
+          - usr-local-${GIT_BRANCH}:/usr/local:ro
+
+volumes:
+    usr-local-${GIT_BRANCH}:
+        external: true
+It seems that docker-compose does not like the interpolated variable in the volumes section:
+$ docker-compose ps
+ERROR: The Compose file '/Users/.../docker-compose.yml' is invalid because:
+volumes value Additional properties are not allowed ('usr-local-${GIT_BRANCH}' was unexpected)
+$
+I'm running:
+$ docker-compose --version
+docker-compose version 1.8.1, build 878cff1
+$
+Is the interpolation of environment variables in the volumes section not supported, or am I doing something wrong in my docker-compose.yml?

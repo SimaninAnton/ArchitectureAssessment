@@ -1,0 +1,1 @@
+Confusing error when docker-compose.yml invalid (usage of image instead of build)

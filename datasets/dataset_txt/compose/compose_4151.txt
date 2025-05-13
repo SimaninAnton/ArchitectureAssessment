@@ -1,0 +1,2 @@
+sirwolfgang commented on 21 Oct 2014
+With version 1.0.0 I now get the docker.errors.DockerException: HTTPS endpoint unresponsive and insecure mode isn't enabled. when connecting to my private http repo. I do not see a way to allow/change the behavior to use http.

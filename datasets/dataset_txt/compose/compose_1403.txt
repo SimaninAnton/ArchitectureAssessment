@@ -1,0 +1,10 @@
+ianblenke commented on 8 Jun 2017
+Ran into this "problem" while I was using docker-compose, and I'm sure someone else is bound to run into the same thing.
+In one of my shells, I was trying to address an openssl/curl root chain CA bundle problem, so I set this environment variable
+export CURL_CA_BUNDLE=/usr/local/etc/openssl/cert.pem
+After doing this, docker-compose started failing with:
+ERROR: SSL error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:590)
+This didn't impact the docker command, however, which continued to work just fine in that shell.
+After seeing that other shells were not experiencing this same problem, I compared environments and ended up "fixing" my shell by running:
+unset CURL_CA_BUNDLE
+I hope this saves someone else the same headache.

@@ -1,0 +1,162 @@
+Dunadan commented on 31 Oct 2018 •
+edited
+Description of the issue
+After recent update of docker-compose to version 1.23.0 suddenly builds started to fail with error (yesterday was ok):
+TypeError: argument of type 'NoneType' is not iterable. It appears to me, that underlying Python libraries are failing during docker-compose process.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.0, build c8524dc
+docker-py version: 3.5.1
+CPython version: 2.7.15
+OpenSSL version: LibreSSL 2.7.4
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.37 (downgraded from 1.38)
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:20:43 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.03.0-ce
+  API version:      1.37 (minimum version 1.12)
+  Go version:       go1.9.4
+  Git commit:       0520e24
+  Built:            Wed Mar 21 23:08:31 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+ docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml config
+networks:
+  backend: {}
+  frontend:
+    external:
+      name: nginxproxy_default
+services:
+  front:
+    build:
+      context: /builds/project/project_name
+      dockerfile: docker/nginx/Dockerfile
+    depends_on:
+    - php
+    image: localrepo:5005/project/front
+    links:
+    - php
+    networks:
+      backend: null
+      frontend: null
+    restart: always
+  php:
+    build:
+      context: /builds/project/project_name
+      dockerfile: docker/php/Dockerfile
+    image: localrepo:5005/project/php
+    networks:
+      backend: null
+version: '3.0'
+Observed result
+docker-compose fails with TypeError: argument of type 'NoneType' is not iterable
+Expected result
+Build is successful
+Stacktrace / full error message
+command line where it fails (see log, I've included installations also):
+docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml run --no-deps php bin/console doctrine:migrations:migrate --allow-no-migration --no-interaction
+$ pip install --no-cache-dir docker-compose
+Collecting docker-compose
+  Downloading https://files.pythonhosted.org/packages/23/e7/3702078bb674d36e607c48177f4e7d93d6fecb13c32a8889d1172236848d/docker_compose-1.23.0-py2.py3-none-any.whl (131kB)
+Collecting websocket-client<1.0,>=0.32.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/14/d4/6a8cd4e7f67da465108c7cc0a307a1c5da7e2cdf497330b682069b1d4758/websocket_client-0.53.0-py2.py3-none-any.whl (198kB)
+Collecting PyYAML<4,>=3.10 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769/PyYAML-3.13.tar.gz (270kB)
+Collecting dockerpty<0.5,>=0.4.1 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/8d/ee/e9ecce4c32204a6738e0a5d5883d3413794d7498fe8b06f44becc028d3ba/dockerpty-0.4.1.tar.gz
+Collecting backports.ssl-match-hostname>=3.5; python_version < "3.5" (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/76/21/2dc61178a2038a5cb35d14b61467c6ac632791ed05131dda72c20e7b9e23/backports.ssl_match_hostname-3.5.0.1.tar.gz
+Collecting docopt<0.7,>=0.6.1 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/a2/55/8f8cab2afd404cf578136ef2cc5dfb50baa1761b68c9da1fb1e4eed343c9/docopt-0.6.2.tar.gz
+Collecting ipaddress>=1.0.16; python_version < "3.3" (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/fc/d0/7fc3a811e011d4b388be48a0e381db8d990042df54aa4ef4599a31d39853/ipaddress-1.0.22-py2.py3-none-any.whl
+Collecting enum34<2,>=1.0.4; python_version < "3.4" (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/c5/db/e56e6b4bbac7c4a06de1c50de6fe1ef3810018ae11732a50f15f62c7d050/enum34-1.1.6-py2-none-any.whl
+Collecting requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/f1/ca/10332a30cb25b627192b4ea272c351bce3ca1091e541245cccbace6051d8/requests-2.20.0-py2.py3-none-any.whl (60kB)
+Collecting texttable<0.10,>=0.9.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/02/e1/2565e6b842de7945af0555167d33acfc8a615584ef7abd30d1eae00a4d80/texttable-0.9.1.tar.gz
+Collecting docker<4.0,>=3.5.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/c2/76/b8091dc6d9db038af62ae88f228da656a84632cf5d7a84dcf54c613d3fd0/docker-3.5.1-py2.py3-none-any.whl (126kB)
+Collecting jsonschema<3,>=2.5.1 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/77/de/47e35a97b2b05c2fadbec67d44cfcdcd09b8086951b331d82de90d2912da/jsonschema-2.6.0-py2.py3-none-any.whl
+Collecting cached-property<2,>=1.2.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/3b/86/85c1be2e8db9e13ef9a350aecd6dea292bd612fa288c2f40d035bb750ded/cached_property-1.5.1-py2.py3-none-any.whl
+Collecting six<2,>=1.3.0 (from docker-compose)
+  Downloading https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
+Collecting chardet<3.1.0,>=3.0.2 (from requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1->docker-compose)
+  Downloading https://files.pythonhosted.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl (133kB)
+Collecting certifi>=2017.4.17 (from requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1->docker-compose)
+  Downloading https://files.pythonhosted.org/packages/56/9d/1d02dd80bc4cd955f98980f28c5ee2200e1209292d5f9e9cc8d030d18655/certifi-2018.10.15-py2.py3-none-any.whl (146kB)
+Collecting urllib3<1.25,>=1.21.1 (from requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1->docker-compose)
+  Downloading https://files.pythonhosted.org/packages/8c/4b/5cbc4cb46095f369117dcb751821e1bef9dd86a07c968d8757e9204c324c/urllib3-1.24-py2.py3-none-any.whl (117kB)
+Collecting idna<2.8,>=2.5 (from requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1->docker-compose)
+  Downloading https://files.pythonhosted.org/packages/4b/2a/0276479a4b3caeb8a8c1af2f8e4355746a97fab05a372e4a2c6a6b876165/idna-2.7-py2.py3-none-any.whl (58kB)
+Collecting docker-pycreds>=0.3.0 (from docker<4.0,>=3.5.0->docker-compose)
+  Downloading https://files.pythonhosted.org/packages/ea/bf/7e70aeebc40407fbdb96fa9f79fc8e4722ea889a99378303e3bcc73f4ab5/docker_pycreds-0.3.0-py2.py3-none-any.whl
+Collecting functools32; python_version == "2.7" (from jsonschema<3,>=2.5.1->docker-compose)
+  Downloading https://files.pythonhosted.org/packages/c5/60/6ac26ad05857c601308d8fb9e87fa36d0ebf889423f47c3502ef034365db/functools32-3.2.3-2.tar.gz
+Installing collected packages: six, websocket-client, PyYAML, dockerpty, backports.ssl-match-hostname, docopt, ipaddress, enum34, chardet, certifi, urllib3, idna, requests, texttable, docker-pycreds, docker, functools32, jsonschema, cached-property, docker-compose
+  Running setup.py install for PyYAML: started
+    Running setup.py install for PyYAML: finished with status 'done'
+  Running setup.py install for dockerpty: started
+    Running setup.py install for dockerpty: finished with status 'done'
+  Running setup.py install for backports.ssl-match-hostname: started
+    Running setup.py install for backports.ssl-match-hostname: finished with status 'done'
+  Running setup.py install for docopt: started
+    Running setup.py install for docopt: finished with status 'done'
+  Running setup.py install for texttable: started
+    Running setup.py install for texttable: finished with status 'done'
+  Running setup.py install for functools32: started
+    Running setup.py install for functools32: finished with status 'done'
+Successfully installed PyYAML-3.13 backports.ssl-match-hostname-3.5.0.1 cached-property-1.5.1 certifi-2018.10.15 chardet-3.0.4 docker-3.5.1 docker-compose-1.23.0 docker-pycreds-0.3.0 dockerpty-0.4.1 docopt-0.6.2 enum34-1.1.6 functools32-3.2.3.post2 idna-2.7 ipaddress-1.0.22 jsonschema-2.6.0 requests-2.20.0 six-1.11.0 texttable-0.9.1 urllib3-1.24 websocket-client-0.53.0
+You are using pip version 10.0.1, however version 18.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+$ docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml run --no-deps php bin/console doctrine:migrations:migrate --allow-no-migration --no-interaction
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 127, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 873, in run
+    self.toplevel_options, self.project_dir
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 1328, in run_one_off_container
+    **container_options)
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 326, in create_container
+    previous_container=previous_container,
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 895, in _get_container_create_options
+    one_off=one_off)
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 969, in _get_container_host_config
+    links=self._get_links(link_to_self=one_off),
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 800, in _get_links
+    links[container.name_without_project] = container.name
+  File "/usr/lib/python2.7/site-packages/compose/container.py", line 85, in name_without_project
+    return '{0}_{1}{2}'.format(self.service, self.number, '_' + self.slug if self.slug else '')
+  File "/usr/lib/python2.7/site-packages/compose/container.py", line 99, in slug
+    return truncate_id(self.full_slug)
+  File "/usr/lib/python2.7/site-packages/compose/utils.py", line 168, in truncate_id
+    if ':' in value:
+TypeError: argument of type 'NoneType' is not iterable
+ERROR: Job failed: exit code 1
+Previous successfull biulds:
+Successfully installed PyYAML-3.13 backports.ssl-match-hostname-3.5.0.1 cached-property-1.5.1 certifi-2018.10.15 chardet-3.0.4 docker-3.5.1 docker-compose-1.22.0 docker-pycreds-0.3.0 dockerpty-0.4.1 docopt-0.6.2 enum34-1.1.6 functools32-3.2.3.post2 idna-2.6 ipaddress-1.0.22 jsonschema-2.6.0 requests-2.18.4 six-1.11.0 texttable-0.9.1 urllib3-1.22 websocket-client-0.53.0
+You are using pip version 10.0.1, however version 18.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+$ docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml run --no-deps php bin/console doctrine:migrations:migrate --allow-no-migration --no-interaction
+                                                              
+                    Application Migrations                    
+                                                              
+
+No migrations to execute.

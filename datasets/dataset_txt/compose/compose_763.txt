@@ -1,0 +1,4 @@
+sukhbir-singh commented on 31 Mar 2018
+Each time, I change even a single line in source code i need to close the current docker-compose run by pressing ctrl+c then start a new one using command docker-compose up.
+Is their exist any command for docker-compose so that I donot need to restart docker-compose everytime and it automatically rebuilds using the changed and latest source code.
+Thank you

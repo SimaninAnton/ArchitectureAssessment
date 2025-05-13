@@ -1,0 +1,1 @@
+Add `--build` and `--no-build` options to `run` analogous to `up` command.

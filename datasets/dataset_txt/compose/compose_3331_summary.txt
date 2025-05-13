@@ -1,0 +1,1 @@
+[DOC] Outdated release notes for 1.2.0 on https://docs.docker.com/compose/

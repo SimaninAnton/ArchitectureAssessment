@@ -1,0 +1,22 @@
+twang2218 commented on 17 Jul 2017
+Say we have a docker-compose.yml contains the $ sign, and it should be escaped, like:
+version: '3.3'
+services:
+  exporter:
+    image: prom/node-exporter
+    command:
+      - -option_without_quote=$$
+      - '-option_single_quote=$$'
+      - "-option_double_quote=$$"
+However, when using docker-compose config to show this file, the $ sign are not escaped anymore:
+$ docker-compose -f sample.yml config
+services:
+  exporter:
+    command:
+    - -option_without_quote=$
+    - -option_single_quote=$
+    - -option_double_quote=$
+    image: prom/node-exporter
+version: '3.3'
+This will cause the problem when the output will be used in docker stack deploy case, as following error will be raised:
+Invalid interpolation format for "command" option in services "exporter": "-option_without_quote=$". You may need to escape any $ with another $.

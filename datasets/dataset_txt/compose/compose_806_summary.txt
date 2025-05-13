@@ -1,0 +1,1 @@
+Configuring volumes to share host directory with container based on windows image does not work for me

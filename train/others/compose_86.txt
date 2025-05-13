@@ -1,0 +1,8 @@
+romfreiman commented on 8 Oct 2019
+During debugging docker performance, I noticed that docker-compose add extra unnecessary load on docker while running docker-compose down.
+Seems that instead of filtering the containers that are specified in the compose file, docker compose inspects each and every container on the host and only then performs the filtering.
+In a scenarios where are many containers and many docker-compose instances are executing, it adds very high api load on docker daemon.
+This is the code that does this flow: https://github.com/docker/compose/blob/master/compose/project.py#L702
+when executed in the following flow: https://github.com/docker/compose/blob/master/compose/project.py#L324
+Any specific reason for this implementation?
+Thanks

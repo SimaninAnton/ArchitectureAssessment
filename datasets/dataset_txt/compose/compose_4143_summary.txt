@@ -1,0 +1,1 @@
+possible to have Dockerfile FROM point to another fig-defined service?

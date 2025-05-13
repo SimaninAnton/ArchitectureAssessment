@@ -1,0 +1,9 @@
+Contributor
+dnephin commented on 2 Dec 2014
+I've started to feel that doing a build during docker-compose up is potentially causing more trouble than it's worth, and I'm curious if anyone is actually using this functionality.
+I believe this is a positive change for two reasons:
+Anytime I've used docker-compose up I've always had to explicitly docker-compose build first (and often docker-compose pull before that). This is because without doing an explicit build/pull, you risk running an older version of the image.
+Doing a build/pull as part of up starts to require that up support every parameter that build and pull require, which leads to more code complexity, and a less clean interface (see #687, #573, #586, which are probably just the start)
+Does anyone actually "need" docker-compose up to build containers first? How do you ensure you're actually running the latest container if you don't do an explicit docker-compose build first?
+This would be a non-backwards compatible change, so it would require waiting for a new major release.
+3

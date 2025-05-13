@@ -1,0 +1,11 @@
+Contributor
+ekristen commented on 14 Jul 2015
+@ralphtheninja and I have stumbled across a problem while trying to programmatically use docker-compose via node.js and exec. If compose is not in a TTY it defaults to 80, which causes some wrapping that is difficult to parse.
+Basically when trying to script this from a non-TTY, this is what happens ...
+Name             Command             State              Ports       
+-------------------------------------------------------------------------
+workstation_ngin   nginx -g daemon    Up                 443/tcp, 0.0.0.0 
+x_1                off;                                  :8888->80/tcp    
+FWIW, Docker Machine does not appear to look for a TTY (at least a brief look at the code didn't turn anything up)
+https://github.com/docker/compose/blob/master/compose/cli/formatter.py#L7-L12
+Is there a reason for having this? If not it would be nice to remove. I am more than willing to submit a PR to do so.

@@ -1,0 +1,34 @@
+powerman commented on 6 May 2018
+Description of the issue
+To run my project's integration tests I need to run go get -t ./... in container first, which in turn needs access to private repos, which means I should copy my ~/.ssh into container. I can't use bind-mount because CI use remote docker, so I have to docker cp it. This means I should:
+create containers first,
+then copy SSH keys,
+then start containers.
+The problem is:
+To make docker-compose correctly exit after tests will finish I should use up --exit-code-from.
+To avoid starting containers before I'll copy SSH keys I should use either up --no-start or create.
+up --no-start complains it's not compatible with --abort-on-container-exit (implied by --exit-code-from)
+I don't see any reasons why these options have to be incompatible, so probably this should be fixed
+create complains it's deprecated and doesn't set environment variables I need.
+Context information
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 3.5.5
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version: 17.12.1-ce
+ API version: 1.35
+ Go version: go1.10.1
+ Git commit: 7390fc6
+ Built: Sat Apr  7 13:27:00 2018
+ OS/Arch: linux/amd64
+
+Server:
+ Engine:
+  Version: 17.12.1-ce
+  API version: 1.35 (minimum version 1.12)
+  Go version: go1.10.1
+  Git commit: 7390fc6
+  Built: Sat Apr  7 13:26:33 2018
+  OS/Arch: linux/amd64
+  Experimental: false

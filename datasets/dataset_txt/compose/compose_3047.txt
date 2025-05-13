@@ -1,0 +1,23 @@
+woshihaoren commented on 26 Nov 2015
+Hi:
+When I use only one docker-compose.yml up several different test environment.
+docker-compose -p test --x-networking --x-network-driver overlay up -d
+docker-compose -p test1 --x-networking --x-network-driver overlay up -d
+WARNING:
+"tomcat" defines links, which are not compatible with Docker networking and will be ignored.
+Future versions of Docker will not support links - you should remove them for forwards-compatibility。
+My application config jdbc://db:3306
+docker-compose.yml
+tomcat:
+image: 'tomcat'
+cpu_shares: 22
+mem_limit: '1g'
+links:
+    - 'mysql:db'
+
+mysql:
+image: 'mysql'
+cpu_shares: 22
+mem_limit: '1g'
+So container tomcat's hosts doesn't hava db alias, and it's test_mysql_1 test1_mysql_1,they are dynamic. I can's config.
+When I use x-networking,How to make an alias?

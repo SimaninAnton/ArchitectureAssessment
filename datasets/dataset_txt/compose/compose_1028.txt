@@ -1,0 +1,43 @@
+ghost commented on 7 Dec 2017
+I have a docker-compose.yml version 3 which works very good:
+version: '3'
+
+services:
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+  
+redis:
+    image: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  app:
+    build: .
+    restart: unless-stopped
+    command: bash ./script.sh
+    volumes:
+      - bundle:/bundle
+    ports:
+      - "3000:3000"
+      - "1234:1234"
+    depends_on:
+      - db
+      - redis
+    stdin_open: true
+    tty: true
+
+volumes:
+
+  bundle: {}
+I use it with Rails and I debug attaching from Windows port 1234. Everything works good.
+But.
+Sometimes my Rails server crash. It happens. So I need the app container restart itself. And it does. But I loose the logs in my powershell console.
+When starting with docker-compose up I see everything.
+When the app container crash and restart itself I don't see anything from the "new" app container. Why?
+If I close manually that app container and start it manually all logs from the before restarted container appears again scrolling down like the Niagara Falls!
+Bug? My own bug?

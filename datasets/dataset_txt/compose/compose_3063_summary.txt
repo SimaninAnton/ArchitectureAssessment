@@ -1,0 +1,1 @@
+File sync issues with `docker/compose` image on Virtualbox/boot2docker

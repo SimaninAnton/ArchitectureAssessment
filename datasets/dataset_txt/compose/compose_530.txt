@@ -1,0 +1,12 @@
+ardeleanraz commented on 17 Aug 2018
+I was doing the django-shop tutorial from this link:https://django-shop.readthedocs.io/en/latest/tutorial/quickstart.html . I am very new in docker ,docker-compose and linux .
+I get this error:
+ERROR: Couldn't connect to Docker daemon at http://127.0.0.1:2375 - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+When I execute these commands...
+$ git clone --depth 1 github.com/awesto/django-shop
+$ cd django-shop
+$ export DJANGO_SHOP_TUTORIAL=commodity
+$ docker-compose up --build -d
+I tried to do this Tutorial and this didn't work.

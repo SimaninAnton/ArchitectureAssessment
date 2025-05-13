@@ -1,0 +1,67 @@
+nicolaka commented on 9 Dec 2015
+Description of problem:
+docker-compose (with--x-networking) somehow does a host-port mapping for a container that is part of an overlay network. This is being deployed against swarm 1.0 cluster.
+docker version: 1.9.1
+docker-compose version: docker-compose version 1.5.2, build 7240ff3
+swarm version: 1.0.0
+docker
+docker-compose.yml:
+web:
+  image: nicolaka/dockchat
+  environment:
+     - INTERLOCK_DATA={"hostname":"demo","domain":"dockchat.com"}
+  ports:
+    - "5000"
+  net: "dockchat"
+docker-compose ps
+dockchat_web_1         python webapp.py                 Up      10.0.20.39:32789->5000/tcp
+docker inspect dockchat_web_1
+     }
+    },
+    "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "73a908124d5ccaea44ee1a5ae2329b1af67f773efbae291eeae73c27ff359c29",
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "Ports": {
+            "5000/tcp": [
+                {
+                    "HostIp": "10.0.20.39",
+                    "HostPort": "32789"
+                }
+            ]
+        },
+
+ "Networks": {
+            "dockchat": {
+                "EndpointID": "46573184e544628eac796bd06df5d5994768e5906758de3d9ee5ae8c127bda9e",
+                "Gateway": "",
+                "IPAddress": "10.10.10.2",
+                "IPPrefixLen": 24,
+                "IPv6Gateway": "",
+                "GlobalIPv6Address": "",
+                "GlobalIPv6PrefixLen": 0,
+                "MacAddress": "02:42:0a:0a:0a:02"
+docker network inspect dockchat
+[
+    {
+        "Name": "dockchat",
+        "Id": "af84295ecfe54399177f9219bba027b09d581833cf5b9c37c89a6e7045269447",
+        "Scope": "global",
+        "Driver": "overlay",
+        "IPAM": {
+            "Driver": "default",
+            "Config": [
+                {
+                    "Subnet": "10.10.10.0/24"
+                }
+            ]
+        },
+        "Containers": {
+            "673fa63486302617bc01a8edf06f520ced58a12dfd634b40c1c10458bc79b917": {
+                "EndpointID": "919c537b463bf39a1305babc14b6154e1ba50d49014878f40b80672e08a117d2",
+                "MacAddress": "02:42:0a:0a:0a:02",
+                "IPv4Address": "10.10.10.2/24",
+                "IPv6Address": ""
+            },

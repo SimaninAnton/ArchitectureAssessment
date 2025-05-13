@@ -1,0 +1,4 @@
+davidoshiro commented on 16 Apr 2017
+I'm not sure what is going on but this is pretty frustrating. I had working docker-compose.yml file that I use as a template for creating new projects. Today, I created a new project using the same docker-compose.yml file as my working projects, but when doing a 'docker-compose build' command, I get an error saying that my environment variables do not exist. Of course, they do exists but are not being recognized for some reason. I go through the online docs and it says to use $$ where I reference the environment variables. The build works, but now when I try 'docker-compose up', docker sees the environment value as ${VAR_NAME} instead of the value.
+I have Docker Community Edition version 17.05.0-ce-rc1-mac8 (16582).
+Any help is appreciated.

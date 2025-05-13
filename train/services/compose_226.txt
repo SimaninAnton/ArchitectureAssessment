@@ -1,0 +1,30 @@
+aflag commented on 8 Apr 2019
+Description of the issue
+The --remove-orphans flag from docker-compose down allows the user to remove containers which were created in a previous run of docker-compose up, but which has since been deleted from the docker-compose.yml file. However, if the container is in a stopped state, then --remove-orphans will have no effect.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:23:03 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+Steps to reproduce the issue
+Create a docker-compose.yml file with any service you'd like
+Run docker-compose up -d
+Stop the newly created service
+Remove the service from the docker-compose.yml file
+Run docker-compose down --remove-orphans
+Observed result
+The stopped container is still present
+Expected result
+The container should have been deleted
+Stacktrace / full error message
+N/A

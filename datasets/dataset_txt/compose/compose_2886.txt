@@ -1,0 +1,16 @@
+jamshid commented on 24 Jan 2016
+I want to use devices in a service but I don't want to hardcode them in the docker-compose.yml.
+foo:
+   devices:
+      # hopefully these can be passed as an environment variable, not hardcoded?
+      - "/dev/sdc:/dev/sdc"
+      - "/dev/sdd:/dev/sdd"
+      - "/dev/sde:/dev/sde"
+      ...
+How do I pass them all as an environment variable? I tried various approaches like below but they didn't work. I guess environment variable substitution only works with strings, not arrays?
+foo:
+   devices: [ $FOO_DEVICES ]
+$ env FOO_DEVICES=/dev/null:/dev/null1,/dev/null:/dev/null2 docker-compose up -d
+Recreating test_foo_1
+ERROR: Cannot start container 979a02371b76b40fb841f553a927431744e0d3da5b9b2b7aafc6f6a48f4ce26f: [8] System error: write /sys/fs/cgroup/devices/docker/979a02371b76b40fb841f553a927431744e0d3da5b9b2b7aafc6f6a48f4ce26f/devices.allow: invalid argument
+Any suggestions are appreciated.

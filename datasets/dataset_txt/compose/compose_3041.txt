@@ -1,0 +1,3 @@
+atrauzzi commented on 29 Nov 2015
+I currently have an nginx and php-fpm container pair configured under a haproxy container. Everything seems to work, but I'd really like it if I could have the links back to haproxy automatically duplicated as well whenever I scale the containers.
+Also, the links between the two containers will obviously need to be scaled as well as they travel in pairs.

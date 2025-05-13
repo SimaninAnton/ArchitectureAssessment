@@ -1,0 +1,83 @@
+hubo1016 commented on 22 Feb 2018
+When use docker-compose run or docker-compose exec with docker-compose 1.9.0+, extra options like --host are ignored when calling docker with call_docker method.
+verbose log:
+[root@c8b3f4049bec ~]# docker-compose --verbose -H 100.73.3.4:4000 -f test.yml run a
+compose.config.config.find: Using configuration files: ./test.yml
+docker.auth.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.auth.find_config_file: Found file at path: /root/.docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Found entry (registry=u'registry.yz-dev-rrcloud.priv', username=u'admin')
+urllib3.connectionpool._new_conn: Starting new HTTP connection (1): 100.73.3.4
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "GET /v1.24/version HTTP/1.1" 200 203
+compose.cli.command.get_client: docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.5
+OpenSSL version: OpenSSL 1.0.1e-fips 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http://100.73.3.4:4000
+compose.cli.command.get_client: Docker version: KernelVersion=4.14.13-1.el7.elrepo.x86_64, Os=linux, BuildTime=2017-09-21T09:42:34+0000, ApiVersion=1.22, Version=swarm/1.2.8, GitCommit=3553e39, Arch=amd64, GoVersion=go1.7.1
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'root_default')
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "GET /v1.24/networks/root_default HTTP/1.1" 404 30
+compose.network.ensure: Creating network "root_default" with the default driver
+compose.cli.verbose_proxy.proxy_callable: docker create_network <- (name=u'root_default', enable_ipv6=False, ipam=None, labels={u'com.docker.compose.project': u'root', u'com.docker.compose.network': u'default'}, driver=None, check_duplicate=True, options=None, internal=False, attachable=True)
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "POST /v1.24/networks/create HTTP/1.1" 201 87
+compose.cli.verbose_proxy.proxy_callable: docker create_network -> {u'Id': u'12c7c9a37f2c59a24d0a2f41e3f9a09e7eed97df7c1e9bb6a05f48e9901c93c4',
+ u'Warning': u''}
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('centos:7')
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "GET /v1.24/images/centos:7/json HTTP/1.1" 200 1938
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/bash'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=root', u'com.docker.compose.service=a', u'com.docker.compose.oneoff=True']})
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "GET /v1.24/containers/json?all=1&limit=-1&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Droot%22%2C+%22com.docker.compose.service%3Da%22%2C+%22com.docker.compose.oneoff%3DTrue%22%5D%7D&trunc_cmd=0&size=0 HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=root', u'com.docker.compose.service=a', u'com.docker.compose.oneoff=False']})
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "GET /v1.24/containers/json?all=0&limit=-1&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Droot%22%2C+%22com.docker.compose.service%3Da%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&trunc_cmd=0&size=0 HTTP/1.1" 200 3
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (device_read_iops=None, mem_swappiness=None, links=[], oom_score_adj=None, blkio_weight=None, cpu_count=None, cpuset_cpus=None, dns_search=None, pid_mode=None, init_path=None, log_config={'Type': u'', 'Config': {}}, cpu_quota=None, read_only=None, cpu_percent=None, device_read_bps=None, storage_opt=None, init=None, dns=None, volumes_from=[], ipc_mode=None, mem_reservation=None, security_opt=None, shm_size=None, device_write_iops=None, dns_opt=None, cgroup_parent=None, group_add=None, network_mode=u'root_default', volume_driver=None, oom_kill_disable=None, userns_mode=None, tmpfs=[], nano_cpus=None, port_bindings={}, isolation=None, memswap_limit=None, restart_policy=None, blkio_weight_device=None, devices=None, extra_hosts=None, binds=[], sysctls=None, pids_limit=None, device_write_bps=None, cap_add=None, mounts=None, mem_limit=None, runtime=None, cap_drop=None, privileged=False, ulimits=None, cpu_shares=None)
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': [],
+ 'Links': [],
+ 'LogConfig': {'Config': {}, 'Type': u''},
+ 'NetworkMode': u'root_default',
+ 'PortBindings': {},
+ 'VolumesFrom': []}
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (tty=True, labels={u'com.docker.compose.version': u'1.19.0', u'com.docker.compose.container-number': '1', u'com.docker.compose.service': u'a', u'com.docker.compose.project': u'root', u'com.docker.compose.oneoff': u'True'}, name=u'root_a_run_1', image='centos:7', stdin_open=True, host_config={'NetworkMode': u'root_default', 'Links': [], 'PortBindings': {}, 'Binds': [], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment=[], command=['bash', '-c', 'date; while ! ping b -c 1 -W 1; do date; done'], volumes={}, detach=False, ports=[], networking_config={u'EndpointsConfig': {u'root_default': {u'IPAMConfig': {}, u'Aliases': ['a']}}})
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "POST /v1.24/containers/create?name=root_a_run_1 HTTP/1.1" 201 73
+compose.cli.verbose_proxy.proxy_callable: docker create_container -> {u'Id': u'c73ac84a5ca861f05f892ad726504724503d6664ebf34557bae58dfb8f619b12'}
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'c73ac84a5ca861f05f892ad726504724503d6664ebf34557bae58dfb8f619b12')
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "GET /v1.24/containers/c73ac84a5ca861f05f892ad726504724503d6664ebf34557bae58dfb8f619b12/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'-c', u'date; while ! ping b -c 1 -W 1; do date; done'],
+ u'Config': {u'AttachStderr': True,
+             u'AttachStdin': True,
+             u'AttachStdout': True,
+             u'Cmd': [u'bash',
+                      u'-c',
+                      u'date; while ! ping b -c 1 -W 1; do date; done'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+compose.cli.verbose_proxy.proxy_callable: docker disconnect_container_from_network <- (u'c73ac84a5ca861f05f892ad726504724503d6664ebf34557bae58dfb8f619b12', u'root_default')
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "POST /v1.24/networks/root_default/disconnect HTTP/1.1" 204 0
+compose.cli.verbose_proxy.proxy_callable: docker disconnect_container_from_network -> None
+compose.service.connect_container_to_networks: Connecting to root_default
+compose.cli.verbose_proxy.proxy_callable: docker connect_container_to_network <- (u'c73ac84a5ca861f05f892ad726504724503d6664ebf34557bae58dfb8f619b12', u'root_default', ipv4_address=None, link_local_ips=None, ipv6_address=None, links=[], aliases=[])
+urllib3.connectionpool._make_request: http://100.73.3.4:4000 "POST /v1.24/networks/root_default/connect HTTP/1.1" 200 0
+compose.cli.verbose_proxy.proxy_callable: docker connect_container_to_network -> None
+compose.cli.main.call_docker: /usr/bin/docker start --attach --interactive c73ac84a5ca861f05f892ad726504724503d6664ebf34557bae58dfb8f619b12
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+version:
+[root@c8b3f4049bec ~]# docker-compose version
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.5
+OpenSSL version: OpenSSL 1.0.1e-fips 11 Feb 2013
+System version: CentOS 7 (in docker container)
+It is clear that the generated docker-cli command line is /usr/bin/docker start --attach --interactive, the specified -H option is ignored. Other options like --tls are also affected.

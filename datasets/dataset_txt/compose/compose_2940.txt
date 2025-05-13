@@ -1,0 +1,3 @@
+habelson commented on 7 Jan 2016
+If, using a docker-compose.yml file and the --x-networking option, I create 2 containers. Each container will have an entry for the other in their /etc/hosts file correctly (underscore issue aside). However, the entry that container2 has for container1 isn't also in container1s /etc/hosts file. It seems like this should be there for completeness.
+Alternatively, would it make sense that, in the absence of an explicit hostname parameter, the hostname of the container is set to the same value as what is added to /etc/hosts in other containers? Or is there a way to set the hostname to that dynamic value (in the case of scaling)?

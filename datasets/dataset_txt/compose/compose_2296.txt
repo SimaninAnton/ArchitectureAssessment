@@ -1,0 +1,56 @@
+MihaiB commented on 16 Jun 2016
+Observed behavior
+docker-compose run --rm removes the container but not the volumes.
+$ cat docker-compose.yml 
+version: '2'
+services:
+  mongo:
+    image: mongo
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+$ docker volume ls
+DRIVER              VOLUME NAME
+$ docker-compose run --rm mongo true
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+$ docker volume ls
+DRIVER              VOLUME NAME
+local               4f4cb250adccee21a56b3f843d7d0a71263f61635ec01514fdb198b767f52959
+local               8cbf8df775b3d451700490dc2283f12ce3fb10f2b7383144839aa9374dc13c53
+$
+Expected behavior
+I expect docker-compose run --rm to remove the volumes, just like docker run --rm does:
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+$ docker volume ls
+DRIVER              VOLUME NAME
+$ docker run --rm mongo true
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+$ docker volume ls
+DRIVER              VOLUME NAME
+$ 
+Versions
+$ docker version
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 22:00:43 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 22:00:43 2016
+ OS/Arch:      linux/amd64
+
+$ docker-compose version
+docker-compose version 1.7.1, build 0a9ab35
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+1

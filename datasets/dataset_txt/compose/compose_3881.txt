@@ -1,0 +1,12 @@
+IshwarKanse commented on 2 Mar 2015
+I'm trying to run tor browser using docker-compose. The task fails with exit code: 1 cannot open display: unix$DISPLAY. Here is the docker-compose.yml file.
+tor:
+  image: jess/tor-browser
+  volumes:
+   - /tmp/.X11-unix:/tmp/.X11-unix
+   - /dev/snd:/dev/snd
+  privileged: true
+  environment:
+   - DISPLAY=unix$DISPLAY
+The app runs with the docker client. Here is the command I used to run tor browser.
+docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -v /dev/snd:/dev/snd --privileged --name tor-browser jess/tor-browser

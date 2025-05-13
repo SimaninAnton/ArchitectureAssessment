@@ -1,0 +1,3 @@
+samalba commented on 1 Jun 2015
+'z' option is currently not supported for volumes and volumes_from.
+Here are the modes available in docker: https://github.com/docker/docker/blob/53d9609de472f2fc9e6aaef2b713f526605f4ab8/daemon/volumes.go#L115

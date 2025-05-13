@@ -1,0 +1,12 @@
+shamil614 commented on 25 Feb 2016
+I'll have docker up and running with docker-compose up
+All is fine. Then after about a minute, I see this
+ERROR: Couldn't connect to Docker daemon - you might need to run docker-machine start default.
+Running dockker-machine ls shows
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER    ERRORS
+default   *        virtualbox   Running   tcp://192.168.99.100:2376           v1.10.2
+I can run docker-compose up again and it works for about another minute. Then connection drops.
+docker -v
+Docker version 1.10.2, build c3959b1
+docker-compose -v
+docker-compose version 1.6.0, build d99cad6

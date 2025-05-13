@@ -1,0 +1,10 @@
+timfallmk commented on 16 Jun 2015
+When using the environment setting in the yml file, it does not appear to evaluate any input to env variables. For example:
+environement:
+  - HOST_IP=${<some other service>_PORT_4001_TCP_ADDR}
+yields HOST_IP=HOST_IP=${<some other service>_PORT_4001_TCP_ADDR}
+But running:
+docker run --env HOST_IP=${<some other service>_PORT_4001_TCP_ADDR}
+will yield
+HOST_IP=<proper address>
+The primary use case here is to properly set env variables for linked containers using the env variables set by --link

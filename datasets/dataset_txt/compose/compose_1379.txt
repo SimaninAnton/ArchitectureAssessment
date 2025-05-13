@@ -1,0 +1,5 @@
+psankar commented on 19 Jun 2017
+We currently do not have a working docker-compose container image that supports docker-compose v3 API.
+The latest docker-compose build on the dockerhub is failing:
+https://hub.docker.com/r/docker/compose/
+https://jenkins.dockerproject.org/job/Compose%20Master/

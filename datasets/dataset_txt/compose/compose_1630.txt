@@ -1,0 +1,2 @@
+jeffrom commented on 6 Mar 2017
+When I docker-compose exec service bash, psql, and other interactive programs, i've noticed that control-P and control-N do not have the same behavior as the up and down arrows when navigating history. Up and down work as expected, but ctrl-P doesn't show the previous command. When that happens, if i use a left or right arrow to move the cursor, the command will show up. But it's pretty annoying. Am I the only one with this problem? :)

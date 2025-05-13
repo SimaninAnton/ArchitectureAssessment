@@ -1,0 +1,38 @@
+laszlocph commented on 6 Apr 2018 •
+edited
+When I'm running docker-compose build it's not able to pull private base images.
+WHAT I EXPERIENCE
+I use docker-credential-gcr and my ~/.docker/config.json is correctly set up.
+I'm able to do docker pull myprivaterepo/myimage
+I'm able to do docker-compose pull if the image is used as a service image
+I'm not able to do docker-compose build as the private base image cannot be pulled.
+ERROR: Service 'hello' failed to build: unauthorized: You don't have the needed permissions to perform this operation, and you may have invalid credentials. To authenticate your request, follow the steps in: https://cloud.google.com/container-registry/docs/advanced-authentication
+WHAT I EXPECT
+Since I'm able to pull the image with docker pull, Compose should be able to pull too even in a build phase.
+REPRO CASE
+Dockerfile
+From myprivaterepo/myimage
+docker-compose.yml
+version: '3.2'
+
+services:
+  hello:
+    build: &build
+      context: .
+ENV
+cat ~/.docker/config.json 
+{
+        "auths": {},
+        "credHelpers": {
+                "asia.gcr.io": "gcr",
+                "eu.gcr.io": "gcr",
+                "gcr.io": "gcr",
+                "staging-k8s.gcr.io": "gcr",
+                "us.gcr.io": "gcr"
+        }
+}
+$ docker --version
+Docker version 18.03.0-ce, build 0520e24
+$ docker-compose --version
+docker-compose version 1.20.1, build 5d8c71b
+5

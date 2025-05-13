@@ -1,0 +1,26 @@
+kxxoling commented on 6 May 2015
+Original posted on StackOverflow: http://stackoverflow.com/questions/30068873/
+Django returns Unknown command: 'runserver'
+web_1   | Unknown command: 'runserver'
+web_1   | Type 'manage.py help' for usage.
+breadtrip_web_1 exited with code 1
+If I change the command python /workspace/BreadTripServer/webapps/manage.py runserver 0.0.0.0:8000 --settings=configs.local_default to python /workspace/BreadTripServer/webapps/manage.py runserver, it works OK except I cannot reach the web page.
+docker-compose.yml:
+db:
+  image: postgres:9.1
+  environment:
+    - POSTGRES_PASSWORD=mysecretpassword
+
+redis:
+    image: redis:2.8
+
+web:
+  links:
+    - db
+    - redis
+  build: .
+  volumes:
+    - .:/workspace
+  ports:
+    - "8000:8000“
+  command: python /workspace/BreadTripServer/webapps/manage.py runserver 0.0.0.0:8000 --settings=configs.local_default

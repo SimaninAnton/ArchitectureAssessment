@@ -1,0 +1,1 @@
+Hosts file not updated on container restart

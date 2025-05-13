@@ -1,0 +1,1 @@
+[1.23.1] Docker configs fail silently in non-swarm mode, an error/warning message would be handy

@@ -1,0 +1,4 @@
+peperunas commented on 25 Feb 2016
+Is there any way to use data containers created through docker volume create datacontainer?
+I'm quite afraid to use a "standard" data container since I just updated the image it was based upon and I lost my data.
+Docker volume documentation

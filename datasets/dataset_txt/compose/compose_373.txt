@@ -1,0 +1,53 @@
+r2evans commented on 2 Dec 2018 •
+edited
+Description of the issue
+The sha256 checksum of docker-compose.exe installed with docker-desktop 2.0.0.0-win81 (29211) does not match the release notes. Which one do we use?
+The checksum listed in the release notes verbiage and in the .sha256 file are the same, and the exe file on the release notes page has that same checksum. The only thing wrong is the checksum of the exe file installed by docker-desktop.
+From the release notes:
+docker-compose-Windows-x86_64.exe 0d3fc3acd98a0b906eda5c235267f53ad994cc21d7ab6e3af83fb3762c70350f
+$ curl -L -o docker-compose-Windows-x86_64.exe https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Windows-x86_64.exe
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   623    0   623    0     0   1479      0 --:--:-- --:--:-- --:--:--  1479
+100 7384k  100 7384k    0     0  2449k      0  0:00:03  0:00:03 --:--:-- 3150k
+
+$ sha256sum "`which docker-compose`" docker-compose-Windows-x86_64.exe
+9c1fbe4622a601820da6e80989a03a71247d5f4d1f4398697fd255b0741fd431 */c/Program Files/Docker/Docker/Resources/bin/docker-compose
+0d3fc3acd98a0b906eda5c235267f53ad994cc21d7ab6e3af83fb3762c70350f *docker-compose-Windows-x86_64.exe
+
+$ cat docker-compose-Windows-x86_64.exe.sha256       # just downloaded
+0d3fc3acd98a0b906eda5c235267f53ad994cc21d7ab6e3af83fb3762c70350f  docker-compose-Windows-x86_64.exe
+
+$ docker-compose version                             # installed with docker-desktop
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+
+$ ./docker-compose-Windows-x86_64.exe version        # just downloaded, appears the same
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+
+$ docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:51 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Additional information
+Win10 64bit, docker updated via normal method from 18.06 (?) to docker-desktop 2.0.0.0-win81 with no warnings or errors.

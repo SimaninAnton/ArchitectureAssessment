@@ -1,0 +1,3 @@
+Contributor
+dnephin commented on 19 Jan 2016
+Currently #/definitions/network accepts any fields. We should be a little more strict about what fields are valid in the networks section.

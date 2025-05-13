@@ -1,0 +1,2 @@
+ghost commented on 4 Aug 2015
+When you update and image:tag in a docker-compose yml file, then stop and up -d docker-compose will reuse the previously built container but will record the new image:tag combination as the source image. The result is that "docker ps" produces an output with a version mismatch that lists the new image:tag combination as the source of a container that is still running the previous image:tag combination.

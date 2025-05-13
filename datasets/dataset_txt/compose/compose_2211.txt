@@ -1,0 +1,7 @@
+pcgeek86 commented on 21 Jul 2016
+Is there a method of forcing Docker Compose to use a specific Docker client binary? If not, can this be added? When I'm dealing with various Docker environments, I sometimes need to call different versions of Docker Compose and the Docker client library.
+Cheers,
+Trevor Sullivan
+Microsoft MVP: Cloud & Data Center Management
+https://trevorsullivan.net
+https://twitter.com/pcgeek86

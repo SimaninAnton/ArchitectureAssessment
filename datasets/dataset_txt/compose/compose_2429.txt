@@ -1,0 +1,43 @@
+Erwyn commented on 5 May 2016 •
+edited
+docker-compose is slow with docker for mac os beta on my home network. Here is my workaround for now:
+docker-compose up (take ages)
+shut down wifi
+docker-compose up (really fast)
+re-enable wifi
+I do not reproduce the issue on another network than mine, my work network for instance do not make it slow. I already had a potentially related issue with the docker client itself which couldn't pull any image (going to bizarre local ips instead of the docker hub registry) but it has been fixed since one of the latest docker for mac os beta update.
+The issue is not reproduced against the docker-toolbox, only the "native" docker for mac.
+My version of docker-compose is : docker-compose version 1.7.0, build 0d7bf73
+My version of docker for mac is: Version 1.11.1-beta10 (build: 6662)
+The docker-compose file I'm trying to run is:
+#docker-compose.yml
+sync-engine:
+  build: nylas-sync-engine
+  ports:
+    - 5555:5555
+  links:
+    - mysql:mysql
+    - redis:redis
+  hostname: sync-engine
+  log_opt:
+    max-size: "10m"
+    max-file: "10"
+
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=whateverpassword
+  volumes:
+    - nylas_mysql:/var/lib/mysql
+  log_opt:
+    max-size: "10m"
+    max-file: "10"
+
+redis:
+  image: redis
+  volumes:
+    - nylas_redis:/data
+  log_opt:
+    max-size: "10m"
+    max-file: "10"
+64

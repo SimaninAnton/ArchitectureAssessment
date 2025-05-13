@@ -1,0 +1,9 @@
+Contributor
+schmunk42 commented on 30 Nov 2015
+With docker 1.9 you can connect a container to multiple networks, see docs, but how can I do this with compose?
+I read through the networking section of compose, but haven't found a description about my issue.
+I saw several issues and discussions, where the following syntax was mentioned:
+networks:
+   - myvxlan1
+   - myvxlan2
+What's the current way, how to join to multiple networks with compose?

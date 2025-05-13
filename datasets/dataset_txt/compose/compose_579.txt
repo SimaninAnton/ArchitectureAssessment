@@ -1,0 +1,36 @@
+ft0907 commented on 13 Jul 2018
+在同一docker中有两个容器，我是用dockerfile和dockercompose.yml的方式启动 但是两个容器间无法通过127.0.0.1 或者localhost 或者content-elastic 服务名进行通信，这有什么好的解决方式吗？
+The specific code is as follows：
+content-elastic:
+build:
+context: ./content/docker/elastic_search
+dockerfile: Dockerfile
+environment:
+- "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+- "xpack.security.enabled=true"
+ulimits:
+memlock:
+soft: -1
+hard: -1
+ports:
+- 9201:9200
+- 9301:9300
+volumes:
+- ./content/docker/elastic_search/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+- /docker/content-elastic/data:/usr/share/elasticsearch/data
+- /docker/content-elastic/log:/usr/share/elasticsearch/log
+content-mongo-connector:
+build:
+context: ./content/docker/mongo_connector
+dockerfile: Dockerfile
+volumes:
+- ./content/docker/mongo_connector/conf.json:/etc/conf.json
+command: mongo-connector -c /etc/conf.json
+#links:
+#- content-elastic:content-elastic //If only docker compose.yml is available to communicate, if compose+dockerfile is used, it is necessary to add this line to use the service name content-elastic to communicate
+tty: true
+restart: always
+depends_on:
+- content-elastic
+@shin-
+I know that docker is new to DNS server. I make sure that they are all in bridge mode, but they can not work, and can not know what causes it. If there are other solutions, please let me know. Thank you.

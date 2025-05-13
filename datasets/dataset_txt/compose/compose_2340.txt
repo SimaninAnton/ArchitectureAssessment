@@ -1,0 +1,16 @@
+jduhamel commented on 31 May 2016
+docker and docker-compose handle arguments differently.
+docker-compose $(docker-machine config default) upcauses an error. (see below)
+and
+docker-compose $(docker-machine config default | xargs) up works.
+joe@jsd-mbp ~ $ docker-compose $(docker-machine config default) -f docker-compose.yml up [2.2.3]
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 58, in main
+File "compose/cli/main.py", line 106, in perform_command
+File "compose/cli/command.py", line 33, in project_from_options
+File "compose/cli/docker_client.py", line 36, in tls_config_from_options
+File "site-packages/docker/tls.py", line 47, in init
+docker.errors.TLSParameterError: Path to a certificate and key files must be provided through the client_config param. TLS configurations should map the Docker CLI client configurations. See https://docs.docker.com/engine/articles/https/ for API details.
+docker-compose returned -1
+joe@jsd-mbp ~ $

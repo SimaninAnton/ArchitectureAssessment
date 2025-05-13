@@ -1,0 +1,63 @@
+Iristyle commented on 13 Aug 2019
+Description of the issue
+Usage of docker-compose ps, docker-compose images or docker-compose top will emit an error on Windows like:
+PS C:\users\puppet> docker-compose ps --all
+The system cannot find the path specified.
+Name   Command   State   Ports
+------------------------------
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0-rc2, build 661ac20e
+docker-py version: 4.0.1
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.1c  28 May 2019
+Output of docker version
+Client:
+ Version:           master-dockerproject-2019-08-01
+ API version:       1.40
+ Go version:        go1.12.7
+ Git commit:        e505a7c2
+ Built:             Fri Aug  2 00:02:45 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          master-dockerproject-2019-08-01
+  API version:      1.41 (minimum version 1.24)
+  Go version:       go1.12.7
+  Git commit:       4fb5e9e
+  Built:            Fri Aug  2 00:12:20 2019
+  OS/Arch:          windows/amd64
+  Experimental:     true
+Output of docker-compose config
+N/A
+Steps to reproduce the issue
+Run docker-compose images on Windows
+Observed result
+PS C:\users\puppet> docker-compose ps --all
+The system cannot find the path specified.
+Name   Command   State   Ports
+------------------------------
+Expected result
+PS C:\users\puppet> docker-compose ps --all
+Name   Command   State   Ports
+------------------------------
+Stacktrace / full error message
+I tracked this using procmon (roughly the equivalent of strace on Windows). Once I had the commands being executed it was easy to backtrack into the compose source:
+top, images and ps all make a call like this ot format tabular output
+compose/compose/cli/main.py
+Line 616 in 7a7c9ff
+ print(Formatter().table(headers, rows)) 
+The implementation of Formatter.table() calls
+compose/compose/cli/formatter.py
+Line 14 in 7ae632a
+ tty_size = os.popen('stty size 2> /dev/null', 'r').read().split() 
+The use of stty is completely invalid on Windows as there is no concept of stty
+A fun way to get the problem to go away is to create the directory c:\dev on Windows. Then after running docker-compose images the file c:\dev\null will be created with the contents:
+PS C:\users\puppet> type \dev\null
+'stty' is not recognized as an internal or external command,
+operable program or batch file.
+Additional information
+Windows 10 Build 1903 (19H1)
+7

@@ -1,0 +1,1 @@
+docker-compose slow on docker for mac os beta

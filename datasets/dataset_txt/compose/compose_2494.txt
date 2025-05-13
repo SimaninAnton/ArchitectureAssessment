@@ -1,0 +1,5 @@
+joemewes commented on 14 Apr 2016
+It would be nice-to-have the command:
+docker-compose stats
+Rather than running manually docker stats [container id] for each container you want to monitor.
+possible?

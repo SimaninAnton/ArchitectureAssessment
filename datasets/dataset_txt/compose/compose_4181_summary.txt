@@ -1,0 +1,1 @@
+scripts/build-linux fails with "ERROR: You are running PyInstaller as user root. This is not supported."

@@ -1,0 +1,20 @@
+cyrusmg commented on 26 Jul 2016
+$ docker-compose -v
+docker-compose version 1.7.0, build 0d7bf73
+$ docker-compose build -no-cache
+Build or rebuild services.
+
+Services are built once and then tagged as `project_service`,
+e.g. `composetest_db`. If you change a service's `Dockerfile` or the
+contents of its build directory, you can run `docker-compose build` to rebuild it.
+
+Usage: build [options] [SERVICE...]
+
+Options:
+    --force-rm  Always remove intermediate containers.
+    --no-cache  Do not use cache when building the image.
+    --pull      Always attempt to pull a newer version of the image.
+$ echo $?
+0
+See last line - the return value should be non-zero as the current state does not work correctly with set -e.
+PS: I am sorry if this is fixed in newer version, I can't test it now.

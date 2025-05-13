@@ -1,0 +1,80 @@
+fescobar commented on 3 Sep 2018
+Description of the issue
+When I tried to use ${PWD} as env variable on Windows, this is not resolved correctly.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"
+services:
+  my-service:
+    build:
+      context: C:\Users\fedar\Documents\git\front-practice\example-docker
+      dockerfile: Dockerfile
+    environment:
+      ANY_PATH: C:/Users/fedar/Documents/git/front-practice/example-docker
+    ports:
+    - 9999:80/tcp
+    volumes:
+    - C:\Users\fedar\Documents\git\front-practice\example-docker\.data:/app/data:rw
+version: '3.0'
+Steps to reproduce the issue
+Download project attached
+example-docker.zip
+Open Git Bash, go to project directory and execute:
+echo ${PWD}
+You will see, for example:
+/c/Users/fedar/Documents/git/front-practice/example-docker
+Note the format returned is /c/...
+I'm passing ANY_PATH as an environment variable with value ${PWD}/.data
+version: '3'
+
+services:
+  my-service:
+    build:
+      context: "./"
+      dockerfile: Dockerfile
+    ports:
+      - "9999:80"
+    volumes:
+      - ".data/:/app/data"
+    environment:
+      - ANY_PATH=${PWD}/.data
+Execute
+docker-compose up -d
+Execute
+docker-compose exec my-service printenv
+Observed result
+You will see this output:
+...
+ANY_PATH=C:/Users/fedar/Documents/git/front-practice/example-docker/.data
+LANG=C.UTF-8
+...
+Where the ANY_PATH variable has this value: C:/Users/fedar/Documents/git/front-practice/example-docker/.data with format stating with C:/...
+Expected result
+The env var should content the right value, in this case starting with right format: /c/...
+ANY_PATH=/c/Users/fedar/Documents/git/front-practice/example-docker/.data
+We need this fix because that is the way that selenoid is using for communicating between containers (aerokube/selenoid#539 (comment))

@@ -1,0 +1,59 @@
+railsonluna commented on 24 Sep 2018 •
+edited
+Description of the issue
+Problem trying to generate a container with the docker-compose up command
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f 25 May 2017
+Output of "docker version"
+Client:
+Version: 18.06.1-ce
+API version: 1.38
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:24:56 2018
+OS/Arch: linux/amd64
+Experimental: false
+Server:
+Engine:
+Version: 18.06.1-ce
+API version: 1.38 (minimum version 1.12)
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:23:21 2018
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+networks:
+default:
+external:
+name: provac
+services:
+build:
+command: bash -c "npm install && npm run-script build-qa"
+image: node:latest
+volumes:
+- /home/railson/projects/provac-backoffice:/var/www/provac-backoffice:rw
+working_dir: /var/www/provac-backoffice
+nginx:
+image: nginx:latest
+ports:
+- 8080:80/tcp
+restart: on-failure:5
+volumes:
+- /home/railson/projects/provac-backoffice:/var/www/provac-backoffice:rw
+- /home/railson/projects/provac-backoffice/docker/qa/qa.test.provac.s2it.com.br.conf:/etc/nginx/conf.d/qa.test.provac.s2it.com.br.conf:rw
+version: '3.0'
+Steps to reproduce the issue
+docker-compose -f qa-docker-compose.yml --verbose up --build
+Observed result
+compose.cli.verbose_proxy.proxy_callable: docker wait <- ('640d344c46d8f9de84c377ec8d1612bf7175b0f537da523975860a5cc57fbe0c')
+compose.cli.verbose_proxy.proxy_callable: docker events <- (filters={'label': ['com.docker.compose.project=provac-backoffice', 'com.docker.compose.oneoff=False']}, decode=True)
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.25/containers/640d344c46d8f9de84c377ec8d1612bf7175b0f537da523975860a5cc57fbe0c/wait HTTP/1.1" 200 30
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.25/events?filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dprovac-backoffice%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker wait -> {'Error': None, 'StatusCode': 0}
+provac-backoffice_build_1 exited with code 0
+compose.cli.verbose_proxy.proxy_callable: docker events -> <docker.types.daemon.CancellableStream object at 0x7fa4a742dba8>
+Expected result

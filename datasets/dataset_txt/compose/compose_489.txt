@@ -1,0 +1,61 @@
+aarongorka commented on 20 Sep 2018
+Description of the issue
+env_file seems to be required on all services even if only specified on a single service.
+Given the following services:
+version: '2.0'
+services:
+  shell:
+    image: alpine
+    volumes:
+      - .:/srv/app:Z
+    working_dir: /srv/app
+
+  ubuntu:
+    image: ubuntu
+    env_file: foobar
+    volumes:
+      - .:/srv/app:Z
+    working_dir: /srv/app
+Running only the service shell returns an error because ./foobar doesn't exist:
+$ docker-compose run --rm shell echo hi
+Couldn't find env file: C:\Users\<username>\Documents\project\foobar
+Context information (for bug reports)
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ Kubernetes:
+  Version:          v1.10.3
+  StackAPI:         Unknown
+$ docker-compose config
+Couldn't find env file: C:\Users\<username>\Documents\project\foobar
+Steps to reproduce the issue
+Create docker-compose.yml with the above example
+Run the command above
+Observed result
+See above
+Expected result
+docker-compose does not try to load an env_file and the command completes successfully.
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Windows 10
+Docker for Windows
+Happens using Powershell or Git Bash

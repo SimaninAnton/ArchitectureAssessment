@@ -1,0 +1,10 @@
+mikehaertl commented on 17 Feb 2015
+I want to provide some complex alias for use with fig run. I therefore added something like this in my Dockerfile:
+FROM php:5.6-apache
+RUN echo "alias myalias='some_lengthy_and_complex_command_with \$ENV_VARS'" >> /etc/bash.bashrc
+I've double checked with docker exec -ti web bash, that the alias is written correctly and it really works: I can use the alias there.
+But if I try to use it with fig run it always fails:
+fig run web myalias
+fig run web bash -c 'myalias'
+The alias is not even shown with fig run web bash -c 'alias'. Any idea, how to solve this?
+UPDATE: The alias is also available from the shell, that opens with fig run web bash. But I need to run the alias non-interactively.

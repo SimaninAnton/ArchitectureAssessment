@@ -1,0 +1,62 @@
+misuzu commented on 6 Mar 2017 •
+edited
+Start docker like this:
+/usr/bin/dockerd -H fd:// --ipv6 --fixed-cidr-v6="fcc7:b4f4:59f2:9971:22ca::/80"
+Now check that IPv6 is working using plain docker:
+$ docker run -it debian bash -c "ip -6 addr show dev eth0; ip -6 route show; ping6 -c3 fcc7:b4f4:59f2:9971:22ca::1"
+67: eth0@if68: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP
+    inet6 fcc7:b4f4:59f2:9971:22ca:242:ac11:2/80 scope global nodad
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:acff:fe11:2/64 scope link tentative
+       valid_lft forever preferred_lft forever
+fcc7:b4f4:59f2:9971:22ca::/80 dev eth0  proto kernel  metric 256
+fe80::/64 dev eth0  proto kernel  metric 256
+default via fcc7:b4f4:59f2:9971:22ca::1 dev eth0  metric 1024
+PING fcc7:b4f4:59f2:9971:22ca::1 (fcc7:b4f4:59f2:9971:22ca::1): 56 data bytes
+64 bytes from fcc7:b4f4:59f2:9971:22ca::1: icmp_seq=0 ttl=64 time=0.343 ms
+64 bytes from fcc7:b4f4:59f2:9971:22ca::1: icmp_seq=1 ttl=64 time=0.110 ms
+64 bytes from fcc7:b4f4:59f2:9971:22ca::1: icmp_seq=2 ttl=64 time=0.093 ms
+--- fcc7:b4f4:59f2:9971:22ca::1 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max/stddev = 0.093/0.182/0.343/0.114 ms
+Looks good! Let's try this stuff using docker-compose:
+version: '2'
+
+services:
+  test:
+    image: debian
+    command: bash -c "ip -6 addr show dev eth0; ip -6 route show; ping6 -c3 fcc7:b4f4:59f2:9971:22ca::1"
+$ docker-compose up
+Recreating droneagent_test_1
+Attaching to droneagent_test_1
+test_1  | 71: eth0@if72: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP
+test_1  |     inet6 fe80::42:acff:fe15:2/64 scope link tentative
+test_1  |        valid_lft forever preferred_lft forever
+test_1  | fe80::/64 dev eth0  proto kernel  metric 256
+test_1  | ping6: sending packet: Network is unreachable
+test_1  | PING fcc7:b4f4:59f2:9971:22ca::1 (fcc7:b4f4:59f2:9971:22ca::1): 56 data bytes
+droneagent_test_1 exited with code 1
+Hmm...
+$ docker-compose version
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 3.5.3
+OpenSSL version: OpenSSL 1.1.0e  16 Feb 2017
+$ docker version
+Client:
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   3a232c8
+ Built:        Tue Feb 28 08:02:23 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.0-ce
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   3a232c8
+ Built:        Tue Feb 28 08:02:23 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Here is output of docker container inspect: https://gist.github.com/misuzu/78421149cbaa32a8c9bbdd94ff1bf4ef

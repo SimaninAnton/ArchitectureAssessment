@@ -1,0 +1,6 @@
+ioaoue commented on 1 Aug 2017
+When a service from file a.yml extends a service from file b.yml which extends another service from file b.yml, docker-compose throws an error:
+
+ERROR: Cannot extend service 'test' in b.yml: Service not found
+Issue introduced in commit: 6ff6528
+Example: https://github.com/ioaoue/docker-compose-extends-issue

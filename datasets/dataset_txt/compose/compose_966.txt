@@ -1,0 +1,31 @@
+cristim commented on 4 Jan 2018 •
+edited
+I'm using the following config file (some parts were taken out for simplicity):
+---
+version: '2'
+services:
+  toolbox:
+    environment:
+      - "USER=${USER}"
+    volumes:
+      - "${HOME}/.toolbox:/home/${USER}/.toolbox"
+I noticed this after updating docker-compose to 1.18.0, build 8dd22a9
+$ docker-compose config
+
+services:
+  toolbox:
+    environment:
+      USER: ''
+    volumes:
+    - /root/.toolbox:/home/.toolbox:rw
+version: '2.0'
+Previously, with version 1.17.1, build 6d101fb it was like expected:
+$ docker-compose config
+services:
+  toolbox:
+    environment:
+      USER: myuser
+    volumes:
+    - /home/myuser/.toolbox:/home/myuser/.toolbox:rw
+version: '2.0'
+1

@@ -1,0 +1,3 @@
+pdonorio commented on 23 May 2017
+Found a bug here:
+the second parameter project_dir sent to that class is not used.

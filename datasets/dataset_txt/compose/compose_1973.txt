@@ -1,0 +1,18 @@
+caervs commented on 29 Oct 2016
+When running
+docker-compose up
+and subsequently restarting one of the services (well after it is fully up) there seems to be an exception that causes the thread monitoring events to die. What I see in the original log stream is
+bms_bms_1 exited with code 137
+bms_bms_1 exited with code 137
+Exception in thread Thread-9:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 197, in watch_events
+  File "compose/project.py", line 343, in events
+  File "site-packages/docker/client.py", line 259, in _stream_helper
+  File "json/__init__.py", line 338, in loads
+  File "json/decoder.py", line 369, in decode
+ValueError: Extra data: line 2 column 1 - line 2 column 616 (char 612 - 1227)
+Since it's easy for me to reproduce I can do some debugging to try to provide some more detail.
+3

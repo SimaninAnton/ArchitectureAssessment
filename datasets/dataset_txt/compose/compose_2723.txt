@@ -1,0 +1,43 @@
+de1m commented on 22 Feb 2016
+Hi, I've a docker-compose.yml file
+httpd:
+image: httpd
+hostname: backup-new-test
+privileged: 'true'
+volumes:
+  - /a/data/backup-new-test/httpdocs:/a/http
+  - /a/data/backup-new-test/httpconf:/a/conf
+restart: always
+labels:
+  backupage: 6M
+  backup: /a/data/backup-new-test
+  prerun:
+    - touch /tmp/id.test
+    - echo test >> /tmp/id.test
+  postrun:
+    - cat /tmp/id.test
+    - rm /tmp/id.test
+  strategy: off
+  include:
+    - /a/data/backup-new-test/inc1
+    - /a/data/backup-new-test/inc2
+    - /a/data/backup-new-test/inc3
+  exclude:
+    - /a/data/backup-new-test/ex1
+    - /a/data/backup-new-test/ex2
+    - /a/data/backup-new-test/ex3
+when I run docker-compose -f /path/docker-compose.yml I get following error:
+WARNING: There is a boolean value in the 'environment' key.
+Environment variables can only be strings.
+Please add quotes to any boolean values to make them string (eg, 'True', 'yes', 'N').
+This warning will become an error in a future release.
+
+ERROR: Validation failed in file '/a/run/backup-new-test/docker-compose.yml', reason(s):
+httpd.privileged contains an invalid type, it should be a boolean
+httpd.labels.prerun contains ["touch /tmp/id.test", "echo test >> /tmp/id.test"], which is an invalid type, it should be a string, number, boolean, or a null
+If I run command
+docker-compose -f /path/docker-compose.yml
+without quotas on privileged or with quotas on prerun I get the same errors.
+Please help me!
+I use v1.6 of docker-compose with ubuntu
+Linux 3.13.0-78-generic #122-Ubuntu x86_64 x86_64 x86_64 GNU/Linux

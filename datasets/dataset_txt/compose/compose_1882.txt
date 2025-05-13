@@ -1,0 +1,8 @@
+yashgt commented on 1 Dec 2016
+In my compose file I have:
+my_server:
+image: yashgt/proc1:latest
+command: "2"
+docker-compose up treats the command as the executable. I get an error that says:
+ERROR: for my_server Cannot start service my_server: oci runtime error: container_linux.go:247: starting container process caused "exec: "2": executable file not found in $PATH"
+There should be a way to retain the entrypoint defined in the dockerfile and only pass a runtime argument to it from the compose file.

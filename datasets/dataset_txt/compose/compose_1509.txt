@@ -1,0 +1,15 @@
+itai-codefresh commented on 23 Apr 2017 •
+edited
+I found a problem that an invalid compose file because of an invalid service name in some-cases throws an error in the output about a totally valid service instead of the real problematic one.
+.yaml file:
+version: '2'
+services:
+    redis:2.8.6:
+      image: 'redis'
+
+    cfloggercon:
+      image: 'redis'
+output:
+ERROR: The Compose file './test.yml' is invalid because:
+Invalid service name 'cfloggercon' - only [a-zA-Z0-9\._\-] characters are allowed
+Clearly the cfloggercon is totally legit.

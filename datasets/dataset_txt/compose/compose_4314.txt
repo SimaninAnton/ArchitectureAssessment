@@ -1,0 +1,2 @@
+merzh commented on 2 Jun 2014
+Can someone give me example of using dns option? Or it haven't supported yet?

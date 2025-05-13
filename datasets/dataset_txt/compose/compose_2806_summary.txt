@@ -1,0 +1,1 @@
+Log stream breaks on container restart for service

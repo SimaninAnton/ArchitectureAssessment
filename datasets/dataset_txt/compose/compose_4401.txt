@@ -1,0 +1,2 @@
+srobertson commented on 17 Feb 2014
+Terminal won't automatically resize ($COLUMNS & $LINES updated) when using fig run . Using vanilla docker commands i.e. docker run -t -i on the exact same image updates on resize.

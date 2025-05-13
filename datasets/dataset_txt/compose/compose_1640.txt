@@ -1,0 +1,44 @@
+ostrolucky commented on 1 Mar 2017
+docker-compose run:
+Run a one-off command on a service.
+
+For example:
+
+    $ docker-compose run web python manage.py shell
+
+By default, linked services will be started, unless they are already
+running. If you do not want to start linked services, use
+`docker-compose run --no-deps SERVICE COMMAND [ARGS...]`.
+
+Usage: run [options] [-p PORT...] [-e KEY=VAL...] SERVICE [COMMAND] [ARGS...]
+
+Options:
+    -d                    Detached mode: Run container in the background, print
+                          new container name.
+    --name NAME           Assign a name to the container
+    --entrypoint CMD      Override the entrypoint of the image.
+    -e KEY=VAL            Set an environment variable (can be used multiple times)
+    -u, --user=""         Run as specified username or uid
+    --no-deps             Don't start linked services.
+    --rm                  Remove container after run. Ignored in detached mode.
+    -p, --publish=[]      Publish a container's port(s) to the host
+    --service-ports       Run command with the service's ports enabled and mapped
+                          to the host.
+    -T                    Disable pseudo-tty allocation. By default `docker-compose run`
+                          allocates a TTY.
+    -w, --workdir=""      Working directory inside the container
+docker-compose exec:
+Execute a command in a running container
+
+Usage: exec [options] SERVICE COMMAND [ARGS...]
+
+Options:
+    -d                Detached mode: Run command in the background.
+    --privileged      Give extended privileges to the process.
+    --user USER       Run the command as this user.
+    -T                Disable pseudo-tty allocation. By default `docker-compose exec`
+                      allocates a TTY.
+    --index=index     index of the container if there are multiple
+                      instances of a service [default: 1]
+Why doesn't exec support environment command? Documentation for docker-compose exec reads "This is equivalent of docker exec." And documentation for docker exec DOES list --env parameter.
+16

@@ -1,0 +1,7 @@
+mathstuf commented on 30 Sep 2018
+Description of the issue
+I'd like to utilize runc's config.json support for hooks in order to leverage the oci-register-machine and oci-systemd-hook hooks for better management of logs and such.
+Not sure if being able to specify config.json is the proper way of doing it, but it seems like it'd be able to work.
+Expected result
+Containers and logs should be available via machinectl and journalctl -M.
+1

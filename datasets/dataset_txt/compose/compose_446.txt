@@ -1,0 +1,37 @@
+myuseringithub commented on 15 Oct 2018 •
+edited
+docker-compose build command seems to handle networks incorrectly
+Running the following build command throws:
+docker-compose -f ./compose.yml build x
+Error:
+WARNING: Some networks were defined but are not used by any service: y
+Building x
+Step 1/2 : FROM alpine:latest
+ ---> 11cd0b38bc3c
+Step 2/2 : RUN echo 'something'
+ ---> Running in 476b14ea1f81
+ERROR: Service 'x' failed to build: network y not found
+yaml compose file compose.yml:
+version: '3.7'
+
+networks: 
+    "y":
+      driver: bridge 
+
+services:
+  "x": 
+    image: alpine:latest 
+    build: 
+        context: ./ 
+        dockerfile: ./dockerfile
+        network: 
+            "y" 
+dockerfile:
+FROM alpine:latest
+RUN echo 'something'
+Additional information
+Docker for Windows (edge channel) also reproduced on stable channel, Windows 10 pro
+Docker version 18.09.0-ce-beta1, build 78a6bdb
+docker-compose version 1.22.0, build f46880fe 
+also throws using:
+docker-compose version 1.23.0-rc2, build 350a555e

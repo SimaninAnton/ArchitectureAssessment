@@ -1,0 +1,1 @@
+Compose preserves data for *all* containers if any mount a volume.

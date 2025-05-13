@@ -1,0 +1,7 @@
+Contributor
+GeyseR commented on 29 Mar 2019
+The PyYAML team recently released version 5.1 of their lib to properly fix CVE-2017-18342 vulnerability. It would be great to add support for this version in docker-compose.
+24
+3
+4
+1

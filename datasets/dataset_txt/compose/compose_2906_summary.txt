@@ -1,0 +1,1 @@
+[DX] Better error message when image for a service is not found

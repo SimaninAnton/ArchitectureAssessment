@@ -1,0 +1,62 @@
+nepda commented on 27 Jan 2018 •
+edited
+I'm getting errors on building a docker-compose service via docker-compose build pagekit (pagekit is the service name)
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.18.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 124, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 254, in build
+    build_args=build_args)
+  File "/usr/lib/python3.6/site-packages/compose/project.py", line 364, in build
+    service.build(no_cache, pull, force_rm, memory, build_args)
+  File "/usr/lib/python3.6/site-packages/compose/service.py", line 967, in build
+    'memory': parse_bytes(memory) if memory else None
+  File "/usr/lib/python3.6/site-packages/docker/api/build.py", line 150, in build
+    path, exclude=exclude, dockerfile=dockerfile, gzip=gzip
+  File "/usr/lib/python3.6/site-packages/docker/utils/build.py", line 14, in tar
+    root=root, fileobj=fileobj, gzip=gzip
+  File "/usr/lib/python3.6/site-packages/docker/utils/utils.py", line 124, in create_archive
+    t.addfile(i, None)
+  File "/usr/lib/python3.6/tarfile.py", line 1973, in addfile
+    buf = tarinfo.tobuf(self.format, self.encoding, self.errors)
+  File "/usr/lib/python3.6/tarfile.py", line 811, in tobuf
+    return self.create_gnu_header(info, encoding, errors)
+  File "/usr/lib/python3.6/tarfile.py", line 842, in create_gnu_header
+    return buf + self._create_header(info, GNU_FORMAT, encoding, errors)
+  File "/usr/lib/python3.6/tarfile.py", line 928, in _create_header
+    itn(info.get("mtime", 0), 12, format),
+  File "/usr/lib/python3.6/tarfile.py", line 215, in itn
+    s.insert(1, n & 0o377)
+TypeError: unsupported operand type(s) for &: 'float' and 'int'
+With other services there seems to be no problem. After digging around I've added some dirty debug outputs in file /usr/lib/python3.6/tarfile.py line ~920
+print(info.get("name"))
+print(info.get("mtime"))
+Very dirty, but I've no Python skills. So the output become something like
+pagekit/packages/pagekit/theme-X/css/theme.css
+1450195090.0
+pagekit/packages/pagekit/theme-X/image.jpg
+1467289206.0
+pagekit/packages/pagekit/theme-X/index.php
+1450195090.0
+pagekit/packages/pagekit/theme-X/js/
+-3600.0
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+So the negative mtime output seems to be the problem. See stat output for more details
+stat pagekit/packages/pagekit/theme-X/js/
+  Datei: pagekit/packages/pagekit/theme-X/js/
+  Größe: 4096           Blöcke: 8          EA Block: 4096   Verzeichnis
+Gerät: fe00h/65024d     Inode: 28192270    Verknüpfungen: 2
+Zugriff: (0777/drwxrwxrwx)  Uid: ( 1000/   nepda)   Gid: ( 1000/   nepda)
+Zugriff    : 1970-01-01 01:00:00.000000000 +0100
+Modifiziert: 1970-01-01 00:00:00.000000000 +0100
+Geändert   : 2018-01-27 15:09:57.349325862 +0100
+ Geburt    : -
+(Sorry about the German output)
+With a touch:
+touch pagekit/packages/pagekit/theme-X/js/
+the build was successful again.
+It would be nice, if the build fails with a meaningful message or the behavior should be changed.

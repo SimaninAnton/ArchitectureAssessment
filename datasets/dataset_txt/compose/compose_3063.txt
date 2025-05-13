@@ -1,0 +1,8 @@
+Contributor
+simonvanderveldt commented on 22 Nov 2015
+There are known issues with Alpine based images when used together with Virtualbox Shared folders which have shared folders/files not or only partially updating inside the container.
+See the experiences @dduportal had with his docker-compose image in dduportal-dockerfiles/docker-compose#7 and dduportal-dockerfiles/docker-compose#7
+I ran into the same issues again when using the docker/compose image.
+Switched to @dduportal's dduportal/docker-compose image solved these issues.
+Can we work together on this and create an official fully working image?
+FYI I'm not sure where the actual issue originates, it's somehow a combination of Virtualbox shared folders with an Alpine based image. I wouldn't be surprised if Virtualbox is to blame, but since switching to another base OS like Debian solves the issues I think that would be the smart thing to do right now.

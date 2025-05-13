@@ -1,0 +1,1 @@
+Docker compose pull does not work with custom registry

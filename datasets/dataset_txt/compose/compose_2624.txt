@@ -1,0 +1,3 @@
+iamKurt commented on 15 Mar 2016
+Any reason not to install docker-compose on the docker-machine created virtual host? Since docker is installed by default to install the Docker daemon, I'm wondering whether it's ok to also install docker-compose. If there's no reason not to install compose on the virtual host, then is there a best practice way to install it?
+Thanks!

@@ -1,0 +1,43 @@
+mikehaertl commented on 21 Sep 2016 •
+edited
+I have 2 projects, both live in a directory named app/ and both define a service named web in their docker-compose.yml file:
+.
+├── a
+│   └── app
+│       ├── docker-compose.yml
+│       └── Dockerfile
+└── b
+    └── app
+        ├── docker-compose.yml
+        └── Dockerfile
+a/app/docker-compose.yml
+version: '2'
+services:
+    web:
+        build: ./
+        image: a_image
+        container_name: a_container
+b/app/docker-compose.yml
+version: '2'
+services:
+    web:
+        build: ./
+        image: b_image
+        container_name: b_container
+Now when I start the web service in project a, then go to project b, docker-compose mistakenly operates on the containers for project a:
+$ cd a/app
+$ docker-compose up -d
+Starting a_container
+$ docker-compose ps
+   Name            Command           State             Ports         
+--------------------------------------------------------------------
+a_container   apache2-foreground   Restarting   0.0.0.0:9002->80/tcp 
+
+$ cd ../../b/app
+$ docker-compose ps
+   Name            Command           State             Ports         
+--------------------------------------------------------------------
+a_container   apache2-foreground   Restarting   0.0.0.0:9002->80/tcp
+It works correctly if I change the service name from web to e.g. web_b - but I don't want that. The same setup worked fine with docker-compose 1.7.0. It seems like in only happens after upgrading to 1.8.0. I also see this on multiple machines now.
+My docker version is 1.12.1.
+13

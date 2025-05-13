@@ -1,0 +1,49 @@
+amackera commented on 23 Jul 2014
+When trying to fig up, it fails complaining with the following:
+Cannot start container 298c03e05b4eec8a3268b0aa36467f4649d831e68aae08fb3c6e4382e9b8b2bd: finalize namespace close open file descriptors open /proc/self/fd: no such file or directory
+My fig.yml looks like this:
+db:                                                                                                                                                                                                                                                                                                                            
+  build: ./mysql                                                                
+  volumes: /home/amackera/data/mysql:/var/lib/mysql                             
+  ports:                                                                        
+    - "3306:3306"                                                               
+
+thm:                                                                            
+  build: ./app                                                                  
+  volumes: /home/amackera/work/vm/vagrant/projects/thm/THM:/var/www/app         
+  ports:                                                                        
+    - "8100:8100"                                                               
+  links:                                                                        
+    - db                                                                        
+    - broker                                                                    
+    - cache                                                                     
+
+broker:                                                                         
+  build: ./rabbitmq                                                             
+  ports:                                                                        
+    - "5673:5672"                                                               
+    - "15673:15672"                                                             
+
+cache:                                                                          
+  build: ./memcached                                                            
+  ports:                                                                        
+    - "11211:11211"                                                             
+
+cottontail:                                                                     
+  build: ./cottontail                                                           
+  volumes: /home/amackera/work/vm/vagrant/projects/thm/Cottontail:/var/www/cottontail
+  ports:                                                                        
+    - "8001:8001"                                                               
+  links:                                                                        
+    - broker                                                                    
+
+worker:                                                                         
+  build: ./worker                                                               
+  volumes: /home/amackera/work/vm/vagrant/projects/thm/THM:/var/www/app         
+  links:                                                                        
+    - db                                                                        
+    - broker                                                                    
+    - cache    
+Also, after running fig up there are a bunch of empty directories named a and b, etc. in the directory that I keep my fig.yml file.
+Any ideas?
+Tested with fig version 0.5.0 and 0.5.1, and with docker version 1.1.0 and 1.1.1.

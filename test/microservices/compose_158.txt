@@ -1,0 +1,52 @@
+F21 commented on 12 Jun 2019 •
+edited
+Description of the issue
+docker-compose run does not honor stdin_open: false and runs the container in interactive mode. I am using docker-compose run to run a one-off job on jenkins, but jenkins is not able to see that the job has finished due to docker-compose opening stdin. This results in the job running forever until it times out.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa5906
+docker-py version: 3.7.2
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Output of docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:10:54 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Output of docker-compose config
+version: '3'
+services:
+  build-site:
+    image: jekyll/jekyll:3
+    command: jekyll build
+    volumes:
+      - .:/srv/jekyll
+    stdin_open: false
+Compose logs (relevant bit):
+compose.cli.verbose_proxy.proxy_callable: docker connect_container_to_network <- ('80ec99cfa149eceff3a9862d6c06730752f56b4e2babbdb7bb03512a657fbbcf', 'site_default', aliases=[], ipv4_address=None, ipv6_address=None, links=[], link_local_ips=None)
+urllib3.connectionpool._make_request: http://localhost:2375 "POST /v1.25/networks/site_default/connect HTTP/1.1" 200 0
+compose.cli.verbose_proxy.proxy_callable: docker connect_container_to_network -> None
+compose.cli.main.call_docker: /usr/bin/docker start --attach --interactive 80ec99cfa149eceff3a9862d6c06730752f56b4e2babbdb7bb03512a657fbbcf
+Steps to reproduce the issue
+Run docker-compose --verbose run build-site
+See that docker start is being called with the --interactive flag despite stdin_open being set to false: compose.cli.main.call_docker: /usr/bin/docker start --attach --interactive 80ec99cfa149eceff3a9862d6c06730752f56b4e2babbdb7bb03512a657fbbcf
+Observed result
+Docker-compose attaches to the container's stdin
+Expected result
+Docker-compose should not attach to the container's stdin
+Stacktrace / full error message
+None
+Additional information
+Jenkins 2.150.1

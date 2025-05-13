@@ -1,0 +1,4 @@
+lusinking commented on 16 Feb 2017
+I have a container monitor to monitor the traffic of application container, and have two timeouts, one is small, if this timeout reached, I will pause the container, and the other one is lager, if this timeout reached, I will stop the container, but actually, when the second timeout reached, the stop invokation gives an error as follows:
+Cannot kill container 70086d37f90d: Container 70086d37f90df119d09b7d663bb46029999aeab711b9650b9f43c23958da1d5d is paused. Unpause the container before stopping
+so is there any way to stop the paused container ignore the status of running or paused, or it will generate more work to do, and more work means more scene to consider, and also may cause some prolems if the operations is not atomic

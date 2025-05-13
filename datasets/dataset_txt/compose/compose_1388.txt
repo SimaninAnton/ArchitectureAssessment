@@ -1,0 +1,6 @@
+jamshid commented on 14 Jun 2017 •
+edited
+This is a followup to #4803.
+Using docker-compose version 1.14.0-rc2, build 24dae73 I see that docker-compose up -d foo also stops and removes containers for another (dependent) bar services that had been scaled with docker-compose up -d --scale bar=3.
+Even using --no-deps does not help.
+That seems undesirable, and more importantly, it is a breaking change in behavior.

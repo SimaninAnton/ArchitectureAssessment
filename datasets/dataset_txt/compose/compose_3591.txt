@@ -1,0 +1,27 @@
+edwinlunando commented on 4 Jun 2015
+Hi! I want to go to my container console, so I run docker-compose run web bash, but, it raise an error.
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.2.0', 'console_scripts', 'docker-compose')()
+  File "/Library/Python/2.7/site-packages/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/Library/Python/2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Library/Python/2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Library/Python/2.7/site-packages/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/Library/Python/2.7/site-packages/compose/cli/main.py", line 345, in run
+    dockerpty.start(project.client, container.id, interactive=not options['-T'])
+  File "/Library/Python/2.7/site-packages/dockerpty/__init__.py", line 27, in start
+    PseudoTerminal(client, container, interactive=interactive, stdout=stdout, stderr=stderr, stdin=stdin).start()
+  File "/Library/Python/2.7/site-packages/dockerpty/pty.py", line 154, in start
+    self._hijack_tty(pumps)
+  File "/Library/Python/2.7/site-packages/dockerpty/pty.py", line 242, in _hijack_tty
+    write_stream.do_write()
+  File "/Library/Python/2.7/site-packages/dockerpty/io.py", line 164, in do_write
+    raise e
+OSError: [Errno 32] Broken pipe
+Is it a bug?

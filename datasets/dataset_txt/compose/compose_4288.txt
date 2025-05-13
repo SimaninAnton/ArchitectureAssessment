@@ -1,0 +1,3 @@
+stefanfoulis commented on 4 Jul 2014
+I usually have a console open that just shows the output of fig logs. In a other console I use fig start ... and fig stop ... and other commands to alter the environment.
+Every time a service is stopped, the logs command also exists.

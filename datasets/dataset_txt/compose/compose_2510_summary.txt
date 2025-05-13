@@ -1,0 +1,1 @@
+Allowing more than one cpu core when using docker-compose up

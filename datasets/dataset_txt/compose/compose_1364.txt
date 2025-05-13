@@ -1,0 +1,37 @@
+mbentley commented on 26 Jun 2017
+When running a docker-compose create, it fails due to the networks not being created:
+$ docker-compose create
+Creating temp_test1_1 ...
+Creating temp_test1_1 ... error
+
+ERROR: for temp_test1_1  Cannot create container for service test1: Error: No such network: temp_test-overlay
+ERROR: Cannot create container for service test1: Error: No such network: temp_test-overlay
+My docker-compose.yml
+version : "2"
+
+services:
+  test1:
+    image: dtr.demo.dckr.org/official/alpine:latest
+    command: ping 127.0.0.1
+    networks:
+      - test-overlay
+    volumes:
+      - test1:/data
+
+  test2:
+    image: dtr.demo.dckr.org/official/alpine:latest
+    command: ping 127.0.0.1
+    networks:
+      - test-overlay
+    volumes:
+      - test1:/data
+
+networks:
+  test-overlay:
+
+volumes:
+  test1:
+    driver: local
+  test2:
+    driver: local
+Is this expected behavior to not create the necessary resources for a create to run successfully?

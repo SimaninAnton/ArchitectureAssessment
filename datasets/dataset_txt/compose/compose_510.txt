@@ -1,0 +1,7 @@
+nmaro commented on 6 Sep 2018
+This option has been discussed in a couple of tickets but never had a ticket for itself.
+One should be able to execute
+docker-compose up --env-file=.env.test (perhaps multiple env files)
+to override the usage of .env file.
+256
+4

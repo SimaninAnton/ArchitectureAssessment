@@ -1,0 +1,18 @@
+reduardo7 commented on 16 Feb 2018 •
+edited
+Reopen #1809
+Hi,
+It will be very helpful to have something like "onrun" in the YAML to be able to run commands after the run. Similar to moby/moby#8860
+mongodb:
+    image: mongo:3.0.2
+    hostname: myhostname
+    domainname: domain.lan
+    volumes:
+        - /data/mongodb:/data
+    ports:
+        - "27017:27017" 
+    onrun:
+        - mongodump --host db2dump.domain.lan --port 27017 --out /data/mongodb/dumps/latest
+        - mongorestore -d database /data/mongodb/dumps/latest/database
+After the mongodb start, It will dump db2dump.domain.lan and restore it.
+When I will stop and then start the container, onrun part will no be executed to preserve idempotency.

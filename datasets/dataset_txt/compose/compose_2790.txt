@@ -1,0 +1,17 @@
+adamiprinciples commented on 12 Feb 2016
+When I try to run docker-compose build for my api project, everytime without fail I get
+Step 6 : COPY dist/api.js dist/api.js
+ERROR: Service 'api' failed to build: lstat dist/api.js: no such file or directory
+The file definitely exists. I've tried renaming it, moving it, almost everything and cannot get it to work. Everything works fine under OSX.
+Any ideas?
+EDIT: here is the relevant part of my dockerfile
+WORKDIR /src
+COPY package.json package.json
+RUN npm install
+
+COPY dist/api.js dist/api.js
+
+Expose port
+EXPOSE 3000
+
+CMD ["npm", "run", "api"]

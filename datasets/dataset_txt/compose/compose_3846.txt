@@ -1,0 +1,10 @@
+nicolaferraro commented on 12 Mar 2015
+I am evaluating docker-compose for my development team and I set up a docker VM on Azure. For firewall restrictions, I configured the VM instance to forward public port 21 to the docker daemon.
+I set up the environment variables as follows:
+DOCKER_HOST=tcp://myhostonazure.cloudapp.net:21
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/Users/myusernameonmac/.docker
+I can use docker without any issue. When I try to use docker-compose build in the same shell, I always receive the following error:
+Couldn't connect to Docker daemon - you might need to run `boot2docker up`.
+Bu I don't want to use boot2docker, and the docker daemon is configured correctly on the remote machine. I am using the docker-compose binaries (downloadable with pip) for mac.
+If I just change the port from 21 to 2375 (with a SSH tunnel) everything works fine. How can I get rid of this issue ?

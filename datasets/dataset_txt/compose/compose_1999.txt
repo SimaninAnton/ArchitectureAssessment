@@ -1,0 +1,9 @@
+dolanor commented on 20 Oct 2016
+Hi,
+I got this problem today and I couldn't stop, start, up my compose. It would fail and write:
+docker-compose down 
+WARNING: The ETCD_DISCOVERY variable is not set. Defaulting to a blank string.
+ERROR: stat /var/lib/docker/overlay/887b8e0056eec560706d8b38e7e1d33861304bfc26edd5112d4c7c79941ccb50: no such file or directory
+It looked like it was some container/image not able to find its reference data. I didn't have any tool to automatically find that, so I did it empircally and found that:
+e7ed7b1fb922        domus:local   "cal.sh"                 35 minutes ago      Dead                                              e7ed7b1fb922_domusapi_domus-cal-srv_1
+So, it seems that if 1 container is dead in the whole compose services, docker-compose is useless unless you manually delete the faulty container with a good docker rm -f.

@@ -1,0 +1,18 @@
+garyrutland commented on 23 Oct 2015
+Hi,
+I've seen a few people having this issue but can't see a way to resolve my issue.
+Running "docker-compose up" seems to hang when getting to attach.
+I'm not doing anything fancy at the moment as I was just getting a working prototype first:
+web:
+  image: my-image
+  ports:
+    - 80
+    - 443
+  volumes:
+    - .:/var/www
+I've downloaded the most up to date toolbox to my Mac, these are the versions I'm running...
+Mac OSX: 10.11.1
+Docker: Docker version 1.8.3, build f4bf5c7
+Docker compose: docker-compose version: 1.4.2
+Thanks,
+Gary

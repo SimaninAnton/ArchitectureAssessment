@@ -1,0 +1,2 @@
+divideby0 commented on 22 Apr 2015
+Now that Docker 1.6 supports ulimit options, it would be nice to have this as an option for containers managed by compose, similar to mem_limit, cpu_shares, etc.

@@ -1,0 +1,14 @@
+ctrahhuk commented on 16 Mar 2018 •
+edited
+Consider that i have service with maven container
+container_name: mvn
+image: maven:3.3-jdk-8
+#services will wait for mvn container to complete build
+healthcheck:
+  test: "exit 1"
+  interval: 2s
+  timeout: 10s
+  retries: 30
+...
+Now when I do 'up' or 'up -d', console hangs until maven container completes, and only then logs are attached
+I can run 'docker-compose logs - f -t', but in new console instance. I wonder how can I avoid this ?

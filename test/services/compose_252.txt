@@ -1,0 +1,41 @@
+leem32 commented on 16 Mar 2019
+How do I turn off namespacing for a container using the userns_mode option.
+When I run the command docker-compose pull && docker-compose up -d, I get:
+ERROR: The Compose file './docker-compose.yml' is invalid because: Unsupported config option for services.remark: 'userns_mode'
+I place userns_mode in the file like this:
+version: '2'
+
+services:
+
+    remark:
+        build: .
+        image: umputun/remark42:latest
+        container_name: "remark42"
+        hostname: "remark42"
+        # disables user namespaces for this container
+        userns_mode: "host"
+        restart: always
+        ...
+I'm using the latest docker compose version:
+docker-compose -v
+docker-compose version 1.23.2, build 1110ad01
+and a recent docker version:
+docker -v
+Docker version 18.09.1, build 4c52b90
+According to the docs, support for userns_mode was added in docker compose version 1.9.0+.
+userns_mode added
+Version 2.1
+An upgrade of version 2 that introduces new parameters only available with Docker Engine version 1.12.0+. Version 2.1 files are supported by Compose 1.9.0+.
+
+Introduces the following additional parameters:
+
+link_local_ips
+isolation in build configurations and service definitions
+labels for volumes and networks
+name for volumes
+userns_mode
+healthcheck
+sysctls
+pids_limit
+oom_kill_disable
+cpu_period

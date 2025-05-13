@@ -1,0 +1,11 @@
+rchadalawada commented on 25 Oct 2017 •
+edited
+I was trying to use depends_on: on a service started outside the docker-compose file
+depends_on:
+mydb:
+condition: service_healthy
+It would be nice to specify something like
+services:
+mydb:
+external: true
+I see that this option is available for volumes and network but not for services.

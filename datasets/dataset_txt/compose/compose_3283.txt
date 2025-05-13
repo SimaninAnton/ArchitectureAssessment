@@ -1,0 +1,42 @@
+ahmetb commented on 16 Sep 2015
+I realized if I run two docker-compose up -d processes at the same time and if the image in the yml is missing, then one proceeds and the other one immediately gets one of the following errors.
+I think compose can have better retries/handling around this case.
+error 1
+Looks like a deserialization issue:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 32, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 471, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 245, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 318, in execute_convergence_plan
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 212, in create_container
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 243, in ensure_image_exists
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 714, in pull
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 18, in stream_output
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json", line 338, in loads
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json.decoder", line 366, in decode
+  File "/compose/build/docker-compose/out00-PYZ.pyz/json.decoder", line 384, in raw_decode
+ValueError: No JSON object could be decoded
+error 2
+Most likely happens when the client pulling the image exits compose while image was being pulled, and the next requester just hangs...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 32, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 471, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 245, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 318, in execute_convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 212, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 243, in ensure_image_exists
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 714, in pull
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 17, in stream_output
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 171, in _stream_helper
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.packages.urllib3.response", line 246, in read
+requests.packages.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))

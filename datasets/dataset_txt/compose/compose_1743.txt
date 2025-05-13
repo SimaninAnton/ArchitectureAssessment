@@ -1,0 +1,9 @@
+nicodmf commented on 30 Jan 2017
+I use in docker compose :
+services:
+    apache:
+        networks: [front, app]
+        ports: [ "0.0.0.0:80:80" ] 
+but this is not equivalent to
+docker service create --publish mode=host,target=80,published=80
+Actually, i must delete the service created with docker deploy and recreate it with docker service create. Exist-it another solution to provide the same behavior with a good docker-compose.yml.

@@ -1,0 +1,6 @@
+iamKurt commented on 21 Mar 2016
+Is there a way for compose to store (as an environment variable) the container ID of a running container? It would also be nice if there is a way for compose to store in an env var the image ID that a container was made from. If this is something that compose can already do, how would I go about doing this?
+Here's the background on what I'm trying to solve for:
+If Jenkins is creating images and spinning up containers for testing, I need a way to uniquely identify the logs from each container so that when I copy them out of the Jenkins workspace I know which image/container generated which log. If specifying the container ID as an env var is possible, then I can add this as the name of the logging file by specifying this in the compose file:
+log.file=${CONTAINER_ID}-${COMPOSE_PROJECT_NAME}.log
+Thanks...any thoughts about this are greatly appreciated!

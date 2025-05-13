@@ -1,0 +1,7 @@
+avoinea commented on 27 Oct 2015
+Motivation for this proposal
+Possibility to bulk remove all container except some (e.g. data container).
+Proposal
+Add --exclude option for rm command:
+  $ docker-compose rm -v --exclude data
+The command above should remove all containers, except data one.

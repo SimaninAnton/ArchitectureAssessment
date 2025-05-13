@@ -1,0 +1,23 @@
+dottgonzo commented on 24 Apr 2019 •
+edited
+Description of the issue
+using this volume config on a docker compose compose:
+.....................
+    volumes:
+      - type: bind
+        source: /media
+        target: /media
+        bind:
+          propagation: 'shared'
+      - /system/burning:/media/burning
+
+..........................
+will add as mounted the folder "burning" on host (on bash: mount | grep burning will list it), and it will be never marked as unmounted even when the image will be stopped (as expected)
+when the service will be update o reinstanced, it will add another mount point to the host (identical) and so on, untill on the host the folder will be mounted so many times that it will start to cause unexpected issues like the unabilities to extract an image or updating systemd services, hang of the df command, etc...
+Steps to reproduce the issue
+create a service with a shared mountpoint
+add to the target mountpoint just created, another volume on the same target
+verify that on the host it will appear by listing the mounts
+remove or update the service many times untill you can see that trying to pull an image from a registry became impossibile, because the extract process will hang (or try to run systemd commands like stopping/starting services)
+mitigation
+disable the ability to mount nested folders inside a shared mountpoint

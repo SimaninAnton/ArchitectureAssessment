@@ -1,0 +1,5 @@
+danielpanteleit commented on 23 Jan 2018
+The docker CLI allows to configure proxy configuration via config.json in your .docker directory:
+docker/cli#93
+This proxy configuration is not used when running or building containers via docker-compose. This would have the advantage that you don't need to put any proxy related info in the docker-compose.yml. Then one could use the same docker-compose.yml for both environments (w/ and w/o proxies).
+2

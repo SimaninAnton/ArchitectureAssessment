@@ -1,0 +1,3 @@
+schickling commented on 7 Jan 2014
+A timeout occurs while installing some packages via apt in a Ubuntu VM.
+A possible solution would be to increase the timeout interval?

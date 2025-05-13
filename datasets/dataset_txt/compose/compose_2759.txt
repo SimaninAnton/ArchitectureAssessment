@@ -1,0 +1,33 @@
+ghost commented on 17 Feb 2016
+> uname -a
+Linux mycomputername 3.13.0-77-generic #121-Ubuntu SMP Wed Jan 20 10:50:42 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+> docker -v
+Docker version 1.10.1, build 9e83765
+> docker-compose -v
+docker-compose version 1.6.0, build d99cad6
+According to the docs https://docs.docker.com/compose/reference/up/,
+--abort-on-container-exit should
+Stop all containers if any container was stopped.
+docker-compose.yml:
+version: "2"
+
+services:
+    loop1:
+        image: ubuntu:latest
+        command: bash -c 'for i in {1..5}; do echo $$i && sleep 1; done'
+        stop_signal: SIGKILL
+
+    loop2:
+        image: ubuntu:latest
+        command: bash -c 'for i in {1..10}; do echo $$i && sleep 1; done'
+        stop_signal: SIGKILL
+After docker-compose up --abort-on-container-exit both containers start sending log messages.
+When loop1 exits, documentation suggests that loop2 will also be stopped. This does not happen, which can be confirmed by executing docker-compose ps shortly after loop1 exits.
+An other issue which may be related:
+When hitting Ctrl-C after docker-compose up I would expect this:
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping dockercompose_loop1_1 ... done
+Stopping dockercompose_loop2_1 ... done
+This is only happening occasionally, most of the time I get this instead:
+^CERROR: Aborting.
+Also, the containers remain up.

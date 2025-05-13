@@ -1,0 +1,6 @@
+mlowicki commented on 17 Nov 2017
+I was checking why running every command of docker-compose takes 2-3s and it turned out that
+compose/compose/cli/__init__.py
+Line 19 in d48002a
+ s_cmd = subprocess.Popen( 
+is the reason. Maybe we can add some flag to disable such check?

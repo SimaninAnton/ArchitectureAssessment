@@ -1,0 +1,15 @@
+stampycode commented on 5 Jan 2017
+When using the .dockerignore file, the warning when trying to use a file that matches this list is output as if the file doesn't exist at all, whereas it is actually just being ignored.
+This took me some time to figure out, and should be made clearer.
+The file does exist, it is just being ignored - the error message should say so.
+.dockerignore
+bbb
+Dockerfile
+FROM busybox:latest
+ADD aaa bbb
+docker build . output:
+Sending build context to Docker daemon  8.08 MB
+Step 1 : FROM busybox:latest
+ ---> 1efc1d465fd6
+Step 2 : ADD aaa bbb
+lstat bbb: no such file or directory

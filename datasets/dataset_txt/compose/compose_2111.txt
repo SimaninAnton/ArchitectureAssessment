@@ -1,0 +1,146 @@
+nevstokes commented on 30 Aug 2016 •
+edited
+Hey. I'm having an issue when restarting Docker and consistently getting exceptions thrown. I'm using OS X Yosemite (v10.10.5). I've recently switched over to the stable version from the beta where I don't remember this happening.
+The same kind of trace also seems to sporadically happen of its own accord but I can reliably reproduce the error by restarting using the OS X Menu icon.
+Trace copied below:
+Exception in thread Thread-9:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 149, in tail_container_logs
+  File "compose/cli/log_printer.py", line 179, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 441, in wait
+  File "site-packages/docker/client.py", line 174, in _raise_for_status
+APIError: 502 Server Error: Bad Gateway ("Bad response from Docker engine")
+
+Exception in thread Thread-6:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 149, in tail_container_logs
+  File "compose/cli/log_printer.py", line 179, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 441, in wait
+  File "site-packages/docker/client.py", line 174, in _raise_for_status
+APIError: 502 Server Error: Bad Gateway ("Bad response from Docker engine")
+
+Exception in thread Thread-10:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 149, in tail_container_logs
+  File "compose/cli/log_printer.py", line 179, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 441, in wait
+  File "site-packages/docker/client.py", line 174, in _raise_for_status
+APIError: 502 Server Error: Bad Gateway ("Bad response from Docker engine")
+
+Exception in thread Thread-8:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 149, in tail_container_logs
+  File "compose/cli/log_printer.py", line 179, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 441, in wait
+  File "site-packages/docker/client.py", line 174, in _raise_for_status
+APIError: 502 Server Error: Bad Gateway ("Bad response from Docker engine")
+
+Exception in thread Thread-11:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 190, in watch_events
+  File "compose/project.py", line 356, in events
+  File "compose/container.py", line 42, in from_id
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 182, in inspect_container
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 140, in _get
+  File "site-packages/requests/sessions.py", line 477, in get
+  File "site-packages/requests/sessions.py", line 465, in request
+  File "site-packages/requests/sessions.py", line 573, in send
+  File "site-packages/requests/adapters.py", line 415, in send
+ConnectionError: ('Connection aborted.', BadStatusLine("''",))
+docker-compose.yml:
+version: '2'
+
+volumes:
+    node_modules:
+        driver: local
+    logs:
+        driver: local
+
+services:
+    application:
+        image: doc-registry.uk.novamedia.com/php-webserver:latest
+        working_dir: /var/www
+        entrypoint: ./opt/dev/deployment/start.sh
+        ports:
+            - 80
+        volumes:
+            - ./opt/dev/php/conf.d:/usr/local/etc/php/conf.d
+            - ./opt/dev/php/php.ini:/usr/local/etc/php/php.ini
+            - ./opt/dev/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - .:/var/www
+            - logs:/var/www/app/logs
+        dns_search:
+            - pluk.eeghlan.net
+        dns:
+            - 172.26.10.2
+            - 10.2.0.10
+        depends_on:
+            - database
+            - cache_and_logs
+            - beanstalkd
+            - elasticsearch
+            - redis
+
+    beanstalkd:
+        image: schickling/beanstalkd
+        ports:
+            - 11300
+
+    cache_and_logs:
+        image: busybox
+        volumes:
+            - /var/www/var/cache
+            - /var/www/var/logs
+            - /var/www/web/assets
+            - /var/www/web/bundles
+
+    database:
+        image: postgres
+        environment:
+            - POSTGRES_DB=dbname
+            - POSTGRES_USER=dbuser
+            - POSTGRES_PASSWORD=dbpass
+        ports:
+            - 5432
+
+    elasticsearch:
+        image: willdurand/elk
+        volumes:
+            - ./opt/dev/elk/logstash:/etc/logstash
+            - logs:/var/www/app/logs
+        ports:
+            - 80
+            - 9200
+
+    node:
+        image: node:5.6
+        command: ./opt/dev/node/run.sh
+        working_dir: /var/www
+        volumes:
+            - .:/var/www
+            - node_modules:/var/www/node_modules
+        volumes_from:
+            - cache_and_logs
+
+    redis:
+        image: redis

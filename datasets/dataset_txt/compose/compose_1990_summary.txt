@@ -1,0 +1,1 @@
+UnicodeEncodeError: 'ascii' codec can't encode character '\xd6' in position 36: ordinal not in range(128)

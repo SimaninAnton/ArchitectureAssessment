@@ -1,0 +1,145 @@
+pgerhard commented on 6 Jun 2018 •
+edited
+Description of the issue
+I am attempting to create a customized Jenkins container and in oder to have an easier time running builds I would like to install docker and docker-compose into this container. Installing docker works perfectly fine and I can use docker from within my build jobs.
+However installing docker-compose based on the instructions found on the homepage does not.
+Context information (for bug reports)
+Output of "docker version": Docker version 18.03.1-ce, build 9ee9f40
+Steps to reproduce the issue
+Create a Dockerfile with the following content (the sections that are commented out are usually run, but are not necessary for reproducing this issue)
+FROM jenkins/jenkins:lts-alpine
+
+# Skip initial setup
+# ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+
+# Default user and password
+# ENV JENKINS_USER admin
+# ENV JENKINS_PASS admin
+
+# Create default user
+# COPY default-user.groovy /usr/share/jenkins/ref/init.groovy.d/
+
+# Install Docker CLI and additional APK packages
+USER root
+
+# Install gettext to have envsubst command
+RUN apk update \
+    && apk add gettext
+
+RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz \
+  && tar xzvf docker-18.03.1-ce.tgz \
+  && mv docker/docker /usr/local/bin \
+  && rm -r docker docker-18.03.1-ce.tgz
+
+RUN curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose \ 
+    && chmod +x /usr/local/bin/docker-compose
+
+# Install default plugins
+# Category: Organization and Administration
+RUN /usr/local/bin/install-plugins.sh dashboard-view
+RUN /usr/local/bin/install-plugins.sh cloudbees-folder
+RUN /usr/local/bin/install-plugins.sh antisamy-markup-formatter
+
+# Category: Build Features
+RUN /usr/local/bin/install-plugins.sh build-timeout
+RUN /usr/local/bin/install-plugins.sh credentials-binding
+RUN /usr/local/bin/install-plugins.sh timestamper
+RUN /usr/local/bin/install-plugins.sh ws-cleanup
+RUN /usr/local/bin/install-plugins.sh command-launcher
+
+# Category: Build Tools
+RUN /usr/local/bin/install-plugins.sh ant
+RUN /usr/local/bin/install-plugins.sh gradle
+
+# Category: Build Analysis and Reporting
+RUN /usr/local/bin/install-plugins.sh junit
+RUN /usr/local/bin/install-plugins.sh checkstyle
+RUN /usr/local/bin/install-plugins.sh findbugs
+
+# Category: Pipelines and Continuous Delivery
+RUN /usr/local/bin/install-plugins.sh workflow-aggregator
+RUN /usr/local/bin/install-plugins.sh github-branch-source
+RUN /usr/local/bin/install-plugins.sh pipeline-github-lib
+RUN /usr/local/bin/install-plugins.sh pipeline-stage-view
+RUN /usr/local/bin/install-plugins.sh pipeline-utility-steps
+
+# Category: Source Code Management
+RUN /usr/local/bin/install-plugins.sh git
+RUN /usr/local/bin/install-plugins.sh gitlab-plugin
+RUN /usr/local/bin/install-plugins.sh subversion
+
+# Category: Distributed Builds
+RUN /usr/local/bin/install-plugins.sh ssh-slaves
+
+# Category: User Management and Security
+
+# Category: Notifications and Publishing
+RUN /usr/local/bin/install-plugins.sh email-ext
+RUN /usr/local/bin/install-plugins.sh mailer
+RUN /usr/local/bin/install-plugins.sh publish-over-ssh
+RUN /usr/local/bin/install-plugins.sh ssh
+Start this Dockerfile using docker-compose on the host machine using
+version: '3'
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile      
+    restart: always
+    image: custom-jenkins:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/jenkins_home:/var/jenkins_home
+    environment:
+      - "JENKINS_OPTS=--prefix=/jenkins"
+    ports:
+      - 8080:8080
+Attempt to run a pipeline which uses docker-compose
+pipeline {
+    agent any
+
+    stages {
+        stage('Restart docker-compose with new version'){
+            steps{
+                script {
+                    sh 'docker-compose --version'
+                }
+            }
+        }
+    }
+}
+This build will fail with an output similar to
+Started by user admin
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/Docker Compose test
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Restart docker-compose with new version)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+[Docker Compose test] Running shell script
++ docker-compose --version
+/var/jenkins_home/workspace/Docker Compose test@tmp/durable-1cdcb1ed/script.sh: line 1: docker-compose: not found
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 127
+Finished: FAILURE
+Access the container directly using "docker exec -it <CONTAINER_ID> /bin/bash
+Run "docker --version" this should produce the output
+Docker version 18.03.1-ce, build 9ee9f40
+Run "docker-compose --version" this should produce the output
+bash: /usr/local/bin/docker-compose: No such file or directory
+Observed result
+docker-compose commands can not be executed within a build and are also not available in the CLI within the container
+Expected result
+docker-compose can be run normally within the container
+Additional information
+Output of 'uname -a' within in running docker container built by the above Dockerfile
+Linux 6cf8608fcf05 3.10.0-693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018 x86_64 GNU/Linux

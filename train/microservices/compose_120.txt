@@ -1,0 +1,88 @@
+LEscobar-Driver commented on 25 Jul 2019
+Description of the issue
+I cannot extract pytest artifacts from a successful docker run
+Context information (for bug reports)
+Directory
+docker_folder
+ | requirements.txt
+ | src
+    | -> __init__.py
+    | -> cat.py
+    | -> animal.py
+ | tests
+    | -> __init__.py
+    | -> test_animal.py
+    | -> test_cat.py
+Dockerfile
+Dockerfile
+FROM python:3.7
+COPY ./docker_folder/ .
+RUN pip install -r requirements.txt
+CMD pytest -v --tb=line --junitxml=tests/reports/results.xml --resultlog=tests/reports/testlog.log tests/
+$ docker volume ls
+DRIVER              VOLUME NAME
+local               testVolume
+$ docker volume inspect testVolume
+[
+  {
+      "CreatedAt": "2019-07-24T16:33:44Z",
+      "Driver": "local",
+      "Labels": {},
+      "Mountpoint": "/var/lib/docker/volumes/testVolume/_data",
+      "Name": "testVolume",
+      "Options": {},
+      "Scope": "local"
+  }
+]
+docker build -t damnyou .
+runs successfully
+Successfully built 23a3d34a46e7
+Successfully tagged damnyou:latest
+$ docker images
+REPOSITORY                                          TAG                 IMAGE ID            CREATED              SIZE
+damnyou                                             latest              23a3d34a46e7        About a minute ago   940MB
+$ docker run -v /Users/rm026/Desktop/TestVolume:/var/lib/docker/volumes/testVolume/_data damnyou
+All my tests execute successfully and get the prompt that my xml file has been generated + log file as well
+Output of "docker-compose version"
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of "docker version"
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"
+services:
+  testImage:
+    build:
+      context: /Users/rm026/my_repos/IntTestsForIngestorDocker
+    container_name: cdk_ingest
+    image: damnyou:latest
+    volumes:
+    - /Users/rm026/Desktop/TestVolume:/var/lib/docker/volumes/testVolume/_data:rw
+version: '3.7'
+Steps to reproduce the issue
+docker build -t damnyou .
+docker run -v /Users/rm026/Desktop/TestVolume:/var/lib/docker/volumes/testVolume/_data damnyou
+Observed result
+successfully runs and executes pytests. Pytests states that test artifacts have been created. However, no artifacts are populated to my volume mapping.
+Expected result
+Should get test artifacts into /Users/rm026/Desktop/TestVolume
+OS version / distribution, docker-compose install method, etc.
+MacOS Mojave

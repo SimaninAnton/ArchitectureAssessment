@@ -1,0 +1,35 @@
+lzakrzewski commented on 3 Jul 2016
+Hi!
+This is my docker-compose.yml
+version: '2'
+services:
+  admin_db:
+    build:
+      context: .
+      dockerfile: postgres.dockerfile
+      args:
+        - DB_NAME=admin_db
+        - DB_USER=admin
+        - DB_PASSWORD=admin_pass
+    network_mode: "default"
+  admin:
+    build:
+      context: .
+      dockerfile: admin.dockerfile
+      args:
+        - UID=$UID
+        - GID=$GID
+        - UNAME=$UNAME
+    command: /bin/bash
+    depends_on:
+      - admin_db
+    ports:
+      - "8000:8000"
+    links:
+     - admin_db
+    network_mode: "bridge"
+If with networking_mode:"bridge" I should be able to access my app (admin) on http://127.0.0.1:8000/ from localhost, but currently, I'm able to access it only on random-ip:8000 from localhost.
+I'm able to http://127.0.0.1:8000/ access when networking_mode is "host", but then I'm unable to link containers.
+Is there any solution to have both things ?
+linked containers
+app running on http://127.0.0.1:8000/ from localhost

@@ -1,0 +1,49 @@
+Mourdraug commented on 10 Oct 2018
+Description of the issue
+docker-compose seems to be unable to locate ssh on windows.
+Context information (for bug reports)
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+services:
+  test-service:
+    build:
+      context: git@gitlab.com:dan-poltherm/partservicego.git
+    ports:
+    - 8005:443/tcp
+version: '3.0'
+Steps to reproduce the issue
+Create docker-compose.yml with service to be built from git (throught ssh)
+Build with docker-compose build
+Observed result
+Repository is not even fetched
+Expected result
+Repository should get pulled and image built from it
+Stacktrace / full error message
+ERROR: error fetching: fatal: cannot run ssh: No such file or directory
+fatal: unable to fork
+Additional information
+OS: Windows 10 64-bit
+Docker and docker-compose installed with chocolatey.
+OpenSSH Client installed through "Optional features" in "Apps and Features".
+Ssh is in PATH, and works in powershell.
+Repository is private, so I need to be able to pull it with ssh using ssh-agent running as service.

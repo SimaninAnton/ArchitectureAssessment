@@ -1,0 +1,2 @@
+razic commented on 8 Feb 2015
+hey i created a new machine with machine create dev -d virtualbox, then machine ssh dev to ssh to the machine and change the /var/lib/boot2docker/profile to contain --insecure-registry docker.corp.adobe.com then ran compose up -d but got an error about https/insecure registry. however, i can $(machine env dev) && docker pull docker.corp.adobe.com/typekit/gladius with no problem. seems like compose is not respecting the extra options in /var/lib/boot2docker/profile.

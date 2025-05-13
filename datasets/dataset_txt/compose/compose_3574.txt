@@ -1,0 +1,16 @@
+manast commented on 11 Jun 2015
+Which makes quite difficult to correct them. Also, why displaying an ugly stack trace which provides no useful info to the end user?
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 57, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 77, in get_project
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 69, in from_dicts
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 49, in sort_service_dicts
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 42, in visit
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 27, in get_service_dependents
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 21, in get_service_names
+AttributeError: 'dict' object has no attribute 'split'

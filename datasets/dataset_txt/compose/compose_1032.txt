@@ -1,0 +1,63 @@
+revhawk commented on 6 Dec 2017 •
+edited by shin-
+I am getting new error now saying mapping values are not allowed here.
+Trying to get volumes to work in docker-compose version 3.4
+version: '3.4'
+
+services:
+  confluence:
+    image: cptactionhank/atlassian-confluence:latest
+    container_name: confluence
+    ports:
+      - 8090:8090
+    depends_on:
+      - confluence_db
+    
+ jira:
+    image: cptactionhank/atlassian-jira-software:latest
+    container_name: jira
+    ports:
+      - 8080:8080
+    depends_on:
+      - jira_db
+
+  confluence_db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: confluence
+      POSTGRES_PASSWORD: confluencepassword
+      POSTGRES_DB: confluence
+    volumes:
+      confluencedata:
+        -type: bind
+          source: /var/lib/postgresql/data
+          target: /var/log/confluencedata
+          
+
+  jira_db: 
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: jira
+      POSTGRES_PASSWORD: jirapassword
+      POSTGRES_DB: jira
+    volumes:
+      jiradata:
+        - type: bind
+          source: /var/lib/postgresql/data
+          target: /var/log/jiradata
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8050:8080
+
+volumes:
+  jiradata:
+  confluencedata:
+I have tried a few different formats with not much luck...
+      confluencedata:
+        - "/var/log/confluencedata: /var/lib/postgresql/data"
+          ```

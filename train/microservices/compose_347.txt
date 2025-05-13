@@ -1,0 +1,40 @@
+rmoriz commented on 24 Dec 2018
+Description of the issue
+paramiko python package is missing in the latest compose release (and also in the latest docker for mac edge):
+Expected:
+# export DOCKER_HOST=ssh://user@remote-docker-host
+# docker-compose ps
+Name   Command   State   Ports
+------------------------------
+…
+Actual behavior
+# export DOCKER_HOST=ssh://user@remote-docker-host
+# docker-compose ps
+Traceback (most recent call last):
+  File "site-packages/docker/api/client.py", line 151, in __init__
+NameError: name 'SSHAdapter' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 42, in project_from_options
+  File "compose/cli/command.py", line 123, in get_project
+  File "compose/cli/command.py", line 94, in get_client
+  File "compose/cli/docker_client.py", line 127, in docker_client
+  File "site-packages/docker/api/client.py", line 156, in __init__
+docker.errors.DockerException: Install paramiko package to enable ssh:// support
+[79659] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Tested and failing with:
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+```
+
+… using release binary from github and `/Applications/Docker.app/Contents/Resources/bin/docker-compose` as part of the current Docker for Mac edge release (Version 2.0.0.0-mac82 (29268))
+2

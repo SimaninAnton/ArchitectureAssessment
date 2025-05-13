@@ -1,0 +1,1 @@
+docker-compose up doesn't pull down latest image if the image exists locally

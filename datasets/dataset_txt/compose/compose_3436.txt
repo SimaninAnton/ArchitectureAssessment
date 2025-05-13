@@ -1,0 +1,12 @@
+ream88 commented on 27 Jul 2015
+I really don't understand why this happens, but when building the "web" container based on the following docker-compose.yml file, my whole Internet connection is killed.
+web:
+  build: apps/web
+  volumes:
+    - /apps/web:/usr/src/app
+  ports:
+    - "80:3000"
+  links:
+    - db
+  env_file: .env-production
+Various software is complaining about timeouts, YT and other streams are stopped. The command line hangs with Building web.... Once compose proceeds with Step 0 : FROM ruby:2.2.1 everything goes back to normal. Btw this affects all other devices in my home network as well - my wife's Mac, our phones and so on.

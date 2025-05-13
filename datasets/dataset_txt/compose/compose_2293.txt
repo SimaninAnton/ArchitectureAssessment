@@ -1,0 +1,102 @@
+ain commented on 17 Jun 2016
+docker volume inspect <named volume> seems completely useless as the Mountpoint given does not include anything. There's no way to gain data access from that output.
+docker-compose.yml:
+version: '2'
+services:
+  db:
+    image: postgres:9.5
+    environment:
+      - POSTGRES_DB=***
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=***
+      - POSTGRES_PASSWORD=***
+    volumes:
+      - pgdata:/var/lib/postgresql
+volumes:
+  pgdata:
+    external: true
+$ docker volume inspect pgdata
+[
+    {
+        "Name": "pgdata",
+        "Driver": "local",
+        "Mountpoint": "/var/lib/docker/volumes/pgdata/_data",
+        "Labels": {}
+    }
+]
+$ sudo ls -la /var/lib/docker/volumes/pgdata/_data/data
+total 8
+drwxr-xr-x 2 root  root  4096 Jun 17 18:01 .
+drwxr-xr-x 3 sensu sensu 4096 Jun 17 18:01 ..
+$ docker inspect 20160617155959_db_1
+...
+        "Mounts": [
+            {
+                "Name": "pgdata",
+                "Source": "/var/lib/docker/volumes/pgdata/_data",
+                "Destination": "/var/lib/postgresql",
+                "Driver": "local",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Name": "47dd2d86f2c09a1be75101379004373a3e830f0d3114ad71bf14d2468f7a2445",
+                "Source": "/var/lib/docker/volumes/47dd2d86f2c09a1be75101379004373a3e830f0d3114ad71bf14d2468f7a2445/_data",
+                "Destination": "/var/lib/postgresql/data",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+...
+$ sudo ls -la /var/lib/docker/volumes/47dd2d86f2c09a1be75101379004373a3e830f0d3114ad71bf14d2468f7a2445/_data/pgdata
+total 128
+drwx------ 19 sensu root   4096 Jun 17 18:01 .
+drwxr-xr-x  3 root  root   4096 Jun 17 18:01 ..
+-rw-------  1 sensu sensu     4 Jun 17 18:01 PG_VERSION
+drwx------  6 sensu sensu  4096 Jun 17 18:01 base
+drwx------  2 sensu sensu  4096 Jun 17 18:02 global
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_clog
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_commit_ts
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_dynshmem
+-rw-------  1 sensu sensu  4496 Jun 17 18:01 pg_hba.conf
+-rw-------  1 sensu sensu  1636 Jun 17 18:01 pg_ident.conf
+drwx------  4 sensu sensu  4096 Jun 17 18:01 pg_logical
+drwx------  4 sensu sensu  4096 Jun 17 18:01 pg_multixact
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_notify
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_replslot
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_serial
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_snapshots
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_stat
+drwx------  2 sensu sensu  4096 Jun 17 18:11 pg_stat_tmp
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_subtrans
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_tblspc
+drwx------  2 sensu sensu  4096 Jun 17 18:01 pg_twophase
+drwx------  3 sensu sensu  4096 Jun 17 18:01 pg_xlog
+-rw-------  1 sensu sensu    88 Jun 17 18:01 postgresql.auto.conf
+-rw-------  1 sensu sensu 21678 Jun 17 18:01 postgresql.conf
+-rw-------  1 sensu sensu    37 Jun 17 18:01 postmaster.opts
+-rw-------  1 sensu sensu    92 Jun 17 18:01 postmaster.pid
+Platform:
+$ docker version && docker-compose version
+Client:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:30:23 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:30:23 2016
+ OS/Arch:      linux/amd64
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

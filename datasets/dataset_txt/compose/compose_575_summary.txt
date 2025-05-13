@@ -1,0 +1,1 @@
+Build image if "--build" is passed, alternatively pull image from registry

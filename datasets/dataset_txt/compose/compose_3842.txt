@@ -1,0 +1,4 @@
+awsmsrc commented on 13 Mar 2015
+the command following command works as of docker 1.5:
+docker run -p 3000-3002:3000-3002 port_test
+specifying ports this way in the docker-compose.yml always results in a cannot start container exit status 2

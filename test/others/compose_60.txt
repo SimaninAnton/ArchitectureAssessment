@@ -1,0 +1,9 @@
+ratermir commented on 11 Nov 2019 •
+edited
+In all files and directories in volumes, that are mounted into container, national characters (the ones with unicode > 127) are shown as a question mark "?". The numver of question marks corresponds to count of byte of each character (for example czech "é" is shown as "??").
+The filesystem is local ext4. Characters are dislayed correctly in local tools, also the same paths mounted into container started directly by docker (not through docker-composer but by docker itself), all characters are correct.
+The same is observer on remote filesystem mounted via SMBFS.
+Observed with docker-compose 1.23, still persists in 1.25.0-rc4
+Operation system / docker:
+Debian 9, docker 19.03.4,
+Opensuse 15, dockr 19.03.1

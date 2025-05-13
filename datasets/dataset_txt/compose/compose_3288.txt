@@ -1,0 +1,5 @@
+Contributor
+dnephin commented on 15 Sep 2015
+Right now we run cli "integration" tests in-process by calling dispatch().
+We'd like to run tests against the actual binary. This change will allow us to use the same end-to-end tests with libcompose, and will make the release processes easier (because tests will run directly against the to-be-released binary, removing the need for manual testing of the binaries).
+I think we should split the integration suite into two suites: "integration" which continues to test modules in-process, and "acceptance" which are black box tests that execute the binary.

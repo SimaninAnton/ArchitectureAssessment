@@ -1,0 +1,6 @@
+knutole commented on 6 Oct 2016 •
+edited
+I'd like to use a script to automatically upgrade docker-compose regularly. Currently, I can't find a static url with latest tag, and need to manually edit the 1.8.0 tag.
+curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+Could there be made available a latest tag for this purpose?
+2

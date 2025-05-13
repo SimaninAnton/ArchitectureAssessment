@@ -1,0 +1,28 @@
+elnino1 commented on 29 Mar 2016
+When using the link option in docker compose (either in V1.9 or V2), the linking seems not set on build time.
+I'm using the database host in installation script executed by myapp entrypoint. Thus I set up the installation to point on jdbc:mysql://database:3306/DEMO.
+When executing the dockerfile of myapp, the /etc/hosts does not contain the entry for database.
+After installation (failed) when running the container, the /etc/hosts is properly set.
+Is this the regular behavior ?
+Can I achieve using the virtual hostname ?
+It would be nice to allow such linking at build time.
+e.g. with V1.9
+database:
+  image: mariadb:latest
+  container_name: mycontainer
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+    - MYSQL_DATABASE=DEMO
+    - MYSQL_USER=${DB_USER}
+    - MYSQL_PASSWORD=${DB_PASS}
+
+myapp
+  # here on build time I cannot access database server via "database". I'm forced to use the internal ip.
+  build: .
+  container_name: myapp
+  links:
+      - database:database
+In addition, ENV listing on build time does not contains values set by the linking.
+Note: for V2 I tried replacing links by depends_on but without better result.

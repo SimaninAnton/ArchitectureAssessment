@@ -1,0 +1,62 @@
+ksylvan commented on 11 Nov 2014
+My environment:
+$ docker -v
+Docker version 1.3.0, build c78088f/1.3.0
+$ uname -a
+Linux ksylvan-t420 3.16.7-200.fc20.x86_64 #1 SMP Thu Oct 30 18:12:41 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+Here's what happens after following the steps at http://www.fig.sh/
+$ fig up
+Creating figtest_redis_1...
+Creating figtest_web_1...
+Attaching to figtest_redis_1, figtest_web_1
+redis_1 | [1] 11 Nov 03:34:18.129 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+redis_1 |                 _._                                                  
+redis_1 |            _.-``__ ''-._                                             
+redis_1 |       _.-``    `.  `_.  ''-._           Redis 2.8.17 (00000000/0) 64 bit
+redis_1 |   .-`` .-```.  ```\/    _.,_ ''-._                                   
+redis_1 |  (    '      ,       .-`  | `,    )     Running in stand alone mode
+redis_1 |  |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+redis_1 |  |    `-._   `._    /     _.-'    |     PID: 1
+redis_1 |   `-._    `-._  `-./  _.-'    _.-'                                   
+redis_1 |  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+redis_1 |  |    `-._`-._        _.-'_.-'    |           http://redis.io        
+redis_1 |   `-._    `-._`-.__.-'_.-'    _.-'                                   
+redis_1 |  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+redis_1 |  |    `-._`-._        _.-'_.-'    |                                  
+redis_1 |   `-._    `-._`-.__.-'_.-'    _.-'                                   
+redis_1 |       `-._    `-.__.-'    _.-'                                       
+redis_1 |           `-._        _.-'                                           
+redis_1 |               `-.__.-'                                               
+redis_1 | 
+redis_1 | [1] 11 Nov 03:34:18.132 # Server started, Redis version 2.8.17
+redis_1 | [1] 11 Nov 03:34:18.132 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+redis_1 | [1] 11 Nov 03:34:18.132 * The server is now ready to accept connections on port 6379
+web_1   | python: can't open file 'app.py': [Errno 13] Permission denied
+figtest_web_1 exited with code 2
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping figtest_redis_1...
+If I run "fig up" again", I see this:
+$ fig up
+Recreating figtest_redis_1...
+Recreating figtest_web_1...
+Attaching to figtest_redis_1
+redis_1 | 
+redis_1 | [1] 11 Nov 03:37:03.151 # Server started, Redis version 2.8.17
+redis_1 | [1] 11 Nov 03:37:03.151 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+redis_1 | [1] 11 Nov 03:37:03.151 * DB loaded from disk: 0.000 seconds
+redis_1 | [1] 11 Nov 03:37:03.151 * The server is now ready to accept connections on port 6379
+But "fig ps" whos this:
+$ fig ps
+     Name                   Command             State     Ports   
+-----------------------------------------------------------------
+figtest_redis_1   /entrypoint.sh redis-server   Up       6379/tcp 
+figtest_web_1     python app.py                 Exit 2            
+
+$ docker ps -l
+CONTAINER ID        IMAGE                COMMAND             CREATED             STATUS                          PORTS               NAMES
+77f618dbb710        figtest_web:latest   "python app.py"     2 minutes ago       Exited (2) About a minute ago                       figtest_web_1    
+Trying again to run the "web" app, I see this:
+$ fig run web
+python: can't open file 'app.py': [Errno 13] Permission denied
+Not sure where to go from here or how to help debug this.
+Thank you for any help you can give me!

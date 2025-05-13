@@ -1,0 +1,37 @@
+anentropic commented on 5 Dec 2014
+I have the following fig.yml
+nginx:
+  image: anentropic/nginx
+  links:
+    - dpm
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes_from:
+    - nginxconf
+
+nginxconf:
+  image: anentropic/nginx_conf
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+  links:
+    - uwsgi_app
+nginxconf service CMD runs a script which queries the docker api in order to generate nginx conf for containers that need it, the script exits naturally with a code 0
+problem I saw is the first time I fig up this happens:
+anentropic_nginxconf_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping anentropic_nginx_1...
+Stopping anentropic_dpm_1...
+Stopping anentropic_postgres_1...
+a bit annoying, but curiously if I do fig up again I see:
+$ fig up
+Recreating anentropic_postgresdata_1...
+Recreating anentropic_postgres_1...
+Recreating anentropic_uwsgi_app_1...
+Recreating anentropic_nginxconf_1...
+Recreating anentropic_nginx_1...
+Attaching to anentropic_postgres_1, anentropic_uwsgi_app_1, anentropic_nginx_1
+...
+...this time everything stays up
+Why is this?
+Is there some way I should adapt either my nginx_conf image or my fig.yml to avoid needing to up twice?

@@ -1,0 +1,1 @@
+Could we add COMPOSE_PROJECT_DIRECTORY cli env variable?

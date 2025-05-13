@@ -1,0 +1,66 @@
+haoel commented on 28 Jun 2017 •
+edited
+Not sure I report this issue here is the right place.
+If I installed the docker-compose by using pip install docker-compose, then when I start up, it reports the following error:
+ERROR: for registry  expected string or buffer
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 926, in up
+    scale_override=parse_scale_args(options['--scale']),
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 424, in up
+    get_deps
+  File "/usr/local/lib/python2.7/dist-packages/compose/parallel.py", line 69, in parallel_execute
+    raise error_to_reraise
+TypeError: expected string or buffer
+There NO problem if I used curl -L "https://github.com/docker/compose/releases/download/1.14.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose install the docker-compose
+Information
+$ uname -a
+Linux ip-172-31-6-145 4.4.0-59-generic #80-Ubuntu SMP Fri Jan 6 17:47:47 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 16.04.1 LTS
+Release: 16.04
+Codename: xenial
+$ docker-compose --version
+docker-compose version 1.14.0, build c7bdf9e
+$ cat docker-registry.yaml
+nginx:
+  image: "nginx:1.9"
+  ports:
+    - 443:443
+  links:
+    - registry:registry
+  volumes:
+    - /docker-registry/nginx/:/etc/nginx/conf.d
+    - /etc/ssl/:/etc/ssl
+registry:
+  image: registry:2
+  ports:
+    - 127.0.0.1:5000:5000
+  environment:
+    REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+  volumes:
+    - /docker-registry/data:/data
+$ docker-compose -f docker-registry.yaml up
+
+ERROR: for registry  expected string or buffer
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 926, in up
+    scale_override=parse_scale_args(options['--scale']),
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 424, in up
+    get_deps
+  File "/usr/local/lib/python2.7/dist-packages/compose/parallel.py", line 69, in parallel_execute
+    raise error_to_reraise
+TypeError: expected string or buffer

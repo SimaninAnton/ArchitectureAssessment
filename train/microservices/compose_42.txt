@@ -1,0 +1,52 @@
+lmerlas commented on 30 Nov 2019
+Description of the issue
+After upgrading to compose 1.25.0 the behavior has changed. The same compose file fails to pull the containers when instructed.
+The same command will pull the latest images as expected using compose 1.24.1.
+To note that if the compose files don't have build directive then the image pull happens as expected.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0, build 0a186604
+Output of docker version
+(paste here)
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+lmerlas@WK-03464:~/work/corecrypto/docker$ :)docker-compose -f docker-compose-build.yml config
+services:
+  connect:
+    build:
+      context: /home/lmerlas/work/corecrypto/docker/connect
+    image: internal-tools-artifactory.ncipher.com/wsop/emu-connect:wsopv2-1
+  go-client:
+    build:
+      context: /home/lmerlas/work/corecrypto/docker/go-client
+    image: internal-tools-artifactory.ncipher.com/wsop/go-client:wsopv2-1
+  test-server:
+    build:
+      context: /home/lmerlas/work/corecrypto/docker/test-server
+    image: internal-tools-artifactory.ncipher.com/wsop/test-server:wsopv2-2
+version: '3.5'
+Steps to reproduce the issue
+Execute docker-compose -f <compose file> pull using compose file with build
+Observed result
+lmerlas@WK-03464:~/work/corecrypto/docker$ :)docker-compose -f docker-compose-build.yml --verbose pull
+compose.config.config.find: Using configuration files: ./docker-compose-build.yml
+docker.utils.config.find_config_file: Trying paths: ['/home/lmerlas/.docker/config.json', '/home/lmerlas/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /home/lmerlas/.docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Found entry (registry='nshield-tools-artifactory.ncipher.com', username='svc-artifactory-rw')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.30/version HTTP/1.1" 200 863
+compose.cli.command.get_client: docker-compose version 1.25.0, build 0a186604
+docker-py version: 4.1.0
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': 'Docker Engine - Community'}, Components=[{'Name': 'Engine', 'Version': '19.03.5', 'Details': {'ApiVersion': '1.40', 'Arch': 'amd64', 'BuildTime': '2019-11-13T07:28:22.000000000+00:00', 'Experimental': 'false', 'GitCommit': '633a0ea838', 'GoVersion': 'go1.12.12', 'KernelVersion': '4.15.0-65-generic', 'MinAPIVersion': '1.12', 'Os': 'linux'}}, {'Name': 'containerd', 'Version': '1.2.10', 'Details': {'GitCommit': 'b34a5c8af56e510852c35414db4c1f4fa6172339'}}, {'Name': 'runc', 'Version': '1.0.0-rc8+dev', 'Details': {'GitCommit': '3e425f80a8c931f88e6d94a8c831b9d5aa481657'}}, {'Name': 'docker-init', 'Version': '0.18.0', 'Details': {'GitCommit': 'fec3683'}}], Version=19.03.5, ApiVersion=1.40, MinAPIVersion=1.12, GitCommit=633a0ea838, GoVersion=go1.12.12, Os=linux, Arch=amd64, KernelVersion=4.15.0-65-generic, BuildTime=2019-11-13T07:28:22.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('docker_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.30/networks/docker_default HTTP/1.1" 404 47
+compose.parallel.feed_queue: Pending: set()
+Expected result
+The images are pulled as happens when using compose 1,24.1
+Stacktrace / full error message
+Additional information
+OS:Up-to-date ubunti 18.04
+Update method: used curl command as instructed in compose install

@@ -1,0 +1,1 @@
+volume_driver in service config is unnecessary in v2 format

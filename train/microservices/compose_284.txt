@@ -1,0 +1,87 @@
+thloe1 commented on 15 Feb 2019
+Description of the issue
+I have set up a remote Docker host in a KVM guest system based on the Ubuntu cloud image.
+When using the SSH protocol to access the Docker host by setting DOCKER_HOST=ssh://root@whale1 on my client system I can manage the remote Docker images and containers. Creating, starting and stopping containers with docker-compose also works.
+However, when running docker-compose build with a Compose file containing more than one build option, the second build fails. Building the second image explicitly with docker-compose build SERVICE works fine.
+So I assume the SSH connection is lost after the first build.
+Context information
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+docker-py version: 3.7.0
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:13:47 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 03:42:13 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  hello:
+    build:
+      context: /home/thomas/docker/test
+    image: test/hello
+  world:
+    build:
+      context: /home/thomas/docker/test
+    image: test/world
+version: '2.0'
+/home/thomas/docker/test/Dockerfile
+FROM hello-world
+Steps to reproduce the issue
+Run docker-compose build using the Compose file and Dockerfile mentioned above with a remote Docker host accessed via SSH (DOCKER_HOST=ssh://user@host).
+Observed result
+docker-compose fails to build the second image.
+Expected result
+docker-compose builds both images successfully.
+Stacktrace / full error message
+Connected (version 2.0, client OpenSSH_7.6p1)
+Authentication (publickey) successful!
+Building hello
+Step 1/1 : FROM hello-world
+latest: Pulling from library/hello-world
+Digest: sha256:2557e3c07ed1e38f26e389462d03ed943586f744621577a99efb77324b0fe535
+Status: Downloaded newer image for hello-world:latest
+ ---> fce289e99eb9
+Successfully built fce289e99eb9
+Successfully tagged test/hello:latest
+Building world
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 287, in build
+  File "compose/project.py", line 386, in build
+  File "compose/project.py", line 368, in build_service
+  File "compose/service.py", line 1084, in build
+  File "site-packages/docker/api/build.py", line 268, in build
+  File "site-packages/docker/utils/decorators.py", line 46, in inner
+  File "site-packages/docker/api/client.py", line 221, in _post
+  File "site-packages/requests/sessions.py", line 572, in post
+  File "site-packages/requests/sessions.py", line 524, in request
+  File "site-packages/requests/sessions.py", line 637, in send
+  File "site-packages/requests/adapters.py", line 449, in send
+  File "site-packages/urllib3/connectionpool.py", line 600, in urlopen
+  File "site-packages/urllib3/connectionpool.py", line 354, in _make_request
+  File "http/client.py", line 1239, in request
+  File "http/client.py", line 1285, in _send_request
+  File "http/client.py", line 1234, in endheaders
+  File "http/client.py", line 1026, in _send_output
+  File "http/client.py", line 964, in send
+  File "site-packages/docker/transport/sshconn.py", line 29, in connect
+AttributeError: 'NoneType' object has no attribute 'open_session'
+[19390] Failed to execute script docker-compose

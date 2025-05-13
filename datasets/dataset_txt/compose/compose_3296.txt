@@ -1,0 +1,4 @@
+Contributor
+villlem commented on 11 Sep 2015
+I use my own image build process in my development environment. This process create images localy so I can test them. I also use mose official images (databases) in my docker-compose.yml. With this combination docker-compose pull command fail when its tries to pull my local only images and if I'm not lucky no database images are pulled.
+I would like to from time to time pull new images from repository and so far I have to list them all. Is it possible to pass some flag to pull that it tries to pull all images and only report those that failed (instead of stop pulling others)?

@@ -1,0 +1,1 @@
+Use official Docker image as docker/compose base image

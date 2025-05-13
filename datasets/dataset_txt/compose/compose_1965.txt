@@ -1,0 +1,38 @@
+Member
+StefanScherer commented on 2 Nov 2016 •
+edited
+Working with Windows containers the command should accept single backslashes for file names. At the moment I have to use double backslashes in command, but can use single backslashes for volumes. There is a lot of work going on eg. in moby/moby#27644 to bring in a better windows experience using 'normal' windows pathes.
+works
+  test:
+    image: microsoft/windowsservercore
+    command: cmd /c dir c:\\config\\example.yml
+    volumes:
+      - ..\config:c:\config
+PS C:\vagrant\xxx> docker-compose up test
+Recreating xxx_test_1
+Attaching to xxx_test_1
+test_1            |  Volume in drive C has no label.
+test_1            |  Volume Serial Number is 50EB-34F9
+test_1            |
+test_1            |  Directory of c:\config
+test_1            |
+test_1            | 08/30/2016  07:52 AM             1,491 example.yml
+test_1            |                1 File(s)          1,491 bytes
+test_1            |                0 Dir(s)  95,230,676,992 bytes free
+xxx_test_1 exited with code 0
+does not work
+  test:
+    image: microsoft/windowsservercore
+    command: cmd /c dir c:\config\printers.yml
+    volumes:
+      - ..\config:c:\config
+PS C:\vagrant\xxx> docker-compose up test
+Recreating xxx_test_1
+Attaching to xxx_test_1
+test_1            |  Volume in drive C has no label.
+test_1            |  Volume Serial Number is 50EB-34F9
+test_1            |
+test_1            | File Not Found
+test_1            |  Directory of C:\
+test_1            |
+/cc @friism

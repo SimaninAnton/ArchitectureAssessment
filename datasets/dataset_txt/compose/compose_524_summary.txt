@@ -1,0 +1,1 @@
+Docker-compose scale: "ERROR: Arguments to scale should be in the form service=num"

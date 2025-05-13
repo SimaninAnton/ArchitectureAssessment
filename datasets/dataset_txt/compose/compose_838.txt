@@ -1,0 +1,14 @@
+Kwadz commented on 28 Feb 2018
+Let's assume this docker-compose.yml:
+version: '3'
+
+services:
+  website:
+    build:
+      context: .
+      dockerfile: ./.docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html/
+    tmpfs:
+      - /var/www/html/app/cache/
+Expected behaviour: the permission of /var/www/html/app/cache/ should be 1777 (the default tmpfs-mode).

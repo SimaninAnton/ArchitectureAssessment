@@ -1,0 +1,1 @@
+Fig should say "you probably need to run docker-osx shell" if docker-osx exists and it can't connect to Docker

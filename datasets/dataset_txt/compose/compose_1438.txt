@@ -1,0 +1,89 @@
+J-Fricke commented on 23 May 2017
+Ubuntu via WSL on Windows 10 Pro 1703
+Docker version 17.03.1-ce, build c6d412e
+docker-compose version 1.8.0, build unknown
+Started here to get Ubuntu via WSL on Windows working following instructions here: https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Windows
+Once that was working with hello-world container, this error reared it's head:
+Error
+ERROR: for web  Cannot start service web: error while mounting volume 
+'/var/lib/docker/volumes/web-sync/_data': 
+error while mounting volume with options: 
+type='none' device='/home/User/Documents/dev/' o='bind': no such file or directory
+Encountered errors while bringing up the project.
+EXCEPTION: #<Docker::Compose::Error: 'up' failed with status 'pid 68 exit 1': Starting web>
+MESSAGE: 'up' failed with status 'pid 68 exit 1': Starting web
+docker-compose.yml - relevant parts to this container/volume
+  web:
+    container_name: web
+    image: web:latest
+    build:
+       context: ./
+    networks:
+      - net
+    volumes:
+      - web-sync:/web:nocopy
+    ports:
+      - "80:80"
+      - "443:443"
+volumes:
+  web-sync:
+    external: true
+docker-sync.yml - Has where volume is mapping to
+version: "2"
+options:
+  verbose: true
+syncs:
+  web-sync:
+    src: '~/Documents/dev/'
+    sync_host_port: 10871
+    sync_excludes: ['.git', 'node_modules', '.idea', '.DS_Store']
+    watch_excludes: ['current', 'logs', 'sphinx/var', 'xdebug']
+    watch_args: '-v'
+Note: ~ is working as expected, can see in the error it's expanding and also have tested hard coding in the path. Issue happens when attempting start using docker-sync-stack start and docker-compose up. From this I'm gathering it's an issue with docker-compose more than docker-sync. I have an issue reported here initially: EugenMayer/docker-sync#402
+Possibly also related to: #3073 & #3285
+docker info
+Containers: 3
+ Running: 2
+ Paused: 0
+ Stopped: 1
+Images: 56
+Server Version: 17.03.1-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 4ab9917febca54791c5f071a9d1f404867857fcc
+runc version: 54296cf40ad8143b62dbcaa1d90e520a2136ddfe
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.27-moby
+Operating System: Alpine Linux v3.5
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.934 GiB
+Name: moby
+ID: UIJJ:XMDL:ZNMK:I4NM:EEV3:6PAI:NYNZ:NBXI:UB2R:GLNK:CEHL:IU6B
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 27
+ Goroutines: 42
+ System Time: 2017-05-22T21:10:03.6911824Z
+ EventsListeners: 0
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 21 Mar 2015
+The new jenkins suite runs against multiple versions of docker, but I believe it only runs on python 2.7.
+We should run the test suite (at the very least the unit test suite + flake8) against 2.6, 3.3, 3.4 and pypy.

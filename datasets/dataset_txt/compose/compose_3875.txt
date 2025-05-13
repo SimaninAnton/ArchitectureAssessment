@@ -1,0 +1,9 @@
+gastonmorixe commented on 4 Mar 2015
+Hi Guys,
+I have a container with nginx and other with a rails app.
+Nginx uses volumes_from the rails app to server the assets.
+Every time I upgrade the app, if I do it directly with "up -d" nginx doesn't get the assets folder properly.
+The only solution is to stop the app and then "up -d". Which has a higher downtime. Most of the time I need to stop and start nginx too.
+Also, I was trying to get no downtime at all by using "scale" and creating new containers with the latest rails app image and later stoping and removing the old app containers. It's not working neither, nginx is not getting volumes from the new app containers, forcing me to manually stoping nginx and the apps and starting all over again.
+Any ideas?
+Thanks

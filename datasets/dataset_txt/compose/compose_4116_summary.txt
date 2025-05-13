@@ -1,0 +1,1 @@
+Need environment variable with the "number" of the container in a scaled service

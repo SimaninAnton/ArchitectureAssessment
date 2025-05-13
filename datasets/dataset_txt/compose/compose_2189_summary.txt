@@ -1,0 +1,1 @@
+`docker-compose` 1.8.0 with error "backports.ssl_match_hostname.CertificateError: hostname '192.168.99.104' doesn't match 'localhost'"

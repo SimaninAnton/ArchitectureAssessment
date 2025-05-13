@@ -1,0 +1,8 @@
+shujamughal commented on 2 May 2016
+Hi All,
+I have build a swarm cluster without using docker machine. if we use docker machine then we can deploy using following
+eval "$(docker-machine env --swarm )"
+$ docker-compose up
+but without docker-machine how to access swarm master to deploy containers using compose file?
+Regards
+Shuja

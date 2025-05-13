@@ -1,0 +1,1 @@
+Volume mount does not mount all files when running docker-compose from a container.

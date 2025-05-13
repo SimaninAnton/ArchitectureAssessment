@@ -1,0 +1,31 @@
+Multiply commented on 21 Mar 2017 •
+edited
+I could reproduce it with:
+Version 17.03.0-ce-mac1 (15606)
+Channel: nightly
+8303314087
+docker-compose version: 1.12.0-rc1
+test.yml
+version: '2'
+
+services:
+  a:
+    image: nginx
+    ports:
+      - 80
+
+  b:
+    extends:
+      service: a
+Result
+$ docker-compose -f test.yml up -d
+Creating test_a_1
+Creating test_b_1
+
+ERROR: for b  Cannot create container for service b: invalid port specification: "_ServicePort(target='80', published=None, protocol=None, mode=None, external_ip=None)"
+ERROR: Encountered errors while bringing up the project.
+Expected result
+$ docker-compose -f test.yml up -d
+Creating test_a_1
+Creating test_b_1
+If I don't extend from service a, and simply copypaste everything down, it works fine.

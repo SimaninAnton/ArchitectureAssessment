@@ -1,0 +1,7 @@
+jebw commented on 9 Mar 2017
+This can be tested with something like the following
+cat db.sql | docker-compose run --rm myimage mysql --host=mysql --user=root --password=foobar my_database
+If docker-compose is installed using the instructions on githubs release page
+https://github.com/docker/compose/release
+then the above will work
+If docker-compose is installed as a container, the above line will just give a mysql prompt - implying pipes aren't getting hooked up correctly?

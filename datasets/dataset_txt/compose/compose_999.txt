@@ -1,0 +1,12 @@
+mehertz commented on 20 Dec 2017
+Hi,
+I'm seeing what appears to be a race condition between docker-compose run and docker rm. I'm attempting to run docker-compose run on a box which has containers (of the same service!) being actively created and removed and i'm seeing intermittent errors when issuing the next docker-compose run. This can be replicated by running the following command twice:
+$ for i in {1..14}; do sudo docker rm test_$i; sudo docker-compose run -d --name test_$i test & done; wait
+...
+test_7
+ERROR: No such container: ea639df9e498c681586a3be619a09381d60896e62b068aa0c884c0998585ee9b
+test_14
+...
+I believe this is because even when just doing a run, docker-compose first grabs the list of available containers, and then does docker inspect on each individual container before spinning up the new container. If an docker rm is issued between grabbing the list of containers and inspecting the container, the above error occurs.
+I'm not sure what a good solution is for this. Is it possible for me to do docker-compose run without inspecting every container?
+Thanks

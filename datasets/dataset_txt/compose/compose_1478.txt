@@ -1,0 +1,4 @@
+jamshid commented on 8 May 2017
+I see the "breaking change" about up resetting a service back down to its "default" value (the last scale'd value?) https://github.com/docker/compose/releases/tag/1.13.0.
+But it seems even doing a docker-compose run other-service /script.sh causes other services to be re-scaled. What's weird is my other services are being scaled back down to 1, so I'm losing volumes! I use depends_on, maybe that's contributing factor.
+Sorry I haven't made a simple repro but hoping someone knows more this seems like a serious regression.

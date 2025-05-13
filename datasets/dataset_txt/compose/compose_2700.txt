@@ -1,0 +1,15 @@
+withinboredom commented on 26 Feb 2016
+Related to: #2444
+When running on swarm and trying to recreate containers, I get this error:
+Recreating 74d03893fd_74d03893fd_flagshipcutter_forever_1
+ERROR: unable to find a node with port 6713 available
+Instead of trying to recreate the container, allow specifying a container to start as an intermediary between stopping, destroying and restarting.
+In other words, instead of this oversimplified example:
+docker run -p ${external_port}:${internal_port} --volumes-from ${original_container} --name ${new_container_name} ${new_image}
+docker rm -f ${original_container}
+It would be
+docker run --volumes-from ${original_container} --name ${intermediary_name} ${intermediary_image}
+docker rm -f ${original_container}
+docker run -p ${external_port}:${internal_port} --volumes-from ${intermediary_name} --name ${new_container_name} ${new_image}
+This way, downtime would be hugely minimised instead of stopping all services that may be at a specific scale before being able to bring them back up.
+The intermediate container could be something very small (it just has to hold files) or it could be specified in the docker-compose.yml

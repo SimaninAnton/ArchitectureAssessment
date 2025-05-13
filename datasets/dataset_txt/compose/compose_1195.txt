@@ -1,0 +1,19 @@
+halyson commented on 20 Sep 2017
+I have a problem to use environment variables in docker-compose in windows, I need to pass the tag of the image that will be used.
+how to pass the tag to the docker-compose?
+I also need it to work on windows and linux
+I have a Makefile:
+tag = 1.0.1
+apixx-up:
+     docker build ./src -t apicredito:$(tag)
+     docker-compose -p apixx -f production.yml up -d
+docker-composel file (production.yml):
+version: '3'
+services:
+   app:
+     image: "apixx:${TAG}"
+     container_name: apixx
+     volumes:
+       - ../src:/src
+     expose
+       - "8000"

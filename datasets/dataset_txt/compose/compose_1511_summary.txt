@@ -1,0 +1,1 @@
+docker-compose on a mac became terrifically slow

@@ -1,0 +1,1 @@
+Creating network - UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 24: ordinal not in range(128)

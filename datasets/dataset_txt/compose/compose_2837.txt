@@ -1,0 +1,7 @@
+Contributor
+dnephin commented on 4 Feb 2016
+The list of guides is:
+https://github.com/docker/compose/blob/master/docs/gettingstarted.md
+https://github.com/docker/compose/blob/master/docs/django.md
+https://github.com/docker/compose/blob/master/docs/rails.md
+https://github.com/docker/compose/blob/master/docs/wordpress.md

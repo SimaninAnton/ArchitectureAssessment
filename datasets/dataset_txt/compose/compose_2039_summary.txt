@@ -1,0 +1,1 @@
+Changes to `docker-compose.yml` are not automatically applied

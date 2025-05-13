@@ -1,0 +1,4 @@
+esmail commented on 14 Jan 2016
+The documentation on integration with Docker Swarm needs to be updated to reflect the new multi-host networking capabilities. The current page on Docker Compose/Swarm integration just states:
+... links between containers do not work across hosts.
+On the other hand, we see a basic example on the Get started with multi-host networking page of the website.

@@ -1,0 +1,1 @@
+Little consistency in validation messages makes tooling difficult

@@ -1,0 +1,43 @@
+ruxi commented on 8 Mar 2015
+According to the docs, these are the commands to install compose:
+curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
+ chmod +x /usr/local/bin/docker-compose
+When I do that, this is what returned:
+bash: /usr/local/bin/docker-compose: Permission denied
+So I tried the pip method
+ sudo pip install -U docker-compose
+It also gave me some errors:
+Traceback (most recent call last):
+  File "/usr/bin/pip", line 9, in <module>
+    load_entry_point('pip==1.5.4', 'console_scripts', 'pip')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 351, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2363, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2088, in load
+    entry = __import__(self.module_name, globals(),globals(), ['__name__'])
+  File "/usr/lib/python2.7/dist-packages/pip/__init__.py", line 11, in <module>
+    from pip.vcs import git, mercurial, subversion, bazaar  # noqa
+  File "/usr/lib/python2.7/dist-packages/pip/vcs/mercurial.py", line 9, in <module>
+    from pip.download import path_to_url
+  File "/usr/lib/python2.7/dist-packages/pip/download.py", line 25, in <module>
+    from requests.compat import IncompleteRead
+ImportError: cannot import name IncompleteRead
+docker-compose --version
+Traceback (most recent call last):
+  File "/home/username-ssd/anaconda3/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.1.0', 'console_scripts', 'docker-compose')()
+  File "/home/username-ssd/anaconda3/lib/python3.4/site-packages/setuptools-12.0.4-py3.4.egg/pkg_resources/__init__.py", line 519, in load_entry_point
+  File "/home/username-ssd/anaconda3/lib/python3.4/site-packages/setuptools-12.0.4-py3.4.egg/pkg_resources/__init__.py", line 2630, in load_entry_point
+  File "/home/username-ssd/anaconda3/lib/python3.4/site-packages/setuptools-12.0.4-py3.4.egg/pkg_resources/__init__.py", line 2310, in load
+  File "/home/username-ssd/anaconda3/lib/python3.4/site-packages/setuptools-12.0.4-py3.4.egg/pkg_resources/__init__.py", line 2316, in resolve
+  File "/home/username-ssd/anaconda3/lib/python3.4/site-packages/compose/__init__.py", line 2, in <module>
+    from .service import Service  # noqa:flake8
+  File "/home/username-ssd/anaconda3/lib/python3.4/site-packages/compose/service.py", line 485
+    except StreamOutputError, e:
+                            ^
+SyntaxError: invalid syntax
+Not sure if the issue has to do with anaconda.
+Docker works fine
+Docker version 1.5.0, build a8a31ef

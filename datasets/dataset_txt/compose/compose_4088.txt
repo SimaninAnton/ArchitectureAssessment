@@ -1,0 +1,18 @@
+jmreicha commented on 22 Nov 2014
+I am hitting an issue where I need 2 containers to be able to communicate with each other, ie one container needs to be able to ping the other and vice versa but when I add each container in to the links section of the fig.yml file I get a Circular import between container1 and container2 error when I run fig up.
+Is there a workaround for this? Isn't the link section just adding an entry in each containers host file? If so, shouldn't that be allowed for containers to be able to communicate with each other?
+Here is the bit causing problems. Obviously I have changed some of the names around.
+container1:
+  image: user/container1
+  ports:
+    - "8000:8000"
+  links:
+    - "container2:container2"
+
+container2:
+  image: user/container2
+  ports:
+    - "8080:8080"
+  links:
+    - "container1:container1"
+Is there something I am missing here?

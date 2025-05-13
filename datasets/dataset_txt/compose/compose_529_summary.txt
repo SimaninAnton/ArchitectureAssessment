@@ -1,0 +1,1 @@
+warning about not set environment variable while running `docker-compose run`

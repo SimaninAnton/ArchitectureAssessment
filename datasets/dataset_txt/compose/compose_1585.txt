@@ -1,0 +1,4 @@
+nakato commented on 21 Mar 2017
+Currently with docker-compose config format v3, pid_mode, referred to as pid in the config, accepts nothing, which results in the container having it's own PID namespace, the normal operation. And host, which results in the container sharing the host's pid namespace, capable of seeing and interacting with all processes on the system.
+container:name functions as well in the v3 format, this seems to be a side effect of how pid is passed to pid_mode, as it passes the string without any checking and expects the python docker-client to handle this, where it was previously, in the docker-version specified by the v2 config format limited to None or host.
+I would like to be able to pass service:name to pid in docker-compose.yaml and have my container start in the pid namespace of the service I specify.

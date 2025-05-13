@@ -1,0 +1,63 @@
+chiefy commented on 5 Feb 2015
+Fig.yml
+nginx:
+  build: ./nginx
+  links: 
+    - phpfpm
+  ports: ['8080:8080']
+  volumes:
+    - logs:/var/log
+phpfpm:
+  build: ./phpfpm-symfony
+  ports: ['9000:9000']
+  volumes:
+    - logs/phpfpm:/var/log/php-fpm
+  volumes_from:
+    - data
+data:
+  image: centos6.6
+  volumes :
+    - ../vapor:/srv/http
+$ fig up
+Recreating vapor_data_1...
+Pulling image centos6.6...
+Traceback (most recent call last):
+  File "/usr/local/Cellar/fig/1.0.1/libexec/bin/fig", line 8, in <module>
+    load_entry_point('fig==1.0.1', 'console_scripts', 'fig')()
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/cli/command.py", line 28, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/cli/command.py", line 56, in perform_command
+    handler(project, command_options)
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/cli/main.py", line 427, in up
+    insecure_registry=insecure_registry,
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/project.py", line 174, in up
+    for (_, container) in service.recreate_containers(insecure_registry=insecure_registry):
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/service.py", line 207, in recreate_containers
+    tuples.append(self.recreate_container(c, insecure_registry=insecure_registry, **override_options))
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/service.py", line 237, in recreate_container
+    new_container = self.create_container(**options)
+  File "/usr/local/Cellar/fig/1.0.1/libexec/lib/python2.7/site-packages/fig/service.py", line 185, in create_container
+    insecure_registry=insecure_registry
+  File "/usr/local/Cellar/fig/1.0.1/libexec/vendor/lib/python2.7/site-packages/docker/client.py", line 733, in pull
+    repository, insecure=insecure_registry
+  File "/usr/local/Cellar/fig/1.0.1/libexec/vendor/lib/python2.7/site-packages/docker/auth/auth.py", line 62, in resolve_repository_name
+    'Invalid repository name ({0})'.format(repo_name))
+docker.errors.InvalidRepository: Invalid repository name (centos6.6)
+$ docker images
+REPOSITORY             TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+vapor_nginx            latest              fdabf5218329        40 seconds ago      477.6 MB
+vapor_phpfpm           latest              31ad262a2c04        2 minutes ago       653.7 MB
+<none>                 <none>              d622617e184a        About an hour ago   628.3 MB
+<none>                 <none>              79f1ba22cc1d        2 hours ago         674.3 MB
+jprjr/centos-php-fpm   latest              196721f9544a        6 days ago          361 MB
+jenkins                latest              41001f44325b        4 weeks ago         661.5 MB
+centos                 6.6                 eeed74b237f9        4 weeks ago         202.6 MB
+centos                 centos6.6           eeed74b237f9        4 weeks ago         202.6 MB
+mysql                  latest              cb4d7ccf2eea        4 weeks ago         282.6 MB
+If I use image: 6.6 in my fig.yml, everything works as expected.

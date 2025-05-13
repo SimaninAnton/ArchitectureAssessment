@@ -1,0 +1,15 @@
+aduermael commented on 20 Oct 2017
+Environment variables aren't used during the build phase.
+So I think the docker-compose build command shouldn't display a warning if those are not set.
+Sample docker-compose.yml:
+version: "3.1"
+
+services:
+  foo: 
+    build:
+      context: .
+    environment:
+      BAR: ${BAR}
+$ docker-compose build
+WARNING: The BAR variable is not set. Defaulting to a blank string.
+It's useful though to see that warning when using docker-compose run.

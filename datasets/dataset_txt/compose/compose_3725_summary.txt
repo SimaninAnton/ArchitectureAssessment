@@ -1,0 +1,1 @@
+Docker-compose installed with python2-pip don't run if /usr/bin/python is python3

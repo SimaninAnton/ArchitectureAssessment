@@ -1,0 +1,1 @@
+pause and unpause commands missing from command help

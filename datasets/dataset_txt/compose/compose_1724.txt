@@ -1,0 +1,6 @@
+jgeerds commented on 5 Feb 2017
+A few days ago requests 2.13 has been released. Unfortunately, docker-compose still enforces requests < 2.12:
+'requests >= 2.6.1, != 2.11.0, < 2.12',
+Is there a reason for this? Changes are mostly bugfixes.
+It seems like some distributions already ship docker-compose with newer versions of requests without any issues.
+2

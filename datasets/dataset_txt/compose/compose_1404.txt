@@ -1,0 +1,30 @@
+samuelcolvin commented on 7 Jun 2017 •
+edited
+with a compose containing:
+networks:
+  public:
+    driver: default
+  hidden:
+    driver: default
+    internal: true
+Running docker-compose up I get ERROR: legacy plugin: plugin not found and nothing else.
+If I change the driver to bridge for both networks "compose up" works.
+~ ➤  docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:27:42 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:27:42 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+~ ➤  docker-compose -v
+docker-compose version 1.13.0, build 1719ceb

@@ -1,0 +1,13 @@
+zorba-the-geek commented on 25 Nov 2014
+Not sure if this is #637 or not.
+My fig.yml has a basic volumes: directive:
+    volumes:
+    - localfolder:/var/www/html
+When I run fig up, the containers get created and I can see the volumes are linked correctly with docker inspect.
+Then, if I run fig stop, fig up, it continues to work.
+However if I run fig stop, service docker restart, then fig up, the Volumes are lost.
+docker inspect looks like:
+"Volumes": {
+        "/var/www/html": "/var/lib/docker/vfs/dir/638d9c6bbeb312d7a6c40358524cb67f117c665f025e18743f49989f964e5ae6"
+    },
+instead of "/var/www/html": "/path/to/localfolder"

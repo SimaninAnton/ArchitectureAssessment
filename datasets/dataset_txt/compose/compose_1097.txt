@@ -1,0 +1,24 @@
+bainim commented on 6 Nov 2017 •
+edited
+Hello every one ,
+I'm facing this issue when i'm installing docker-compose
+OS: ubuntu 14.04
+docker --version
+Docker version 17.05.0-ce, build 89658be
+pip freeze | grep docker
+docker==2.5.1
+docker-pycreds==0.2.1
+dockerpty==0.4.1
+pip install docker-compose
+Installing collected packages: docker-compose
+Successfully installed docker-compose-1.17.0
+docker-compose --version
+Traceback (most recent call last):
+File "/usr/local/bin/docker-compose", line 7, in
+from compose.cli.main import main
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 17, in
+from . import errors
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/errors.py", line 11, in
+from docker.errors import APIError
+ImportError: No module named docker.errors
+Any solution for this error , thank you for your help.

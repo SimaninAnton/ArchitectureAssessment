@@ -1,0 +1,7 @@
+westhomas commented on 13 Oct 2014
+I'm trying to figure out how the automatic host names work. The django instructions specify using db_1 as the hostname for accessing the db from the web app. This works fine when using the image from the docs:
+image: postgres
+However, when I switch over to another postgres image (such as image: helmi03/docker-postgis) the db_1 designation no longer seems to work.
+"web_1 | django.db.utils.OperationalError: could not translate host name "db_1" to address: Name or service not known"
+Any insight into how these host names are setup? What's different about my helmi03/docker-postgis dockerfile compared to the "standard" postgres image?
+This is my first use with docker/fig, so I'm sure I'm missing something fundamental.

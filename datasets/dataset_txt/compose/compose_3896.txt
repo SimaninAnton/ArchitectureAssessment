@@ -1,0 +1,60 @@
+nickjj commented on 24 Feb 2015
+I'm still new to docker/compose but I don't think the below use case is doable without patching this tool.
+Use case
+Running a rails/django/whatever app that requires having images built for both the application service and a background worker service.
+Fairly reasonable and common setup right? Heres what the compose file could look like:
+website:
+  build: .
+  ports:
+    - 3000:3000
+  links:
+    - postgresql:postgresql
+    - redis:redis
+  volumes:
+    - .:/usr/src/service
+  environment:
+    # Dozens of env variables
+
+worker:
+  build: .
+  command: bundle exec sidekiq -C config/sidekiq.yml
+  links:
+    - postgresql:postgresql
+    - redis:redis
+  volumes:
+    - .:/usr/src/service
+  environment:
+    # Dozens of the same env variables that the app uses
+Ok, so the first bit of duplication are the links but that's not too bad. The real issue is when you have 30 env variables which are literally copy pasted for website and worker.
+This can be fixed without complicating the API by simply patching fig to understand that a top level yaml key whose first value is a & would be an alias rather than an image.
+Working example if the patch were to exist
+If that "not an image if value starts with &" patch were to exist, here's what the same config would look like just by leveraging YAML's anchors and aliases.
+app_links: &app_links
+  - postgresql:postgresql
+  - redis:redis
+
+app_env: &app_env
+  FOO: bar
+  HELLO: world
+
+website:
+  build: .
+  ports:
+    - 3000:3000
+  links:
+    <<: *app_links
+  volumes:
+    - .:/usr/src/service
+  environment:
+    <<: *app_env
+
+worker:
+  build: .
+  command: bundle exec sidekiq -C config/sidekiq.yml
+  links:
+    <<: *app_links
+  volumes:
+    - .:/usr/src/service
+  environment:
+    <<: *app_env
+Thoughts? Can we make this happen?

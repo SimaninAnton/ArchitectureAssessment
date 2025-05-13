@@ -1,0 +1,11 @@
+prologic commented on 21 May 2015
+It would be nice if the extend(s): directive in the docker-compose.yml were able to extend from another docker-compose.yml from a URI. That we we can build up libraries of common things and services defined in a common place that's web accessible.
+e.g:
+extends: http://mydomain.com/mypaas.yml
+
+service1:
+    ...
+
+service2:
+    ...
+Here I"m talking about "extending" the local docker-compose.yml to "bring in" and include services/definitions from an external file.

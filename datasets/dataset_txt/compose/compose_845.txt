@@ -1,0 +1,4 @@
+Kiran-N commented on 26 Feb 2018 •
+edited
+I am adding the cert as below, It instead adding a html
+ADD https://symwisedownload.symantec.com//resources/sites/SYMWISE/content/live/GENERAL_INFORMATION/2000/INFO2550/en_US/Symc_Cross_Root.txt?__gda__=1519572790_704e4d88e061ab9ef4785310453d25f4 /tmp/app/aws/sqs

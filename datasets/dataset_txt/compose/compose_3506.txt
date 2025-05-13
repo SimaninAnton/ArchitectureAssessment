@@ -1,0 +1,3 @@
+haf commented on 3 Jul 2015
+I want a verbose flag to docker-compose up so that I can see what docker command that Compose calls.
+4

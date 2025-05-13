@@ -1,0 +1,21 @@
+borlander commented on 10 Sep 2017 •
+edited
+Consider the following docker-compose.yml:
+version: '2.1'
+services:
+  labels_as_array:
+    build:
+      context: .
+      labels:
+        - "com.example.description=Description"
+        - "com.example.department=Department"
+        - "com.example.label-with-empty-value"
+which is canonical sample from reference v2
+The Dockerfile for the sample is irrelevalt and is simply FROM busybox
+However, running docker-compose up, produces:
+$ docker-compose -v
+docker-compose version 1.16.0-rc1, build 9bea70a
+$ docker-compose up
+Building labels_as_array
+ERROR: json: cannot unmarshal array into Go value of type map[string]string
+Note that the same sample is also listed for v3 here, but changing the version to '3.3' in the sample above does not help.

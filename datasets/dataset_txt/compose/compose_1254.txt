@@ -1,0 +1,92 @@
+XanderXAJ commented on 19 Aug 2017
+If a volume is created with docker-compose up, a volume is labelled as expected.
+If a volume is created with docker-compose create, it is not labelled. It'll remain unlabelled even if you then run docker-compose up.
+I've tested this in compose 1.14.0 and 1.15.0.
+Minimal docker-compose.yml:
+version: '3.3'
+services:
+  hello-world:
+    image: hello-world
+    volumes:
+      - labelled-volume:/volume
+
+volumes:
+  labelled-volume:
+    labels:
+      com.test.label:
+When running docker-compose up:
+$ docker-compose up
+Creating network "dockercompose115volumelabelmissing_default" with the default driver
+Creating volume "dockercompose115volumelabelmissing_labelled-volume" with default driver
+Pulling hello-world (hello-world:latest)...
+latest: Pulling from library/hello-world
+b04784fba78d: Pull complete
+Digest: sha256:f3b3b28a45160805bb16542c9531888519430e9e6d6ffc09d72261b0d26ff74f
+Status: Downloaded newer image for hello-world:latest
+Creating dockercompose115volumelabelmissing_hello-world_1 ...
+Creating dockercompose115volumelabelmissing_hello-world_1 ... done
+Attaching to dockercompose115volumelabelmissing_hello-world_1
+hello-world_1  |
+hello-world_1  | Hello from Docker!
+...
+dockercompose115volumelabelmissing_hello-world_1 exited with code 0
+
+$ docker volume inspect dockercompose115volumelabelmissing_labelled-volume
+[
+    {
+        "Driver": "local",
+        "Labels": {
+            "com.docker.compose.project": "dockercompose115volumelabelmissing",
+            "com.docker.compose.volume": "labelled-volume",
+            "com.test.label": ""
+        },
+        "Mountpoint": "/var/lib/docker/231072.231072/volumes/dockercompose115volumelabelmissing_labelled-volume/_data",
+        "Name": "dockercompose115volumelabelmissing_labelled-volume",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+$ docker-compose down -v
+Removing dockercompose115volumelabelmissing_hello-world_1 ... done
+Removing network dockercompose115volumelabelmissing_default
+Removing volume dockercompose115volumelabelmissing_labelled-volume
+When running with docker-compose create followed by docker-compose up:
+$ docker-compose create
+Creating dockercompose115volumelabelmissing_hello-world_1 ...
+Creating dockercompose115volumelabelmissing_hello-world_1 ... done
+
+$ docker volume inspect dockercompose115volumelabelmissing_labelled-volume
+[
+    {
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/231072.231072/volumes/dockercompose115volumelabelmissing_labelled-volume/_data",
+        "Name": "dockercompose115volumelabelmissing_labelled-volume",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+$ docker-compose up
+Creating network "dockercompose115volumelabelmissing_default" with the default driver
+Starting dockercompose115volumelabelmissing_hello-world_1 ...
+Starting dockercompose115volumelabelmissing_hello-world_1 ... done
+Attaching to dockercompose115volumelabelmissing_hello-world_1
+hello-world_1  |
+hello-world_1  | Hello from Docker!
+...
+dockercompose115volumelabelmissing_hello-world_1 exited with code 0
+
+$ docker volume inspect dockercompose115volumelabelmissing_labelled-volume
+[
+    {
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/231072.231072/volumes/dockercompose115volumelabelmissing_labelled-volume/_data",
+        "Name": "dockercompose115volumelabelmissing_labelled-volume",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+Note that the creation of the volume is not mentioned in the output of docker-compose create, but the volume is created.

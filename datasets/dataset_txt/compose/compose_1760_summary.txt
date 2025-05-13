@@ -1,0 +1,1 @@
+Not works condition service_healthy if extends present

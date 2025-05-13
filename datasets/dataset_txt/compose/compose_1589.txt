@@ -1,0 +1,16 @@
+bergtwvd commented on 19 Mar 2017
+Version:
+docker-compose version 1.11.2, build dfed245
+I want to set the environment variable VAR1 in the compose file to an empty string, rather than having it unset.
+version: '2'
+
+services:
+ srv1:
+  image: myimagename
+  environment:
+  - VAR1=
+However, with this setting in the docker compose file the variable VAR1 turns out to be unset once I run the container.
+If I use - VAR1="" then the value of VAR1 inside the container is ""
+If I use - VAR1=${UNSET} then VAR1 inside the container is unset
+If I use - VAR1: ${UNSET} I get the error services.rec.environment contains {"VAR1": ""}, which is an invalid type, it should be a string
+Thus: how to assign an empty string to a variable in docker-compose?

@@ -1,0 +1,116 @@
+NathanTheGr8 commented on 29 May 2017 •
+edited
+I just tried to install docker-compose on a fresh Ubuntu 16.04 64bit / Linux 4.8.0-36-generic system. I get this
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.8.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 561, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2631, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2291, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2297, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 17, in <module>
+    from ..bundle import get_image_digests
+  File "/usr/lib/python2.7/dist-packages/compose/bundle.py", line 14, in <module>
+    from .service import format_environment
+  File "/usr/lib/python2.7/dist-packages/compose/service.py", line 13, in <module>
+    from docker.utils import LogConfig
+ImportError: cannot import name LogConfig
+It seems this is similar to this issue so here is the output of pip list
+pip list
+DEPRECATION: The default format will switch to columns in the future. You can use --format=(legacy|columns) (or define a format=(legacy|columns) in your pip.conf under the [list] section) to disable this warning.
+acme (0.14.2)
+backports.ssl-match-hostname (3.5.0.1)
+bernhard (0.2.5)
+bottle (0.12.13)
+cached-property (1.3.0)
+cassandra-driver (3.10)
+certbot (0.14.2)
+certifi (2017.4.17)
+chardet (3.0.3)
+colorama (0.3.9)
+ConfigArgParse (0.11.0)
+configobj (5.0.6)
+CouchDB (1.1)
+cryptography (1.7.1)
+cycler (0.10.0)
+dnspython (1.15.0)
+docker (2.3.0)
+docker-compose (1.8.0)
+docker-py (1.9.0)
+docker-pycreds (0.2.1)
+dockerpty (0.4.1)
+docopt (0.6.2)
+elasticsearch (5.4.0)
+enum-compat (0.0.2)
+enum34 (1.1.6)
+funcsigs (0.4)
+functools32 (3.2.3.post2)
+futures (3.1.1)
+Glances (2.10)
+idna (2.5)
+influxdb (4.1.0)
+ipaddr (2.1.11)
+ipaddress (1.0.18)
+jsonschema (2.6.0)
+kafka-python (1.3.3)
+libvirt-python (1.3.1)
+matplotlib (2.0.2)
+mock (1.3.0)
+ndg-httpsclient (0.4.2)
+netifaces (0.10.5)
+numpy (1.12.1)
+nvidia-ml-py (375.53.1)
+parsedatetime (2.1)
+pbkdf2 (1.3)
+pbr (1.8.0)
+pika (0.10.0)
+pip (9.0.1)
+ply (3.10)
+potsdb (1.0.3)
+prometheus-client (0.0.19)
+protobuf (3.3.0)
+psutil (5.2.2)
+py-cpuinfo (3.2.0)
+pyasn1 (0.2.3)
+pycryptodome (3.4.6)
+pygobject (3.20.0)
+PyICU (1.9.2)
+pymdstat (0.4.2)
+pyOpenSSL (17.0.0)
+pyparsing (2.2.0)
+pyRFC3339 (1.0)
+pysmi (0.1.3)
+pysnmp (4.3.5)
+pystache (0.5.4)
+python-dateutil (2.6.0)
+python2-pythondialog (3.3.0)
+pytz (2014.10)
+PyYAML (3.12)
+pyzmq (16.0.2)
+requests (2.11.1)
+scandir (1.5)
+setuptools (33.1.1)
+six (1.10.0)
+statsd (3.2.1)
+subprocess32 (3.2.7)
+texttable (0.8.8)
+urllib3 (1.21.1)
+websocket-client (0.40.0)
+wheel (0.29.0)
+wifi (0.3.8)
+zeroconf (0.19.0)
+zope.component (4.2.2)
+zope.event (4.2.0)
+zope.hookable (4.0.4)
+zope.interface (4.1.3)
+Running docker-py upgrade doesnt' seem to work
+nathan@davisfamilyserver:~$ docker-py upgrade
+docker-py: command not found
+Other system information
+Docker 17.05.0-ce)
+pip 9.0.1 from /home/nathan/.local/lib/python2.7/site-packages (python 2.7)
+1

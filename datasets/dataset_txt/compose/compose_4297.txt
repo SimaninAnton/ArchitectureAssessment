@@ -1,0 +1,7 @@
+xiaods commented on 28 Jun 2014
+I use boot2docker to up a docker. then i run sample project reference with https://orchardup.github.io/fig/django.html
+i found the cmd can't work as expected.
+$ fig run web django-admin.py startproject figexample .
+it only create a project folder to docker vm, not in my current folder.
+if i use pure docker environment, we can correct get project folder.
+anyone came across the same issues.

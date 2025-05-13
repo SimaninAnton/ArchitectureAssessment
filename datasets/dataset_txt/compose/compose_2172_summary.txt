@@ -1,0 +1,1 @@
+docker-compose.exe up: UnicodeDecodeError: 'ascii' codec can't decode byte 0xe4 in position 10: ordinal not in range(128) docker-compose returned -1

@@ -1,0 +1,221 @@
+dsmorse commented on 19 Dec 2018
+Description of the issue
+When using docker-compose 1.10-1.20.1 with authentication to a private registry (hosted in artifactory) docker-compose pull works. Starting in 1.21.0-rc1 it fails intermittently. Repeating the same pull over may get all images or it will alternate which of the images fail. After troublshooting this we discovered that if I disable the new parallel features and use the --no-parallel flag then it works 100% of the time again.
+Context information (for bug reports)
+All of these were done with docker-composed pulled from the release tab of github
+vagrant@localhost(/tmp) $ ./docker-compose-Linux-x86_64.1 -version
+docker-compose version 1.23.1, build b02f130
+Output of docker-compose version
+Success::
+vagrant@localhost(/tmp) $ ./docker-compose-Linux-x86_64.1 -f lb.yml --verbose pull
+compose.config.config.find: Using configuration files: /code/cm/crowd_loadbalancer/target_filesystem/opt/pa/global/crowd-lb.yml
+WARNING: compose.config.environment.__getitem__: The HOST_NAME variable is not set. Defaulting to a blank string.
+docker.utils.config.find_config_file: Trying paths: ['/etc/docker/config.json', '/home/vagrant/.docker/config.json', '/home/vagrant/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /etc/docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Found entry (registry='docker.registry.internal', username='svc.art.docker')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/version HTTP/1.1" 200 578
+compose.cli.command.get_client: docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': 'Docker Engine - Community'}, Components=[{'Name': 'Engine', 'Version': '18.09.0', 'Details': {'ApiVersion': '1.39', 'Arch': 'amd64', 'BuildTime': '2018-11-07T00:19:08.000000000+00:00', 'Experimental': 'false', 'GitCommit': '4d60db4', 'GoVersion': 'go1.10.4', 'KernelVersion': '3.10.0-957.1.3.el7.x86_64', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.09.0, ApiVersion=1.39, MinAPIVersion=1.12, GitCommit=4d60db4, GoVersion=go1.10.4, Os=linux, Arch=amd64, KernelVersion=3.10.0-957.1.3.el7.x86_64, BuildTime=2018-11-07T00:19:08.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('global_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/global_default HTTP/1.1" 404 33
+Pulling haproxy               ...
+Pulling robots                ...
+Pulling prom_haproxy_exporter ...
+compose.parallel.feed_queue: Pending: {<Service: robots>, <Service: haproxy>, <Service: prom_haproxy_exporter>}
+compose.parallel.feed_queue: Starting producer thread for <Service: robots>
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/go/robotstxt', tag='PA.3', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+compose.parallel.feed_queue: Starting producer thread for <Service: haproxy>
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/haproxy', tag='1.8-alpine', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+compose.parallel.feed_queue: Starting producer thread for <Service: prom_haproxy_exporter>
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/prom/haproxy-exporter', tag='v0.9.0', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+Pulling robots                ... status: image is up to date for d...
+Pulling robots                ... done
+compose.parallel.parallel_execute_iter: Finished processing: <Service: robots>
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/images/create?tag=v0.9.0&fromImage=docker.registry.internal%2Fprom%2Fhaproxy-exporter HTTP/1.1" 200 None
+Pulling prom_haproxy_exporter ... status: image is up to date for d...
+Pulling prom_haproxy_exporter ... done
+compose.parallel.feed_queue: Pending: set()
+Pulling haproxy               ... pulling from haproxy
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/images/create?tag=1.8-alpine&fromImage=docker.registry.internal%2Fhaproxy HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object APIClient._stream_helper at 0x7f8190999a40>
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+Pulling haproxy               ... status: image is up to date for d...
+Pulling haproxy               ... done
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.parallel_execute_iter: Finished processing: <Service: haproxy>
+compose.parallel.feed_queue: Pending: set()
+Failure::
+vagrant@localhost(/tmp) $ ./docker-compose-Linux-x86_64.1 -f lb.yml --verbose pull
+compose.config.config.find: Using configuration files: /code/cm/crowd_loadbalancer/target_filesystem/opt/pa/global/crowd-lb.yml
+WARNING: compose.config.environment.__getitem__: The HOST_NAME variable is not set. Defaulting to a blank string.
+docker.utils.config.find_config_file: Trying paths: ['/etc/docker/config.json', '/home/vagrant/.docker/config.json', '/home/vagrant/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /etc/docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Found entry (registry='docker.registry.internal', username='svc.art.docker')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/version HTTP/1.1" 200 578
+compose.cli.command.get_client: docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': 'Docker Engine - Community'}, Components=[{'Name': 'Engine', 'Version': '18.09.0', 'Details': {'ApiVersion': '1.39', 'Arch': 'amd64', 'BuildTime': '2018-11-07T00:19:08.000000000+00:00', 'Experimental': 'false', 'GitCommit': '4d60db4', 'GoVersion': 'go1.10.4', 'KernelVersion': '3.10.0-957.1.3.el7.x86_64', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.09.0, ApiVersion=1.39, MinAPIVersion=1.12, GitCommit=4d60db4, GoVersion=go1.10.4, Os=linux, Arch=amd64, KernelVersion=3.10.0-957.1.3.el7.x86_64, BuildTime=2018-11-07T00:19:08.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('global_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/global_default HTTP/1.1" 404 33
+Pulling haproxy               ...
+Pulling robots                ...
+Pulling prom_haproxy_exporter ...
+compose.parallel.feed_queue: Pending: {<Service: robots>, <Service: haproxy>, <Service: prom_haproxy_exporter>}
+compose.parallel.feed_queue: Starting producer thread for <Service: robots>
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/go/robotstxt', tag='PA.3', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+compose.parallel.feed_queue: Starting producer thread for <Service: haproxy>
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/haproxy', tag='1.8-alpine', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+compose.parallel.feed_queue: Starting producer thread for <Service: prom_haproxy_exporter>
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/prom/haproxy-exporter', tag='v0.9.0', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+Pulling robots                ... error
+compose.parallel.parallel_execute_iter: Failed: <Service: robots>
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+Pulling haproxy               ... pulling from haproxy
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/images/create?tag=1.8-alpine&fromImage=docker.registry.internal%2Fhaproxy HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object APIClient._stream_helper at 0x7f8c339cfa40>
+compose.parallel.feed_queue: Pending: set()
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/images/create?tag=v0.9.0&fromImage=docker.registry.internal%2Fprom%2Fhaproxy-exporter HTTP/1.1" 200 None
+Pulling prom_haproxy_exporter ... status: image is up to date for d...
+Pulling prom_haproxy_exporter ... done
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.feed_queue: Pending: set()
+Pulling haproxy               ... status: image is up to date for d...
+Pulling haproxy               ... done
+compose.parallel.feed_queue: Pending: set()
+compose.parallel.parallel_execute_iter: Finished processing: <Service: haproxy>
+compose.parallel.feed_queue: Pending: set()
+
+ERROR: for robots  b'Get https://docker.registry.internal/v2/go/robotstxt/manifests/PA.3: unauthorized: BAD_CREDENTIAL'
+ERROR: compose.cli.main.main: Get https://docker.registry.internal/v2/go/robotstxt/manifests/PA.3: unauthorized: BAD_CREDENTIAL
+Always Success::
+vagrant@localhost(/tmp) $ ./docker-compose-Linux-x86_64.1 -f lb.yml --verbose pull --no-parallel
+compose.config.config.find: Using configuration files: /code/cm/crowd_loadbalancer/target_filesystem/opt/pa/global/crowd-lb.yml
+WARNING: compose.config.environment.__getitem__: The HOST_NAME variable is not set. Defaulting to a blank string.
+docker.utils.config.find_config_file: Trying paths: ['/etc/docker/config.json', '/home/vagrant/.docker/config.json', '/home/vagrant/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /etc/docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Found entry (registry='docker.registry.internal', username='svc.art.docker')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/version HTTP/1.1" 200 578
+compose.cli.command.get_client: docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': 'Docker Engine - Community'}, Components=[{'Name': 'Engine', 'Version': '18.09.0', 'Details': {'ApiVersion': '1.39', 'Arch': 'amd64', 'BuildTime': '2018-11-07T00:19:08.000000000+00:00', 'Experimental': 'false', 'GitCommit': '4d60db4', 'GoVersion': 'go1.10.4', 'KernelVersion': '3.10.0-957.1.3.el7.x86_64', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.09.0, ApiVersion=1.39, MinAPIVersion=1.12, GitCommit=4d60db4, GoVersion=go1.10.4, Os=linux, Arch=amd64, KernelVersion=3.10.0-957.1.3.el7.x86_64, BuildTime=2018-11-07T00:19:08.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('global_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.22/networks/global_default HTTP/1.1" 404 33
+compose.service.pull: Pulling haproxy (docker.registry.internal/haproxy:1.8-alpine)...
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/haproxy', tag='1.8-alpine', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/images/create?tag=1.8-alpine&fromImage=docker.registry.internal%2Fhaproxy HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object APIClient._stream_helper at 0x7fe84fc7aa40>
+1.8-alpine: Pulling from haproxy
+compose.service.pull: Pulling robots (docker.registry.internal/go/robotstxt:PA.3)...
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/go/robotstxt', tag='PA.3', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/images/create?tag=PA.3&fromImage=docker.registry.internal%2Fgo%2Frobotstxt HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object APIClient._stream_helper at 0x7fe84fc7aeb8>
+PA.3: Pulling from go/robotstxt
+compose.service.pull: Pulling prom_haproxy_exporter (docker.registry.internal/prom/haproxy-exporter:v0.9.0)...
+compose.cli.verbose_proxy.proxy_callable: docker pull <- ('docker.registry.internal/prom/haproxy-exporter', tag='v0.9.0', stream=True, platform=None)
+docker.auth.get_config_header: Looking for auth config
+docker.auth.resolve_authconfig: Looking for auth entry for 'docker.registry.internal'
+docker.auth.resolve_authconfig: Found 'docker.registry.internal'
+docker.auth.get_config_header: Found auth config
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.22/images/create?tag=v0.9.0&fromImage=docker.registry.internal%2Fprom%2Fhaproxy-exporter HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object APIClient._stream_helper at 0x7fe84fc7a9e8>
+v0.9.0: Pulling from prom/haproxy-exporter
+aab39f0bc16d: Already exists
+a3ed95caeb02: Already exists
+2cd9e239cea6: Already exists
+470a754bedd7: Already exists
+Output of docker version
+vagrant@localhost(/tmp) $ docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:48:22 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:19:08 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Steps to reproduce the issue
+Install any version of docker-compose > 1.20.0
+perform a docker-compose pull with images that require authentication to a private registry (repeat x5)
+note any failures
+4, repeat with --no-parallel flag and note 100% success
+Observed result
+failures periodically happen on different images if they are pulled in parallel from a registry that requires authentication.
+Expected result
+failures should not be intermittent and should work in parallel or series

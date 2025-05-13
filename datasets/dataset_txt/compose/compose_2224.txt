@@ -1,0 +1,7 @@
+beverts312 commented on 15 Jul 2016 •
+edited
+Bundle should support the volumes key (as mounts).
+With bundles currently being the only way to leverage compose files (indirectly) with the new swarm mode, it is important that we can leverage settings configured under the volumes key.
+docker-compose bundle
+WARNING: Unsupported key 'volumes' in services.app - ignoring
+8

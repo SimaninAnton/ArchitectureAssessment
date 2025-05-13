@@ -1,0 +1,17 @@
+Goldob commented on 11 Dec 2016 •
+edited
+With Docker Compose being a very powerful tool, for some cases it's considerably even too powerful. In particular, the environments created with it lack very important isolation restrictions. Let me elaborate on what that excactly means.
+Case study: automated testing
+Let's say you have set up an integration test environment with Compose and want to have it run automatically on each repository push.
+How it's done with Docker
+The simplest CI workflow with pure Docker is quite straightforward:
+fetch the source and the Dockerfile
+build it
+create & run it
+And that's it. With no additional steps, you have a save, isolated test.
+The problem with Compose
+While Dockerfile defines only a single container with no assumptions about the outside world, Compose file allows the developer to define relations not only between particular containers, but also between containers and the host. With the ability to mount any arbitrary volume with no access restrictions, an attacker could easily take full control over the machine. The ability to expose ports on the host is also undesirable.
+Kicking off an environment from the provided Compose file as-is is therefore a no-go.
+The solution
+One way to solve that problem is to create a separate tool for isolated testing. What it would in essence need to be, however, is just stripped down version of Compose. So why not just add the proper limitations to what we already have?
+My suggestion is to add an --isolated flag that affects the way Compose files are read. In particular, it should ignore any configurations that break the isolation.

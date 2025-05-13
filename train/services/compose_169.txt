@@ -1,0 +1,52 @@
+elcolie commented on 22 May 2019
+Description of the issue
+dependencies locked down my installation
+- requests [required: >=2.6.1,<2.21,!=2.18.0,!=2.12.2,!=2.11.0, installed: 2.20.1]
+Context information (for bug reports)
+I would like to install other dependencies without lock
+web-push-libs/pywebpush#114
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa5906
+docker-py version: 3.7.2
+CPython version: 3.7.3
+OpenSSL version: OpenSSL 1.0.2r  26 Feb 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.0-beta3
+ API version:       1.40
+ Go version:        go1.12.4
+ Git commit:        c55e026
+ Built:             Thu Apr 25 19:05:38 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.0-beta3
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.4
+  Git commit:       c55e026
+  Built:            Thu Apr 25 19:13:00 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc7+dev
+  GitCommit:        029124da7af7360afa781a0234d1b083550f797c
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Steps to reproduce the issue
+Make requirements.in
+Put django-push-notification, docker-compose altogether in file
+pip-compile requirements.in
+Observed result
+It is unable to install pywebpash
+Then django-push-notification also unable to follow.
+Expected result
+pip-compile must be able to find the dependencies match
+Additional information
+OSX 10.14.2
+pip install docker-compose

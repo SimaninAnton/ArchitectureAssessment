@@ -1,0 +1,7 @@
+adambro commented on 2 Mar 2018
+Container start fails, because network it was attached to has been removed. For some reason docker-compose tries to remove that container attached network first, which results with an error.
+Steps to reproduce:
+docker-compose up
+docker network rm dockercomposenetworkrmfails_default
+docker-compose up
+7

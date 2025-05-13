@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 6 Jul 2015
+Adding and removing containers in "scale" can be done in parallel. This would be particularly useful when using Compose in combination with a Swarm, because you will scale to larger sizes and things generally run a bit slower on a Swarm.
+@aanand has started work on this here: https://github.com/aanand/fig/tree/parallel-scale

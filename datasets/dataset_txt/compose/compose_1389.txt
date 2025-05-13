@@ -1,0 +1,80 @@
+scottbelden commented on 13 Jun 2017
+I apologize that I won't have much information to go on, but I'm really just hoping that someone can if this is more likely a bug in docker-compose or docker-engine.
+I have a docker-compose.yaml file that starts up about 40 services. I can't post the file, but here's essentially what a subset of it looks like:
+services:
+  db:
+    hostname: db
+    links:
+    - nsqd
+    - statsd
+    network_mode: bridge
+  nsqd:
+    hostname: nsqd
+    network_mode: bridge
+  statsd:
+    hostname: statsd
+    network_mode: bridge
+  svc1:
+    hostname: svc1
+    links:
+    - nsqd
+    - db
+    - statsd
+    network_mode: bridge
+  svc2:
+    hostname: svc2
+    links:
+    - nsqd
+    - db
+    - statsd
+    network_mode: bridge
+version: '2.1'
+When I start my cluster, normally for svc1 or svc2 I would see links like the following when doing docker inspect:
+"Links": [
+"/cluster_db_1:/cluster_svc1_1/cluster_db_1",
+"/cluster_nsqd_1:/cluster_svc1_1/cluster_nsqd_1",
+"/cluster_statsd_1:/cluster_svc1_1/cluster_statsd_1",
+"/cluster_statsd_1:/cluster_svc1_1/statsd",
+"/cluster_db_1:/cluster_svc1_1/db",
+"/cluster_db_1:/cluster_svc1_1/db_1",
+"/cluster_nsqd_1:/cluster_svc1_1/nsqd",
+"/cluster_nsqd_1:/cluster_svc1_1/nsqd_1",
+"/cluster_statsd_1:/cluster_svc1_1/statsd_1"
+],
+Both of those services have three links in the docker-compose.yaml and therefore nine links in the list. This is normal and expected.
+However, every once in a while (as in, it took me about 30 or 40 calls to docker-compose down -v and then docker-compose up -d) I see something like this:
+"Links": [
+"/cluster_statsd_1:/cluster_svc2_1/cluster_statsd_1",
+"/cluster_statsd_1:/cluster_svc2_1/statsd",
+"/cluster_statsd_1:/cluster_svc2_1/statsd_1",
+"/cluster_nsqd_1:/cluster_svc2_1/db",
+"/cluster_nsqd_1:/cluster_svc2_1/nsqd",
+"/cluster_nsqd_1:/cluster_svc2_1/nsqd_1",
+"/cluster_nsqd_1:/cluster_svc2_1/cluster_nsqd_1"
+],
+This doesn't have the correct number of links and more troubling is the line "/cluster_nsqd_1:/cluster_svc2_1/db",
+In that instance, if svc2 tries to ping or connect to db it's actually hitting the nsqd container. Once again, I don't have a reliable way to reproduce this or anything to give someone for them to try to reproduce. I'm just hoping that someone can use what I've posted here to guess at whether this is a docker-compose issue or docker.
+This was done on ubuntu 16.04.2. Here's my docker and docker-compose versions:
+$ docker version
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:45:26 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:45:26 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+$ docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.2.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Thanks!

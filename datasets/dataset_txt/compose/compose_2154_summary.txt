@@ -1,0 +1,1 @@
+docker-compose up should return non-zero exit code when volume mapping fails

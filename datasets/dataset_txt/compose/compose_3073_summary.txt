@@ -1,0 +1,1 @@
+Where is pulled image, how can i customize it with docker-compose ?

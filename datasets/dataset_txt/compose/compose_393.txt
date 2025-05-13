@@ -1,0 +1,82 @@
+ZParanoya commented on 21 Nov 2018 •
+edited
+Description of the issue
+Receive a stack trace on build when relative paths are used in the build config. The release prior to this worked fine. I didn't get the version number, but I kept updating with every version that was being automatically downloaded by Docker CE on Windows 10.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:51 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.24)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:56:41 2018
+  OS/Arch:          windows/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  devtestnet:
+    ipam:
+      config:
+      - subnet: 172.28.28.0/24
+      driver: default
+services:
+  web:
+    build:
+      context: C:\SertifiKiln\__BuildAndRunInDocker\Volume\DevBuildWorkspace
+      dockerfile: ../../Scripts/Compose/DevWebDockerfile
+    container_name: c_devtest_com
+    expose:
+    - 80
+    - 443
+    image: devtest_com
+    networks:
+      devtestnet:
+        aliases:
+        - devtest.com
+        - login.devtest.com
+    volumes:
+    - C:\testKiln\__SandboxQAReleases\latest\Web:C:/inetpub/Applications/dotNet2.0/testEsign/Program:ro
+    - C:\SertifiKiln\__BuildAndRunInDocker\Volume\NAS:c:/NAS:rw
+version: '3.7'
+Steps to reproduce the issue
+docker-compose build
+Observed result
+Stack trace
+Expected result
+Build completes
+Stacktrace / full error message
+docker-compose build
+Building web
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 287, in build
+  File "compose\project.py", line 384, in build
+  File "compose\project.py", line 366, in build_service
+  File "compose\service.py", line 1080, in build
+  File "site-packages\docker\api\build.py", line 152, in build
+  File "site-packages\docker\api\build.py", line 346, in process_dockerfile
+OSError: [Errno 22] Invalid argument: '\\\\?\\C:\\SertifiKiln\\__BuildAndRunInDocker\\Volume\\DevBuildWorkspace\\../../Scripts/Compose/DevWebDockerfile'
+[18796] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Windows 10. Installed by going to https://store.docker.com/editions/community/docker-ce-desktop-windows , downloading the executable and installing.
+Tried every combination of enclosing with single quotes, enclosing with double quotes, reversing the slashes, using \ on the ../../Scripts/Compose/DevWebDockerfile path.
+1

@@ -1,0 +1,51 @@
+ashamrai commented on 24 Feb 2017
+Hi!
+My application can not resolve names of services. I have created next config file:
+version : '3'
+services:
+wcf1:
+build: cnt1
+expose:
+- "8733"
+wcf2:
+build: cnt3
+expose:
+- "8733"
+wa1:
+build: cnt2
+ports:
+- "80:80"
+links:
+- wcf1
+- wcf2
+depends_on:
+- wcf1
+- wcf2
+networks:
+default:
+external:
+name: "nat"
+But application from wa1 can not resolve names wcf1 and wcf2. I have done some tests on wa1 with nslookup and it shows me addresses:
+C:\webapplication>nslookup
+Default Server: UnKnown
+Address: 172.25.16.1
+> wcf1
+Server: UnKnown
+Address: 172.25.16.1
+Non-authoritative answer:
+Name: wcf1
+Address: 172.25.29.136
+> wcf2
+Server: UnKnown
+Address: 172.25.16.1
+Non-authoritative answer:
+Name: wcf2
+Address: 172.25.29.126
+Ping works by address:
+C:\webapplication>ping 172.25.29.136
+Pinging 172.25.29.136 with 32 bytes of data:
+Reply from 172.25.29.136: bytes=32 time<1ms TTL=128
+Reply from 172.25.29.136: bytes=32 time<1ms TTL=128
+But does not work by name:
+C:\webapplication>ping wcf1
+Ping request could not find host wcf1. Please check the name and try again.

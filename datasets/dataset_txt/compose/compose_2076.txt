@@ -1,0 +1,23 @@
+guycalledseven commented on 11 Sep 2016 •
+edited
+I have some config vars defined in ".env" file.
+So, if I can use them like this in my compose yml file:
+  environment:
+   - VAR=${VAL_FROM_ENV}
+  env_file:
+    - etc/environment.yml
+Why I cannot use this in my environment.yml?
+DEMO_VAR='${VAL_FROM_ENV}'
+I see env_file as extension of environment field in a file, and it makes perfect sense also to adhere the override from shell vars.
+It makes sense to me that .env file is for Compose and environment/env_file for docker-containers.
+It also makes perfect sense to me that terminal env vars override the ones in .env.
+I think it is pretty cool that I can have many env.yml files or just one and reuse it. Making it work the same a enviroment field vars would make whole compose thing drastically more dynamic and interconnected (and you are not passing everything everywhere). And I wouldn't have to retype everything on many different places.
+Background - I am orchestrating development environment on mac with docker machine / compose (previously with vagrant) and have been looking for a way to keep all important settings per app in one file (where app runs on some stack defined in compose file), which IMHO makes life easier dealing with many projects/devs. Also, I really don't like hardcoding sensitive data in different config files.
+I have been following discussion on #3435 (Interpolate Variables set by environment or env_file) and although I want that badly, I don't think that compose yml file is good place to define vars to be used elsewhere (in compose/docker filees?) because that would lead to completely unreadable mix of vars (who is setting or reading from where?).
+Thank you. :)
+docker-compose version
+docker-compose version 1.8.0, build unknown
+docker-py version: 1.9.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 0.9.8zh 14 Jan 2016
+14

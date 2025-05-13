@@ -1,0 +1,24 @@
+szemek commented on 21 Sep 2016
+In docker-compose.yml I have something like that:
+app:
+    environment:
+        VARIABLE: ${VARIABLE}
+When VARIABLE contains characters from Polish alphabet like ą, ć, ę, ł, ń, ó, ś, ź, ż it returns error:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 56, in main
+  File "compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "compose/cli/docopt_command.py", line 26, in dispatch
+  File "compose/cli/main.py", line 191, in perform_command
+  File "compose/cli/main.py", line 657, in up
+  File "compose/project.py", line 318, in up
+  File "compose/service.py", line 370, in execute_convergence_plan
+  File "compose/service.py", line 410, in recreate_container
+  File "compose/service.py", line 258, in create_container
+  File "compose/service.py", line 625, in _get_container_create_options
+  File "compose/service.py", line 1031, in format_environment
+  File "compose/service.py", line 1030, in format_env
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xc5 in position 7: ordinal not in range(128)
+docker-compose returned -1
+make: *** [run_compose_up] Error 255
+Is it possible that more than ASCII will be handled?

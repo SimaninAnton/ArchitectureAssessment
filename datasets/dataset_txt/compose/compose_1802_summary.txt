@@ -1,0 +1,1 @@
+config command produces wrong depends_on for file version 3

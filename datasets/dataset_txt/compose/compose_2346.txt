@@ -1,0 +1,13 @@
+vikstrous commented on 29 May 2016
+Environment variable values can have new lines in them and docker-compose.yml already supports that because yml does:
+test:
+    image: alpine
+    environment:
+        a: "b\nc"
+    command: sh -c "echo \"$$a\""
+However, the env file syntax doesn't support this. It looks like it doesn't do anything more than split on newlines and the first = sign.
+compose/compose/config/environment.py
+Line 16 in 86b5ed1
+ def split_env(env): 
+One way would be to allow quoted strings in the env file. This is not backwards compatible because anyone who already has a quoted string in their env file would see unexpected behaviour. Hopefully someone else has a better idea?
+29

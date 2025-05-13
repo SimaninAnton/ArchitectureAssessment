@@ -1,0 +1,3 @@
+ThiefMaster commented on 17 Apr 2016
+When using --tmpfs in docker-run I can specify the maximum size (64M for a temporary folder may be ridiculously low depending on the usecase). However, apparently there is no way to do the same from a compose file.
+3

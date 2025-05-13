@@ -1,0 +1,16 @@
+loretoparisi commented on 19 Mar 2019 •
+edited
+In my docker-compose configuration I mount AWS EFS volumes
+volumes:
+      - fs-xxxxxx:/root
+Since few days I'm getting the error Volume fs-xxxx .specifies nonexistent driver efs. According to the exception
+except NotFound:
+            raise ConfigurationError(
+                'Volume %s specifies nonexistent driver %s' % (volume.name, volume.driver)
+            )
+here
+compose/compose/volume.py
+Line 161 in 7ae632a
+ except NotFound: 
+I'm getting a Volume fs-xxxx .specifies nonexistent driver efs error while initializing the containers.
+Looking at the initialize code there could be different root causes of this (maybe in volume.create() or maybe check_remote_volume_config, etc.), and assumed that it is not a ConfigurationError, how to check which is the exact cause that raises that exception?

@@ -1,0 +1,17 @@
+SupaHam commented on 28 Oct 2016
+Hi,
+I have come across a minor issue. The command option does not seem to use the latest environment variables, as specified in the config file.
+If I have the following:
+#.env
+APP_PORT=123
+#docker-compose.yml
+version: '2'
+services:
+  web:
+    environment:
+      APP_PORT: 1234
+    command: "program ${APP_PORT}"
+The final command is program 123 not program 1234. This is preventing me from conveniently setting up different environments.
+However, if I create a debug.env file and add all my environment variables in there, and load it using env_file: [debug.env], command will use the latest env vars as specified in debug.env.
+P.S. I'm open to any suggestions of better ways to share environemnt variables.
+16

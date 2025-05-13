@@ -1,0 +1,24 @@
+Applemann commented on 11 May 2017
+Hello I updated my docker-compose to version 1.13.0
+and try run this docker-compose file:
+version: "3"
+services:
+  redis:
+    image: redis:latest
+    container_name: erp_redis
+    hostname: erp_redis
+    ports:
+      - "6379:6379"
+but I get this error:
+root @ debian /root ### docker-compose -f /etc/docker/compose/jenkins/docker-compose.yml up
+Creating erp_redis ...
+Creating erp_redis ... error
+
+ERROR: for erp_redis  Cannot create container for service redis: invalid port specification: "None"
+
+ERROR: for redis  Cannot create container for service redis: invalid port specification: "None"
+ERROR: Encountered errors while bringing up the project.
+with docker-compose version 2.11.1 is all OK
+error is with docker compose 2.12.0 and 2.13.0
+I am using: Python 3.4.2
+Debian 8

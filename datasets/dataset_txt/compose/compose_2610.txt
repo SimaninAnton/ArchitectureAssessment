@@ -1,0 +1,7 @@
+stefcl commented on 17 Mar 2016
+Hello,
+I am using docker-compose 1.6.2 along with docker 1.10.3.
+I often run short-lived containers in interactive mode using docker-compose run with --rm option and an argument line for debugging purpose before running them in background.
+Sometimes, it takes many attempts to get the command line of my dockerized apps right. Recently, I found a lot of dangling containers with suffixes like "run_3" "run_4" while running docker ps -a, these seemed to correspond to failed "run" attempts that the docker engine was permanently trying to "resurrect". It comes from my yml file which sets the restart policy to "unless-stopped" for all my containers.
+While I understand why it happens, I am wondering if the docker-compose run command should not ignore the restart policy defined in the yml file. The run command seems to be designed primarily for interactive testing and ephemeral containers, while restart policies make most sense with long-lived services.
+Kind regards

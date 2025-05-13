@@ -1,0 +1,251 @@
+deekthesqueak commented on 10 Nov 2015
+When I run docker-compose up the CWD is not mounted to /var/www/html as expected. Instead when the active container is inspected /var/www/html only contains the folder db-store which contains files that would normally be found in /var/lib/mysql.
+docker version
+Client:
+ Version:      1.9.0
+ API version:  1.21
+ Go version:   go1.5.1
+ Git commit:   76d6bc9
+ Built:        Tue Nov  3 21:17:46 UTC 2015
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.9.0
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   76d6bc9
+ Built:        Tue Nov  3 19:20:09 UTC 2015
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version: 1.5.0
+docker-py version: 1.5.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 0.9.8zg 14 July 2015
+OS: OSX 10.11.1
+docker inspect <container>
+[
+{
+    "Id": "bf568df131332934c5e3d414b5f7856f8347f43e4555376248b34464c1934e6c",
+    "Created": "2015-11-10T00:22:01.570929891Z",
+    "Path": "apache2-foreground",
+    "Args": [],
+    "State": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 30701,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2015-11-10T00:22:01.723989821Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+    },
+    "Image": "a8f8c7c959a647b8aa0f1d22bcd3dd445d7fc3d752f06526be2840d76e5e75c1",
+    "ResolvConfPath": "/mnt/sda1/var/lib/docker/containers/bf568df131332934c5e3d414b5f7856f8347f43e4555376248b34464c1934e6c/resolv.conf",
+    "HostnamePath": "/mnt/sda1/var/lib/docker/containers/bf568df131332934c5e3d414b5f7856f8347f43e4555376248b34464c1934e6c/hostname",
+    "HostsPath": "/mnt/sda1/var/lib/docker/containers/bf568df131332934c5e3d414b5f7856f8347f43e4555376248b34464c1934e6c/hosts",
+    "LogPath": "/mnt/sda1/var/lib/docker/containers/bf568df131332934c5e3d414b5f7856f8347f43e4555376248b34464c1934e6c/bf568df131332934c5e3d414b5f7856f8347f43e4555376248b34464c1934e6c-json.log",
+    "Name": "/app_app_1",
+    "RestartCount": 0,
+    "Driver": "aufs",
+    "ExecDriver": "native-0.2",
+    "MountLabel": "",
+    "ProcessLabel": "",
+    "AppArmorProfile": "",
+    "ExecIDs": null,
+    "HostConfig": {
+        "Binds": [
+            "/Code/app:/var/www/html:rw"
+        ],
+        "ContainerIDFile": "",
+        "LxcConf": null,
+        "Memory": 0,
+        "MemoryReservation": 0,
+        "MemorySwap": 0,
+        "KernelMemory": 0,
+        "CpuShares": 0,
+        "CpuPeriod": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "CpuQuota": 0,
+        "BlkioWeight": 0,
+        "OomKillDisable": false,
+        "MemorySwappiness": null,
+        "Privileged": false,
+        "PortBindings": {
+            "80/tcp": [
+                {
+                    "HostIp": "",
+                    "HostPort": "80"
+                }
+            ],
+            "9000/tcp": [
+                {
+                    "HostIp": "",
+                    "HostPort": "9000"
+                }
+            ]
+        },
+        "Links": [
+            "/app_db_1:/app_app_1/app_db_1",
+            "/app_db_1:/app_app_1/db",
+            "/app_db_1:/app_app_1/db_1"
+        ],
+        "PublishAllPorts": false,
+        "Dns": null,
+        "DnsOptions": null,
+        "DnsSearch": null,
+        "ExtraHosts": [],
+        "VolumesFrom": [],
+        "Devices": null,
+        "NetworkMode": "default",
+        "IpcMode": "",
+        "PidMode": "",
+        "UTSMode": "",
+        "CapAdd": null,
+        "CapDrop": null,
+        "GroupAdd": null,
+        "RestartPolicy": {
+            "Name": "",
+            "MaximumRetryCount": 0
+        },
+        "SecurityOpt": null,
+        "ReadonlyRootfs": false,
+        "Ulimits": null,
+        "LogConfig": {
+            "Type": "json-file",
+            "Config": {}
+        },
+        "CgroupParent": "",
+        "ConsoleSize": [
+            0,
+            0
+        ],
+        "VolumeDriver": ""
+    },
+    "GraphDriver": {
+        "Name": "aufs",
+        "Data": null
+    },
+    "Mounts": [
+        {
+            "Source": "/Code/app",
+            "Destination": "/var/www/html",
+            "Mode": "rw",
+            "RW": true
+        }
+    ],
+    "Config": {
+        "Hostname": "app",
+        "Domainname": "dev.local",
+        "User": "",
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "AttachStderr": false,
+        "ExposedPorts": {
+            "80/tcp": {},
+            "9000/tcp": {}
+        },
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+            "affinity:container==698019cde0ecd5607517c07acfa4b859c82dcba6990b1f1740538aa4370b833a",
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "PHP_INI_DIR=/usr/local/etc/php",
+            "PHP_EXTRA_BUILD_DEPS=apache2-dev",
+            "PHP_EXTRA_CONFIGURE_ARGS=--with-apxs2",
+            "GPG_KEYS=0BD78B5F97500D450838F95DFE857D9A90D90EC1 6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3",
+            "PHP_VERSION=5.6.15",
+            "PHP_SSH2_VERSION=0.12",
+            "XDEBUG_VERSION=2.3.3"
+        ],
+        "Cmd": [
+            "apache2-foreground"
+        ],
+        "Image": "app_app",
+        "Volumes": {
+            "/var/www/html": {}
+        },
+        "WorkingDir": "/var/www/html",
+        "Entrypoint": null,
+        "OnBuild": null,
+        "Labels": {
+            "com.docker.compose.config-hash": "16b222a69c065cadacd70b88e4cf68916157bffee0ebb7b16742af0a7a6d4e27",
+            "com.docker.compose.container-number": "1",
+            "com.docker.compose.oneoff": "False",
+            "com.docker.compose.project": "app",
+            "com.docker.compose.service": "app",
+            "com.docker.compose.version": "1.5.0"
+        }
+    },
+    "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "024a2541f91d56f678993a5bf1e61719a9b71b174870ac43442c31100a20eb8e",
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "Ports": {
+            "80/tcp": [
+                {
+                    "HostIp": "0.0.0.0",
+                    "HostPort": "80"
+                }
+            ],
+            "9000/tcp": [
+                {
+                    "HostIp": "0.0.0.0",
+                    "HostPort": "9000"
+                }
+            ]
+        },
+        "SandboxKey": "/var/run/docker/netns/024a2541f91d",
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "9e069f910d10a75b530110f37d88bd143f1194bbcde1959948bee5712358e16f",
+        "Gateway": "172.17.0.1",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "172.17.0.3",
+        "IPPrefixLen": 16,
+        "IPv6Gateway": "",
+        "MacAddress": "02:42:ac:11:00:03",
+        "Networks": {
+            "bridge": {
+                "EndpointID": "9e069f910d10a75b530110f37d88bd143f1194bbcde1959948bee5712358e16f",
+                "Gateway": "172.17.0.1",
+                "IPAddress": "172.17.0.3",
+                "IPPrefixLen": 16,
+                "IPv6Gateway": "",
+                "GlobalIPv6Address": "",
+                "GlobalIPv6PrefixLen": 0,
+                "MacAddress": "02:42:ac:11:00:03"
+            }
+        }
+    }
+}
+]
+docker-compose.yml
+app:
+  build: .
+  hostname: app.dev.local
+  volumes:
+    - .:/var/www/html
+  ports:
+    - "80:80"
+    - "9000:9000"
+  links:
+    - db
+db:
+  image: mysql:5.7
+  volumes:
+    - db-store:/var/lib/mysql
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: app
+    MYSQL_DATABASE: app
+    MYSQL_USER: app
+    MYSQL_PASSWORD: devdb

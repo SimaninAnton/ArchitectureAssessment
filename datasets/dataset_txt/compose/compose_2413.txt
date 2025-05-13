@@ -1,0 +1,42 @@
+cristinelvasluianu commented on 10 May 2016 •
+edited
+When we are using docker compose to launch a docker container, the container will always have the default value for mtu size (1500), even when we start the docker daemon with a custom size (Eg: docker daemon --mtu=1460).
+Steps to reproduce
+Start docker daemon using a custom mtu size
+docker daemon --mtu=1460
+Launch a container using docker compose
+docker-compose.yml:
+version: '2'
+services:
+db:
+image: postgres
+Check the mtu size of eth0 interface for the launched container
+login into container: docker exec -it containerName bash
+cmd: ifconfig
+Expected result:
+The MTU size for the launched container should be equal with daemon mtu option (in our case 1460 bytes)
+Actual result:
+The MTU size for the launched container have the default mtu value 1500 bytes
+NOTE
+docker-compose info
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.5
+OpenSSL version: OpenSSL 1.0.1e-fips 11 Feb 2013
+docker info
+Client:
+Version: 1.11.1
+API version: 1.23
+Go version: go1.5.4
+Git commit: 5604cbe
+Built: Wed Apr 27 00:34:42 2016
+OS/Arch: linux/amd64
+Server:
+Version: 1.11.1
+API version: 1.23
+Go version: go1.5.4
+Git commit: 5604cbe
+Built: Wed Apr 27 00:34:42 2016
+OS/Arch: linux/amd64
+system info
+Linux weave-machine 3.10.0-327.13.1.el7.x86_64 #1 SMP Thu Mar 31 16:04:38 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux

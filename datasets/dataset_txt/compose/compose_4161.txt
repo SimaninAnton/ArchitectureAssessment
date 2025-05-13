@@ -1,0 +1,4 @@
+clifton commented on 18 Oct 2014
+What's the best practice on cloning private repos (e.g. gems or npm modules)? Currently, I'd need to add my private ssh keys into the repo via volumes in fig.yml. Is there a better way?
+I'd think the optimal way of handling this would be to forward the ssh agent. Perhaps have an option in the fig.yml for doing that?
+Example: https://gist.github.com/d11wtq/8699521

@@ -1,0 +1,22 @@
+PatrickLang commented on 3 Sep 2016
+docker run has a parameter --isolation that can be used to set additional isolation modes when running Docker containers. For example, docker run --isolation=hyperv is commonly used on Windows with Hyper-V. Given that most of the other run options are already supported such as security_opt and privileged, I think it makes sense that isolation should be there too.
+Here's an example of how I would like to use it in docker-compose.yml:
+version: '2'
+services:
+  sql:
+    image: windowsservercore
+    tty: true
+    stdin_open: true
+#    isolation: 'hyperv'
+
+  web:
+    image: windowsservercore
+    tty: true
+    stdin_open: true
+#    isolation: 'hyperv'
+
+networks:
+  default:
+    external:
+      name: nat
+2

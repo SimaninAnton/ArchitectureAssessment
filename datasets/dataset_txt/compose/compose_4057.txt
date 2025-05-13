@@ -1,0 +1,34 @@
+anentropic commented on 5 Dec 2014
+First I thought this was a fig issue #637 (comment)
+then a Docker issue moby/moby#9530
+But now I'm pretty sure it's a fig issue, and I can see where.
+Basically when you fig up anything after the first time, fig will 'recreate the containers'...
+In the code for Service.recreate_container it says:
+Recreate a container. An intermediate container is created so that
+the new container has the same name, while still supporting
+volumes-from the original container.
+Here is some code from fig Service:
+def recreate_container(self, container, **override_options):
+    ...
+    intermediate_container.start(volumes_from=container.id)`
+    ...
+    self.start_container(new_container, intermediate_container=intermediate_container)
+
+    intermediate_container.remove()
+    ...
+
+def start_container(self, container=None, intermediate_container=None, **override_options):
+    ...
+    container.start(
+        ...
+        volumes_from=self._get_volumes_from(intermediate_container),
+    )
+    ...
+
+def _get_volumes_from(self, intermediate_container=None):
+    ...
+    if intermediate_container:
+        volumes_from.append(intermediate_container.id)
+    ...
+I think I can see here that we end up with a volumes_from to a container that is then removed. Then when I try to restart the new container, Docker complains about the missing intermediate container and fails.
+I assume the point of the dance above is something to do with ensuring continuity of volumes. If that is all essential then maybe it's wrong to remove intermediate_container here. Or maybe the VolumesFrom reference could be removed after it's done its job.

@@ -1,0 +1,4 @@
+030 commented on 10 Apr 2017
+    -t, --timeout TIMEOUT      Use this timeout in seconds for container shutdown
+                               when attached or when containers are already
+                               running. (default: 10)

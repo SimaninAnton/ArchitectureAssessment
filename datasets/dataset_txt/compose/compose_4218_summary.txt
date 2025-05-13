@@ -1,0 +1,1 @@
+[feature] fig run aliases in fig.yml

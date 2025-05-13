@@ -1,0 +1,9 @@
+galp commented on 22 Mar 2018 •
+edited
+Since 17.12.0 there is support in docker swarm for gpu devices such as nvidia cuda .
+You can create a service that requires a gpu resource like so:
+docker service create -t --generic-resource "gpu=1" ubuntu bash
+However there is no way to do this via docker-compose as far as I understand.
+For reference the relevant github issue comment is here
+Is there a plan to add this in compose?
+2

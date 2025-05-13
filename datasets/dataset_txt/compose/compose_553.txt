@@ -1,0 +1,26 @@
+Contributor
+denismakogon commented on 31 Jul 2018 •
+edited
+Description of the issue
+Here's the thing. I need to set container's env var with a value of docker network(s) where this particular container would be binded to, here's reference template:
+version: '3'
+
+networks:
+  my-network:
+    driver: bridge
+
+services:
+  server:
+    restart: always
+    image: ***
+    networks:
+      - my-network
+    ports:
+      - "8080:8080"
+    environment:
+      DOCKER_NETWORKS: <here i need to set "my-network" real resource name>
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+Since compose will provision a network with a different name there is no clear way to reference a networkin name anywhere except specific fields where compose does perform name resolving.
+feature proposal
+At this particular moment V3 allows to set container_name, so it makes a container name static. I'd like to be able to do the same with networks.

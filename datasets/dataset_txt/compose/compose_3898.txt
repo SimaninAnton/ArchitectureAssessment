@@ -1,0 +1,41 @@
+EwanValentine commented on 24 Feb 2015
+I keep getting errors such as Invalid repository name (Docker_app), only [a-z0-9-_.] are allowed
+Here's my fig.yml:
+app:
+  build: app/
+  links:
+    - redis
+    - mysql
+  volumes:
+    - ./app/project:/var/www
+
+nginx:
+  build: nginx/
+  ports:
+    - 8080:80
+  links:
+    - fpm
+  volumes_from:
+    - app
+  environment:
+    <APP_SERVER_NAME>: dev-machine
+
+fpm:
+  build: fpm/
+  links:
+    - redis
+  volumes_from:
+    - app
+  environment:
+    APP_SERVER_NAME: dev-machine
+
+mysql:
+  image: mysql:latest
+  ports:
+    - 3363
+
+redis:
+  image: redis:latest
+  ports:
+    - "6379:6379"
+Cheers!

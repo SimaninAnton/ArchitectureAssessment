@@ -1,0 +1,11 @@
+qweluke commented on 21 Sep 2017 •
+edited
+Hi,
+I'm having a problem with docker-compose and MacOS 10.12
+In short: on linux all works fine, on mac.. there is huge performance problem.
+I'm using it to develop a symfony app. If I use 'dev' version (which don't uses a cache, loads all data from the hdd and so on, each time I refresh the page) page can load up to 1-2 minutes...
+Have you faced similiar issue?
+One more thing: while refreshing the page, my CPU goes really hight..
+I've found other (similiar) issue? with solution: #3419 (comment)
+but it won't work on my pc.
+What's more strange is that phpmyadmin works fine, without any problem, also quering a database is quick...

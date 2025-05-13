@@ -1,0 +1,56 @@
+t-richards commented on 5 Apr 2017 •
+edited
+Problem
+When using a docker-compose.override.yml file, $ docker-compose up will exit with a TypeError if the port mappings specified in both the base and override file are not all of the same type. Additionally, the error message produced on exit is not particularly helpful.
+Version(s)
+Operating system: Arch Linux
+$ docker-compose --version
+docker-compose version 1.11.2, build dfed245b
+
+$ docker --version
+Docker version 17.03.1-ce, build c6d412e329
+How to reproduce
+#
+# File: docker-compose.yml
+#
+web:
+  image: tianon/true
+  ports:
+    - 8080 # int
+#
+# File: docker-compose.override.yml
+#
+web:
+  ports:
+    - "8443" # str
+$ docker-compose up
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.11.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 64, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 113, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/command.py", line 36, in project_from_options
+    environment=environment
+  File "/usr/lib/python3.6/site-packages/compose/cli/command.py", line 103, in get_project
+    config_data = config.load(config_details)
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 333, in load
+    service_dicts = load_services(config_details, main_file)
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 455, in load_services
+    service_config = merge_services(service_config, next_config)
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 446, in merge_services
+    for name in all_service_names
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 446, in <dictcomp>
+    for name in all_service_names
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 802, in merge_service_dicts_from_files
+    new_service = merge_service_dicts(base, override, version)
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 870, in merge_service_dicts
+    md.merge_field(field, merge_unique_items_lists, default=[])
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 826, in merge_field
+    self.override.get(field, default))
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 889, in merge_unique_items_lists
+    return sorted(set().union(base, override))
+TypeError: '<' not supported between instances of 'str' and 'int'
+Workaround
+Adjust the port specifications in both files so that they are all the same type (e.g. "8080", "8443")

@@ -1,0 +1,1 @@
+Better message when Hub throws an error - in this case Hub was rate limiting requests

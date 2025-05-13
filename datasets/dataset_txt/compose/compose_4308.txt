@@ -1,0 +1,7 @@
+pmlopes commented on 11 Jun 2014
+Recreating resources_db_1...
+Cannot start container fc92a8344af94a2697da22c7b6285935157e807fbdc8e7591d85e84fe49f5017: /var/lib/docker/aufs/mnt/fc92a8344af94a2697da22c7b6285935157e807fbdc8e7591d85e84fe49f5017 is not within /var/lib/docker/aufs/mnt/fc92a8344af94a2697da22c7b6285935157e807fbdc8e7591d85e84fe49f5017
+I am just trying to setup a postgresql container and share the /var/lib/postgresql (the data) with the host so the data in the db survives restarts.
+I've used this docker file:
+https://github.com/stigi/dockerfile-postgresql
+But replaced the dockyard with the ubuntu packages.

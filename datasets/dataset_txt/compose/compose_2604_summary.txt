@@ -1,0 +1,1 @@
+Docker compose installed on Mac with pip fails due to missing module

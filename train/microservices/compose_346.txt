@@ -1,0 +1,88 @@
+liuzhipeng1234 commented on 25 Dec 2018 •
+edited
+Description of the issue
+There two service in one yaml and share same volume. My swarm has one manager and one worker.
+When I use " docker stack deploy -c " to deploy it, both of two nodes try to create the same volume at the same time. The result is appearing two volumes with same name.
+I think custom variable of volume is used to tell swarm to use this volume. Scheduling first ,then create it.
+compose file
+version: '3.5'
+services:
+  vsftpd:
+    network_mode: ingress
+    image: {{ registry_url }}/kycloud/vsftpd:1.0
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ cpu_limit }}"
+          memory: {{ memory_limit }}
+        reservations:
+          cpus: "{{ cpu_reserved }}"
+          memory: {{ memory_reserved }}
+    ports:
+      - {{ port_min }}-{{ port_max }}:{{ port_min }}-{{ port_max }}
+    volumes:
+      - ftpdata:/etc/vsftpd_data:rw
+    environment:
+      - FTP_PORT_MIN={{ port_min }}
+      - FTP_PORT_MAX={{ port_max }}
+      - PASV_ADDRESS={{ host_ip }}
+      - XDERLOG_ENABLE={{ log_enable }}
+      - ANONYMOUS_ENABLE={{ anon_enable }}
+      - ANON_UPLOAD_ENABLE={{ anon_upload_enable }}
+      - ANON_MKDIR_WRITE_ENABLE={{ anon_mkdir_write_enable }}
+      - USER_NAME={{ user_name }}
+      - USER_PASSWORD={{ user_password }}
+
+  http:
+    network_mode: ingress
+    depends_on:
+      - vsftpd
+    image: {{ registry_url }}/kycloud/apache:2.4.35-debian-9-r15 # 公网镜像
+    ports:
+      - {{ port_http }}:8080
+    volumes:
+      - ftpdata:/app:rw
+
+volumes:
+  ftpdata:
+    name: "{{ volume_name }}"
+    driver: rexray
+    driver_opts:
+      size: {{ volume_size }}
+      fsType: {{ volume_fs }}
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:23:03 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:25:29 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of rexray config
+libstorage:
+  service: cinder
+  server:
+    services:
+      cinder:
+        driver: cinder
+cinder:
+  authUrl: ******
+  username: ******
+  password: ******
+  tenantName: ******
+  domainName: ******
+Steps to reproduce the issue
+two service share same volume
+deploy then
+check rexray log

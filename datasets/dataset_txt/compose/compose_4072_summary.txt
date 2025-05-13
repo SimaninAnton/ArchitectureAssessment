@@ -1,0 +1,1 @@
+Add container name with current ip to /etc/hosts

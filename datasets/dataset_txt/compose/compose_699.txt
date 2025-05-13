@@ -1,0 +1,103 @@
+xmartinez commented on 3 May 2018
+Description of the issue
+docker-compose pull fails to retrieve images from Google Cloud Repository (using gcloud credential helper), with the following exception:
+Pulling hello-world ... 
+ERROR: gcloud failed to load: 'module' object has no attribute 'HTTPSConnection'
+    gcloud_main = _import_gcloud_main()
+    import googlecloudsdk.gcloud_main
+    from googlecloudsdk.calliope import base
+    from googlecloudsdk.calliope import display
+    from googlecloudsdk.calliope import display_taps
+    from googlecloudsdk.core.resource import resource_printer_base
+    from googlecloudsdk.core.resource import resource_projector
+    from apitools.base.py import encoding as protorpc_encoding
+    from apitools.base.py.base_api import *
+    from apitools.base.py import http_wrapper
+    import httplib2
+    from httplib2.python2.httplib2 import *
+    class HTTPSConnectionWithTimeout(httplib.HTTPSConnection):
+
+This usually indicates corruption in your gcloud installation or problems with your Python interpreter.
+
+Please verify that the following is the path to a working Python 2.7 executable:
+    /usr/bin/python2
+
+If it is not, please set the CLOUDSDK_PYTHON environment variable to point to a working Python 2.7 executable.
+
+If you are still experiencing problems, please reinstall the Cloud SDK using the instructions here:
+    https://cloud.google.com/sdk/
+
+ERROR: for hello-world  Credentials store error: StoreError('Credentials store docker-credential-gcloud exited with "".',)
+Traceback (most recent call last):
+  File "site-packages/dockerpycreds/store.py", line 71, in _execute
+  File "subprocess.py", line 336, in check_output
+  File "subprocess.py", line 418, in run
+subprocess.CalledProcessError: Command '['/usr/bin/docker-credential-gcloud', 'get']' returned non-zero exit status 1.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "site-packages/docker/auth.py", line 126, in _resolve_authconfig_credstore
+  File "site-packages/dockerpycreds/store.py", line 33, in get
+  File "site-packages/dockerpycreds/store.py", line 84, in _execute
+dockerpycreds.errors.StoreError: Credentials store docker-credential-gcloud exited with "".
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 729, in pull
+  File "compose/project.py", line 556, in pull
+  File "compose/parallel.py", line 105, in parallel_execute
+  File "compose/parallel.py", line 203, in producer
+  File "compose/project.py", line 549, in pull_service
+  File "compose/service.py", line 1163, in pull
+  File "site-packages/docker/api/image.py", line 380, in pull
+  File "site-packages/docker/auth.py", line 47, in get_config_header
+  File "site-packages/docker/auth.py", line 94, in resolve_authconfig
+  File "site-packages/docker/auth.py", line 143, in _resolve_authconfig_credstore
+docker.errors.DockerException: Credentials store error: StoreError('Credentials store docker-credential-gcloud exited with "".',)
+[9076] Failed to execute script docker-compose
+Context information (for bug reports)
+$ docker-compose --version
+docker-compose version 1.21.1, build 5a3f1a3Output of "docker-compose version"
+$ docker --version
+Docker version 18.03.0-ce, build 0520e24
+$ docker-compose config
+services:
+  hello-world:
+    image: gcr.io/library/hello-world
+version: '3.0'
+Steps to reproduce the issue
+After installing the Linux pyinstaller release:
+wget -O $HOME/.local/bin/docker-compose https://github.com/docker/compose/releases/download/1.21.1/docker-compose-Linux-x86_64
+chmod +x $HOME/.local/bin/docker-compose
+and setting up gcloud credential helper in ~/.docker/config.json:
+{
+  "credHelpers": {
+    "gcr.io": "gcloud"
+  }
+}
+Trying to pull images (docker-compose pull) for the following sample docker-compose.yaml:
+version: "3"
+services:
+  hello-world:
+    image: gcr.io/library/hello-world
+fails with the above traceback.
+Additional information
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 17.10
+Release: 17.10
+Codename: artful
+$ gcloud --version
+Google Cloud SDK 200.0.0
+alpha 2018.04.30
+beta 2018.04.30
+bq 2.0.33
+core 2018.04.30
+gsutil 4.31
+5

@@ -1,0 +1,1 @@
+Entrypoint should be allowed to be a string

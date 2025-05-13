@@ -1,0 +1,28 @@
+tylerbrandt commented on 20 May 2016
+I noticed what appears to be a regression upon upgrading from 1.7.0 to 1.7.1, where the network "aliases" are not defined when running docker-compose run.
+This is the simplest docker-compose.yml configuration I could create to illustrate the difference:
+version: '2'
+
+services:
+  test:
+    image: busybox
+    networks:
+      default:
+        aliases:
+          - busy
+    command: sh
+When running docker-compose run test on 1.7.1 the "Aliases" key is empty:
+> docker-compose -v
+docker-compose version 1.7.1, build 0a9ab35
+> docker-compose run test
+> docker inspect --format '{{.NetworkSettings.Networks.composetest_default.Aliases}}' $(docker-compose ps -q)
+[]
+On 1.7.0 I see the defined alias:
+> docker-compose -v
+docker-compose version 1.7.0, build 0d7bf73
+> docker-compose run test
+> docker inspect --format '{{.NetworkSettings.Networks.composetest_default.Aliases}}' $(docker-compose ps -q)
+[busy]
+I also tried using a defined network, but Aliases weren't created there either under 1.7.1. Aliases are assigned as expected using docker-compose up -d test.
+Is the 1.7.1 behavior expected, or a bug? In my case the new behavior is breaking a selenium test suite that I have created, which has two services which need bidirectional communication. My solution (under 1.7.0) was to link my "app" service to the "selenium" service, and define an alias for the app service (on the default network). Then I docker-compose run the "app" service in order to run a series of tests (I can attach the docker-compose.yml file for the actual service if necessary but it uses some proprietary images). Under 1.7.0 the containers can resolve each other using the defined aliases, but under 1.7.1 only "app" can see "selenium", but not the other way around.
+1

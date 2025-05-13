@@ -1,0 +1,31 @@
+michaelknurr commented on 3 Apr 2018 •
+edited
+Description of the issue
+When upgrading docker compose to a version later than 1.19.0 i get an error
+$ sudo curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+$ docker-compose --version
+docker-compose: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /tmp/_MEIb0wktP/libz.so.1)
+Whereas the version 1.19.0 still runs fine
+$ sudo curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+$ docker-compose --version
+docker-compose version 1.19.0, build 9e633ef
+Context information (for bug reports)
+OS release: CentOS release 6.9 (Final)
+Output of "docker-compose version"
+Output of "docker version"
+$ docker version
+Client version: 1.7.1
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 786b29d/1.7.1
+OS/Arch (client): linux/amd64
+Server version: 1.7.1
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 786b29d/1.7.1
+OS/Arch (server): linux/amd64
+Output of "docker-compose config"
+Additional information
+it seems like there is a possible relation to #102 #102
+OS version / distribution, docker-compose install method, etc.
+1

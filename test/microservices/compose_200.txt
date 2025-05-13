@@ -1,0 +1,55 @@
+Silex commented on 26 Apr 2019 •
+edited
+Hello,
+With the following compose file, changes done to ./haproxy/haproxy.cfg after the container started are not reflected in the container. If I remove the :ro then things work as expected.
+It works as expected if I use plain docker from the command line, which makes me think the problem is in docker-compose.
+I'm not using swarm, just docker-compose up -d.
+version: '3.7'
+services:
+  proxy:
+    restart: always
+    image: haproxy
+    command: ['haproxy', '-f', '/run/secrets/haproxy/admins.cfg', '-f', '/usr/local/etc/haproxy/haproxy.cfg']
+    ports:
+      - '80:80'
+      - '3128:3128'
+      - '9999:9999'
+    secrets:
+      - haproxy
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '2m'
+        max-file: '10'
+
+secrets:
+  haproxy:
+    file: ./data/secrets/haproxy
+Additional informations:
+philippe@pv-desktop:$ docker version
+Client:
+ Version:           18.09.5
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        e8ff056
+ Built:             Thu Apr 11 04:43:57 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       e8ff056
+  Built:            Thu Apr 11 04:10:53 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+philippe@pv-desktop:$ docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018

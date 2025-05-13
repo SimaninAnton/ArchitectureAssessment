@@ -1,0 +1,32 @@
+moroz-off commented on 12 Nov 2016 •
+edited by shin-
+Docker version 1.12.2, build bb80604
+docker-compose version 1.9.0-rc4, build 181a4e9
+ProductName: Mac OS X ProductVersion: 10.9.5 BuildVersion: 13F1808
+docker-machine version 0.8.2, build e18a919
+My docker-compose.yml:
+version: '2.0'
+services:
+  sass:
+    image: ubuntudesign/sass
+    command: sass --watch --style compressed --scss /app/static/styles/scss/style.scss:/app/static/styles/style.css
+    restart: always
+  web:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: python:3.3
+    command: python3 wsgi.py 
+    env_file: ./.env
+    volumes:
+      - ./:/code
+    working_dir: /code
+    ports:
+      - "443:443"
+      - "8051:80"
+    links:
+      - sass
+    depends_on:
+      - sass
+    restart: always
+on earlier versions of 1.7 and 1.8 I get the same error ...

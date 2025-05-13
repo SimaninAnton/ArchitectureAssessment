@@ -1,0 +1,10 @@
+felixrabe commented on 27 Aug 2014
+Using the following fig.yml file:
+web:
+  image: busybox:latest
+  command: echo hello world
+leads to this output:
+$ fig run web
+hello world
+hello world
+Why?

@@ -1,0 +1,86 @@
+aario commented on 11 Feb 2019
+Description of the issue
+This is the most annoying bug I have ever faced with docker-compose. As it's the second time I'm facing this issue, I decided to report it here maybe other people also have faced the same issue and maybe others have better workaround than mine and maybe one finds the root cause and so the solution.
+There are no clear steps to reproduce as of now. Here is what happens:
+A folder containing a docker-compose.yml file and some Dockerfile in a subfolder. The docker-compose file points to the Dockerfile to build as well as some volumes to mount. The setup is working for months and no problem. Suddenly it stops working, complaining about a random file not being accessible in one of the containers:
+An exception occurred in driver: could not find driver
+You remove the container, nothing happens. It recreates the container and throws the same error. You remove the image, then it shows a new error message:
+...
+  File "/usr/lib/python3/dist-packages/docker/utils/build.py", line 100, in create_archive
+...
+PermissionError: [Errno 13] Permission denied: <address of some random file in one of the volumes>
+You remove all the images you have ever had and all the containers, so docker starts to pull everything again from internet, same thing!
+You totally remove the volumes section from the yaml file, nope. You totally rename all the service names and container names, nope. You rename all folders and subfolders, nope. You totally remove all the lines and start with a simple hello-world container, it works. But it's just a hello-world.
+Next you put that hello world inside a Dockerfile in a random subfolder, same error again!
+Now here is some clue: You totally rename the volume folder where the path inside permission error message points to, you run things again, you see the error message is still there, it even automatically detected what you chose as the new name for the volume folder, and hits that to your face!. Like if the file which it complains about access permissions is in:
+/home/user/docker-files/volumes/mysql/abcd.xyz
+And you rename volumes to volumes.bak, the error message now complains about:
+/home/user/docker-files/volumes.bak/mysql/abcd.xyz
+You grep the whole /var/lib/docker/ and /var/lib/docker-engine for volumes.bak and you cannot find any text or binary file containing the name. It's like the text is coming from a micro-controller inside the mainboard!
+Finally the workaround:
+You archive the volumes folder to a tar archive, then totally remove it with
+sudo rm -rf ./volumes.bak
+Clean up all your insane try and errors inside your project folder:
+git reset --hard HEAD
+and then it works!
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.21.0, build unknown
+docker-py version: 3.4.1
+CPython version: 3.7.2
+OpenSSL version: OpenSSL 1.1.1a  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:53 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:02:44 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(As I mentioned above, even moving to a new folder like /tmp/a and trying with dummy docker-compose file which just has a build section, gives the same error regarding same permission problem accessing the same file even if the volume folder is renamed like /home/user/docker-files/volumes.bak/mysql/abcd.xyz)
+services:
+  main-webserver:
+    build:
+      args:
+        HOST_USER_ID: "y"
+      context: /tmp/a
+      dockerfile: x
+    container_name: y
+version: '2.0'
+Steps to reproduce the issue
+Still unknown. Just hope it never happens to you. If it did, do the workaround above.
+Observed result
+See above
+Expected result
+at worst case, docker rmi must fix the issue.
+Stacktrace / full error message
+Unfortunately I fixed it with above workaround before being able to have a full copy pasted of the error message.
+Additional information
+> cat /etc/os-release
+PRETTY_NAME="Debian GNU/Linux buster/sid"
+NAME="Debian GNU/Linux"
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+> dpkg --get-selections | grep docker
+docker-ce                                       install
+docker-ce-cli                                   install
+docker-compose                                  install
+golang-docker-credential-helpers                install
+python3-docker                                  install
+python3-dockerpty                               install
+python3-dockerpycreds                           install
+``

@@ -1,0 +1,10 @@
+cauealvesbraz commented on 30 Nov 2015
+Hello,
+I'm having some problems to connect with network at docker-compose.yml
+Docker version 1.9.1, build a34a1d5
+docker-compose version: 1.5.1
+docker-machine version 0.5.1 (7e8e38e)
+For install some dependencies, inside of entrypoint I has the following command: composer install. And received the following message:
+SlowTimer [54662ms] at curl
+Fatal error: Maximum execution time of 180 seconds exceeded
+When I try to run apt-get update command the same thing happens. Could anyone help me?

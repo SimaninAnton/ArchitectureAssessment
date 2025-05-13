@@ -1,0 +1,1 @@
+"Invalid repository name" error message alerts about the wrong service name

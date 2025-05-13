@@ -1,0 +1,38 @@
+hdorio commented on 2 Oct 2015
+With docker-compose 1.4.2 and docker 1.8.2
+You can see below the first volume e583c6a8...5a93788a0 is reused
+ $ sudo docker-compose up -d --force-recreate
+   Recreating remotetransmission_torrent_1...
+
+ $ docker inspect remotetransmission_torrent_1 | grep volumes
+   "/mnt/docker/volumes/e583c6a87437a5b4b1af50ee2693bd3e5dce574ec72d60dce1311215a93788a0/_data:/home/transmission/.config/transmission-daemon:rw",
+   "/mnt/docker/volumes/cefce79850d7162f4f99541559c2dfc7315c83db717a7a5953118bd3c4b273e0/_data:/home/transmission/Downloads:rw"
+   "Source": "/mnt/docker/volumes/e583c6a87437a5b4b1af50ee2693bd3e5dce574ec72d60dce1311215a93788a0/_data",
+   "Source": "/mnt/docker/volumes/cefce79850d7162f4f99541559c2dfc7315c83db717a7a5953118bd3c4b273e0/_data",
+
+ $ sudo docker-compose up -d --force-recreate
+   Recreating remotetransmission_torrent_1...
+
+ $ docker inspect remotetransmission_torrent_1 | grep volumes
+   "/mnt/docker/volumes/e583c6a87437a5b4b1af50ee2693bd3e5dce574ec72d60dce1311215a93788a0/_data:/home/transmission/.config/transmission-daemon:rw",
+   "/mnt/docker/volumes/cefce79850d7162f4f99541559c2dfc7315c83db717a7a5953118bd3c4b273e0/_data:/home/transmission/Downloads:rw"
+   "Source": "/mnt/docker/volumes/e583c6a87437a5b4b1af50ee2693bd3e5dce574ec72d60dce1311215a93788a0/_data",
+   "Source": "/mnt/docker/volumes/cefce79850d7162f4f99541559c2dfc7315c83db717a7a5953118bd3c4b273e0/_data",
+I'm forced to stop then rm to create some new volumes
+ $ sudo docker-compose stop 
+   Stopping remotetransmission_torrent_1... done
+
+ $ sudo docker-compose rm
+   Going to remove remotetransmission_torrent_1
+   Are you sure? [yN] y
+   Removing remotetransmission_torrent_1... done
+
+ $ sudo docker-compose up -d --force-recreate
+   Creating remotetransmission_torrent_1...
+
+ $ docker inspect remotetransmission_torrent_1 | grep volumes
+   "Source": "/mnt/docker/volumes/c5bb9a8f7b68c762c42e9c0ee92afbca3aa0d7ff9d09aaf45fd260f6fc663ec9/_data",
+   "Source": "/mnt/docker/volumes/9dcce8440bafc8893e07352111d1aefb625c36df10da6dc4eaa593220266ea31/_data",
+_
+Is there a better way than the stop/rm method?
+22

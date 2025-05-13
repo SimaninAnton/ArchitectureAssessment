@@ -1,0 +1,36 @@
+powersplay commented on 2 Dec 2015
+(On Windows Server 2016 TP4) Specifying volumes: key in docker-compose.yml file gives error of invalid type, it should be an array or Invalid volume specification: The docker-compose.yml looks like this for the first error:
+  foobar:
+    image: microsoft/iis
+    net: default
+    volumes:  c:\foo:c:\bar
+    command: cmd /c type Hello
+PS C:\Users\Administrator\compose2> docker-compose up -d
+Validation failed, reason(s):
+Service 'foobar' configuration key 'volumes' contains an invalid type, it should be an array
+foobar:
+  image: microsoft/iis
+  net: default
+  volumes:  
+    - c:\foo:c:\bar
+  command: cmd /c type Hello
+PS C:\Users\Administrator\compose2> docker-compose up -d
+Creating compose2_foobar_1
+Invalid volume spec "c": volumeinvalid: Invalid volume specification: 'c'
+The command docker run -v c:/foo:c:/bar --name test1 windowsservercore cmd works fine and mounts the volume correctly.
+Here is the version:
+PS C:\Users\Administrator\compose2> docker version
+Client:
+Version: 1.10.0-dev
+API version: 1.22
+Go version: go1.5.1
+Git commit: 54733ab
+Built: Mon Nov 30 19:27:57 UTC 2015
+OS/Arch: windows/amd64
+Server:
+Version: 1.10.0-dev
+API version: 1.22
+Go version: go1.5.1
+Git commit: 54733ab
+Built: Mon Nov 30 19:27:57 UTC 2015
+OS/Arch: windows/amd64

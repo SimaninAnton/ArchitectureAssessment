@@ -1,0 +1,21 @@
+Spittal commented on 18 Jun 2017
+I have a quick question about named volumes, and how to update data within it.
+Basically my continuous integration system builds a docker image and as a step in the build copies the latest version of my code into it. From there it pushes that image to a private registry then once that is done I issue an SSH command on my server running docker-compose to docker-compose pull && docker-compose up -d.
+Where the problem is, is I have multiple services that share data from that one docker image I just created and pulled, my configuration of named volumes looks like this:
+version: '3'
+services:
+  service1:
+    image: imageWithUpdatedCode
+    volumes:
+      - app:/var/www
+
+  service2:
+    image: someImage
+    volumes:
+      - app:/var/www
+
+volumes:
+  app:
+So, when I update the image that service1 is using, because the volume app already exists, it doesn't update the volume with the new code found in service1's new docker image.
+I know that I can issue a command on startup of the container to copy in the new data from another directory, but that seems like a bit of a hack to me. Is there a better way to update the data in the app volume?
+5

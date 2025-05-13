@@ -1,0 +1,19 @@
+ljones-cbnl commented on 14 Apr 2016
+If I set up a network using the "docker network" cli command:
+docker network create --subnet=192.168.2.0/24 --gateway=192.168.2.254 \
+--ip-range=192.168.2.0/24 -o "com.docker.network.bridge.name"="house_lan" house_lan
+I get a network called "house_lan".
+If I try and simulate this command with docker-compose.yml entries:
+networks:
+  house_lan:
+    driver: bridge
+    driver_opts:
+       com.docker.network.bridge.name: "house_lan"
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+          iprange: 192.168.2.0/24
+          gateway: 192.168.2.25
+I get a network called "dockernetworking2_house_lan" which is to be expected given docker-composes scaling features. The directory in this instance is docker-networking-2.
+How do I over ride this project naming feature to create a named network, is there a network_name item similar to the services container_name or some other way of ensuring the network name has no project attached to the front?

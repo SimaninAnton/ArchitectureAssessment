@@ -1,0 +1,11 @@
+Mahmoudz commented on 8 May 2016 •
+edited
+I'm using the latest version of everything and the v2 of docker compose.
+I tried to set it in the docker-compose.yml file with no luck as there's no clear reference on where to place it exactly?
+I tried to add it in an .env file but didn't read it!
+I also tried to add it in the command and it keeps giving an error.
+docker-compose up -d -p anything   nginx php mysql
+docker-compose up -d --project-name anything   nginx php mysql
+I'm more interested in adding it to the docker-compose file.
+The main reason is I want to override the default project name which is the directory name.
+9

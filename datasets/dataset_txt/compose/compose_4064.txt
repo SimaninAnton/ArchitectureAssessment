@@ -1,0 +1,40 @@
+nonsensery commented on 3 Dec 2014
+TL;DR
+It seems like it would be useful to be able to specify a subset of "default" containers that would be run when using plain old fig up.
+Background
+As a concrete example, I have a Rails app that uses Cucumber for feature testing. (The Cucumber tests run as a separate process that makes requests to a running instance of the application.) I would like to have the Cucumber tests containerized along side my application so that my team (and our CI server) can easily run the feature tests.
+If I do this, though, then a plain fig up has the effect of starting all of my containers (including the Cucumber container), running the feature tests, and then shutting down.
+A work-around is to use fig up app to launch the app (and db, etc), but this just doesn't sit right with me. It seems like anywhere Fig is being used, I should be able to run fig up and get a running version of the thing.
+Proposed Solution
+What if there were a way to designate one or more containers as the "default" containers? Running fig up would then be equivalent to running fig up <default containers>. (That is, the default containers and all of their linked containers would be started.)
+A Strawman
+I hesitate to spell out exactly what this setting might look like, because I'm afraid it will cause people to fixate on that aspect. But, it seems like it would be useful for illustration, so here is one way it could be done:
+app:
+  default: true # <= This is the container that most people will want to run most often
+  build: .
+  command: bundle exec rails server
+  volumes:
+    - ".:/code"
+  links:
+    - mysql
+    - redis
+  ports:
+    - "3000:3000"
+
+cucumber:
+  build: cucumber
+  command: cucumber
+  volumes:
+    - "cucumber:/code"
+  links:
+    - app
+
+db:
+  image: mysql
+
+redis:
+  image: redis
+Using this file, running fig up would be equivalent to fig up app. It would start up the db, redis and app containers and run until the app container exited.
+Impact Assessment
+Obviously, changing the behavior of such a basic command is a Big Deal, and backwards-compatibility is important. Compatibility could be maintained via a "fallback" behavior where if there are no "default" containers, then you just run 'em all like before. That would allow people to opt into this new behavior. The behavior of fig up xxx yyy would be unchanged.
+1

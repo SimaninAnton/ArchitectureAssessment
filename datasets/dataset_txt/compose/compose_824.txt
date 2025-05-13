@@ -1,0 +1,26 @@
+basickarl commented on 2 Mar 2018 •
+edited
+The following docker-compose_run.sh file has been renamed from run.sh. https://raw.githubusercontent.com/docker/compose/master/script/run/run.sh
+gitlab-ci.yml:
+variables:
+  FORCE_COLOR: '1'
+
+stages:
+  - Build
+
+Build:
+  tags:
+    - shell
+  stage: Build
+  script:
+    - docker --version
+    - . docker-compose_run.sh --version
+    - docker --version
+- . docker-compose_run.sh --version exits the whole job with exit code 0. The last line - docker --version is never invoked. Is there something I'm missing with this docker compose image?
+...
+Skipping Git submodules setup
+$ docker --version
+Docker version 17.12.1-ce, build 7390fc6
+$ . docker-compose_run.sh --version
+docker-compose version 1.19.0, build 9e633ef
+Job succeeded

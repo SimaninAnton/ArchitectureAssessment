@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 11 Mar 2016
+Labels will probably be coming to networks and volumes in Docker 1.11 and we should support that in Compose: moby/moby#20356
+8

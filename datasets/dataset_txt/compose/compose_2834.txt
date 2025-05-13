@@ -1,0 +1,29 @@
+Evild67 commented on 5 Feb 2016
+I tried to upgrade my docker-compose file to V2 but links are not working.
+version: '2'
+services:
+ [...]
+  wordpress:
+    image: wordpress:4.4.2-fpm
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db:mysql
+    volumes:
+      - ./wp:/var/www/html
+    environment:
+      - WORDPRESS_DB_NAME=....
+      - WORDPRESS_TABLE_PREFIX=...
+
+  db:
+    image: mariadb:latest
+    restart: always
+    volumes:
+      - ./var/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=....
+Logs :
+wordpress_1 | error: missing WORDPRESS_DB_HOST and MYSQL_PORT_3306_TCP environment variables
+wordpress_1 |   Did you forget to --link some_mysql_container:mysql or set an external db
+wordpress_1 |   with -e WORDPRESS_DB_HOST=hostname:port?

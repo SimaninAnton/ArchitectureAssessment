@@ -1,0 +1,19 @@
+Contributor
+aanm commented on 27 Apr 2015
+I think it would be better if the service option to be optional.
+compose would look through extends' file and find if there's a service with the same name of the service where the extends option is.
+#docker-compose.yml
+web:
+  extends:
+    file: common-services.yml
+    #service: web
+  environment:
+    - DEBUG=1
+  cpu_shares: 5
+#common-services.yml
+web:
+  build: .
+  ports:
+    - "8000:8000"
+  volumes:
+    - "/data"

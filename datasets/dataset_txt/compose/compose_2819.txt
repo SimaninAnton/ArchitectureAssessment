@@ -1,0 +1,61 @@
+sevagh commented on 8 Feb 2016
+Hello. I'm running Fedora 22 64-bit with:
+$ uname -r
+4.3.4-200.fc22.x86_64
+$ docker --version
+Docker version 1.10.0, build 590d5108
+$ docker-compose --version
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+I installed docker and docker-compose using the curl commands on the docs. I have added my user to the docker group, so that I don't need sudo for docker.
+Here's my docker-compose file:
+version: '2'
+
+services:
+    rabbit1:
+        image: rabbitmq
+
+    consumer1:
+        build: ./consumer
+        environment:
+            - HOST=rabbit1
+            - PORT=5672
+        links:
+            - rabbit1
+Consumer1 has a basic RabbitMQ consumer program written in Go, running on Alpine.
+When I do "docker-compose up", I get a connection refused from my application (which uses the environment variables to connect to HOST:PORT):
+consumer_1 | dial tcp: lookup rabbit on 127.0.0.11:53: read udp 127.0.0.1:41780->127.0.0.11:53: read: connection refused
+Here's the output of docker ps and docker inspect Networks section of rabbit1:
+b7a2d4aa2082        rabbitmq               "/docker-entrypoint.s"   11 minutes ago      Up 11 minutes       4369/tcp, 5671-5672/tcp, 25672/tcp   whackamole_rabbit1_1
+
+"Networks": {
+            "whackamole_default": {
+                "IPAMConfig": null,
+                "Links": null,
+                "Aliases": [
+                    "rabbit1",
+                    "46b195edbd"
+                ],
+                "NetworkID": "8ae6e14a305dd0e1ffb739b575ebba806cee7773d238825a437502a26450fc6d",
+                "EndpointID": "150eb6ab7870417b0daa85e255d249afd50577c7cbae5d09d1c6cd968b869283",
+                "Gateway": "172.21.0.1",
+                "IPAddress": "172.21.0.2",
+                "IPPrefixLen": 16,
+                "IPv6Gateway": "",
+                "GlobalIPv6Address": "",
+                "GlobalIPv6PrefixLen": 0,
+                "MacAddress": "02:42:ac:15:00:02"
+            }
+        }
+If I use the IP of the rabbit1 container instead, things work:
+consumer1:
+    build: ./consumer
+    environment:
+        - HOST=172.21.0.2
+        - PORT=5672
+    links:
+     - rabbit1
+Also, if I do "docker-compose run --entrypoint /bin/sh consumer1", I can telnet to rabbit1 with the ip:5672, but rabbit1 is an unrecognized hostname.
+I asked around on IRC and somebody helped me who said he tried my docker-compose file (replacing my consumer1 build with an Alpine container) and he was able to telnet to rabbit1:5672 easily, could this be a bug?

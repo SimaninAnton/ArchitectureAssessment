@@ -1,0 +1,4 @@
+combin commented on 12 Sep 2018
+I have docker-compose.yml v3.0 and i have issue from #4645. Acording by documentations it is not implemented in 3.0. Is it planned to implement it? Or is there any reason why this feature was removed?
+# docker-compose --version
+docker-compose version 1.22.0, build f46880f

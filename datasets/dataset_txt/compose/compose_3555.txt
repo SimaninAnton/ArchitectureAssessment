@@ -1,0 +1,30 @@
+brianfoshee commented on 19 Jun 2015
+I have a locally built image (built with docker build -t project/heroku-base ./project-heroku-base) that version 1.3 of docker-compose is not finding during the build process for another image.
+I can build with docker build app ./app, and with version 1.2 of docker-compose I can build with docker-compose build app.
+$ docker-compose build app
+Building app...
+Step 0 : FROM project/heroku-base:latest
+Pulling repository project/heroku-base
+Service 'app' failed to build: Error: image project/heroku-base:latest not found
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+project/heroku-base latest              ebe895ea759a        10 minutes ago      1.325 GB
+mysql               latest              d63d4723d715        2 days ago          283.5 MB
+debian              jessie              bf84c1d84a8f        2 days ago          125.2 MB
+heroku/cedar        14                  89fc314a0a6e        4 weeks ago         1.242 GB
+busybox             latest              8c2e06607696        8 weeks ago         2.433 MB
+$ docker-compose -v
+docker-compose version: 1.3.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+$ docker version
+Client version: 1.7.0
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 0baf609
+OS/Arch (client): linux/amd64
+Server version: 1.7.0
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 0baf609
+OS/Arch (server): linux/amd64

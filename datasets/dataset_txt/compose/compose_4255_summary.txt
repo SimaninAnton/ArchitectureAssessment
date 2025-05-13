@@ -1,0 +1,1 @@
+Epic: "compose run" should support every "docker run" option

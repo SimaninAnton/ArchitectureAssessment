@@ -1,0 +1,1 @@
+build from git doesn't use /etc/hosts for name resolving

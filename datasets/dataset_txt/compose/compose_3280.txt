@@ -1,0 +1,2 @@
+flash1293 commented on 17 Sep 2015
+I have some services running defined by a docker-compose.yml via docker-compose up -d. When I try to restart a service with a new image by calling docker-compose up --no-deps -d SERVICENAME, the service restarts as expected, but after that I can't reach it in linked containers, I get an EHOSTUNREACH error. I have to restart all services to re-establish the connection. How can I fix this?

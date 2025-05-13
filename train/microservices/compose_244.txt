@@ -1,0 +1,86 @@
+caiges commented on 22 Mar 2019 •
+edited
+Description of the issue
+I see to be running into either #2839 or #6369. I have a compose file and a named override file and when using multiple -f to merge them, the latter cannot find the defined network from the first.
+# docker-compose.yml
+version: "3.5"
+
+services:
+  web1:
+    image: nginx
+    container_name: web1
+    networks:
+      webnetwork:
+
+networks:
+  webnetwork:
+# something.yml
+version: "3.5"
+
+services:
+  web2:
+    image: nginx
+    container_name: web2
+    networks:
+      webnetwork:
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build unknown
+docker-py version: 3.7.0
+CPython version: 3.7.2
+OpenSSL version: OpenSSL 1.1.1b  26 Feb 2019
+Output of docker version
+Client:
+ Version:           18.09.3-ce
+ API version:       1.39
+ Go version:        go1.12
+ Git commit:        774a1f4eee
+ Built:             Thu Feb 28 20:38:40 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.3-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.12
+  Git commit:       774a1f4eee
+  Built:            Thu Feb 28 20:37:49 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  webnetwork: {}
+services:
+  web1:
+    container_name: web1
+    image: nginx
+    networks:
+      webnetwork: null
+  web2:
+    container_name: web2
+    image: nginx
+    networks:
+      webnetwork: null
+version: '3.5'
+Steps to reproduce the issue
+In the default compose file, add a network and a service that uses that network.
+In a separate compose override file, add a service that uses the network defined in the main compose file.
+Run docker-compose -f docker-compose.yml -f youroverride.yml up
+Observed result
+Services cannot attach to networks defined by earlier compose files.
+Expected result
+Services defined in latter compose override files can attach to networks defined earlier in the file specification chain.
+Stacktrace / full error message
+docker-compose -f docker-compose.yml -f something.yml up -d 
+web1 is up-to-date
+Starting web2 ... error
+
+ERROR: for web2  Cannot start service web2: network 1b30d1dbe75046fe2c99e7df92518f94c1f904d71dd4732909335035b20ac8b0 not found
+
+ERROR: for web2  Cannot start service web2: network 1b30d1dbe75046fe2c99e7df92518f94c1f904d71dd4732909335035b20ac8b0 not found
+ERROR: Encountered errors while bringing up the project.
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Manjaro: 4.19.28-1-MANJARO

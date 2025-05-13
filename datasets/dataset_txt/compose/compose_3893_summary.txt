@@ -1,0 +1,1 @@
+Brew installation broken as of rebranding

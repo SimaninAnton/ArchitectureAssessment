@@ -1,0 +1,4 @@
+hamiltont commented on 19 Feb 2015
+If I grok fig correctly, when I use fig up I essentially get the volumes from a prior container (assuming that one exists).
+I'm mounting volumes on my host using things like sshfs, and then using fig to expose those inside docker containers. I keep having to run fig stop && fig rm --force && fig up -d to actually get a fresh mount when the status changes on my host. For example, if sshfs crashes, then I can unmount and remount it on the host and it works on the host. Inside the docker container it's still not working at this point, but if I just stop and restart the container using fig, the mount point inside fig still acts like it's crashed. The only way to get it to work properly inside docker seems to get a proper bind mount from the original host location
+Basically, if there was some option like --no-volumes-from on fig up that forced mounting from the original filesystem, I think that would be useful

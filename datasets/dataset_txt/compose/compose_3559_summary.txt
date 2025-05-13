@@ -1,0 +1,1 @@
+x-smart-recreate crashes when modified image name/tag

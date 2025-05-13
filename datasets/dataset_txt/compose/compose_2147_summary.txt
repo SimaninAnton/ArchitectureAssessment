@@ -1,0 +1,1 @@
+Unsupported config option for services.networks: 'default', docker-compose version 1.8.1

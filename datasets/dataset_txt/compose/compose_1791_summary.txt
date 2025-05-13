@@ -1,0 +1,1 @@
+"docker-compose up" not rebuilding container that has an underlying updated image

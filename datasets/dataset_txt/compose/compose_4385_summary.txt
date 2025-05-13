@@ -1,0 +1,1 @@
+Downscaling should remove containers

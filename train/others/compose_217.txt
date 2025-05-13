@@ -1,0 +1,20 @@
+alshamari commented on 17 Apr 2019 •
+edited
+please help I deploying a small job in Jenkins and I got this error ??
+python -u /Users/alshamari/re/application/api.py
+python: can't open file '/Users/alshamari/re/application/api.py': [Errno 2] No such file or directory
+here's my Jenkins file content >>
+pipeline {
+agent any
+stages{
+stage ('clone'){
+steps{
+checkout scm
+}
+}
+stage ('bulid'){
+steps{
+    sh "python -u /Users/alshamari/re/application/api.py"
+    }
+}
+}}

@@ -1,0 +1,16 @@
+ruffsl commented on 26 Jan 2016
+I'm just testing a simple foo bar example using variable substitution:
+test:
+  image: ubuntu
+  volumes: ${FOO_BAR}
+  command: ping 127.0.0.1
+but am encountering this:
+$ mkdir /tmp/foo
+$ mkdir /tmp/bar
+$ export FOO_BAR="['/tmp/bar:/bar', '/tmp/foo:/foo']"
+$ docker-compose up
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+Service 'test' configuration key 'volumes' contains an invalid type, it should be an array
+Does compose support this YAML spec, or am I doing something improper?
+http://yaml.org/spec/1.2/spec.html#id2759963
+relevant context: NVIDIA/nvidia-docker#39

@@ -1,0 +1,3 @@
+jmreicha commented on 7 Apr 2017
+I tried out the new --parallel docker-compose pull flag and it is really nice.
+One future enhancement I'd like to see for it is some sort of progress bar or completion percentage next to the image name so that I can tell how far along all the pulls are.

@@ -1,0 +1,17 @@
+aaparmeggiani commented on 15 Nov 2017
+When docker-compose up with the config below, if the file mypass.txt is missing, docker-compose creates an empty directory mypass.txt. Is that expected behaviour?
+version: '3.1'
+
+services:
+  app:
+    image: alpine
+    secrets:
+      - mypass
+
+secrets:
+  mypass:
+    file: ./mypass.txt
+macOS 10.13.1
+Docker version 17.11.0-ce-rc3, build 5b4af4f
+docker-compose version 1.17.0, build ac53b73
+2

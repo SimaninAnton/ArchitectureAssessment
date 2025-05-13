@@ -1,0 +1,27 @@
+dmitrybelyakov commented on 21 May 2016 •
+edited
+Hi, I just decided to bring up my compose app on another machine and discovered that container won't run due to bad permission on mounted volumes. The volumes are not owned by root, but by 1000:staff instead.
+Further testing revealed that behaviour differs from when run with just docker cli. For example when I run:
+docker run -it -v example:/example ubuntu ls -l /
+I get:
+...
+drwxr-xr-x  44 root root 4096 May 21 13:55 etc
+drwxr-xr-x   2 root root 4096 May 21 13:55 example   <---- All good here
+drwxr-xr-x   2 root root 4096 Apr 12 20:14 home
+...
+Here's a simple compose file:
+version: '2'
+services:
+    testservice:
+      image: ubuntu
+      container_name: testservice
+      volumes:
+        - ./example:/example
+      command: 'ls -l /'
+Running it with docker-compose up gives me:
+...
+testservice       | drwxr-xr-x  44 root root  4096 May 21 13:55 etc
+testservice       | drwxr-xr-x   1 1000 staff   68 May 21 13:44 example <--- suddently owned by staff
+testservice       | drwxr-xr-x   2 root root  4096 Apr 12 20:14 home
+...
+Trying to figure out why this is happening and googling was no help...

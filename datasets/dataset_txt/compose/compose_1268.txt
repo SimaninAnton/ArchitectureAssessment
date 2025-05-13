@@ -1,0 +1,5 @@
+aaronmorgan commented on 9 Aug 2017 •
+edited
+If the pull fails when using --parallel the individual image shows error but the process exits cleanly, i.e. $lastexitcode and $? report 0 and True respectively.
+Occurs regardless of whether there's one request and it fails, or many requests and one or more of them fail.
+docker-compose version 1.14.0, build c7bdf9e3

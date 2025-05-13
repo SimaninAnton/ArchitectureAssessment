@@ -1,0 +1,21 @@
+yashk commented on 22 Dec 2014
+$ docker version
+Client version: 1.3.2
+Client API version: 1.15
+Go version (client): go1.3.3
+Git commit (client): 39fa2fa
+OS/Arch (client): darwin/amd64
+Server version: 1.4.1
+Server API version: 1.16
+Go version (server): go1.3.3
+Git commit (server): 5bc2ff8
+$ fig --version
+fig 1.0.1
+$ docker ps
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+$ echo $DOCKER_HOST
+tcp://192.168.59.103:2376
+$ boot2docker status
+running
+$ fig up
+Couldn't connect to Docker daemon - you might need to run boot2docker up.

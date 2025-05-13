@@ -1,0 +1,1 @@
+Setting environment variable `docker-compose run -e FOO=bar` fails with `TypeError`

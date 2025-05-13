@@ -1,0 +1,7 @@
+kimptoc commented on 14 Feb 2016
+Hi,
+I've upgraded the docker-engine package via apt-get and its using 1.10 now (had to a full remove/re-install to get that working - seemed to be spinning processing the old images/containers).
+However docker compose is still v1.5.2 - is that to be expected?
+Any thoughts on when 1.6 will be available for ubuntu 14.04
+Thanks,
+Chris

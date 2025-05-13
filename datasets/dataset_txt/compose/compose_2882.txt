@@ -1,0 +1,45 @@
+Contributor
+schmunk42 commented on 25 Jan 2016
+So, I run docker-compose ps to see which containers in my stack are up
+root@sepp-roj:/repo/stacks/auto/prj/www.prj.de# docker-compose ps
+        Name                      Command             State                   Ports                 
+---------------------------------------------------------------------------------------------------
+project_appnginx_1    sh /root/run.sh               Up      443/tcp, 1.2.3.4:32784->80/tcp 
+project_appphp_1      /app/src/run.sh               Up      9000/tcp                              
+project_appworker_1   yii resque/work *             Up      9000/tcp                              
+project_redis_1       /entrypoint.sh redis-server   Up      6379/tcp     
+As you can see, compose says: all of them. But if you ask docker directly, there's one missing
+root@sepp-roj:/repo/stacks/auto/prj/www.prj.de# docker ps --filter name=project
+CONTAINER ID        IMAGE                                                 COMMAND               CREATED             STATUS                          PORTS                                   NAMES
+35297ccd6481        schmunk42/nginx:1.9                                   "sh /root/run.sh"     2 days ago          Up 2 days                       443/tcp, 1.2.3.4:32784->80/tcp   sepp-hz-1-122/project_appnginx_1
+1d63db59cfb7        registry/project-appphp:latest   "yii resque/work *"   2 days ago          Restarting (1) 35 minutes ago   9000/tcp                                sepp-hz-1-122/project_appworker_1
+24b465adf152        registry/project-appphp:latest   "/app/src/run.sh"     2 days ago          Up 2 days                       9000/tcp                                sepp-hz-1-122/project_appnginx_1/PHPFPM,sepp-hz-1-122/project_appnginx_1/appphp_1,sepp-hz-1-122/project_appnginx_1/project_appphp_1,sepp-hz-1-122/project_appphp_1
+It's actually an Exited container scheduled (falsely) on another host sepp-hz-1-122 vs. sepp-a1
+root@sepp-roj:/repo/stacks/auto/prj/www.prj.de# docker ps --filter name=project -a
+CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS                         PORTS                                   NAMES
+2f2a8c5f8f33        schmunk42/nginx:1.9                                   "sh /root/run.sh"        20 seconds ago      Up 21 seconds                  443/tcp, 1.2.3.4:32794->80/tcp   sepp-hz-1-122/project_appnginx_1
+25eee66f8e38        registry/project-appphp:latest   "yii resque/work *"      22 seconds ago      Restarting (1) 9 seconds ago   9000/tcp                                sepp-hz-1-122/project_appworker_1
+cb32061bc614        registry/project-appphp:latest   "/app/src/run.sh"        26 seconds ago      Up 26 seconds                  9000/tcp                                sepp-hz-1-122/project_appphp_1
+2472d87f69cf        redis:3.0                                             "/entrypoint.sh redis"   2 days ago          Exited (0) 2 days ago          6379/tcp                                sepp-a1/project_redis_1
+Version info:
+root@sepp-roj:/repo/stacks# docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 12:50:31 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.1.0
+ API version:  1.21
+ Go version:   go1.5.2
+ Git commit:   5cb6f21
+ Built:        Thu Jan 21 22:34:44 UTC 2016
+ OS/Arch:      linux/amd64
+root@sepp-roj:/repo/stacks# docker-compose version
+docker-compose version 1.5.2, build 7240ff3
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

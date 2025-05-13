@@ -1,0 +1,44 @@
+Yajo commented on 3 Feb 2017
+docker build supports the --volume option to add volumes at build time.
+docker-compose does not have such support (or it is not docummented).
+$ docker-compose version
+docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j-fips  26 Sep 2016
+
+$ docker info
+Containers: 128
+ Running: 0
+ Paused: 0
+ Stopped: 128
+Images: 592
+Server Version: 1.12.6
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+Logging Driver: journald
+Cgroup Driver: systemd
+Plugins:
+ Volume: local
+ Network: bridge host null overlay
+Swarm: inactive
+Runtimes: oci runc
+Default Runtime: oci
+Security Options: seccomp
+Kernel Version: 4.9.5-200.fc25.x86_64
+Operating System: Fedora 25 (Workstation Edition)
+OSType: linux
+Architecture: x86_64
+Number of Docker Hooks: 2
+CPUs: 4
+Total Memory: 6.761 GiB
+Name: yajolap.yajodomain
+ID: KUBN:F7JL:URX6:HO55:R3L2:SCUU:IWVY:EZ2O:F53G:WHTO:3G4D:R4YU
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Insecure Registries:
+ 127.0.0.0/8
+Registries: docker.io (secure)
+2

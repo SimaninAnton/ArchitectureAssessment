@@ -1,0 +1,17 @@
+docteurklein commented on 8 Dec 2015
+Not sure if the title is very clear, so I'll expand my idea here.
+Given a docker-compose.yml file:
+nginx:
+    image: nginx
+    volumes:
+        - './test:/test'
+and a extra.yml file:
+nginx:
+    volumes: []
+Then the resulting volumes for docker-compose -f docker-compose.yml -f extra.yml up should be an empty array.
+Note this applies when using extends too.
+This behavior should apply for every merged array (environment/labels/…)
+The idea is that if I specify an empty array, it's for a reason, otherwise I simply would not specify the key at all.
+The consequence is that I can describe a working dev setup (mounting the sources from the host f.e), and use an extra file for a staging environment f.e, which has no host volumes.
+Hope I'm clear :) Otherwise, just tell me, I'll try to explain my use case in a better way.
+2

@@ -1,0 +1,6 @@
+Contributor
+kinghuang commented on 23 Mar 2018
+PR #4333 added --resolve-image-digests to docker-compose config, which resolves image tags to their digest to form stable references. However, this relies on the images being available on the Docker host.
+It would be useful if Docker Compose could fetch image digests without having to pull the image if the image doesn't exist locally. In CI jobs using Docker-in-Docker, pulling images just for tag digests can be a significant waste of time and network resources.
+Digests can be obtained using HEAD requests against /v2/<name>/manifests/<reference> in the v2 API.
+https://stackoverflow.com/questions/35186693/what-is-the-docker-registry-v2-api-endpoint-to-get-the-digest-for-an-image#35420411

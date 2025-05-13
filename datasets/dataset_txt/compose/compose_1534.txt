@@ -1,0 +1,32 @@
+phlegx commented on 10 Apr 2017 •
+edited
+With docker-compose (version 1.11.2) one can set an environment variable inside the the docker-compose file like this:
+redis:
+  image: "registry.example.com/namespace/redis:{TAG}" 
+as mentioned here https://docs.docker.com/compose/environment-variables/
+Now if this TAG variable is empty a docker-compose pull redis does the following:
+WARNING: The TAG variable is not set. Defaulting to a blank string.
+Pulling redis (registry.example.com/namespace/redis:latest)...
+latest: Pulling from namespace/redis
+Digest: sha256:4f716f7ee5bad3d263fb605c439861fdd2556171df302d63c8916ffbf2f9db73
+Status: Image is up to date for registry.example.com/namespace/redis:latest
+Recreating 890e0950ed8b_890e0950ed8b_namespace_redis_1
+Pulling redis (registry.example.com/namespace/redis:latest)...
+latest: Pulling from namespace/redis
+Digest: sha256:4f716f7ee5bad3d263fb605c439861fdd2556171df302d63c8916ffbf2f9db73
+Status: Image is up to date for registry.example.com/namespace/redis:latest
+
+ERROR: for redis  Image 'registry.example.com/namespace/redis:' not found
+Traceback (most recent call last):
+  File "bin/docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 64, in main
+  File "compose/cli/main.py", line 116, in perform_command
+  File "compose/cli/main.py", line 876, in up
+  File "compose/project.py", line 416, in up
+  File "compose/parallel.py", line 66, in parallel_execute
+compose.service.NoSuchImageError: Image 'registry.example.com/namespace/redis:' not found
+Failed to execute script docker-compose
+So it seems to download the registry.example.com/namespace/redis:latest, which is in my opinion perfectly cool when it uses for default the latest tag on an empty ENV variable. However for starting/upping it tries to start this:
+ registry.example.com/namespace/redis:
+without the latest tag. It would be nice if also for start/up it would also use the latest tag per default if the TAG environment variable is empty!
+thanks!

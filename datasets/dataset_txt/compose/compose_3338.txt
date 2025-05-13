@@ -1,0 +1,3 @@
+envygeeks commented on 28 Aug 2015
+I am proposing that something like /etc/<<compose_file>>.yml be searched for (if no -f is provided and no relative compose file is found) so that systems can drop a default compose file and docker-compose quickly.
+I am proposing that on-top of the current files being accepted that compose.yml also be added to that list, we have a preference for that short name because it doesn't overtake our apps root folders with a long file (docker-compose.yml) is overly noticeable to the point where it's a focus.

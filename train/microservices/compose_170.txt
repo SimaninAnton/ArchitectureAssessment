@@ -1,0 +1,14 @@
+diegohavenstein commented on 22 May 2019
+I have a docker-compose with roughly the following content:
+version: '2.3'
+services:
+  server_1:
+    image: tensorflow/serving:latest-gpu
+    runtime: nvidia
+    per_process_gpu_memory_fraction: 0.3
+This does not work, due to the following error:
+ERROR: The Compose file './x.yaml' is invalid because:
+Unsupported config option for services.server_1: 'per_process_gpu_memory_fraction'
+If I run the command that would be equivalent to the above, using docker run ... --per_process_gpu_memory_fraction=0.3, it works without any issue. This is not an option however, since I need many services running and docker-compose comes quite handy
+How can I pass the option through to tensorflow using a docker-compose file? Is this a docker-compose issue, or related to the used file version? I am using docker-compose version 1.24.0, build 0aa59064
+Appreciate the support, cheers

@@ -1,0 +1,8 @@
+Contributor
+andrerom commented on 13 May 2016 •
+edited
+Example:
+volumes:
+ - $COMPOSER_HOME:/home/user/.composer
+Output:
+ERROR: Named volume ""~/.composer":"/home/user/.composer":rw" is used in service "app" but no declaration was found in the volumes section.

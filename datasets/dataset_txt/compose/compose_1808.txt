@@ -1,0 +1,3 @@
+thomaschaaf commented on 10 Jan 2017
+With docker/docker-py#1383 docker-py added cache-from to the sdk. We could integrate it into docker compose making moby/moby#26839 available.
+15

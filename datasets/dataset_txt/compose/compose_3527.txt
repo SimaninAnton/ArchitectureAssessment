@@ -1,0 +1,10 @@
+juliantaylor commented on 29 Jun 2015
+my docker-compose contained:
+someimage:
+    image: ubuntu:trusty
+    cap_add: NET_ADMIN
+this worked fine in docker-compose 1.1.0, though with 1.3.1 (and docker 1.7.0) it now fails with a cryptic error message:
+json: cannot unmarshal string into Go value of type []string
+it took me a while to figure out cap_add now has to be a list. I think the non-list form was also an example in the docs at some point in the past.
+It would be good to improve the error message here to simplify finding the error in the yml.
+Or alternatively accepting the non-list form for backward compat would also be good.

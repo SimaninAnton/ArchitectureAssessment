@@ -1,0 +1,1 @@
+Conflicting documentation for "links" in compose 1.6.0rc1

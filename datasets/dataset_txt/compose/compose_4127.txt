@@ -1,0 +1,27 @@
+waitingkuo commented on 3 Nov 2014
+It's inspired by #527
+The pull request for this proposal is #607
+The main idea is to allow servie to use different Docker Hosts. To do so, I add three new parameters:
+docker_host
+docker_cert_path
+docker_verify_tls
+So we can modify our fig.yml to deploy to more than one docker host in the same time. For example,
+fig.yaml:
+web1:
+  build: .
+  command: python app.py
+  docker_host: tcp://192.168.0.101:2376
+  docker_cert_path: /path/to/your/cert1/directory
+  docker_tls_verify: 1
+  ports:
+   - "8000:8000"
+
+web2:
+  build: .
+  command: python app.py
+  docker_host: tcp://192.168.0.102:2376
+  docker_cert_path: /path/to/your/cert2/directory
+  docker_tls_verify: 1
+  ports:
+   - "8000:8000"
+We can use this fig config to deploy to both 192.168.0.101 and 192.168.0.102. For generating docker cert over SSL, please reference here

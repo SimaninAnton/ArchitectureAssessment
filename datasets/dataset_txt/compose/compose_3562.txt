@@ -1,0 +1,6 @@
+sunadm commented on 16 Jun 2015
+When I stop and rm a container (for example, mysql), and use "up --no-recreate -d" parameter to recreate it.
+Sometimes other containers (for example tomcat) link to this service may lost connection to it.
+When this happened, from the bash of tomcat cannot ping the mysql container by hostname.
+I checked the internal IP address of mysql, when container recreated, it's IP usually changed too.
+But in this case, the tomcat's /etc/hosts file looks not updated, so...

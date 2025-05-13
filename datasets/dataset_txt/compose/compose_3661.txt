@@ -1,0 +1,97 @@
+therosco commented on 6 May 2015
+Starting some docker-compose project:
+$ docker-compose kill -s 9 && docker-compose rm --force && docker-compose build && docker-compose up -t 100000 -d && docker-compose logs
+Result:
+Traceback (most recent call last):
+  File "/usr/local/Cellar/fig/1.2.0/libexec/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.2.0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 464, in up
+    do_build=not options['--no-build'],
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/project.py", line 208, in up
+    do_build=do_build):
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/service.py", line 214, in recreate_containers
+    **override_options)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/service.py", line 190, in create_container
+    return Container.create(self.client, **container_options)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/lib/python2.7/site-packages/compose/container.py", line 36, in create
+    response = client.create_container(**options)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/docker/client.py", line 463, in create_container
+    return self.create_container_from_config(config, name)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/docker/client.py", line 470, in create_container_from_config
+    res = self._post_json(u, data=config, params=params)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/docker/client.py", line 143, in _post_json
+    return self._post(url, data=json.dumps(data2), **kwargs)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/docker/client.py", line 100, in _post
+    return self.post(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/requests/sessions.py", line 504, in post
+    return self.request('POST', url, data=data, json=json, **kwargs)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/requests/sessions.py", line 461, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/Cellar/fig/1.2.0/libexec/vendor/lib/python2.7/site-packages/requests/adapters.py", line 433, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='192.168.59.105', port=2376): Read timed out. (read timeout=60)
+Versions and so on:
+$ docker-compose --version
+docker-compose 1.2.0
+$ docker --version
+Docker version 1.6.0, build 4749651
+$ boot2docker info
+{
+    "Name": "boot2docker-vm",
+    "UUID": "0bfd1a58-88e4-4b73-8cdb-e965bff0bbd9",
+    "Iso": "/Users/rosco/.boot2docker/boot2docker.iso",
+    "State": "running",
+    "CPUs": 8,
+    "Memory": 2048,
+    "VRAM": 8,
+    "CfgFile": "/Users/rosco/VirtualBox VMs/boot2docker-vm/boot2docker-vm.vbox",
+    "BaseFolder": "/Users/rosco/VirtualBox VMs/boot2docker-vm",
+    "OSType": "",
+    "Flag": 0,
+    "BootOrder": null,
+    "DockerPort": 0,
+    "SSHPort": 2022,
+    "SerialFile": "/Users/rosco/.boot2docker/boot2docker-vm.sock"
+}%
+                                                                                                                                                                                                    $ boot2docker cfg
+# boot2docker profile filename: /Users/rosco/.boot2docker/profile
+Init = false
+Verbose = false
+Driver = "virtualbox"
+Clobber = true
+ForceUpgradeDownload = false
+SSH = "ssh"
+SSHGen = "ssh-keygen"
+SSHKey = "/Users/rosco/.ssh/id_boot2docker"
+VM = "boot2docker-vm"
+Dir = "/Users/rosco/.boot2docker"
+ISOURL = "https://api.github.com/repos/boot2docker/boot2docker/releases"
+ISO = "/Users/rosco/.boot2docker/boot2docker.iso"
+DiskSize = 20000
+Memory = 2048
+CPUs = 8
+SSHPort = 2022
+DockerPort = 0
+HostIP = "192.168.59.3"
+DHCPIP = "192.168.59.99"
+NetMask = [255, 255, 255, 0]
+LowerIP = "192.168.59.103"
+UpperIP = "192.168.59.254"
+DHCPEnabled = true
+Serial = false
+SerialFile = "/Users/rosco/.boot2docker/boot2docker-vm.sock"
+Waittime = 300
+Retries = 75
+What might be done?

@@ -1,0 +1,15 @@
+baksosapi commented on 22 Apr 2016 •
+edited
+After i reinstalling python on mac el capitan, i got the folowing error:
+wildan:docker-symfony wildan$ docker-compose up
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 57, in main
+File "compose/cli/main.py", line 108, in perform_command
+File "contextlib.py", line 35, in exit
+File "compose/cli/errors.py", line 52, in handle_connection_errors
+File "compose/cli/utils.py", line 45, in call_silently
+NameError: global name 'WindowsError' is not defined
+docker-compose returned -1
+Now i use:
+docker-compose version 1.7.0, build 0d7bf73

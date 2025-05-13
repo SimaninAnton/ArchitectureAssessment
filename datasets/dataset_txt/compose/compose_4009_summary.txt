@@ -1,0 +1,1 @@
+It would be nice a TODO in README, in order to understand supported and no supported features

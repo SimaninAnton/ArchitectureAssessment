@@ -1,0 +1,33 @@
+umair-khokhar commented on 14 Mar 2018 •
+edited
+I have a node app that listens on port 8000, I containerized it using following Docker file
+FROM node:carbon
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install -g nodemon
+RUN npm install
+COPY . .
+
+EXPOSE 8000
+CMD [ "nodemon", "start" ]
+My compose file looks like this:
+version: '3'
+services:
+  node:
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    ports:
+      - "8000:8000"
+    image: console:cp
+    volumes:
+      - .:/usr/src/app
+I have ensured the node app listens on all interfaces i.e. 0.0.0.0. But still whenever I type http://localhost:8000 it says this site cannot be reached.
+When I run following inspect command to list all port bindings it returns: 8000/tcp -> 8000
+docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' a5c17883fd5c
+Any ideas? I am pulling my hairs at the moment.
+I am using docker-compose up command.
+Versions
+Docker version 17.12.0-ce, build c97c6d6
+docker-compose version 1.18.0, build 8dd22a9
+Mac 0SX 10.13.2

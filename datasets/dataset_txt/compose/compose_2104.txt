@@ -1,0 +1,9 @@
+NCarlsonMSFT commented on 1 Sep 2016
+When building windows containers a compose file like:
+foo:
+    image: windowsservercore
+    volumes:
+        - C:\foo:C:\bar:ro
+Results in the error:
+ERROR: Volume c:\foo:c:\bar:ro has incorrect format, should be external:internal[:mode]
+But if I call docker directly with "docker run -v C:\foo:C:\bar:ro windowsservercore" it is accepted as expected.

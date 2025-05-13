@@ -1,0 +1,15 @@
+tooda02 commented on 15 Dec 2015
+In Windows, the Getting Started example works correctly only if the working directory is under the user's home directory (C:\users\username). Otherwise, it fails with the message:
+python: can't open file 'app.py': [Errno 2] No such file or directory
+which occurs because the /code directory is empty in the container.
+The example Dockerfile is:
+FROM python:2.7
+ADD . /code
+WORKDIR /code
+RUN pip install -r requirements.txt
+CMD python app.py
+and docker-compose.yml contains:
+volumes:
+  - .:/code
+A standard Docker build produces a working container (that is, /code/app.py exists) regardless of the working directory. However, docker-compose up creates a working image only if run from C:\users\username or one of its subdirectories.
+5

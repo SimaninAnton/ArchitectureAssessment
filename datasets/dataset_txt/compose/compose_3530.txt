@@ -1,0 +1,15 @@
+edannenberg commented on 28 Jun 2015
+This one had me scratching my head for a bit. Apparently using --rm option for run commands will always return exit signal 1 even though the command did exit with 0.
+To reproduce:
+$ docker-compose --version
+docker-compose 1.2.0
+docker-compose.yml:
+test:
+    image: busybox
+$ docker-compose run test true
+$ echo $?
+0
+$ docker-compose run --rm test true
+$ echo $?
+1
+Our build tools wrap docker-compose and rely on the exit signal to determine errors, so this is a bit of a show stopper.

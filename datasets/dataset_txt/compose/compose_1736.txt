@@ -1,0 +1,32 @@
+darkrasid commented on 1 Feb 2017
+Hi, I try to make compose file that deploy to swarm mode.
+First, sorry for my English and
+Second, my docker and compose versions are
+docker : 1.3.0
+docker-compose : 1.10.
+I made a docker-compose file somthing like below.
+version: "3"
+
+services:
+  redis:
+    image: myrepo/redis:latest
+    volumes:
+      - /home/user/docker/discourse/redis:/var/lib/redis:Z
+
+  web:
+    image: myrepo/web:latest
+    env_file: .env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+
+networks:
+  default:
+    external:
+      name: test_overlay
+I already make test_overlay network.
+And after trying sudo docker stack deploy --compose-file=docker-compose.yml test I got Error response from daemon: network test_default not found
+I think compose ignore the pre-exist network name and try to find {stack_name_default} network.
+Am I missing something?
+When I try to using bridge network and docker-compose up, it works fine.

@@ -1,0 +1,21 @@
+Contributor
+twitherspoon commented on 31 Mar 2016
+This was working fine the other day. Was wondering if its just me or if anyone else is seeing the same issue. When I run the docker-compose test scripts I get the following error.
+py27 installdeps: -rrequirements.txt, -rrequirements-dev.txt
+ERROR: invocation failed (exit code 1), logfile: /code/.tox/py27/log/py27-1.log
+ERROR: actionid: py27
+msg: getenv
+cmdargs: [local('/code/.tox/py27/bin/pip'), 'install', '-rrequirements.txt', '-rrequirements-dev.txt']
+env: {'LANG': 'en_US.UTF-8', 'VIRTUAL_ENV': '/code/.tox/py27', 'HOSTNAME': '2c958daa05e3', 'PWD': '/code', 'PYTHONHASHSEED': '526761282', 'HOME': '/tmp', 'PATH': '/code/.tox/py27/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'LD_LIBRARY_PATH': '/usr/local/lib'}
+
+Collecting PyYAML==3.11 (from -r requirements.txt (line 1))
+  Retrying (Retry(total=4, connect=None, read=None, redirect=None)) after connection broken by 'NewConnectionError('<pip._vendor.requests.packages.urllib3.connection.VerifiedHTTPSConnection object at 0x7feef886e790>: Failed to establish a new connection: [Errno -2] Name or service not known',)': /simple/pyyaml/
+  Retrying (Retry(total=3, connect=None, read=None, redirect=None)) after connection broken by 'NewConnectionError('<pip._vendor.requests.packages.urllib3.connection.VerifiedHTTPSConnection object at 0x7feef886e910>: Failed to establish a new connection: [Errno -2] Name or service not known',)': /simple/pyyaml/
+  Retrying (Retry(total=2, connect=None, read=None, redirect=None)) after connection broken by 'NewConnectionError('<pip._vendor.requests.packages.urllib3.connection.VerifiedHTTPSConnection object at 0x7feef886ea90>: Failed to establish a new connection: [Errno -2] Name or service not known',)': /simple/pyyaml/
+  Retrying (Retry(total=1, connect=None, read=None, redirect=None)) after connection broken by 'NewConnectionError('<pip._vendor.requests.packages.urllib3.connection.VerifiedHTTPSConnection object at 0x7feef886ec10>: Failed to establish a new connection: [Errno -2] Name or service not known',)': /simple/pyyaml/
+  Retrying (Retry(total=0, connect=None, read=None, redirect=None)) after connection broken by 'NewConnectionError('<pip._vendor.requests.packages.urllib3.connection.VerifiedHTTPSConnection object at 0x7feef886ed90>: Failed to establish a new connection: [Errno -2] Name or service not known',)': /simple/pyyaml/
+  Could not find a version that satisfies the requirement PyYAML==3.11 (from -r requirements.txt (line 1)) (from versions: )
+No matching distribution found for PyYAML==3.11 (from -r requirements.txt (line 1))
+
+ERROR: could not install deps [-rrequirements.txt, -rrequirements-dev.txt]; v = InvocationError('/code/.tox/py27/bin/pip install -rrequirements.txt -rrequirements-dev.txt (see /code/.tox/py27/log/py27-1.log)', 1)
+py34 create: /code/.tox/py34

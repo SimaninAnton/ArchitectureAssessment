@@ -1,0 +1,21 @@
+cloojure commented on 23 Mar 2016
+The result of docker-compose help is not helpful:
+> docker-compose help
+Get help on a command.
+
+Usage: help COMMAND
+docker-compose should follow the example of both docker and docker-machine, which print help/usage text when invoked alone or with the "help" subcommand:
+> docker 
+Usage: docker [OPTIONS] COMMAND [arg...]
+       docker daemon [ --help | ... ]
+       docker [ --help | -v | --version ]
+
+A self-sufficient runtime for containers.
+...
+> docker help
+Usage: docker [OPTIONS] COMMAND [arg...]
+       docker daemon [ --help | ... ]
+       docker [ --help | -v | --version ]
+
+A self-sufficient runtime for containers.
+...

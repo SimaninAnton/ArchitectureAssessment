@@ -1,0 +1,1 @@
+Using extends to replace "build" with "image" results in an error when build directory path does not exist

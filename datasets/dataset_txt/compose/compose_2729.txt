@@ -1,0 +1,13 @@
+freneticdisc commented on 21 Feb 2016
+I have a docker-compose.yml file with the following service defined:
+version: "2.0"
+services:
+  database:
+    image: oraclelinux:7
+    command: /bin/bash
+    shm_size: 1g
+The service creation fails as the sum-size option is unavailable in docker compose. I use the following versions of the Docker Engine and Docker Compose.
+Docker version 1.10.1, build 9e83765
+docker-compose version 1.6.0, build d99cad6
+3
+2

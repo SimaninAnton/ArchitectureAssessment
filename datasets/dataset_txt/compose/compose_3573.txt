@@ -1,0 +1,28 @@
+bastiao commented on 11 Jun 2015
+This traceback should be better handle for end-user.
+Traceback (most recent call last):
+  File "/Volumes/EXT1/PProj/django/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.2.0', 'console_scripts', 'docker-compose')()
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/cli/main.py", line 464, in up
+    do_build=not options['--no-build'],
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/project.py", line 214, in up
+    do_build=do_build):
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/service.py", line 288, in start_or_create_containers
+    do_build=do_build,
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/service.py", line 199, in create_container
+    stream_output(output, sys.stdout)
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/progress_stream.py", line 37, in stream_output
+    print_output_event(event, stream, is_terminal)
+  File "/Volumes/EXT1/PProj/django/lib/python2.7/site-packages/compose/progress_stream.py", line 50, in print_output_event
+    raise StreamOutputError(event['errorDetail']['message'])
+compose.progress_stream.StreamOutputError: Get https://index.docker.io/v1/repositories/bioinformaticsua/catalogue/images: dial tcp: lookup index.docker.io on 10.0.2.3:53: read udp 10.0.2.3:53: i/o timeout

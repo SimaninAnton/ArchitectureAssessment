@@ -1,0 +1,53 @@
+alfredvaa commented on 11 Oct 2019
+Description of the issue
+I have a docker-compose.yml in the root of my project. There is also a frontend.env and backend.env which is referenced by two different containers in the env_file parameter in docker-compose. Besides that, there is also a .env file in the root of the project to set some args inside the docker-compose
+      args:
+        - NODE_ENV=development
+        - NPM_REGISTRY_TOKEN=$NPM_REGISTRY_TOKEN
+The NPM_REGISTRY_TOKEN is defined in the .env file. When running docker-compose config from the root directory I can see that it sets NPM_REGISTRY_TOKEN and all variables for backend.env and frontend.env correctly. But when running docker-compose config from the subfolder /frontend I can only see the frontend.env and backend.env variables set correctly, but the NPM_REGISTRY_TOKEN is now an empty string.
+I did not even knew that it is possible to run docker-compose from a sub directory but it appears so. My problem with all this is that I accidentally run it from the sub directory and since the backend.env and frontend.env variables was populated correctly I was confused about why my .env-file did not work anymore.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:26:49 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:32:21 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Steps to reproduce the issue
+create a docker-compose.yml and an .env-file.
+Use a variable from the .env-file in docker-compose.yml
+cd into a sub directory and run docker-compose config
+Observed result
+.env is not used when running docker-compose from sub directory.
+Expected result
+I think that either none of .env, backend.env and frontend.env should work, or all of them should work.
+Stacktrace / full error message
+none
+Additional information

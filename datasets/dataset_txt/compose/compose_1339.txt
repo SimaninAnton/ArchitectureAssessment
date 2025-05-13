@@ -1,0 +1,74 @@
+hiagop commented on 5 Jul 2017
+I'm trying to deploy an IMAP server using docker-compose and secrets for the sensitive data management. I followed the documentation for the long syntax form of creating secrets. But anytime I do docker-compose up -d I get this warning:
+WARNING: Service "imap" uses secret "key" with uid, gid, or mode. These fields are not supported by this implementation of the Compose file
+WARNING: Service "imap" uses secret "cert" with uid, gid, or mode. These fields are not supported by this implementation of the Compose file
+This actually doesn't prevent the containers from being deployed though. But none of the properties set in the docker-compose.yml file are applied to the generated files inside the container.
+I have already checked for the compatibility table, but according to it, I should not be getting this warning, since I'm running my containers with the following docker engine and docker-compose versions:
+$ docker version:
+Client:
+Version: 17.06.0-ce
+API version: 1.30
+Go version: go1.8.3
+Git commit: 02c1d87
+Built: Fri Jun 23 21:20:04 2017
+OS/Arch: linux/amd64
+Server:
+Version: 17.06.0-ce
+API version: 1.30 (minimum version 1.12)
+Go version: go1.8.3
+Git commit: 02c1d87
+Built: Fri Jun 23 21:18:59 2017
+OS/Arch: linux/amd64
+Experimental: false
+$ docker-compose version:
+docker-compose version 1.14.0, build c7bdf9e
+docker-py version: 2.3.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+This is my docker-compose.yml file:
+version: '3.1'
+services:
+    imap:
+        image: cyrus
+        hostname: cyrus
+        volumes:
+            - volume1
+            - volume2
+            - volume3
+            - volume4
+        secrets:
+            - source: key
+              target: my.key
+              uid: '0'
+              gid: '109'
+              mode: 0640
+            - source: cert
+              target: my.crt
+              uid: '0'
+              gid: '109'
+              mode: 0640
+        ports:
+            - 110:110
+            - 143:143
+            - 993:993
+            - 995:995
+            - 4190:4190
+        restart: always
+        networks:
+            - mail
+    logger:
+        image: gliderlabs/logspout
+        hostname: logspout
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - mail
+        command: syslog://log-server-ip:514
+networks:
+    mail:
+        driver: bridge
+secrets:
+    key:
+        file: ./my.key
+    cert:
+        file: ./my.crt

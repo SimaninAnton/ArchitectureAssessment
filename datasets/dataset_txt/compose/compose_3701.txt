@@ -1,0 +1,5 @@
+liubin commented on 22 Apr 2015
+I'm using CentOS 7, If I install docker-compose under /usr/local/bin(the manual way), my sudo docker-compose up will fail.
+How about install it under a more common folder like /usr/bin?
+Thanks,
+Bin Liu

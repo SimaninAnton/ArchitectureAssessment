@@ -1,0 +1,26 @@
+brunocascio commented on 25 Nov 2016 •
+edited
+Steps to reproduce:
+backend_mongo:
+    extends:
+      file: common.yml
+      service: mongo
+    volumes:
+      - mongo_data_dev:/data/db
+    env_file:
+      - .env.development
+
+backend_api:
+    extends:
+      file: common.yml
+      service: api
+    depends_on:
+      - backend_mongo
+    links:
+      - backend_mongo:mongo
+    env_file:
+      - .env.development
+Run: docker-compose run --rm backend_api <command>
+It will remove the backend_api container but not the backend_mongo container.
+Is it possible to remove them? Maybe, using --remove-links flag with something like --new-linked-services flag to prevent that the command remove another container already running.
+1

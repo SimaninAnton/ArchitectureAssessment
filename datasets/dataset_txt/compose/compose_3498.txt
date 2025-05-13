@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 6 Jul 2015
+In #1399, a basic version of state convergence was hidden behind the --x-smart-recreate flag. This should be promoted to a stable feature and become the default behaviour.
+A flag should be added to up to support the old behaviour where all containers are stopped and recreated.

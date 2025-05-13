@@ -1,0 +1,1 @@
+docker-compose hangs on build using a private registry

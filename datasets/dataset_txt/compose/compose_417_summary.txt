@@ -1,0 +1,1 @@
+DNS stops working shortly after compose containers come up

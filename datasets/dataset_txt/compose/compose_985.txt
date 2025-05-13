@@ -1,0 +1,63 @@
+martinmakesitwork commented on 27 Dec 2017
+Hi everyone!
+I have two docker compose files:
+version: '3.2'
+services:
+  web:
+    build: .
+    ports:
+     - "8080:8080"
+    external_links:
+     - app
+    networks:
+     - wordnet
+networks:
+  wordnet:
+    external: true
+and
+version: '3.2'
+services:
+  app:
+    image: "node:8"
+    user: "node"
+    container_name: app
+    ports:
+      - '3000:3000'
+    networks:
+      - wordnet
+    external_links:
+      - web
+    command: "npm start"
+
+networks:
+  wordnet:
+    external: true
+One for the app and one for the corresponding website. My problem is that im not able to get infos from the app container. I tried this:
+  var options = {
+    host: 'localhost',
+    port: 3000,
+    path: '/stats/123/today'
+  };
+
+  http.get(options, function (resp) {
+    console.log(resp);
+  }).on('error', function (err) {
+    console.log("Error:", err)
+  });
+then this error occures:
+{"code":"ECONNREFUSED","errno":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":3000}
+and i tried this:
+  var options = {
+    host: 'http//app',
+    port: 3000,
+    path: '/stats/123/today'
+  };
+
+  http.get(options, function (resp) {
+    res.send(resp);
+  }).on('error', function (err) {
+    console.log("Error:", err)
+  });
+then this error occures
+{"code":"ENOTFOUND","errno":"ENOTFOUND","syscall":"getaddrinfo","hostname":"http//app","host":"http//app","port":3000}
+I have no idea how to handle this problem. My network uses the bridge driver.

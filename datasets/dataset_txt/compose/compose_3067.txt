@@ -1,0 +1,6 @@
+bitgandtter commented on 20 Nov 2015
+This suppose to be a question, debate and maybe a feature.
+I have been using k8s for a while and i really want to migrate over all docker tools, i mean use compose to manage my topology and use swarm for my cluster.
+My question is: There is some proposal, discussion or WIP about monitor and keep running the desired amount of containers for a service?
+Explain, on k8s you have replication controllers that always keep runnig the desired amount of containers for a service, if for some reason one of those containers stop it will create a fresh one.
+This will be a great feature for compose since help you protect against disasters, its not all but will help.

@@ -1,0 +1,11 @@
+Contributor
+dnephin commented on 19 Jan 2016
+Currently we split the config schema into two files, one for the "top level" configuration and the other for the service definition. We can actually put everything into the same file and still do multi-stage validation.
+Move #/definitions/service into fields_schema_vx.json
+Move #/definitions/constraints into fields_schema_vx.json (and rename it to service-constraints or something like that)
+Rename fields_schema_vx.json to config_schema_vx.json, and remove service_schema.json
+Create a new definition called something like top-level-config which contains the top level properties (services, networks, volumes, and version) with type: object, without any validation of the properties.
+Move the current root schema properties into a new definitions, one for each type networks, volumes, services.
+Change the top level schema to be allOf: ['top-level-config', 'networks', 'volumes', 'services']
+In the compose validation code we would never validate the root schema directly. First we validate against the top-level-config schema to make sure all the keys exist and are of the right type. Then as we validate each section we use the individual definitions. This allows us to raise an error which contains the name of the item (service name, volume name, etc) without having to guess at where the name is in within the schema.
+I think this should block #2089

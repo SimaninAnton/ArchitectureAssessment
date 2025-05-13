@@ -1,0 +1,6 @@
+Contributor
+metal3d commented on 20 Apr 2016 •
+edited
+Hi,
+#3351 and #3348 pull-request have the same errors that seems to no come from our development. Is it a problem with validation ?
+Thanks a lot :)

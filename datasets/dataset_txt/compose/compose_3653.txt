@@ -1,0 +1,5 @@
+Contributor
+dnephin commented on 11 May 2015
+Similar to #1356 and #1066 but for image names.
+I've looked over the docker api reference, and the docker-py docs and neither include details about how to add labels to images (other than LABEL in the Dockerfile , which doesn't help us here).
+It's possible the API already supports this, and the docs are just missing. I haven't had a chance to look through the docker source yet. Does anyone know offhand if this is already supported?

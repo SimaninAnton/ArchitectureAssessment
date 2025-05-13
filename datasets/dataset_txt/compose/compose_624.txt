@@ -1,0 +1,14 @@
+langri-sha commented on 18 Jun 2018
+I have a repository with several projects inside. Sometimes there's some code sharing and I have to set up the context to be a common root. Troubles arise when there are several images that use the same context, but require different sets of files.
+This takes away the simplicity of maintaining a small context and using a straightforward COPY to preserve structure. What would really help is if I could specify something akin to:
+x-foo: &foo
+  build:
+     context: .
+     dockerfile: ./foo/Dockerfile
+     dockerignore: ./foo/.dockerignore
+x-bar: &bar
+  build:
+     context: .
+     dockerfile: ./bar/Dockerfile
+     dockerignore: ./bar/.dockerignore
+8

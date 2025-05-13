@@ -1,0 +1,8 @@
+max-10001 commented on 24 Dec 2015
+$ docker-compose.exe up
+←[31mERROR←[0m: A service can not link to itself: registration-service
+$ docker-compose.exe --version
+docker-compose version: 1.5.1
+Here is what happened:
+I executed 'stop' and 'rm' to remove the services which were running however I got the same error.
+Then I thought my docker compose might have gone to some unstable state and hence removed the containers by docker rm command. Even after doing this I'm not able to execute any of the compose commands and it keeps on throwing the same error with minimal info. registration-service is one of the services which was running earlier. Any ideas on how I can reset the compose?

@@ -1,0 +1,2 @@
+farhadkzm commented on 17 Mar 2016
+To map a container's port within a range of host's ports, Docker run acceps -p x-y:cPort, however it seems the option is not supported by Docker compose's yml file.

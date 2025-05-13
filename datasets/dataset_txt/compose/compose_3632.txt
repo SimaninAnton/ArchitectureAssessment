@@ -1,0 +1,4 @@
+stephenlawrence commented on 21 May 2015
+When I typed docker-compose rm SERVICE, I got a response back that said:
+Going to remove SERVICE1, SERVICE2, SERVICE3, etc...
+When I answered Yes to the prompt, it only deleted the original service I had requested to be removed. The message is mis-leading.

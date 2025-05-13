@@ -1,0 +1,1 @@
+Docker parameter "dns-opt" not implemented

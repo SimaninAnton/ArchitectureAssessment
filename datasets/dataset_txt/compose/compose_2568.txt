@@ -1,0 +1,2 @@
+aschrijver commented on 29 Mar 2016
+I know this can be done with docker command, but I find it strange that you can do docker-compose up -d [service...] and specify one or more services defined in compose config, but you cannot in a similar way specify specific services to stop.

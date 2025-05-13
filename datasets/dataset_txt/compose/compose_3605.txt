@@ -1,0 +1,24 @@
+ak47 commented on 30 May 2015
+When following this example:
+https://docs.docker.com/compose/
+I consistently get the below error:
+╰─➤  docker-compose up
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 57, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 77, in get_project
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 69, in from_dicts
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 49, in sort_service_dicts
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 42, in visit
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 27, in get_service_dependents
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 21, in get_service_names
+TypeError: 'NoneType' object is not utterable
+I've tried python 3.4.3 & 2.7.10 via pyenv on my MBP
+I've installed docker-compose via 'brew cask install' and the 'curl' method shown on docker-compose installation instructions.
+here is a dump of my files:
+https://gist.github.com/ak47/cfd48c827eea2f18a8c7
+I have no more ideas on what I'm doing wrong. Thanks for any help.

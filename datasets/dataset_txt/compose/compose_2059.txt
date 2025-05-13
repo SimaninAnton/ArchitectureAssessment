@@ -1,0 +1,9 @@
+CarstenHoyer commented on 19 Sep 2016
+#3939
+I created a pull request. It git the label dco/no because it wasn´t signed.
+I then got it signed and forced push an amend.
+The dco/no label was removed by the nice turtle.
+I then switched to a different computer, made some changes and forced pushed another amend.
+This time the commit was not signed, so the turtle reapplied the dco/no label.
+I then fixed my key issues and forced pushed yet another amend.
+This time the dco/no seems to not go away again.

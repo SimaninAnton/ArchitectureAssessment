@@ -1,0 +1,28 @@
+hasnat commented on 9 Feb 2018 •
+edited
+/data directory preserved in container after recreate
+docker-compose.yml
+version: '2'
+services:
+  zookeeper:
+     image: zookeeper:3.4.11
+     container_name: zookeeper
+     environment:
+#       ZOO_DATA_DIR: /usr/local/lib
+       ZOO_MY_ID: 1
+$ docker-compose up -d
+Creating network "zookeeper_default" with the default driver
+Creating zookeeper ... done
+$ docker exec zookeeper cat /data/myid
+1
+now change ZOO_MY_ID: 2
+$ docker-compose up -d
+Recreating zookeeper ... done
+$ docker exec zookeeper cat /data/myid
+1
+this should have been changed to 2 as per the entry-point.sh of that container, but it stays 1
+https://github.com/31z4/zookeeper-docker/blob/af9250c7208973b74ed0ef6ca61052bdf853ce20/3.4.11/docker-entrypoint.sh#L31
+If I change ZOO_DATA_DIR to /usr/local/lib all works as expected /usr/local/lib/myid is changed to 2
+seems like somehow compose recreate is keeping contents of /data directory
+is this expected?
+zookeeper:3.4.11 https://github.com/31z4/zookeeper-docker/tree/af9250c7208973b74ed0ef6ca61052bdf853ce20/3.4.11

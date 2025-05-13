@@ -1,0 +1,1 @@
+Compose equivalent of Dockerfile VOLUME + COPY

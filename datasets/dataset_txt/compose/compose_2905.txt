@@ -1,0 +1,16 @@
+jimzucker commented on 19 Jan 2016
+If an image has a volume defined you cannot override it in the yml file, but the user does not get any error or warning.
+Take the example of this file below. the volume entry to map your local file system but this is ignored because in the official mongo image a docker volume was created for /data/db.
+docker-compose.yml :
+mongodb:
+  image: mongo:latest
+  container_name: mongodb2
+  command: mongod --smallfiles
+  ports:
+   - "27017:27017"
+  volumes:
+  - ./mongo:/data/db
+  volume_driver: local
+Docker file for mongo that defines the volume that cannot be overridden:
+https://github.com/docker-library/mongo/blob/358d9eb62895be2c9fd4290595573c93b79d47d4/3.2/Dockerfile
+1

@@ -1,0 +1,2 @@
+sebglon commented on 17 Mar 2015
+If i have no internet, is it possible to made "docker-compose up" on offline and use cache

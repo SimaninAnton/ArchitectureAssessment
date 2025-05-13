@@ -1,0 +1,1 @@
+tip:you need careful for handle cache image in rails development

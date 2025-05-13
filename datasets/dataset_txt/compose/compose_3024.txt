@@ -1,0 +1,16 @@
+decisio-build commented on 2 Dec 2015
+If you have a base configuration like this one ...
+baseservice:
+  build: path/to/compose/file
+  command: /bin/false
+  environment:
+    AN_ENVIRONMENT_VAR: 1234
+
+service1:
+  extends:
+    file: docker-compose.yml
+    service: baseservice
+  command: some command
+  environment:
+    PULL_FROM_HOST:
+And service1 has the environment var AN_ENVIRONMENT_VAR set but PULL_FROM_HOST will always come back as None no matter if it's set in the host. If you remove the extends part of service1 then the PULL_FROM_HOST environment variable works. It's like the dictionary merging process broke.

@@ -1,0 +1,6 @@
+torte commented on 6 Mar 2015
+Hi,
+this is actually a feature request. Docker was adding the exec command with Docker 1.4 which lets you execute commands on a running container (rather than creating a new container each time, like run does). I would love this to be available in docker-compose as well.
+Right now I can use the docker exec command directly, but it is not as convenient as using the commands through compose.
+Thanks.
+2

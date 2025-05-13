@@ -1,0 +1,5 @@
+Contributor
+j0hnsmith commented on 3 Apr 2014
+It's awkward having to be in the same directory as fig.yml, something like this would be useful
+fig up --config some/path/to/fig.yml
+Then without the argument fig could look in some default locations in a defined order, eg current directory, /etc/fig/fig.yml

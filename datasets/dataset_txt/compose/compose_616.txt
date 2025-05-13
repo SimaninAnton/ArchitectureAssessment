@@ -1,0 +1,88 @@
+techieshark commented on 22 Jun 2018
+Description of the issue
+If you have a typo like an extra space, in the docker compose file version field, you'll see a stack trace rather than error message.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version":
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 332, in config
+  File "compose/cli/command.py", line 68, in get_config_from_options
+  File "compose/config/config.py", line 385, in load
+  File "compose/config/config.py", line 385, in <listcomp>
+  File "compose/config/config.py", line 535, in process_config_file
+  File "distutils/version.py", line 70, in __ge__
+  File "distutils/version.py", line 337, in _cmp
+TypeError: '<' not supported between instances of 'str' and 'int'
+[4431] Failed to execute script docker-compose
+Steps to reproduce the issue
+create a docker-compose.yml containing:
+version: '3 '
+
+services:
+  web:
+    image: alpine:latest
+(Note the space following the 3)
+Run compose
+docker-compose -f docker-compose.yml config
+Observed result
+Stack trace is printed:
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 332, in config
+  File "compose/cli/command.py", line 68, in get_config_from_options
+  File "compose/config/config.py", line 385, in load
+  File "compose/config/config.py", line 385, in <listcomp>
+  File "compose/config/config.py", line 535, in process_config_file
+  File "distutils/version.py", line 70, in __ge__
+  File "distutils/version.py", line 337, in _cmp
+TypeError: '<' not supported between instances of 'str' and 'int'
+[70770] Failed to execute script docker-compose
+Expected result
+Helpful message like:
+The `version` field in the file `docker-compose.yml` contains an unexpected character. It should be either 1, 2, or 3. We found: "3 ".
+Stacktrace / full error message
+(From above):
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 332, in config
+  File "compose/cli/command.py", line 68, in get_config_from_options
+  File "compose/config/config.py", line 385, in load
+  File "compose/config/config.py", line 385, in <listcomp>
+  File "compose/config/config.py", line 535, in process_config_file
+  File "distutils/version.py", line 70, in __ge__
+  File "distutils/version.py", line 337, in _cmp
+TypeError: '<' not supported between instances of 'str' and 'int'
+[70770] Failed to execute script docker-compose
+Additional information
+OS X, docker-compose included with docker app.

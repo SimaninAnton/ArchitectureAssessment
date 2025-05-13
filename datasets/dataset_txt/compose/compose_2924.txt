@@ -1,0 +1,23 @@
+lmakarov commented on 13 Jan 2016
+Issue
+The following fails in Cygwin/Babun on Windows
+$ docker inspect $(docker-compose ps -q cli)
+Error: No such image or container: 605e85cc3dd1d6312760411e1719000c26255e2f27047508aec05c3c48314972
+[]
+If the id is copied and manually passed to the docker command then everything works:
+$ docker inspect 605e85cc3dd1d6312760411e1719000c26255e2f27047508aec05c3c48314972
+[
+{
+    "Id": "605e85cc3dd1d6312760411e1719000c26255e2f27047508aec05c3c48314972",
+...
+Cause
+On Windows docker-compose spits out CRLF for line breaks.
+Unfortunately the Windows docker binary won't understand CRLF.
+It's worth noting that when used in Powershell, the output from docker-compose still has the CRLF line ending, but is UTF-8 encoded. The docker binary reads the input correctly in this case.
+Workaround
+Trim the CR(\r) character:
+$ docker inspect $(docker-compose ps -q cli | tr -d '\r')
+[
+{
+    "Id": "605e85cc3dd1d6312760411e1719000c26255e2f27047508aec05c3c48314972",
+...

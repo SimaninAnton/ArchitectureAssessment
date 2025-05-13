@@ -1,0 +1,1 @@
+Inconsistency in how compose handles empty environment variables

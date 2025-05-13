@@ -1,0 +1,1 @@
+Docker Compose doesn't work when SSH connection used to remote Docker Engine

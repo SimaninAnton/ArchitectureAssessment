@@ -1,0 +1,2 @@
+imaia commented on 14 Dec 2016
+Is it possible to mount a volume through command line when calling "docker-compose up"? That would be very helpful during development.

@@ -1,0 +1,7 @@
+botchagalupe commented on 15 May 2015
+Currently the docker-compose ps command is limiting from a trouble shooting perspective. Here are a few suggestions...
+There should be a --no-wrap option or move to the ps model using --no-trunc. IMHO the ascetics of the wrapping column output are not much better than a full line wrap output. The former makes it hard for a debugger where they need to cut and paste parts of the output.
+The short CID should be in the default ps output.
+Some additional meta might be nice (e.g., up time and image name). Otherwise the user's might be straddling between the docker ps and the docker-compose ps commands...
+Some more meta
+2

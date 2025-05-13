@@ -1,0 +1,9 @@
+HuanhuanSunMSFT commented on 7 Jan 2017 •
+edited
+With latest 1.10.0-rc1 docker compose, slash in .dockerignore cannot be recognized. It will have below errors with this .dockerginore file.
+*
+!obj/Docker/publish/*
+!obj/Docker/empty/
+Building webapplication1
+Service 'webapplication1' failed to build: GetFileAttributesEx obj\Docker\empty: The system cannot find the path specified..
+Note: slash works well in 1.9.0.

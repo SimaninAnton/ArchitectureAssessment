@@ -1,0 +1,16 @@
+sblackstone commented on 13 Jun 2017
+Tested with docker-compose 1.13.0
+docker-compose.yml:
+version: '3.0'
+services:      
+  test:
+    image: debian:latest
+    env_file:
+      - test.env      
+    command: "/bin/bash -lc export"
+test.env
+TESTVAR="a=1&b=2&c=3"
+Results
+declare -x TESTVAR="\"a=1&b=2&c=3\""
+Expected
+declare -x TESTVAR="a=1&b=2&c=3"

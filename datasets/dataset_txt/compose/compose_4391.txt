@@ -1,0 +1,16 @@
+Contributor
+kvz commented on 22 Feb 2014
+I tried
+fig stop || true
+fig kill || true
+fig rm
+Going to remove syzygy_sabnzbd_1
+Are you sure? [yN] y
+But I keep getting
+Removing syzygy_sabnzbd_1...
+container_delete: Cannot destroy container f9b1643f5eb138a83dd6578daa738f9f15674534b622f06d26111855d8855ba7: Driver aufs failed to remove root filesystem f9b1643f5eb138a83dd6578daa738f9f15674534b622f06d26111855d8855ba7: rename /mnt/sda1/var/lib/docker/aufs/mnt/f9b1643f5eb138a83dd6578daa738f9f15674534b622f06d26111855d8855ba7 /mnt/sda1/var/lib/docker/aufs/mnt/f9b1643f5eb138a83dd6578daa738f9f15674534b622f06d26111855d8855ba7-removing: device or resource busy
+How can I solve this? I already closed all my processes to it so I think the problem is inside the vm.
+I'm running
+$ fig --version && docker --version
+fig 0.2.2
+Docker version 0.8.0, build cc3a8c8

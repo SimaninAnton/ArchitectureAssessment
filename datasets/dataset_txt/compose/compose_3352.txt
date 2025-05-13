@@ -1,0 +1,7 @@
+Contributor
+aanand commented on 24 Aug 2015
+A file like this should result in a validation error:
+web:
+  image: myimage
+  dockerfile: Dockerfile.alt
+This should also be documented.

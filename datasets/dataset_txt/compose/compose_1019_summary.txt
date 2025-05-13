@@ -1,0 +1,1 @@
+Unable to pass the cpu_shares value in .env file when deploying container using docker-compose

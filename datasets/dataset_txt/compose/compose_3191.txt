@@ -1,0 +1,9 @@
+aismail commented on 20 Oct 2015
+aismail@hax:~$ docker --version
+Docker version 1.8.3, build f4bf5c7
+aismail@hax:~$ docker-compose --version
+docker-compose version: 1.4.2
+aismail@hax:~$ cat /etc/issue
+Ubuntu 14.04.2 LTS \n \l
+I have some Dockerfiles with the new LABEL statement in them. I've built some images out of those Dockerfiles. When I start the containers using docker-compose, the labels are completely replaced with docker-compose specific ones.
+Is this intentional? Am I wrong to expect the image labels to still be there, without copy-pasting them in the "labels" section of docker-compose.yml?

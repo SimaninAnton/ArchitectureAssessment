@@ -1,0 +1,8 @@
+Contributor
+kojiromike commented on 1 Nov 2014
+Basically…
+$ ls -a
+.   ..
+$ fig help up
+Can't find fig.yml. Are you in the right directory?
+…I think fig help $cmd should not care if there's a fig.yml file in the current directory to give you help.

@@ -1,0 +1,1 @@
+[Request] Make docker-compose support default value for ENV variable substitution

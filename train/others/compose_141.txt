@@ -1,0 +1,26 @@
+TafThorne commented on 3 Jul 2019
+Description of the issue
+When you view https://hub.docker.com/r/docker/compose the suggested pull command is
+docker pull docker/compose
+This fails with the message:
+$ docker pull docker/compose
+Using default tag: latest
+Error response from daemon: manifest for docker/compose:latest not found
+Presumably because there is no :latest defined.
+Context information (for bug reports)
+Ran on Ubuntu, see above for more details.
+Steps to reproduce the issue
+Run docker pull docker/compose on a machine without the image already installed
+Observed result
+Using the default tag: latest
+Error response from daemon: manifest for docker/compose:latest not found
+Expected result
+Something similar to
+$ docker pull docker
+Using default tag: latest
+latest: Pulling from library/docker
+Digest: sha256:38874a2f8d1c33b51b7e2c629630f54ec32f1fe4aed91133db9da771029e2947
+Status: Image is up to date for docker:latest
+Additional information
+I would guess a version needs tagged or the website reference prompting the non-working command needs to be removed.
+2

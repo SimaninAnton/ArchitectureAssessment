@@ -1,0 +1,36 @@
+mattgiles commented on 21 Apr 2016 •
+edited
+Docker client handles certs without issue. Compose refuses to schedule any containers.
+$ export DOCKER_HOST=tcp://leader.me.priv:2375
+$ export DOCKER_TLS_VERIFY=1
+$ export DOCKER_CERT_PATH=/home/ubuntu/.docker
+
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+$ docker-compose up -d service
+ERROR: SSL error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:590)
+
+$ docker-compose version
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+
+$ docker version
+Client:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 15:59:07 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.2.0
+ API version:  1.22
+ Go version:   go1.5.4
+ Git commit:   a6c1f14
+ Built:        Wed Apr 13 05:58:31 UTC 2016
+ OS/Arch:      linux/amd64
+10

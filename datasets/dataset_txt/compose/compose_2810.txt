@@ -1,0 +1,68 @@
+Contributor
+cr7pt0gr4ph7 commented on 9 Feb 2016
+Based on the behavior of environment and labels, as well as build.image, build.context etc, I would also expect build.args to be merged, instead of being replaced.
+To give an example:
+Input
+docker-compose.yml:
+version: "2"
+services:
+  my_service:
+    build:
+      context: my-app
+      args:
+          SOME_VARIABLE: "42"
+docker-compose.override.yml:
+version: "2"
+services:
+  my_service:
+    build:
+      args:
+        HTTP_PROXY: http://proxy.somewhere:80
+        HTTPS_PROXY: http://proxy.somewhere:80
+        NO_PROXY: somewhere,localhost
+my-app/Dockerfile
+# Just needed to be able to use `build:`
+FROM busybox:latest
+ARG SOME_VARIABLE=xyz
+RUN echo "$SOME_VARIABLE" > /etc/example
+Current Output
+$ docker-compose config
+networks: {}
+services:
+  my_service:
+    build:
+      args:
+        HTTPS_PROXY: http://proxy.somewhere:80
+        HTTP_PROXY: http://proxy.somewhere:80
+        NO_PROXY: somewhere,localhost
+      context: <project-dir>\my-app
+version: '2.0'
+volumes: {}
+Expected Output
+$ docker-compose config
+networks: {}
+services:
+  my_service:
+    build:
+      args:
+        SOME_VARIABLE: 42 # Note the merged variable here
+        HTTPS_PROXY: http://proxy.somewhere:80
+        HTTP_PROXY: http://proxy.somewhere:80
+        NO_PROXY: somewhere,localhost
+      context: <project-dir>\my-app
+version: '2.0'
+volumes: {}
+Version Information
+$ docker-compose version
+docker-compose version 1.6.0, build cdb920a
+docker-py version: 1.7.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+Implementation proposal
+I mainly want to get clarification on what the desired behavior is, so that I can possibly help implementing it, maybe even for 1.6.1.
+Personally, I'd like the behavior to be to merge the build.args key (as outlined above), for a couple of reasons:
+Principle of least surprise/consistency with environment, labels, ports and so on.
+It enables scenarios like the one outlined above, where the images require some transient configuration to build, in addition to other build variables which actually have an influence on the final image.
+The scenario that one wants to replace all build args at once is not very likely IMO; why would you define base build variables in the first place if you're going to replace them anyway?
+Alternative behavior: Output a warning
+If the behavior should stay the same as it is now, i.e. to fully replaced the build.args keys, then docker-compose should at least output a warning IMO. It took me some time to figure out that docker-compose was ignoring the build args in the base docker-compose.yml file.

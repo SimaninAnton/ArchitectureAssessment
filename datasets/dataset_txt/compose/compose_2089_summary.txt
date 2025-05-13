@@ -1,0 +1,1 @@
+docker-compose -f custom-filename.yml up --force-recreate does not recreate image

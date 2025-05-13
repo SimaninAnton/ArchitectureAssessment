@@ -1,0 +1,24 @@
+voocel commented on 17 May 2017 •
+edited
+Hi
+when I mount the nginx Site root directory only, like this:
+        volumes:
+            - /docker/nginx/www:/usr/share/nginx/html
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+it is work!
+but now I want to mount the nginx conf，like this:
+        volumes:
+            - /docker/nginx/www:/usr/share/nginx/html
+            - /docker/nginx/conf:/etc/nginx/conf.d
+        
+        restart: always
+
+        ports:
+            - "80:80"
+            - "443:443"
+and then I write the same nginx conf at /docker/nginx/conf
+it's not work!
+error:The connection was reset

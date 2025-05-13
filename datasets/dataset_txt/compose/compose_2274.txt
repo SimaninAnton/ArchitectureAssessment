@@ -1,0 +1,5 @@
+tinytub commented on 27 Jun 2016
+docker-1.12 have removed syslog-tag
+I have try to change "syslog-tag" to "tag" in docker-compose.yml but it dosen't work.
+So from docker-1.12 I can not get harbor's logs.
+How can I get harbor's logs back?

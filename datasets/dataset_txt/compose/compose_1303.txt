@@ -1,0 +1,25 @@
+jnovack commented on 20 Jul 2017 •
+edited
+Given a Dockerfile
+FROM alpine as keys
+RUN apk update && \
+     apk add --no-cache openssl && \
+     rm -rf /var/cache/apk/*
+RUN openssl req -x509 -nodes -newkey rsa:4096 -keyout /key.pem -out /certificate.pem -days 720 -subj "/C=US/ST=State/L=City/O=Department/OU=Company/CN=localhost.localdomain"
+
+FROM nginx
+EXPOSE 443
+COPY --from=keys /*.pem /etc/nginx/
+RUN ls /etc/nginx/*.pem
+with appropriate docker-compose.yml:
+services:
+  nginx:
+    build: .
+I would like the necessary intelligence within docker-compose to invalidate the (any/all) builder container(s) and rebuild the deployment container with cache ("with cache" is modifying the "deployment container", not "builder container").
+I can accomplish this in docker with:
+$ docker build --target=keys --no-cache .
+$ docker build -t nginx-with-keys .
+In the above example, keys (or builder container) fully rebuilds, and the deployment build (tagged as nginx-with-keys) only rebuilds from STEP 3 (COPY --from) as expected. Rebuilding from Step 3 is the important piece here.
+I do not want to build the entire deployment build from scratch as the deployment container (or other containers in the Dockerfile) could have time intensive tasks and I would want to take advantage of docker caches where appropriate.
+In an compose environment I'd have to hit every scalable container, or at a minimum, attempt to derive the COMPOSE_PROJECT_NAME (don't hate me!) and rebuild each container (builders without cache, deployments with cache) manually.
+At a minimum, it would need to be able to successfully identify the correct service (in a multi-service docker-compose.yml file) and correct builder container (in a multi-builder Dockerfile)

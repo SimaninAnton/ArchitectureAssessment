@@ -1,0 +1,36 @@
+d2xdt2 commented on 4 Apr 2015
+I will be demonstrating the problem not using a docker-compose.yml file to make it easier to see the issue.
+In the below example the symlink test is put inside /var/www/html at build time, but it is at run time it specified that /var/www/html is going to be a volume mounted on the host, and hence it will not contain the test symlink as intended.
+Docker Compose could solve this problem, as it knows at compile time that /var/www/html is going to be a volume mounted on the host.
+# cat Dockerfile 
+FROM fedora:latest
+RUN mkdir -p /var/www/html
+RUN mkdir /var/www/test
+RUN ln -s /var/www/test /var/www/html
+
+
+# docker build -t test2 .
+Sending build context to Docker daemon 6.656 kB
+Sending build context to Docker daemon 
+Step 0 : FROM fedora:latest
+ ---> 834629358fe2
+Step 1 : RUN mkdir -p /var/www/html
+ ---> Running in 7f1a245c3be1
+ ---> c58e763cc16b
+Removing intermediate container 7f1a245c3be1
+Step 2 : RUN mkdir /var/www/test
+ ---> Running in a05c89dcff1a
+ ---> b0e69bb78e1b
+Removing intermediate container a05c89dcff1a
+Step 3 : RUN ln -s /var/www/test /var/www/html
+ ---> Running in 3222377643fd
+ ---> a70fdef50689
+Removing intermediate container 3222377643fd
+Successfully built a70fdef50689
+
+
+# docker run -ti --rm test2 ls /var/www/html
+test
+
+# mkdir html
+# docker run -ti --rm -v /tmp/html/:/var/www/html test2 ls /var/www/html

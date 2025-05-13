@@ -1,0 +1,16 @@
+ghost commented on 26 Nov 2015
+after last docker update, when I try make docker-compose up I get:
+Creating bridge
+ERROR:  Conflicting options: -h and the network mode (--net)
+compose file is:
+bridge:
+    build:          ./some-bridge
+    container_name: bridge
+    hostname:       bridge
+    restart:        always
+    net: "container:openvpn"
+    env_file:
+        - /home/someuser/environment/environment.sh
+openvpn is an external container with the following running options
+docker run -p 32323:32323 -d -v /etc/openvpn:/etc/openvpn --cap-add=NET_ADMIN -v /dev/net/tun:/dev/net/tun --name openvpn openvpn
+I use Docker version 1.9.1, build a34a1d5 and docker-compose version: 1.5.1

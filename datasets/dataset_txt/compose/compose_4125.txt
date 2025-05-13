@@ -1,0 +1,64 @@
+matthuisman commented on 4 Nov 2014
+#625
+I have a base image that I use for PHP (PHP-CLI & PHP-FPM)
+Would be cool if you could tell fig to inherit a previous image as a base.
+The child image would then have all the attributes of the parent, and then you would be able to override the parents attributes / add attributes.
+It is simply generating a different Docker Run command based on the parents command.
+No extra building / pulling etc would be needed.
+Current Method
+ServiceA:
+  build: /docker/php
+  volumes:
+    - /docker/websites:/docker/websites
+  links:
+    - redis
+  command: php service.php
+((docker run -v /docker/websites:/docker/websites --links redis:redis ae3454 php service.php))
+
+ServiceB:
+  build: /docker/php
+  volumes:
+    - /docker/websites:/docker/websites
+  links:
+    - redis
+  command: php5-fpm -F
+((docker run -v /docker/websites:/docker/websites --links redis:redis ae3454 php5-fpm -F))
+Proposed Method
+ServiceA:
+  build: /docker/php
+  volumes:
+    - /docker/websites:/docker/websites
+  links:
+    - redis
+  command: php service.php
+((docker run -v /docker/websites:/docker/websites --links redis:redis ae3454 php service.php))
+
+ServiceB:
+  inherits: ServiceA
+  command: php5-fpm -F
+((docker run -v /docker/websites:/docker/websites --links redis:redis ae3454 php5-fpm -F))
+Behind the scenes
+ServiceA = {'container-id' => 'ae3454',
+          volumes'=>['/docker/websites:/docker/websites'], 
+          links=>['redis:redis'], 'command'=>'php service.php'}
+
+ServiceB = {'command'=>'php5-fpm -F'}
+
+ServiceB = Merge ServiceB ServiceA  (B overrides A)
+
+print Service B:
+{'container-id' => 'ae3454',
+ volumes'=>['/docker/websites:/docker/websites'], 
+ links=>['redis:redis'], 'command'=>'php5-fpm -F'}
+
+*Generate Docker Run Commands*
+
+docker run -v /docker/websites:/docker/websites --links redis:redis ae3454 php service.php
+docker run -v /docker/websites:/docker/websites --links redis:redis ae3454 php5-fpm -F
+This will help reduce code duplication and make it easy to modify attributes just in the parent image.
+Say my PHP images now required another service (MYSQL), I would simply need to add the mysql link to the first image.
+At present, I would need to duplicate this change to all the other images which could lead to broken images if one is missed.
+What would need deciding is what attributes get inherited, what attributes overwrite the parents and what attributed append to the parents.
+Volumes - Append?
+Environment variables - Append?
+Ports - Don't inherit?

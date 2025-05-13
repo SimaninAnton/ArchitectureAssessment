@@ -1,0 +1,17 @@
+aequasi commented on 1 Feb 2018 •
+edited
+Let me know if this isnt the way i should be doing this, but i have the following config:
+version: '2'
+services:
+    webserver:
+        image: abiosoft/caddy
+        ports:
+            - 80:80
+        // ... Some other stuff
+     api:
+         // ... Normal stuff
+     www:
+         // ... Normal stuff
+         extra_hosts:
+             - "dev.api.example.com:webserver"
+The webserver has multiple vhosts in it, and nothing defaulted, so i can't use webserver. I cant expose the port on the api container, as its not a webserver.

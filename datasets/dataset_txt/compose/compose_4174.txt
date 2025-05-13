@@ -1,0 +1,17 @@
+andrewmichaelsmith commented on 6 Oct 2014
+I'm occasionally seeing this error when my application exits with error code 1:
+app_app_1 exited with code 1
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping app_couchdb_1...
+Exception in thread Thread-1 (most likely raised during interpreter shutdown):
+Traceback (most recent call last):
+  File "/code/build/fig/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/code/build/fig/out00-PYZ.pyz/threading", line 763, in run
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.multiplexer", line 41, in _enqueue_output
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.log_printer", line 56, in _make_log_generator
+  File "/code/build/fig/out00-PYZ.pyz/fig.container", line 128, in wait
+  File "/code/build/fig/out00-PYZ.pyz/fig.packages.docker.client", line 855, in wait
+  File "/code/build/fig/out00-PYZ.pyz/fig.packages.docker.client", line 66, in _post
+  File "/code/build/fig/out00-PYZ.pyz/requests.sessions", line 425, in post
+  File "/code/build/fig/out00-PYZ.pyz/requests.sessions", line 335, in request
+<type 'exceptions.TypeError'>: 'NoneType' object is not callable

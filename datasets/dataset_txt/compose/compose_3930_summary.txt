@@ -1,0 +1,1 @@
+fig up stuck if the container.wait throws exception

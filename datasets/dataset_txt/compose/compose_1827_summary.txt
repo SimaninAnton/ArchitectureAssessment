@@ -1,0 +1,1 @@
+docker-compose run option to recreate dependencies

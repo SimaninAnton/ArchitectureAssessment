@@ -1,0 +1,9 @@
+jelmstrom commented on 26 Aug 2015
+I accidentally gave my container the exact same name as the image used, and the error message that resulted was quite confusing..
+[8] System error: not a directory
+The config looks like this
+godata:
+  image: godata
+  privileged: true
+If this is not a valid option it would be helpful if it is caught while parsing the yml file rather than at run-time
+Changing either the image pr container name solves the problem...

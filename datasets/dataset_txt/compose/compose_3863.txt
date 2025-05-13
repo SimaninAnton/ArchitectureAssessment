@@ -1,0 +1,21 @@
+wernight commented on 6 Mar 2015
+Given a docker-compose.yml:
+web:
+  image: nginx:1.7
+  ports:
+    - 9084:80
+node:
+  build: test/functional
+  links:
+    - web
+  ports:
+    - 127.0.0.1:8080
+Executing this will:
+$ docker-compose --project-name=B up
+...
+$ docker-compose --project-name=A run --rm -T -e ENV=staging node npm test
+Creating A_php_1...
+Creating A_web_1...
+Cannot start container 282ac57ac3052dc65c4647c93596504ead598dcc3c29e4b51f4ead123f2d40d7: Bind for 0
+.0.0.0:9084 failed: port is already allocated
+However I didn't use the new --expose-ports command, so I don't expect it would try to expose port, so I expect it'd not try to bind to port 9084 during the second command.

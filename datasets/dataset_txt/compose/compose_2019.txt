@@ -1,0 +1,26 @@
+HuanhuanSunMSFT commented on 6 Oct 2016 •
+edited
+Here is a very simple docker compose file.
+version: '2'
+
+services:
+  testproject:
+    image: testproject
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes: 
+      - .:C:\app
+    ports:
+      - "80"
+networks:
+  default:
+    external:
+      name: nat
+Here is the error I get when running compose up:
+ERROR: for fulldotnet Cannot create container for service fulldotnet: invalid volume spec "/c/app": invalid volume specification: '\c\app'
+docker-compose version
+docker-compose version 1.8.1, build 004ddae
+docker-py version: 1.10.3
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016

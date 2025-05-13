@@ -1,0 +1,37 @@
+ciokan commented on 23 Dec 2014
+I'm trying to port a django app to fig and I can't manage to get it up because it gives a mySql connection error. From the printed logs it seems that the database is started after the moment when django tries to connect:
+web_1           | django.db.utils.OperationalError: (2003, "Can't connect to MySQL server on '172.17.0.173' (111)")
+db_1            | 141222 10:11:31 InnoDB: 5.5.38 started; log sequence number 1595675
+db_1            | 141222 10:11:31 [Note] Server hostname (bind-address): '0.0.0.0'; port: 3306
+db_1            | 141222 10:11:31 [Note]   - '0.0.0.0' resolves to '0.0.0.0';
+db_1            | 141222 10:11:31 [Note] Server socket created on IP: '0.0.0.0'.
+db_1            | 141222 10:11:31 [Note] Event Scheduler: Loaded 0 events
+db_1            | 141222 10:11:31 [Note] /usr/sbin/mysqld: ready for connections.
+db_1            | Version: '5.5.38-0ubuntu0.12.04.1-log'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  (Ubuntu)
+elasticsearch_1 | [2014-12-22 10:11:33,155][INFO ][cluster.service          ] [Kro] new_master [Kro][dyEs-jseSweFhV1UYVYk7Q][a3fc9882e1a7][inet[/172.17.0.169:9300]], reason: zen-disco-join (elected_as_master)
+elasticsearch_1 | [2014-12-22 10:11:33,194][INFO ][http                     ] [Kro] bound_address {inet[/0:0:0:0:0:0:0:0:9200]}, publish_address {inet[/172.17.0.169:9200]}
+elasticsearch_1 | [2014-12-22 10:11:33,194][INFO ][node                     ] [Kro] started
+elasticsearch_1 | [2014-12-22 10:11:33,200][INFO ][gateway                  ] [Kro] recovered [0] indices into cluster_state
+Here's my fig.yml:
+redis:
+  image: redis
+elasticsearch:
+  image: dockerfile/elasticsearch
+db:
+  image: orchardup/mysql
+  ports:
+   - 3306
+  environment:
+    MYSQL_DATABASE: devcasts
+    MYSQL_ROOT_PASSWORD: somenicepassword
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
+  links:
+    - db
+    - redis
+    - elasticsearch

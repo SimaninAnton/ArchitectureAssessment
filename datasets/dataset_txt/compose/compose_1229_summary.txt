@@ -1,0 +1,1 @@
+extending services within v1 style compose files failing

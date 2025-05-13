@@ -1,0 +1,13 @@
+KnicKnic commented on 6 Mar 2018 •
+edited
+I tried to reference a environmental variable with a space in it. I also tried with parens "()"
+Here is the repro steps in windows.
+C:\tmp>set some arg=hello
+C:\tmp>docker-compose up
+ERROR: Invalid interpolation format for "command" option in service "space": "${some arg}"
+C:\tmp>type docker-compose.yaml
+version: '2.1'
+services:
+  space:
+    image: microsoft/nanoserver
+    command: ["c:\\windows\\system32\\cmd.exe", "/c", "echo", "${some arg}"]

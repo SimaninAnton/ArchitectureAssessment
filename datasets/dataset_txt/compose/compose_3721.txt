@@ -1,0 +1,10 @@
+ain commented on 16 Apr 2015
+Despite following the installation command, installation fails:
+$ sudo curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+-bash: /usr/local/bin/docker-compose: Permission denied
+Platform:
+Mac OS X 10.10.3 Yosemite
+$ curl --version
+curl 7.41.0 (x86_64-apple-darwin14.1.0) libcurl/7.41.0 OpenSSL/1.0.2a zlib/1.2.8 libidn/1.29
+Protocols: dict file ftp ftps gopher http https imap imaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp 
+Features: IDN IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP UnixSockets 

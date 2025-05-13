@@ -1,0 +1,6 @@
+Glideh commented on 7 Sep 2015
+As I was saying in #88, for a fresh install with the curl script (at least in Debian 8), docker seems to be configured to listen on fd:// by default
+ExecStart=/usr/bin/docker daemon -H fd://
+However, when DOCKER_HOST is set to use fd://, docker-compose (1.4.0) complains:
+fd protocol is not implemented
+Maybe this issue is more linked to the docker client

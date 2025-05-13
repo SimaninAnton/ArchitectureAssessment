@@ -1,0 +1,7 @@
+sielaq commented on 2 Feb 2015
+It would be awesome to have "optional: true" in fig.yml,
+so container is not starting with when "fig up" / "fig up -d" is executed.
+but only when you do "fig up " / "fig up -d "
+It sould not affect current config so default is "optional: false"
+Then you can have multiple versions / alternative solutions /
+some specific containers for specific purposes, that are not starting by default.

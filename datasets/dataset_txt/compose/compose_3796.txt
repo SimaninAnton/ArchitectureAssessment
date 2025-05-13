@@ -1,0 +1,15 @@
+jlesquembre commented on 25 Mar 2015
+With this simple .yml file:
+web:
+  image: alpine:3.1
+  command: echo "Hello World"
+First time you run docker-compose up, everything works as expected:
+Creating test_web_1...
+Attaching to test_web_1
+web_1 | Hello World
+test_web_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+But second time, compose doesn't display any output and never exits:
+Recreating test_web_1...
+Attaching to
+Probably related to #753

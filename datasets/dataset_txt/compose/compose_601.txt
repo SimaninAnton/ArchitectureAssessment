@@ -1,0 +1,68 @@
+harshmah commented on 1 Jul 2018 •
+edited
+Description of the issue
+I created below docker-compose file (my understanding is that below file will run 2 docker image\svcs). When I run command (docker-compose up), it starts both services.
+The issue is svc1 is not able to connect with svc2. It uses the following URL:
+http://localhost/v1/shop/1/1033/21654427,22270779,21974681,21709135,21654206,21654004,21710306,21768511,21713842,22399516,20066588,21654252,21654007,21653989,21653987,21653982,21653979,21706920/2/2018-08-01/2018-08-02?mctc=0&agent=false&sourceType=0&botRequest=false&sessionId=&lobType=STANDALONE&tests=&debug=false&userRegistered=true
+The interesting part is when I am able to get a response via Postman with same above url. any idea what is an issue here?
+version: '2'
+services:
+svc1:
+image: svc1
+ports:
+- '5001:5001'
+- '8430:8430'
+environment:
+- APP_NAME=svc1
+- VAULT_TOKEN
+- EXPEDIA_ENVIRONMENT=dev
+- ACTIVE_VERSION
+- JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=5001,server=y,suspend=n
+svc2:
+image: svc2
+ports:
+- '5002:5002'
+- '8431:8431'
+environment:
+- EXPEDIA_ENVIRONMENT=dev
+- ACTIVE_VERSION
+- VAULT_TOKEN
+- JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=5002,server=y,suspend=n
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2n 7 Dec 2017
+Output of "docker version"
+Client:
+Version: 18.03.0-ce
+API version: 1.37
+Go version: go1.9.4
+Git commit: 0520e24
+Built: Wed Mar 21 23:06:22 2018
+OS/Arch: darwin/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.0-ce
+API version: 1.37 (minimum version 1.12)
+Go version: go1.9.4
+Git commit: 0520e24
+Built: Wed Mar 21 23:14:32 2018
+OS/Arch: linux/amd64
+Experimental: true
+Output of "docker-compose config"
+Steps to reproduce the issue
+Observed result
+org.apache.http.conn.HttpHostConnectException: Connect to localhost:80 [localhost/127.0.0.1] failed: Connection refused (Connection refused)
+at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:159)
+at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:359)
+at org.apache.http.impl.execchain.MainClientExec.establishRoute(MainClientExec.java:381)
+Expected result
+Svc1 should be able to connect with svc2.
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

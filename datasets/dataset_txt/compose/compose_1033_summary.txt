@@ -1,0 +1,1 @@
+docker compose up abort on ascii codec not in range

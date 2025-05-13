@@ -1,0 +1,7 @@
+giftig commented on 6 May 2016
+It looks like when using the containerised docker-compose with its bash script wrapper (I need to use this as I'm on OSX Mountain Lion and docker-compose doesn't work on my platform), there's some strange caching going on which breaks my yaml file if I try to re-run after changing it. I get errors which often refer to things I've removed from my docker-compose.yml file, and frequently get this error:
+ERROR: yaml.reader.ReaderError: unacceptable character #x0000: special characters are not allowed
+  in "./docker-compose.yaml", position 607
+The work-around I've been using for this is to move the file from .yml to .yaml or vice verca; each time I do that and run docker-compose it seems to invalidate whatever was caching it and re-read it, but it's a real pain to have to do this repeatedly when I'm debugging a compose config, especially as I also get other, confusing errors referring to previous states of the file.
+Strangely, this cache seems to persist even when I remove the docker-compose container and its image and have it rebuilt from scratch.
+2

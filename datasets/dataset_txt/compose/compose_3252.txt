@@ -1,0 +1,17 @@
+kismet010 commented on 30 Sep 2015
+As this moby/moby#15182 functionality has been merged, it would be great to manage with Compose
+I.e.:
+Dockerfile with default variables
+ARG vhost=default.com
+RUN echo $vhost > ...
+Overriding through docker-composer.yml
+web:
+  build: ...
+  arguments:
+    - vhost: dev.com
+Or an hierarchy of extended environments
+production:
+  extends: web
+  arguments:
+    - vhost: my-final-domain.com
+2

@@ -1,0 +1,5 @@
+hieudang9 commented on 21 Jun 2017
+Hello there,
+I could get list service via docker-compose config --service.
+And I wonder how I can get list all services in a container. You know, any container could ping other service ( which define in compose file). But I don't know how they see each other. When I do a dns request, seem 127.0.0.11 - default embed dns server will answer. Where are embed dns server really from?
+Thanks in advance.

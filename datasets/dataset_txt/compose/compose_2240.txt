@@ -1,0 +1,4 @@
+yank1 commented on 11 Jul 2016
+HI , Do we support mem_reservation?
+If not, what the plan?
+1

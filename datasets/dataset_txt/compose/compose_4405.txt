@@ -1,0 +1,4 @@
+beorn commented on 15 Feb 2014
+I love how fig simplifies "development deployment / orchestration", but all systems eventually need to be deployed to a production environment, and I couldn't find any info on recommended ways to do that. My worry is of course having to use a completely different orchestration system for production.
+It would be really useful to also have an example of how you can deploy to, e.g., Orchard or a Docker running on an AWS Ubuntu box - ideally, of course, reusing as much of the fig.yml orchestration info as possible.
+If you DON'T want fig to be used for production deployment / orchestration, then it would be nice to say so up front. (And even nicer to point users to recommended projects for that.)

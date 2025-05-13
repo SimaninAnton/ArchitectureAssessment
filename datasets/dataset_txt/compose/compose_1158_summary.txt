@@ -1,0 +1,1 @@
+Add command (`export PATH=$PATH`) to set up path in the installation instructions

@@ -1,0 +1,3 @@
+Gijsjan commented on 12 Apr 2016
+docker run has the option to pass an alternative sequence to detach. Currently it is mapped to ctrl-p ctrl-q, but I heavily use ctrl-p in the cli and Vim, so I would like to remap. Is that possible with Compose? If not, this is a feature request. :)
+52

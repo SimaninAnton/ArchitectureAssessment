@@ -1,0 +1,1 @@
+Support `ls` sub command - list available services

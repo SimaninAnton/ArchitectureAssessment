@@ -1,0 +1,2 @@
+drastorguev commented on 2 Mar 2018
+I am trying to run docker-compose --verbose -f docker-compose-prod.yml up -d --build from my Mac to AWS EC2, but it keeps getting stuck on docker.api.build._set_auth_headers: Sending auth config (u'auths'). I do have a very large file inside. Any thoughts?

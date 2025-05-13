@@ -1,0 +1,27 @@
+codeincarnate commented on 19 Oct 2017
+I'm running docker-compose in a docker based CI environment (definitely somewhat meta). I have it setup to connect to a remote host and deploy the configuration and code to it. However I'm getting stuck on an error with no error message. Command and output below:
+docker-compose --verbose --skip-hostname-check build web
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.auth.find_config_file: No config file found
+Traceback (most recent call last):
+File "bin/docker-compose", line 6, in
+File "compose/cli/main.py", line 68, in main
+File "compose/cli/main.py", line 118, in perform_command
+File "compose/cli/command.py", line 37, in project_from_options
+File "compose/cli/command.py", line 99, in get_project
+File "compose/cli/command.py", line 74, in get_client
+File "site-packages/docker/api/daemon.py", line 177, in version
+File "site-packages/docker/utils/decorators.py", line 46, in inner
+File "site-packages/docker/api/client.py", line 189, in _get
+File "site-packages/requests/sessions.py", line 488, in get
+File "site-packages/requests/sessions.py", line 475, in request
+File "site-packages/requests/sessions.py", line 596, in send
+File "site-packages/requests/adapters.py", line 497, in send
+requests.exceptions.SSLError: unknown error (_ssl.c:2947)
+I have environment variables for the command set:
+DOCKER_TLS_VERIFY=1
+DOCKER_HOST=tcp://xxx.xxx.xxx.xxx:2376
+DOCKER_CERT_PATH=/certs
+I'm running OpenSSL 1.0.2g and docker-compose 1.17.0-rc1
+I'm guessing with the minimal environment that there may be some incompatibility or missing dependency but I'm not 100%. Any help here would be appreciated.

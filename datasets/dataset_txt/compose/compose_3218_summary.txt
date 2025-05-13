@@ -1,0 +1,1 @@
+Docker compose django example dont work

@@ -1,0 +1,11 @@
+vmptk commented on 21 Aug 2016 •
+edited
+Hello,
+When I am trying to setup a remove machine via docker machine and then using the docker-compose, I am getting the follow error
+host:~/compose [remote-machine]$ docker-compose -f docker-compose.yml ps
+ERROR: .IOError: [Errno 2] No such file or directory: u'./docker-compose.yml'
+in verbose mode:
+ERROR: compose.cli.main.main: .IOError: [Errno 2] No such file or directory: '/xxxxxxx/docker-compose.yml'
+When the remove machine is unlinked, the docker-compose works perfectly. The client OS is Ubuntu 16.04.1, docker engine 1.12.1, docker compose 1.8.0, docker machine 0.8.1
+The same setup is on the remote machine
+Any suggestions???

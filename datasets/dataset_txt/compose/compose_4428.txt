@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 22 Jan 2014
+Ideally in fig.yml (how do we have general config in there? maybe we need a top level services key?), but maybe in a separate .fig-project file or something.
+13

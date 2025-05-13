@@ -1,0 +1,5 @@
+alo-is commented on 8 May 2016
+As @gaertner-mike noticed in #2804, and due to this change in Docker API v1.23 :
+POST /networks/create now supports enabling ipv6 on the network by setting the EnableIPv6 field (doing this with a label will no longer work).
+IPv6 custom networks doesn't work anymore with docker-compose, which uses a label so far to enable IPv6 (com.docker.network.enable_ipv6: "true")
+7

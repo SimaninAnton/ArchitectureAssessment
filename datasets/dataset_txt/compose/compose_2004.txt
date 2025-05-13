@@ -1,0 +1,12 @@
+scic commented on 18 Oct 2016
+Currently docker-compose supports to add labels to containers. But we with pure docker we can add labels to images with docker build --label mylabel . (https://docs.docker.com/engine/reference/commandline/build/)
+Since we recently also gained support for labelling networks and volumes: #3898 I suggest to implement this for building images as well.
+It could look like this:
+version: '2'
+services:
+  myservice:
+    build:
+      context: .
+      labels:
+        - mylabelOne= "labelTextOne"
+        - mylabelTwo= "labelTextTwo"

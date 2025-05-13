@@ -1,0 +1,2 @@
+rvanderwal-newrelic commented on 31 Mar 2016
+We'd like to eliminate the overhead from userland-proxy in our docker compose-based tests. It'd be great if we could turn this off in the compose configuration file, just like you can from the docker run command.

@@ -1,0 +1,1 @@
+docker-compose run with isolated sets of services?

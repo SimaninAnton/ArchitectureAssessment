@@ -1,0 +1,30 @@
+sebglon commented on 29 Oct 2015
+I have docker-composne.YML like this:
+repo:
+Default credentials are: admin / admin123
+build: repo
+ports:
+- 8083:8081
+volumes:
+- /data-volume/repo:/sonatype-work
+I have setting DOCKER_HOST to my remote docker and it is OK
+But when i run docker-compose build, i have this error:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 39, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 495, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 274, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 377, in execute_convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 271, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 297, in ensure_image_exists
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 696, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 18, in stream_output
+  File "/code/build/docker-compose/out00-PYZ.pyz/json", line 338, in loads
+  File "/code/build/docker-compose/out00-PYZ.pyz/json.decoder", line 369, in decode
+ValueError: Extra data: line 2 column 1 - line 3 column 16157 (char 53 - 16266)
+if i run docker build on repo/Dockerfile, hte build is OK;
+I don't understand why?

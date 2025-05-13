@@ -1,0 +1,31 @@
+ghost commented on 26 Jun 2015
+$ docker-compose --version
+docker-compose version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+see https://www.openssl.org/news/secadv_20150319.txt that mentions
+Reclassified: RSA silently downgrades to EXPORT_RSA [Client] (CVE-2015-0204)
+============================================================================
+
+Severity: High
+
+This security issue was previously announced by the OpenSSL project and
+classified as "low" severity. This severity rating has now been changed to
+"high".
+
+This was classified low because it was originally thought that server RSA
+export ciphersuite support was rare: a client was only vulnerable to a MITM
+attack against a server which supports an RSA export ciphersuite. Recent
+studies have shown that RSA export ciphersuites support is far more common.
+
+This issue affects OpenSSL versions: 1.0.1, 1.0.0 and 0.9.8.
+
+OpenSSL 1.0.1 users should upgrade to 1.0.1k.
+OpenSSL 1.0.0 users should upgrade to 1.0.0p.
+OpenSSL 0.9.8 users should upgrade to 0.9.8zd.
+
+This issue was reported to OpenSSL on 22nd October 2014 by Karthikeyan
+Bhargavan of the PROSECCO team at INRIA. The fix was developed by Stephen
+Henson of the OpenSSL core team. It was previously announced in the OpenSSL
+security advisory on 8th January 2015.
+1

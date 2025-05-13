@@ -1,0 +1,1 @@
+Document that fig does not always rebuild images automatically
