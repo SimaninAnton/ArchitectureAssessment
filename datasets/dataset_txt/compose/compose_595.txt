@@ -1,0 +1,251 @@
+h1nk commented on 4 Jul 2018 •
+edited
+Description of the issue
+When following the instructions from Running Compose on a single server I am unable to connect to a remote server without errors.
+Context information (for bug reports)
+Related to #890, #2668, and #3365 (none provide any working solutions)
+Output of "docker-compose version"
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.4.1
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.1.0g 2 Nov 2017
+Output of "docker version"
+Client:
+Version: 18.03.1-ce
+API version: 1.37
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Wed Jun 20 21:43:51 2018
+OS/Arch: linux/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.1-ce
+API version: 1.37 (minimum version 1.12)
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Wed Jun 20 21:42:00 2018
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+N/A
+Steps to reproduce the issue
+Setup a remote docker machine in a headless VirtualBox instance to connect to over TCP/TLS authentication:
+$ docker-machine create --driver virtualbox test                                
+Running pre-create checks...
+Creating machine...
+(test) Copying /users/hink/.docker/machine/cache/boot2docker.iso to /users/hink/.docker/machine/machines/test/boot2docker.iso...
+(test) Creating VirtualBox VM...
+(test) Creating SSH key...
+(test) Starting the VM...
+(test) Check network to re-create if needed...
+(test) Waiting for an IP...
+Waiting for machine to be running, this may take a few minutes...
+Detecting operating system of created instance...
+Waiting for SSH to be available...
+Detecting the provisioner...
+Provisioning with boot2docker...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+
+This machine has been allocated an IP address, but Docker Machine could not
+reach it successfully.
+
+SSH for the machine should still work, but connecting to exposed ports, such as
+the Docker daemon port (usually <ip>:2376), may not work properly.
+
+You may need to add the route manually, or use another related workaround.
+
+This could be due to a VPN, proxy, or host file configuration issue.
+
+You also might want to clear any VirtualBox host only interfaces you are not using.
+Checking connection to Docker...
+Docker is up and running!
+To see how to connect your Docker Client to the Docker Engine running on this virtual machine, run: docker-machine env test
+Verify the remote docker host is running
+$ docker-machine ls                                                                   
+NAME   ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
+test   -        virtualbox   Running   tcp://192.168.99.100:2376           v18.05.0-ce   
+$ docker-machine ssh test                                                             
+                        ##         .
+                  ## ## ##        ==
+               ## ## ## ## ##    ===
+           /"""""""""""""""""\___/ ===
+      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+           \______ o           __/
+             \    \         __/
+              \____\_______/
+ _                 _   ____     _            _
+| |__   ___   ___ | |_|___ \ __| | ___   ___| | _____ _ __
+| '_ \ / _ \ / _ \| __| __) / _` |/ _ \ / __| |/ / _ \ '__|
+| |_) | (_) | (_) | |_ / __/ (_| | (_) | (__|   <  __/ |
+|_.__/ \___/ \___/ \__|_____\__,_|\___/ \___|_|\_\___|_|
+Boot2Docker version 18.05.0-ce, build HEAD : b5d6989 - Thu May 10 16:35:28 UTC 2018
+Docker version 18.05.0-ce, build f150324
+Setup environment variables to connect to this newly created machine remotely over TCP
+$ docker-machine env test                                                             
+set -gx DOCKER_TLS_VERIFY "1";
+set -gx DOCKER_HOST "tcp://192.168.99.100:2376";
+set -gx DOCKER_CERT_PATH "/users/hink/.docker/machine/machines/test";
+set -gx DOCKER_MACHINE_NAME "test";
+# Run this command to configure your shell: 
+# eval (docker-machine env test)
+$ eval (docker-machine env test)                                               
+$ env | grep DOCKER                                                            
+DOCKER_CERT_PATH=/users/hink/.docker/machine/machines/test
+DOCKER_HOST=tcp://192.168.99.100:2376
+DOCKER_MACHINE_NAME=test
+DOCKER_TLS_VERIFY=1
+$ # Just to be 100% sure... (referencing https://github.com/docker/compose/issues/890#issuecomment-217672396)
+$ export CURL_CA_BUNDLE=$DOCKER_CERT_PATH/ca.pem
+$ echo $CURL_CA_BUNDLE                                                         
+/users/hink/.docker/machine/machines/test/ca.pem
+$ # And as well...
+$ export PYTHONHTTPSVERIFY=0                                                   
+$ echo $PYTHONHTTPSVERIFY                                                      
+0
+Do a sanity check, and make sure TLS connections to remote docker instance are good to go.
+$: docker-machine ssh test                                                             
+                        ##         .
+                  ## ## ##        ==
+               ## ## ## ## ##    ===
+           /"""""""""""""""""\___/ ===
+      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+           \______ o           __/
+             \    \         __/
+              \____\_______/
+ _                 _   ____     _            _
+| |__   ___   ___ | |_|___ \ __| | ___   ___| | _____ _ __
+| '_ \ / _ \ / _ \| __| __) / _` |/ _ \ / __| |/ / _ \ '__|
+| |_) | (_) | (_) | |_ / __/ (_| | (_) | (__|   <  __/ |
+|_.__/ \___/ \___/ \__|_____\__,_|\___/ \___|_|\_\___|_|
+Boot2Docker version 18.05.0-ce, build HEAD : b5d6989 - Thu May 10 16:35:28 UTC 2018
+Docker version 18.05.0-ce, build f150324
+docker@test:~$ docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+9bb5a5d4561a: Pull complete 
+Digest: sha256:3e1764d0f546ceac4565547df2ac4907fe46f007ea229fd7ef2718514bcec35d
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/engine/userguide/
+
+docker@test:~$ ⏎                                                                                          
+$ # (referencing https://docs.docker.com/engine/security/https/#connecting-to-the-secure-docker-port-using-curl)
+$ curl https://192.168.99.100:2376/images/json \                                      
+                --cert $DOCKER_CERT_PATH/cert.pem \
+                --key $DOCKER_CERT_PATH/key.pem \
+                --cacert $DOCKER_CERT_PATH/ca.pem
+[{"Containers":-1,"Created":1523470309,"Id":"sha256:e38bc07ac18ee64e6d59cf2eafcdddf9cec2364dfe129fe0af75f1b0194e0c96","Labels":null,"ParentId":"","RepoDigests":["hello-world@sha256:3e1764d0f546ceac4565547df2ac4907fe46f007ea229fd7ef2718514bcec35d"],"RepoTags":["hello-world:latest"],"SharedSize":-1,"Size":1848,"VirtualSize":1848}]
+Run a docker-compose operation to remote host
+$ docker-compose ps
+Observed result
+A bunch of TLS connection errors:
+ERROR: SSL error: HTTPSConnectionPool(host='192.168.99.100', port=2376): Max retries exceeded with url: /v1.21/info (Caused by SSLError(SSLError("bad handshake: Error([('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')],)",),))
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.utils.config.find_config_file: Trying paths: ['/users/hink/.docker/config.json', '/users/hink/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+docker.utils.config.find_config_file: Trying paths: ['/users/hink/.docker/config.json', '/users/hink/.dockercfg']
+docker.utils.config.find_config_file: No config file found
+urllib3.connectionpool._new_conn: Starting new HTTPS connection (1): 192.168.99.100
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/contrib/pyopenssl.py", line 441, in wrap_socket
+    cnx.do_handshake()
+  File "/usr/local/lib/python3.6/dist-packages/OpenSSL/SSL.py", line 1907, in do_handshake
+    self._raise_ssl_error(self._ssl, result)
+  File "/usr/local/lib/python3.6/dist-packages/OpenSSL/SSL.py", line 1639, in _raise_ssl_error
+    _raise_current_error()
+  File "/usr/local/lib/python3.6/dist-packages/OpenSSL/_util.py", line 54, in exception_from_error_queue
+    raise exception_type(errors)
+OpenSSL.SSL.Error: [('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')]
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/connectionpool.py", line 601, in urlopen
+    chunked=chunked)
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/connectionpool.py", line 346, in _make_request
+    self._validate_conn(conn)
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/connectionpool.py", line 850, in _validate_conn
+    conn.connect()
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/connection.py", line 326, in connect
+    ssl_context=context)
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/util/ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/contrib/pyopenssl.py", line 448, in wrap_socket
+    raise ssl.SSLError('bad handshake: %r' % e)
+ssl.SSLError: ("bad handshake: Error([('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')],)",)
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/requests/adapters.py", line 440, in send
+    timeout=timeout
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/connectionpool.py", line 639, in urlopen
+    _stacktrace=sys.exc_info()[2])
+  File "/usr/local/lib/python3.6/dist-packages/urllib3/util/retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='192.168.99.100', port=2376): Max retries exceeded with url: /v1.21/version (Caused by SSLError(SSLError("bad handshake: Error([('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')],)",),))
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python3.6/dist-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/local/lib/python3.6/dist-packages/compose/cli/main.py", line 124, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/local/lib/python3.6/dist-packages/compose/cli/command.py", line 41, in project_from_options
+    compatibility=options.get('--compatibility'),
+  File "/usr/local/lib/python3.6/dist-packages/compose/cli/command.py", line 121, in get_project
+    host=host, environment=environment
+  File "/usr/local/lib/python3.6/dist-packages/compose/cli/command.py", line 95, in get_client
+    version_info = six.iteritems(client.version())
+  File "/usr/local/lib/python3.6/dist-packages/docker/api/daemon.py", line 181, in version
+    return self._result(self._get(url), json=True)
+  File "/usr/local/lib/python3.6/dist-packages/docker/utils/decorators.py", line 46, in inner
+    return f(self, *args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/docker/api/client.py", line 198, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/lib/python3.6/dist-packages/requests/sessions.py", line 521, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/requests/sessions.py", line 508, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/requests/sessions.py", line 618, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/requests/adapters.py", line 506, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='192.168.99.100', port=2376): Max retries exceeded with url: /v1.21/version (Caused by SSLError(SSLError("bad handshake: Error([('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')],)",),))
+docker.utils.config.find_config_file trys /users/hink/.docker/ even though $DOCKER_CERT_PATH is /users/hink/.docker/machine/machines/test/??? Why is it ignoring $DOCKER_CERT_PATH
+Quoting Running Compose on a single server:
+"You can use Compose to deploy an app to a remote Docker host by setting the `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, and `DOCKER_CERT_PATH` environment variables appropriately."`
+"Once you’ve set up your environment variables, all the normal docker-compose commands work with no further configuration."
+Expected result
+No errors
+Additional information
+OS version / distribution, docker-compose install method, etc.
+sudo apt-get --yes autoremove --purge 'docker-compose'
+sudo pip3 install docker-compose
+$ lsb_release -a                                                                      
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 18.04 LTS
+Release: 18.04
+Codename: bionic
+1

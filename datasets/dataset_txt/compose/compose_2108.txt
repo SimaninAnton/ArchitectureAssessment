@@ -1,0 +1,7 @@
+Contributor
+dbdd4us commented on 31 Aug 2016 •
+edited
+I have ran into a situation where I need to get networks and volumes created by a given compose project. I think it could be done by adding a label to the networks and volumes defined in the compose file and then I could query the networks and volumes by a label filter through docker api.
+But when I check the schema definition at compose/config/config_schema_v2.0.json, I found it's not supported by compose.
+Would it be better if creating volume and network with label options is supported? I could do this if this feature is reasonable.
+1

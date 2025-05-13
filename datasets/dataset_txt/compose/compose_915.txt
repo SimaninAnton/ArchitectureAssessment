@@ -1,0 +1,9 @@
+arminorlik commented on 27 Jan 2018 •
+edited
+Hi guys,
+I'm confused - I have Docker file which use as "FROM" https://hub.docker.com/r/consol/ubuntu-xfce-vnc/ image. It's very fast way to build vnc container with gui and chromium what is require by my project. And everything is fine but i have problem with port mapping - i want to run few similar containers on same server so it's obvious that each container must use different port. I assumed that the easiest way will be run as below:
+docker run -p 5902:5901 -t cont1
+docker run -p 5903:5901 -t cont2
+docker run -p 5904:5901 -t cont3
+docker run -p 5905:5901 -t cont4
+but when i try to connect via vnc, the connection can by established only with 5901 port - despite the fact that i use -p with mapping. Maybe someone will know what's wrong?

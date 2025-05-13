@@ -1,0 +1,1 @@
+Add option --rm to `fig run`

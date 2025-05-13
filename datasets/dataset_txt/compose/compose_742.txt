@@ -1,0 +1,127 @@
+vovimayhem commented on 13 Apr 2018 •
+edited
+I've created a repo to reproduce this case: https://github.com/vovimayhem/docker-compose-build-cache-miss-test
+Given I have a Dockerfile which adds a file from the build context into the resulting image, and that I've already built the image using docker build ., docker-compose build somehow misses the cached layer, needlesly re-running the steps following the ADD command:
+$ docker build .
+Sending build context to Docker daemon   7.68kB
+Step 1/4 : FROM alpine:3.7
+3.7: Pulling from library/alpine
+ff3a5c916c92: Pull complete
+Digest: sha256:7df6db5aa61ae9480f52f0b3a06a140ab98d427f86d8d5de0bedab9b8df6b1c0
+Status: Downloaded newer image for alpine:3.7
+ ---> 3fd9065eaf02
+Step 2/4 : RUN apk add --no-cache openssh-keygen
+ ---> Running in f3aa31fbbe9a
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/community/x86_64/APKINDEX.tar.gz
+(1/1) Installing openssh-keygen (7.5_p1-r8)
+Executing busybox-1.27.2-r7.trigger
+OK: 4 MiB in 12 packages
+Removing intermediate container f3aa31fbbe9a
+ ---> 69526ecc54c7
+Step 3/4 : ADD blah.txt /usr/src/blah.txt
+ ---> 2ca5d35f9d8a
+Step 4/4 : RUN apk add --no-cache openssh-client
+ ---> Running in aa8fa691d561
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/community/x86_64/APKINDEX.tar.gz
+(1/1) Installing openssh-client (7.5_p1-r8)
+Executing busybox-1.27.2-r7.trigger
+OK: 7 MiB in 13 packages
+Removing intermediate container aa8fa691d561
+ ---> b3bf2a57bb20
+Successfully built b3bf2a57bb20
+I would expect docker-compose build to use all the cached layers from the image built with docker build, but it's not currently the case:
+$ docker-compose build test
+Building test
+Step 1/4 : FROM alpine:3.7
+ ---> 3fd9065eaf02
+Step 2/4 : RUN apk add --no-cache openssh-keygen
+ ---> Using cache
+ ---> 69526ecc54c7
+Step 3/4 : ADD blah.txt /usr/src/blah.txt
+ ---> 127556331931
+Step 4/4 : RUN apk add --no-cache openssh-client
+ ---> Running in 6f4994391e39
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/community/x86_64/APKINDEX.tar.gz
+(1/1) Installing openssh-client (7.5_p1-r8)
+Executing busybox-1.27.2-r7.trigger
+OK: 7 MiB in 13 packages
+Removing intermediate container 6f4994391e39
+ ---> 72bdc03430ef
+
+Successfully built 72bdc03430ef
+Successfully tagged vovimayhem/docker-compose-build-cache-miss:latest
+...but it's missing the cached layer on Step 3/4, running that step & the following steps altogether.
+Any ideas on what may be happening here?
+Docker Version:
+Client:
+ Version: 18.04.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 3d479c0
+ Built: Tue Apr 10 18:13:16 2018
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.04.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 3d479c0
+  Built: Tue Apr 10 18:23:05 2018
+  OS/Arch: linux/amd64
+  Experimental: true
+Docker Info:
+Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 43
+Server Version: 18.04.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 773c489c9c1b21a6d78b5c538cd395416ec50f88
+runc version: 4fc53a81fb7c994640722ac585fa9ca548971871
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.87-linuxkit-aufs
+Operating System: Docker for Mac
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 5.818GiB
+Name: linuxkit-025000000001
+ID: Q6UA:FHPP:MS3A:46SC:D7SA:PUMT:P7IK:TOSZ:QL7E:ERLP:EN2J:2WEP
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 23
+ Goroutines: 41
+ System Time: 2018-04-13T01:25:21.565801673Z
+ EventsListeners: 2
+HTTP Proxy: gateway.docker.internal:3128
+HTTPS Proxy: gateway.docker.internal:3129
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

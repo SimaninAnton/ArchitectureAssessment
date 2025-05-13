@@ -1,0 +1,1 @@
+docker compose down does not remove volumes when compose project spans multiple files

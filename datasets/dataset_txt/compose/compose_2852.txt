@@ -1,0 +1,8 @@
+PatrickLang commented on 2 Feb 2016
+If you run a command that uses cursor position commands - it works from a default CMD window but not if you launch a new PowerShell window.
+Example command:
+docker-compose.exe scale web=4
+From CMD window:
+From PowerShell window:
+
+Notice the control characters at the far left of the last line

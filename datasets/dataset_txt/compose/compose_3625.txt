@@ -1,0 +1,8 @@
+ofir-petrushka commented on 23 May 2015
+We can either build or run the containers defined in docker-compose.
+But can we have some images which are only for build since others relay on them but we don't want to actually run them?
+Example:
+Base container (docker hub)
+language container
+service container
+So I want docker-compose build to build the "language container" to it will later be able to build the "service container" but I only want "service container" to run. I don't want docker-compose run to run "language container".

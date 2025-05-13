@@ -1,0 +1,35 @@
+alvinr commented on 18 Nov 2015
+Problem
+Right now with 0.5.1 compose you can specify the following
+haproxy:
+  image: ehazlett/interlock:latest
+  net: "bridge"
+Which allows connecting the container to the "bridge" network. However, if you have used multi-host networking to link a number of containers over the overlay (VxLAN), then you need to be able to connect (in this case) a given container to two networks
+the internal overlay network so that HAProxy can forward the requests to the App servers
+the external network so that it can accept incoming requests
+Solution
+Allow "net" to be a multi value parameter
+Workaround
+Manually attach the container to the second network e.g.
+docker $(docker-machine config swarm-0) network connect prod $(docker inspect -f "{{.Id}}" prod_haproxy_1)
+Environment
+$ uname -a
+Darwin vero.local 14.5.0 Darwin Kernel Version 14.5.0: Tue Sep  1 21:23:09 PDT 2015; root:xnu-2782.50.1~1/RELEASE_X86_64 x86_64
+$ docker-compose --version
+docker-compose version: 1.5.1
+$ docker version
+Client:
+ Version:      1.9.1-rc1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   aba5981
+ Built:        Thu Nov 12 23:09:22 UTC 2015
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      swarm/1.0.0
+ API version:  1.21
+ Go version:   go1.5.1
+ Git commit:   087e245
+ Built:        
+ OS/Arch:      linux/amd64

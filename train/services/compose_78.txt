@@ -1,0 +1,59 @@
+terryvdgriend commented on 18 Oct 2019
+Description of the issue
+We use docker-compose up in our CI environment to build and deploy a stack of services, on which we then perform some tests. After the tests are ran we use docker-compose down --rmi all -v to clean up the deployed stack of services.
+What we have noticed that after we use docker-compose down --rmi all -v the base images that are used by the services aren't cleaned up. While looking at the documentation of --rmi all it states:
+Remove all images used by any service
+With this I would assume that when we use docker_compose down --rmi all that there should be no images left behind.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:26:49 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:32:21 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  custom:
+    build:
+      context: .\docker-issue
+    ports:
+    - 9100:8080/tcp
+version: '3.0'
+Steps to reproduce the issue
+docker-issue.zip
+Unpack zip file
+run docker-compose up -d
+run docker-compose down --rmi all -v
+run docker images
+Observed result
+Nginx image is still there.
+Expected result
+No images are listed.

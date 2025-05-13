@@ -1,0 +1,14 @@
+thomasleveil commented on 26 Oct 2017
+consider the following docker-compose.yml file:
+version: "2.3"
+
+services:
+  test:
+    image: tutum/hello-world
+    healthcheck:
+      test: echo | telnet 127.0.0.1 80
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+We would expect the first test to occur 5s after the container start (instead of 20s after start)

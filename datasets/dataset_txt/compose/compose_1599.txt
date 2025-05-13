@@ -1,0 +1,31 @@
+fc-arny commented on 14 Mar 2017
+How use variables from env_file as a build arguments?
+I have 2 env_files - .env (in repo) and .env.local (out of repo).
+My docker-compose.yml
+version: "3"
+
+services:
+  app:
+    image: "app"
+    build:
+      context: .
+      args:
+        VARIABLE: $VARIABLE
+    env_file:
+      - ./.env
+      - ./.env.local
+    command: bundle exec puma
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3000:3000"
+...
+Dockerfile
+FROM ruby:2.3-slim
+ARG VARIABLE
+...
+$VARIABLE defined in .env file and redefined for production in .env.local, but when i build image $VARIABLE=(value from .env.file)
+docker-compose build app
+Thanx for help.
+1

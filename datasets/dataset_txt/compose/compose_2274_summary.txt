@@ -1,0 +1,1 @@
+docker-1.12 removed "syslog-tag" option from log driver

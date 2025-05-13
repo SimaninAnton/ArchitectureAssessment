@@ -1,0 +1,25 @@
+quinn commented on 21 Dec 2017
+this is my config:
+version: '3.2'
+
+services:
+  app:
+    build: .
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+it throws the error after building the image:
+ERROR: for example_app_1  mounts param is not supported in API versions < 1.30
+
+ERROR: for rails-app  mounts param is not supported in API versions < 1.30
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/main.py", line 956, in up
+  File "compose/project.py", line 479, in up
+  File "compose/parallel.py", line 80, in parallel_execute
+docker.errors.InvalidVersion: mounts param is not supported in API versions < 1.30
+Failed to execute script docker-compose
+I'm using docker for mac.

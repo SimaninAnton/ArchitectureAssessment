@@ -1,0 +1,9 @@
+dlip commented on 6 May 2014
+When there is a container A that container B depends on, in B's Dockerfile I reference it with the command FROM myname/A. Unfortunately fig only tags with docker_A, but I don't want to use that in my Dockerfile. Something like the following would be good
+A:
+  build: A
+  tags:
+    - myname/A
+B:
+  image: myname/A
+11

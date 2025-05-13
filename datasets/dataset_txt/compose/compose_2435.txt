@@ -1,0 +1,37 @@
+salkin commented on 3 May 2016 •
+edited by aanand
+When restarting a container that has other containers marked in same namespace a restart of "master" conainer does not restart the dependent containers.
+docker-compose -f docker-compose.yaml restart elasticsearch
+docker-compose -f docker-compose.yaml up -d is only bringing up the elasticsearch container but the logstash container is left hanging in the old namespace not existing anymore.
+docker exec -ti compose_logstash_1 bash       
+rpc error: code = 2 desc = "oci runtime error: exec failed: lstat /proc/17269/ns/net: no such file or directory"
+yaml file:
+  elasticsearch: 
+    image: elasticsearch:${TAG}
+    command: /usr/share/java/elasticsearch/bin/elasticsearch
+    environment:
+      ZOOKEEPER_CONNECT: zookeeper:2181
+      ES_JAVA_OPTS: "-Des.insecure.allow.root=true"
+    ports:
+     - "8006:9200"
+    privileged: true
+    restart: always
+    volumes:
+      - /data-elastic:/data-elastic  
+
+  logstash:
+    image: logstash:${TAG}
+    command: /start.sh
+    environment:
+      ZOOKEEPER_CONNECT: zookeeper:2181
+      JAVA_HOME: /etc/alternatives/jre_1.8.0
+    privileged: true
+    restart: always
+    network_mode: "service:elasticsearch"
+    depends_on: 
+      - elasticsearch
+docker -v
+Docker version 1.11.1, build 5604cbe
+ docker-compose -v
+docker-compose version 1.7.0, build 0d7bf73
+2

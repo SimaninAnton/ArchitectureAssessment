@@ -1,0 +1,2 @@
+chaouiy commented on 1 Aug 2017
+I think we can do better than remembring that stdin_open: true is is equivalent to -i docker run argument

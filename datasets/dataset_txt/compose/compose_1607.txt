@@ -1,0 +1,5 @@
+holajoyce commented on 11 Mar 2017
+Hi
+I use circleci, and currently circleci v1 has trouble deleting old containers, as such I would like to use --rm=false
+Same as 4325
+6

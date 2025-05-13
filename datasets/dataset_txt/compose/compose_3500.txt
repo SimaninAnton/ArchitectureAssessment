@@ -1,0 +1,12 @@
+Contributor
+bfirsh commented on 6 Jul 2015 •
+edited by shin-
+Many of Compose's actions can be performed in parallel rather than in sequence. For larger apps, this would result in enormously reduced startup/redeploy times.
+This is a meta-issue for keeping track of all of the stuff happening around that, in rough priority order.
+docker-compose (stop|kill|remove): #1651
+docker-compose scale: #1653
+docker-compose up: Creating, pulling, building and starting in up can be done in parallel: #1984
+docker-compose pull: Multiple services can be pulled in parallel.
+docker-compose pull --parallel is the default (deprecate flag).
+(Replaces #1395)
+45

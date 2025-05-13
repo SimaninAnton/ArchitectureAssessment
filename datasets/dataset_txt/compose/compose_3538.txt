@@ -1,0 +1,16 @@
+lmakarov commented on 25 Jun 2015
+Compose v1.3.0+ adds a set of affinity:container environment variables inside containers when those are recreated (second time a docker-compose up -d command is issued).
+root@web:/var/www# env|grep affinity
+VOYA_DB_1_ENV_affinity:container==f75d8c6ced29ed8e7f12cd60e3716e62844031caabb003d1feb74168bde942bc
+DB_ENV_affinity:container==f75d8c6ced29ed8e7f12cd60e3716e62844031caabb003d1feb74168bde942bc
+affinity:container==76df92d213821482e706251a81d9c9fde5416515f43c6813dcaf3816777a9849
+DB_1_ENV_affinity:container==f75d8c6ced29ed8e7f12cd60e3716e62844031caabb003d1feb74168bde942bc
+Such variables have invalid identifiers and cannot be exported/read by shell.
+root@web:/var/www# export {affinity:container}==f75d8c6ced29ed8e7f12cd60e3716e62844031caabb003d1feb74168bde942bc
+bash: export: `{affinity:container}==f75d8c6ced29ed8e7f12cd60e3716e62844031caabb003d1feb74168bde942bc': not a valid identifier
+printf %q ${affinity:container}
+''
+Unfortunately there are fatal side effects of the empty ENV variables.
+In my case all ENV variables are written into /etc/php5/fpm/pool.d/env.conf by a startup.sh script. The affinity:container variables value cannot be read properly, thus an empty value is written.
+php-fpm does not tolerate empty variables in env.conf and simply crashes.
+I added checks in the script, however it would make sense if docker-compose did not inject bad environmental variables to start with.

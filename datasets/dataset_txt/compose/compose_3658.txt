@@ -1,0 +1,4 @@
+iMerica commented on 7 May 2015
+Hey guys,
+I just want to gauge interest in this before I start working on it. Is this something others would find useful?
+My project's yml file has grown so big that docker-compose up -d and docker-compose stop take about a minute so this would be super awesome if once the parent containers are started/stopped, the child containers would start/stop asynchronously.

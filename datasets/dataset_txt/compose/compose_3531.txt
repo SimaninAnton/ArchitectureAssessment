@@ -1,0 +1,5 @@
+devinrsmith commented on 27 Jun 2015
+I've got a full example repo here:
+https://github.com/devinrsmith/docker-compose-build-test
+If I'm using docker-compose build incorrectly, please let me know!
+14

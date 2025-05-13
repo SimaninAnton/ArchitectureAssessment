@@ -1,0 +1,1 @@
+Docker-compose up fails in Gitlab CI with Exit code: 1

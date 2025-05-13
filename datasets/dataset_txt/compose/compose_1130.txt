@@ -1,0 +1,20 @@
+bolshakov commented on 23 Oct 2017 •
+edited
+I have a simple docker-compose file
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+  backup:
+    image: postgres-backup
+    depends_on:
+      - postgres
+When I run the backup service and suppress its output, it still writes not error messages to stdout:
+✗ docker-compose -f docker-compose.yml run backup > /dev/null
+Starting test_postgres_1 ...
+Starting test_postgres_1 ... done
+This is not expected behavior since Starting test_postgres_1 message does not look like an error. I understand the motivation of writing docker compose messages not to stdout. But I expect that stderr contains errors. For example, when I run backup using cron, I want to suppress stdout and receive error messages via email. But currently, I receive "Starting test_postgres_1" which obviously is not error messages.
+It would be very helpful to have control over docker compose output while automating things.
+2

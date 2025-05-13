@@ -1,0 +1,20 @@
+Contributor
+jgsqware commented on 22 Dec 2015
+Hello,
+I have a simple docker-compose.yml
+helloworld:
+  build: .
+I run
+docker-compose run helloworld
+The container run and exit, then I would like to delete this container.
+I tried
+docker-compose rm -f -v helloworld
+but it's not working:
+> docker-compose rm -f helloworld
+No stopped containers
+But the container is there:
+CONTAINER ID        IMAGE               COMMAND                   CREATED             STATUS                      PORTS               NAMES
+a7776041eece        sample_helloworld   "/bin/sh -c 'echo \"He"   40 seconds ago      Exited (0) 40 seconds ago                       sample_helloworld_run_1
+If I run the compose with docker-compose up, I can do docker-compose rm -f -v helloworld
+I know I can do docker-compose run --rm helloworld but I would like to know if this behaviour is correct?
+Thanks

@@ -1,0 +1,32 @@
+lewistaylor commented on 11 Apr 2016
+I have a webapp defined by this compose file:
+version: '2'
+services:
+  web:
+    command: /bin/bash --login -c "uwsgi --http :8000 --wsgi-file project/wsgi.py"
+    tty: true
+    build: .
+    volumes_from:
+      - config
+    ports:
+      - 8000:8000
+  db:
+    image: mdillon/postgis
+    environment:
+      - POSTGRES_PASWORD=postgres
+  config:
+    build: .config/local
+    command: "true"
+    read_only: true
+    stdin_open: true
+    tty: true
+config loads a python settings file that configures the environment.
+The issue I have is after a while, docker-compose up exits claiming ERROR: Couldn't connect to Docker daemon - you might need to run docker-machine start default`. Bizarrely the app still seems to be running as per below, and I can access the website as expected.
+$ docker-compose ps
+     Name                    Command               State            Ports          
+----------------------------------------------------------------------------------
+tappil_config_1   true                             Exit 0                          
+tappil_db_1       /docker-entrypoint.sh postgres   Up       5432/tcp               
+tappil_web_1      /bin/bash --login -c ./man ...   Up       0.0.0.0:8000->8000/tcp 
+EIther there is an issue with my setup (.config/local/Dockerfile is just 3 lines copying a settings file and declaring the folder as a volume), or there is some issue with a data-only container that's exited, as removing the config service and having the file within the app container on it's own does not bring about these issues.
+Any help appreciated. Happy to provide more info, didn't want to bore everyone unless necessary!

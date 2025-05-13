@@ -1,0 +1,51 @@
+Contributor
+schmunk42 commented on 28 Feb 2016
+I tried to start a stack on a swarm, but got this error:
+root@sepp-roj:/stacks# docker-compose up -d
+Creating myproject_appsrc_1
+ERROR: Get https://private.registry/v2/ns/app/manifests/0.8.2-26-g1ce3ada: no basic auth credentials
+A manual pull is required (no further passwords entered)
+root@sepp-roj:/stacks# docker-compose pull 
+Pulling appsrc (private.registry/ns/app:0.8.2-26-g1ce3ada)...
+sepp-a1: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+sepp-m2: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+sepp-hz-1-122: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+sepp-p1: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+Pulling appfpm (phundament/php:5.6-fpm-dev)...
+sepp-hz-1-122: Pulling phundament/php:5.6-fpm-dev... : downloaded
+sepp-p1: Pulling phundament/php:5.6-fpm-dev... : downloaded
+sepp-a1: Pulling phundament/php:5.6-fpm-dev... : downloaded
+sepp-m2: Pulling phundament/php:5.6-fpm-dev... : downloaded
+Pulling appnginx (schmunk42/nginx:1.9)...
+sepp-m2: Pulling schmunk42/nginx:1.9... : downloaded
+sepp-hz-1-122: Pulling schmunk42/nginx:1.9... : downloaded
+sepp-p1: Pulling schmunk42/nginx:1.9... : downloaded
+sepp-a1: Pulling schmunk42/nginx:1.9... : downloaded
+Pulling appcli (private.registry/ns/app:0.8.2-26-g1ce3ada)...
+sepp-a1: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+sepp-m2: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+sepp-hz-1-122: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+sepp-p1: Pulling private.registry/ns/app:0.8.2-26-g1ce3ada... : downloaded
+Version info
+root@sepp-roj:/repo/stacks# docker version
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 22:37:33 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.1.0
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   a0fd82b
+ Built:        Thu Feb  4 08:55:18 UTC 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+1

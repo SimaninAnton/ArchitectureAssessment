@@ -1,0 +1,18 @@
+oliveiraev commented on 17 May 2017
+given following docker-compose.yaml
+version: "3"
+services:
+    sample:
+        image: alpine
+        environment:
+            - USER_PASSWORD
+            - ROOT_PASSWORD=${ROOT_PASSWORD:-$USER_PASSWORD}
+        command: sh -c "env | sort | grep _PASSWORD"
+Invocation of $ USER_PASSWORD='my own password' docker-compose run ends up with
+Starting sample_sample_1 ... 
+Starting sample_sample_1 ... done
+Attaching to sample_sample_1
+sample_1  | ROOT_PASSWORD=$USER_PASSWORD
+sample_1  | USER_PASSWORD=my own password
+Is there any way to make ROOT_PASSWORD inherit from USER_PASSWORD value?
+4

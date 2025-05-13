@@ -1,0 +1,82 @@
+Tensho commented on 21 Sep 2018 •
+edited
+Description
+When I use env vars from the default .env file any interpolation works as expected. But everything not so nice if I'd like to use a custom env file, e.g. .env.mizu or .env.test.
+Context
+$ docker-compose version
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+$ docker version
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:05:26 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:13:46 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+$ cat .env.mizu
+PATH_TO_SHARED_DATA=~/projects/alpha/data
+HOST=example.com
+$ cat docker-compose.yml
+version: '3'
+
+services:
+  one:
+    image: ruby
+    volumes:
+      - ${PATH_TO_SHARED_DATA}:/app
+    env_file:
+      - .env.mizu
+    networks:
+      default:
+        aliases:
+          - ${HOST}
+$ docker-compose config
+WARNING: The PATH_TO_SHARED_DATA variable is not set. Defaulting to a blank string.
+WARNING: The HOST variable is not set. Defaulting to a blank string.
+services:
+  one:
+    environment:
+      HOST: example.com
+      PATH_TO_SHARED_DATA: ~/projects/alpha/data
+    image: ruby
+    networks:
+      default:
+        aliases:
+        - ''
+    volumes:
+    - .:/app:rw
+version: '3.0'
+Observed Result
+There are warnings about unset (blank) env vars, despite they are declared in the custom env file and can be observed in config output.
+Nor PATH_TO_SHARED_DATA neither HOST env var interpolation doesn't work.
+Expected Result
+The same as env vars would be declared in the default .env file:
+services:
+  one:
+    image: ruby
+    networks:
+      default:
+        aliases:
+        - example.com
+    volumes:
+    - /Users/tensho/projects/alpha/data:/app:rw
+version: '3.0'
+Additional Information
+Docker for Mac
+$ system_profiler SPSoftwareDataType | grep Version
+      System Version: macOS 10.13.6 (17G65)
+      Kernel Version: Darwin 17.7.0

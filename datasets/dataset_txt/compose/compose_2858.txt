@@ -1,0 +1,18 @@
+wil93 commented on 31 Jan 2016
+I'm getting this error whenever I run any docker-compose command, after upgrading to 1.6.0rc2
+Traceback (most recent call last):
+  File "/home/ioi/.local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.6.0rc2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 351, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2363, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2088, in load
+    entry = __import__(self.module_name, globals(),globals(), ['__name__'])
+  File "/home/ioi/.local/lib/python2.7/site-packages/compose/cli/main.py", line 25, in <module>
+    from ..project import NoSuchService
+  File "/home/ioi/.local/lib/python2.7/site-packages/compose/project.py", line 21, in <module>
+    from .network import Network
+  File "/home/ioi/.local/lib/python2.7/site-packages/compose/network.py", line 7, in <module>
+    from docker.utils import create_ipam_config
+ImportError: cannot import name create_ipam_config

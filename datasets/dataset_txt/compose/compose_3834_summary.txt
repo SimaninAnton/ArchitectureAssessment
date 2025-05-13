@@ -1,0 +1,1 @@
+Deleting an image built by docker-compose results in "No such image" error on next run

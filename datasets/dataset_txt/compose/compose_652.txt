@@ -1,0 +1,12 @@
+y3ti commented on 24 May 2018
+Description of the issue
+Would be nice to be able to tag images created by docker-compose build e.g.
+# docker-compose.yml
+...
+services:
+  frontend:
+    build: .
+$ docker-compose build frontend
+$ docker-compose tag frontend mycompany/frontend:latest
+Next, someone can use our image e.g.
+docker container run -ti mycompany/frontend:latest

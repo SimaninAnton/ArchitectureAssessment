@@ -1,0 +1,195 @@
+garland commented on 27 Sep 2018
+May be related to Inconsistent Behaviour for .env File #6203
+Description of the issue
+When using the docker-compose -f flag to specify a named Docker Compose yaml file, e.g. docker-compose-staging.yml, and inside that docker-compose-staging.yml, under one of the defined services, a custom named .env file is used, such as .env.staging, inconsistent property values are being pulled through into the build context, from another environment file, called .env which is nested at the same level in my project as the .env.staging file, causing debugging to be a nightmare. So, to be clear:
+I execute the following command to build and activate the db service like so:
+    $ docker-compose -f docker-compose-staging.yml up --build db
+Inside the docker-compose-staging.yml file I have a defined service of 'db', like so:
+    db:
+      env_file:
+        - .env.staging
+      build:
+        context: ./docker-deps
+        dockerfile: Dockerfile
+        args:
+          - MYSQL_VERSION=${MYSQL_VERSION}
+      container_name: "db"
+      restart: on-failure
+      ports:
+        - 3306:3306
+        - 22:22
+      volumes:
+        - "mysql_data:/var/lib/mysql/docker_mysql"
+        - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+      networks:
+        - backend
+Notice the env_file is named as .env.staging. Inside the .env_staging file I have a variable defined like so:
+    MYSQL_VERSION=5.8
+Expected result
+When I parse the configuration file using the config option specifying the docker-compose-staging.yml file, like so:
+    docker-compose -f docker-compose-staging.yml config
+and more specifically, when I grep the config command to query for the value of a specified property, using the following command:
+    docker-compose -f docker-compose-staging.yml config | grep MYSQL_VERSION
+I would expect the following (or similar output due to the verbosity of the config command):
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+Observed result
+So, in fact, when I execute the above mentioned command, the result received is:
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.7'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.7'
+Additional information
+The docker-compose.staging.yml file, nor the .env.staging file contains any other reference to MYSQL_VERSION which can contradict the originally declared value of MYSQL_VERSION=5.8.
+Thinking that the values encountered above were exceptionally strange I checked the .env file which sits in my project root, along side the .env.staging file, and sure enough there was a declared property declared as so:
+    MYSQL_VERSION=5.7
+I changed the above value of MYSQL_VERSION in the .env file, to match that of the .env.staging value of 5.8. I then ran the following command:
+    docker-compose -f docker-compose-staging.yml config | grep MYSQL_VERSION
+Now, the output was acceptable to me (see below), but in declaring the file option above, nowhere did I include the .env base environment file:
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+    MYSQL_VERSION: '5.8'
+It's evident from my basic test that the specification of an override environment file in the docker-compose command collects values from an .env file sitting at the same level in the file system even though one does not expect this to happen.
+Due to this happening, I have been encountering strange values coming through into my build which has caused me a lot of hair pulling and anxiety.
+docker-compose version 1.18.0, build 8dd22a9
+Docker version 17.12.0-ce, build c97c6d6
+networks:
+  xyz:
+    driver: bridge
+services:
+  db:
+    container_name: xyz-db
+    environment:
+      APP_DEBUG: "true"
+      APP_ENV: development
+      APP_KEY: xyz
+      APP_LOG: daily
+      APP_LOG_LEVEL: debug
+      APP_NAME: xyz
+      APP_TIMEZONE: '+10:00'
+      APP_URL: https://staging.xyz.com
+      CACHE_DRIVER: 'file           # refer storage/cache'
+      CLOUDINARY_KEY: 'xyz'
+      CLOUDINARY_NAME: xyz
+      CLOUDINARY_SECRET: xyz
+      DB_CONNECTION: mysql
+      DB_DATABASE: xyzdb
+      DB_HOST: mysql
+      DB_PASSWORD: 'xyz'
+      DB_PORT: '3306'
+      DB_USERNAME: xyz
+      FIREBASE_API_KEY: xyz
+      FIREBASE_DB: xyz
+      FIREBASE_DOMAIN: xyz
+      'FIREBASE_MESSAGE_ID ': xyz'
+      FIREBASE_PROJECT: xyz
+      MAIL_DRIVER: sparkpost
+      MAIL_ENCRYPTION: tls
+      MAIL_HOST: smtp.sparkpostmail.com
+      MAIL_PASSWORD: xyz
+      MAIL_PORT: '587'
+      MAIL_USERNAME: SMTP_Injection
+      MYSQL_DATABASE: xyzdb
+      MYSQL_ENTRYPOINT_INITDB: ./mysql/docker-entrypoint-initdb.d
+      MYSQL_PASSWORD: 'xyz'
+      MYSQL_PORT: '3306'
+      MYSQL_ROOT_PASSWORD: 'xyz'
+      MYSQL_TIMEZONE: '+10:00'
+      MYSQL_USER: xyz
+      MYSQL_VERSION: '5.8'
+      QUEUE_DRIVER: database
+      RUN_DATABASE_MIGRATIONS: "true"
+      SESSION_DRIVER: 'file         # refer storage/sessions'
+      SPARKPOST_SECRET: xyz
+      STRIPE_KEY: xyz
+      STRIPE_SECRET: xyz
+      TZ: '+10:00'
+    image: mysql:5
+    networks:
+      xyz: null
+    ports:
+    - 3306:3306/tcp
+    restart: unless-stopped
+    volumes:
+    - mysql_data:/var/lib/mysql/docker_mysql:rw
+  web:
+    build:
+      context: /home/user/Development/xyz-project/xyz
+      dockerfile: Dockerfile
+    container_name: xyz-web
+    depends_on:
+    - db
+    environment:
+      APP_DEBUG: "true"
+      APP_ENV: development
+      APP_KEY: base64:xyz
+      APP_LOG: daily
+      APP_LOG_LEVEL: debug
+      APP_NAME: xyz
+      APP_TIMEZONE: '+10:00'
+      APP_URL: https://staging.xyz.com
+      CACHE_DRIVER: 'file           # refer storage/cache'
+      CLOUDINARY_KEY:xyz
+      CLOUDINARY_NAME: xyz
+      CLOUDINARY_SECRET: xyz
+      DB_CONNECTION: mysql
+      DB_DATABASE: xyzdb
+      DB_HOST: mysql
+      DB_PASSWORD: 'xyz'
+      DB_PORT: '3306'
+      DB_USERNAME: xyz
+      FIREBASE_API_KEY: xyz
+      FIREBASE_DB: https://xyz.firebaseio.com
+      FIREBASE_DOMAIN: xyz.firebaseapp.com
+      'FIREBASE_MESSAGE_ID ': 'xyz'
+      FIREBASE_PROJECT: xyz-xyz
+      MAIL_DRIVER: sparkpost
+      MAIL_ENCRYPTION: tls
+      MAIL_HOST: smtp.sparkpostmail.com
+      MAIL_PASSWORD: xyz
+      MAIL_PORT: '587'
+      MAIL_USERNAME: SMTP_Injection
+      MYSQL_DATABASE: xyzdb
+      MYSQL_ENTRYPOINT_INITDB: ./mysql/docker-entrypoint-initdb.d
+      MYSQL_PASSWORD: 'xyz'
+      MYSQL_PORT: '3306'
+      MYSQL_ROOT_PASSWORD: 'xyz'
+      MYSQL_TIMEZONE: '+10:00'
+      MYSQL_USER: xyz
+      MYSQL_VERSION: '5.8'
+      QUEUE_DRIVER: database
+      RUN_DATABASE_MIGRATIONS: "true"
+      SESSION_DRIVER: 'file         # refer storage/sessions'
+      SPARKPOST_SECRET: xyz
+      STRIPE_KEY: xyz
+      STRIPE_SECRET: xyz
+    networks:
+      xyz: null
+    ports:
+    - 80:80/tcp
+    restart: unless-stopped
+    volumes:
+    - /home/user/Development/xyz-project/xyz:/var/www:rw
+    - laravel_logs:/storage/logs:ro
+version: '3.0'
+volumes:
+  laravel_logs: {}
+  mysql_data: {}
+  web: {}
+    Distributor ID: Ubuntu
+    Description:    Ubuntu 18.04.1 LTS
+    Release:        18.04
+    Codename:       bionic
+2

@@ -1,0 +1,21 @@
+nicolaka commented on 3 Jun 2016
+when I have multiple swarm affinity constraints with same key, compose is not passing all of them as envs but instead using the last one on entered.
+docker-compose.yml sample:
+version: "2"
+
+services:
+ app:
+  image: busybox
+  command: /bin/sh
+  environment:
+   - affinity:container!=consul
+   - affinity:container!=nginx
+docker-compose --verbose up -d :
+u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'affinity:container!=nginx'],
+             u'Hostname': u'0d5c1a7ad103',

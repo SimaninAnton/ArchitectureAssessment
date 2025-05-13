@@ -1,0 +1,3 @@
+dekobon commented on 21 Apr 2015
+With docker you can specify a Docker host that listens exclusively with TLS. Then you can use the parameter --tls and the environment variable DOCKER_CERT_PATH to connect to a Docker host with self-signed certificates.
+However, when using Docker compose, you can't connect to a host using self-signed certs because the only option to enable TLS based Docker hosts is DOCKER_TLS_VERIFY and that environment variable has TLS verify baked into it. I need something more like a vanilla DOCKER_TLS environment variable or a CLI parameter that is equivalent of "docker --tls"

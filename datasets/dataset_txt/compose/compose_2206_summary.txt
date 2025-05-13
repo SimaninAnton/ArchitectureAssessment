@@ -1,0 +1,1 @@
+Allow compose to accept arbitrary command on 'up'

@@ -1,0 +1,47 @@
+Contributor
+aanand commented on 11 Feb 2015
+$ unset DOCKER_HOST
+$ docker-compose up
+Traceback (most recent call last):
+  File "/Users/aanand/.virtualenvs/docker-compose/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.1.0-rc2', 'console_scripts', 'docker-compose')()
+  File "/Users/aanand/work/docker/fig/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/Users/aanand/work/docker/fig/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Users/aanand/work/docker/fig/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 57, in perform_command
+    verbose=options.get('--verbose'))
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 84, in get_project
+    self.get_client(verbose=verbose))
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 62, in get_client
+    client = docker_client()
+  File "/Users/aanand/work/docker/fig/compose/cli/docker_client.py", line 20, in docker_client
+    parts = base_url.split('://', 1)
+AttributeError: 'NoneType' object has no attribute 'split'
+
+$ export DOCKER_HOST=
+$ docker-compose up
+Traceback (most recent call last):
+  File "/Users/aanand/.virtualenvs/docker-compose/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.1.0-rc2', 'console_scripts', 'docker-compose')()
+  File "/Users/aanand/work/docker/fig/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/Users/aanand/work/docker/fig/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Users/aanand/work/docker/fig/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 57, in perform_command
+    verbose=options.get('--verbose'))
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 84, in get_project
+    self.get_client(verbose=verbose))
+  File "/Users/aanand/work/docker/fig/compose/cli/command.py", line 62, in get_client
+    client = docker_client()
+  File "/Users/aanand/work/docker/fig/compose/cli/docker_client.py", line 21, in docker_client
+    base_url = '%s://%s' % ('https', parts[1])
+IndexError: list index out of range

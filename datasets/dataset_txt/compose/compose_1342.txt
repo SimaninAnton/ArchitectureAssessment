@@ -1,0 +1,75 @@
+markocelan commented on 3 Jul 2017
+Consider this docker-compose.yml
+version: '2.2'
+
+services:
+    template:
+      image: tutum/hello-world
+
+    test_extends:
+      extends: template
+      scale: 4
+I expected docker-compose up -d to run 4 test_extends containers. It actually runs only one.
+If I want to scale containers to 4 in this configuration I need to do: docker-compose up -d --scale test_extends=4.
+OTOH:
+version: '2.2'
+
+services:
+    test_extends:
+      image: tutum/hello-world
+      extends: template
+      scale: 4
+works as expected, meaning docker-compose up -d runs 4 containers.
+System info:
+$ docker-compose version
+docker-compose version 1.14.0, build c7bdf9e
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+$ docker info
+Containers: 14
+ Running: 2
+ Paused: 0
+ Stopped: 12
+Images: 4
+Server Version: 1.13.1
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: journald
+Cgroup Driver: systemd
+Plugins: 
+ Volume: local
+ Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: oci runc
+Default Runtime: oci
+Init Binary: /usr/libexec/docker/docker-init-latest
+containerd version:  (expected: aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1)
+runc version: N/A (expected: 9df8b306d01f59d3a8029be411de015b7304dd8f)
+init version: N/A (expected: 949e6facb77383876aeff8a6944dde66b3089574)
+Security Options:
+ seccomp
+  WARNING: You're not using the default seccomp profile
+  Profile: /etc/docker-latest/seccomp.json
+ selinux
+Kernel Version: 4.11.8-300.fc26.x86_64
+Operating System: Fedora 26 (Workstation Edition)
+OSType: linux
+Architecture: x86_64
+Number of Docker Hooks: 3
+CPUs: 4
+Total Memory: 15.42 GiB
+Name: tp-t470s
+ID: VNOI:YGWK:MD6M:RNSZ:Y622:R7LS:GNLF:P7VJ:TNTM:EXE7:OV3M:X4GU
+Docker Root Dir: /var/lib/docker-latest
+Debug Mode (client): false
+Debug Mode (server): false
+Username: zemanta
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+Registries: docker.io (secure)

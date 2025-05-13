@@ -1,0 +1,4 @@
+wy-z commented on 11 May 2016 •
+edited
+Is there any plan to update the version requirement of Requests?
+It conflicts with some packages such as python-novaclient, python-keystoneclient(!=2.9.0,>=2.8.1)...

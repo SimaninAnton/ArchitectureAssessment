@@ -1,0 +1,52 @@
+ivaaaan commented on 22 Mar 2019
+Description of the issue
+docker-compose does not work with dockerd via ssh. It says that Authentication (publickey) failed.. But at the same time, docker via cli works fine.
+$ DOCKER_HOST=ssh://ubuntu@xxx docker version
+...provides correct output for the remote server
+
+$ DOCKER_HOST=ssh://ubuntu@xxx docker-compose up                                                                        
+Connected (version 2.0, client OpenSSH_7.2p2)
+Authentication (publickey) failed.
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+docker-py version: 3.7.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+Steps to reproduce the issue
+Run docker daemon on a remote server
+Try to run containers on that server via
+$ DOCKER_HOST=ssh://ubuntu@xxx docker-compose up
+To ensure that your config is ok run
+$ DOCKER_HOST=ssh://ubuntu@35.180.198.219 docker version
+Stacktrace / full error message
+Connected (version 2.0, client OpenSSH_7.2p2)
+Authentication (publickey) failed.
+Authentication (publickey) failed.
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 42, in project_from_options
+  File "compose/cli/command.py", line 123, in get_project
+  File "compose/cli/command.py", line 94, in get_client
+  File "compose/cli/docker_client.py", line 127, in docker_client
+  File "site-packages/docker/api/client.py", line 162, in __init__
+  File "site-packages/docker/transport/sshconn.py", line 84, in __init__
+  File "site-packages/paramiko/client.py", line 437, in connect
+  File "site-packages/paramiko/client.py", line 749, in _auth
+  File "site-packages/paramiko/client.py", line 725, in _auth
+  File "site-packages/paramiko/transport.py", line 1507, in auth_publickey
+  File "site-packages/paramiko/auth_handler.py", line 250, in wait_for_response
+paramiko.ssh_exception.AuthenticationException: Authentication failed.
+[78120] Failed to execute script docker-compose
+Additional information
+macOS Mojave 10.14.3

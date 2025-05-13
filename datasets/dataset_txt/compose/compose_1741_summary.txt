@@ -1,0 +1,1 @@
+Can't "docker exec -it <container_id> /bin/bash after docker-compose up

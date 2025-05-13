@@ -1,0 +1,1 @@
+When updating a container definition with links: `ERROR: ... Conflict. The name ... is already in use by container ...` (1.7 regression)

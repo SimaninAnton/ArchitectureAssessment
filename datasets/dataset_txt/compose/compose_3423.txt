@@ -1,0 +1,15 @@
+nottrobin commented on 30 Jul 2015
+I need to be able to let the individual developer decide which port to map to to the service. I could do this within Docker like:
+docker -p 8012:5000 run my-image
+And of course I can set the local port in docker-compose.yml:
+service:
+  ports: ["8012:5000"]
+But the developer who runs docker-compose up has no control over this port mapping. Given that it is the dev who really knows which ports are available and which port they want to use for development, it would make sense for them to be able to pass through the host port from the command-line.
+There's one way I can think of to do this, with the bleeding edge 1.4.0rc2:
+echo "new-service: {extends: {file: 'docker-compose.yml', service: 'old-service'}, ports: ['8015:5000']}" | docker-compose --file - up
+But that's pretty ugly.
+Given this is surely such a useful feature, is there any simpler way to do it? It seems to me there are three possibilities:
+Allow overriding of all the directives in docker-compose.yml through the CLI, making the interface to docker-compose up similar to that of docker run
+Support variables inside docker-compose.yml (currently being worked on)
+Add a specific option to docker-compose up like --local-port=8012
+Am I missing an obvious option here?

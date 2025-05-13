@@ -1,0 +1,9 @@
+chxzqw commented on 24 Feb 2018
+Apologize if this is duplicated or there are other ways to achieve this.
+So at this moment it looks like docker-compose only reads a .env within same working folder to do 'variable substitution'. I'd like to have a feature that it reads multiple .env files since the compose can deal with multiple docker-compose.yml already. It may have a similar form like:
+docker-compose --file docker-compose1.yml \
+                          **--env 1.env \**
+                          --file docker-compose2.yml \
+                          **--env 2.env \**
+......
+I am aware of that there is env-files section inside docker-compose.yml which however is used to pass variables into containers and has nothing to do with variable substitution with docker-compose.yml itself.

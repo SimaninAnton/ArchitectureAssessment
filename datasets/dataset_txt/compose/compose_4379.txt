@@ -1,0 +1,2 @@
+gregwebs commented on 4 Mar 2014
+I want to run with the --priveleged argument, but fig up and fig run don't seem to allow options to be passed through. Actually I want this option to always be set, so it would be better to have it in the yml file, but I don't see any documentation for adding command line options.

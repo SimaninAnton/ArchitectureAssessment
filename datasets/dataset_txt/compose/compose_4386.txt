@@ -1,0 +1,23 @@
+gregwebs commented on 1 Mar 2014
+sudo fig up mongodb
+
+Creating webapp_mongodb_1...
+Attaching to webapp_mongodb_1
+start: Cannot start container 745360786dc698195c91ab89bd15f644cd344227a57275843cf22bde5fde50ac: /var/lib/docker/aufs/mnt/745360786dc698195c91ab89bd15f644cd344227a57275843cf22bde5fde50ac is not within /var/lib/docker/aufs/mnt/745360786dc698195c91ab89bd15f644cd344227a57275843cf22bde5fde50ac
+fig.yml
+mongodb:
+  image: dockerfile/mongodb
+  ports:
+    - 27017:27017
+    - 27018:27018
+  volumes: /data/db:/data/db 
+
+web:
+  image: foo:dev
+  links:
+    - mongodb
+  ports:
+    - 3000:3000
+  volumes:
+    - ../../:/home/foo/
+  command: bin/webapp

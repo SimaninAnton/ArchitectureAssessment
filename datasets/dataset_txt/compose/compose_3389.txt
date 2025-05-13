@@ -1,0 +1,15 @@
+juliantaylor commented on 11 Aug 2015
+is it possible to support yaml merge keys in the compose file?
+http://yaml.org/type/merge.html
+this would allow to shorten files having similar values except for a few exceptions, e.g.
+one: &base
+  build: folder1
+  volumes_from:
+    - container
+  restart: always
+
+# same as one except for the base image
+two:
+  <<: *base
+  build: folder2
+with compose 1.4.0rc3 this throws a type error

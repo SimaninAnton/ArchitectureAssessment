@@ -1,0 +1,1 @@
+Suggested documentation clarification for "Extending services and Compose files"

@@ -1,0 +1,1 @@
+Docker-compose up DOCKER-ISOLATION problem

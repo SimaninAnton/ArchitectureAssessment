@@ -1,0 +1,1 @@
+Instead of version number why don't use 'latest' it will help writing scripts to install docker-compose with the latest version, in releases tab.

@@ -1,0 +1,85 @@
+s8sg commented on 6 Jun 2018 •
+edited
+Description of the issue
+When using a pre-existing network from a docker compose file version 3.3
+Defining a network as function like below
+    openfaas:
+        external:
+            name: func_functions
+and using it in my service (device-gateway) as
+  networks:
+           - device
+           - openfaas
+The container joins the network
+"Networks": [
+                    {
+                        "Target": "bx90two22l2gp65wxuq0w71dx",
+                        "Aliases": [
+                            "device-gateway"
+                        ]
+                    },
+                    {
+                        "Target": "gfqb7w8jjcfnuxdc27fmsohiw", // func_functions
+                        "Aliases": [
+                            "device-gateway"
+                        ]
+                    }
+                ]
+Although the network inspect doesn't include the service
+This Problem doesn't occur if the name of the network in docker-compose and the external network name is same. i.e.
+    func_functions:
+        external:
+            name: func_functions
+and use it as
+  networks:
+           - device
+           - func_functions
+This scenario is quite confusing as giving network name default works
+    default:
+        external:
+            name: func_functions
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:      18.05.0-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   f150324
+ Built:        Wed May  9 22:12:05 2018
+ OS/Arch:      darwin/amd64
+ Experimental: true
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.05.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.10.1
+  Git commit:   f150324
+  Built:        Wed May  9 22:20:16 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+ERROR: 
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml
+Steps to reproduce the issue
+Create a network say functions (device: overlay)
+Use the existing network using external network type in a docker-compose as:
+    my_external_network:
+        external:
+            name: functions
+Use the network in a service as:
+    networks:
+          - my_external_network
+Observed result
+docker service inspect <service_name> list that Network although
+docker network inspect <functions> doesn't include the Service
+Expected result
+docker network inspect <functions> should include the Service when used my_external_network in network. my_external_network should be an alias of network functions
+or
+Otherwise documentation should include that the network name should be same as external network name, otherwise it might be confusing

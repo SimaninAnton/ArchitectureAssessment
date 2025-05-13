@@ -1,0 +1,22 @@
+heaths commented on 12 May 2017
+On Windows with docker-compose 1.11.2 and docker 17.03.1-ce, when I rerun a service (e.g. docker-compose run or docker-compose up I get an error that the network needs to be recreated because options had changed instead of the container (and I made no changes to the docker-compose.yml) joining the network. My compose file looks like:
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+version: '2.1'
+services:
+  test:
+    build: .
+    volumes:
+      - "${OUTDIR:-../../src/VSSetup.PowerShell/bin/Debug}:C:\\Users\\ContainerAdministrator\\Documents\\WindowsPowerShell\\Modules\\VSSetup:ro"
+      - ../Instances:C:\ProgramData\Microsoft\VisualStudio\Packages\_Instances:ro
+      - ../Tests:C:\Tests
+      - C:\VS\Community
+      - C:\VS\Professional
+      - C:\VS\Enterprise
+      - C:\BuildTools
+    networks:
+      - external
+networks:
+  external:
+    driver: transparent

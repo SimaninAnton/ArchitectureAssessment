@@ -1,0 +1,21 @@
+Contributor
+aanand commented on 5 Jun 2015
+Requested in #652 and #1347.
+It would be nice to allow users to customise container names, perhaps with a name field:
+web:
+  image: myimage
+  name: webapp
+$ docker-compose up -d
+$ docker-compose ps
+CONTAINER ID        COMMAND             CREATED              STATUS              NAMES
+747cb66d30f5        "python app.py"     About a minute ago   Up About a minute   webapp
+However, it might not play nicely with docker-compose scale, since names are supposed to be unique.
+Some options, keeping in mind that sequential suffixes are probably going away (#1516):
+Don't allow services with a custom name to be scaled.
+Automatically append a suffix to the name of each container:
+webapp_1a2b3c, webapp_4d5e6f, webapp_7a8b9c
+Easy enough, but the feature becomes somewhat less useful at that point.
+3. Automatically append a suffix to the name of all but the first container:
+webapp, webapp_1a2b3c, webapp_4d5e6f
+It works, but it's more complicated. What does the logic for creating/scaling look like now?
+8

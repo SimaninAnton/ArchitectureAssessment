@@ -1,0 +1,2 @@
+joshwget commented on 21 Apr 2016
+According to the docs, the extends value must be a dictionary. Docker Compose also seems to support using a service name directly in extends, however. Is the idea to deprecate this functionality and only support dictionaries in the future? I'm curious about this mostly because I'm trying to decide whether or not this feature should be added to libcompose.

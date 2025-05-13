@@ -1,0 +1,6 @@
+jamshid commented on 19 Mar 2015
+How about allowing services with a published port (eg, "80:80") to be "scaled" to "1" or "0". Report the below error only when scaling >=2. Sorry I know this is a nit, but seems slightly better behavior and would simplify some scripts.
+$ docker-compose scale myserver=1
+Service "myserver" cannot be scaled because it specifies a port on the host. If multiple containers for this service were created, the port would clash.
+
+Remove the ":" from the port definition in docker-compose.yml so Docker can choose a random port for each container.

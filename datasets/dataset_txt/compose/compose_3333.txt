@@ -1,0 +1,4 @@
+behemphi commented on 1 Sep 2015
+It would be pretty nice to have a docker-compose validate command that would validate the structure of the YAML file. The specific use case I have in mind is for CI pipelines.
+Return true if valid YAML of Docker-Compose format
+Return false otherwise

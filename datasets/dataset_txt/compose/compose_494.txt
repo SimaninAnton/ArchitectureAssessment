@@ -1,0 +1,89 @@
+SpencerMalone commented on 15 Sep 2018 •
+edited
+Description of the issue
+This is a docker-compose copy of moby/moby#37764, with some compose specific info.
+Essentially, either docker or docker-compose is getting stuck sometimes in our tests when we're running docker-compose exec commands. Besides the fact that they are hanging (which I'm guessing is a docker problem), compose isn't respecting the default timeout of 60 seconds, and only reports this error after the lock has been released.
+Context information (for bug reports)
+ docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:20:16 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:23:58 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Note, there are some env variables not set when I ran composer-config for ensuring some CPUs are left open, as well as UID+GID stuff, and the image name
+WARNING: The MAXCPU variable is not set. Defaulting to a blank string.
+WARNING: The UID variable is not set. Defaulting to a blank string.
+WARNING: The GID variable is not set. Defaulting to a blank string.
+WARNING: The DOCKER_IMAGE_NAME variable is not set. Defaulting to a blank string.
+networks:
+  mc: {}
+services:
+  app:
+    cpuset: 1-
+    entrypoint: sh -l -c "/usr/sbin/php-fpm && nginx"
+    image: ''
+    networks:
+      mc: null
+    tmpfs:
+    - /opt/<redacted>/current/data/meta
+    - /opt/<redacted>/current/cache
+    user: ':'
+    volumes:
+    - <redacted>/.docker/configs/nginx/nginx.conf:/etc/nginx/nginx.conf:rw
+    -<redacted>/.docker/configs/nginx/dev.conf:/etc/nginx/conf.d/default.conf:rw
+    - <redacted>/.docker/configs/mc-configs/app.dev.ini:/opt/<redacted>/current/config/app.dev.ini:rw
+    - <redacted>/.docker/configs/mc-configs/app.test.ini:/opt/<redacted>/current/config/app.test.ini:rw
+    - <redacted>/.docker/configs/php-tests:/etc/php.d-tests:rw
+    - <redacted>:/opt/<redacted>/current:rw
+  shard-db:
+    command: --defaults-extra-file=/etc/mysql/<redacted>.conf
+    cpuset: 1-
+    environment:
+      MYSQL_ROOT_PASSWORD: <redacted>
+    image: <redacted private registry>/rsg/centos-7-percona:57-c3034ff
+    networks:
+      mc:
+        aliases:
+        - shard-db2
+    tmpfs:
+    - /var/lib/mysql:rw,size=2000000k
+    user: ':'
+    volumes:
+    - /<redacted>/.docker/configs/percona:/etc/mysql:rw
+version: '2.0'
+Steps to reproduce the issue
+Reproduction has been difficult, not found an easy to do reproduction, but it happens on our CI hosts ~ once every day, where a docker-compose exec call hangs. Can't tell if it's moby or docker-compose at fault, docker-runc list shows nothing, but docker ps shows containers, and ps aux | grep docker will show you the container-shim. If you kill that container-shim proc, everything frees up and the lock is released, and everything starts moving again. Before that, you can't exec into the container, or get it's logs.
+Outside of all of this weirdness: The default compose timeout isn't in place. I've noticed when I kill that container-shim, the stuck CI jobs all report...
+[Unit Tests] An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+[Unit Tests] If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+But these are jobs stuck for hours. It seems like docker-compose isn't respecting whatever timeout is relevant here.
+Observed result
+docker-compose can hang forever on exec calls that get locked up.
+Expected result
+You should time out after 60 seconds of non-response
+Stacktrace / full error message
+https://gist.github.com/SpencerMalone/99226defea3c55d7926d4f5f4f7f4c2d
+https://gist.github.com/SpencerMalone/69edeb9cc65289d402ea36b11d8ac3e4
+Some dumps from docker debug, only just found out about compose --verbose, gonna try that shortly.
+Additional information
+CentOS Linux release 7.3.1611 (Core)
+Physical box that may have cruft around from prior docker versions. We've done our best to ensure we don't leave that around during upgrades, but stuff sneaks by.

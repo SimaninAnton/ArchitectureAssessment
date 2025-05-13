@@ -1,0 +1,6 @@
+prologic commented on 28 May 2014
+Does fig starts containers in the order as
+written in the fig.yml? If not is it meant to?
+I've run into an issue where I need one or two
+containers to start before others.
+Related but different Issue: #74

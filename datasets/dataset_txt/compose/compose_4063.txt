@@ -1,0 +1,4 @@
+zjstrive commented on 3 Dec 2014
+1 fig can't remove images
+2 fig give images TAG
+3 fig build images will build some none images. that I did't need!

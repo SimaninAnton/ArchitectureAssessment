@@ -1,0 +1,10 @@
+jeqo commented on 31 Jan 2015
+Hi,
+I'd like to know if there are some plans for support Fig on Windows (as Docker: https://ahmetalpbalkan.com/blog/compiling-docker-cli-on-windows/).
+I've installed fig with python and pip, but I get problems with these libraries:
+termios
+fcntl
+And I don't know if there are more.
+Thanks in advance.
+Best,
+Jorge

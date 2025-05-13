@@ -1,0 +1,5 @@
+wvxvw commented on 20 Mar 2019
+Your setup.py has this constraint on requests library:
+'requests >= 2.6.1, != 2.11.0, != 2.12.2, != 2.18.0, < 2.21'
+When your package is used with other libraries, it is very difficult (and sometimes impossible) to find a version of another package that would perfectly fit into your constraints. For example, prance, the OpenAPI parser requires requests ~=2.21, and there's no way to get a version that wants something that would fit your requirements.
+I understand that this requirement must have been a result of bug reports that resulted from using requests package, but... please be reasonable, and try to work around those bugs, perhaps by locally patching or even vendoring the version you need. The way it is now, it effectively prevents the use of your library by projects which need to use other libraries, and requests is an almost ubiquitous requirement nowadays...

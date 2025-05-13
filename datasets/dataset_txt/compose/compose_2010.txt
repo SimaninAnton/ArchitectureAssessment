@@ -1,0 +1,24 @@
+withinboredom commented on 11 Oct 2016
+Running a container like docker-compose -p "cutter" up will output:
+base_theme_builder   | g changed files to targets
+base_theme_builder   | ##teamcity[progressMessage 'Applying changes']
+base_theme_builder   | ty[progressMessage 'Waiting for containers to stop']
+base_theme_builder   | h exited 0
+base_theme_builder   | nish.d] executing container finish scripts...
+base_theme_builder   | nish.d] done.
+base_theme_builder   | sh] syncing disks.
+base_theme_builder   | sh] sending all processes the TERM signal.
+base_theme_builder   | sh] sending all processes the KILL signal and exiting.
+However, running docker-compose -p "cutter" up -d and viewing the logs:
+base_theme_builder   | Copying changed files to targets
+base_theme_builder   | ##teamcity[progressMessage 'Applying changes']
+base_theme_builder   | ##teamcity[progressMessage 'Waiting for containers to stop']
+base_theme_builder   | /bin/bash exited 0
+base_theme_builder   | [cont-finish.d] executing container finish scripts...
+base_theme_builder   | [cont-finish.d] done.
+base_theme_builder   | [s6-finish] syncing disks.
+base_theme_builder   | [s6-finish] sending all processes the TERM signal.
+base_theme_builder   | [s6-finish] sending all processes the KILL signal and exiting.
+I will get together a sample repo, but hopefully others can reproduce this easily in the meantime.
+This has been since 1.8.0.
+3

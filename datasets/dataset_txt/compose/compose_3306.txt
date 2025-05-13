@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 9 Sep 2015
+I see detach: {type: boolean} in fields_schema.json, but I don't see it referenced in the docs or code (it's a cli param for run, but not a config param).
+Was this added by mistake? I think we should remove it.

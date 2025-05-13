@@ -1,0 +1,12 @@
+kmlsh04 commented on 15 Feb 2017 •
+edited
+I am new to docker and not have much experience with windows commands too.
+I tried to access the directory of my new created VM(worker) but it gives me permission error.
+C:\Windows\system32>docker-machine ssh worker /home/docker
+sh: /home/docker: Permission denied
+Could anyone please suggest why I am getting this error ?
+Docker installed details:
+Version 1.13.1 (10072)
+Channel: Stable
+94675c5
+Windows 10 Pro

@@ -1,0 +1,14 @@
+TheTechOddBug commented on 13 Jan 2017
+Using version 1.12.6 or 1.12.5 of docker (error not present with docker 1.12.3), when we try to create a volume for a specific image following next structure inside a docker compose "yml" file (bold for volumes related with this issue):
+jenkins-slave:
+volumes:
+- jenkins_slave_home:/workspace
+- /var/run/docker.sock:/var/run/docker.sock
+jenkins:
+user: root
+volumes:
+- jenkins_home:/var/jenkins_home
+- /var/run/docker.sock:/var/run/docker.sock
+We obtain following error:
+ERROR: for jenkins Cannot create container for service jenkins: create \var\run\docker.sock: "\var\run\docker.sock" includes invalid characters for a local volume name, only [a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed.
+We have tested this with Windows 10 and VirtualBox 5.1.10 and various versions of git-bash (2.10 and 2.11)

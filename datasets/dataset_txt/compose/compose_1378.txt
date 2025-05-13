@@ -1,0 +1,8 @@
+Yajo commented on 19 Jun 2017 •
+edited
+Currently docker-compose run has a bunch of flags you can use to override some configurations from the ones defined in the corresponding docker-compose.yaml file.
+There's still the lack of a -l or --label parameter. This is way useful, I have a use case:
+You have a host where there is a traefik inverse proxy and your production app is running. You boot a sidekick container that needs to keep on doing things in the background, so you run docker-compose run --rm app backgroundjob. At some point, you need to restart the production app, so you docker-compose restart app, and then suddenly the proxy returns a 404 status. That's because Traefik lost notion of your production container for a second, and then it routed things to the myproject_app_run_1 container instead. When the old production container is restarted, it has no longer routing.
+If we were able to docker-compose run --rm -l traefik.enable=false app backgroundjob, this would never happen.
+I guess there could be other possible similar scenarios out there.
+4

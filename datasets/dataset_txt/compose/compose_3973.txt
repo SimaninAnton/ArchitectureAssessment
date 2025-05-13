@@ -1,0 +1,16 @@
+wernight commented on 26 Jan 2015
+Dockerfile:
+ADD bar /bar
+fig.xml
+foo:
+  build: .
+Note that ./bar is a directory.
+Docker builds correctly:
+$ docker build .
+ADD bar /bar
+Fig fails:
+$ fig build
+ADD bar /bar
+Service 'foo' failed to build: bar: no such file or directory
+Note that I'm running Fig installed via pip in a virtualenv (if that changes anything) but the same issue appears with the version installed via:
+curl -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m`

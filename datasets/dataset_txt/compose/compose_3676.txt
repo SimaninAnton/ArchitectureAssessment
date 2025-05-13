@@ -1,0 +1,3 @@
+linlinlinlin commented on 29 Apr 2015
+docker-py 1.2.1 have been released yesterday.
+How could we help to test it is work with compose 1.2 ?

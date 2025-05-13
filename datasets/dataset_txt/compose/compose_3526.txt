@@ -1,0 +1,5 @@
+zimmski commented on 29 Jun 2015
+I am using compose 1.3.1 and docker 1.7.0 in an up to date ubuntu/trusty64 Vagrant box. Before I used compose 1.2 and docker 1.6.x which did not have this problem.
+I am starting a few containers using "compose up". Among them are a rabbitmq:3.5.3-management container, exposing the ports 5672 and 15672, as well as google/debian:wheezy which is consuming the rabbitmq container via a link defined in the compose file.
+When I remove all containers and do a compose up. This one container will fail starting up with the error "System error: read parent: connection reset by peer". By removing the link to the rabbitmq container the same container will start just fine. Also when the rabbitmq container is already running, the said container does also start up fine. So I guess there is a race because of rabbitmq which needs some time to start up.
+Since this problem did not occur with the older versions I am wondering if this can be avoided using some option of compose I do not know of, like waiting for a container to be ready, or if this is a general problem and needs to be debugged. Anyway, please let me know how I can help.

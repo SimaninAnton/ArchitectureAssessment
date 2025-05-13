@@ -1,0 +1,11 @@
+mbana commented on 24 Sep 2018
+Hi,
+Where are the Dockerfiles for the images available at: https://hub.docker.com/r/docker/compose/tags/
+I now it's Alpine by running it but It would be nice if this was documented somewhere.
+docker run --rm -it --entrypoint=sh docker/compose:1.22.0           
+
+/ # cat /etc/issue 
+Welcome to Alpine Linux 3.6
+Kernel \r on an \m (\l)
+
+/ # 

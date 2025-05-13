@@ -1,0 +1,1 @@
+docker-compose build download pom dependencies each time

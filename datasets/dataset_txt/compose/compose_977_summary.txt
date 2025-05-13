@@ -1,0 +1,1 @@
+Strange caching bug manifests itself when building image from remote git repo

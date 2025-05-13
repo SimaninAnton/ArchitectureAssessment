@@ -1,0 +1,44 @@
+FernandoMiguel commented on 30 Jul 2018
+Description of the issue
+We have a docker-compose.yml which is used to build many images. Some of those images also use a disposable but cacheable "builder" image.
+We want to push some of those images to AWS ECR.
+The only images are the non builder ones.
+For example
+  nginx-base:
+    image: XXX.dkr.ecr.eu-west-1.amazonaws.com/nginx-base:release-production
+
+  ms-builder:
+    build:
+      [...]
+    image: ms-builder:release-${id}
+The idea is to use
+$ docker-compose -f docker-compose.base-images.yml push
+and only push the ones tagged with ECR
+But by default, docker will assume docker.io as the default registry, and prepend that to the images name, trying to push the builders to docker.io, leading to a fail
+We have been fallbacking to --ignore-push-failures but that will not makes aware if a valid image fails to push.
+Would it be possible to tag images with some prefix that would make docker push skip them?
+something like local/ms-builder:release-${id}
+Context information (for bug reports)
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018```
+Client:
+Version: 18.03.1-ce
+API version: 1.37
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:13:02 2018
+OS/Arch: darwin/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.1-ce
+API version: 1.37 (minimum version 1.12)
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:22:38 2018
+OS/Arch: linux/amd64
+Experimental: true```
+1

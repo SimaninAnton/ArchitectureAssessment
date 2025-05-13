@@ -1,0 +1,1 @@
+Compose does not re-attach to restarting containers

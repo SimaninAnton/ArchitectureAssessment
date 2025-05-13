@@ -1,0 +1,6 @@
+aleemb commented on 11 Mar 2016
+In my parent config I have,
+- networks:
+  - foobar
+...but in my child config I don't want to use this network. I presumed I could pass an empty array in my child config but it threw an error:
+- networks: []

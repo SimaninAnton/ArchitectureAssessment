@@ -1,0 +1,40 @@
+looneym commented on 22 Aug 2018
+I am on Docker For Mac 8.03.1-ce-mac65 (24312)
+Description of the issue
+I am reopening this issue #253 as the problem is still occuring for me and from the looks of comments on that issue, several other people too.
+Original description:
+If I start a bash shell inside a docker container, then start typing a long command at the bash prompt, I get to maybe 50-60 characters across the window, then the line wraps back on itself and I'm then typing over the top of what I've already written. It doesn't affect the input, only the rendering of the shell.
+There is a workaround described in the linked issue but it kinda sucks to have to do that all the time
+Context information (for bug reports)
+ ⚙ ✝  ~/src/hustle   ml/issue_model±  docker-compose version
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+ ⚙ ✝  ~/src/hustle   ml/issue_model±  docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Steps to reproduce the issue
+Open a shell in a container
+Type a long command
+Observe the line overwriting itslef
+Additional information
+I'm running Iterm2 with tmux 2.7
+cc @sophylee @Wolvverine who report this still occurring in the linked issue.

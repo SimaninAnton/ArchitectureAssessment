@@ -1,0 +1,1 @@
+unhelpful error if build arg is not string

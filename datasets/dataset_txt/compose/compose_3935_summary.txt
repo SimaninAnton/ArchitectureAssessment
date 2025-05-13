@@ -1,0 +1,1 @@
+Make --rm flag default for `fig run`

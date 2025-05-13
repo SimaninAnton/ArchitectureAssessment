@@ -1,0 +1,81 @@
+SystemZ commented on 2 Jan 2017
+Description
+Using docker-compose seems to break mount volumes on host function.
+Same configuration without docker-compose works ok.
+Steps to reproduce
+1.Create minimal example docker-compose.yml
+version: "2"
+services:
+  nginx:
+    image: nginx
+    volumes:
+     - ./:/test
+Run docker-compose run --rm nginx "ls /test"
+Expected result
+List of files in current folder
+Actual result
+ERROR: Cannot start service nginx: invalid header field value "oci runtime error: container_linux.go:247: starting container process caused \"exec: \\\"ls /test\\\": stat ls /test: no such file or directory\"\n"
+Without docker-compose
+docker run --rm -v $(pwd):/test nginx ls /test
+Dockerfile
+docker-compose.yml
+site
+(list of files)
+Environment
+docker-compose version
+docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+docker version
+Client:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 02:30:42 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 02:30:42 2016
+ OS/Arch:      linux/amd64
+docker info
+Containers: 16
+ Running: 0
+ Paused: 0
+ Stopped: 16
+Images: 3
+Server Version: 1.12.5
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 46
+ Dirperm1 Supported: false
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host overlay null
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: apparmor
+Kernel Version: 3.13.0-106-generic
+Operating System: Ubuntu 14.04.5 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 1.955 GiB
+Name: ubuntu
+ID: 4FLA:ACWW:W4NZ:KZNW:LGAQ:73SE:NT7B:JRCO:PJA6:MJVX:4UJ4:L2TR
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Insecure Registries:
+ 127.0.0.0/8

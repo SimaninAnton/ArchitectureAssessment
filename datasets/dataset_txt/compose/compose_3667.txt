@@ -1,0 +1,8 @@
+Contributor
+TomasTomecek commented on 3 May 2015
+I'm using compose during development and I find it super useful. The only thing is that it takes so long to rebuild my environment (app, db, redis, worker, worker management). My workflow is, that I update one of the services and want to do up right away. Unfortunately compose recreates all containers, not just the one I updated.
+Do you think it would make sense, if:
+compose would recreate containers which have updates images
+compose would rebuild images which have updates dockerfiles
+I'll gladly provide patch for this.
+1

@@ -1,0 +1,26 @@
+remus-corneliu commented on 25 Oct 2019 •
+edited
+version: '3.7'
+
+services:
+  teamcity:
+    image: jetbrains/teamcity-server:latest
+    ports:
+      - 8081:8111
+    restart: unless-stopped
+    volumes:
+      - C:\config\logs:C:/TeamCity/logs
+      - C:\config\data:C:/ProgramData/JetBrains/TeamCity
+
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:latest
+    environment:
+      - SERVER_URL=http://teamcity:8111
+    restart: unless-stopped
+COMPOSE_CONVERT_WINDOWS_PATHS is 1
+running config command I see the following
+ volumes:
+    - /c/docker:C:/TeamCity/logs:rw
+    - /c/docker:C:/ProgramData/JetBrains/TeamCity:rw
+I'm running on windows server 1809 version
+What am I missing ?

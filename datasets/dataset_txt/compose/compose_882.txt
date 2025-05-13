@@ -1,0 +1,20 @@
+dgilling commented on 9 Feb 2018
+Previously docker-compose up -d would never change the number of instances deployed.
+For example, if I run the following:
+docker-compose up -d
+docker-compose scale my_service=5
+docker-compose up -d
+I would still have 5 instances running.
+With the latest version, if I run, the same sequence:
+docker-compose up -d
+docker-compose scale my_service=5
+docker-compose up -d
+It actually removes 4 of the 5 instances. Why does the scale command have to be tightly coupled to the up command and break legacy behavior?
+This is with a legacy swarm cluster Docker version 17.05.0-ce, build 89658be
+And with Mac OSX 17.09.1-ce-mac42 (21090)
+Even if I target a different service, docker compose will rescale even the other services.
+docker-compose up -d
+docker-compose scale my_service=5
+docker-compose up -d my_other_service
+my_service will be scaled back down to 1.
+This just breaks legacy scripts and behavior on so many levels.

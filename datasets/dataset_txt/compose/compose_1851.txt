@@ -1,0 +1,16 @@
+stfenjobs commented on 15 Dec 2016 •
+edited
+hi there
+i want connect to Docker host from container,
+i uesd this man code,but it not work,can you help me?
+moby/moby#1143 (comment)
+version: '2'
+services:
+  nginx:
+    build: dockerfile/nginx1
+    restart: always
+    extra_hosts:
+      - "dockerhost:$(ip route | awk '/docker0/ { print $NF }')"
+    ports:
+      - "80:80"
+      - "443:443"

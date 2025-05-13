@@ -1,0 +1,35 @@
+pradley commented on 23 Dec 2017 •
+edited by shin-
+Here is my Compose File
+version: '2.1'
+
+services:
+  NotificationProcessor:
+    image: notificationprocessor 
+    restart: unless-stopped
+    depends_on: 
+    - SQLServer
+    mem_limit: 2G
+    environment:
+     DataSource: SQLServer
+     DBName: IODC_Central
+     DBIntegratedSecurity: "false"
+     DBUserid: sa
+     DBPassword: LoveDocker
+
+  SQLServer:
+    image: microsoft/mssql-server-windows-developer
+    restart: unless-stopped
+    ports:
+      - "1433:1433"
+    volumes:
+      - "C:/Base_4_0_Database/:C:/Base_4_0_Database/"
+    environment:
+     sa_password: LoveDocker
+     ACCEPT_EULA: Y
+     attach_dbs: "[{'dbName':'IODC_Central','dbFiles':['C:\\\\Base_4_0_Database\\\\IODC_Central.mdf','C:\\\\Base_4_0_Database\\\\IODC_Central_log.ldf']}]"
+Sadly the notification processor can only connect to database if I run the SQL container first then get its IP replace
+DataSource: SQLServer
+with
+DataSource: 172.26.0.120 (example of a randomly generated ip) inside of the compose file and then compose up the notification processor
+It should be able to connect to it using the service name so that I could call docker-compose up and it would connect. Anyone have any guidance?

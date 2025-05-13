@@ -1,0 +1,24 @@
+maciejjaskowski commented on 10 Nov 2016
+While performing
+docker-compose ... build I was getting consistently errors:
+chematica@deb01:/opt/sas/chematica/zmq$ docker-compose -f docker-compose.common.yml -f docker-compose.local.yml build
+Building rabbitmq
+Traceback (most recent call last):
+ File "<string>", line 3, in <module>
+ File "compose/cli/main.py", line 62, in main
+ File "compose/cli/main.py", line 114, in perform_command
+ File "compose/cli/main.py", line 220, in build
+ File "compose/project.py", line 300, in build
+ File "compose/service.py", line 727, in build
+ File "site-packages/docker/api/build.py", line 55, in build
+ File "site-packages/docker/utils/utils.py", line 95, in tar
+ File "tarfile.py", line 2014, in add
+ File "tarfile.py", line 2043, in addfile
+ File "tarfile.py", line 274, in copyfileobj
+IOError: [Errno 28] No space left on device
+docker-compose returned -1
+On the root device indeed not much space was left but docker itself never complained for TMPDIR points to another device.
+Turns out that docker-compose writes in my case a ~1GB tmp file to /tmp (ignoring TMPDIR variable) with filenames like:
+tmpePRwRB
+tmpjkvgDF
+before proceeding with actual image building.

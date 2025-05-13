@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 24 Aug 2015
+The docs for log_opt don't mention what options are actually valid. This is mainly because Compose doesn't know what's valid, but we could at least link to the Engine documentation for configuring logging drivers.

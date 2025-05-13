@@ -1,0 +1,31 @@
+delbao commented on 12 Feb 2017 •
+edited by shin-
+I am experimenting using docker-compose for a cassandra cluster and pin the instance to a specific core. I have a docker-compose.yaml (below).
+When I run it on a ubuntu box (24 core ec2 instance), it gives me "Bind mounts must be absolute paths"
+(master) [origin ] $ docker-compose -p cluster up -d
+Creating network "cluster_default" with the default driver
+Recreating cassandra-seed1
+ERROR: for cassandra-seed1 Bind mounts must be absolute paths.
+However, if I pin all cpus to cpuset 0, it has no error. Very strange behavior. I think the bind mounts should only be relevant to file system
+networks: {}
+services:
+  cassandra-node:
+    environment:
+      CASSANDRA_SEEDS: seed1
+    image: cassandra
+    links:
+    - cassandra-seed1:seed1
+    restart: always
+    cpuset: "1"
+ 
+  cassandra-seed1:
+    container_name: cassandra-seed1
+    hostname: cassandra-seed1
+    image: cassandra
+    ports:
+    - 9042:9042
+    restart: always
+    cpuset: "0"
+ 
+version: '2.0'
+volumes: {}

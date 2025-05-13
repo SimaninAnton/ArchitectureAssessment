@@ -1,0 +1,1 @@
+UnicodeEncodeError: 'ascii' codec can't encode character u'\u2023'

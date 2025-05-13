@@ -1,0 +1,3 @@
+ElijahLynn commented on 17 Dec 2016
+Just upgraded from Docker 1.12.3 to 1.12.4 and now docker-compose 'ImportError: No module named docker.errors'. I have docker-engine installed with apt-get on Ubuntu and docker-compose installed with pip.
+docker-compose is at 1.9.0.

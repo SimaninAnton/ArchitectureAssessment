@@ -1,0 +1,1 @@
+Docker 1.12 and Compose 1.8 - Mount not work

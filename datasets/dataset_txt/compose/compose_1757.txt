@@ -1,0 +1,130 @@
+komuw commented on 25 Jan 2017 •
+edited
+I recently upgraded to docker version 1.13 and docker-compose 1.10.0.
+When using a docker compose file (both version 2 or version 3), the commands docker-compose up docker-compose pull <service_name> I get the following error:
+$ docker-compose up
+Pulling myredis (redis:latest)...
+Traceback (most recent call last):
+File "/usr/local/bin/docker-compose", line 11, in
+sys.exit(main())
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 64, in main
+command()
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 116, in perform_command
+handler(command, command_options)
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 848, in up
+remove_orphans=remove_orphans)
+File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 389, in up
+svc.ensure_image_exists(do_build=do_build)
+File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 312, in ensure_image_exists
+self.pull()
+File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 878, in pull
+output = self.client.pull(repo, tag=tag, stream=True)
+File "/usr/local/lib/python2.7/dist-packages/docker/api/image.py", line 333, in pull
+header = auth.get_config_header(self, registry)
+AttributeError: 'module' object has no attribute 'get_config_header'
+Here are my compose files, note that both version 2 and 3 fail with the same error.
+~/Downloads $ cat docker-compose.yml
+version: '2'
+services:
+  myredis:
+     image: redis:alpine
+~/Downloads $ cat docker-compose.yml
+version: '3'
+services:
+  myredis:
+     image: redis:alpine
+~/Downloads $ docker version
+Client:
+Version: 1.13.0
+API version: 1.25
+Go version: go1.7.3
+Git commit: 49bf474
+Built: Tue Jan 17 09:58:26 2017
+OS/Arch: linux/amd64
+Server:
+Version: 1.13.0
+API version: 1.25 (minimum version 1.12)
+Go version: go1.7.3
+Git commit: 49bf474
+Built: Tue Jan 17 09:58:26 2017
+OS/Arch: linux/amd64
+Experimental: false
+~/Downloads $ docker info
+WARNING: No swap limit support
+Containers: 5
+Running: 0
+Paused: 0
+Stopped: 5
+Images: 59
+Server Version: 1.13.0
+Storage Driver: aufs
+Root Dir: /var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 104
+Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 03e5862ec0d8d3b3f750e19fca3ee367e13c090e
+runc version: 2f7393a47307a16f8cee44a37b262e8b81021e3e
+init version: 949e6fa
+Security Options:
+apparmor
+seccomp
+Profile: default
+Kernel Version: 4.4.0-53-generic
+Operating System: Ubuntu 16.04.1 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 15.55 GiB
+Name: REDACTED
+ID: EWM5:UMNC:4KLA:MYJK:FZ7F:JSKE:D2NB:CICK:KL33:QWEE:9000:K6OJ
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Username: REDACTED
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+127.0.0.0/8
+Live Restore Enabled: false
+~/Downloads $ docker-compose version
+docker-compose version 1.10.0, build 4bd6f1a
+docker-py version: 2.0.2
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g 1 Mar 2016
+~/Downloads $ uname -ra
+Linux REDACTED 4.4.0-53-generic #74-Ubuntu SMP Fri Dec 2 15:59:10 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+~/Downloads $ lsb_release -ar
+Distributor ID: Ubuntu
+Description: Ubuntu 16.04.1 LTS
+Release: 16.04
+Codename: xenial
+No LSB modules are available.
+docker by itself (without docker-compose) seems to work just fine:
+~/Downloads $ docker run -it redis:alpine
+Unable to find image 'redis:alpine' locally
+alpine: Pulling from library/redis
+0a8490d0dfd3: Pull complete
+c8d0e817ebe2: Pull complete
+7f2a4f935feb: Pull complete
+0b43e209f780: Pull complete
+b06b9be4b2bc: Pull complete
+5de037257f43: Pull complete
+Digest: sha256:a06a61747e4a7b46788e2813b21ea6b06386df8e238e56f51f8793adb48f0a8b
+Status: Downloaded newer image for redis:alpine
+1:C 25 Jan 08:59:26.533 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+.
+.-__ ''-._ _.- . . ''-._ Redis 3.2.6 (00000000/0) 64 bit
+.-`` .-. / ., ''-._
+....
+...
+..
+1

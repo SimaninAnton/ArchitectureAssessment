@@ -1,0 +1,77 @@
+arthurlogilab commented on 25 Jun 2019 •
+edited
+Description of the issue
+pip install docker-compose on debian jessie.
+Context information (for bug reports)
+Output of pip install docker-compose>=1.21.0
+              Downloading/unpacking docker-compose>=1.21.0
+              Downloading/unpacking enum34>=1.0.4,<2 (from docker-compose>=1.21.0)
+                Downloading enum34-1.1.6-py2-none-any.whl
+              Downloading/unpacking requests>=2.6.1,!=2.11.0,!=2.12.2,!=2.18.0,<2.21 (from docker-compose>=1.21.0)
+              Downloading/unpacking websocket-client>=0.32.0,<1.0 (from docker-compose>=1.21.0)
+              Downloading/unpacking texttable>=0.9.0,<0.10 (from docker-compose>=1.21.0)
+                Downloading texttable-0.9.1.tar.gz
+                Running setup.py (path:/tmp/pip-build-VYiGUR/texttable/setup.py) egg_info for package texttable
+                  /tmp/pip-build-VYiGUR/texttable/setup.py:12: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+                    # but WITHOUT ANY WARRANTY; without even the implied warranty of
+              Downloading/unpacking cached-property>=1.2.0,<2 (from docker-compose>=1.21.0)
+                Downloading cached_property-1.5.1-py2.py3-none-any.whl
+              Downloading/unpacking docker[ssh]>=3.7.0,<4.0 (from docker-compose>=1.21.0)
+              Downloading/unpacking jsonschema>=2.5.1,<3 (from docker-compose>=1.21.0)
+                Downloading jsonschema-2.6.0-py2.py3-none-any.whl
+              Downloading/unpacking docopt>=0.6.1,<0.7 (from docker-compose>=1.21.0)
+                Downloading docopt-0.6.2.tar.gz
+                Running setup.py (path:/tmp/pip-build-VYiGUR/docopt/setup.py) egg_info for package docopt
+                  /tmp/pip-build-VYiGUR/docopt/setup.py:12: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+                    license='MIT',
+              Downloading/unpacking backports.ssl-match-hostname>=3.5 (from docker-compose>=1.21.0)
+                Downloading backports.ssl_match_hostname-3.7.0.1.tar.gz
+                Running setup.py (path:/tmp/pip-build-VYiGUR/backports.ssl-match-hostname/setup.py) egg_info for package backports.ssl-match-hostname
+                  /tmp/pip-build-VYiGUR/backports.ssl-match-hostname/setup.py:12: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+                    version='3.7.0.1',
+              Downloading/unpacking six>=1.3.0,<2 (from docker-compose>=1.21.0)
+                Downloading six-1.12.0-py2.py3-none-any.whl
+              Downloading/unpacking dockerpty>=0.4.1,<0.5 (from docker-compose>=1.21.0)
+                Downloading dockerpty-0.4.1.tar.gz
+                Running setup.py (path:/tmp/pip-build-VYiGUR/dockerpty/setup.py) egg_info for package dockerpty
+                  /tmp/pip-build-VYiGUR/dockerpty/setup.py:12: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+                    # distributed under the License is distributed on an "AS IS" BASIS,
+              Downloading/unpacking PyYAML>=3.10,<4.3 (from docker-compose>=1.21.0)
+                Running setup.py (path:/tmp/pip-build-VYiGUR/PyYAML/setup.py) egg_info for package PyYAML
+                  /tmp/pip-build-VYiGUR/PyYAML/setup.py:12: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+                    supports standard YAML tags and provides Python-specific tags that
+              Downloading/unpacking ipaddress>=1.0.16 (from docker-compose>=1.21.0)
+                Downloading ipaddress-1.0.22-py2.py3-none-any.whl
+              Downloading/unpacking certifi>=2017.4.17 (from requests>=2.6.1,!=2.11.0,!=2.12.2,!=2.18.0,<2.21->docker-compose>=1.21.0)
+              Downloading/unpacking urllib3>=1.21.1,<1.25 (from requests>=2.6.1,!=2.11.0,!=2.12.2,!=2.18.0,<2.21->docker-compose>=1.21.0)
+              Downloading/unpacking chardet>=3.0.2,<3.1.0 (from requests>=2.6.1,!=2.11.0,!=2.12.2,!=2.18.0,<2.21->docker-compose>=1.21.0)
+              Downloading/unpacking idna>=2.5,<2.8 (from requests>=2.6.1,!=2.11.0,!=2.12.2,!=2.18.0,<2.21->docker-compose>=1.21.0)
+              Downloading/unpacking docker-pycreds>=0.4.0 (from docker[ssh]>=3.7.0,<4.0->docker-compose>=1.21.0)
+                Downloading docker_pycreds-0.4.0-py2.py3-none-any.whl
+              Downloading/unpacking paramiko>=2.4.2 (from docker[ssh]>=3.7.0,<4.0->docker-compose>=1.21.0)
+              Cleaning up...
+              Exception:
+              Traceback (most recent call last):
+                File "/home/example/.virtualenvs/docker-compose/local/lib/python2.7/site-packages/pip/basecommand.py", line 122, in main
+                  status = self.run(options, args)
+                File "/home/example/.virtualenvs/docker-compose/local/lib/python2.7/site-packages/pip/commands/install.py", line 290, in run
+                  requirement_set.prepare_files(finder, force_root_egg_info=self.bundle, bundle=self.bundle)
+                File "/home/example/.virtualenvs/docker-compose/local/lib/python2.7/site-packages/pip/req.py", line 1266, in prepare_files
+                  req_to_install.extras):
+                File "/home/example/.virtualenvs/docker-compose/lib/python-wheels/setuptools-5.5.1-py2.py3-none-any.whl/pkg_resources.py", line 2401, in requires
+                  dm = self._dep_map
+                File "/home/example/.virtualenvs/docker-compose/lib/python-wheels/setuptools-5.5.1-py2.py3-none-any.whl/pkg_resources.py", line 2597, in _dep_map
+                  self.__dep_map = self._compute_dependencies()
+                File "/home/example/.virtualenvs/docker-compose/lib/python-wheels/setuptools-5.5.1-py2.py3-none-any.whl/pkg_resources.py", line 2630, in _compute_dependencies
+                  common = frozenset(reqs_for_extra(None))
+                File "/home/example/.virtualenvs/docker-compose/lib/python-wheels/setuptools-5.5.1-py2.py3-none-any.whl/pkg_resources.py", line 2627, in reqs_for_extra
+                  if req.marker_fn(override={'extra':extra}):
+                File "/home/example/.virtualenvs/docker-compose/lib/python-wheels/setuptools-5.5.1-py2.py3-none-any.whl/_markerlib/markers.py", line 113, in marker_fn
+                  return eval(compiled_marker, environment)
+                File "<environment marker>", line 1, in <module>
+              NameError: name 'platform_system' is not defined
+              
+              Storing debug log for failure in /home/example/.pip/pip.log
+Additional information
+debian jessie, pip install in virtualenv
+2

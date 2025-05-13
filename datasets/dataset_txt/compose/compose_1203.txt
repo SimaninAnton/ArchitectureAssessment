@@ -1,0 +1,4 @@
+jasonmp85 commented on 16 Sep 2017 •
+edited
+-p is just a much more succinct way of setting the project name. We've been suggesting it in our documentation to have some consistency around container names, but now I'm actually using the environment variable within some explicitly-specified container_name fields and -p does not set this variable.
+It would be great to have docker-compose -p name cmd be shorthand for COMPOSE_PROJECT_NAME=name docker-compose cmd.

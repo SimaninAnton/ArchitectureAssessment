@@ -1,0 +1,6 @@
+bergtwvd commented on 13 Mar 2018
+Multiple services can refer to a volume under the volumes section in the docker-compose file. When the volume does not exist the volume will be created by docker-compose, and data will be copied in from the container(s).
+To make this process deterministic, how is it determined which container will be used to copy the data to the volume?
+Do I need to use the depends_on key?
+Can you add this information to the documentation?
+3

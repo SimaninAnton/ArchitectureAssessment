@@ -1,0 +1,33 @@
+rcdailey commented on 6 May 2019 •
+edited
+I have the following docker-compose.yml:
+version: '3.7'
+
+services:
+  app:
+    image: portainer/portainer
+    restart: unless-stopped
+    user: $UID:$GID
+    networks:
+      reverse_proxy:
+        aliases:
+        - portainer
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - TZ=America/Chicago
+
+networks:
+  reverse_proxy:
+    external: true
+    name: reverse_proxy
+Using this method, I am not able to connect to my local docker instance. I do not use Swarm. There is no indication in the Portainer UI on how to add 'localhost'. I added the docker.sock volume, so I'm not sure why it isn't working.
+I also tried adding this:
+command: -H unix:///var/run/docker.sock
+But this won't work because I'm running as a non-root user:
+http error: endpoint snapshot error (endpoint=primary, URL=unix:///var/run/docker.sock) (err=Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/_ping: dial unix /var/run/docker.sock: connect: permission denied)
+On my host machine, user identified by $UID is in the docker group. But, that user is probably not being added to the docker group inside the container. That's something your entrypoint script should be doing.
+How do I get Portainer to connect to my local non-swarm docker when using a non-root user?
+1

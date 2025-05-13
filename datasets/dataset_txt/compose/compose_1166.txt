@@ -1,0 +1,20 @@
+anthoneous commented on 7 Oct 2017
+Hello, we are using https://github.com/awslabs/amazon-ecr-credential-helper helper with docker and when attempting to use docker-compose build unittest it fails on the pull from the repository.
+[jenkins@ git]$ docker-compose --verbose build unittest
+compose.config.config.find: Using configuration files: ./docker-compose.yaml
+docker.auth.find_config_file: Trying paths: ['/home/jenkins/.docker/config.json', '/home/jenkins/.dockercfg']
+docker.auth.find_config_file: Found file at path: /home/jenkins/.docker/config.json
+docker.auth.load_config: Found 'credsStore' section
+compose.cli.command.get_client: docker-compose version 1.16.1, build 6d1ac219
+docker-py version: 2.5.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.1e-fips 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.9.51-10.52.amzn1.x86_64, Arch=amd64, BuildTime=2017-09-26T22:45:38.000000000+00:00, ApiVersion=1.32, Version=17.09.0-ce, MinAPIVersion=1.12, GitCommit=afdb6d4, Os=linux, GoVersion=go1.8.3
+compose.service.build: Building unittest
+compose.cli.verbose_proxy.proxy_callable: docker build <- (nocache=False, pull=False, cache_from=None, target=None, stream=True, labels=None, network_mode=None, tag=u'git_unittest', buildargs={'PIP_REQS': '*requirements.txt', 'PIP_INDEX_URL': ''}, forcerm=False, rm=True, path='/home/jenkins/git', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: Sending auth config ()
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x7fb8b6d35050>
+Step 1/12 : FROM #########.dkr.ecr.us-east-1.amazonaws.com/####/####:latest
+ERROR: compose.cli.main.main: Service 'unittest' failed to build: Get https://########.dkr.ecr.us-east-1.amazonaws.com/v2/#####/#####/manifests/latest: no basic auth credentials

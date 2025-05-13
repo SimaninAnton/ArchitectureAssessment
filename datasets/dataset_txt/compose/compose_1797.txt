@@ -1,0 +1,9 @@
+Spidy88 commented on 13 Jan 2017
+Recently we've been seeing issues with our docker-compose logs where we request a single container to be logged, however we get multiple containers streamed in.
+For example, I run docker-compose logs -f file-watch . Which prints out a set of logs for the file-watch container and then continues to stream new logs for file-watch as they come in. However, after the initial cached (maybe not right word) or old logs have been printed and the streaming starts, we start to see additional logs for another service that is running auth-api.
+Not sure what can be causing it. Only recently did we add the -f flag to our workflow for streaming. No other services seem to get into the mix, though we do have other services with and without the - character in their name that are also running.
+I should also note, that only the file-watch container is listed when docker-compose logs lists containers it is attaching to.
+Here's my current setup:
+Docker version 1.11.0, build 4dc5990
+docker-compose version 1.7.0, build 0d7bf73
+Mac v10.11.6

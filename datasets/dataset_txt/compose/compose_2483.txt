@@ -1,0 +1,31 @@
+vshab commented on 18 Apr 2016
+Hello!
+After updating Docker got this error when building:
+$ docker-compose build
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 57, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 105, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 31, in project_from_options
+    environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 76, in get_project
+    host=host, environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 49, in get_client
+    environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/docker_client.py", line 52, in docker_client
+    kwargs = kwargs_from_env(environment=environment)
+TypeError: kwargs_from_env() got an unexpected keyword argument 'environment'
+I'm using Fedora 23. Docker from docker repository.
+$ rpm -qa | grep -i docker
+docker-compose-1.7.0-1.fc23.noarch
+python-docker-py-1.7.2-1.fc23.noarch
+docker-engine-1.11.0-1.fc23.x86_64
+python-dockerpty-0.4.1-2.fc23.noarch
+python3-docker-py-1.7.2-1.fc23.noarch
+docker-engine-selinux-1.11.0-1.fc23.noarch
+$ python --version
+Python 2.7.11
+Docker-compose 1.6 still works well.

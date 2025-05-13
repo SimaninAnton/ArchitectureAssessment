@@ -1,0 +1,1 @@
+`config` should validate the service name provided in `links`

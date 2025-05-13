@@ -1,0 +1,1 @@
+Windows docker-compose gives no output

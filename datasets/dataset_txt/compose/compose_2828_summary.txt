@@ -1,0 +1,1 @@
+Inconsistent `rm -v` `down -v` behaviour

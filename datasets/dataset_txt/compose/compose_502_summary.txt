@@ -1,0 +1,1 @@
+.env file variables with underscores are ignored by image directive

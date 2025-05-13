@@ -1,0 +1,1 @@
+Version 1.2 fails to pull from a private registry with authentication (1.1 works)

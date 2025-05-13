@@ -1,0 +1,1 @@
+Compose should use LF line break instead of CRLF on Windows

@@ -1,0 +1,6 @@
+callmekatootie commented on 9 Apr 2015
+Hello,
+I went through the documentation and I could not find how I can uninstall docker-compose.
+I installed docker and docker-compose to know more about it. Now I am done and I wish to remove them. However, I could not find any info about how to carry that out.
+I installed them through the instructions in the website.
+OS: Ubuntu 14.04

@@ -1,0 +1,73 @@
+outcoldman commented on 1 Sep 2016
+I have my environment variable setup
+SPLUNK_CLUSTER_DOCKER_IMAGE_PATH=registry.example.com/dgladkikh
+SPLUNK_CLUSTER_VERSION=6.4.3
+My docker-compose file looks like
+version: '2'
+services:
+
+  consul:
+    image: ${SPLUNK_CLUSTER_DOCKER_IMAGE_PATH}/splunk-cluster-consul:${SPLUNK_CLUSTER_VERSION}
+    container_name: consul
+    hostname: consul
+    restart: always
+    networks:
+      splunk:
+        aliases:
+          - consul
+    labels:
+      splunk.cluster: "consul"
+    environment:
+      - CONSUL_DATA_DIR=/var/consul/data
+      - CONSUL_DC=dc
+      - CONSUL_DOMAIN=splunk
+      - CONSUL_CLIENT=0.0.0.0
+      - CONSUL_BOOTSTRAP_EXPECT=1
+      - CONSUL_JOIN=consul
+      - CONSUL_ADVERTISE_INTERFACE=eth0
+      - SYSLOG_SERVER=cluster-slave
+      - SYSLOG_PORT=1514
+      - SYSLOG_PROTO=udp
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
+
+networks:
+  example:
+When I do
+docker-compose -f docker-compose.yml up --verbose -d
+I get
+compose.config.config.find: Using configuration files: ./docker-compose.yml,./docker-compose.license-master.yml
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'xxxxxxx', username=u'dgladkikh')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://index.docker.io/v1/', username=u'outcoldman')
+docker.auth.auth.parse_auth: Found entry (registry=u'registry.example.com', username=u'dgladkikh')
+docker.auth.auth.parse_auth: Found entry (registry=u'yyyyyyy', username=u'dgladkikh')
+compose.cli.command.get_client: docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.19-moby, Os=linux, BuildTime=2016-08-18T17:32:24.504694950+00:00, ApiVersion=1.24, Version=1.12.1, GitCommit=23cf638, Arch=amd64, Experimental=True, GoVersion=go1.6.3
+compose.service.pull: Pulling consul (registry.example.com/dgladkikh/splunk-cluster-consul:6.4.3)...
+compose.cli.verbose_proxy.proxy_callable: docker pull <- (u'registry.example.com/dgladkikh/splunk-cluster-consul', tag=u'6.4.3', stream=True)
+docker.api.image.pull: Looking for auth config
+docker.auth.auth.resolve_authconfig: Looking for auth entry for u'registry.example.com'
+docker.auth.auth.resolve_authconfig: Found u'registry.example.com'
+docker.api.image.pull: Found auth config
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object _stream_helper at 0x102d5f2d0>
+Pulling repository registry.example.com/dgladkikh/splunk-cluster-consul
+ERROR: compose.cli.main.main: Error: image dgladkikh/splunk-cluster-consul:6.4.3 not found
+Tried to pull with docker pull and works as expected
+docker pull registry.example.com/dgladkikh/splunk-cluster-consul:6.4.3
+6.4.3: Pulling from dgladkikh/splunk-cluster-consul
+8ad8b3f87b37: Pull complete 
+80ef1c27c82d: Pull complete 
+e59a575f19ca: Pull complete 
+17d982e12b62: Pull complete 
+2f2c1101696f: Pull complete 
+26bc6d86e10b: Pull complete 
+Digest: sha256:55aae0d90440643dcf9e66ad9f655377faa2c478e407881f4853ce2ee46030ab
+Status: Downloaded newer image for registry.example.com/dgladkikh/splunk-cluster-consul:6.4.3

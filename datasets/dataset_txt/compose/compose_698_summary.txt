@@ -1,0 +1,1 @@
+Compose build fails with "Impossible to perform platform-targeted builds for API version < 1.35" error

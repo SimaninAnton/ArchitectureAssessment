@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 5 Sep 2015
+http://docs.docker.com/swarm/scheduler/filter/#port-filter
+Maybe we should be setting this filter on containers that have external ports, so that they scale properly on swarm?

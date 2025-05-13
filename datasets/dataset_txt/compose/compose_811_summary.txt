@@ -1,0 +1,1 @@
+docker-compose config doesn't work well in version 3.3

@@ -1,0 +1,7 @@
+johnjelinek commented on 10 Dec 2015
+I guess in my docker-compose.yml, dns is expected to be []string now instead of string. My existing docker-compose.yml had:
+dns: 172.17.0.1
+and now it has to be:
+dns:
+    - 172.17.0.1
+otherwise I get this error message: ERROR: json: cannot unmarshal string into Go value of type []string.

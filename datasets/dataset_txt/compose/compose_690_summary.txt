@@ -1,0 +1,1 @@
+Allow --no-start with --exit-code-from

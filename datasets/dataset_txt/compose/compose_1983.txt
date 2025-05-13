@@ -1,0 +1,22 @@
+finalclass commented on 26 Oct 2016
+Hey,
+I'm running docker at:
+Docker version 1.12.2, build bb80604
+and docker-compose at:
+docker-compose version 1.8.1, build 878cff1
+I don't see any output (from container) in the console when I run "docker-compose run ..."
+To reproduce create this simple docker-compose.yml
+version: '2'
+services:
+    hello:
+        image: 'alpine'
+run it like that:
+docker-compose build
+docker-compose run hello echo "hello"
+I've also tried adding -T parameter:
+docker-compose run -T hello echo "hello"
+but it doesn't help.
+When I run docker without compose then it works fine:
+docker run alpine echo "hello"
+hello
+4

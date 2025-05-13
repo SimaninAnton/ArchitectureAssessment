@@ -1,0 +1,4 @@
+SteveALee commented on 11 Feb 2015
+It appears that Boot2Docker works on Windows so will Fig also? The Fig install instructions only mention OS X
+https://docs.docker.com/installation/windows/
+http://www.fig.sh/install.html

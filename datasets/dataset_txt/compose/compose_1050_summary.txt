@@ -1,0 +1,1 @@
+Stacktrace / traceback on `sudo docker-compose images`

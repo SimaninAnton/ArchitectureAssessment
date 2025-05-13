@@ -1,0 +1,5 @@
+Contributor
+nubs commented on 4 Feb 2016
+Support for a configurable /dev/shm size was added in moby/moby#16168 as part of Docker 1.10 (API version 1.22). I am currently running into an issue where I need a larger /dev/shm size in a project that is managed by docker-compose and I am unable to configure it when running containers via docker-compose.
+It should be similar to fields like mem_limit for actual implementation.
+3

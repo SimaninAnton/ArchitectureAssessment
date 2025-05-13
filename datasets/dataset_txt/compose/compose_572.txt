@@ -1,0 +1,56 @@
+stepanselyuk commented on 19 Jul 2018
+Description of the issue
+I have a few volumes, some should be mounted inside folders of already defined (and expected to be mounted) volumes, but it seems (with --verbose) docker-compose uses some different logic than the order of which volumes mounts is declared.
+Context information (for bug reports)
+volumes:
+          # data
+          - $PWD/mounts/abc-wpfrontend:/srv/cms/thecode/public_html/frontendwp
+          # data from production nas
+          - /Volumes/DataHD/frontendwp/wp-content/plugins:/srv/cms/thecode/public_html/frontendwp/wp-content/plugins
+          - /Volumes/DataHD/frontendwp/wp-content/uploads:/srv/cms/thecode/public_html/frontendwp/wp-content/uploads
+          # logs
+          - $PWD/logs/frontendwp/supervisor:/var/log/supervisor
+          - $PWD/logs/frontendwp/apache2:/var/log/apache2
+          - $PWD/logs/frontendwp/newrelic:/var/log/newrelic
+From --verbose log:
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': ['/Volumes/WebDevHD/abc-dev-env/logs/frontendwp/supervisor:/var/log/supervisor:rw',
+           '/Volumes/WebDevHD/abc-dev-env/logs/frontendwp/apache2:/var/log/apache2:rw',
+           '/Volumes/DataHD/frontendwp/wp-content/plugins:/srv/cms/thecode/public_html/frontendwp/wp-content/plugins:rw',
+           '/Volumes/WebDevHD/abc-dev-env/mounts/abc-wpfrontend:/srv/cms/thecode/public_html/frontendwp:rw',
+           '/Volumes/WebDevHD/abc-dev-env/logs/frontendwp/newrelic:/var/log/newrelic:rw',
+           '/Volumes/DataHD/frontendwp/wp-content/uploads:/srv/cms/thecode/public_html/frontendwp/wp-content/uploads:rw'],
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o 27 Mar 2018
+Output of "docker version"
+Client:
+Version: 18.03.1-ce
+API version: 1.37
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:13:02 2018
+OS/Arch: darwin/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.1-ce
+API version: 1.37 (minimum version 1.12)
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:22:38 2018
+OS/Arch: linux/amd64
+Experimental: true
+Output of "docker-compose config"
+Steps to reproduce the issue
+Observed result
+As it's going every run by the new way, sometimes I have properly mounted folders, and sometimes not, sometimes only one of them properly mounted as in the example above.
+Expected result
+Mount volumes in the strict order as specified in yml file.
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+2

@@ -1,0 +1,9 @@
+haojiliu commented on 10 Feb 2018 •
+edited
+Symptoms:
+After an upgrade to High Sierra OS 10.13.1, docker-compose top hangs. Pretty much every docker-compose command hangs as well(up/build/start/etc.).
+Haojis-MacBook-Pro:noises_life haojiliu$ docker-compose --version
+docker-compose version 1.18.0, build 8dd22a9
+Haojis-MacBook-Pro:noises_life haojiliu$ docker --version
+Docker version 17.12.0-ce, build c97c6d6
+Haojis-MacBook-Pro:noises_life haojiliu$ 

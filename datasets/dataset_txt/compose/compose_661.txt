@@ -1,0 +1,64 @@
+dongasai commented on 21 May 2018
+Description of the issue
+I had unexpected errors after updating "docker for windows"
+Context information (for bug reports)
+docker-compose.yml
+version: '2'
+services:
+  nginxproxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+    - 80:80
+    volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+networks:
+  default:
+    external:
+      name: ggggg
+Output of "docker-compose version"
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:48 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+Steps to reproduce the issue
+1.docker-compose up
+2.
+3.
+Observed result
+OS: win10-1803
+DOCKER:
+Version 18.03.1-ce-win65 (17513)
+Channel: stable
+93354b3
+Expected result
+Create and open containers successfully
+Stacktrace / full error message
+Creating win10docker_nginxproxy_1 ... error
+
+ERROR: for win10docker_nginxproxy_1  Cannot create container for service nginxproxy: b'Mount denied:\nThe source path "\\\\var\\\\run\\\\docker.sock:/tmp/docker.sock"\nis not a valid Windows path'
+
+ERROR: for nginxproxy  Cannot create container for service nginxproxy: b'Mount denied:\nThe source path "\\\\var\\\\run\\\\docker.sock:/tmp/docker.sock"\nis not a valid Windows path'
+ERROR: Encountered errors while bringing up the project.
+Additional information
+OS version / distribution, docker-compose install method, etc.

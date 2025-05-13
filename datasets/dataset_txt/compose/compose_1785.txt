@@ -1,0 +1,3 @@
+AndrewBryukhov commented on 18 Jan 2017 •
+edited
+COMPOSE_CONVERT_WINDOWS_PATHS missing for docker toolbox by default.

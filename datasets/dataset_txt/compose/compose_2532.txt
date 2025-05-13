@@ -1,0 +1,60 @@
+jpetazzo commented on 5 Apr 2016
+What I do:
+docker-compose -f - up -d <<EOF
+rainbow:
+    image: redis
+    links:
+      - red
+      - green
+      - blue
+
+red:
+    image: redis
+
+green:
+    image: redis
+
+blue:
+    image: redis
+EOF
+docker-compose -f - up -d <<EOF
+rainbow:
+    image: redis
+    links:
+      - red
+      - green
+      - blue
+
+red:
+    image: redis
+
+green:
+    image: redis
+
+blue:
+    image: redis
+    links:
+      - cyan
+      - navy
+
+cyan:
+    image: redis
+
+navy:
+    image: redis
+EOF
+What I expect:
+Container blue is updated since in the 2nd version it has links to cyan and navy
+What I see instead:
+ERROR: for cyan  Conflict. The name "/composebug_cyan_1" is already in use by container 7841361683d7af4c53cac8c698a09a79cb16c8c21d83e9705ff3c36ed3dcc26e. You have to remove (or rename) that container to be able to reuse that name.
+Extra notes:
+$ docker-compose -v
+docker-compose version 1.7.0rc1, build 1ad8866
+This is The Weirdest Thing Ever.
+If I remove a container (e.g. red, green, or navy) everything works fine.
+If I rollback to Compose 1.6.2, all works correctly.
+If I bring up the 2nd stack directly (without going through the 1st stack) all works fine.
+This is executed on a single Engine, after wiping out all containers; running 1.11-rc3.
+I initially had the problem on a much bigger Compose file so I reduced it to the smallest thing that would still crash.
+To make it easy to tweak/test/etc, get this gist: https://gist.github.com/jpetazzo/6902757218d61ad7e2f4bc07ff40053c
+I'm stumped.

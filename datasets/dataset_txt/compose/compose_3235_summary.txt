@@ -1,0 +1,1 @@
+When docker-compose.yml is emtpy, fail with a human readable error message

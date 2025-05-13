@@ -1,0 +1,5 @@
+th3mis commented on 29 Jan 2018
+Hello everyone!
+Almost one year ago --device-cgroup-rule was merged into main branch (moby/moby#22563), but I cannot find any support for this option in latest docker-compose.
+When will this option be added?
+How can I use it now? Maybe some workaround for it?

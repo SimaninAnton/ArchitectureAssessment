@@ -1,0 +1,76 @@
+Rohlik commented on 2 May 2016
+Hello,
+I have this simple docker-compose.yml
+test:
+ build: .
+ ports:
+  - "80"
+When I run docker-compose scale test=5 then this happened:
+Creating and starting tmp_test_1 ... 
+Creating and starting tmp_test_2 ... 
+Creating and starting tmp_test_3 ... 
+Creating and starting tmp_test_4 ... 
+Creating and starting tmp_test_5 ... 
+Building test
+Building test
+Building test
+Building test
+Building test
+Step 1 : FROM busybox
+ ---> 47bcc53f74dc
+Step 2 : EXPOSE 80
+Step 1 : FROM busybox
+ ---> 47bcc53f74dc
+Step 2 : EXPOSE 80
+Step 1 : FROM busybox
+ ---> 47bcc53f74dc
+Step 2 : EXPOSE 80
+ ---> Running in 67c494d6da7d
+ ---> Running in f8fd96e4b336
+ ---> dcacc53a6dcf
+ ---> 8c8c276f9943
+ ---> Running in d49b060238f8
+Removing intermediate container 67c494d6da7d
+Step 3 : CMD ping -c 30 google.cz
+ ---> Running in 28ea5fee9747
+ ---> cb9320a8981c
+Removing intermediate container f8fd96e4b336
+Step 3 : CMD ping -c 30 google.cz
+ ---> 002a4455dd94
+ ---> Running in 526dbfa5015a
+Removing intermediate container d49b060238f8
+Step 3 : CMD ping -c 30 google.cz
+ ---> Running in 9b97d8908d67
+Removing intermediate container 28ea5fee9747
+Successfully built 002a4455dd94
+WARNING: Image for service test was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+ ---> c29188599737
+ ---> 8a749f22b5b1
+Removing intermediate container 9b97d8908d67
+Creating and starting tmp_test_1 ... done
+Creating and starting tmp_test_2 ... done
+Creating and starting tmp_test_3 ... done
+Successfully built 8a749f22b5b1
+WARNING: Image for service test was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+
+ERROR: for tmp_test_5  [Errno 2] No such file or directory: '/tmp/tmpyMpwoc'
+
+ERROR: for tmp_test_4  [Errno 2] No such file or directory: '/tmp/tmpyMpwoc'
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 57, in main
+  File "compose/cli/main.py", line 108, in perform_command
+  File "compose/cli/main.py", line 619, in scale
+  File "compose/service.py", line 238, in scale
+  File "compose/parallel.py", line 60, in parallel_execute
+OSError: [Errno 2] No such file or directory: '/tmp/tmpyMpwoc'
+docker-compose returned -1
+Is it bug?
+My Docker version is:
+Docker version 1.11.0, build 4dc5990
+My compose version is:
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Using RHEL7 - 3.10.0-327.el7.x86_64

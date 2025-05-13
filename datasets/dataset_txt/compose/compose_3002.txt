@@ -1,0 +1,10 @@
+dngferreira commented on 9 Dec 2015
+Hi,
+I am trying to build a elasticsearch cluster using docker swarm (1.0), docker compose(1.51) and the network overlay.
+I'm starting with two nodes: elasticsearch_node_1 and elasticsearch_node_2.
+When connecting node_1 to node_2 works great I can just ping elasticsearch_node_1 using it's container name:
+elasticsearch_node_2$ ping elasticsearch_node_1
+but doing
+elasticsearch_node_2$ ping elasticsearch_node_2
+gives an error, it can't resolve the hostname.
+Is this a known issue or am I doing some thing wrong?

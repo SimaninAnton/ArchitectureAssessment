@@ -1,0 +1,1 @@
+Update documentation to indicate that build / cache_from is available in 2.x

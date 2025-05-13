@@ -1,0 +1,1 @@
+/etc/hosts sometimes corrupted with restart=always at docker daemon restart

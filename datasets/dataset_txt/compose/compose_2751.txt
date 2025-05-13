@@ -1,0 +1,25 @@
+gittycat commented on 18 Feb 2016
+I've noticed that one case where the "ERROR: Container command not found or does not exist." message occurs is when a service refers to a non existing directory in its working_dir: attribute. Having a more helpful message pointing to the problem would had saved me a lot of time instead of focusing on the command: section and not finding anything wrong.
+Here's a quick compose file to replicate the error.
+version: '2'
+
+services:
+  builder:
+    image: golang:1.5.3
+    restart: never
+    working_dir: /go/this-dir-doesnt-exist-and-causes-the-error
+    volumes_from:
+      - data
+    command: ["/bin/true"]
+
+  data:
+    image: golang:1.5.3
+    container_name: data
+    restart: never
+    volumes:
+      - data-volume:/go
+    command: ["/bin/true"]
+
+volumes:
+  data-volume:
+1

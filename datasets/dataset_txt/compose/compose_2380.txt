@@ -1,0 +1,8 @@
+shulhi commented on 20 May 2016
+I have two docker-compose files, docker-compose.yml and production.yml.
+docker-compose.yml uses development.env.
+docker-compose.yml uses production.env
+When building the image like so
+$ docker-compose -f production.yml build
+$ docker-compose -f production.yml up -d
+My environment variables from production.env doesn't get picked up, the one in development.env get picked up.

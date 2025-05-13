@@ -1,0 +1,2 @@
+athyuttamre commented on 27 Jan 2016
+I think it's a little strange that we need to install Compose by downloading a GitHub release. Why not package officially for apt-get?

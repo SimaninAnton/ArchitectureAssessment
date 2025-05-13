@@ -1,0 +1,7 @@
+florentvaldelievre commented on 14 Nov 2014
+Is there a way to specify a tag when running fig up / run ?
+zookeeper:
+ image: registry:5000/zookeeper
+exemple:
+fig run zookeeper:0.21
+it will pull & run registry:5000/zookeeper:0.21

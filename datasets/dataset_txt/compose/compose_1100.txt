@@ -1,0 +1,8 @@
+qoomon commented on 5 Nov 2017 •
+edited
+Hi there,
+I just noticed a tiny flaw on the Docker compose documentation side in the Extension fields section:
+https://docs.docker.com/compose/compose-file/compose-file-v2/#extension-fields
+Markdown seems broken in for 3rd code block.
+And the indention of 4th code block is wrong.
+Kind regards

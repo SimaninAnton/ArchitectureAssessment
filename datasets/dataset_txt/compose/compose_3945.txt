@@ -1,0 +1,2 @@
+razic commented on 8 Feb 2015
+hey. i'm running some containers with net: host and i need some containers to start running before others but obviously cant use links with net host to specify that sort of dependency. any ideas?

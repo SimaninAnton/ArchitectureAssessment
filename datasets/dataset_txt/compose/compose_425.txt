@@ -1,0 +1,18 @@
+samiboukadida commented on 31 Oct 2018
+docker-compose up --build
+Pulling db (mysql:5.7)...
+Traceback (most recent call last):
+File "docker-compose", line 6, in
+File "compose\cli\main.py", line 71, in main
+File "compose\cli\main.py", line 127, in perform_command
+File "compose\cli\main.py", line 1052, in up
+File "compose\cli\main.py", line 1048, in up
+File "compose\project.py", line 471, in up
+File "compose\service.py", line 346, in ensure_image_exists
+File "compose\service.py", line 1181, in pull
+File "site-packages\docker\api\image.py", line 380, in pull
+File "site-packages\docker\auth.py", line 48, in get_config_header
+File "site-packages\docker\auth.py", line 96, in resolve_authconfig
+File "site-packages\docker\auth.py", line 127, in _resolve_authconfig_credstore
+TypeError: init() got an unexpected keyword argument 'environment'
+[8588] Failed to execute script docker-compose

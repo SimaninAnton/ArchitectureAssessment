@@ -1,0 +1,45 @@
+bsander commented on 15 May 2017
+Simplified example:
+docker-compose.yml:
+version: '3.2'
+services:
+  test:
+    build:
+      context: /
+      cache_from:
+      - some-registry.com/image:tag
+additions.yml:
+version: '3.2'
+services:
+  test:
+    # Contains some unrelated settings
+    environment:
+      SOME_VAR: some-value
+$ docker-compose config
+networks: {}
+secrets: {}
+services:
+  test:
+    build:
+      cache_from:
+      - some-registry.com/image:tag
+      context: /
+version: '3.2'
+volumes: {}
+
+$ docker-compose -f docker-compose.yml -f additions.yml config
+networks: {}
+secrets: {}
+services:
+  test:
+    build:
+      context: /
+    environment:
+      SOME_VAR: some-value
+version: '3.2'
+volumes: {}
+In the second command, the cache_from directive is missing from the merged service configuration.
+$ docker-compose --version
+docker-compose version 1.13.0, build 1719ceb
+$ docker --version
+Docker version 17.05.0-ce, build 89658be

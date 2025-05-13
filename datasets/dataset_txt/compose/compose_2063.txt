@@ -1,0 +1,10 @@
+pcgeek86 commented on 16 Sep 2016
+For more complex applications, with many components, it would be useful to be able to make a Docker Compose service depends_on an external docker-compose.yml file.
+Is this something that can be added?
+Cheers,
+Trevor Sullivan
+Docker Captain
+Microsoft MVP: Cloud & Data Center Management
+https://trevorsullivan.net
+https://twitter.com/pcgeek86
+5

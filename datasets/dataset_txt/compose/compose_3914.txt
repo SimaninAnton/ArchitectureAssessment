@@ -1,0 +1,6 @@
+dhauenstein commented on 18 Feb 2015
+Hi,
+is there any way of setting a container's mac address (docker run parameter --mac-address) in the fix/compose config file? Or any additional parameters at all?
+I'd really love to see this feature implemented to allow low-level access to the containers, if needed.
+Cheers,
+Daniel

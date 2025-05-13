@@ -1,0 +1,1 @@
+Docker Compose depending on another Docker Compose

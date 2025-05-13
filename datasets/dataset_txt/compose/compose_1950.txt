@@ -1,0 +1,24 @@
+chen-xin commented on 7 Nov 2016
+Environment:
+Microsoft windows 10.0.14393
+Docker version 1.12.2, build bb80604
+docker-compose version 1.8.1, build 004ddae
+My docker-compose.yml has a container to build as :
+version: '2'
+services:  
+  db:
+    build: pg_dict
+And the Dockerfile in pg_dict directory:
+FROM azurewind.psqlcnft
+COPY dicts /data/dicts
+Then I first build with docker-compose:
+$ docker-compose build db
+$ winpty exec -it --rm docker_db bash
+root@f3c8e552dc75:/# ls /data/
+?ļ?????????.txt  ???????ʻ???.txt  ????????.txt.new.gz  רҵ.txt.new.gz
+If I build with docker build:
+$ cd pg_dict
+$ docker build  -t docker_db .
+$ winpty exec -it --rm docker_db bash
+root@cb2d6f78e44b:/# ls /data/
+专业.txt.new.gz  四级行政区划.txt  行政区域.txt.new.gz

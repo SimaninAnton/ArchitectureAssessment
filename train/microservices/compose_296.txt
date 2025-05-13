@@ -1,0 +1,54 @@
+nmvega commented on 4 Feb 2019 •
+edited
+Hello Friends:
+Below is my v3.5 docker-compose.yml definition file. It has an analytics network (using an alias of the same name), and where both included services connect to said network to communicate with one another. This works.
+However, I want these services (ports) exposed to the HOST machine, as well. I think there's a way to do that by defining an additional network and/or specifying additional ports: entries within the services themselves, but I can't figure out exactly how because the documentation is confusing and version-specific (moving targets).
+Without destroying the below (because it works internally), what additions do I make (and where) to expose both services to the HOST machine as well?
+Thank you!
+version: '3.5'
+
+networks:
+  analytics:
+    name: analytics
+    driver: bridge
+
+  # ===========================================
+  # Service: Zookeeper
+  # ===========================================
+  zookeeper:
+    image: 'wurstmeister/zookeeper:latest'
+    container_name: analytics-ZooKeeper
+    networks:
+      - analytics
+    ports:
+      - "2181:2181"
+    volumes:
+      - ./data.d/zookeeper.d:/opt/zookeeper-3.4.9/data
+  # ===========================================
+
+  # ===========================================
+  # Service: Kafka
+  # ===========================================
+  kafka:
+    build:
+      context: ./kafka.d
+      dockerfile: Dockerfile
+    image: nmvega/kafka:latest
+
+    networks:
+      - analytics
+    ports:
+      - 9092-9094:9092 # For one to three Kafka brokers.
+
+    environment:
+      #KAFKA_ADVERTISED_HOST_NAME: vps00             # Before FIX
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.180 # After FIX
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data.d/kafka.d:/kafka
+
+    depends_on:
+      - zookeeper
+  # ===========================================

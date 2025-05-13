@@ -1,0 +1,1 @@
+project-name -p is sanitized, resulting container name difficult to read

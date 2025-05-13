@@ -1,0 +1,7 @@
+dkirrane commented on 4 Dec 2014
+Reproduce:
+https://github.com/dkirrane/docker-env-issue
+When I run fig up the parent container 'web' does not have access to the ENV variables of the linked child container 'db'
+docker version 1.3.2
+fig 1.0.0
+Same issue does not occur when I run the containers directly with docker

@@ -1,0 +1,14 @@
+rainleon commented on 28 Dec 2016
+➜ docker-registry git:(develop) docker -v
+Docker version 1.12.5, build 7392c3b
+➜ docker-registry git:(develop) docker-compose -v
+docker-compose version 1.9.0, build 2585387
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 65, in main
+File "compose/cli/main.py", line 117, in perform_command
+File "compose/cli/main.py", line 849, in up
+File "compose/project.py", line 382, in up
+File "compose/service.py", line 297, in ensure_image_exists
+File "compose/service.py", line 319, in image
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe5 in position 33: ordinal not in range(128)

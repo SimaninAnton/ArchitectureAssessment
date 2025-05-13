@@ -1,0 +1,10 @@
+onekit commented on 27 Nov 2016
+Usually, if I launch docker-compose up -d, it will build all images, then create all of them in order mentioned in depends_on chain of docker-compose.yml.
+What if approach with launching one by one will let remove "wait-for-it.sh" scripts. Time of start MySQL is near 5 minutes. Build of container usually takes even more.
+Not important to know when container has been started.
+Much more important to know when service become is up and ready to work.
+Change order of build & create in docker-compose. Allow order, not only build 1, build 2, build 3, create 1, create2, create3, but build1&create1, build3&create3, build2&create2.
+Upgrade depends_on for waiting opening port (this data exists in docker-compose.yml)
+while ! curl --output /dev/null --silent --head --fail http://172.25.0.1:3306; do sleep 1 && echo -n .; done;
+Finally we have time economy, cause while one container is building, previous already start to initialize.
+It allow put logic of Symfony project with Fixtures loading after MySQL is up.

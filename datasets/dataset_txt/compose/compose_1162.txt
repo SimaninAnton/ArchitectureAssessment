@@ -1,0 +1,85 @@
+vishalseshagiri commented on 9 Oct 2017
+These are my configs :
+docker-compose version 1.16.1, build 6d1ac21
+Docker version 17.06.0-ce, build 02c1d87
+Docker compose file version 3.3
+I tried giving a certain user created inside docker some sudo level permissions. But on stopping and restarting the container all the changes (in the /etc/sudoers.d/user file) were lost. Similar experience with the /etc/hosts file, all ip=>domain mappings were lost. Is it a caveat of docker containers or am I doing something wrong here ? @shin- had previously mentioned that if the compose containers run on the legacy bridge network I might face this issue, but I dont think this the issue in my case.
+The network that my compose containers run on is frappedocker_default
+My docker network ls results :
+NETWORK ID          NAME                   DRIVER              SCOPE
+d487147224bb        bridge                 bridge              local
+8f40b88ca67e        frappedocker_default   bridge              local
+b917908e5bea        host                   host                local
+c48fb6fff012        none                   null                local
+My docker inspect frappedocker_default results :
+[
+    {
+        "Name": "frappedocker_default",
+        "Id": "8f40b88ca67e32c36aa3a6e349fe9721e09fcd8bcd5a28cd8e0001a176658a4e",
+        "Created": "2017-10-08T17:49:32.54174136+05:30",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.21.0.0/16",
+                    "Gateway": "172.21.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "5241bc7bdffc33063f62a565f269175fb42409b162fd7558a6b25f21f1187298": {
+                "Name": "redis-socketio",
+                "EndpointID": "0c871cf2546482b715836127c15c4301c540a4e497cece696a68f481322f1e23",
+                "MacAddress": "02:42:ac:15:00:04",
+                "IPv4Address": "172.21.0.4/16",
+                "IPv6Address": ""
+            },
+            "53e3c57b6400345318112176692b1342f37b9263bf19f451725b6819416c5d67": {
+                "Name": "redis-queue",
+                "EndpointID": "ef21063c2cf3860bf7698a159862316d6f144ffe7cceb2fbe3080fff2f79fbb3",
+                "MacAddress": "02:42:ac:15:00:05",
+                "IPv4Address": "172.21.0.5/16",
+                "IPv6Address": ""
+            },
+            "8197d8a050fbcd7d180a95d51443d54cd6007bc7091a7aaf4b8ff5a1795e054c": {
+                "Name": "frappe",
+                "EndpointID": "d28d64ee8bf8e9107c8f7ab98325986ab58dc0201e1500b1048015edd59c7e65",
+                "MacAddress": "02:42:ac:15:00:06",
+                "IPv4Address": "172.21.0.6/16",
+                "IPv6Address": ""
+            },
+            "a36ccabf4b71a1771655a93537bc323f35508227386c5e6d6bce7cf7c430c73a": {
+                "Name": "redis-cache",
+                "EndpointID": "8bd26652e66d1a1b17c73386e9a82620ca16185f4414c9fcbb3bd6b8c7d9d85d",
+                "MacAddress": "02:42:ac:15:00:03",
+                "IPv4Address": "172.21.0.3/16",
+                "IPv6Address": ""
+            },
+            "ca66b7d8c090b959195453d179ef2c0d39addb678ceb8139c353667ec331d14d": {
+                "Name": "mariadb",
+                "EndpointID": "cf0816610193005397de435c81cb42a788099e3fc3808318cb0cb498d0782c51",
+                "MacAddress": "02:42:ac:15:00:02",
+                "IPv4Address": "172.21.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "default",
+            "com.docker.compose.project": "frappedocker"
+        }
+    }
+]
+Previously posted on the docker.github.io repo
+1

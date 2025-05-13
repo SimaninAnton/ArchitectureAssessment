@@ -1,0 +1,56 @@
+mattekenpis commented on 24 May 2016 •
+edited
+Hi!
+I tried to convert a docker-compose file from v1 file v2.
+I got no error while building in both case.
+When I launched my container with "docker-compose up..." it was working well with v1, but I got an error with v2 (see below).
+I thought it was by docker-compose.yml which contained error.
+But I tried to build and launch another very simple project from github:
+https://github.com/stcalica/docker-rabbit
+And I experience the same error:
+docker-compose up
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 58, in main
+  File "compose/cli/main.py", line 109, in perform_command
+  File "compose/cli/main.py", line 734, in up
+  File "compose/project.py", line 372, in up
+  File "compose/project.py", line 413, in initialize
+  File "compose/network.py", line 162, in initialize
+  File "compose/network.py", line 47, in ensure
+  File "compose/network.py", line 82, in inspect
+  File ".tox/py27/lib/python2.7/site-packages/docker/utils/decorators.py", line 32, in wrapper
+docker.errors.InvalidVersion: inspect_network is not available for version < 1.21
+docker-compose returned -1
+Here are my versions of Docker and docker-compose:
+Engine version
+[__]$ docker version
+Client:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:30:23 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:30:23 2016
+ OS/Arch:      linux/amd64
+Compose version
+[__]$ docker-compose version
+docker-compose version 1.7.1, build 0a9ab35
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Python bindings
+[__]$ pip list | grep docker
+docker-compose (1.7.1)
+docker-py (1.8.1)
+dockerpty (0.4.1)
+It seems that the problem comes from Docker Client API... But I can't find how to solve that.
+I tried to reinstall both Docker and docker-compose but this didnt solved the problem.
+Any idea?

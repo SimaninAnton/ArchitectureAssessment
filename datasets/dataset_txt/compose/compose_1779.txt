@@ -1,0 +1,57 @@
+Billiam commented on 20 Jan 2017
+Adding a docker-compose.override.yml causes the service_healthy under depends_on.condition to be replaced with the default service_starting value instead.
+docker-compose.yml
+version: '2.1'
+
+services:
+  main:
+    image: alpine
+    command: /usr/bin/top
+    depends_on:
+      secondary:
+        condition: service_healthy
+
+  secondary:
+    image: alpine
+    command: /usr/bin/top
+    healthcheck:
+      test: exit 1
+$ docker-compose --version
+docker-compose version 1.10.0, build 4bd6f1a
+$ docker-compose config
+networks: {}
+services:
+  main:
+    command: /usr/bin/top
+    depends_on:
+      secondary:
+        condition: service_healthy
+    image: alpine
+  secondary:
+    command: /usr/bin/top
+    healthcheck:
+      test: exit 1
+    image: alpine
+version: '2.1'
+volumes: {}
+But, after adding a docker-compose.override.yml:
+docker-compose.override.yml
+version: '2.1'
+
+services: {}
+$ docker-compose config
+networks: {}
+services:
+  main:
+    command: /usr/bin/top
+    depends_on:
+      secondary:
+        condition: service_started
+    image: alpine
+  secondary:
+    command: /usr/bin/top
+    healthcheck:
+      test: exit 1
+    image: alpine
+version: '2.1'
+volumes: {}

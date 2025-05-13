@@ -1,0 +1,1 @@
+Switch to boot2docker as recommended way to run Docker on OS X

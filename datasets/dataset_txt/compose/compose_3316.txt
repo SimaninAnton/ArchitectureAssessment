@@ -1,0 +1,34 @@
+Contributor
+bfirsh commented on 5 Sep 2015
+It is a common pattern to define a base service which you want several services to extend, but it's currently very verbose to do this:
+docker-compose-base.yml
+base:
+  environment:
+    FOO: bar
+docker-compose.yml
+web:
+  extends:
+    file: docker-compose-base.yml
+    service: base
+  ...
+db:
+  extends:
+    file: docker-compose-base.yml
+    service: base
+  ...
+It should be possible to extend an incomplete service in a single compose file. Something like this:
+base:
+  abstract: true
+  environment:
+    FOO: bar
+web:
+  extends:
+    service: base
+  ...
+db:
+  extends:
+    service: base
+Design decisions:
+How should a service be marked as a service that shouldn't be run? (I've used "abstract" in the example above for the sake of illustration, pinched from Django's "abstract" models.)
+7
+1

@@ -1,0 +1,10 @@
+Contributor
+funkyfuture commented on 17 May 2015
+the extra_hosts option doesn't support IPv6 yet.
+since the host is seperated from the ip with a colon, how would Compose expect the ip to be given?
+extra_hosts:
+  - host:1111:2222:3333:4444:5555:6666:7777:8888
+or
+extra_hosts:
+  - host:[1111:2222:3333:4444:5555:6666:7777:8888]
+or any different?

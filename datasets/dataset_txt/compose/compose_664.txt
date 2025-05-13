@@ -1,0 +1,6 @@
+lgcosta commented on 18 May 2018
+The name down is very confusing to specify the stop and removing of the containers and the environment. Generates confusion with the stop command, being namesake to leave an environment down, without cleaning.
+I think it's more consistent to use a clean, clear or purge variant command name, example:
+clean               Stop and remove containers, networks, images, and volumes
+Thanks
+1

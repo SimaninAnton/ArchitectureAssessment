@@ -1,0 +1,1 @@
+the first healthcheck should happen as soon as `min(start_period, interval)` is reached

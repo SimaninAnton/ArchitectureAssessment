@@ -1,0 +1,37 @@
+shikhovmy commented on 10 Mar 2017 •
+edited
+Here is a simple docker-compose.yml
+version: '2.1'
+services:
+  example:
+    build:
+      context: ./dir
+    image: hello-world
+$ docker-compose up
+Building example
+ERROR: Cannot locate specified Dockerfile: Dockerfile
+It happens when hello-world image cannot be found locally. After I pull it manually docker-compose up works as expected
+My system's info:
+OS Mac OS Sierra 10.12.3 (16D32)
+$ docker version
+Client:
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   60ccb22
+ Built:        Thu Feb 23 10:40:59 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.03.0-ce
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   3a232c8
+ Built:        Tue Feb 28 07:52:04 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+$ docker-compose version
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016

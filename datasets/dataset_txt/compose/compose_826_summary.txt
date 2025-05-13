@@ -1,0 +1,1 @@
+docker-compose up fails if network attached to container is removed

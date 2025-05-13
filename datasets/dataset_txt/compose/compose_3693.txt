@@ -1,0 +1,34 @@
+gomex commented on 24 Apr 2015
+I am trying to set some memory limit in my docker-compose file:
+  image: gomex/tomcat8:v2
+  mem_limit: 2000m
+  ports:
+   - "8080:8080"
+  volumes:
+   - /containers/sisaudev/logs:/usr/local/apache-tomcat-8.0.21/logs
+   - /containers/sisaudev/webapps:/usr/local/apache-tomcat-8.0.21/webapps
+  environment:
+   - JAVA_MAXMEMORY=1024
+   - JAVA_STARTMEMORY=1024
+I start with that command:
+docker-compose -f /containers/compose/docker-compose.yml -p SISAU up -d
+I got this container:
+# docker-compose -f /containers/compose/docker-compose.yml -p SISAU ps
+       Name           Command    State                Ports              
+-------------------------------------------------------------------------
+sisau_sisaudev_1     tomcat.sh   Up      8009/tcp, 0.0.0.0:8080->8080/tcp
+When I try see stats information, I can't get the limit :(
+# docker stats sisau_sisaudev_1
+CONTAINER           CPU %               MEM USAGE/LIMIT     MEM %               NET I/O
+sisau_sisaudev_1    0.05%               0 B/4.859 GiB       0.00%               49.38 KiB/62.74 KiB
+What should be it? Looks like docker-compose don't send to docker that information :(
+# docker inspect sisau_sisaudev_1 | grep -i memory
+            "JAVA_MAXMEMORY=1024",
+            "JAVA_STARTMEMORY=1024",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "Memory": 0,
+        "MemorySwap": 0,
+My version:
+# docker-compose --version docker-compose 1.2.0
+# docker version Client version: 1.6.0 Client API version: 1.18 Go version (client): go1.4.2 Git commit (client): 4749651 OS/Arch (client): linux/amd64 Server version: 1.6.0 Server API version: 1.18 Go version (server): go1.4.2 Git commit (server): 4749651 OS/Arch (server): linux/amd64

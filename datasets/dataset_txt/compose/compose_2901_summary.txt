@@ -1,0 +1,1 @@
+Containers should be discoverable from their container id

@@ -1,0 +1,9 @@
+Contributor
+andrerom commented on 27 Jul 2017 •
+edited
+Case is:
+Any given software that users might install several times for several projects (blog system , cms, forum, ..)
+With usage of -f to specify docker compose file to not clutter root (for instance several files for misc configurations, or some other reason)
+Currently you'll either have to live with docker compose using the folder name of the docker compose file for project name like deploy or docker, or force your users to specify COMPOSE_PROJECT_NAME, or force users to specify --project-directory . in all usage of docker-compose like docker-compose --project-directory . ps which is easy to forget.
+With COMPOSE_PROJECT_DIRECTORY=. this would not be an issue.
+3

@@ -1,0 +1,13 @@
+wrouesnel commented on 9 Feb 2017
+I'd like to be able to do something like the following:
+version: '2'
+
+networks:
+  net1:
+    driver: custom
+  net2:
+    driver: custom
+    opts:
+      join_network: $compose_net1_name
+Basically I'd like to declare a dependency where I can inject whatever the name of the created network for net1 is into the data provided to net2 when it is created.
+Really, I'd like to be able to do this with everything compose creates - containers, images and volumes.

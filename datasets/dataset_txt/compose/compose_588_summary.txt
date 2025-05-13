@@ -1,0 +1,1 @@
+"libreadline.so.7: no version information available" (1.22.0-rc1 and 1.22.0-rc2)

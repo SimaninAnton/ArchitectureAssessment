@@ -1,0 +1,43 @@
+2trc commented on 26 Aug 2016 •
+edited
+Setup
+I have deployed a swarm standalone cluster on 3 nodes (each behaving as manager and regular node) with Zookeeper as the discovery service (mainly following Build a Swarm cluster for production). Everything seems to be working (docker info shows 3 healthy nodes). I can run containers as well.
+So I tried using docker-compose to test the 'scale' functionality. I followed this tutorial: How to scale Docker Containers with Docker-Compose.
+Problem
+I was surprised to see that all containers were deployed on the same host. Then I tried scaling the containers (by 10) but they remained on the same node.
+Is this the expected behavior?
+How do I get the load to be shared across nodes?
+PS: I just noticed that docker-compose now has some affinity/filter/scheduling but I didn't use any of those.
+Environment details
+docker --version
+Docker version 1.12.1, build 23cf638
+docker version
+Client:
+ Version:      1.12.1
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   23cf638
+ Built:        Thu Aug 18 05:22:43 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.2.5
+ API version:  1.22
+ Go version:   go1.5.4
+ Git commit:   27968ed
+ Built:        Thu Aug 18 23:10:29 UTC 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.8.0, build 94f7016
+docker-py version: 1.9.0
+CPython version: 2.7.6
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+docker-compose.yml
+version: '2'
+services:
+  web:
+    image: dockercloud/hello-world
+    ports:
+      - 8080
+  redis:
+    image: redis

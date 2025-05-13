@@ -1,0 +1,13 @@
+ailjushkin commented on 19 Dec 2017
+I faced with issue when docker-compose says me that it does not support 3.4 version of docker-compose file.
+It does not work with 3.3 also.
+And also does not work with 2.3.
+It works only with version: "2.0".
+Please look behind to find my installed versions:
+sudo docker-compose up -d
+ERROR: Version in "./docker-compose.yml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify a version of "2" (or "2.0") and place your service definitions under the services key, or omit the version key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+docker-compose --version
+docker-compose version 1.17.1, build 6d101fb
+docker --version
+Docker version 17.09.1-ce, build 19e2cf6

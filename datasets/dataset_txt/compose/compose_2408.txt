@@ -1,0 +1,5 @@
+terracott commented on 11 May 2016
+I'm using compose file, which contains several services.
+Some images should be pulled from docker hub, some images should be built local.
+When I run docker-compose pull, docker-compose trying to pull local images. Now my local images have unique names, therefore no conflict.
+How I can distinguish local from non-local images?

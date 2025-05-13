@@ -1,0 +1,158 @@
+zsuzhengdu commented on 7 Nov 2016 •
+edited
+When the number of lines of expected output is bigger than the number of rows (echo $LINES) of terminal, a truncated terminal output is noticed .
+How to reproduce:
+create a docker-compose.yml,
+~/test (master) $ cat docker-compose.yml
+version: '2'
+services:
+  web:
+    image: dockercloud/hello-world
+    ports:
+      - 8080
+    networks:
+      - front-tier
+      - back-tier
+
+  redis:
+    image: redis
+    links:
+      - web
+    networks:
+      - back-tier
+
+  lb:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - web
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
+run docker-compose start and scale the web service to 100, which is bigger than the number of $LINES of current visible terminal.
+run docker-compose stop. Noticed that some terminal output is truncated or missing updates, when scrolling up the terminal. The problem might be caused by failure of moving 'curser' up to expected location, but to location (0, 0), which is constrained by the current visible terminal boundaries. Below is a output sample of running docker-compose stop
+~/test (master) $ docker-compose stop
+Stopping test_web_91 ...
+Stopping test_web_94 ...
+Stopping test_web_95 ...
+Stopping test_web_85 ...
+Stopping test_web_63 ...
+Stopping test_web_96 ...
+Stopping test_web_100 ...
+Stopping test_web_88 ...
+Stopping test_web_98 ...
+Stopping test_web_79 ...
+Stopping test_web_97 ...
+Stopping test_web_84 ...
+Stopping test_web_86 ...
+Stopping test_web_89 ...
+Stopping test_web_93 ...
+Stopping test_web_99 ...
+Stopping test_web_82 ...
+Stopping test_web_80 ...
+Stopping test_web_90 ...
+Stopping test_web_81 ...
+Stopping test_web_68 ...
+Stopping test_web_87 ...
+Stopping test_web_83 ...
+Stopping test_web_62 ...
+Stopping test_web_73 ...
+Stopping test_web_85 ... done
+Stopping test_web_64 ... done
+Stopping test_web_66 ... done
+Stopping test_web_92 ... done
+Stopping test_web_60 ... done
+Stopping test_web_61 ... done
+Stopping test_web_70 ... done
+Stopping test_web_58 ... done
+Stopping test_web_72 ... done
+Stopping test_web_51 ... done
+Stopping test_web_71 ... done
+Stopping test_web_78 ... done
+Stopping test_web_74 ... done
+Stopping test_web_65 ... done
+Stopping test_web_69 ... done
+Stopping test_web_76 ... done
+Stopping test_web_75 ... done
+Stopping test_web_77 ... done
+Stopping test_web_52 ... done
+Stopping test_web_67 ... done
+Stopping test_web_46 ... done
+Stopping test_web_50 ... done
+Stopping test_web_54 ... done
+Stopping test_web_56 ... done
+Stopping test_web_42 ... done
+Stopping test_web_53 ... done
+Stopping test_web_55 ... done
+Stopping test_web_57 ... done
+Stopping test_web_43 ... done
+Stopping test_web_49 ... done
+Stopping test_web_48 ... done
+Stopping test_web_45 ... done
+Stopping test_web_47 ... done
+Stopping test_web_40 ... done
+Stopping test_web_44 ... done
+Stopping test_web_38 ... done
+Stopping test_web_39 ... done
+Stopping test_web_41 ... done
+Stopping test_web_37 ... done
+Stopping test_web_35 ... done
+Stopping test_web_30 ... done
+Stopping test_web_31 ... done
+Stopping test_web_25 ... done
+Stopping test_web_29 ... done
+Stopping test_web_36 ... done
+Stopping test_web_27 ... done
+Stopping test_web_32 ... done
+Stopping test_web_34 ... done
+Stopping test_web_21 ... done
+Stopping test_web_24 ... done
+Stopping test_web_33 ... done
+Stopping test_web_28 ... done
+Stopping test_web_22 ... done
+Stopping test_web_26 ... done
+Stopping test_web_23 ... done
+Stopping test_web_20 ... done
+Stopping test_web_19 ... done
+Stopping test_web_16 ... done
+Stopping test_web_18 ... done
+Stopping test_web_15 ... done
+Stopping test_web_17 ... done
+Stopping test_web_14 ... done
+Stopping test_web_13 ... done
+Stopping test_web_9 ... done
+Stopping test_web_12 ... done
+Stopping test_web_11 ... done
+Stopping test_web_10 ... done
+Stopping test_web_8 ... done
+Stopping test_web_7 ... done
+Stopping test_web_6 ... done
+Stopping test_web_5 ... done
+Stopping test_web_4 ... done
+Stopping test_web_2 ... done
+Stopping test_web_3 ... done
+Stopping test_redis_1 ... done
+Stopping test_lb_1 ... done
+Stopping test_web_1 ... done
+Testing environment:
+~/test (master) $ docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+~/test (master) $ echo $LINES
+78
+~/test (master) $ sw_vers
+ProductName: Mac OS X
+ProductVersion: 10.12.1
+BuildVersion: 16B2555
+1

@@ -1,0 +1,29 @@
+pocesar commented on 11 Mar 2015
+I have this setting in my docker-compose.yml:
+volumes:
+    image: "volumes"
+    volumes:
+        - "/var/www:/srv/www"
+        - "/var/staging:/srv/staging"
+web:
+    image: "web:staging"
+    ports:
+        - "443:443"
+        - "80:80"
+    volumes_from:
+        - "volumes"
+volumes image is just "tianon/true", when doing docker-compose run web, the root_volumes_1 container is created but the host aren't mounted:
+{
+  "Volumes": {
+        "/srv/staging": "/var/lib/docker/vfs/dir/61023818c6fcccbd9f14511ed61dd3fd2cceb8d08b2b8c60bab3a370caca681f",
+        "/srv/www": "/var/lib/docker/vfs/dir/b6d5dc1491f92a621c3b008f23b1aa92b18149e90bcbf5890ba48e6f67709399"
+  }
+}
+When I start it manually using docker-compose run volumes, it mounts correctly (and creates it as root_volumes_run_1 but root_web_run_1 won't see it):
+{
+    "Volumes": {
+        "/srv/staging": "/var/staging",
+        "/srv/www": "/var/www"
+    },
+}
+Using Docker 1.5.0 and docker-compose 1.1.0.

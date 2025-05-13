@@ -1,0 +1,1 @@
+json-file logs are not valid JSON

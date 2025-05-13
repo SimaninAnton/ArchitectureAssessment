@@ -1,0 +1,16 @@
+renanbr commented on 4 May 2017
+I would like to set a service environment variable, but using a value configured in other service.
+I didn't find how to do it in the docs, so i'm putting here a sample of what I intend to do.
+version: "2"
+services:
+    php:
+        image: php:7-apache
+        links:
+            - mysql
+        environment:
+            DB_NAME: i_would_like_to_use_the_MYSQL_DATABASE_defined_in_mysql_service
+    mysql:
+        image: mysql:5
+        environment:
+            MYSQL_DATABASE: single_place_to_configure_the_db_name
+Is there some way to do that? (I don't want to depend on the .env file)

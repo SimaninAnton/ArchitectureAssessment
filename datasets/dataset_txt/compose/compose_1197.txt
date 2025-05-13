@@ -1,0 +1,26 @@
+matclab commented on 19 Sep 2017
+$ docker --version                                     
+Docker version 17.07.0-ce, build 87847530f7
+$ docker-compose --version
+docker-compose version 1.16.1, build unknown
+$ uname -a
+Linux machine 4.12.12-1-ARCH #1 SMP PREEMPT Sun Sep 10 09:41:14 CEST 2017 x86_64 GNU/Linux
+With the docker-compose.yml file:
+version: '2'
+services:
+   test:
+      build: .
+      domainname: rendre.fr
+and the Dockerfile:
+From alpine
+
+RUN apk update && apk add net-tools
+
+CMD ["/bin/sh", "-c", "hostname;domainname; nisdomainname"]
+Doing docker-compose up --build I get the following output:
+test_1  | 88c5aee837f5.rendre.fr
+test_1  | (none)
+test_1  | (none)
+Whereas I would have expected to see rendre.fr instead of (none) for the two last one.
+This problem prevent NIS from working inside the container.
+The problem was initially observed in an ubuntu based image.

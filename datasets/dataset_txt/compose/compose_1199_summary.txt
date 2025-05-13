@@ -1,0 +1,1 @@
+Dependees should be stopped when the dependent is stopped with CTRL+C

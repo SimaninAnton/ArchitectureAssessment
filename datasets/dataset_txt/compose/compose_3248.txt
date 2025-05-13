@@ -1,0 +1,5 @@
+rosskevin commented on 30 Sep 2015
+docker-compose version: 1.4.0
+My case is multi-project, multi-environment concurrent CI builds. While I can use labels to find my containers, the output of docker ps is almost jibberish.
+For example, my web container started with -p acme_test_333 turns into a container named acmetest333_web_1. Is there a reason that -p is being sanitized with re.sub(r'[^a-z0-9]', '', name.lower())?
+7

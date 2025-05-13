@@ -1,0 +1,1 @@
+Docker compose's ports doesn't map host range mapping to single container port

@@ -1,0 +1,75 @@
+armpogart commented on 21 Feb 2018 •
+edited
+I have CI running docker-compose and my configuration was working until recently. Not sure on which version of docker-compose my image was before (I've updated the image), but now I have following:
+Image is base on docker:latest, docker-compose is installed through:
+RUN apk add --no-cache py-pip
+RUN pip install docker-compose
+$ docker version
+Client:
+ Version: 18.02.0-ce
+ API version: 1.32 (downgraded from 1.36)
+ Go version: go1.9.3
+ Git commit: fc4de44
+ Built: Wed Feb  7 21:12:37 2018
+ OS/Arch: linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 17.09.0-ce
+  API version: 1.32 (minimum version 1.12)
+  Go version: go1.8.3
+  Git commit: afdb6d4
+  Built: Tue Sep 26 22:42:49 2017
+  OS/Arch: linux/amd64
+  Experimental: false
+$ docker-compose version
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.14
+OpenSSL version: LibreSSL 2.6.3
+Following environment variables are populated: DOCKER_HOST, DOCKER_TLS_VERIFY="1" and ca.pem, cert.pem and key.pem are copied to ~/.docker folder. (P.S. tried also DOCKER_TLS_VERIFY=1 and DOCKER_TLS_VERIFY="True")
+On any docker-compose command (ps, pull) I get following error (some values are replaced with xxxxxx):
+$ docker-compose --verbose pull
+compose.config.config.find: Using configuration files: xxxxxx
+docker.auth.find_config_file: Trying paths: ['/root/.docker/config.json', '/root/.dockercfg']
+docker.auth.find_config_file: Found file at path: /root/.docker/config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Found entry (registry=u'xxxxxx', username=u'xxxxxx')
+docker.auth.load_config: Found 'HttpHeaders' section
+urllib3.connectionpool._new_conn: Starting new HTTPS connection (1): xxxxxx
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 121, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 40, in project_from_options
+    override_dir=options.get('--project-directory'),
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 118, in get_project
+    host=host, environment=environment
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 93, in get_client
+    version_info = six.iteritems(client.version())
+  File "/usr/lib/python2.7/site-packages/docker/api/daemon.py", line 177, in version
+    return self._result(self._get(url), json=True)
+  File "/usr/lib/python2.7/site-packages/docker/utils/decorators.py", line 46, in inner
+    return f(self, *args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/docker/api/client.py", line 191, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/lib/python2.7/site-packages/requests/sessions.py", line 521, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/lib/python2.7/site-packages/requests/sessions.py", line 508, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/site-packages/requests/sessions.py", line 618, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/site-packages/requests/adapters.py", line 506, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='xxxxxx', port=2376): Max retries exceeded with url: /v1.25/version (Caused by SSLError(SSLError(1, u'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:661)'),))
+As you see docker connects to host as it shows daemon version and the same configuration was working until updating the image (and as a result docker-compose).
+The workaround now is to use all the flags with docker-compose directly (as if I understand it correctly, it just ignore environment variables):
+$ docker-compose -H xxxxxx --tlsverify --tlscacert ~/.docker/ca.pem --tlscert ~/.docker/cert.pem --tlskey ~/.docker/key.pem ps
+It may be related to following issues/PRs: #5632, #5593, #5634
+I'm almost sure that this is some kind of regression that was introduced in 1.19.0
+P.S. Not sure if it is important but the CI is docker in docker setup.

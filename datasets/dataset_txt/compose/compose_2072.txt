@@ -1,0 +1,26 @@
+TDaglis commented on 12 Sep 2016
+I'm running docker-compose cli inside a Cygwin Terminal.
+The logs produced after running docker-compose up as well as docker-compose logs -f do not stop after terminating the processes with Ctrl-C.
+Things I noticed (they apply to both commands):
+After running docker-compose up, ps in cygwin terminal shows 1 docker-compose command, while powershell shows 2 docker-compose commands.
+Cygwin Terminal
+PID PPID PGID WINPID TTY UID STIME COMMAND
+2616 13476 2616 11436 pty0 197609 14:23:07 /usr/bin/docker-compose
+Powershell
+ProcessID ParentProcessID CommandLine
+2616 13080 "C:\cygwin64\bin\bash.exe"
+11436 2616 C:\cygwin64\bin\docker-compose up
+408 11436 C:\cygwin64\bin\docker-compose up
+Ctrl-C kills the Cygwin process, instantly releases the prompt, but won't actually stop the logs nor will kill the process. The signal appears to never propagate to docker-compose up as it continues normally, without ever attempting to stop gracefully. After Ctrl-C, Cygwin Terminal no longer sees a docker-compose process, while Powershell still has the following:
+ProcessID ParentProcessID CommandLine
+408 11436 C:\cygwin64\bin\docker-compose up
+Why is this happening?
+Windows 10
+Cygwin 2.5.2
+Python 2.7.10
+$ docker-compose version
+docker-compose version 1.8.0, build d988a55
+docker-py version: 1.9.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+installed with wget https://github.com/docker/compose/releases/download/1.8.0/docker-compose-Windows-x86_64.exe -O /usr/bin/docker-compose

@@ -1,0 +1,35 @@
+atrauzzi commented on 31 Oct 2015
+Trying to run docker-compose up, my first container with a bind mount seems to be failing:
+compose.cli.main.main: Cannot start container b097f0e6f952c1b40fd25f98f64ec27babe9efbfeabf224be939f07c87a9cd35: [8] System error: no such file or directory
+Here's the relevant portion of my docker-compose.yaml:
+search:
+
+  container_name: dev_search
+  image: elasticsearch
+
+  volumes:
+    - ./elasticsearch/docker-entrypoint.sh:/docker-entrypoint.sh
+    - ./elasticsearch/config:/usr/share/elasticsearch/config
+    - ./elasticsearch/data:/usr/share/elasticsearch/data
+
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+Docker Compose version:
+$ docker-compose --version
+docker-compose version: 1.5.0rc3
+Docker version:
+$ docker --version
+Docker version 1.8.3, build f4bf5c7
+Docker Machine version:
+$ docker-machine --version
+C:\Program Files\Docker Toolbox\docker-machine.exe version 0.4.1 (e2c88d6)
+Other fun facts:
+Windows 10
+Project runs fine on OSX and Linux
+docker-machine ssh default and it looks like all the vboxsf mounts are good
+Containers seem to be building fine, phewf!
+cc. #1085
+cc. #2158
+cc. #2128
+Apologies if it seems like this is a duplicate, I haven't seen any momentum on getting this resolved and hopefully I'm not being dramatic when I say: This is quite a blocker and I'd love to be able to continue helping with testing my real project on Windows.

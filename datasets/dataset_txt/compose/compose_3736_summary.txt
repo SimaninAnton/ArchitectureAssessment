@@ -1,0 +1,1 @@
+APIError: 500 Server Error on first docker-compose up / build

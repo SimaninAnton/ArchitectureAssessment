@@ -1,0 +1,1 @@
+"docker-compose exec" does not write to STDERR

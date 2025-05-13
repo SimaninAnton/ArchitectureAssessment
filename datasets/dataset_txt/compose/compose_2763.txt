@@ -1,0 +1,18 @@
+nottrobin commented on 16 Feb 2016
+Even though the latest release mentions depends_on (documented here):
+There's a new depends_on option for specifying dependencies between services.
+I can't get it to work:
+$ docker-compose --version
+docker-compose version 1.6.0, build d99cad6
+$ docker-compose up
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+Unsupported config option for web: 'depends_on'
+Here's the relevant section of my docker-compose.yml:
+web:
+  build: .
+  ports:
+    - "8010:5000"
+  links:
+    - db
+  depends_on:
+    - db-ready

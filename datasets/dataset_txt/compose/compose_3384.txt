@@ -1,0 +1,2 @@
+the-destro commented on 13 Aug 2015
+I would like to have a stable python library to submit dictionaries of container configs and have it handle creating a composed set of containers. I have been able to use compose this way before but the internal API changes have been troublesome to keep up with.

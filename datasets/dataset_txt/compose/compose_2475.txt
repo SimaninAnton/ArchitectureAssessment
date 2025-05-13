@@ -1,0 +1,136 @@
+keyolk commented on 20 Apr 2016
+I've a application which has multi container. to easy installation, I decide to use package image which contains docker-comopse.yaml file.
+what I expected is like below
+$ docker run my_application install | sh
+this will pull all related image
+$ docker run my_application up | sh
+this will do "docker-compose up" and some intial job for application using "docker-compose exec"
+But I got below error
+$ echo "docker-compose exec cassandra cqlsh -e 'desc keyspaces'" | sh
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 57, in main
+  File "compose/cli/main.py", line 108, in perform_command
+  File "compose/cli/main.py", line 353, in exec_command
+  File ".tox/py27/lib/python2.7/site-packages/dockerpty/pty.py", line 338, in start
+  File ".tox/py27/lib/python2.7/site-packages/dockerpty/io.py", line 32, in set_blocking
+ValueError: file descriptor cannot be a negative integer (-1)
+docker-compose returned -1
+and I confiremd that below two commands works well
+$ echo "docker exec my_application_cassandra_1 cqlsh -e 'desc keyspaces'" | sh
+
+system_traces  system
+
+$ sh -c "docker-compose exec cassandra cqlsh -e 'desc keyspaces'"
+
+system_traces  system
+Does someone have any idea why the error comes?
+below is my version info and logs from docker-compose
+$ docker version
+Client:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Sat Mar 12 19:18:57 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Sat Mar 12 19:18:57 2016
+ OS/Arch:      linux/amd64
+$ docker-compose version
+docker-compose version 1.7.0rc1, build 1ad8866
+docker-py version: 1.8.0-rc2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+$ sh -c "docker-compose --verbose exec cassandra cqlsh -e 'desc keyspaces'"
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'dtr.test.org', username=u'keyolk')
+docker.auth.auth.parse_auth: Found entry (registry=u'test.org', username=u'$oauthtoken')
+compose.cli.command.get_client: docker-compose version 1.7.0rc1, build 1ad8866
+docker-py version: 1.8.0-rc2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.3.2-0-vanilla, Os=linux, BuildTime=2016-03-12T19:18:57.542338402+01:00, ApiVersion=1.22, Version=1.10.3, GitCommit=20f81dd, Arch=amd64, GoVersion=go1.5.3
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (filters={u'label': [u'com.docker.compose.project=insator', u'com.docker.compose.service=cassandra', u'com.docker.compose.oneoff=False', u'com.docker.compose.container-number=1']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker exec_create <- (u'63c121aa356c5435a9bae43c08cd805268f7253734d44e01aa2d044a41304253', ['cqlsh', '-e', 'desc keyspaces'], tty=True, stdin=True, privileged=False, user=None)
+compose.cli.verbose_proxy.proxy_callable: docker exec_create -> {u'Id': u'638f966cd2cf003da3b6fb32238a8750c61bfe147eabd103540501e55f8af725'}
+compose.cli.verbose_proxy.proxy_callable: docker exec_start <- ({u'Id': u'638f966cd2cf003da3b6fb32238a8750c61bfe147eabd103540501e55f8af725'}, tty=True, socket=True)
+compose.cli.verbose_proxy.proxy_callable: docker exec_start -> <socket object, fd=7, family=1, type=1, protocol=0>
+compose.cli.verbose_proxy.proxy_callable: docker exec_inspect <- ({u'Id': u'638f966cd2cf003da3b6fb32238a8750c61bfe147eabd103540501e55f8af725'})
+compose.cli.verbose_proxy.proxy_callable: docker exec_inspect -> {u'CanRemove': False,
+ u'ContainerID': u'63c121aa356c5435a9bae43c08cd805268f7253734d44e01aa2d044a41304253',
+ u'DetachKeys': u'',
+ u'ExitCode': None,
+ u'ID': u'638f966cd2cf003da3b6fb32238a8750c61bfe147eabd103540501e55f8af725',
+ u'OpenStderr': True,
+ u'OpenStdin': True,
+ u'OpenStdout': True,
+ u'ProcessConfig': {u'arguments': [u'-e', u'desc keyspaces'],
+                    u'entrypoint': u'cqlsh',
+...
+compose.cli.verbose_proxy.proxy_callable: docker exec_resize <- ({u'Id': u'638f966cd2cf003da3b6fb32238a8750c61bfe147eabd103540501e55f8af725'}, width=190, height=42)
+                                                                                                                                                                    compose.cli.verbose_proxy.proxy_callable: docker exec_resize -> None
+
+system_traces  system
+
+compose.cli.verbose_proxy.proxy_callable: docker exec_inspect <- ({u'Id': u'638f966cd2cf003da3b6fb32238a8750c61bfe147eabd103540501e55f8af725'})
+compose.cli.verbose_proxy.proxy_callable: docker exec_inspect -> {u'CanRemove': False,
+ u'ContainerID': u'63c121aa356c5435a9bae43c08cd805268f7253734d44e01aa2d044a41304253',
+ u'DetachKeys': u'',
+ u'ExitCode': 0,
+ u'ID': u'638f966cd2cf003da3b6fb32238a8750c61bfe147eabd103540501e55f8af725',
+ u'OpenStderr': True,
+ u'OpenStdin': True,
+ u'OpenStdout': True,
+ u'ProcessConfig': {u'arguments': [u'-e', u'desc keyspaces'],
+                    u'entrypoint': u'cqlsh',
+...
+echo "docker-compose --verbose exec cassandra cqlsh -e 'desc keyspaces'" | sh                                   [2/22580]
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'dtr.test.org', username=u'keyolk')
+docker.auth.auth.parse_auth: Found entry (registry=u'test.org', username=u'$oauthtoken')
+compose.cli.command.get_client: docker-compose version 1.7.0rc1, build 1ad8866
+docker-py version: 1.8.0-rc2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.3.2-0-vanilla, Os=linux, BuildTime=2016-03-12T19:18:57.542338402+01:00, ApiVersion=1.22, Version=1.10.3, GitCommit=20f81dd, A$ch=amd64, GoVersion=go1.5.3
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (filters={u'label': [u'com.docker.compose.project=insator', u'com.docker.compose.service=cassandra', u'com.docker.compose.oneo$f=False', u'com.docker.compose.container-number=1']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker exec_create <- (u'63c121aa356c5435a9bae43c08cd805268f7253734d44e01aa2d044a41304253', ['cqlsh', '-e', 'desc keyspaces'], tty=True, stdin=True$ privileged=False, user=None)
+compose.cli.verbose_proxy.proxy_callable: docker exec_create -> {u'Id': u'28344216442c0d58abce8a9face0430d1551d66eed3ec95477a1b333c67faf01'}
+compose.cli.verbose_proxy.proxy_callable: docker exec_start <- ({u'Id': u'28344216442c0d58abce8a9face0430d1551d66eed3ec95477a1b333c67faf01'}, tty=True, socket=True)
+compose.cli.verbose_proxy.proxy_callable: docker exec_start -> <socket object, fd=7, family=1, type=1, protocol=0>
+compose.cli.verbose_proxy.proxy_callable: docker exec_inspect <- ({u'Id': u'28344216442c0d58abce8a9face0430d1551d66eed3ec95477a1b333c67faf01'})
+compose.cli.verbose_proxy.proxy_callable: docker exec_inspect -> {u'CanRemove': False,
+ u'ContainerID': u'63c121aa356c5435a9bae43c08cd805268f7253734d44e01aa2d044a41304253',
+ u'DetachKeys': u'',
+ u'ExitCode': None,
+ u'ID': u'28344216442c0d58abce8a9face0430d1551d66eed3ec95477a1b333c67faf01',
+ u'OpenStderr': True,
+ u'OpenStdin': True,
+ u'OpenStdout': True,
+ u'ProcessConfig': {u'arguments': [u'-e', u'desc keyspaces'],
+                    u'entrypoint': u'cqlsh',
+...
+compose.cli.verbose_proxy.proxy_callable: docker exec_resize <- ({u'Id': u'28344216442c0d58abce8a9face0430d1551d66eed3ec95477a1b333c67faf01'}, width=190, height=42)
+compose.cli.verbose_proxy.proxy_callable: docker exec_resize -> None
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 57, in main
+  File "compose/cli/main.py", line 108, in perform_command
+  File "compose/cli/main.py", line 353, in exec_command
+  File ".tox/py27/lib/python2.7/site-packages/dockerpty/pty.py", line 338, in start
+  File ".tox/py27/lib/python2.7/site-packages/dockerpty/io.py", line 32, in set_blocking
+ValueError: file descriptor cannot be a negative integer (-1)
+docker-compose returned -1
+46

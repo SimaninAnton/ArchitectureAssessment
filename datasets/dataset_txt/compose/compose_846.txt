@@ -1,0 +1,52 @@
+AceHack commented on 26 Feb 2018 •
+edited
+I would expect the following two docker-compose files to work exactly the same but they do not. The first one works with C:/ but the second one with just / does not. In most other places in docker like Dockerfiles, Linux like paths can be used with no issues.
+Works:
+version: '3.3'
+services:
+  arch.samples.containers:
+    volumes:
+    - type: bind
+      source: ${ArchSamplesContainersConfigPath-C:/etc/Arch.Samples.Containers}
+      target: /etc/Arch.Samples.Containers
+      read_only: true
+      volume:
+        nocopy: true
+Does not work:
+version: '3.3'
+services:
+  arch.samples.containers:
+    volumes:
+    - type: bind
+      source: ${ArchSamplesContainersConfigPath-/etc/Arch.Samples.Containers}
+      target: /etc/Arch.Samples.Containers
+      read_only: true
+      volume:
+        nocopy: true
+Fails with "Cannot create container for service arch.samples.containers: invalid mount config for type "bind": bind source path does not exist"
+Docker Version:
+Client:
+Version: 18.02.0-ce
+API version: 1.36
+Go version: go1.9.3
+Git commit: fc4de44
+Built: Wed Feb 7 21:12:53 2018
+OS/Arch: windows/amd64
+Experimental: true
+Orchestrator: kubernetes
+Server:
+Engine:
+Version: 18.02.0-ce
+API version: 1.36 (minimum version 1.12)
+Go version: go1.9.3
+Git commit: fc4de44
+Built: Wed Feb 7 21:20:15 2018
+OS/Arch: linux/amd64
+Experimental: true
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.14
+OpenSSL version: OpenSSL 1.0.2k 26 Jan 2017
+Windows Version:
+Windows 10 Build 17107.rs4_release.180220-1350
+1

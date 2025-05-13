@@ -1,0 +1,12 @@
+epintos commented on 22 Apr 2015
+Im trying docker compose for Rails projects with the following script to run rspec tests:
+> docker-compose build
+> docker-compose run web rake db:test:prepare
+> docker-compose run web rspec
+
+> docker-compose stop
+> docker-compose rm --force
+> docker stop `docker ps -a -q -f status=exited`
+> docker rm -v `docker ps -a -q -f status=exited`
+> docker rmi `docker images --filter 'dangling=true' -q --no-trunc`
+I'm executing the last commands so I remove every container and dangling image to free space. After some builds I notice that the /var/lib/docker/aufs, /var/lib/docker/volumes and /var/lib/docker/devicemapper directories keeps on growing. I'm running this for a few different projects. What am I doing wrong?

@@ -1,0 +1,1 @@
+Env variable defaulting to blank string although I can see those variables already set in Docker inspect

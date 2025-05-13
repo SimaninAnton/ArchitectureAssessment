@@ -1,0 +1,15 @@
+spachecogomez commented on 16 Feb 2017 •
+edited
+Hello all,
+I'm facing the following issue, with a compose v3 file i'm getting the following error:
+Unsupported config option for services.back-end: 'replicas'
+docker info output
+Containers: 0 Running: 0 Paused: 0 Stopped: 0 Images: 6 Server Version: 1.13.1 Storage Driver: aufs Root Dir: /var/lib/docker/aufs Backing Filesystem: extfs Dirs: 31 Dirperm1 Supported: true Logging Driver: json-file Cgroup Driver: cgroupfs Plugins: Volume: local Network: bridge host macvlan null overlay Swarm: inactive Runtimes: runc Default Runtime: runc Init Binary: docker-init containerd version: aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1 runc version: 9df8b306d01f59d3a8029be411de015b7304dd8f init version: 949e6fa Security Options: apparmor seccomp Profile: default Kernel Version: 4.4.0-59-generic Operating System: Ubuntu 16.04.2 LTS OSType: linux Architecture: x86_64 CPUs: 1 Total Memory: 3.859 GiB Name: test-VirtualBox ID: 53JL:SKSU:4ZKN:EVXE:FCOH:X3NQ:UPT6:2FWL:UQQ5:TX2J:IJU6:PKRJ Docker Root Dir: /var/lib/docker Debug Mode (client): false Debug Mode (server): false Registry: https://index.docker.io/v1/ WARNING: No swap limit support Experimental: false Insecure Registries: 127.0.0.0/8 Live Restore Enabled: false
+Docker version output
+Client: Version: 1.13.1 API version: 1.26 Go version: go1.7.5 Git commit: 092cba3 Built: Wed Feb 8 06:50:14 2017 OS/Arch: linux/amd64 Server: Version: 1.13.1 API version: 1.26 (minimum version 1.12) Go version: go1.7.5 Git commit: 092cba3 Built: Wed Feb 8 06:50:14 2017 OS/Arch: linux/amd64 Experimental: false
+docker-compose version output
+docker-compose version 1.11.1, build 7c5d5e4 docker-py version: 2.0.2 CPython version: 2.7.13 OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+The docker-compose.yml file
+version: "3" services: front-end: build: frontend/. replicas: 2 back-end: build: backend/. replicas: 2
+I'm trying to run docker-compose up command within the folder that contains the docker-compose.yml file.
+Repo https://github.com/spachecogomez/BEnFECompose

@@ -1,0 +1,15 @@
+LeanderK commented on 4 Jun 2016 •
+edited
+when i do docker-compose pull, docker-compose kill and docker-compose up i get:
+ERROR: for server  Invalid bind mount spec "b1e00cd98668d75e8ff2707fc5850a49687e4a62a036ed7d0b2cd3f47351d660:bin/data:rw": Invalid volume destination path: 'bin/data' mount path must be absolute.
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 63, in main
+    log.error(e.msg)
+AttributeError: 'ProjectError' object has no attribute 'msg'
+the volumes part in my config:
+volumes:
+      - /etc/letsencrypt:/ssl:ro
+      - ${DATA}:/data/izou
+and my environment-var. is: export DATA=/x/y/z

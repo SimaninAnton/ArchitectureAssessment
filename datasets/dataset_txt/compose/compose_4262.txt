@@ -1,0 +1,35 @@
+andyshinn commented on 27 Jul 2014
+I'm running into the following error when running a Rails schema migration in my newly built image. It almost seems like it is caused by the amount of output coming through the console. If I run it 2 or 3 more times it usually completes.
+$ fig run --rm web bin/rake db:schema:load RAILS_ENV=development
+...
+   (1.7ms)  INSERT INTO `schema_migrations` (version) VALUES ('26')
+   (2.2ms)  INSERT INTO `schema_migrations` (version) VALUES ('20130725203816')
+   (2.1ms)  INSERT INTO `schema_migrations` (version) VALUES ('20101220174325')
+   (1.3ms)  INSERT INTO `schema_migrations` (version) VALUES ('20091119220254')
+   (1.0ms)  INSERT INTO `schema_migrations`Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 8, in <module>
+    load_entry_point('fig==0.5.1', 'console_scripts', 'fig')()
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 31, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 50, in perform_command
+    return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 252, in run
+    dockerpty.start(self.client, container.id)
+  File "/Library/Python/2.7/site-packages/dockerpty/__init__.py", line 27, in start
+    PseudoTerminal(client, container).start()
+  File "/Library/Python/2.7/site-packages/dockerpty/pty.py", line 145, in start
+    self._hijack_tty(pumps)
+  File "/Library/Python/2.7/site-packages/dockerpty/pty.py", line 228, in _hijack_tty
+    if not all([p.flush() is not None for p in ready]):
+  File "/Library/Python/2.7/site-packages/dockerpty/io.py", line 253, in flush
+    raise e
+OSError: [Errno 35] Resource temporarily unavailable
+Any ideas?

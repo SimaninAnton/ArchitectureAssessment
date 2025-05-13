@@ -1,0 +1,7 @@
+murphyke commented on 30 Mar 2016
+Is there any way to suppress the service-specific output prefix that docker-compose likes to insert?
+When piping, I'd prefer:
+Just the facts, ma'am.
+instead of:
+foosvc_1 | Just the facts, ma'am.
+If there isn't a relevant switch or yml file option, I guess I can just use sed or else fall back on docker run.

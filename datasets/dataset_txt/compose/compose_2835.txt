@@ -1,0 +1,15 @@
+taiidani commented on 5 Feb 2016
+I am unsure if I am missing this in the docs or not, but I'm not seeing any way in Compose 1.6.0 that implements the new --net-alias support in Docker-Engine.
+Here's the relevant add from the Docker Engine release notes: moby/moby#19242
+My specific end-user ask is a way to define multiple aliases for a container on a network. Something like this, perhaps?
+networks:
+    example
+
+services:
+    www:
+        image: apache:2.4.18
+        networks:
+            example:
+                aliases:
+                    - localweb
+                    - www.localaddress.com

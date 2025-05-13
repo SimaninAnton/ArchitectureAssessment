@@ -1,0 +1,7 @@
+MatthewMiele commented on 4 Dec 2016
+Im not to sure where this issue lies or if its even an issue (might be something thats not supported?) but as I could not find any documentation on this I am opening this ticket.
+I have Docker installed on Windows 10 (using HyperV) and I have docker-compose installed in Bash for Windows. docker-compose is installed via pip and is the Linux version.
+The problem is that when I run my container using docker-compose -H tcp://0.0.0.0:2375 the volumes that are defined in my compose file are not mounted properly. It only seems to make the folders that appear in that directory, but when looking inside the mounts, in the container, they are empty.
+When running the exact same command directly from Windows (not in Bash for Windows), the mounts work.
+Im thinking maybe volumes are generally not supported when specifying a host? even though technically its the same machine in this case.
+I hope that makes sense :)

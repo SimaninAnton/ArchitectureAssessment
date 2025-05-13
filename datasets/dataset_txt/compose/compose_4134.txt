@@ -1,0 +1,6 @@
+girvo commented on 31 Oct 2014
+As per an issue report over on the boot2docker repository, Tiny Core Linux for boot2docker is running a 32-bit user-space on a 64-bit kernel, thus causing problems.
+boot2docker/boot2docker#603
+Now, the releases show that there is only a 64-bit version, is that a hard requirement? Is it possible to recompile it for 32-bit user-space on TCL?
+The reason this is a big deal is that Windows users (half of my team!) need to run fig inside the boot2docker VM, as docker and boot2docker don't run on Windows in the same way as OS X.
+If there's anything I can do to help, let me know!

@@ -1,0 +1,1 @@
+Docker-compose pull returns exit code 0 and gives no feedback when it fails

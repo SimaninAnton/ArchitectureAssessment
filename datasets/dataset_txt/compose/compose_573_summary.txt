@@ -1,0 +1,1 @@
+--scale problem on docker-compose up

@@ -1,0 +1,17 @@
+mihneadb commented on 10 Apr 2015
+I have a docker-compose.yml file along the lines of:
+analytics:
+    build: .
+    links:
+    - mongo:mongo
+    ports:
+    - 80:80
+mongo:
+    build: docker_containers/mongo
+    expose:
+    - 27017
+Running docker-compose up creates a link in /etc/hosts to the mongo service. However, running docker-compose run analytics bash does not create the link -- I checked the /etc/hosts file.
+The docs of docker-compose do not mention anything about this, so I'm confused.
+Why isn't the link set when using run?
+How can I achieve this?
+original SO question

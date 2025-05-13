@@ -1,0 +1,17 @@
+mathroc commented on 28 Dec 2017
+I’d like to to something like that:
+services:
+  tool:
+    volumes:
+      - ./app:./app
+    working_dir: $PWD
+so that I can use the tool from any directory and :
+the tool will print paths that are valid on the host
+I can pass relative path to the docker-compose run tool and it’ll work automatically
+this is not an option:
+services:
+  tool:
+    volumes:
+      - $PWD/app:$PWD/app
+    working_dir: $PWD
+because it would mount only the current directory lots of tools needs the whole project (eg: to read configuration file at the project root)

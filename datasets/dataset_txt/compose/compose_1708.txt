@@ -1,0 +1,35 @@
+tpoindessous commented on 9 Feb 2017
+Hi
+I have two containers in a docker-compose file.
+The first one is referenced by many names :
+version: '3'
+services:
+  www:
+    image: kitematic/hello-world-nginx
+    ports:
+      - 80:80
+  backend:
+    image: kitematic/hello-world-nginx
+    links:
+      - www:www.domain.com
+      - www:api.domain.com
+      - www:alias.domaine.com
+If I launch all containers in one time (docker-compose up -d), everything works fine.
+$ docker-compose -f test.yml exec backend ping api.domain.com
+PING api.domain.com (172.18.0.2): 56 data bytes
+64 bytes from 172.18.0.2: seq=0 ttl=64 time=0.087 ms
+But if I have many containers and for one reason, www (which is launched first) exited abrutly at the launch, backend container doesn't get links names for www (after I relaunched successfully www).
+Order of launch:
+docker-compose up -d
+www dies abrutly
+backend is fine but can't ping api.domain.com and www (which is normal since www dies)
+docker-compose up -d
+www restarts fine
+backend still can't ping api.domain.com but can ping www
+docker-compose kill (or stop) backend ; docker-compose up -d
+backend still can't ping api.domain.com but can ping www
+docker-compose stop backend ; docker-compose rm backend ; docker-compose up -d
+everything work : backend can ping www and can ping api.domain.com
+I have a .yml file to reproduce the issue.
+Thanks in advance.
+PS : my first container www dies abrutly because it's nginx and it's using upstream names (which are not valid until all container are launched). I resolved my problem by putting a sleep 30 in the nginx container, which is not very clean ...

@@ -1,0 +1,43 @@
+matyuda commented on 25 Jun 2019
+I tried mount Windows Shared Folder with in container.
+So, I wrote docker-compose.yml file below, but mount directory owner is root and writeable only owner user.
+version: '3'
+
+services:
+  php:
+    container_name: php
+    build: ./docker/php
+    volumes:
+    - cifs:/shared
+    restart: always
+
+volumes:
+  cifs:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username=(username),password=(password),rw,domain=(domainname),uid=1000,gid=1000
+      device: "\\\\(ipaddress)\\shared"
+$ sudo docker-compose exec php bash
+$ ls -l /
+...
+drwxr-xr-x 2 root root 4096 Jun 24 07:27 shared
+...
+By the way, I executed below command at host.
+sudo mount -t cifs -o username=(username),password=(password),domain=(domainname),rw,uid=1000,gid=1000 //(ipaddress)/shared /shared
+and I modified docker-compose.yml file below, could mount cifs volume by other than root user.
+version: '3'
+
+services:
+  php:
+    container_name: php
+    build: ./docker/php
+    volumes:
+    - /shared:/shared
+    restart: always
+$ sudo docker-compose exec php bash
+$ ls -l /
+...
+drwxr-xr-x 2 1000 1000 4096 Jun 24 07:27 shared
+...
+Tell me how to mount cifs volume by other than root user without host mount.

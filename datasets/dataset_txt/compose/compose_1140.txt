@@ -1,0 +1,2 @@
+van-ema commented on 18 Oct 2017
+I have a docker-compose with two services. I start them in swarm mode with docker-stack-deploy from the compose file. The containers are created and they work properly. However when i restart the system containers are recreated and not restarted. So after some reboot i have a lot of containers with state Exited. Is there a way to restart the old containers and not recreate them?

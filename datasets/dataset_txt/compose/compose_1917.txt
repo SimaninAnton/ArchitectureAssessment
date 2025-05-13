@@ -1,0 +1,28 @@
+antoinetran commented on 17 Nov 2016 •
+edited
+Hi,
+We have an use case where we need our scaled containers, launched by Docker Compose, to access its container name. For instance, we launch 2 zookeepers, in Swarm, we then have in 2 hosts:
+zookeeper_cluster_1 and zookeeper_cluster_2.
+Since zookeeper needs to know before docker run has been done, but after docker compose scale, the list of all zookeeper containers name, we need in this use case the container name in docker-compose.yaml.
+I can see many issue closed, with the same need.
+Docker Compose can't scale containers with hard-coded name states why this feature is not accepted, by design. But, I don't see this feature as contradictory to scaling, see this use case.
+Another example is Kafka, we need all kafka containers id, to put these in kafka configuration:
+#broker.<id> = <ip> eg:
+broker.1 = 192.168.1.1
+broker.2 = 192.168.1.2
+broker.3 = 192.168.1.3
+The only proper way for this is, after docker compose has scaled, let's say 3 kafka nodes, there is a environment variable like this
+version: '2'
+services:
+  node:
+    image: alpine
+    entrypoint: ["/bin/sh"]
+    stdin_open: true
+    tty: true
+    environment:
+      - CONTAINER_NAME=${CONTAINER_NAME}
+      - CONTAINER_NAMES=${CONTAINER_NAMES}
+where CONTAINER_NAME=kafka_cluster_3 for instance
+CONTAINER_NAMES=kafka_cluster1 kafka_cluster2 kafka_cluster3
+As a workaround, we used consul-template to gets the list of all containers name. The issue is this is done AFTER the containers are runned. It is better to have that before.
+I also do not understand this issue Proposal: Stop using sequential container numbers . When we tried in Swarm (not Swarm mode 1.12, the old Swarm image), we have sequential number in container name. Why should we not rely on sequential number?

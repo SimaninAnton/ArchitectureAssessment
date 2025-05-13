@@ -1,0 +1,2 @@
+umrashrf commented on 5 Jun 2014
+You can't run cron jobs in docker so how about managing cron jobs with fig? Here's basic idea how it should work.

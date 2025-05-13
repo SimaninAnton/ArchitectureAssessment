@@ -1,0 +1,1 @@
+piping in docker-compose blocks the command in the container when using Docker Toolbox for Mac

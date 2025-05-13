@@ -1,0 +1,4 @@
+bitliner commented on 17 Mar 2015
+It there any criteria followed by the build and up commands?
+I have an architecture with selenium-grid, that includes a node (selenium hub) that connects to other nodes (selenium instances).
+The problem is that it does not work because the hub looks empty, like if no one of selenium instances is connected to it (maybe because the hub is started earlier than the selenium instances).

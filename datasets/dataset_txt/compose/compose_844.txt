@@ -1,0 +1,3 @@
+dvusboy commented on 27 Feb 2018
+The context is a plugin creating Ceph RBDs as Docker volumes. But there is the ability to allocate the devices from different pools, and one way to specify the device is by the format of <pool>/<name>.
+Currently, all of the current compose config schemas restrict the name of the volume with the regular expression: "^[a-zA-Z0-9._-]+$". This precludes the use of "/" in the volume name. I understand that the pool can be supplied by way of a driver option, but that is only available in VolumeDriver.Create and all other plugin operations use just the name. Obviously, we don't want to treat prod/volume the same as test/volume, but with just the name of volume, there isn't much leeway to workaround the problem.

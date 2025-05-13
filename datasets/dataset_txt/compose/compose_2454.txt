@@ -1,0 +1,23 @@
+Contributor
+andrerom commented on 26 Apr 2016 •
+edited
+global/default ".env" file is a great feature, allowing to set defaults for env variables without hardcoding reference to it inside each and every service definition using env_file, or having to wrap docker-compose in script to accomplish this.
+However it does not seem to take folder of docker-compose.yml file into account, as implied by the doc:
+Compose supports declaring default environment variables in an environment file named .env, and placed in the same folder as your compose file.
+Example:
+docker-compose --verbose -f bin/.docker/docker-compose.yml up -d --no-recreate
+compose.config.config.find: Using configuration files: ./bin/.docker/docker-compose.yml
+WARNING: compose.config.environment.__getitem__: The DATABASE_USER variable is not set. Defaulting to a blank string.
+WARNING: compose.config.environment.__getitem__: The DATABASE_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: compose.config.environment.__getitem__: The DATABASE_NAME variable is not set. Defaulting to a blank string.
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.7.0, build 0d7bf73
+Suggested behavior
+Maybe it should look for it in following order (all before loading any docker-compose.yml files):
+pwd (execution folder)
+folder of 1st docker-compose.yml
+[ ... ]
+This would allow dev envimrnets to override prod env in example below with .env file in dev/ folder:
+ export COMPOSE_FILE="docker-compose.yml:dev/docker-compose.yml"
+docker-compose up -d --no-recreate
+1

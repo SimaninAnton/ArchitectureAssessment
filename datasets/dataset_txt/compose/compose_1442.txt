@@ -1,0 +1,46 @@
+szokekaroly-zz commented on 21 May 2017 •
+edited
+When I run docker-compose command in bash, I got the following error message:
+$ docker-compose
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2958, in <module>
+    @_call_aside
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2944, in _call_aside
+    f(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2971, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 637, in _build_master
+    return cls._build_from_requirements(__requires__)
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 650, in _build_from_requirements
+    dists = ws.resolve(reqs, Environment())
+  File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 829, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'texttable<0.9,>=0.8.1' distribution was not found and is required by docker-compose
+Environment:
+Fedora 25 kernel 4.10.15-200.fc25.x86_64
+Docker version 1.12.6, build ae7d637/1.12.6
+docker-compose version 1.9.0, build 2585387
+pip 9.0.1 from /usr/lib/python2.7/site-packages (python 2.7)
+pip show texttable:
+Name: texttable
+Version: 0.9
+Summary: module for creating simple ASCII tables
+My workaround was:
+# pip install pip-conflict-checker
+# pipconflictchecker
+--------------------------------------------------
+ Conflicts Detected
+--------------------------------------------------
+ - texttable(0.9.0) docker-compose(>=0.8.1,<0.9)
+# pip uninstall texttable
+# pip install texttable ==0.8.1
+# docker-compose 
+Define and run multi-container applications with Docker.
+$ pip show texttable
+Name: texttable
+Version: 0.8.1
+Summary: module for creating simple ASCII tables
+...
+5

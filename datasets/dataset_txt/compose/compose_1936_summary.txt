@@ -1,0 +1,1 @@
+docker-compose 1.9.0-rc4 gets SSL: WRONG_VERSION_NUMBER

@@ -1,0 +1,9 @@
+Contributor
+mnowster commented on 7 Sep 2015
+(reported by @dnephin)
+Duplicate strings in command
+web:
+    image: alpine:edge
+    command: ['sh', 'sh']
+Service 'web' configuration key 'command' contains an invalid type, ...
+If I do the same thing with entrypoint, I get a better error message Service 'web' configuration key 'entrypoint' value ['sh', 'sh'] has non-unique element, but it's still an error

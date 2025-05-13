@@ -1,0 +1,19 @@
+matthewmueller commented on 23 Aug 2014
+fig newcomer here, trying to set up the WordPress example.
+It's unclear to me what the directory structure is from the documentation. Is it:
+wordpress/
+  fig.yml
+  wp-config.php
+  router.php
+or...
+fig.yml
+wordpress/
+  wp-config.php
+  router.php
+or...
+fig.yml
+wordpress/
+wp-config.php
+router.php
+Running the first example, fig up simply hangs.
+edit: boot2docker wasn't running, that's why it was hanging

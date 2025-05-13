@@ -1,0 +1,13 @@
+amalagaura commented on 2 Dec 2014
+I just upgraded fig after many months and found that when recreating my volumes it did not respect the volumes in fig.yml.
+---
+  mongo: 
+    image: mongo-server
+    volumes: 
+      - /space/mongo:/data/db
+[root@localhost docker]# fig up -d mongo
+Recreating docker_mongo_1...
+[root@localhost docker]# docker exec docker_mongo_1 ls -alh /data/db
+Running this on fig 1.0.1 shows a blank /data/db, but running it in 0.3.2 shows my full data. However on 1.0.1 it is not completely blank, it is creating the directory with some sort of persistence but I cannot find it. When I stop and restart the mongo container with fig, it finds the old container, but it is not from the host directory /space/mongo.
+Is this because of SELinux? I would expect it to give me some failure message, but there is no info. It is quite confusing, I ran --debug on 1.0.1 and it does show the correct mapping.
+What is also odd is that when trying to debug it behaved correctly using run, but up failed completely.

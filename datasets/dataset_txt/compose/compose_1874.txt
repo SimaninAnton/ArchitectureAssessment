@@ -1,0 +1,60 @@
+airtonix commented on 6 Dec 2016 •
+edited
+tl;dr windows environment variables are more complicated than on unixy systems.
+related: #1085 (comment)
+Grab the test repo or download it here: https://gist.github.com/airtonix/dc03f6b3ba23fae6eb7b7d609d92a9cd
+$git clone git@gist.github.com:dc03f6b3ba23fae6eb7b7d609d92a9cd.git
+Given I am using Windows 10
+When I have Docker Toolbox or Docker for Windows installed
+When I execute docker-compose up with-env
+Then I should see git cloning a repository via ssh using my host ssh auth_sock.
+Given I am using Windows 10
+When I have Docker Toolbox or Docker for Windows installed
+When I execute docker-compose up without-env
+Then I should see git cloning a repository via ssh using my host ssh auth_sock.
+note: Here you could create any gist, and replace the id used.
+services:
+  common:
+    image: base
+    command: ["git", "clone", "git@gist.github.com:dc03f6b3ba23fae6eb7b7d609d92a9cd.git"]
+    environment:
+      - "$SSH_AUTH_SOCK=/ssh-auth-sock"
+
+  with-env:
+    extends:
+      service: common
+    volumes:
+      - '$Env:SSH_AUTH_SOCK:/ssh-auth-sock'
+
+  without-env:
+    extends:
+      service: common
+    volumes:
+      - '$SSH_AUTH_SOCK:/ssh-auth-sock'
+Instead what actually happens is this:
+dc03f6b3ba23fae6eb7b7d609d92a9cd master = $ docker-compose up with-env
+�[33mWARNING�[0m: The Env variable is not set. Defaulting to a blank string.
+Creating network "dc03f6b3ba23fae6eb7b7d609d92a9cd_default" with the default driver
+Pulling with-env (getourneau/alpine-bash-git:latest)...
+latest: Pulling from getourneau/alpine-bash-git
+
+�[0Bec4760f9: Already exists
+�[0B0f86af63: Pulling fs layer
+Digest: sha256:15c8d1b754247d19d3aa5124f3e8264787067a5c0c787604e3431cb710cd5f1412.46 MB/12.46 MBB
+Status: Downloaded newer image for getourneau/alpine-bash-git:latest
+Creating dc03f6b3ba23fae6eb7b7d609d92a9cd_with-env_1
+
+ERROR: for with-env  Cannot create container for service with-env: Invalid volume spec "SSH_AUTH_SOCK": Invalid volume destination path: 'SSH_AUTH_SOCK' mount path must be absolute.
+�[31mERROR�[0m: Encountered errors while bringing up the project.
+dc03f6b3ba23fae6eb7b7d609d92a9cd master * = $ docker-compose up without-env
+�[33mWARNING�[0m: The Env variable is not set. Defaulting to a blank string.
+Creating dc03f6b3ba23fae6eb7b7d609d92a9cd_without-env_1
+Attaching to dc03f6b3ba23fae6eb7b7d609d92a9cd_without-env_1
+�[36mwithout-env_1  |�[0m Cloning into 'dc03f6b3ba23fae6eb7b7d609d92a9cd'...
+�[36mwithout-env_1  |�[0m Host key verification failed.
+�[36mwithout-env_1  |�[0m fatal: Could not read from remote repository.
+�[36mwithout-env_1  |�[0m
+�[36mwithout-env_1  |�[0m Please make sure you have the correct access rights
+�[36mwithout-env_1  |�[0m and the repository exists.
+�[36mdc03f6b3ba23fae6eb7b7d609d92a9cd_without-env_1 exited with code 128
+�[0m

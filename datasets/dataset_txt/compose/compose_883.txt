@@ -1,0 +1,14 @@
+Curtis-Fletcher commented on 9 Feb 2018
+According to the YAML spec, when in flow style, leading whitespace (tabs or spaces) is "neither content nor indentation." whereas in a docker compose file specified as *.json or *.yml a trivial case of valid flow style cosmetically indented with tabs
+{
+ "version": "3",
+ "services": {
+  "test": {}
+ }
+}
+results in a YAML parse error:
+ERROR: yaml.scanner.ScannerError: while scanning for the next token
+found character '\t' that cannot start any token
+Which is incorrect for tokens in flow mode.
+This is for docker-compose version 1.18.0, build 8dd22a9 on MacOS
+2

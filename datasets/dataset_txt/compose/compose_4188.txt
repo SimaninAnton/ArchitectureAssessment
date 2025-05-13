@@ -1,0 +1,60 @@
+brianclements commented on 18 Sep 2014
+using this fig file:
+logs:
+    image: "radial/axle-base:latest"
+    volumes:
+        - /log
+hub:
+    build: hub
+    volumes_from:
+        - logs
+    volumes:
+        - /config
+        - /data
+        - /run
+nginx:
+    build: spoke
+    volumes_from:
+        - hub
+    ports:
+        - "8080:80"
+        - "4430:443"
+        - "22229:22"
+fig -f some/path/fig.yml up will find the fig file OK, but then will crash because it can't find the directories specified in my 'build' key.
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.5.2', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 30, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 31, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 50, in perform_command
+    return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 340, in up
+    recreate=recreate
+  File "/usr/local/lib/python2.7/dist-packages/fig/project.py", line 170, in up
+    for (_, container) in service.recreate_containers():
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 166, in recreate_containers
+    container = self.create_container(**override_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 146, in create_container
+    container_options = self._get_container_create_options(override_options, one_off=one_off)
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 348, in _get_container_create_options
+    self.build()
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 366, in build
+    nocache=no_cache,
+  File "/usr/local/lib/python2.7/dist-packages/fig/packages/docker/client.py", line 354, in build
+    context = utils.tar(path)
+  File "/usr/local/lib/python2.7/dist-packages/fig/packages/docker/utils/utils.py", line 48, in tar
+    t.add(path, arcname='.')
+  File "/usr/lib/python2.7/tarfile.py", line 1979, in add
+    tarinfo = self.gettarinfo(name, arcname)
+  File "/usr/lib/python2.7/tarfile.py", line 1851, in gettarinfo
+    statres = os.lstat(name)
+OSError: [Errno 2] No such file or directory: 'hub'
+however if I cd into /some/path and try again, I have success. Any path specified using -f should be remembered going forward so that we can use fig in more complex situations where the CWD can be random or not set at all.

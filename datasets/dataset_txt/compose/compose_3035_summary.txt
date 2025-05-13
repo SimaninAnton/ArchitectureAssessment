@@ -1,0 +1,1 @@
+Proposal: Specify networks in the Compose file

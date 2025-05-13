@@ -1,0 +1,1 @@
+bash associative array in .yml definition

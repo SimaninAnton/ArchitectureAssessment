@@ -1,0 +1,17 @@
+jackzkdavies commented on 30 Jan 2018 •
+edited
+Hi there,
+Since updating to 17.12.0-ce, on windows I am experiencing and issue with my host volumes where the do not get mounted to my container anymore, this issue is not present when i try 17.12.0 on ubuntu 16.04
+running compose version: "2"
+My volumes are defined as
+volumes:
+- ./:/var/www
+- ./docker/logs:/var/log/apache2
+- ./docker/shared:/shared
+- ~/.composer:/home/coder/.composer
+- /var/www/config/sync
+- my-files-volume:/var/www/web/sites/default/files
+- ./docker/provision/config/settings.local.php:/var/www/web/sites/default/settings.local.php
+However since updating, the contents of my root directory, and others, is not mounted to my container, and 'settings.local.php' is created as a folder/directory within my container and not copied accross.
+This issue does not happen when using 17.12 on Ubuntu.
+Cheers

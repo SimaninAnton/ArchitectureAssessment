@@ -1,0 +1,1 @@
+`docker-compose run` does not detect EOF and hangs

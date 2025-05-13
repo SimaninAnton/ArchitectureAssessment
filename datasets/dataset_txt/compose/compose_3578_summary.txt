@@ -1,0 +1,1 @@
+Compose doesn't collaborate with Swarm when 1 service has 2 dependencies

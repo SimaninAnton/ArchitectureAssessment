@@ -1,0 +1,30 @@
+mansing2 commented on 11 Jul 2017 •
+edited by shin-
+I have two services and each service calls dockerfile which has microsoft/windowsservercore as a base image.
+When I run docker-compose up on windows, the containers are getting stopped immediately however same yaml file on linux keeps containers running. is there any known issue on windows?
+my docker-compose.yml file is:
+version: '3'
+
+networks:
+  default:
+    external:
+      name: nat
+
+services:
+  awi-service:
+    env_file:
+      - awi-box.env
+    image: awi-box:12.0.0
+    ports:
+    - 8080:8080
+    depends_on:
+    - ae-service
+    
+
+  ae-service:
+    env_file:
+      - ae-box.env
+    image: ar-box:12.0.0
+    ports:
+    -  2217:2217
+    -  2218:2218

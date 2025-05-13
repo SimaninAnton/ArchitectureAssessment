@@ -1,0 +1,28 @@
+tspecht commented on 14 Apr 2016
+I think this is machine related, but I'm not sure. I'm using the most current docker toolbox with docker 1.10.3 on OSX
+I have a project using a Dockerfile, which copies code into the container like this:
+COPY . /code
+VOLUME /code
+WORKDIR /code
+For faster local development (test execution), we mount the current directory in the compose file
+volumes:
+      - .:/code
+and execute
+docker-compose -f docker-compose.yml -f docker-compose.testing.yml run web py.test
+Now, it looks like I have two different folders/files:
+when running the container and looking inside a file with vi, everything looks like on the host. Changing files and executing our tests (pytest, specifically) lets the python interpreter read garbage so it can't execute the tests.
+Example
+the end of a file looks like this (which got copied in the Dockerfile into the container):
+post_save.connect(backup_something, sender=SomeSender, dispatch_uid='backup_something') foobar
+this obviously raises an error when executing, so I change it to
+post_save.connect(backup_something, sender=SomeSender, dispatch_uid='backup_something')
+the file looks fine now, both from the host and inside the container.
+Executing pytest, it still reads the content of the copied code, breaking the tests locally for me.
+If I change even more, it's neither the copied nor the mounted file, so stuff breaks at random positions:
+File "/code/some_code.py", line 69
+    dispatch_uid='backup_
+                        ^
+SyntaxError: EOL while scanning string literal
+(tail shows correct syntax etc, there is definitely nothing broken with the code)
+Is there something wrong with our setup or is it just my machine being broken somehow? I tried restarting and recreating the docker machine but this doesn't help.
+Anybody got a clue what's going on here?

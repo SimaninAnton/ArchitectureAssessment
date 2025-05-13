@@ -1,0 +1,1 @@
+Scale + links: how routing works? Mesh network? Other types of network?

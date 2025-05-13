@@ -1,0 +1,8 @@
+alekbarszczewski commented on 7 Jul 2016
+In native Max OS / Unix normally you can write:
+MY_ENV_VAR1=abcdef
+MY_ENV_VAR2="abcdef"
+and both env vars will be equal (double quotes are omitted/ignored). Also libraries I know that use (parse) .env files work in a same way.
+Docker compose however treats double quotes differently when parsing .env file passed as env_file: .env in docker-compose.yml. It does not ignore double quotes and treats them as a part of the string.
+Is it intentional behaviour or it's a bug? Tested on docker-compose version 1.5.2, build 7240ff3.
+27

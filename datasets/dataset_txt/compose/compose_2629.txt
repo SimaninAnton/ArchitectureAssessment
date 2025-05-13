@@ -1,0 +1,95 @@
+fakraemer commented on 15 Mar 2016
+It would be great if docker-compose could support looking up the IP address of one of the containers it controls and be able to provide it for --dns.
+My use case is that I am testing if my application can cope with DNS address changes. In particular an address change on a name that identifies a StatsD host. For this setup I have two containers with StatsD running, and one container with BIND. The consuming container should then get the IP address of the BIND container via --dns. At the moment, I have to work around this by controlling the consuming container outside of docker-compose.
+throng-postgres:
+  extends:
+    file: ../common.yml
+    service: throng-postgres
+throng-dynamodb:
+  extends:
+    file: ../common.yml
+    service: throng-dynamodb
+throng-dynamodb-create-table:
+  extends:
+    file: ../common.yml
+    service: throng-dynamodb-create-table
+  links:
+    - throng-dynamodb:dynamodb
+throng-graphite-statsd-1:
+  extends:
+    file: ../common.yml
+    service: graphite-statsd
+  ports:
+    - "9001:80"
+throng-graphite-statsd-2:
+  extends:
+    file: ../common.yml
+    service: graphite-statsd
+  ports:
+    - "9002:80"
+dns:
+  image: sameersbn/bind
+  ports:
+    - 10000:10000
+throng-graphite-statsd-1 and throng-graphite-statsd-2 are the StatsD hosts, and dns is the BIND DNS. Then I have a run script for starting this setup up with the consuming container.
+#!/bin/bash -ex
+
+COMPOSE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd "${COMPOSE_DIR}"
+
+docker-compose up -d
+
+DNS_CONTAINER_IP_ADDRESS=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' graphitestatsddns_dns_1)
+COMMON_DIR="${COMPOSE_DIR}/.."
+
+
+docker run --dns "${DNS_CONTAINER_IP_ADDRESS}" --link graphitestatsddns_throng-postgres_1:postgres --link graphitestatsddns_throng-dynamodb_1:dynamodb -p 8080:8080 --env-file "${COMMON_DIR}/dynamodb.env" --env-file "${COMMON_DIR}/postgres.env" --env-file "${COMMON_DIR}/throng.env" --dns-search="throng.throng" --volume $(pwd)/data:/data --name graphitestatsddns_throng docker.atlassian.io/atlassian/throng --rm
+BIND is configured to be the master zone for a domain called throng.throng, and it resolves the statsd name to either of these StatsD containers. I can get their IP address by linking the StatsD containers into the BIND container, and could thus implement something that continously switches the address between one of them. I would like to get rid of that run script however, and instead use docker-compose to control the consuming container. For that, it would be great if docker-compose could either introduce a separate configuration (dns_hostname?) or support container names on the dns configuration.
+throng-postgres:
+  extends:
+    file: ../common.yml
+    service: throng-postgres
+throng-dynamodb:
+  extends:
+    file: ../common.yml
+    service: throng-dynamodb
+throng-dynamodb-create-table:
+  extends:
+    file: ../common.yml
+    service: throng-dynamodb-create-table
+  links:
+    - throng-dynamodb:dynamodb
+throng-graphite-statsd-1:
+  extends:
+    file: ../common.yml
+    service: graphite-statsd
+  ports:
+    - "9001:80"
+throng-graphite-statsd-2:
+  extends:
+    file: ../common.yml
+    service: graphite-statsd
+  ports:
+    - "9002:80"
+dns:
+  image: sameersbn/bind
+  ports:
+    - 10000:10000
+  links:
+    - throng-graphite-statsd-1:statsd-1
+    - throng-graphite-statsd-2:statsd-2
+throng:
+  extends:
+    file: ../common.yml
+    service: throng
+  links:
+    - throng-postgres:postgres
+    - throng-dynamodb:dynamodb
+  ports:
+    - 8080:8080
+  dns:
+    - dns
+  dns_search: throng.throng
+The meaning here would be that docker-compose starts the dns container first, thus treating the dns (sorry for the redundant naming) configuration on the throng container the same way it treats link dependencies. It would start the dns container up first, get the IP address of that container and provide it as --dns for the docker run of the throng container.
+Am I missing other options I would have in this case or do you think this use case is too specific? I could potentially modify the image the consuming container is based on, thus making the necessary changes to the resolve.conf as part of an entrypoint. So I would instead link the dns container into throng just for the purpose of having the IP address of it on an env var and then wrap the entrypoint script with my own writing this IP address to the resolve.conf.

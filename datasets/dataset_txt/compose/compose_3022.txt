@@ -1,0 +1,7 @@
+ivan-kolmychek commented on 3 Dec 2015
+For instance, if you specify ports in docker-compose.yml as
+ports:
+  - "localhost:5432:5432"
+the container will bind to 0.0.0.0:5432 on the host machine, instead of 127.0.0.1:5432.
+Docker version 1.9.1, build a34a1d5-dirty
+docker-compose version: 1.5.1

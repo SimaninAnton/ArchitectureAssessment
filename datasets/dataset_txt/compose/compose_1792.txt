@@ -1,0 +1,16 @@
+pedroxs commented on 16 Jan 2017
+I have my docker engine startup configured with:
+{
+  "bip": "172.80.0.1/16",
+  "fixed-cidr": "172.80.0.0/16"
+}
+but if I start a compose without any network config it creates a bridge with subnet 172.17.0.0/16.
+When the docker engine was running with default config it created docker0 with subnet 172.17.0.0/16 and when running compose the bridge network was created with subnet 172.18.0.0/16
+Is this the expected behavior? How / where does compose gets the "default" network config from? Is there a way to change this globally to avoid spreading the following config on every compose.yaml?
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.177.0.0/16
+Thanks.
+19

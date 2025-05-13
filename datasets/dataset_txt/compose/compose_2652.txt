@@ -1,0 +1,4 @@
+iamKurt commented on 10 Mar 2016
+If I have a Jenkins job that runs docker-compose up to build an environment for testing, do I need to ensure that this job is run sequentially? I'm wondering how to handle the fact that running compose up twice on the same compose file will result in port conflicts (if the second container even starts up).
+Has anyone run into this before and how did you solve it?
+Thanks!

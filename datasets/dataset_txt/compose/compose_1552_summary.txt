@@ -1,0 +1,1 @@
+External DNS lookups fail with docker-compose embedded dns server

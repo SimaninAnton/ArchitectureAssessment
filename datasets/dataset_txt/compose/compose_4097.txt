@@ -1,0 +1,19 @@
+prologic commented on 17 Nov 2014
+Hi, Before I submit a PR for this I wanted to gauge the reaction/feedback first.
+See: https://github.com/therealprologic/fig/commit/1653955606881c9d9268cfcf8044cfde01128b1c
+This adds optional explicit container names to fig. Use-case:
+autodock:
+    image: prologic/autodock
+    name: autodock
+    ports:
+        - 1338:1338
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+
+hipache:
+    image: hipache
+    name: hipache
+    ports:
+        - 80:80
+        - 443:443
+1

@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 15 Sep 2015
+It relies on the ALL_DOCKER_VERSIONS variable being set when script/test-versions runs, which is no longer the case now that script/test invokes it directly rather than running it inside a container.

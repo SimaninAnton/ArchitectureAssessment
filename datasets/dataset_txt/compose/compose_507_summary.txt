@@ -1,0 +1,1 @@
+wrong zsh completion when container_name is used

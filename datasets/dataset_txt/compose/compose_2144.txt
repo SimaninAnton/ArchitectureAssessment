@@ -1,0 +1,59 @@
+raptor235 commented on 16 Aug 2016 •
+edited
+The system was working properly on the toolbox but now after the upgrade and removal of toolbox I'm getting timeouts or very slow builds... 5-10mins +
+My docker-compose build is hanging at
+[ home/docker ] - $ docker-compose --verbose build app
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.15-moby, Os=linux, BuildTime=2016-07-28T21:15:28.963402499+00:00, ApiVersion=1.24, Version=1.12.0, GitCommit=8eab29e, Arch=amd64, GoVersion=go1.6.3
+compose.service.build: Building app
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag=u'docker_app', buildargs=None, rm=True, forcerm=False, path='/Users/bartdabek/Sites/docker', dockerfile='Dockerfile-app')
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.auth.load_config: File doesn't exist
+docker.api.build._set_auth_headers: No auth config found
+docker-compose up is failing
+[ home/docker ] - $ docker-compose --verbose up app
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.15-moby, Os=linux, BuildTime=2016-07-28T21:15:28.963402499+00:00, ApiVersion=1.24, Version=1.12.0, GitCommit=8eab29e, Arch=amd64, GoVersion=go1.6.3
+compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+compose.cli.verbose_proxy.proxy_callable: docker info -> {u'Architecture': u'x86_64',
+ u'BridgeNfIp6tables': True,
+ u'BridgeNfIptables': True,
+ u'CPUSet': True,
+ u'CPUShares': True,
+ u'CgroupDriver': u'cgroupfs',
+ u'ClusterAdvertise': u'',
+ u'ClusterStore': u'',
+ u'Containers': 0,
+ u'ContainersPaused': 0,
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'docker_default')
+compose.network.ensure: Creating network "docker_default" with the default driver
+compose.cli.verbose_proxy.proxy_callable: docker create_network <- (ipam=None, driver=None, options=None, name=u'docker_default')
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 61, in main
+  File "compose/cli/main.py", line 113, in perform_command
+  File "contextlib.py", line 35, in __exit__
+  File "compose/cli/errors.py", line 56, in handle_connection_errors
+TypeError: log_timeout_error() takes exactly 1 argument (0 given)
+docker-compose returned -1
+I've tried all the tricks people have been mentioning of using google dns, turning off wifi, adding hosts entries to include
+127.0.0.1 localunixsocket
+127.0.0.1 localunixsocket.local
+127.0.0.1 localunixsocket.home
+nothing is helping...
+The amount of time I've spent over the past 6 months fighting docker is soo frustrating...
+4

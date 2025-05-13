@@ -1,0 +1,48 @@
+dazorni commented on 4 Nov 2015
+Currently i'm using docker compose to connect my web app with the postgre database. My config looks like this:
+# Dockerfile
+
+FROM rails:onbuild
+RUN rake db:create db:migrate db:seed
+# config/database.yml
+
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+    adapter: postgresql
+    encoding: utf8
+    database: rezeptr_prod
+    pool: 5
+    username: postgres
+    password:
+    host: db
+
+development:
+  <<: *default
+  database: rezeptr_dev
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: rezeptr_test
+# docker-compose.yml
+
+db:
+  image: postgres
+web:
+  build: .
+  volumes:
+    - .:/usr/src/app
+  ports:
+    - "3000:3000"
+  links:
+    - db:db
+If i run docker-compose up i get this error
+could not translate host name "db" to address: Name or service not known
+If i don't run rake db:create ... in the Dockerfile and run it like this docker-compose run web rake db:create it works fine and i don't get any errors. Can you help me?

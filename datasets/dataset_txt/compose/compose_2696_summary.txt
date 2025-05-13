@@ -1,0 +1,1 @@
+New compose format causes docker-machine timeout

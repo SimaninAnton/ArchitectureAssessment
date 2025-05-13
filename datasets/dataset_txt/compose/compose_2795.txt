@@ -1,0 +1,6 @@
+OferE commented on 11 Feb 2016
+Hi,
+This seems like a bug.
+The docker-compose up ignores the container name enry in the yml file.
+the docker-compose build doesn't ignore it...
+Thanks

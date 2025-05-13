@@ -1,0 +1,2 @@
+hesonglin006 commented on 17 Apr 2015
+I used the command docker-compose scale datacontainer=3,I found there is only datacontainer_3 can be started,why? I will be appreciated for your response!

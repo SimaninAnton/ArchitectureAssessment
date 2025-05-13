@@ -1,0 +1,1 @@
+when mounting file and it doesn't exist or permission denied an empty directory with the same name is mounted instead

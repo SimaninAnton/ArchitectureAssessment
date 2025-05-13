@@ -1,0 +1,20 @@
+stefanocog commented on 15 Jul 2015
+Hi, i tried to push/pull my image from/to my registry repositories, after pushed an image i tried to pull with docker-compose and i have this error after pushing:
+# docker-compose up -d    
+.
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 460, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 230, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 332, in execute_convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 380, in recreate_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 213, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 435, in _next_container_number
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.container", line 70, in number
+ValueError: Container 8bb1102da4 does not have a com.docker.compose.container-number label
+I use docker-compose 1.3.1

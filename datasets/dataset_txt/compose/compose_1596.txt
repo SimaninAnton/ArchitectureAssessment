@@ -1,0 +1,32 @@
+mathew-bulletin commented on 15 Mar 2017
+Envionment:
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 2.7.5
+OpenSSL version: OpenSSL 1.0.1e-fips 11 Feb 2013
+Linux 3.10.0-514.6.1.el7.x86_64 #1 SMP Wed Jan 18 13:06:36 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux```
+Scenario:
+version: '2.1'
+.....
+networks:
+  ExtNet:
+    driver: macvlan
+    driver_opts:
+      parent: enp3s0
+    ipam:
+      config:
+        - gateway: 192.168.1.1
+          ip_range: 192.168.1.10/28
+          subnet: 192.168.1.0/24
+  IntNet:
+    internal: True
+    driver: bridge
+    ipam:
+      config:
+        - ip_range: 10.0.0.0/16
+          subnet: 10.0.0.0/16
+Question:
+Would it be possible to not append [projectname]_ to the name of networks created by docker-compose?
+Reference such as redis.IntNet inside the container can no longer be resolved because the network has named as dockercompose_IntNet by docker-compose, and reference has to be altered to redis.dockercompose_IntNet to accommodate it.
+Or is there any workaround for this?
+Thank you.

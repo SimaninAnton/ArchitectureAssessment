@@ -1,0 +1,1 @@
+Odd restrictions within docker stack deploy on 1.13rc7

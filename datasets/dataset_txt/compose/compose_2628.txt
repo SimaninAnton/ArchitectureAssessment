@@ -1,0 +1,16 @@
+mccrodp commented on 15 Mar 2016
+Docker compose seems to mount a host directory on the container. Is it possible to mount a container directory on the host.
+For example, the official drupal image I am using in the below docker-compose.yml already downloads a version of the Drupal CMS to /var/www/html and when I try to mount the volume using ./drupal:/var/www/html it wipes the drupal install on the container. What is the recommended approach for this?
+  # Drupal official image => drupal:version
+  image: drupal:7.43-apache
+  ports:
+    # Host machine's port 8000 will map to Drupal's port 80
+    - "8000:80"
+  volumes:
+    # Drupal should live in the "drupal" directory
+    - ./drupal:/var/www/html:rw
+    - ./docker-compose.sh:/docker-compose.sh
+  links:
+    - mysql:mysql
+    - solr:solr
+  working_dir: /var/www/html

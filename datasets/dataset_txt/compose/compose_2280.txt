@@ -1,0 +1,31 @@
+Contributor
+friism commented on 25 Jun 2016
+I'm a developer and it's my first day at my new job. I really hope this new job is going to be better than my last one, because it was bad.
+I've been told to figure out how to create DABs from a code base that has this compose file:
+version: "2"
+
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+  db:
+    image: postgres:9.4
+This compose file is currently checked in with the app and people just check out the code and run docker-compose up. It's great.
+So I went ahead and added an image property to the web service to make the new bundle command work:
+version: "2"
+
+services:
+  web:
+    build: .
+    image: fng/web
+    ports:
+      - "80:80"
+  db:
+    image: postgres:9.4
+This worked really well for me and I could push, create a bundle and deploy it. So I checked in the code and told my new boss to try it. When he tried to run docker-compose push it failed because he didn't have access to fng/web. Deploying the bundle also didn't work right because his engine couldn't pull the images from the repo I had created (it took a long time to debug that problem btw).
+By adding the image property to the shared docker-compose.yml file I've made it unusable for my new co-workers and they're really angry.
+Now my first day is looking really bad and it feels like my old job again.
+I don't know what to do about this. Maybe all Docker installs need a local registry (instead/in-addition-to the built-in non-registry engine image store). That could then be referenced with ~/web or something.
+@dnephin @aanand @bfirsh
+1

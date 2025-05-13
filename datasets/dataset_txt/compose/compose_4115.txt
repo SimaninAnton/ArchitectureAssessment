@@ -1,0 +1,4 @@
+koen-serry commented on 7 Nov 2014
+I was looking into the issue I just got regarding having both an image and a build inside my fig config, but I couldn't understand why this constraint exists.
+Service .... has both an image and build path specified. A service can either be built to image or use an existing image, not both.
+Because I may have both. If my image is not stale (ie. exactly the same as my Dockerfile) running from my image will be faster than rebuilding it. If however my image is stale (or I want to rebuild it just in case) I'd use fig build . I agree that now we save a step when you do a fig up, because it actually builds the image, but it's also a bit confusing. Would it be possible to have some kind of fallback so in case the image is not there it builds it?

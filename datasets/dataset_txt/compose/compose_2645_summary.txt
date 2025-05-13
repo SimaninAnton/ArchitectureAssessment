@@ -1,0 +1,1 @@
+run docker-compose with "ERROR: No command specified"

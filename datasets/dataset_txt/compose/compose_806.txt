@@ -1,0 +1,3 @@
+DawidSadlik commented on 13 Mar 2018
+Hi
+I'm trying to configure volumes sharing host (windows Server 2016) directory with container running from windows server core based image. I can't figure it how to properly define source path. Can anybody provide example of such configuration?

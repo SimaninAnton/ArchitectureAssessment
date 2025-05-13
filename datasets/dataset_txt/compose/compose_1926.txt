@@ -1,0 +1,6 @@
+pmihalcin commented on 15 Nov 2016
+Hi all,
+Are there any plans for docker-compose inspect command?
+One could get e.g. exposed ports of given service
+Thanks
+17

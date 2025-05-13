@@ -1,0 +1,37 @@
+psfpro commented 9 days ago
+[v ] I have tried with the latest version of my channel (Stable or Edge)
+[v ] I have uploaded Diagnostics
+Diagnostics ID: D5D0C2E5-E342-42A4-BA6B-1174744BA405/20200121213746
+Expected behavior
+Work correctly
+Actual behavior
+$ docker-compose exec app sh
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 72, in main
+  File "compose\cli\main.py", line 128, in perform_command
+  File "compose\cli\main.py", line 491, in exec_command
+  File "compose\cli\main.py", line 1469, in call_docker
+  File "subprocess.py", line 172, in call
+  File "subprocess.py", line 394, in __init__
+  File "subprocess.py", line 644, in _execute_child
+TypeError: environment can only contain strings
+[9644] Failed to execute script docker-compose
+Information
+Windows Version: 10 Pro
+Docker Desktop Version: 2.2.0.0 (42247) stable
+Steps to reproduce the behavior
+version: "3"
+
+services:
+  app:
+    build: docker/php
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+Empty .env file. Run docker-compose exec app sh - work correctly
+Add data to .env file. For example:
+APP_ENV=development
+Run docker-compose exec app sh - error: environment can only contain strings
+22

@@ -1,0 +1,9 @@
+lovmat commented on 2 Feb 2016
+I've an issue with the latest rc2 release and the depends_on feature. My config looks like this:
+docker-compose.yml
+Getting error:
+front.example.org | Message from VCC-compiler:
+front.example.org | Backend host '"www.development.example.org"' could not be resolved to an IP address:
+front.example.org | Name or service not known
+So apparently the front.development.example.org container starts before it's able to resolve the host www.development.example.org to an IP address.
+(I've attempted to manually sleep for two secs before starting front main application, and then it works fine.)

@@ -1,0 +1,1 @@
+How to use images, which are build in the same stack?

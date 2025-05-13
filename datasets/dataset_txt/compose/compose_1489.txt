@@ -1,0 +1,137 @@
+chisumo2016 commented on 3 May 2017
+Hi ,
+I need help how to resolve this problem.It's my first time to use docker
+C:\Users\bundalla\Desktop\advancelaravel54\laradock>docker-compose up -d nginx mysql
+WARNING: The PMA_USER variable is not set. Defaulting to a blank string.
+WARNING: The PMA_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The PMA_ROOT_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The PMA_DB_ENGINE variable is not set. Defaulting to a blank string.
+WARNING: The PMA_PORT variable is not set. Defaulting to a blank string.
+WARNING: The DATA_SAVE_PATH variable is not set. Defaulting to a blank string.
+WARNING: The DOCKER_HOST_IP variable is not set. Defaulting to a blank string.
+WARNING: The PHP_IDE_CONFIG variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_XDEBUG variable is not set. Defaulting to a blank string.
+WARNING: The INSTALL_BLACKFIRE variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_SOAP variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_MONGO variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_ZIP_ARCHIVE variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_BCMATH variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_PHPREDIS variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_MEMCACHED variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_OPCACHE variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_EXIF variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_AEROSPIKE_EXTENSION variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_MYSQLI variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_TOKENIZER variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_INTL variable is not set. Defaulting to a blank string.
+WARNING: The PHP_FPM_INSTALL_GHOSTSCRIPT variable is not set. Defaulting to a blank string.
+WARNING: The PHP_VERSION variable is not set. Defaulting to a blank string.
+WARNING: The POSTGRES_DB variable is not set. Defaulting to a blank string.
+WARNING: The POSTGRES_USER variable is not set. Defaulting to a blank string.
+WARNING: The POSTGRES_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The POSTGRES_PORT variable is not set. Defaulting to a blank string.
+WARNING: The HAPROXY_HOST_HTTP_PORT variable is not set. Defaulting to a blank string.
+WARNING: The MYSQL_DATABASE variable is not set. Defaulting to a blank string.
+WARNING: The MYSQL_USER variable is not set. Defaulting to a blank string.
+WARNING: The MYSQL_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The MYSQL_ROOT_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The MYSQL_PORT variable is not set. Defaulting to a blank string.
+WARNING: The BLACKFIRE_SERVER_ID variable is not set. Defaulting to a blank string.
+WARNING: The BLACKFIRE_SERVER_TOKEN variable is not set. Defaulting to a blank string.
+WARNING: The SELENIUM_PORT variable is not set. Defaulting to a blank string.
+WARNING: The PHP_SOCKET variable is not set. Defaulting to a blank string.
+WARNING: The APACHE_HOST_LOG_PATH variable is not set. Defaulting to a blank string.
+WARNING: The APACHE_HOST_HTTP_PORT variable is not set. Defaulting to a blank string.
+WARNING: The APACHE_HOST_HTTPS_PORT variable is not set. Defaulting to a blank string.
+WARNING: The JENKINS_HOST_SLAVE_AGENT_PORT variable is not set. Defaulting to a blank string.
+WARNING: The JENKINS_HOST_HTTP_PORT variable is not set. Defaulting to a blank string.
+WARNING: The JENKINS_HOME variable is not set. Defaulting to a blank string.
+WARNING: The MEMCACHED_HOST_PORT variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_CONFIG variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_PROXY2_CACHE_SIZE variable is not set. Defaulting to a blank string.
+WARNING: The VARNISHD_PARAMS variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_PORT variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_PROXY2_BACKEND_HOST variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_BACKEND_PORT variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_PROXY2_SERVER variable is not set. Defaulting to a blank string.
+WARNING: The NGINX_HOST_LOG_PATH variable is not set. Defaulting to a blank string.
+WARNING: The NGINX_SITES_PATH variable is not set. Defaulting to a blank string.
+WARNING: The NGINX_HOST_HTTP_PORT variable is not set. Defaulting to a blank string.
+WARNING: The NGINX_HOST_HTTPS_PORT variable is not set. Defaulting to a blank string.
+WARNING: The APPLICATION variable is not set. Defaulting to a blank string.
+WARNING: The PERCONA_DATABASE variable is not set. Defaulting to a blank string.
+WARNING: The PERCONA_USER variable is not set. Defaulting to a blank string.
+WARNING: The PERCONA_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The PERCONA_ROOT_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The PERCONA_PORT variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_PROXY1_CACHE_SIZE variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_PROXY1_BACKEND_HOST variable is not set. Defaulting to a blank string.
+WARNING: The VARNISH_PROXY1_SERVER variable is not set. Defaulting to a blank string.
+WARNING: The MARIADB_DATABASE variable is not set. Defaulting to a blank string.
+WARNING: The MARIADB_USER variable is not set. Defaulting to a blank string.
+WARNING: The MARIADB_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The MARIADB_ROOT_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The MARIADB_PORT variable is not set. Defaulting to a blank string.
+WARNING: The MSSQL_DATABASE variable is not set. Defaulting to a blank string.
+WARNING: The MSSQL_PASSWORD variable is not set. Defaulting to a blank string.
+WARNING: The MSSQL_PORT variable is not set. Defaulting to a blank string.
+WARNING: The MINIO_PORT variable is not set. Defaulting to a blank string.
+WARNING: The RABBITMQ_DEFAULT_USER variable is not set. Defaulting to a blank string.
+WARNING: The RABBITMQ_DEFAULT_PASS variable is not set. Defaulting to a blank string.
+WARNING: The RABBITMQ_NODE_HOST_PORT variable is not set. Defaulting to a blank string.
+WARNING: The RABBITMQ_MANAGEMENT_HTTP_HOST_PORT variable is not set. Defaulting to a blank string.
+WARNING: The RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT variable is not set. Defaulting to a blank string.
+WARNING: The ADM_PORT variable is not set. Defaulting to a blank string.
+WARNING: The ELASTICSEARCH_HOST_HTTP_PORT variable is not set. Defaulting to a blank string.
+WARNING: The ELASTICSEARCH_HOST_TRANSPORT_PORT variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_XDEBUG variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_SOAP variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_MONGO variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_NODE variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_YARN variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_DRUSH variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_AEROSPIKE_EXTENSION variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_V8JS_EXTENSION variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_COMPOSER_GLOBAL_INSTALL variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_WORKSPACE_SSH variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_LARAVEL_ENVOY variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_DEPLOYER variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_LINUXBREW variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_INSTALL_MC variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_PUID variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_PGID variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_NODE_VERSION variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_YARN_VERSION variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_TIMEZONE variable is not set. Defaulting to a blank string.
+WARNING: The BLACKFIRE_CLIENT_ID variable is not set. Defaulting to a blank string.
+WARNING: The BLACKFIRE_CLIENT_TOKEN variable is not set. Defaulting to a blank string.
+WARNING: The WORKSPACE_SSH_PORT variable is not set. Defaulting to a blank string.
+WARNING: The BEANSTALKD_HOST_PORT variable is not set. Defaulting to a blank string.
+ERROR: The Compose file '.\docker-compose.yml' is invalid because:
+services.proxy.expose is invalid: should be of the format 'PORT[/PROTOCOL]'
+services.proxy2.expose is invalid: should be of the format 'PORT[/PROTOCOL]'
+services.memcached.ports is invalid: Invalid port ":11211", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.beanstalkd.ports is invalid: Invalid port ":11300", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.mssql.ports is invalid: Invalid port ":1433", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.rabbitmq.ports is invalid: Invalid port ":15671", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.rabbitmq.ports is invalid: Invalid port ":15672", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.workspace.ports is invalid: Invalid port ":22", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.mariadb.ports is invalid: Invalid port ":3306", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.mysql.ports is invalid: Invalid port ":3306", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.percona.ports is invalid: Invalid port ":3306", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.apache2.ports is invalid: Invalid port ":443", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.nginx.ports is invalid: Invalid port ":443", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.selenium.ports is invalid: Invalid port ":4444", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.jenkins.ports is invalid: Invalid port ":50000", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.postgres.ports is invalid: Invalid port ":5432", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.postgres-postgis.ports is invalid: Invalid port ":5432", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.rabbitmq.ports is invalid: Invalid port ":5672", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.apache2.ports is invalid: Invalid port ":80", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.nginx.ports is invalid: Invalid port ":80", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.phpmyadmin.ports is invalid: Invalid port ":80", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.adminer.ports is invalid: Invalid port ":8080", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.jenkins.ports is invalid: Invalid port ":8080", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.balancer.ports is invalid: Invalid port ":8085", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.minio.ports is invalid: Invalid port ":9000", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.elasticsearch.ports is invalid: Invalid port ":9200", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]
+services.elasticsearch.ports is invalid: Invalid port ":9300", should be [[remote_ip:]remote_port[-remote_port]:]port[/protocol]

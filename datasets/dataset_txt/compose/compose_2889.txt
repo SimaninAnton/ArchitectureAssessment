@@ -1,0 +1,34 @@
+taiidani commented on 22 Jan 2016
+I have a docker-compose.yml file where multiple containers use the same image. When I call docker-compose pull the same image will be pulled multiple times. Is this really needed? The chances of a new version of that image being uploaded within the same pull process seems highly unlikely.
+Example YML:
+fpm:
+    image: company/fpm
+    container_name: fpm
+    volumes:
+        - /public:/var/www
+
+ownersfpm:
+    image: company/fpm
+    container_name: ownersfpm
+    volumes:
+        - /owners:/var/www
+
+partnersfpm:
+    image: company/fpm
+    container_name: partnersfpm
+    volumes:
+        - /partners:/var/www
+And the pull string:
+Pulling fpm (company/fpm)...
+vagrant: Pulling from company/fpm
+Digest: sha256:f190cbcd1a51b9fc03177bcda596dd2ae114825140284935f5a2b658754592a9
+Status: Image is up to date for company/fpm
+Pulling ownersfpm (company/fpm)...
+vagrant: Pulling from company/fpm
+Digest: sha256:f190cbcd1a51b9fc03177bcda596dd2ae114825140284935f5a2b658754592a9
+Status: Image is up to date for company/fpm
+Pulling partnersfpm (company/fpm)...
+vagrant: Pulling from company/fpm
+Digest: sha256:f190cbcd1a51b9fc03177bcda596dd2ae114825140284935f5a2b658754592a9
+Status: Image is up to date for company/fpm
+1

@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 16 Feb 2016
+From: #1203 (comment)
+config should validate everything it can, and the names of services in links are easily available (we already do this for depends_on).

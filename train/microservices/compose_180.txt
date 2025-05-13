@@ -1,0 +1,22 @@
+tusharbudhe0302 commented on 14 May 2019
+PS C:\TFS\guycarp-poc\guycarp-api> docker --version
+Docker version 18.02.0-ce, build fc4de447b5
+PS C:\TFS\guycarp-poc\guycarp-api> docker-compose --version
+docker-compose version 1.19.0, build 9e633ef
+PS C:\TFS\guycarp-poc\guycarp-api> docker-machine env default
+$Env:DOCKER_TLS_VERIFY = "1"
+$Env:DOCKER_HOST = "tcp://192.168.99.102:2376"
+$Env:DOCKER_CERT_PATH = "C:\Users\U1123452.docker\machine\machines\default"
+$Env:DOCKER_MACHINE_NAME = "default"
+$Env:COMPOSE_CONVERT_WINDOWS_PATHS = "true"
+Run this command to configure your shell:
+"C:\Program Files\Docker Toolbox\docker-machine.exe env default | Invoke-Expression"
+PS C:\TFS\guycarp-poc\guycarp-api> docker-machine ls
+| NAME | ACTIVE | DRIVER | STATE | URL | SWARM | DOCKER | ERRORS |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| default- virtualbox |Running | | Running |tcp://192.168.99.102:2376 || v18.09.6 |
+PS C:\TFS\guycarp-poc\guycarp-api> docker-machine start default
+Starting "default"...
+Machine "default" is already running.
+PS C:\TFS\guycarp-poc\guycarp-api> docker-compose -f .\docker-compose.yml up --build -d
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default.

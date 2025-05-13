@@ -1,0 +1,92 @@
+bugchecker commented on 5 Jul 2017 •
+edited
+I failed when I'm trying transfer entrypoint with special parameters from Dockerfile to docker-compose.yml.
+Before:
+$ cat ./parsey-universal/Dockerfile
+FROM andersrye/parsey-universal-server
+ENTRYPOINT ["sh", \
+    "-c", \
+    "set -ux && sed -ie '/print(\"got something/d' /opt/parsefaceserver/server.py && \"$@\"", \
+    "sh"]
+$ cat docker-compose.yml
+version: '2'
+services:
+  parsey-universal:
+    build: ./parsey-universal
+    command: python /opt/parsefaceserver/server.py
+    environment:
+      PARSEY_MODELS: English,Russian-SynTagRus
+$ docker-compose up -d parsey-universal
+Creating work_parsey-universal_1 ... 
+Creating work_parsey-universal_1 ... done
+$ docker-compose ps
+         Name                        Command               State   Ports
+------------------------------------------------------------------------
+work_parsey-universal_1   sh -c set -ux && sed -ie ' ...   Up
+$ docker-compose exec parsey-universal ps xf
+  PID TTY      STAT   TIME COMMAND
+  147 ?        Rs+    0:00 ps xf
+    1 ?        Ss     0:00 sh -c set -ux && sed -ie '/print("got something/d' /o
+    8 ?        Sl     0:00 python /opt/parsefaceserver/server.py
+   11 ?        S      0:00  \_ /usr/bin/python bazel-bin/syntaxnet/parser_eval -
+   21 ?        Sl     0:03  |   \_ /usr/bin/python /opt/tensorflow/models/syntax
+   12 ?        S      0:00  \_ /usr/bin/python bazel-bin/syntaxnet/parser_eval -
+   20 ?        Sl     0:03  |   \_ /usr/bin/python /opt/tensorflow/models/syntax
+   13 ?        S      0:00  \_ /usr/bin/python bazel-bin/syntaxnet/parser_eval -
+   17 ?        Sl     0:01  |   \_ /usr/bin/python /opt/tensorflow/models/syntax
+   14 ?        S      0:00  \_ /usr/bin/python bazel-bin/syntaxnet/parser_eval -
+   22 ?        Sl     0:02  |   \_ /usr/bin/python /opt/tensorflow/models/syntax
+   15 ?        S      0:00  \_ /usr/bin/python bazel-bin/syntaxnet/parser_eval -
+   25 ?        Sl     0:04  |   \_ /usr/bin/python /opt/tensorflow/models/syntax
+   16 ?        S      0:00  \_ /usr/bin/python bazel-bin/syntaxnet/parser_eval -
+   26 ?        Sl     0:03  |   \_ /usr/bin/python /opt/tensorflow/models/syntax
+   18 ?        S      0:00  \_ python /opt/parsefaceserver/server.py
+$ docker-compose stop parsey-universal && docker-compose rm -f parsey-universal
+Stopping work_parsey-universal_1 ... done
+Going to remove work_parsey-universal_1
+Removing work_parsey-universal_1 ... done
+After:
+$ cat docker-compose.yml
+version: '2'
+services:
+  parsey-universal:
+    image: andersrye/parsey-universal-server
+    entrypoint:
+      - sh
+      - -c
+      - set -ux && sed -ie '/print("got something/d' /opt/parsefaceserver/server.py && "$@"
+      - sh
+    command: python /opt/parsefaceserver/server.py
+    environment:
+      PARSEY_MODELS: English,Russian-SynTagRus
+$ docker-compose up -d parsey-universal
+ERROR: Invalid interpolation format for "entrypoint" option in service "parsey-universal": "set -ux && sed -ie '/print("got something/d' /opt/parsefaceserver/server.py && "$@""
+$ docker-compose ps
+ERROR: Invalid interpolation format for "entrypoint" option in service "parsey-universal": "set -ux && sed -ie '/print("got something/d' /opt/parsefaceserver/server.py && "$@""
+$ docker version
+Client:
+ Version:      1.12.6
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   78d1802
+ Built:        Tue Jan 10 20:38:45 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.6
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   78d1802
+ Built:        Tue Jan 10 20:38:45 2017
+ OS/Arch:      linux/amd64
+$ docker-compose version
+docker-compose version 1.14.0, build c7bdf9e
+docker-py version: 2.4.2
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 16.04.2 LTS
+Release: 16.04
+Codename: xenial

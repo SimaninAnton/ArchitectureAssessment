@@ -1,0 +1,44 @@
+jayfk commented on 20 Jul 2015
+I've stumbled across the recommended way of deploying code changes here: https://github.com/docker/compose/blob/master/docs/production.md
+Deploying changes
+When you make changes to your app code, you'll need to rebuild your image and
+recreate your app's containers. To redeploy a service called
+web, you would use:
+$ docker-compose build web
+$ docker-compose up --no-deps -d web
+This will first rebuild the image for web and then stop, destroy, and recreate
+just the web service. The --no-deps flag prevents Compose from also
+recreating any services which web depends on.
+I wasn't able to get to the desired behaviour using various projects. I always ended up with a mixed state of running and terminated containers with various recreations along the way.
+This is a minimal configuration to reproduce:
+docker-compose.yml:
+cache:
+  image: ubuntu
+  command: ping google.com
+
+nginx:
+  image: ubuntu
+  command: ping google.com
+
+web:
+  image: ubuntu
+  command: ping google.com
+Run:
+docker-compose up
+Open a second terminal and run:
+docker-compose ps
+Output should be something like:
+Name           Command       State   Ports
+----------------------------------------------
+test_cache_1   ping google.com   Up
+test_nginx_1   ping google.com   Up
+test_web_1     ping google.com   Up
+Now, If you follow the example and run
+docker-compose up --no-deps -d web
+in your second terminal, you'll see that all other containers are stopped after a while, except web of course.
+docker-compose ps
+    Name           Command        State     Ports
+-------------------------------------------------
+test_cache_1   ping google.com   Exit 137
+test_nginx_1   ping google.com   Exit 137
+test_web_1     ping google.com   Up

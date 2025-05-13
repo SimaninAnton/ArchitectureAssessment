@@ -1,0 +1,16 @@
+ghost commented on 15 Jan 2016
+I am getting following error when trying to run "docker-compose up -d":
+[root@N-temP openchain]# docker-compose up -d
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 5, in
+from pkg_resources import load_entry_point
+File "/usr/lib/python2.6/site-packages/pkg_resources.py", line 2655, in
+working_set.require(requires)
+File "/usr/lib/python2.6/site-packages/pkg_resources.py", line 648, in require
+needed = self.resolve(parse_requirements(requirements))
+File "/usr/lib/python2.6/site-packages/pkg_resources.py", line 546, in resolve
+raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: jsonschema>=2.5.1,<3
+Output for command: pip --version is
+pip 7.1.0 from /usr/lib/python2.6/site-packages (python 2.6)
+Operating System: CentOS release 6.5 (Final)

@@ -1,0 +1,5 @@
+Aisbergg commented on 21 Sep 2015
+Support of the newest logging drivers
+The currently docker-compose version 1.4.1 does only support json-file, syslog and none. It is due to the old dependency that comes with the install of compose. Updating docker-py from 1.3.1 to 1.4 would be great. At the moment the dependency is unmet when upgrading docker-py myself:
+pkg_resources.DistributionNotFound: The `'docker-py<1.4,>=1.3.1' distribution was not found and is required by docker-compose
+I just workarounded by using docker-py 1.3.1 and replacing types.py resp. types.pyc in /usr/local/lib/python2.7/dist-packages/docker/utils/ with the newest version.

@@ -1,0 +1,25 @@
+ein-shved commented on 25 Jan 2019
+When using one environment variable in different places of compose-file, you have to specify it's default value in every place, you use it. My real case are:
+orchestra:
+  volumes:
+    - ${TMP:-/tmp/}/my_docker/:${TMP:-/tmp/}/my_docker/
+  environment:
+    - TMP: ${TMP:-/tmp/}/my_docker
+This leads to extra code growing and more mistakes.
+I do not know would be my suggestion suitable for docker-compose philosophy, but there no reason to specify different default values for the same variable ind different places.
+So in my opinion it will be a good idea to make docker-compose to use the default value of first variable appearance in other places. When the second default value specified, docker-compose should breaks with error in case it differs from the first. The last one needed for backward compatibility and extra verification of old docker-compose files. According this the above examples may looks next:
+orchestra:
+  volumes:
+    - ${TMP:-/tmp/}/my_docker/:$TMP/my_docker/
+  environment:
+    - TMP: $TMP/my_docker
+Another way is to add new option with default environment variables values, which modifies the docker-compose environment prior running other options. There could be two options: one for variables which is not exists and another for variables which is not exists or empty. For example:
+orchestra:
+  env_defaults_empty:
+    - TMP: /tmp/ #used when TMP is unset or empty in the environment
+  env_default_absent:
+    - VARIABLE: "val" #used when VARIABLE is unset in the environment
+  volumes:
+    - ${TMP:-/tmp/}/my_docker/:$TMP/my_docker/
+  environment:
+    - TMP: $TMP/my_docker

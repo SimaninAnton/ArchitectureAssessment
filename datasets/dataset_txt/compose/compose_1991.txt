@@ -1,0 +1,39 @@
+sjeeva commented on 22 Oct 2016
+docker-compose get confused with the path while aggregating multiple compose files from different directories
+Below the directory structure
+.
+├── mod1 
+│   ├── docker-compose.yml
+│   └── httpd
+│       └── Dockerfile
+└── mod2
+    ├── docker-compose.yml
+    └── phpd
+        └── Dockerfile
+Below are the errors
+$ docker-compose -f mod1/docker-compose.yml -f mod2/docker-compose.yml build
+ERROR: build path /home/ubuntu/multi-directory-issue/mod1/phpd either does not exist, is not accessible, or is not a valid URL.
+$ docker-compose -f mod2/docker-compose.yml -f mod1/docker-compose.yml build
+ERROR: build path /home/ubuntu/multi-directory-issue/mod2/httpd either does not exist, is not accessible, or is not a valid URL.
+As you could see above, compose is getting confused with the path.. However it is able to build them individually as shown below
+$ docker-compose -f mod1/docker-compose.yml build
+Building httpd
+Step 1 : FROM ubuntu:14.04
+##  TEXT - TRUNCATED ## 
+
+$ docker-compose -f mod2/docker-compose.yml build
+Building phpd
+Step 1 : FROM ubuntu:14.04
+##  TEXT - TRUNCATED ## 
+Below are the sample Dockerfiles
+$ cat mod1/docker-compose.yml
+version: '2'
+services:
+  httpd:
+    build: httpd
+
+$cat mod2/docker-compose.yml
+version: '2'
+services:
+  phpd:
+    build: phpd

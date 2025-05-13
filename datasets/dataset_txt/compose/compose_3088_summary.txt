@@ -1,0 +1,1 @@
+--force-recreate doesn't kill and remove a running container before it tries to launch the new one

@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 19 Jan 2016
+Currently we support host, bridge and none as special cases in the list of networks, and we don't support net: container:... or net: service:....
+The new network_mode field would be a single scalar string value which supports any of the above, and we would remove this support from the networks field.

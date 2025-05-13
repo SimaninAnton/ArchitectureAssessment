@@ -1,0 +1,45 @@
+BentCoder commented on 23 Dec 2017
+Hi,
+When I have volumes: directive set in docker-compose.yml, the ownership of the logs directory is root:root. If I get rid of volumes: directive then the ownership of the logs directory is root:www-data which is what I want but this time I won't be able share logs with my local OS. How can I make this possible? So all I need is, own /usr/local/apache2/logs as root:www-data and see the logs in local OS. That's all!
+Thanks
+$ docker-compose -v
+docker-compose version 1.17.0, build ac53b73
+$ docker -v
+Docker version 17.09.0-ce, build afdb6d4
+docker-compose.yml
+version: '3'
+services:
+    apache_img:
+        container_name: apache_con
+        build: ./apache
+        volumes:
+            - ../logs/apache:/usr/local/apache2/logs
+apache/Dockerfile
+FROM httpd:2.4
+RUN chown -R root:www-data /usr/local/apache2/logs
+Result from having volumes: directive
+$ docker exec -it apache_con bash
+
+root@6063c694ef2b:/usr/local/apache2# ls -l 
+...
+drwxr-sr-x 1 root www-data 4096 Dec 23 09:40 conf
+drwxr-sr-x 2 root www-data 4096 Dec 12 04:59 htdocs
+drwxr-xr-x 2 root root     4096 Dec 23 09:40 logs
+
+root@6063c694ef2b:/usr/local/apache2# ls -l logs/
+...
+-rw-r--r-- 1 root root 0 Dec 23 09:47 access.log
+-rw-r--r-- 1 root root 0 Dec 23 09:47 error.log
+Result from not having volumes: directive
+ubuntu@linux:~/hello-world$ docker exec -it apache_con bash
+
+root@9a5da32a0557:/usr/local/apache2# ls -l
+...
+drwxr-sr-x 1 root www-data 4096 Dec 23 09:47 conf
+drwxr-sr-x 2 root www-data 4096 Dec 12 04:59 htdocs
+drwxr-sr-x 1 root www-data 4096 Dec 23 09:47 logs
+
+root@9a5da32a0557:/usr/local/apache2# ls -l logs/
+...
+-rw-r--r-- 1 root www-data 0 Dec 23 09:47 access.log
+-rw-r--r-- 1 root www-data 0 Dec 23 09:47 error.log

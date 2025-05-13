@@ -1,0 +1,13 @@
+fkautz commented on 13 Nov 2015
+$ docker-compose up --force-recreate
+Recreating reproduciblebuilds_redis_1
+Recreating 589ef0f368_589ef0f368_reproduciblebuilds_repro_1
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/logging/__init__.py", line 859, in emit
+    msg = self.format(record)
+  File "/usr/lib64/python2.7/logging/__init__.py", line 732, in format
+    return fmt.format(record)
+  File "/usr/lib/python2.7/site-packages/compose/cli/formatter.py", line 48, in format
+    return self.get_level_message(record) + message
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 124: ordinal not in range(128)
+Logged from file main.py, line 66

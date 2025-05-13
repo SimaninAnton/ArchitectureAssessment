@@ -1,0 +1,8 @@
+kill0rz commented on 1 Mar 2018
+I have the following commands in my crontable:
+/usr/local/bin/docker-compose pull > /dev/null
+/usr/local/bin/docker-compose build --pull > /dev/null
+/usr/local/bin/docker-compose up --no-deps -d > /dev/null
+I want to supress the outputs and only get error messages, but these still give me the complete output.
+Is this a bug? How can I do this?
+Thank you!

@@ -1,0 +1,1 @@
+"HTTPS endpoint unresponsive and insecure mode isn't enabled" with boot2docker

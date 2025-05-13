@@ -1,0 +1,1 @@
+Copying application files/folders into container from host filesystem

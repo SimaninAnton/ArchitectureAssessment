@@ -1,0 +1,13 @@
+aalexgabi commented on 24 Apr 2018
+Description of the issue
+I need a dynamic list of volumes in docker-compose.yml:
+services:
+  my-app:
+    volumes:
+      {{
+        MODULES=($(ls modules))
+        for MODULE in ${MODULES[@]} ; do
+          echo "- ./lib:/opt/my-app/modules/$MODULE/lib"
+        done
+      }}
+Here is a more generic question: how do you substitute variables that contain arrays or objects of yml values? Is there a way to have dynamic number of entries for any docker-compose.yml array entry?

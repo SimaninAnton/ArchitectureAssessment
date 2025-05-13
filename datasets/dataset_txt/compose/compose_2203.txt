@@ -1,0 +1,9 @@
+benjyz commented on 26 Jul 2016 •
+edited by aanand
+In a docker machine, docker compose up has some auth config error, but its unclear what this error exactly is. Would nice to know which file this is looking for e.g.
+$ docker-compose --verbose -p webapp up 
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.auth.load_config: File doesn't exist
+docker.api.build._set_auth_headers: No auth config found

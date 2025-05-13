@@ -1,0 +1,4 @@
+bd8392 commented on 27 Sep 2019
+Hi,
+I want to configure openhab with a traefik reverseproxy. So far so good, it works, but I've a problem. I need to acces the web-frontend from openhab ONLY over trafik, as openahb itself doesn't provide authentication, so I've to use a reverse-proxy container for not exposing the ports of openhab directly BUT Openhab also has auto-discovery abbilities, which do not work when the container isn't attached to the host network. So my Question is...How can I write a docker compose, in which i can access openhab only over the traefik container, but openahb is still assigned to the host network and can use it's discovery futures? I think its some kind of network-configuration. I want to do it only within the docker-compose or with cli...please help =)
+Kind regards

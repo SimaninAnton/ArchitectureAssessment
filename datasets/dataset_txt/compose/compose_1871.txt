@@ -1,0 +1,23 @@
+liamjones commented on 6 Dec 2016
+Variable substitution doesn't seem to work correctly when there is a default value which itself contains curly braces. I saw the documentation stating that $$ can be used to escape $ but didn't see anything about escaping curly braces (doubling them up didn't seem to help). Steps to reproduce:
+Create a docker-compose.yml with the following contents:
+version: '2.1'
+
+services:
+
+  hello-world:
+    image: hello-world:latest
+    environment:
+      - URL_TEMPLATE=${URL_TEMPLATE:-http://example.org/{urlTemplateVariable}/some-sub-directory}
+docker-compose up then examine the environment variables of the container (e.g. docker inspect -f "{{ .Config.Env }}" test_hello-world_1).
+Expected value of URL_TEMPLATE:
+http://example.org/{urlTemplateVariable}/some-sub-directory
+Actual value is:
+http://example.org/{urlTemplateVariable/some-sub-directory}
+This also seems to cause problems when trying to override the default value from a .env file. If you add a .env like so:
+URL_TEMPLATE=http://example.net
+The expected value of URL_TEMPLATE is:
+http://example.net
+Actual value is:
+http://example.net/some-sub-directory}
+7

@@ -1,0 +1,50 @@
+ghost commented on 2 Nov 2018
+I cannot run docker-compose exec with my service
+Main log
+Creating epm-adpt_adaptation-integration-test_1 ... done $ docker-compose exec adaptation-integration-test bash -c '/activator "testOnly *IntegrationTest"' No such service: adaptation-integration-test
+docker-compose-integration-test.yml file
+version: '3'
+
+services:
+    adaptation-integration-test:
+        image: ${ARTIFACTORY_REPO}/epm-adpt/adaptation:${CI_COMMIT_TAG}-${CI_PIPELINE_ID}
+        env_file:
+            - .env
+        environment:
+            - DOMAIN_ENV=${DOMAIN_ENV}
+        build:
+            context: .
+        depends_on:
+            - "mongo-test"
+        logging:
+          driver: "json-file"
+          options:
+            max-size: "50m"
+            max-file: "5"
+
+    mongo-test:
+        image: mongo:3.0.2
+        ports:
+            - 127.0.0.1:27017:27017
+        volumes:
+            - mongodb:/data/db
+            - ./mongo/mongod.conf:/etc/mongo/mongod.conf
+        logging:
+          driver: "json-file"
+          options:
+            max-size: "50m"
+            max-file: "5"
+
+volumes:
+    mongodb:
+```
+
+Run script
+```
+
+     - docker-compose -f docker-compose-integration-test.yml up -d --force-recreate --remove-orphans
+      - docker-compose exec adaptation-integration-test bash -c '/activator "testOnly *IntegrationTest"'
+      - docker-compose down
+      - docker system prune -f 
+```
+Could you help me and clarifay what i do wrong?

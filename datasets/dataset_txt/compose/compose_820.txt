@@ -1,0 +1,12 @@
+eriksenonline commented on 7 Mar 2018 •
+edited
+In some dev environments, you can have some tools needed on a stag server for profiling, APM testing etc. This can be implemented either in the docker image or as separate containers.
+Multiple docker-compose files are not fun to work with. So I wonder if it should be possible to start a service in the docker-compose file based on a variable.
+Example
+In the docker compose on the service we could add a parameter
+conditional_startup: true
+When this condition is set in the docker-compose it will automatically map to a variable in the .env file.
+Then in the .env file we could add this
+service_blackfire=true (this will start the service)
+service_blackfire=false (this will NOT start the service)
+With this, you would not need to maintain complicated CLI commands with -f for another docker-compose file and so on.

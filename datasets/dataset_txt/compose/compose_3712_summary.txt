@@ -1,0 +1,1 @@
+Extends does not use correct data when doing "docker-compose restart service"

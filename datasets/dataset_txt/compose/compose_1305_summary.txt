@@ -1,0 +1,1 @@
+docker-compose config doesn't print ':' when first port is 0

@@ -1,0 +1,9 @@
+sulphur commented on 11 Jan 2016
+hi,
+Creating zookeeper_1
+ERROR: Cannot start container e10b86ad21b68327dfa92e6068dc4e4f90587ab18d66076c1bc669d5c1c3a176: failed to create endpoint zookeeper_1 on network bridge: iptables failed: iptables --wait -t nat -A DOCKER -p tcp -d 0/0 --dport 2181 -j DNAT --to-destination 172.17.0.2:2181 ! -i docker0: iptables: No chain/target/match by that name.
+ (exit status 1)
+my docker0 interface address is 172.17.0.1 so clearly it uses wrong one. I'm able to start the container with
+docker run --rm wurstmeister/zookeeper
+and restarting docker daemon fix the issue... temporary. Until next break. This docker insane is running on my jenkins machine so i'm always creating and destroying the containers.
+i'm using docker-compose 1.5.2 and docker 1.9.1

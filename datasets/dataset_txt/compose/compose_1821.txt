@@ -1,0 +1,12 @@
+tmaier commented on 4 Jan 2017 •
+edited
+https://hub.docker.com/r/docker/compose/
+Common use case for this repo: Run docker-compose within a CI pipeline, which is based on docker-in-docker.
+As MVP, please do the following:
+Add a reference to the Dockerfile which is being used here
+Add automated build from repo
+Add automated build when the dependent image alpine has been updated
+Add a latest tag
+On top of this, please consider
+Add explanation how to use this together with docker:dind
+5

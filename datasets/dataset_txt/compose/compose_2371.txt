@@ -1,0 +1,31 @@
+mysuperstar commented on 23 May 2016
+Hi,
+I'm using docker toolbox for Windows (docker v1.11.1, compose v1.7.1).
+My docker-compose.yml looks like this :
+version: '2'
+
+services:
+  ubuntu:
+    image: ubuntu
+    networks:
+      test:
+        ipv4_address: 172.16.238.10
+    command: sleep 1000
+
+networks:
+  test:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+        gateway: 172.16.238.1
+Then when I try to execute a command with docker-compose run, i get the next error :
+$ docker-compose run -d ubuntu ls
+Address already in use
+I guess it is because I use a static IP for the container but we should be able to use docker-compose run anyway.
+Is it a bug or is there a way to make it work ?
+Thanks for your help !
+1

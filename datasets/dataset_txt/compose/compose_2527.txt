@@ -1,0 +1,75 @@
+thomas-riccardi commented on 7 Apr 2016
+Scenario:
+Files
+Dockerfile:
+FROM ubuntu:14.04
+
+ARG FOO=1
+RUN echo "-${FOO}-"
+
+CMD /bin/bash
+docker-compose.yml:
+version: '2'
+
+services:
+  test:
+    build:
+      context: .
+      args:
+        - FOO
+Execution:
+$ ./docker-compose-1.6.2 --verbose config
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+networks: {}
+services:
+  test:
+    build:
+      args:
+        FOO: None
+      context: /home/riccardi/git/ses-docker/test-default-build-arg
+version: '2.0'
+volumes: {}
+$ ./docker-compose-1.6.2 --verbose build
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.2.0-35-generic, Os=linux, BuildTime=2016-03-10T15:54:52.312835708+00:00, ApiVersion=1.22, Version=1.10.3, GitCommit=20f81dd, Arch=amd64, GoVersion=go1.5.3
+compose.service.build: Building test
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag=u'testdefaultbuildarg_test', buildargs={u'FOO': 'None'}, rm=True, forcerm=False, path='/home/riccardi/git/ses-docker/test-default-build-arg', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.auth.load_config: File doesn't exist
+docker.api.build._set_auth_headers: No auth config found
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x7f56bafb3a50>
+Step 1 : FROM ubuntu:14.04
+ ---> b549a9959a66
+Step 2 : ARG FOO=1
+ ---> Using cache
+ ---> 4774113d6ec5
+Step 3 : RUN echo "-${FOO}-"
+ ---> Running in dabd31837074
+-None-
+ ---> f8a99349af3b
+Removing intermediate container dabd31837074
+Step 4 : CMD /bin/bash
+ ---> Running in 487f5e789c38
+ ---> 6c484f426fb5
+Removing intermediate container 487f5e789c38
+Successfully built 6c484f426fb5
+compose.cli.verbose_proxy.proxy_callable: docker close <- ()
+compose.cli.verbose_proxy.proxy_callable: docker close -> None
+( same result with 1.7.1-rc1 which includes PR #2938 )
+Issue
+Expected result:
+prints -1-.
+Actual result:
+prints -None-.
+Details:
+Compose has no value for FOO build arg from its environment, so it could either send an empty string to docker build, or better: not send this build arg to docker build.
+The second one would be great: it would open the possibility to use the default value for the build arg as defined in the Dockerfile. ( For now the workaround is to duplicate the default values from Dockerfile to .env, only works with >=1.7.0).
+The first one would be still better than the current behavior.
+Current behavior: no value in Compose environment is represented in python as None, then casted to a string "None", which is probably always bad.

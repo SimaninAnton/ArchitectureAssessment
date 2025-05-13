@@ -1,0 +1,23 @@
+karthigb commented on 24 Jul 2014
+Hi,
+I'm trying to get the Flask tutorial up and running, but I get the follow error:
+➜  sudo fig up               
+Recreating figtest_redis_1...
+Creating figtest_web_1...
+Building web...
+ ---> cdc18ed4ed6f
+Step 1 : ADD . /code
+ ---> Using cache
+ ---> af5b6bfbc4c1
+Step 2 : WORKDIR /code
+ ---> Using cache
+ ---> cf32151738e6
+Step 3 : RUN pip install -r requirements.txt
+ ---> Running in 37a472e3cf93
+Downloading/unpacking flask (from -r requirements.txt (line 1))
+  Cannot fetch index base URL https://pypi.python.org/simple/
+  Could not find any downloads that satisfy the requirement flask (from -r requirements.txt (line 1))
+Cleaning up...
+No distributions at all found for flask (from -r requirements.txt (line 1))
+Storing debug log for failure in /.pip/pip.log
+Service 'web' failed to build: The command [/bin/sh -c pip install -r requirements.txt] returned a non-zero code: 1

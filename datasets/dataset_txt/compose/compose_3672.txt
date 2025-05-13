@@ -1,0 +1,37 @@
+Contributor
+kojiromike commented on 29 Apr 2015
+revise
+Actually, this bug is simply that docker-compose pull doesn't give an error when the requested image doesn't exist, but docker-compose run does give an error when it fails to pull.
+original/outdated
+For some reason docker-compose is succeeding with pull and failing with run trying to pull images using the same docker-compose.yml file:
+$ cat docker-compose.yml
+db:
+    image: privrepo.example.com/cheetah/magento-retail-order-management-db:1.14.1.0-ee
+phpunit:
+    image: privrepo.example.com/cheetah/magento-retail-order-management-dev:1.14.1.0-ee-f7e9bd1
+    links:
+        - db
+    command: phpunit -d memory_limit=-1
+
+$ docker-compose pull
+Pulling db (privrepo.example.com/cheetah/magento-retail-order-management-db:1.14.1.0-ee)...
+Pulling phpunit (privrepo.example.com/cheetah/magento-retail-order-management-dev:1.14.1.0-ee-f7e9bd1)...
+
+$ docker-compose run --rm phpunit
+Creating magentoretailordermanagement_db_1...
+Pulling image privrepo.example.com/cheetah/magento-retail-order-management-db:1.14.1.0-ee...
+Pulling repository privrepo.example.com/cheetah/magento-retail-order-management-db
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 300, in run
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 214, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 288, in start_or_create_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 199, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 37, in stream_output
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 50, in print_output_event
+compose.progress_stream.StreamOutputError: Error: image cheetah/magento-retail-order-management-db:1.14.1.0-ee not found

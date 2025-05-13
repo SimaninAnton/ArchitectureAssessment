@@ -1,0 +1,20 @@
+neophob commented on 7 Aug 2014
+hellou
+I use fig (v0.5.2) to build my docker images on a jenkins server. my script builds all images, which looks like this:
+echo ----- BUILD
+fig up -d
+echo ----- DONE
+fig ps
+however the fig pscall just fails:
+stty: standard input: Inappropriate ioctl for device
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 30, in main
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 31, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 50, in perform_command
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 178, in ps
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.formatter", line 9, in table
+ValueError: need more than 0 values to unpack

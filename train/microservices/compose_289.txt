@@ -1,0 +1,44 @@
+ssbarnea commented on 9 Feb 2019 •
+edited
+It seems that current paramiko code in code in docker-compose is flawed and fails to use ssh key loaded in the agent.
+It seems that the same bug also afectts docker-py at docker/docker-py#2251 but I am sure that this use-case is covered by paramiko because other tools using it have no problems using the ssh key (example ansible).
+It should not be hard to replicate the issue locally using a loopback ssh connection, no need for a remote server.
+export DOCKER_HOST=ssh://$USER@localhost
+docker info
+# ^ this works, docker is able to use the ssh protocol
+
+docker-compose build
+The command abone will choke with an error similar to below:
+$ docker-compose build                                                                                                                                                                                 {u'stackOrchestrator': u'swarm'}
+Connected (version 2.0, client OpenSSH_7.4)
+Authentication (publickey) failed.
+Authentication (publickey) failed.
+Traceback (most recent call last):
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/bin/docker-compose", line 11, in <module>
+sys.exit(main())
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+command()
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/compose/cli/main.py", line 124, in perform_command
+project = project_from_options('.', options)
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/compose/cli/command.py", line 42, in project_from_options
+compatibility=options.get('--compatibility'),
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/compose/cli/command.py", line 123, in get_project
+host=host, environment=environment
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/compose/cli/command.py", line 94, in get_client
+environment=environment, tls_version=get_tls_version(environment)
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/compose/cli/docker_client.py", line 127, in docker_client
+client = APIClient(**kwargs)
+File "/Users/ssbarnea/os/docker-py/docker/api/client.py", line 166, in __init__
+base_url, timeout, pool_connections=num_pools
+File "/Users/ssbarnea/os/docker-py/docker/transport/sshconn.py", line 94, in __init__
+password=None
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/paramiko/client.py", line 437, in connect
+passphrase,
+File "/Users/ssbarnea/.pyenv/versions/2.7.15/lib/python2.7/site-packages/paramiko/client.py", line 749, in _auth
+raise saved_exception
+paramiko.ssh_exception.PasswordRequiredException: Private key file is encrypted
+I removed the encrypted key, hopping that docker will use the agent one, but instead It fails with
+paramiko.ssh_exception.AuthenticationException: Authentication failed.
+The proof that I do have key working (and obviously doing ssh works):
+$ ssh-add -l
+4096 SHA256:IIgRCJ84QIlEIoYJ1RiFYRwPlbxXVr3z/7jo+FTM6zg  (RSA)

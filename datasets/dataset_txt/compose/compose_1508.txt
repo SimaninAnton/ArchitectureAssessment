@@ -1,0 +1,44 @@
+ksylvan commented on 25 Apr 2017
+Docker Compose running as a container does not work in a docker container
+Running docker-compose as a container (see https://github.com/dduportal-dockerfiles/docker-compose.git or my fork) works on the host system, but fails to find the docker-compose.yml file while running in a docker:latest container. The docker-compose shell script looks like this:
+#!/bin/sh
+
+IMG=kayvan/docker-compose:1.12.0
+
+if [ -t 0 ]; then OPTS='-it'; fi
+
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+       -v "$(pwd):$(pwd)" -w "$(pwd)" \
+       $OPTS ${IMG} ${1+"$@"}
+Running on the host
+Starting redis ... done
+Starting postgres ... done
+$ ./docker-compose 
+docker-compose version 1.12.0, build b31ff33
+$ ./docker-compose ps
+         Name                       Command               State           Ports          
+----------------------------------------------------------------------------------------
+composetest_postgres_1   docker-entrypoint.sh postgres    Up      0.0.0.0:5432->5432/tcp 
+composetest_redis_1      docker-entrypoint.sh redis ...   Up      0.0.0.0:6379->6379/tcp 
+$
+Running in a docker container with $(pwd) volume mounted to /src
+$ docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src docker sh
+/src # ./docker-compose
+docker-compose version 1.12.0, build b31ff33
+/src # ./docker-compose ps
+ERROR: 
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml
+        
+/src #
+Running in a docker container with $(pwd) volume mounted to $(pwd)
+If I do the same thing and map $(pwd) to $(pwd) instead of `/src', then it works:
+$ docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):$(pwd) -w $(pwd) docker sh
+/home/kayvan/src/compose-test # ./docker-compose ps
+         Name                       Command               State           Ports          
+----------------------------------------------------------------------------------------
+composetest_postgres_1   docker-entrypoint.sh postgres    Up      0.0.0.0:5432->5432/tcp 
+composetest_redis_1      docker-entrypoint.sh redis ...   Up      0.0.0.0:6379->6379/tcp 
+/home/kayvan/src/compose-test #

@@ -1,0 +1,1 @@
+Docker 1.13.1 swarm-mode compose not assign the correct static addresses

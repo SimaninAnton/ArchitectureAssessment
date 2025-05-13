@@ -1,0 +1,1 @@
+Docker-compose up exit with status code 1 without info

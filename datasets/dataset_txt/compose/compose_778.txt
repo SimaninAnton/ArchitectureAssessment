@@ -1,0 +1,46 @@
+jamshid commented on 26 Mar 2018
+Description of the issue
+I expect to only see containers that publish port 19088, but instead I see all containers started by my compose file.
+$ docker-compose ps --filter "publish=19088" 
+...
+example_test_1                      /bin/sh -c /start.sh       Up           4444/tcp, 5900/tcp, 6080/tcp, 80/tcp          
+Regular docker ps works as expected:
+$ docker ps --filter "publish=19088" 
+c35a214eabc1        192.168.1.61:5000/example:latest   "/tini -g -- /config…"   21 minutes ago      Up 21 minutes       9001/tcp, 0.0.0.0:5423->22/tcp, 0.0.0.0:5435->135/tcp, 0.0.0.0:5437->137/tcp, 0.0.0.0:5439->139/tcp, 0.0.0.0:5445->445/tcp, 0.0.0.0:5418->18088/tcp, 0.0.0.0:5419->19088/tcp   example_foo_1
+Context information (for bug reports)
+docker-compose version 1.20.0-rc2, build 8c4af54
+Client:
+ Version: 18.03.0-ce-rc4
+ API version: 1.35 (downgraded from 1.37)
+ Go version: go1.9.4
+ Git commit: fbedb97
+ Built: Thu Mar 15 07:33:28 2018
+ OS/Arch: darwin/amd64
+ Experimental: true
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 17.12.1-ce
+  API version: 1.35 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 7390fc6
+  Built: Tue Feb 27 22:16:13 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+Really need this?
+Steps to reproduce the issue
+Use compose to bring up services some that publish a port.
+Try to list those services.
+FYI I'm mainly needing this to list the containers for a service that were not started by a run. I guess is-task=false should work too?
+Observed result
+see above
+Expected result
+see above
+Stacktrace / full error message
+no error, just not able to filter containers from compose
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+4

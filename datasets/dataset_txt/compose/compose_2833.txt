@@ -1,0 +1,17 @@
+Contributor
+saulshanabrook commented on 6 Feb 2016
+I think that docker-compose run <service> should bring up the dependencies of that service, the same as docker-compose up <service> would. There is already the --no-deps flag for run, which implies that the default behavior is to bring up dependencies.
+If this is the intended behavior, then I am not seeing it. If I have a docker-compose.yml file like this:
+version: '2'
+services:
+  web:
+    image: postgres
+    command: sh -c 'psql -h db -p 5432 -U postgres -d postgres -c "\list"'
+    entrypoint: /tmp/entrypoint.sh
+    volumes:
+      - ./entrypoint.sh:/tmp/entrypoint.sh
+    depends_on:
+       - db
+  db:
+    image: postgres
+Then running docker-compose run web won't bring up the db container.

@@ -1,0 +1,18 @@
+pyros2097 commented on 23 Jun 2016
+I would be nice to have a description field in the services so that users can just read the docker-compose yml and understand what each service does. Something like this,
+version: '2'
+services:
+   prodDBUI:
+    description: To access the production db
+    image: phpmyadmin/phpmyadmin
+    environment:
+     - PMA_ARBITRARY=1
+   cleanImages:
+    description: To cleanup artifacts left by docker
+    image: pyros2097/web
+    command: clean.sh
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+Right now I need to document what these services do in a separate readme.
+1
+1

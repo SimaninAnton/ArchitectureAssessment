@@ -1,0 +1,42 @@
+bdhameli commented on 25 Apr 2017 •
+edited
+I am consistently getting a MemoryError on container:
+bdhameli@debian:~/Docker$ docker-compose up openvpn
+Starting dmzpi_openvpn_1
+Attaching to dmzpi_openvpn_1
+Traceback (most recent call last):
+  File "bin/docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 67, in main
+  File "compose/cli/main.py", line 117, in perform_command
+  File "compose/cli/main.py", line 937, in up
+  File "compose/cli/log_printer.py", line 87, in run
+  File "compose/cli/log_printer.py", line 235, in consume_queue
+MemoryError
+At this point, the container is running normally.
+The docker-compose.yml file contains:
+services:
+  openvpn:
+    build: ./openvpn
+    cap_add:
+      - net_admin
+    dns:
+      - 8.8.4.4
+      - 8.8.8.8
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./openvpn/vpn:/vpn
+    devices:
+      - /dev/net/tun:/dev/net/tun
+Docker and Docker-Compose versions are:
+:~/Docker$ docker --version
+Docker version 17.03.1-ce, build c6d412e
+:~/Docker/$ docker-compose version
+docker-compose version 1.12.0, build b31ff33
+docker-py version: 2.2.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016

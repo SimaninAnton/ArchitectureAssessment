@@ -1,0 +1,14 @@
+brunocascio commented on 22 Nov 2016 •
+edited
+Hi,
+What do you think about the ability to add env_files with regexp?
+Example:
+pepe:
+    image: pepe
+    volumes:
+      - mongo_data_dev:/data/db
+    env_file:
+      - .env.development
+      - .env.development.*
+It should match with the files .env.development and for example env.development.customized
+Thanks

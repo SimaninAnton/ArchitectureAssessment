@@ -1,0 +1,1 @@
+add command to list service names

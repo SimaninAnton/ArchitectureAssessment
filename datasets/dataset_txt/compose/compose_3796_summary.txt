@@ -1,0 +1,1 @@
+Compose 'up' command fails after second call

@@ -1,0 +1,6 @@
+liamzebedee commented on 25 Jul 2014
+Running Ubuntu 14.04, followed the Fig tutorial for Rails, encountered an error after running fig run web rake db:create:
+Couldn't create database for {"adapter"=>"postgresql", "encoding"=>"unicode", "database"=>"railsapp_development", "pool"=>5, "username"=>"docker", "password"=>"docker", "host"=>"172.17.0.28", "port"=>5432}
+PG::InvalidParameterValue: ERROR:  new encoding (UTF8) is incompatible with the encoding of the template database (SQL_ASCII)
+HINT:  Use the same encoding as in the template database, or use template0 as template.
+Fix I found was to edit the database.yml and insert template: template0 under the configuration for the development/default database.

@@ -1,0 +1,7 @@
+jgadbois commented on 12 Jan 2015
+After updating fig, I'm having a problem where fig seems to be caching the local working directory and using it's own version instead of using my local directory. For instance in my fig.yml I have
+  volumes:
+    - .:/var/www/html/
+But file changes don't show in the web server.
+In another project, where a volume is mounted the same way, switching branches in my local directory does not seem to update the code in the mounted volume.
+Is this a new configuration item I am missing or something?

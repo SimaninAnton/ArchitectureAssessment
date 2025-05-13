@@ -1,0 +1,1 @@
+Readline errors when running binary on arch linux

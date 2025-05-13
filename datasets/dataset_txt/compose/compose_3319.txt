@@ -1,0 +1,2 @@
+programmerq commented on 5 Sep 2015
+This was outlined in #1013, but that ended up only fixing the issue when doing a run with the --rm flag.

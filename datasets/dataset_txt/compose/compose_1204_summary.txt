@@ -1,0 +1,1 @@
+Reference part of multi-stage build

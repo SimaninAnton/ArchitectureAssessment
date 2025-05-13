@@ -1,0 +1,11 @@
+Contributor
+garribas commented on 6 Oct 2017
+The following two acceptance test cases are failing for all new PRs, no matter what the source code changes are:
+CLITestCase.test_build_failed (assert len(containers) == 1 fails with AssertionError: assert 3 == 1)
+CLITestCase.test_build_failed_forcerm (assert not containers fails with AssertionError: assert not [<Container: affectionate_dijkstra (349f9a)>])
+Both tests pass locally, is the Jenkins server keeping some state of previous builds?
+Affected PRs: #5237 , #5238, #5241
+Jenkins logs:
+https://jenkins.dockerproject.org/job/docker/job/compose/job/PR-5237/1/consoleFull
+https://jenkins.dockerproject.org/job/docker/job/compose/job/PR-5238/2/consoleFull
+https://jenkins.dockerproject.org/job/docker/job/compose/job/PR-5241/1/consoleFull

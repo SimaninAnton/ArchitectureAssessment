@@ -1,0 +1,14 @@
+corradio commented on 24 Jun 2016 •
+edited
+Hello,
+I'm trying to use external_links to link to a container outside of the compose network. However it does not work. One solution is to add network_mode: "bridge" to all services.
+Is there a way to except that external_links automatically links to the bridge network?
+version: '2'
+services:
+  web:
+    build: .
+    depends_on: [mongo]
+    external_links: ["grafana_graphite_statsd:statsd"]
+  mongo:
+    image: mongo
+2

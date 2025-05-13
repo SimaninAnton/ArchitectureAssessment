@@ -1,0 +1,1 @@
+Feature Request: Add depends_on support for external Compose files

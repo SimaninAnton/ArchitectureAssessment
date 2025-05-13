@@ -1,0 +1,50 @@
+jehon commented on 7 Sep 2018
+Description of the issue
+Environment: Windows 10
+Status: service Docker is down
+$ docker-compose up
+==> ERROR: Windows named pipe error: The system cannot find the file specified. (code: 2)
+I would expect a message saying "Docker: service unreachable. Is it started?"
+Context information (for bug reports)
+docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.38/version: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
+docker-compose.yml
+services:
+  mysql:
+    environment:
+    image: mysql:5.5
+  server:
+    build:
+      context: xxx\
+      dockerfile: conf/docker-server-file
+    depends_on:
+    - mysql
+    ports:
+    - 5555:80/tcp
+version: '3.1'
+Steps to reproduce the issue
+Stop windows "docker" service
+docker-compose up
+Observed result
+An unrelated error
+Expected result
+I would expect a message saying "Docker: service unreachable. Is it started?"
+Stacktrace / full error message
+Additional information
+Windows 10
+Running docker from command line
+Docker service is not running
+1

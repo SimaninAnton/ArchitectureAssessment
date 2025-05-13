@@ -1,0 +1,37 @@
+JamesJJ commented on 23 Jan 2018
+Version
+docker-compose version 1.18.0, build 8dd22a9
+docker-compose.yml
+version: '2.2'
+services:
+
+  test:
+    image: "alpine"
+    environment:
+      KEY: "${VALUE}"
+      NO_VARIABLE_KEY: "沒問題"
+ACSII VALUE
+$ export VALUE=foo
+$ docker-compose config
+services:
+  test:
+    environment:
+      KEY: foo
+      NO_VARIABLE_KEY: "\u6C92\u554F\u984C"
+    image: alpine
+version: '2.2'
+Non-ACSII VALUE
+$ export VALUE=加油
+$ docker-compose config
+ERROR: Invalid interpolation format for "environment" option in service "test": "${VALUE}"
+Feature/Improve request : Instead of throwing error Invalid interpolation format, could "requires encoding" substitution values be handled automatically i.e. expected result of above would be:
+$ export VALUE=加油
+$ docker-compose config
+services:
+  test:
+    environment:
+      KEY: "\u52A0\u6CB9"
+      NO_VARIABLE_KEY: "\u6C92\u554F\u984C"
+    image: alpine
+version: '2.2'
+Many thanks ^_^

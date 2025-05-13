@@ -1,0 +1,2 @@
+imaia commented on 7 Jul 2017
+Please, document when volumes are attached with docker compose. Are they created before or after the container was created? Named volumes and anonymous volumes behave differently? Etc.

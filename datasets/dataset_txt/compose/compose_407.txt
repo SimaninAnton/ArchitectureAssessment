@@ -1,0 +1,80 @@
+raesene commented on 11 Nov 2018 •
+edited
+Description of the issue
+Just trying out the new SSH connection introduced in Docker 18.09 and I noticed an error when attempting to do docker-compose up whilst targeting a remote Docker Engine instance.
+Errors message below appears to indicate that Compose isn't aware of the SSH protocol for this purpose
+docker.errors.DockerException: Invalid bind address protocol: ssh://xfoxy.secinternal.local
+[486] Failed to execute script docker-compose
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  testnet: {}
+services:
+  dradis:
+    image: raesene/dradis
+    networks:
+      testnet: null
+    ports:
+    - 3000/tcp
+    volumes:
+    - data:/data:rw
+  sectest:
+    image: raesene/sectest
+    networks:
+      testnet: null
+    ports:
+    - 22/tcp
+    volumes:
+    - data:/data:rw
+version: '3.0'
+volumes:
+  data: {}
+Steps to reproduce the issue
+Configure a Docker client (18.09) to connect to a remote Docker engine instance via SSH
+Run docker-compose up in a directory with a docker-compose.yml file.
+Error occors.
+Observed result
+Error occurs
+Expected result
+Docker compose contacts the remote docker engine instance to create the containers.
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 42, in project_from_options
+  File "compose/cli/command.py", line 123, in get_project
+  File "compose/cli/command.py", line 94, in get_client
+  File "compose/cli/docker_client.py", line 127, in docker_client
+  File "site-packages/docker/api/client.py", line 118, in __init__
+  File "site-packages/docker/utils/utils.py", line 256, in parse_host
+docker.errors.DockerException: Invalid bind address protocol: ssh://xfoxy.secinternal.local
+[486] Failed to execute script docker-compose
+Additional information
+Client is WSL (Ubuntu 18.04) Server is Ubuntu 18.04 running Docker 18.09.
+4

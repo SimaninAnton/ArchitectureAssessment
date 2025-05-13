@@ -1,0 +1,18 @@
+Contributor
+TomasTomecek commented on 14 Sep 2015
+Step 10 : RUN /src/pre-process.sh /docs
+ ---> Running in 0657f098ac6b
+mv: cannot remove '/docs/content/docker/article-img/architecture.svg': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_basic_host_config.gliffy': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_basic_host_config.svg': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_ndp_proxying.gliffy': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_ndp_proxying.svg': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_routed_network_example.gliffy': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_routed_network_example.svg': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_slash64_subnet_config.gliffy': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_slash64_subnet_config.svg': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_switched_network_example.gliffy': No such file or directory
+mv: cannot remove '/docs/content/docker/article-img/ipv6_switched_network_example.svg': No such file or directory
+The command '/bin/sh -c /src/pre-process.sh /docs' returned a non-zero code: 1
+Makefile:55: recipe for target 'docs-build' failed
+make: *** [docs-build] Error 1

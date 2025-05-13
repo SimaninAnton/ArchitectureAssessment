@@ -1,0 +1,41 @@
+gavD commented on 24 Mar 2016
+Hi, I am running:
+OSX Yosemite (Macbook Pro)
+docker-compose version 1.6.2, build 4d72027
+Docker version 1.10.3, build 20f81dd
+docker-machine version 0.6.0, build e27fb87
+My project is under the Users directory (/Users/gavin/myproject).
+I have a Docker-compose.yaml file like the below. Note that I've made three separate attempts at mounting the volume:
+manager:
+  build: .
+  dockerfile: Dockerfile-manager
+  volumes:
+    - /Users/gavin/myproject:/opt/one
+    - .:/opt/two
+    - ~/myproject:/opt/three
+My Dockerfile-manager looks like:
+FROM node:argon
+RUN ls -al /opt
+When I run this, I get:
+$ docker-compose build
+Building manager
+Step 1 : FROM node:argon
+ ---> 4e2e99ae7d3e
+Step 2 : RUN ls -al /opt
+ ---> Using cache
+ ---> 5734b5039cd2
+Successfully built 5734b5039cd2
+So this shows that the volume has not been mounted on /opt/one, /opt/two or /opt/three. I would expect to see these directories available, unless I've misunderstood the docs.
+When I SSH into the docker machine, I see that it can see the files just fine:
+$ docker-machine ssh
+Boot2Docker version 1.10.3, build master : 625117e - Thu Mar 10 22:09:02 UTC 2016
+Docker version 1.10.3, build 20f81dd
+docker@default:~$ cd /Users/gavin/myproject/
+docker@default:/Users/gavin/myproject$ ls -al
+drwxr-xr-x    1 docker   staff          816 Mar 24 16:04 ./
+drwxr-xr-x    1 docker   staff         3196 Mar 24 16:06 ../
+-rw-r--r--    1 docker   staff           32 Mar 24 16:04 Dockerfile-manager
+-rw-r--r--    1 docker   staff          139 Mar 24 16:03 docker-compose.yml
+docker@default:/Users/gavin/myproject$
+So, this means that the files are available to Docker machine, but are not being made available to the container.
+I am brand new to Docker, so it's likely I'm doing something wrong - can anyone help?

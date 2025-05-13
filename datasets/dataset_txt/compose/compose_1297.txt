@@ -1,0 +1,29 @@
+dobbs commented on 25 Jul 2017 •
+edited
+init works fine in version 2.2:
+cat > docker-compose.yml <<EOF
+version: '2.2'
+services:
+  xyz:
+    image: alpine
+    command: sleep 5m
+    init: true
+EOF
+docker-compose up -d
+init fails in version 3.0:
+cat > docker-compose.yml <<EOF
+version: '3.0'
+services:
+  xyz:
+    image: alpine
+    command: sleep 5m
+    init: true
+EOF
+docker-compose up -d
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services.xyz: 'init'
+This documentation:
+https://docs.docker.com/compose/compose-file/compose-versioning/
+reports that init was introduced in version 2.2. There's no mention if it being removed.
+Also tested with version 3.1, 3.2, and 3.3... init fails in all of them
+3

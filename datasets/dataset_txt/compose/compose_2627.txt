@@ -1,0 +1,6 @@
+Silex commented on 15 Mar 2016
+Hello,
+As far as I know, --blkio-weight is the way to limit I/O for a container. It'd be great if it was supported in docker-compose.
+My use case is that I have "maintenance" containers that do database backups and similar, it'd be nice if they used very low CPU and I/O.
+CPU limitation is supported through cpu_shares, but I/O has no support.
+9

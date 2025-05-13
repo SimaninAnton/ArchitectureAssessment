@@ -1,0 +1,1 @@
+Can not scale to multiple nodes when binding host port in docker-compose.yml

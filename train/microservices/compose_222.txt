@@ -1,0 +1,21 @@
+varmanishant commented on 12 Apr 2019 •
+edited
+Is your feature request related to a problem? Please describe.
+I have a web application image web and a database image database that needs to be run using docker-compose.
+My web app (Zope), also needs a content management system to be installed. So I was wondering if I could create an image out of that web-cms-database and use that instead.
+However, the problem is that building web-cms-database image needs a database container spawned as a dependency because it executes some queries.
+I tried using the build option, but the problem is that the database container won't be running during the build phase!
+I don't know if the problem (dependency on DB during installation) is specific to Zope Framework; or if it is something in our code (it is huge) that his dependency. Have you seen any frameworks or services that has dependencies like this?
+Describe the solution you'd like
+I would like to know if it possible to add a key called depends that takes the necessary services that needs to kept up while it is getting build. Once the build is completed, it should stop those services gracefully.
+services:
+  database:
+    image: database
+  web:
+    build: 
+      context: ../web
+      dockerfile: Dockerfile
+      depends_on: database
+    image: web-cms-db
+Describe alternatives you've considered
+I was also thinking if it is possible to create some kind of dummy service that would do this job.

@@ -1,0 +1,9 @@
+Grokzen commented on 10 Feb 2015
+docker run has the flag --cidfile <file> that writes the container id to the specefied file so that it is possible to read it for other purposes.
+It should be a option in the config for one image
+web:
+  image: mysql:latest
+  cidfile: /tmp/mysql.cid
+...
+Supporting this might be a simpler solution to build before exec command is supported (as discussed in #593)
+14

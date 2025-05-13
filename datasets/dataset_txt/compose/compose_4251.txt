@@ -1,0 +1,6 @@
+sleepycat commented on 30 Jul 2014
+Since fig is talking to docker, having some way of seeing what commands it is running sending would be really great for debugging purposes.
+Perhaps something like:
+DEBUG=true fig up
+Or:
+fig up --debug

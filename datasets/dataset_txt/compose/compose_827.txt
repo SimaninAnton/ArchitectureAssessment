@@ -1,0 +1,7 @@
+KnicKnic commented on 2 Mar 2018 •
+edited
+In Windows there is no way to build a container that requires specification of the isolation option.
+If the default isolation is process(which is the default for docker), and I want to build an image based on a downlevel container then the build needs to get passed isolation=hyperv .
+I see two options.
+Have build inherit the isolation setting from the service.
+Add isolation into the build args.

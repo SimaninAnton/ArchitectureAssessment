@@ -1,0 +1,7 @@
+Contributor
+aanand commented on 5 Jun 2015
+Now that we're not relying on a strict container name format, we should be able to allow more characters in service names, as has often been requested (see #799, #869, #941, #1300, #1384).
+Docker allows [a-zA-Z0-9_.-] (daemon.go)
+Compose allows just [a-zA-Z0-9] (service.py)
+Any good reason we can't allow _.- now?
+5

@@ -1,0 +1,1 @@
+Ability to override service command in Compose file on CLI

@@ -1,0 +1,35 @@
+vskubriev commented on 8 Dec 2015
+Software versions:
+$ docker-compose -v
+docker-compose version 1.5.2, build 7240ff3
+$ docker -v
+Docker version 1.9.1, build a34a1d5
+compose.yml:
+mycont:
+  #tty: true
+  #entrypoint: /sbin/init
+  env_file: ".env"
+  build: "."
+  container_name: "mycont"
+  domainname: "example.lab"
+  hostname: "mycont"
+  dns: "192.168.128.3"
+  dns_search: "example.lab"
+  restart: "always"
+  expose:
+    - "389"
+    - "80"
+  extra_hosts:
+    - "ldap.example.lab:192.168.1.10"
+    - "ldap:192.168.1.10"
+    - "tgnpdc:192.168.1.10"
+  # http://blog.oddbit.com/2014/08/11/four-ways-to-connect-a-docker/
+  net: "bridge"
+  ports:
+    - "389:389"
+    - "80:80"
+Error:
+$ docker-compose up -d
+Recreating 177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_177deb9c24_mycont
+ERROR: json: cannot unmarshal string into Go value of type []string
+I suspect that this is because latest updates installed.

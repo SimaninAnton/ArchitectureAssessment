@@ -1,0 +1,1 @@
+"Cannot create container for service svc: Duplicate mount point" when defining volume in docker-compose.yml which was already defined in docker image

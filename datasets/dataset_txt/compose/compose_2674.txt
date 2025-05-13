@@ -1,0 +1,55 @@
+pavel64-sutyrin commented on 3 Mar 2016
+It's puzzling to see "Creating volume "test_data"" when existing volume is actually reused. It's visibly indistinguishable from the case when volume is newly created. Transcript is below.
+# review config
+:~/test$ docker-compose config
+networks: {}
+services:
+  web:
+    image: nginx
+    volumes:
+    - data:/data:rw
+version: '2.0'
+volumes:
+  data: {}
+
+:~/test$ docker volume ls | fgrep test_data # volume is not created
+:~/test$ docker-compose up -d 
+Creating volume "test_data" with default driver
+Creating test_web_1
+:~/test$ docker volume ls | fgrep test_data
+local               test_data
+:~/test$ docker exec -ti test_web_1 ls -lh /data
+total 0
+:~/test$ docker exec -ti test_web_1 touch /data/1
+:~/test$ docker exec -ti test_web_1 ls -lh /data
+total 0
+-rw-r--r-- 1 root root 0 Mar  3 10:41 1
+:~/test$ docker-compose kill 
+Killing test_web_1 ... done
+:~/test$ docker volume ls | fgrep test_data
+local               test_data
+:~/test$ docker-compose rm -f 
+Going to remove test_web_1
+Removing test_web_1 ... done
+:~/test$ docker volume ls | fgrep test_data # volume is not deleted upon removing container, okay
+local               test_data
+:~/test$ docker-compose up -d 
+Creating volume "test_data" with default driver # Actually, it's "Reusing existing volume "test_data"
+Creating test_web_1
+:~/test$ docker exec -ti test_web_1 ls -lh /data
+total 0
+-rw-r--r-- 1 root root 0 Mar  3 10:41 1
+:~/test$ docker volume rm test_data
+Error response from daemon: Conflict: remove test_data: volume is in use - [056e66bd641f57060d1fa7a19bd26a5214afb54432c90470a2ddf6c0d31ae178]
+:~/test$ docker-compose kill
+Killing test_web_1 ... done
+:~/test$ docker-compose rm -f 
+Going to remove test_web_1
+Removing test_web_1 ... done
+:~/test$ docker volume rm test_data
+test_data
+:~/test$ docker-compose up -d 
+Creating volume "test_data" with default driver
+Creating test_web_1
+:~/test$ docker exec -ti test_web_1 ls -lh /data # it is now recreated
+total 0

@@ -1,0 +1,96 @@
+ps23 commented on 13 Mar 2019 •
+edited
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+services:
+  elastic:
+    cpu_shares: '512'
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
+version: '2.4'
+Steps to reproduce the issue 1
+Create .env file
+ES_CPU_SHARES_FROM_FILE=512
+Create config
+version: '2.4'
+
+services:    
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
+    cpu_shares: ${ES_CPU_SHARES_FROM_FILE}
+docker-compose up
+Steps to reproduce the issue 2
+Create config
+version: '2.4'
+
+services:    
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
+    cpu_shares: ${ES_CPU_SHARES_FROM_FILE:-512}
+docker-compose up
+Observed result
+cpu_shares is quoted as string but should be an integer, error:
+services:
+  elastic:
+    cpu_shares: '512'
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
+version: '2.4'
+Expected result
+services:
+  elastic:
+    cpu_shares: 512
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
+version: '2.4'
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1080, in up
+  File "compose/cli/main.py", line 1076, in up
+  File "compose/project.py", line 503, in up
+  File "compose/parallel.py", line 105, in parallel_execute
+  File "compose/parallel.py", line 203, in producer
+  File "compose/project.py", line 489, in do
+  File "compose/service.py", line 548, in execute_convergence_plan
+  File "compose/service.py", line 475, in _execute_convergence_recreate
+  File "compose/parallel.py", line 105, in parallel_execute
+  File "compose/parallel.py", line 203, in producer
+  File "compose/service.py", line 469, in recreate
+  File "compose/service.py", line 582, in recreate_container
+  File "compose/service.py", line 328, in create_container
+  File "compose/service.py", line 897, in _get_container_create_options
+  File "compose/service.py", line 1028, in _get_container_host_config
+  File "site-packages/docker/api/container.py", line 573, in create_host_config
+  File "site-packages/docker/types/containers.py", line 350, in __init__
+TypeError: Invalid type for cpu_shares param: expected int but found <class 'str'>
+[20766] Failed to execute script docker-compose
+Additional information
+MacOS
+Current workaround:
+export $(grep "^[^#]" .env | xargs) && cat docker-compose.tpl | envsubst > docker-compose.yml
+1

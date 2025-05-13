@@ -1,0 +1,11 @@
+ujovlado commented on 4 May 2016
+Hi, I'm running docker-compose and .env file is ignored.
+Location of the files:
+$ ls -la | grep -e ".env" -e "docker-compose.yml"
+-rw-rw-r--  1 vlado vlado   2878 May  4 17:17 docker-compose.yml
+-rw-rw-r--  1 vlado vlado    171 May  4 16:42 .env
+Environment:
+engine: 1.11.1, build 5604cbe (1.11.1-0~xenial)
+compose: 1.7.0, build 0d7bf73
+Docker compose located in ~/bin/docker-compose.
+Thanks!

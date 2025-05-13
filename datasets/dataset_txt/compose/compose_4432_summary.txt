@@ -1,0 +1,1 @@
+Log output from Rails doesn't display when running fig up

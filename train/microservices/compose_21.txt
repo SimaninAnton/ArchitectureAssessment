@@ -1,0 +1,80 @@
+andreyMid commented 26 days ago
+Description of the issue
+I'm failed to get the relation between container name and image id by using command:
+docker-compose -f ./docker-compose.yml -p InitializingVariables_supportInitializingAssign images | tail -n +3 | xargs -n 6 | cut -d " " -f1,4
+since 1.25.0-rc3.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version
+docker-compose version 1.25.0-rc3, build c7e82489
+docker-py version: 4.1.0
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea
+ Built:             Wed Nov 13 07:25:41 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea
+  Built:            Wed Nov 13 07:24:18 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose.yml
+version: "3"
+services:
+    client1:
+        image: "httpd"
+        networks:
+            httpd_network:
+                aliases:
+                    - apache1
+        ports:
+            - "8331:8080"
+
+    client2:
+        image: "httpd"
+        networks:
+            httpd_network:
+                aliases:
+                    - apache2
+        ports:
+            - "8333:8080"
+
+networks:
+    httpd_network:
+Steps to reproduce the issue
+yes | docker-compose -f ./docker-compose.yml -p InitializingVariables_supportInitializingAssign up --no-start
+docker-compose -f ./docker-compose.yml -p InitializingVariables_supportInitializingAssign images | tail -n 2
+Observed result
+initializingvariables_supportini httpd latest c2aa7e16edd8 165.3 MB
+tializingassign_client1_1
+initializingvariables_supportini httpd latest c2aa7e16edd8 165.3 MB
+tializingassign_client2_1
+Expected result
+initializingvariables_supportinitializingassign_client1_1 httpd latest c2aa7e16edd8 157.6 MB
+initializingvariables_supportinitializingassign_client2_1 httpd latest c2aa7e16edd8 157.6 MB
+(output from 1.25.0-rc2)
+Additional information
+Red Hat Enterprise Linux Server release 7.5 (Maipo)
+Installation method:
+curl -L https://github.com/docker/compose/releases/download/1.25.0-rc3/docker-compose-`uname -s-uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose

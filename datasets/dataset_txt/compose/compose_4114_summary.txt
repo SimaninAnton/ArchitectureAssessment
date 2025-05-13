@@ -1,0 +1,1 @@
+Watching for changes in files in mounted directory eats 200% CPU

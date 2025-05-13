@@ -1,0 +1,4 @@
+wader commented on 11 Aug 2015
+Hi, when piping the output from docker-compose pull the progress details seems to just be blank lines. Not really sure what one would like the output to be when there is not tty, wait for all layers to download and then output "final" status for each?
+How to reproduce:
+docker-compose pull | cat

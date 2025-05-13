@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 3 Jun 2014
+http://orchardup.github.io/fig/yml.html
+It could do with a complete reference of options and an example without comments.

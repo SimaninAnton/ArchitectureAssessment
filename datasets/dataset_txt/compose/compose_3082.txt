@@ -1,0 +1,11 @@
+wyhysj commented on 18 Nov 2015
+When you use docker-compose at swarm manager
+The image is dynamic built like this
+web:
+  build: .
+For the first time docker-compose up -d, it works fine, will schedule on one swarm node, but when you try to scale up to multiple nodes, it will fail due to can not find the dynamic image.
+Here's the output
+root@swarm-manager:/opt/compose#docker-compose scale web=2
+Creating and starting 2 ... error
+
+ERROR: for 2  Error: image library/tlccom_web:latest not found 

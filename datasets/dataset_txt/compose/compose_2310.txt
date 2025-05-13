@@ -1,0 +1,4 @@
+Fedcomp commented on 11 Jun 2016 •
+edited
+I use steamcmd to build dedicated-server docker image. Steamcmd is appear to be wine application and it doesn't work properly with default seccomp rules.
+Would it be possible to add a way to configure/disable seccomp also during building of image?

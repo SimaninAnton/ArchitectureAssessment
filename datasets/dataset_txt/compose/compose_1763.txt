@@ -1,0 +1,75 @@
+AlexeyTimofeev commented on 24 Jan 2017
+Hello, I can use docker in next way:
+docker run -p 5001-5010:5000 registry:2
+Every time I run this command docker determines free port from defined range and publish it:
+CONTAINER ID IMAGE COMMAND PORTS
+9cd40afd2ff5 registry "/entrypoint.sh /etc/" 0.0.0.0:5004->5000/tcp
+1b7268e6d6ab registry "/entrypoint.sh /etc/" 0.0.0.0:5003->5000/tcp
+2b1568c7ad57 registry "/entrypoint.sh /etc/" 0.0.0.0:5002->5000/tcp
+e709fae805d1 registry "/entrypoint.sh /etc/" 0.0.0.0:5001->5000/tcp
+But, I am not able to simulate the same behavior with docker-compose... Having docker-compose.yml:
+version: '2'
+services:
+registry:
+image: registry:latest
+ports:
+- "5001-5010:5000"
+I receive error:
+services.registry.ports is invalid: Port ranges don't match in length.
+Please advise.
+docker version:
+Client:
+Version: 1.12.6
+API version: 1.24
+Go version: go1.6.4
+Git commit: 78d1802
+Built: Wed Jan 11 00:23:16 2017
+OS/Arch: windows/amd64
+Server:
+Version: 1.12.6
+API version: 1.24
+Go version: go1.6.4
+Git commit: 78d1802
+Built: Wed Jan 11 00:23:16 2017
+OS/Arch: linux/amd64
+docker info:
+Containers: 4
+Running: 4
+Paused: 0
+Stopped: 0
+Images: 30
+Server Version: 1.12.6
+Storage Driver: aufs
+Root Dir: /var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 103
+Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: overlay null host bridge
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.41-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 3.821 GiB
+Name: moby
+ID: MODJ:FE2K:YQY3:ERZJ:4UIL:ZT4G:LTF6:C4B7:WR7E:HGCG:ZOX5:BYC2
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Http Proxy: http://bla-bla:8080
+Https Proxy: http://bla-bla:8080
+No Proxy: 127.0.0.1,localhost,bla-bla
+Registry: https://index.docker.io/v1/
+WARNING: No kernel memory limit support
+Insecure Registries:
+127.0.0.0/8
+docker-compose --version:
+docker-compose version 1.9.0, build 2585387

@@ -1,0 +1,21 @@
+dfee commented on 9 Sep 2017
+I'm trying to override an ENTRYPOINT and CMD in a compose file. I've gotten a working solution, but I can't seem to reduce it.
+Here is an example service container that launches a bash shell for me to work in with a virtual environment activated:
+  # Ephemeral api service
+  x-api:
+    entrypoint: /bin/bash -c "/bin/bash -c \"$${@}\""
+    command: |
+      /bin/bash -c "
+        set -e
+        source ~/.env/api/bin/activate
+        p-api config
+        /bin/bash || exit 0
+      "
+    depends_on: *platform-depends_on
+    environment: {<<: *platform-environment}
+    image: *platform-image
+    ports:
+      - "5000:5000"
+    volumes: *platform-volumes
+    working_dir: /srv/api
+Three (or is it 4? or 5?) layers of bash shells seems to be over complicated. Is there a simpler solution?

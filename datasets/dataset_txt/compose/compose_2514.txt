@@ -1,0 +1,8 @@
+dominics commented on 11 Apr 2016
+1.7.0-rc1 is called different things in different places
+Download URL: 1.7.0-rc1
+docker-compose -v: 1.7.0rc1 (NB: no dash, doesn't match download URL)
+docker-compose version: 1.7.0rc1 (same as -v)
+I'm happy enough for the version specifier to not have a dash, but if we're going to do that can we at least make the download URL also not have one?
+As it is, having these inconsistent version numbers makes it awkward to ensure the correct version of docker-compose is installed in configuration management; you have to somehow map the version number you'll get from docker-compose version to the download URL, or vice versa.
+2

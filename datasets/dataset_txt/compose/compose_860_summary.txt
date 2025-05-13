@@ -1,0 +1,1 @@
+"run" command doesn't seem to recreate dependencies on config changes

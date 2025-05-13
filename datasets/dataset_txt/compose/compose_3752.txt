@@ -1,0 +1,20 @@
+jaewie commented on 4 Apr 2015
+Hello, my current directory looks like:
+.
+├── app.js
+├── docker-compose.yml
+├── package.json
+└── run.sh
+And my docker-compose.yml is:
+nodeapp:
+  image: node:0.12
+  command: /bin/bash /usr/src/app/run.sh
+  volumes:
+    - .:/usr/src/app
+  ports:
+    - 80:8000
+But wIth docker-compose up I'm getting the fllowing. How can I fix this issue?
+Attaching to ebdockermultipleports_nodeapp_1
+nodeapp_1 | /bin/bash: /usr/src/app/run.sh: No such file or directory
+ebdockermultipleports_nodeapp_1 exited with code 127
+Gracefully stopping... (press Ctrl+C again to force)

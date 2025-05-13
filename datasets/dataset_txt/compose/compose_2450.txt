@@ -1,0 +1,28 @@
+iamKurt commented on 27 Apr 2016
+I started up a few services using Compose on my Mac and they appear to be running just fine. The services are, a Spring Boot application that is linked to a mock application, ActiveMQ, Mongo. I have been able to verify that the Spring Boot app connects to both the database and the activemq containers. For some reason though, when I run functional tests against the app container, it cannot connect to the mock application.
+Here's a summary of how the apps connect and the error messages I am seeing:
+    poc_service:
+          build:
+            context: .
+            dockerfile: Dockerfile
+          links:
+                    - activemq:amq
+                    - mock:mock
+                    - mongodb:mongodb
+          environment:
+                    - ws.url=http://mock:38080/services/MyService
+So I am telling gradle to hit the poc_service and in fact do see that connection established. However, the poc_service is unable to reach the mock.
+  poc_service_1   | ID: 1
+  poc_service_1   | Address: http://mock:38080/services/MyService
+  poc_service_1   | Encoding: UTF-8
+  poc_service_1   | Http-Method: POST
+  poc_service_1   | Content-Type: text/xml
+  poc_service_1   | Headers: {Accept=[*/*], SOAPAction=[""]}
+  poc_service_1   | Payload: <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body>...</soap:Body></soap:Envelope>
+And the error is:
+  poc_service_1   | org.apache.cxf.interceptor.Fault: Could not send Message.
+  poc_service_1   |     at org.apache.cxf.interceptor.MessageSenderInterceptor$MessageSenderEndingInterceptor.handleMessage(MessageSenderInterceptor.java:64) ~[cxf-core-3.1.5.jar!/:3.1.5]
+  ...
+  poc_service_1   | Caused by: org.apache.cxf.transport.http.HTTPException: HTTP response '404: Not Found' when communicating with http://mock:38080/services/MyService
+  poc_service_1   |     at org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.doProcessResponseCode(HTTPConduit.java:1600) ~[cxf-rt-transports-http-3.1.5.jar!/:3.1.5]
+Any thoughts on why this is not connecting or how to debug this further?

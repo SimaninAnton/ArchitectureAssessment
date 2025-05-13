@@ -1,0 +1,45 @@
+ibuildthecloud commented on 20 Aug 2015
+We are seeing the introduction of new first class objects in Docker such as volumes and networks. Beyond just describing containers in docker-compose.yml we would like to also describe the other resources that are being added to Docker. Specifically I would to add support for volumes and machines. Machines is quite different as it’s not in the Docker Remote API, but this proposal will discuss how that can be achieved.
+Types
+Currently everything in a docker-compose.yml is a container (or service if you will). If we need to add more types I propose we keep that same flat structure but just add the key type:. If type: is missing it can be assumed to be a container. Example
+nginx:
+    image: nginx
+
+flux-capacitor:
+    type: time-travel-enabler
+The type of the object will then define what are the allowed/required fields.
+Portability
+Portability is of paramount importance in Docker-land. Volumes and machines are an essential part of an application production environment, but quite often non-portable in nature. You may want to run on a t2.medium EC2 instance in production, but on your desktop what does that mean? Volume drivers are the same. In production you may want NFS backed storage but in dev local disk is fine.
+To address portability I propose we introduce a new file called docker-compose-resources.yml. The idea being that docker-compose.yml is fully portable and may include references to resources. docker-compose-resources.yml will then include the non-portable configuration that is really environment specific. In docker-compose.yml we include references to resources and then docker-compose-resource.yml provides the environment specific bindings for those resources. Example:
+docker-compose.yml
+mysql:
+     environment:
+     - constraint:storage==ssd
+     volumes:
+     - dbdata:/var/lib/mysql
+nginx:
+     environment:
+     - constraint:size==tiny
+docker-compose-resources.yml
+dbdata:
+     type: volume
+     driver: ebs
+     driver-opts:
+     - size=300GB
+web:
+    type: machine
+    driver: amazonec2
+    instance-type: t2.small
+    engine-label:
+    - size=tiny
+db:
+    type: machine
+    driver: amazonec2
+    instance-type: m4.xlarge
+    engine-label:
+    - storage=ssd
+In this example docker-compose.yml references a volume called dbdata and then scheduling rules indirectly references machines. docker-compose-resources.yml then provides the resources that are bound to those references at deployment time.
+Pluggability
+I think the implementation of resources should be pluggable. Docker Machine is a good example in that there is no API but instead a CLI. I'd propose that a docker-machine plugin should be written for docker compose. Beyond just docker assets, it can be very useful for people to write there own company specific plugins. These extensions would not be generally applicable but still very useful in their context. Being that docker-compose-resource.yml is intended to not be portable, allowing free form customization seems acceptable.
+The Kitchen Sink
+With the introduction of docker-compose-resources.yml I think we can not only define container but the entire deployment of a Docker based application. Imagine a single docker-compose up creating machines, a swarm cluster, volumes, networks, and deploying applications. Incredibly powerful!

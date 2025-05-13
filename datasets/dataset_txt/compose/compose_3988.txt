@@ -1,0 +1,51 @@
+Contributor
+funkyfuture commented on 19 Jan 2015
+setting up a wordpress-instance with Docker is easy:
+docker run --name="wp_db" -d -v /var/lib/mysql -e MYSQL_ROOT_PASSWORD=password mysql
+docker run --name="wp_web" -d --link="wp_db:mysql" -v /var/www -p "8001:80" wordpress
+to my knowledge, this would be the corresponding fig.yml:
+web:
+  image: wordpress
+  links:
+    - db:mysql
+  ports:
+    - "8001:80"
+  volumes:
+    - /var/www
+
+db:
+  image: mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+  volumes:
+    - /var/lib/mysql
+however, starting the 'app' with fig up will lead to the situation that - to quote:
+db_1  | 2015-01-18 20:55:44 1 [Warning] IP address '172.17.0.30' could not be resolved: Name or service not known
+web_1 | MySQL Connection Error: (1130) Host '172.17.0.30' is not allowed to connect to this MySQL server
+web_1 | 
+web_1 | Warning: mysqli::mysqli(): (HY000/1130): Host '172.17.0.30' is not allowed to connect to this MySQL server in - on line 5
+after inspecting the containers, this makes sense, since the failing containers are not attached to Docker's network-bridge. which i would expect since Docker does that by default.
+anyway, also adding
+  net: "bridge"
+explicitly to both service's configuration will not create the network-bridge.
+what's irritating even more is that it worked for a while with the fig.yml above. and the only aspect i changed these days was to update fig to version 1.0.1 (edit: with version 1.0.0 it's all the same.)
+so, before i dig deeper i'd appreciate some feedback whether this is reproducable, a race condition to be expected or some obvious mistake on my side.
+Ubuntu 14.04 / Mac OS X 10.9
+Docker 1.4.1
+fig 1.0.1
+EDIT to elaborate a little more on the bridge-issue:
+the verbose output states the last container start as follows:
+docker start <- (u'62cd26fedcab626cdc212416cc81d753406542c8517e52415e58f0f7b6de44b5', links=[(u'wordpress_db_1', u'mysql'), (u'wordpress_db_1', u'wordpress_db_1'), (u'wordpress_db_1', u'db_1')], network_mode='bridge', binds={}, dns=None, volumes_from=[u'946af1607e985ba9eed6cc673ec45041928b14e1a2443ebc4e49c49e4ecf9700'], port_bindings={u'80': u'8001'}, privileged=False)
+anyhow:
+docker inspect 62cd26
+
+(...)
+    "NetworkSettings": {
+        "Bridge": "",
+        "Gateway": "",
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "MacAddress": "",
+        "PortMapping": null,
+        "Ports": null
+    }

@@ -1,0 +1,5 @@
+josh-devops-center commented on 12 Aug 2014
+Hi,
+Could there be a fig kill-all option? It would do the following
+fig stop && fig kill && fig rm --force
+Thanks

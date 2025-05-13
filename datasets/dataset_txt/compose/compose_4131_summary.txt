@@ -1,0 +1,1 @@
+`fig help $cmd` fails without fig.yml file

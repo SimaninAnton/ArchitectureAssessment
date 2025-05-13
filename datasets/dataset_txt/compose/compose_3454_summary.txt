@@ -1,0 +1,1 @@
+Couldn't connect to Docker daemon at http://127.0.0.1:2376 - is it running?

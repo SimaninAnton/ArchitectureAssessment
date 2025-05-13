@@ -1,0 +1,61 @@
+fntlnz commented on 17 Mar 2015
+I have a number of projects which are using docker-compose and I'm starting to have the need to specify the project name directly into the docker-compose.yml
+Consider this scenario:
+I have two projects with the following directory structures
+project1
+|-- docker
+|    |-- docker-compose.yml
+|-- public
+|    |--index.php
+|-- vendor
+|-- modules
+project2
+|-- docker
+|    |-- docker-compose.yml
+|-- public
+|    |--index.php
+|-- vendor
+|-- modules
+And with two docker-compose.yml like this:
+web:
+  image: fntlnz/nginx:1.6.2
+  volumes:
+    - ../:/var/www/project
+  ports:
+    - "127.0.0.2:80:80"
+  links:
+    - fpm:fpm
+
+fpm:
+  image: fntlnz/php-fpm:5.6.6
+  volumes:
+    - ../:/var/www/project
+  links:
+    - redis:redis
+
+redis:
+  image: redis
+When I issue a docker-compose up in the project1 directory it will start three containers with the following names docker_web_1, docker_fpm_1, docker_redis_1.
+If now I issue the same command in the project2 directory it recreates the same containers of project1 instead creating it's own.
+I know that I can change the project name using the -p option or the COMPOSE_PROJECT_NAME environment variable but IMHO would be useful to have in the docker-compose.yml something like project_name: project1.
+My docker-compose.yml would become:
+project_name: project1
+web:
+  image: fntlnz/nginx:1.6.2
+  volumes:
+    - ../:/var/www/project
+  ports:
+    - "127.0.0.2:80:80"
+  links:
+    - fpm:fpm
+
+fpm:
+  image: fntlnz/php-fpm:5.6.6
+  volumes:
+    - ../:/var/www/project
+  links:
+    - redis:redis
+
+redis:
+  image: redis
+75

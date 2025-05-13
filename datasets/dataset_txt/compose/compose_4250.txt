@@ -1,0 +1,6 @@
+darioush commented on 1 Aug 2014
+I'd be interested in implementing supporting plain processes alongside docker containers for fig:
+This would enable a more transitional approach where a product could be moved to docker containers one service at a time.
+Processes are similar to docker containers for the most part, except they will not have a stopped state.
+In the fig.yml file, a service without an image or build tag would be considered a process.
+I wanted to know if this is something that you would consider upstreaming?

@@ -1,0 +1,50 @@
+rikvanderkemp commented on 3 Aug 2017
+docker-compose version 1.15.0
+Docker version 17.06.0-ce, build 3dfb8343
+I am trying to do a docker-compose up with a file I have used many times before. But I now get the following traceback
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/site-packages/requests/packages/urllib3/util/timeout.py", line 124, in _validate_timeout
+    float(value)
+TypeError: float() argument must be a string or a number, not 'Timeout'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.15.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 928, in up
+    scale_override=parse_scale_args(options['--scale']),
+  File "/usr/lib/python3.6/site-packages/compose/project.py", line 414, in up
+    warn_for_swarm_mode(self.client)
+  File "/usr/lib/python3.6/site-packages/compose/project.py", line 640, in warn_for_swarm_mode
+    info = client.info()
+  File "/usr/lib/python3.6/site-packages/docker/api/daemon.py", line 90, in info
+    return self._result(self._get(self._url("/info")), True)
+  File "/usr/lib/python3.6/site-packages/docker/utils/decorators.py", line 46, in inner
+    return f(self, *args, **kwargs)
+  File "/usr/lib/python3.6/site-packages/docker/api/client.py", line 189, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/lib/python3.6/site-packages/requests/sessions.py", line 521, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/lib/python3.6/site-packages/requests/sessions.py", line 508, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3.6/site-packages/requests/sessions.py", line 618, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3.6/site-packages/requests/adapters.py", line 440, in send
+    timeout=timeout
+  File "/usr/lib/python3.6/site-packages/requests/packages/urllib3/connectionpool.py", line 582, in urlopen
+    timeout_obj = self._get_timeout(timeout)
+  File "/usr/lib/python3.6/site-packages/requests/packages/urllib3/connectionpool.py", line 309, in _get_timeout
+    return Timeout.from_float(timeout)
+  File "/usr/lib/python3.6/site-packages/requests/packages/urllib3/util/timeout.py", line 154, in from_float
+    return Timeout(read=timeout, connect=timeout)
+  File "/usr/lib/python3.6/site-packages/requests/packages/urllib3/util/timeout.py", line 97, in __init__
+    self._connect = self._validate_timeout(connect, 'connect')
+  File "/usr/lib/python3.6/site-packages/requests/packages/urllib3/util/timeout.py", line 127, in _validate_timeout
+    "int or float." % (name, value))
+ValueError: Timeout value connect was Timeout(connect=300, read=300, total=None), but it must be an int or float.
+I can run docker ps etc and the docker service seems to be running...

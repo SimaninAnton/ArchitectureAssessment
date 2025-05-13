@@ -1,0 +1,1 @@
+Code signature error on `brew docker-compose` installation

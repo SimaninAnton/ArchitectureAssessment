@@ -1,0 +1,36 @@
+realyze commented on 22 Mar 2015
+I'm seeing this on my development env box quite often when I restart services using docker-compose -f dev_conf.yml up.
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:  Error: Redis connection to redis:6379 failed - connect EHOSTUNREACH 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:        throw er; // Unhandled 'error' event 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:              ^ 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:  events.js:85 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:      at Socket.<anonymous> (/root/node_modules/redis/index.js:106:14) 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:      at RedisClient.on_error (/root/node_modules/redis/index.js:196:24) 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:      at net.js:451:14 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:      at Socket.emit (events.js:107:17) 
+Mar 22 20:02:38 pureprofile-dev pureprofile_authd_1:      at process._tickDomainCallback (node.js:381:11) 
+I'm linking redis container to the authd container and starting authd with restart: on-failure:10 so I assume it should be able to link to redis eventually (even if not on the first few attempts). Also, I don't get why I should be seeing EHOSTUNREACH...
+Here's some deets:
+It's Ubuntu 14.04 LTS
+~/pureprofile$ uname -a
+Linux ip-10-251-16-31 3.13.0-44-generic #73-Ubuntu SMP Tue Dec 16 00:22:43 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+docker info output:
+~/pureprofile$ docker info
+Containers: 11
+Images: 167
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 189
+Execution Driver: native-0.2
+Kernel Version: 3.13.0-44-generic
+Operating System: Ubuntu 14.04.1 LTS
+CPUs: 1
+Total Memory: 3.661 GiB
+Name: ip-10-251-16-31
+ID: VVIX:HWDA:6ZMR:TVJR:NDBT:PU5F:AZD4:DZ6A:BWQ2:GP6E:CA6R:WNHM
+Username: pureprofiledeployuser
+Registry: [https://index.docker.io/v1/]
+WARNING: No swap limit support
+Docker version 1.5.0, build a8a31ef
+docker-compose version 1.1.0

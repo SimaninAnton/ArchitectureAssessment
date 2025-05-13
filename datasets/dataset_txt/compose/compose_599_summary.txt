@@ -1,0 +1,1 @@
+up ignores --no-deps (launches whole stack) when --scale is used

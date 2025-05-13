@@ -1,0 +1,1 @@
+Make docker-compose fail when an undefined environment variable used in a compose file.

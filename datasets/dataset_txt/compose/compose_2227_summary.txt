@@ -1,0 +1,1 @@
+Proposal: Remove build features from compose

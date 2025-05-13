@@ -1,0 +1,6 @@
+Contributor
+dnephin commented on 4 May 2016 •
+edited
+When we recreate a container we start by renaming the old container by adding the container short id as a prefix. If the start or create fails, the container is left with that prefixed name. On each subsequent recreate we prefix it again. If the container keeps failing we end up with some very ugly container names.
+We actually only need to prefix it once. We could check the container name before adding the prefix, and if it already has its own short id as a prefix we can skip the rename.
+This is a very low priority issue.

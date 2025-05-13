@@ -1,0 +1,6 @@
+Contributor
+aanand commented on 15 May 2015
+Once #1356 is merged, docker-compose up should become more fault-tolerant.
+Currently, if up crashes between the renaming of the old container and the creation of the new one, on its next invocation it will ignore the old container entirely, which can lead to loss of data if there were volumes attached.
+However, once we're using labels - which aren't affected by the rename - it'll detect the old container and attempt to recreate it once again. The fact that it's been renamed no longer matters.
+We should add a test for this (by deliberately making recreate_container abort in the right place), confirm that it doesn't work on master and that it does work once #1356 is merged.

@@ -1,0 +1,4 @@
+bencevans commented on 12 Feb 2014
+An interesting feature of Drone project is that they proxy services to the appropriate ports on the app machine so there's no faffing with ENV variables.
+From their README:
+NOTE: database and service containers are exposed over TCP connections and have their own local IP address. If the socat utility is installed inside your Docker image, Drone will automatically proxy localhost connections to the correct IP address.

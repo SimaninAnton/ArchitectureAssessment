@@ -1,0 +1,122 @@
+starrychloe commented on 30 Apr 2018
+Description of the issue
+One service cannot see another in a composer file. While following this guide
+https://docs.docker.com/compose/rails/
+I get
+C:\Users\Chloe\workspace\project\src>docker-compose run web rake db:create
+Starting src_pg_1 ... done
+could not translate host name "pg" to address: No address associated with hostname
+Couldn't create database for {"adapter"=>"postgresql", "encoding"=>"unicode", "pool"=>5, "timeout"=>5000, "host"=>"pg", "username"=>"postgres", "password"=>nil, "database"=>"project"}
+rake aborted!
+PG::ConnectionBad: could not translate host name "pg" to address: No address associated with hostname
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b
+Docker version 18.03.0-ce, build 0520e24302
+C:\Users\Chloe\workspace\fortuneempire\src>docker-compose config
+services:
+  cms:
+    environment:
+      JOOMLA_DB_HOST: mysql
+      JOOMLA_DB_PASSWORD: example
+    image: joomla
+    links:
+    - mysql:joomladb
+    ports:
+    - 8080:80/tcp
+    restart: always
+  mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    image: mysql:5.6
+    restart: always
+  pg:
+    image: postgres
+    volumes:
+    - /c/Users/Chloe/workspace/project/src/tmp/db:/var/lib/postgresql/data:rw
+  web:
+    build:
+      context: C:\Users\Chloe\workspace\project\src
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    depends_on:
+    - pg
+    links:
+    - pg
+    ports:
+    - 3000:3000/tcp
+    volumes:
+    - /c/Users/Chloe/workspace/project/src:/app:rw
+version: '3.0'
+Steps to reproduce the issue
+Follow the guide here https://docs.docker.com/compose/rails/ except name db to pg.
+Observed result
+could not translate host name "pg" to address: No address associated with hostname
+Expected result
+Expected it to work without errors.
+Stacktrace / full error message
+Additional information
+https://stackoverflow.com/questions/50090012/how-do-i-run-rails-in-docker-pgconnectionbad-could-not-translate-host-name-p
+####docker-compose.yml
+version: '3'
+services:
+  pg:                                     ######### LOOK HERE!
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+  web:
+    build: .
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - pg
+    links:
+      - pg                                     ######### LOOK HERE!
+  cms:
+    image: joomla
+    restart: always
+    links:
+      - mysql:joomladb
+    ports:
+      - 8080:80
+    environment:
+      JOOMLA_DB_HOST: mysql
+      JOOMLA_DB_PASSWORD: example
+  mysql:
+    image: mysql:5.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+####config/database.yml
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  timeout: 5000
+  host: pg                                     ######### LOOK HERE!
+  username: postgres
+  password:
+
+development:
+  <<: *default
+  database: project
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: project_test
+
+production:
+  <<: *default
+  database: project
+Windows 8.1.
+docker-compose install method via chocolatey install docker-toolbox.

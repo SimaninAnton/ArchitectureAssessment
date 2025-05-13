@@ -1,0 +1,6 @@
+dancrumb commented on 5 Aug 2014
+I have a MySQL container that takes a little time to start up as it needs to import data.
+I have an Alfresco container that depends upon the MySQL container.
+At the moment, when I use fig, the Alfresco service inside the Alfresco container fails when it attempts to connect to the MySQL container... ostensibly because the MySQL service is not yet listening.
+Is there a way to handle this kind of issue in Fig?
+200

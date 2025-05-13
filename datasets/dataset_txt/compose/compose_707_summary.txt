@@ -1,0 +1,1 @@
+Missing secret error message could be clearer

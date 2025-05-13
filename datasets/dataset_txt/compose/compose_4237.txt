@@ -1,0 +1,39 @@
+BrendanBerkley commented on 13 Aug 2014
+Was running fig up for awhile, and then started having some kind of a timeout issue.
+Now I can't even run fig ps:
+bash-3.2$ fig ps
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/2.7/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.5.2', 'console_scripts', 'fig')()
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/main.py", line 30, in main
+    command.sys_dispatch()
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/command.py", line 31, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/command.py", line 50, in perform_command
+    return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/cli/main.py", line 155, in ps
+    containers = self.project.containers(service_names=options['SERVICE'], stopped=True) + self.project.containers(service_names=options['SERVICE'], one_off=True)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/project.py", line 185, in containers
+    for container in service.containers(*args, **kwargs):
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/service.py", line 69, in containers
+    for container in self.client.containers(all=stopped):
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/packages/docker/client.py", line 432, in containers
+    res = self._result(self._get(u, params=params), True)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/fig/packages/docker/client.py", line 69, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 395, in get
+    return self.request('GET', url, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 383, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 486, in send
+    r = adapter.send(request, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/adapters.py", line 387, in send
+    raise Timeout(e)
+requests.exceptions.Timeout: HTTPConnectionPool(host='172.16.42.43', port=4243): Read timed out. (read timeout=60)
+I noticed similar problems here and here. What could be causing a timeout?

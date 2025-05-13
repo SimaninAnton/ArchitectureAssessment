@@ -1,0 +1,17 @@
+Contributor
+viranch commented on 6 Jul 2015
+I think it would be a lot more convenient if the file parameter in the extends block would default to the current file instead of throwing KeyError. Example:
+base:
+  image: nginx
+web:
+  extends:
+    service: base
+I would also suggest defaulting the service parameter to same as that its defined in if file is not missing. Example:
+production.yml:
+web:
+  image: nginx
+docker-compose.yml:
+web:
+  extends:
+    file: production.yml
+I do realize that the latter may be a little counter-intuitive, but I think the first part could be done.

@@ -1,0 +1,6 @@
+analytically commented on 7 May 2014
+I got:
+  links:
+    - zipkinredis:redis
+but in my docker container:
+ZIPKINREDIS_1_PORT_6379_TCP_ADDR=172.17.0.2

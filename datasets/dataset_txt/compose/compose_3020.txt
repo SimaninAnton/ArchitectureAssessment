@@ -1,0 +1,15 @@
+Contributor
+dnephin commented on 4 Dec 2015
+From #1661 (comment)
+Having both a scale command and scale configuration option leads to a scenario with unexpected results. Take this example:
+Given a docker-compose.yml that defines a service web with scale: 5
+Run docker-compose up -d to start 5 instances of the web service
+Then run docker-compose scale web=4 to down-scale the web service.
+Finally, run another docker-compose up -d.
+How many instances do you expect of web? Some might say 4 because the service was scaled independently. Some might say 5 because the compose file said 5.
+In the case where there are 4 instances, the value in the compose file is ignored, which is undesirable. up -d should always bring services to the state described in the compose file.
+In the case where up -d scales to 5, there is no reason to have a scale command at all. up -d is already handling scale. With the new file overrides a user could even set the scale numbers in a scale.yml, and run docker-compose -f docker-compose.yml -f scale.yml, which supports keeping scale separate from application configuration.
+This proposal is to deprecate the scale command (add a removal warning for 1 or 2 releases, before finally removing it), and instead use up -d to scale a service.
+Update
+To handle the case of overriding the scale number from the command line, up can use the service=count syntax that is currently available to scale (#1661 (comment)).
+18

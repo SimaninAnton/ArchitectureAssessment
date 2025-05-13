@@ -1,0 +1,1 @@
+docker stack deploy failed if volume name with special character like "@" used in the compose file

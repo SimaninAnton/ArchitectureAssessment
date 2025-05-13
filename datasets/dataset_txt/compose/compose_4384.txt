@@ -1,0 +1,9 @@
+Contributor
+kvz commented on 3 Mar 2014
+If one of my services can't execute their command:, the only error I get is from a depending service saying it Cannot link to a non running container. Example:
+$ fig up
+Recreating syzygy_sabnzbd_1...
+Recreating syzygy_sickbeard_1...
+Attaching to syzygy_sabnzbd_1, syzygy_sickbeard_1
+start: Cannot start container 156b95ed57fddf8c4a504d63d07b6a2e0281c09f765a066f64da7fee99731b2e: Cannot link to a non running container: /syzygy_sabnzbd_1 AS /syzygy_sickbeard_1/sabnzbd_1
+I think it would be very helpful while still setting up a cluster if the first service whose fig.yml's command: exits with something non-zero, would fail hard & fast, and preferably showing it's stderr.

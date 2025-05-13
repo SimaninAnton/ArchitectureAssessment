@@ -1,0 +1,11 @@
+greg0ire commented on 16 Aug 2016 •
+edited
+I'm using compose on a new project, and instead of using it only in development, we also want to use it in production now.
+I ended up with :
+docker-compose.yml
+docker-compose.override.yml (for development)
+docker-compose.prod.yml (for production)
+Dockerfile.dev
+Dockerfile.prod
+My reviewer (@Arnch) asked if I could put these file in a docker directory, because docker related files are starting to clutter the root directory (I also have a Dockerfile, and might have env files in the future). Now I could cd into this directory before running any docker, or use -f options, but I feel this could be made a bit handier.
+What if after looking for files in the root directory, docker-compose looked in another directory, named docker or docker-compose, or even docker/compose?

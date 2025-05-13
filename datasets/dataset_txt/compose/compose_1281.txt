@@ -1,0 +1,32 @@
+907th commented on 1 Aug 2017
+Containers run with docker-compose run --rm option are not auto-removed when connection losts. They are still running on the server. They also have "AutoRemove": false setting.
+Example:
+$ docker-compose run --rm --name multi_unicorn_222 unicorn  bash -i &
+
+$ docker inspect multi_unicorn_222 | grep AutoRemove
+            "AutoRemove": false,
+Versions:
+$ docker version
+Client:
+ Version:      17.06.0-ce
+ API version:  1.30
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:23:31 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.06.0-ce
+ API version:  1.30 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:19:04 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+
+$ docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+1

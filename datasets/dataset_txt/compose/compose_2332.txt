@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 4 Jun 2016
+User agents are now passed through to registries, so Compose should set a user agent with its version.
+1

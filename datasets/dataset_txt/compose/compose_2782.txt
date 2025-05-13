@@ -1,0 +1,9 @@
+Contributor
+dnephin commented on 13 Feb 2016
+There's a bunch of history in #1040 and #2055.
+We've tried multiple implementations of signal handlers, but each has their own set of issues, but ONLY when run from the frozen binary created by pyinstaller.
+It looks like there is a very old issue in pyinstaller around this: pyinstaller/pyinstaller#208
+These problems can manifest in three ways:
+a thread.error when a signal interrupts a thread lock
+the signal handlers being completely ignored and raising a KeynoardInterupt instead
+the signal handlers being registered but the try/except to handle the except is skipped (this could be caused by the signal firing multiple times for a single ctrl-c, but I can't really verify that's what is happening)

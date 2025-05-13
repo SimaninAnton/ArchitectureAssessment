@@ -1,0 +1,1 @@
+"extends:" command requires "file:" when reading from stdin

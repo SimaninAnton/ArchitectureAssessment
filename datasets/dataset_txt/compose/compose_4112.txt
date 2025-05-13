@@ -1,0 +1,17 @@
+antmanler commented on 11 Nov 2014
+My container running depends on a package which is already added to images,
+in that package contains a symbolic link point to /code, which will be used in runtime.
+for example these is copy to image, in Dockerfile I used COPY gopath /gopath
+   /gopath
+       /foo.com/
+            bar/
+            foobar/ ----> /code
+foobar point to /code, this folder is used in runtime
+This works fine using docker's client, but when I put it to fig.yml
+publisher:
+    build: .
+    environment:
+        CONFIG_PATH: /etc/rest/publisher.json
+    volumes:
+        - ./code:/code
+and fig up, I found the foobar is missing!

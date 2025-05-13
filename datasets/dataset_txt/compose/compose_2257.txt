@@ -1,0 +1,58 @@
+mavencode01 commented on 3 Jul 2016 •
+edited
+I'm trying out the docker-compose bundle command but am getting some bunch of WARNINGS below:
+WARNING: Unsupported key 'container_name' in services.master - ignoring
+WARNING: Unsupported key 'volumes_from' in services.config - ignoring
+WARNING: Unsupported key 'volumes' in services.config - ignoring
+WARNING: Unsupported key 'container_name' in services.config - ignoring
+WARNING: Unsupported key 'links' in services.keycloak - ignoring
+Now, when I deploy the generated bundle, the services / containers doesn't work and I feel the WARNINGS are kind of errors that my docker-compose file isn't compatible with the new bundle file requirements. I can fix the warnings on container_name, but not sure how I would fix the warnings on volume_from, volumes and links in my compose file.
+How do I fix the warning message and Is there any sort of reference for the new docker-compose bundle command ?
+Here is my docker-compose file:
+version: "2"
+
+services:
+
+  master:
+    container_name: "citus_master"
+    image: "citusdata/citus:5.1.0"
+    ports: 
+    - "5432:5432"
+    labels: 
+    - "com.citusdata.role=Master"
+
+  worker:
+    image: "citusdata/citus:5.1.0"
+    ports: 
+    - "5433:5432"
+    labels: 
+    - "com.citusdata.role=Worker"
+
+  config:
+    container_name: "citus_config"
+    image: "citusdata/workerlist-gen:0.9.0"
+    volumes: 
+    - "/var/run/docker.sock:/tmp/docker.sock"
+    volumes_from: 
+    - "master"
+
+  keycloak:
+    image: "jboss/keycloak-postgres"
+    links: 
+    - "master:postgres"
+    ports: 
+    - "8080:8080"
+    environment: 
+    - KEYCLOAK_USER=admin 
+    - KEYCLOAK_PASSWORD=password 
+    - POSTGRES_DATABASE=postgres
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    - POSTGRES_PORT_5432_TCP_ADDR=postgres
+    - POSTGRES_PORT_5432_TCP_PORT=5432
+
+  pgweb:
+    image: "sosedoff/pgweb"
+    ports: 
+    - "8081:8081"
+2

@@ -1,0 +1,1 @@
+`pip freeze` call in compose/cli/__init__.py adds 2s to execution time

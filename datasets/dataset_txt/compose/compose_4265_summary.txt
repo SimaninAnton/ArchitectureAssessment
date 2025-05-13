@@ -1,0 +1,1 @@
+new encoding (UTF8) is incompatible with the encoding of the template database (SQL_ASCII)

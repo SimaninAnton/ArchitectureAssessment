@@ -1,0 +1,3 @@
+mubashertnss commented on 17 Apr 2019
+Hi, when I am tring to build docker image using command # ./build.py. it ends up with below pasted error:
+ERROR: Service 'test' failed to build: The command '/bin/sh -c for module in find /gomod/src/modules -maxdepth 2 -mindepth 2 -type d do cd ${module}/cloud/go && go mod download; done' returned a non-zero code: 2

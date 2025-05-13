@@ -1,0 +1,1 @@
+UnicodeDecodeError when executing docker-compose up

@@ -1,0 +1,63 @@
+c4tz commented on 14 Dec 2015
+Hi,
+I encountered an issue when trying to run multiple images with docker-compose up. When I run the images separately, everything is fine. But if I try to run an image which links to another one and that one has a volume, it does not mount it.
+uname -a: Darwin MacBook-Pro.local 14.5.0 Darwin Kernel Version 14.5.0: Wed Jul 29 02:26:53 PDT 2015; root:xnu-2782.40.9~1/RELEASE_X86_64 x86_64
+docker version: 1.9.1, build a34a1d5
+docker info:
+Containers: 19
+Images: 478
+Server Version: 1.9.1
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 516
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 4.1.13-boot2docker
+Operating System: Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015
+CPUs: 1
+Total Memory: 996.2 MiB
+Name: dev
+ID: 67ZD:WOF3:PSC5:24OM:YGBW:MFHL:5HMB:37C3:UMFZ:W7EY:GQQB:WL5B
+Debug mode (server): true
+ File Descriptors: 27
+ Goroutines: 45
+ System Time: 2015-12-14T14:17:36.10270983Z
+ EventsListeners: 0
+ Init SHA1:
+ Init Path: /usr/local/bin/docker
+ Docker Root Dir: /mnt/sda1/var/lib/docker
+Labels:
+ provider=virtualbox
+docker-compose.yml of the application I run:
+dev:
+  build: .
+  dockerfile: Dockerfile-dev
+  container_name: frontend_toolbox_container
+  ports:
+    - "80:80"
+  volumes:
+    - ./src:/var/www
+  links:
+    - rating
+    - redis:db
+  tty: true
+
+rating:
+  image: servicerating_dev
+
+redis:
+  image: redis
+docker-compose.yml of service_rating:
+dev:
+  build: .
+  dockerfile: Dockerfile-dev
+  container_name: service_rating_container
+  ports:
+    - "80:80"
+  volumes:
+    - ./src:/var/www
+  tty: true
+Result: 3 containers are running, the frontend_toolbox has a mount in /var/www, service_rating has no mounted files in /var/www.
+I think this is a bug, but maybe I'm just doing something wrong?

@@ -1,0 +1,105 @@
+Nighthawk22 commented on 28 Feb 2018 •
+edited
+Description
+Newest docker-compose failing to build go project with prometheus procfs dependency (https://github.com/prometheus/procfs). I assume that it could be related to the symlinks inside the repository. A normal docker build -t procfs-test . with the same project is working perfectly fine.
+Discussion startet at: prometheus/procfs#75
+Steps to reproduce the issue:
+Checkout https://github.com/Nighthawk22/procfs-test
+Run docker-compose up --build
+Describe the results you received:
+The following stack trace:
+130 user@mac-user ..src/github.com/Nighthawk22/procfs-test % docker-compose up --build                                                                                                      :(
+Creating network "procfstest_default" with the default driver
+Building web
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/main.py", line 1001, in up
+  File "compose/cli/main.py", line 997, in up
+  File "compose/project.py", line 463, in up
+  File "compose/service.py", line 310, in ensure_image_exists
+  File "compose/service.py", line 989, in build
+  File "site-packages/docker/api/build.py", line 150, in build
+  File "site-packages/docker/utils/build.py", line 14, in tar
+  File "site-packages/docker/utils/utils.py", line 103, in create_archive
+IOError: Can not access file in context: /Users/user/projects/src/github.com/Nighthawk22/procfs-test/vendor/github.com/prometheus/procfs/fixtures/26231/fd/0
+Failed to execute script docker-compose
+Describe the results you expected:
+A building docker container and starting docker container.
+Additional information you deem important (e.g. issue happens only occasionally):
+Output of docker version:
+user@mac-user ..src/github.com/Nighthawk22/procfs-test (git)-[master] % docker version
+Client:
+ Version:       18.03.0-ce-rc1
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    c160c73
+ Built: Thu Feb 22 02:34:03 2018
+ OS/Arch:       darwin/amd64
+ Experimental:  true
+ Orchestrator:  kubernetes
+
+Server:
+ Engine:
+  Version:      18.03.0-ce-rc1
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   c160c73
+  Built:        Thu Feb 22 02:42:37 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of docker-compose --version:
+user@mac-user ..src/github.com/Nighthawk22/procfs-test (git)-[master] % docker-compose --version
+docker-compose version 1.19.0, build 9e633ef
+Output of docker info:
+user@mac-user ..src/github.com/Nighthawk22/procfs-test (git)-[master] % docker info
+Containers: 48
+ Running: 18
+ Paused: 0
+ Stopped: 30
+Images: 241
+Server Version: 18.03.0-ce-rc1
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: cfd04396dc68220d1cecbe686a6cc3aa5ce3667c
+runc version: 6c55f98695e902427906eed2c799e566e3d3dfb5
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.75-linuxkit-aufs
+Operating System: Docker for Mac
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 5.818GiB
+Name: linuxkit-025000000001
+ID: 2GVG:G3OX:6L7M:ES5R:TGYZ:64WU:7RTF:LMUO:N6A4:446Y:RXRW:5ZAN
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 119
+ Goroutines: 117
+ System Time: 2018-02-28T12:53:08.118830863Z
+ EventsListeners: 2
+HTTP Proxy: docker.for.mac.http.internal:3128
+HTTPS Proxy: docker.for.mac.http.internal:3129
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

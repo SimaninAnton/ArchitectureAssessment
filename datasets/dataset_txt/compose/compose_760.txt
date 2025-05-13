@@ -1,0 +1,107 @@
+bscheshirwork commented on 3 Apr 2018 •
+edited
+Description of the issue
+I want to solution for linux.
+Important: I can't change target image directly.
+I wish not to change the entrypoint
+I wish not to set hardcoded value
+I want to pass IP of docker host to container's environment XDEBUG_CONFIG.
+https://github.com/bscheshirwork/docker-yii2-app-advanced/blob/c74a7ea274960b275472137fb130f0b5226b5a3c/docker-run/docker-compose.yml#L2-L14
+services:
+  php:
+    image: bscheshir/php:7.2.3-fpm-alpine-4yii2-xdebug
+    restart: always
+    volumes:
+      - ../php-code:/var/www/html #php-code
+      - ~/.composer/cache:/root/.composer/cache
+    depends_on:
+      - db
+    environment:
+      TZ: Europe/Moscow
+      XDEBUG_CONFIG: "remote_host=192.168.0.83 remote_port=9001 var_display_max_data=1024 var_display_max_depth=5"
+      PHP_IDE_CONFIG: "serverName=yii2advanced"
+I try to find solution and I have some problem with each of search result:
+dns name host.docker.internal available only for mac
+we can't use .env file from any places. i.e.
+XDEBUG_CONFIG: "remote_host=$HOST_DOCKER_DEV remote_port=9001 var_display_max_data=1024 var_display_max_depth=5"
+.env
+HOST_DOCKER_DEV=192.168.0.83
+with command from home dir
+cd && docker-compose -f ~/projects/docker-yii2-app-advanced/docker-run/docker-compose.yml config|grep XDEBUG_CONFIG
+returns empty string like XDEBUG_CONFIG: remote_host= remote_port=9001 var_display_max_data=1024
+and this is hardcoded.
+Change entrypoint from docker-compose.yml is terrible
+    environment:
+      TZ: Europe/Moscow
+      XDEBUG_CONFIG: "remote_host=host.docker.internal remote_port=9001 var_display_max_data=1024 var_display_max_depth=5"
+    entrypoint:
+      - "sh"
+      - "-c"
+      - "echo $$(/sbin/ip route|awk '/default/ { print $$3 }') host.docker.internal >> /etc/hosts; docker-php-entrypoint php-fpm"
+I wish run another copy of container with different entrypoint... and I loose this changes. i.e.
+cd && docker-compose -f ~/projects/docker-yii2-app-advanced/docker-run/docker-compose.yml run --rm --entrypoint bash php
+I can't connect to required dns name host.docker.internal
+We can't set extra_hosts as expression. Can't work
+ERROR: for php  Cannot create container for service php: b'invalid IP address in add-host: "$(/sbin/ip route|awk \'/default/ { print $3 }\')"'
+we can't calculate environment after / in inject moment. Something like
+      HOST_DOCKER_INTERNAL: $$(/sbin/ip route|awk '/default/ { print $$3 }')
+      XDEBUG_CONFIG: "remote_host=$$($$HOST_DOCKER_INTERNAL) remote_port=9001 var_display_max_data=1024 var_display_max_depth=5"
+just add environment with $
+use HOSTALIASES
+echo 'host.docker.internal 192.168.0.83' > ~/.hosts
+services:
+  php:
+    image: bscheshir/php:7.2.3-fpm-alpine-4yii2-xdebug
+    restart: always
+    volumes:
+      - ../php-code:/var/www/html #php-code
+      - ~/.composer/cache:/root/.composer/cache
+      - ~/.hosts:/root/.hosts
+    depends_on:
+      - db
+    environment:
+      TZ: Europe/Moscow
+      HOSTALIASES: ~/.hosts
+      XDEBUG_CONFIG: "remote_host=`host.docker.internal remote_port=9001 var_display_max_data=1024 var_display_max_depth=5"
+      PHP_IDE_CONFIG: "serverName=yii2advanced"
+another hardcoded. But this is can be used from any location instead of .env
+but also not work.
+It does not support hostname to IP address resolution
+Any another one-line solution?
+Or, may be this is issues:
+way to calculate environment on container before set from docker-compose.yml
+way to calculate extra_hosts on container before set to /etc/hosts
+additional system dns like host.docker.internal on linux
+Context information (for bug reports)
+docker-compose version
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+docker version
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:10:01 2018
+ OS/Arch: linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:08:31 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+Additional information
+Kernel Version: 4.4.0-116-generic
+Operating System: Ubuntu 16.04.4 LTS
+OSType: linux
+Architecture: x86_64
+1
+2

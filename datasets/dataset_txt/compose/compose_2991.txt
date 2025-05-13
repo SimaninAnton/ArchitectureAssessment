@@ -1,0 +1,10 @@
+jamshid commented on 12 Dec 2015
+Is there a reason environment variable substitution doesn't work in the value of privileged?
+$ env SOCAT_PRIVILEGED=true docker-compose up -d
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+Service 'socat' configuration key 'privileged' contains an invalid type, it should be a boolean
+socat:
+  image: bobrik/socat
+  privileged: ${SOCAT_PRIVILEGED}
+...
+Maybe this is related to #2025. I guess an env variable is always treated as a string, can't specify a boolean value?

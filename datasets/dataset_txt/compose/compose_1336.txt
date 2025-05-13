@@ -1,0 +1,29 @@
+rehmana1 commented on 6 Jul 2017
+Docker swarm service creation with --publish parameter fails to create containers.
+It tries respawning containers but fails with following error:
+CURRENT STATE ERROR
+Rejected 4 seconds ago "HNS failed with error : Unspecified error "
+{More data present in attached file}.
+If I create the same service without using the --publish port parameter the service runs as expected with the desired no. of tasks (containers) up and running.
+OS: Windows 10 Enterprise
+Docker version 17.06.0-ce, build 02c1d87
+docker-machine.exe version 0.12.0, build 45c69ad
+docker-compose version 1.14.0, build c7bdf9e
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j 26 Sep 2016
+Service creation with --publish command included:
+docker service create --name democsvc --publish 6000:80 demoimage1
+Result of Docker service ps demosvc:
+PS C:\Users\INIDC-rehmana05\Desktop\Nginx> docker service ps demosvc --no-trunc
+ID NAME IMAGE NODE DESIRED STATE CURRENT STATE ERROR PORTS
+2ozjd29l26ppafajjz31ew4cb democtrsvc.1 demoimage1:latest INIDC-rehman06 Ready Rejected 3 seconds ago "HNS failed with error : Unspecified error "
+3ncclwb1m87l4urit15kz3jkb _ democtrsvc.1 demoimage1:latest INIDC-rehman06 Shutdown Rejected 8 seconds ago "HNS failed with error : Unspecified error "
+n10g23kpxhab23xuwke4gcl52 _ democtrsvc.1 demoimage1:latest INIDC-rehman06 Shutdown Rejected 13 seconds ago "HNS failed with error : Unspecified error "
+yficjckeko0of5osb0dly3djp _ democtrsvc.1 demoimage1:latest INIDC-rehman06 Shutdown Rejected 18 seconds ago "HNS failed with error : Unspecified error "
+vm99eqvgha1bbqewqycm8vw03 _ democtrsvc.1 demoimage1:latest INIDC-rehman06 Shutdown Rejected 24 seconds ago "HNS failed with error : Unspecified error "
+If same command is executed without --publish 6000:80 option, the service is able to create and run the containers and tasks.
+docker service create --name democsvc demoimage1 {Works good}
+One more issue:
+Exposed ports by --publish command are not accessible (IPAddress:Port should allow to communicate with the tasks of the service) from other machines present in the same network.
+Running single container (Not in swarm mode) with -p Port on Host: Exposed port of container is working in the same network.

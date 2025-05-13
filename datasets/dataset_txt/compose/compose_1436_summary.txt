@@ -1,0 +1,1 @@
+Bug at the initialization of the TopLevelCommand class

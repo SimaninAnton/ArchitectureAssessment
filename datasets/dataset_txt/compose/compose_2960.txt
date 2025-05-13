@@ -1,0 +1,6 @@
+vaab commented on 29 Dec 2015
+Skimming through the issues, it seems that you've chosen to set the paths of docker-compose.yml (for instance the build path) relative to docker-compose.yml file's own location.
+This doesn't suits my current needs, and I do not think you should take this setup for granted to the point where we do not have any options to bypass this behavior. I'll have to make gruesome hacks to go around this.
+So as a proposition, why not simply add an optional general argument --cwd PATH (as the -f FILENAME is), that would allow more flexibility and compatibility with other behaviors ?
+I'm using a generated docker-compose.yml to hook Juju style of services description. And this CWD following the config file is a pain in the ass currently (and it has already generated quite some puzzling it seems) , so if at least we could prevent this behavior with an optional argument (no compatibility break), this would be great.
+1

@@ -1,0 +1,22 @@
+snky1987 commented on 6 Jul 2017 •
+edited
+Part of my docker-compose (Docker for Mac):
+expose: 
+  - "12201/udp"
+  - "1514/udp"
+ports:
+  - "9000:9000"
+  - "12201/udp:12201/udp"
+  - "1514/udp:1514/udp"
+When I run docker-compose up -d I get an console error: ERROR: Invalid published port: 12201/udp
+It is greylog container so I do need to define and expose both 12201 and 1514 as "UDP"
+When I do:
+expose: 
+  - "12201/udp"
+  - "1514/udp"
+ports:
+  - "9000:9000"
+  - "12201:12201/udp"
+  - "1514:1514/udp"
+Error disappear but the Greylog container does not work for me.
+The weird thing is that the configuration I put at the top of this Issue works for some other people in my team but not me.

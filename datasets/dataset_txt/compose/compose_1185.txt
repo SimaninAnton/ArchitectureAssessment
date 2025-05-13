@@ -1,0 +1,42 @@
+Spriithy commented on 25 Sep 2017 •
+edited
+Hey everyone, I'm making a simple test environment using docker-compose for a project in my company. However, I have built a simple docker-compose.yml file like so :
+version: '3'
+services:
+  entry:
+    image: .
+    ports:
+      - "5000:5000"
+  maids:
+    image: "local_tests/maids3"
+    ports:
+      - "5000:5000"
+  redis:
+    image: "redis:alpine"
+The idea is that entry connects to maids that stores an ML algorithm's results in a redis cache.
+I am using
+% docker -v                                                             
+Docker version 17.06.2-ce, build cec0b72
+% docker-compose -v                                                            
+docker-compose version 1.16.1, build 6d1ac21
+However, when I do docker-compose up, I get
+% docker-compose up                                                                
+Creating pocbasket_entry_1 ... 
+Creating pocbasket_redis_1 ... 
+Creating pocbasket_maids_1 ... 
+Creating pocbasket_maids_1
+Creating pocbasket_redis_1
+
+Creating pocbasket_redis_1 ... done
+
+ERROR: for entry  list indices must be integers, not unicode
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 938, in up
+  File "compose/project.py", line 453, in up
+  File "compose/parallel.py", line 70, in parallel_execute
+TypeError: list indices must be integers, not unicode
+Failed to execute script docker-compose
+Any clue how I can fix this ? Thanks in advance !

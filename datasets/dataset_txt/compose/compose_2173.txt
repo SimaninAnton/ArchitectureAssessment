@@ -1,0 +1,63 @@
+kumarsarath588 commented on 4 Aug 2016 •
+edited by aanand
+Hi Team,
+I am trying to create overlay network using command.
+docker network create --driver overlay --subnet 172.30.0.0/24 mynet
+Inspect
+[
+    {
+        "Name": "mynet",
+        "Id": "b59f9e11f75460e91e183c5937b26fdffff6a57c7decfb37de5b1e22c63831c8",
+        "Scope": "global",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.30.0.0/24"
+                }
+            ]
+        },
+        "Internal": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+But if i create same network using docker-compose file
+networks:
+  mynet:
+    driver: overlay
+    driver_opts:
+      subnet: "172.31.0.0/24"
+Inspect:
+[
+    {
+        "Name": "wordpress_wordpress_net",
+        "Id": "702a1e7e13ab0b65b5f66bbe1931da2d632572bc12bb98667eba6199f6bc46bf",
+        "Scope": "global",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "10.0.0.0/24",
+                    "Gateway": "10.0.0.1/24"
+                }
+            ]
+        },
+        "Internal": false,
+        "Containers": {},
+        "Options": {
+            "subnet": "172.31.0.0/24"
+        },
+        "Labels": {}
+    }
+]
+Due to which the docker run is failing with the error:
+docker: Error response from daemon: Error response from daemon: subnet sandbox join failed for "10.0.1.0/24": overlay subnet 10.0.1.0/24 has conflicts in the host while running in host mode
+Please help.

@@ -1,0 +1,8 @@
+r0fls commented on 4 Sep 2016
+When I run the below command it just spits out the help menu:
+$ docker-compose --x-networking up 
+Documented here:
+https://docs.docker.com/v1.9/compose/networking/
+This is my version info:
+$ docker-compose --version
+docker-compose version 1.8.0, build f3628c7

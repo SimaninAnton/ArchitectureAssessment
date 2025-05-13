@@ -1,0 +1,1 @@
+Docker-compose release docs and compose file spec docs inconsistent

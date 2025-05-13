@@ -1,0 +1,116 @@
+thecatwhisperer commented on 20 Feb 2017 •
+edited
+I have a docker setup on windows 10. This morning i was prompted to update Docker and I did. Since then, port mapping no longer seems to work. As far as I know I have not modified my docker-compose.yml file. But i used to be able to access the ports mapped in the file (see below).
+notes
+I can connect fine to any of the services form the assigned Docker ip of 10.0.75.2:XXXX (eg: 8989, 8080, etc). Used to be able to hit "localhost" or the machine's name on my network.
+seems to mount volumes fine (can see data on local disk.
+no other configuration changes were made.
+disabling windows firewall has no effect.
+docker version
+Client:
+ Version:      1.13.1
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   092cba3
+ Built:        Wed Feb  8 08:47:51 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.13.1
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   092cba3
+ Built:        Wed Feb  8 08:47:51 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+docker info
+Containers: 4
+ Running: 4
+ Paused: 0
+ Stopped: 0
+Images: 5
+Server Version: 1.13.1
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1
+runc version: 9df8b306d01f59d3a8029be411de015b7304dd8f
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.8-moby
+Operating System: Alpine Linux v3.5
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 7.769 GiB
+Name: moby
+ID: I37G:HSYO:ON2Z:HSDY:EDFD:2WCZ:BSDO:TNWB:32WJ:IIZX:XSZ6:GAGS
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 34
+ Goroutines: 39
+ System Time: 2017-02-19T20:17:44.934505Z
+ EventsListeners: 0
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+docker-compose.yml
+version: '4'
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    environment:
+      - TZ=America/Halifax
+      - PLEX_CLAIM=REDACTED
+    network_mode: host
+    volumes:
+      - /e/apps/plex:/config
+      - /e/temp/transcoding:/transcode
+      - /e/media:/data
+  sabnzbd:
+    image: sabnzbd/sabnzbd
+    container_name: sabnzbd
+    volumes:
+      - /e/apps/sabnzb/data:/datadir
+      - /e/temp/media:/media
+    ports:
+      - 8080:8080
+    restart: always
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    volumes:
+      - /dev/rtc:/dev/rtc:ro
+      - /e/apps/sonarr:/config
+      - /e/media/tv:/tv
+      - /e/temp/media/tv:/downloads
+    ports:
+      - 8989:8989
+  couchpotato:
+    image: couchpotato/couchpotato
+    container_name: couchpotato
+    volumes:
+      - /e/apps/couchpotato:/datadir
+      - /e/media/movies:/media
+    ports:
+      - 5050:5050
+    restart: always
+log.txt
+gist.github.com: thecatwhisperer/log.txt

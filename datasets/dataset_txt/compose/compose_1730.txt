@@ -1,0 +1,5 @@
+max8899 commented on 3 Feb 2017 •
+edited
+Hello,
+I am working on a project that getting json data from compose yaml file. Finally I found it is not that easy and there are codes in compose project just do the same thing. So I'm wondering why not abstract this logic to a standard python package. Since there is a lot of validations out of the compose file's json schema and there are constrains which need to know the docker's limit well. And the upgrade of docker and docker compose makes it more harder to maintain such codes. It will helped a lot with a single python package to this.
+Thanks

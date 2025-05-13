@@ -1,0 +1,23 @@
+hc2p commented on 3 Nov 2016
+when i want to merge two docker-compose.yml i get following error with the current beta 1.12.3-beta29.3 (619507e)
+docker-compose -f ../docker-compose.yml -f docker-compose.yml up myService
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 65, in main
+  File "compose/cli/main.py", line 114, in perform_command
+  File "compose/cli/command.py", line 36, in project_from_options
+  File "compose/cli/command.py", line 103, in get_project
+  File "compose/config/config.py", line 323, in load
+  File "compose/config/config.py", line 414, in load_services
+  File "compose/config/config.py", line 405, in merge_services
+  File "compose/config/config.py", line 405, in <dictcomp>
+  File "compose/config/config.py", line 704, in merge_service_dicts_from_files
+  File "compose/config/config.py", line 774, in merge_service_dicts
+  File "compose/config/config.py", line 728, in merge_field
+  File "compose/config/config.py", line 807, in merge_logging
+  File "compose/config/config.py", line 749, in merge_scalar
+  File "compose/config/config.py", line 720, in needs_merge
+TypeError: argument of type 'NoneType' is not iterable
+docker-compose returned -1
+diagnostic id: E9B25A88-ABE3-46AF-B578-39A426964940
+5

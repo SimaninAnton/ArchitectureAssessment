@@ -1,0 +1,4 @@
+Contributor
+villlem commented on 29 May 2015
+docker-compose run version 1.3.0 RC1 does not remove container when called with --rm option. Those containers does not appear in docker-compose ps command either.
+2

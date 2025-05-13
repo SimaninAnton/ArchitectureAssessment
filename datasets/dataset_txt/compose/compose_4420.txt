@@ -1,0 +1,4 @@
+pedroborges commented on 28 Jan 2014
+I started playing with Fig yesterday and when I wanted to start fresh today on project, I cleaned all Docker images (using docker rmi $(docker images -a -q)). I thought Fig would rebuild as it did yesterday, but no. After that, Fig was looking for an image that didn't exist.
+Then I uninstalled Fig, Docker and even cleaned Docker folder inside /var/lib/Docker. But without success... Now web and db services build but don't work. Is there any place Fig store this info?
+See: https://gist.github.com/pedroborges/0efe5f5e125bbddcdf07

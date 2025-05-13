@@ -1,0 +1,20 @@
+f-f commented on 19 Jan 2016
+I get the following error while trying to do docker-compose ps or docker-compose pull. Happens with 1.6.0-RC1 and 1.5.2 (well in reality 1.5.2 blows up only when installing from pip, so I guess the bug is in docker-py).
+Docker version: 1.9.1
+# docker-compose pull
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/compose/cli/main.py", line 54, in main
+  File "/code/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/code/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/code/compose/cli/main.py", line 171, in perform_command
+  File "/code/compose/cli/command.py", line 52, in project_from_options
+  File "/code/compose/cli/command.py", line 85, in get_project
+  File "/code/compose/cli/command.py", line 66, in get_client
+  File "/code/compose/cli/docker_client.py", line 27, in docker_client
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/client.py", line 56, in __init__
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/auth/auth.py", line 177, in load_config
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/auth/auth.py", line 118, in parse_auth
+TypeError: string indices must be integers
+docker-compose returned -1
+Of course the docker daemon is up and in good health.

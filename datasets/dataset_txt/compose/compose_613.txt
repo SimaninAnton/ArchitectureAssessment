@@ -1,0 +1,7 @@
+gabyfulchic commented on 22 Jun 2018
+I did that following commands in my debian stretch vm :
+#git clone https://github.com/sipcapture/homer-docker
+#cd heplify-server/hom5-hep-influx
+#docker-compose --verbose up
+I'm having a freeze after bootstrap-mysql exited with code 0. (while docker-compose --verbose up is running)
+Any ideas ? Maybe that's a bug :)

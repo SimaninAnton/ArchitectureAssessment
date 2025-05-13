@@ -1,0 +1,3 @@
+Contributor
+summergirl21 commented on 30 Nov 2017
+I saw discussion in other issues of adding an option to docker-compose down to specify a service, similar to docker-compose stop [SERVICE_NAME]. Is this something that would be useful?

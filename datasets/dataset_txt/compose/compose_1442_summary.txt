@@ -1,0 +1,1 @@
+docker-compose error on Fedora 25: DistributionNotFound

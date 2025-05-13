@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 16 Jul 2015
+It should be possible to pass the -p option to expose ports when doing docker-compose run. It should probably be not be possible to use this option in combination with the --service-ports option.
+This is part of #363.

@@ -1,0 +1,26 @@
+jbeaudoin11 commented on 7 Dec 2017 •
+edited
+Hi,
+I'm a noobie with docker/compose and i just had a weird problem..
+When i tried to pass args from the compose file to the dockerfile my args were always empty/blank oO
+# Compose file
+version: '3'
+services:
+    postgres:
+        build:
+            context: ./postgres
+            args:
+                PG_PWD: qwer
+        ports:
+            - 5432:5432
+# Dockerfile 
+ARG PG_PWD
+FROM mdillon/postgis
+
+USER postgres
+RUN echo "${PG_PWD}"
+So i ended up switching the order of ARG and FROM and it worked !
+FROM mdillon/postgis
+ARG PG_PWD
+Maybe i missed it in the docs but i can't find anywhere saying that you must put ARG after the FROM statement :/. Would be cool to see it in https://docs.docker.com/compose/compose-file/#args
+1

@@ -1,0 +1,7 @@
+bugeaud commented on 11 Aug 2018 •
+edited
+Docker has chosen to publish to a dedicated repository its releases inside download.docker.com for the various OS.
+Docker Compose should publish its releases to this repository for consistency purpose of the whole stack.
+This would ease the maintenance of Docker Compose related applications and ensure version update & security fixes beeing applied.
+OS : Any distrib supported as download.docker.com
+5

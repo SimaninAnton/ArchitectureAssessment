@@ -1,0 +1,35 @@
+alexandrev commented on 4 Oct 2015
+I'm getting this error when I was trying to run a docker-compose up command:
+Status: Downloaded newer image for cpuguy83/docker-grand-ambassador:latest===>]     32 B/32 B6 MB
+Traceback (most recent call last):
+  File "C:\Python34\Scripts\docker-compose-script.py", line 9, in <module>
+    load_entry_point('docker-compose==1.5.0dev', 'console_scripts', 'docker-compose')()
+  File "d:\projects\github\compose\compose\cli\main.py", line 51, in main
+    command.sys_dispatch()
+  File "d:\projects\github\compose\compose\cli\docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "d:\projects\github\compose\compose\cli\command.py", line 32, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "d:\projects\github\compose\compose\cli\docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "d:\projects\github\compose\compose\cli\main.py", line 146, in perform_command
+    return super(TopLevelCommand, self).perform_command(options, *args, **kwargs)
+  File "d:\projects\github\compose\compose\cli\command.py", line 64, in perform_command
+    handler(project, command_options)
+  File "d:\projects\github\compose\compose\cli\main.py", line 553, in up
+    timeout=timeout
+  File "d:\projects\github\compose\compose\project.py", line 283, in up
+    for service in services
+  File "d:\projects\github\compose\compose\project.py", line 287, in <listcomp>
+    timeout=timeout
+  File "d:\projects\github\compose\compose\service.py", line 399, in execute_convergence_plan
+    do_build=do_build,
+  File "d:\projects\github\compose\compose\service.py", line 303, in create_container
+    previous_container=previous_container,
+  File "d:\projects\github\compose\compose\service.py", line 648, in _get_container_create_options
+    one_off=one_off)
+  File "d:\projects\github\compose\compose\service.py", line 661, in _get_container_host_config
+    config=options.get('log_opt', None)
+  File "C:\Python34\lib\site-packages\docker\utils\types.py", line 27, in __init__
+    ', '.join(self.types._values)
+ValueError: LogConfig.type must be one of (json-file, syslog, none)´´´

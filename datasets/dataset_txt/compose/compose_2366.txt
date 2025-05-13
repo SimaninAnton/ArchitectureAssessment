@@ -1,0 +1,14 @@
+AblionGE commented on 24 May 2016
+Hello,
+Is it possible to set easily the network interface you want to use when connecting to a docker network (external or not) via the docker-compose file ?
+For example, in the docker-compose.yaml file I have:
+networks:
+  anet:
+    external:
+      name: anet
+  bnet:
+    external:
+      name: bnet
+And I want to have anet on eth1 and bnet on eth0. It seems that, by default, it takes the alphabetical order and anet will have eth0. Is there something existing to define this ?
+Thanks
+1

@@ -1,0 +1,1 @@
+Compose on windows, remote machine linux. latest docker-toolbox v1.12.5

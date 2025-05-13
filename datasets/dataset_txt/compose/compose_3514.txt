@@ -1,0 +1,2 @@
+iMerica commented on 2 Jul 2015
+This appears when doing docker-compose up -d pretty frequently since upgrading to 1.3.1.

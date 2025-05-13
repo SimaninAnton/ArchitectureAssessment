@@ -1,0 +1,11 @@
+zedtux commented on 30 Aug 2014
+When executing fig run or fig logs we can see the logs from all the contains (which is an awesome feature!).
+I have a Rails containers where is running my application. The application works really well but there is no logs until there is an issue where the logs are refreshed, often.
+I mean when I go to the homepage, I'm expecting to see an update in the logs window like the following:
+web_1        | Started GET "/" for 192.168.59.3 at 2014-08-30 18:01:03 +0000
+web_1        | Processing by WelcomeController#index as HTML
+web_1        |   User Load (0.5ms)  SELECT  "users".* FROM "users"  WHERE "users"."id" = 1  ORDER BY "users"."id" ASC LIMIT 1
+web_1        |   Rendered welcome/index.html.slim within layouts/application (0.2ms)
+web_1        |   Rendered shared/_left_menu.html.slim (1.4ms)
+web_1        | Completed 200 OK in 118ms (Views: 112.4ms | ActiveRecord: 0.5ms)
+Is this normal that the logs window is not refreshed in realtime (like with the tail -f command on Linux) ?

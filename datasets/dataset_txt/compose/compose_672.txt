@@ -1,0 +1,46 @@
+IkumiMashiba commented on 15 May 2018 •
+edited
+Description of the issue
+ERROR: for db Cannot start service db: cgroups: cannot find cgroup mount destination: unknown
+ERROR: No containers to start
+Context information (for bug reports)
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24302
+ Built: Fri Mar 23 08:31:36 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.05.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.10.1
+  Git commit:   f150324
+  Built:        Wed May  9 22:20:42 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+docker-compose version 1.21.2, build a1334711
+Docker version 18.03.0-ce, build 0520e24302
+docker-machine.exe version 0.14.0, build 89b8332
+other.
+I tried but the result was the same.
+docker-compose 1.19.0
+docker-compose 1.20.1
+Steps to reproduce the issue
+1.docker-compose up -d ... done
+2.docker-compose stop ... done
+3.docker-compose start ... error
+Stacktrace / full error message
+ERROR: for db Cannot start service db: cgroups: cannot find cgroup mount destination: unknown
+ERROR: No containers to start
+Additional information
+Win10 1709 Enterprise x64
+Memory 8G
+Oracle VirtualBox 5.2.8
+This will succeed
+docker-machine restart
+docker-compose start

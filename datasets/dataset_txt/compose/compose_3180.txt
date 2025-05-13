@@ -1,0 +1,16 @@
+benlei-neustar commented on 24 Oct 2015
+I have something like this:
+my_container:
+  image: my-image
+  ports:
+    - "1234:1234"
+  environment:
+    CONTAINER_PORT: 1234
+    COTANINER_ID: 3a53bcd0710
+I want to be able to achieve three things:
+If I scale to 2, how do I get the second container's port to change from 1234:1234 to 1235:1234
+Similar to the above, how do I get the CONTAINER_PORT env var to be 1235 for the second container?
+How do I get the first container to use CONTAINER_ID 3a53bcd07101 and the second to use 3a53bcd07102?
+To scale further, what if I wanted 10+ of these containers?
+Can these only be achieved by copying and pasting my_container 10x times?
+2

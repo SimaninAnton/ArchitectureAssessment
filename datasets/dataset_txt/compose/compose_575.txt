@@ -1,0 +1,39 @@
+chrispad2k commented on 17 Jul 2018 •
+edited
+Feature Request: Build image if --build is passed, alternatively pull image from registry
+I don't know if this is working yet, but it would be a great feature, if you could toggle between building a image and pulling it from the registry.
+So what i mean is that if you provide the --build parameter, docker compose should build the image from a Dockerfile, and if no --build is passed, the registry image (image: registry.docker.com/bla) will be used.
+So for example i would use this docker-compose.yml file:
+version: '3.0'
+services:
+  devserver:
+    image: registry.docker.com/superspecialdevserver
+    build: docker/devserver
+    restart: always
+    container_name: devserver
+And the Dockerfile would be sitting in docker/devserver
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24302
+ Built: Fri Mar 23 08:31:36 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.05.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.10.1
+  Git commit:   f150324
+  Built:        Wed May  9 22:20:42 2018
+  OS/Arch:      linux/amd64
+  Experimental: false

@@ -1,0 +1,6 @@
+Contributor
+bfirsh commented on 1 Apr 2016
+See @taylorb-microsoft's comment here: 313c584#commitcomment-16546187
+Windows doesn't support disconnecting containers from networks and isn't going to any time soon. It seems like we should get better APIs for updating aliases on containers instead of doing this which feels like hack.
+This is blocking Compose working with Windows containers, I believe.
+2

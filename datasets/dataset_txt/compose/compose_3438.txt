@@ -1,0 +1,5 @@
+richburdon commented on 27 Jul 2015
+On OS/X I get the error below whenever running docker-compose.
+(NOTE, I have already installed sudo pip install --upgrade requests[security])
+/usr/local/Cellar/fig/1.3.3/libexec/vendor/lib/python2.7/site-packages/requests/packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+InsecurePlatformWarning

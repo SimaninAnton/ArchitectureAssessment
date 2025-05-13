@@ -1,0 +1,1 @@
+`docker-compose config` does not use `--project-directory` for build context absolute path

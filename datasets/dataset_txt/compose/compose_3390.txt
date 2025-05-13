@@ -1,0 +1,21 @@
+kunyan commented on 11 Aug 2015
+When I follow the guide to execute
+$ docker-compose run web django-admin.py startproject composeexample .
+Here is the error I got
+➜  django-docker  docker-compose run web django-admin startproject composeexample .              
+Traceback (most recent call last):
+  File "/usr/local/bin/django-admin", line 11, in <module>
+    sys.exit(execute_from_command_line())
+  File "/usr/local/lib/python2.7/site-packages/django/core/management/__init__.py", line 338, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/site-packages/django/core/management/__init__.py", line 330, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/site-packages/django/core/management/base.py", line 393, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/site-packages/django/core/management/base.py", line 444, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/site-packages/django/core/management/commands/startproject.py", line 33, in handle
+    super(Command, self).handle('project', project_name, target, **options)
+  File "/usr/local/lib/python2.7/site-packages/django/core/management/templates.py", line 154, in handle
+    with open(new_path, 'wb') as new_file:
+IOError: [Errno 13] Permission denied: '/code/manage.py'

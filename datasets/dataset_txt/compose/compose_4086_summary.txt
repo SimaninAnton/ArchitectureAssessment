@@ -1,0 +1,1 @@
+Illegal Instruction crash on older Macs

@@ -1,0 +1,4 @@
+whitecolor commented on 12 Mar 2017
+When docker-compose up my-service is run it will also start services that my-service depends_on, but it won't show output of those services.
+It would be useful to have option for docker-compose that would also turn on output for dependencies.
+1

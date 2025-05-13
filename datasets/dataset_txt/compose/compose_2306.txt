@@ -1,0 +1,4 @@
+yank1 commented on 14 Jun 2016
+The docker would support VirtualIP in next release.
+does compose support it?
+docker/libnetwork#1195

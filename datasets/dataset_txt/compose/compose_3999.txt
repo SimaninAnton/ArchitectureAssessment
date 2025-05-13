@@ -1,0 +1,2 @@
+hamiltont commented on 12 Jan 2015
+It seems that fig --verbose <command> is the only way to get verbose output. I'd propose to also support the standard short flag fig -v <command>

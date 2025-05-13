@@ -1,0 +1,17 @@
+laggingreflex commented on 10 Sep 2016 •
+edited
+My python isn't very good so apologies if I'm missing something obvious.
+I tried (after installing all dependencies)
+python setup.py build
+I was expecting to get an .exe (being on Windows) which it didn't create, but it created .\build\lib\compose. Are you supposed to run this?
+python ...path-to\build\lib\compose up
+It runs the docker-compose command but it doesn't seem to actually use the code in that build directory. In build\lib\compose\__main__.py there's
+from compose.cli.main import main
+which seems to be importing from somewhere else than this build\lib\compose\cli\main (I checked by putting some test print statements which it didn't print, hence my suspicion). I changed it to
+from cli.main import main
+then it indeed imports from build\lib\compose\cli\main, but then it gives other errors
+  File "C:\dev\compose\build\lib\compose\cli\errors.py", line 15, in <module>
+    from ..const import API_VERSION_TO_ENGINE_VERSION
+ValueError: Attempted relative import beyond toplevel package
+I'm guessing there must be other steps to build this than what I've done.
+Could someone please point me in the right direction on how to build docker-compose from source on Windows?

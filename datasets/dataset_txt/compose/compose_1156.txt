@@ -1,0 +1,11 @@
+imaia commented on 12 Oct 2017
+I would like to be able to reuse a image compiled for a service defined in a docker-compose inside the same docker-compose. Example:
+version: '3.2'
+services:
+  app:
+    build: ./app
+    image: myapp
+  app2:
+    image: myapp
+    command: sh -c "echo 'non default command'"
+This would be quite useful for some scenarios, like task schedulers (celery, rq).

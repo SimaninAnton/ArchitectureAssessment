@@ -1,0 +1,6 @@
+Dzhuneyt commented on 14 Apr 2019 •
+edited
+While skimming through the documentation of Terraform, I observed a very interesting implementation to how they handle passing in variables (secret keys, passwords, whatever) which are NOT versioned into the terraform config which IS versioned.
+Basically, you define a list of variables in a config file, similar to .env. An important difference here is that you can leave any of these variable's values EMPTY.
+Whenever you run the actual terraform apply command (equivalent to docker-compose up), the CLI will ask you to fill any empty variables right inside the shell, in an interactive manner.
+In contrast to Terraform, the docker-compose up command currently just fails if there are variables defined inside docker-compose.yml, without them being defined inside .env or passed inline to the "up" command (e.g. $ BRANCH=develop docker-compose up). I thought such interactivity like Terraform provides, would certainly make the Docker Compose CLI a bit more user-friendly.

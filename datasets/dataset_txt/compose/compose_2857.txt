@@ -1,0 +1,6 @@
+navinSing commented on 31 Jan 2016
+$ docker-compose up -d
+ERROR: Error: image library/abc:3.0 not found
+Why is it looking library tag?
+while the image was available on that machine.
+running it with swarm and docker engine 1.9.1

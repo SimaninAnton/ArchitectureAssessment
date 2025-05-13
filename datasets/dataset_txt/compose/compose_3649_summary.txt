@@ -1,0 +1,1 @@
+Invalid repository name (compose2_MongoConnector), only [a-z0-9-_.] are allowed

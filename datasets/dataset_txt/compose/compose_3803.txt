@@ -1,0 +1,73 @@
+emilisto commented on 24 Mar 2015
+I'm having problems with using docker-compose on OS X and boot2docker. I have the following docker-compose.yml:
+test:
+  image: ubuntu:precise
+  command: /bin/sh -c "while true; do echo Hello, world; sleep 1; done"
+Here's an illustration of the problem:
+osx$ docker-compose run test
+Hello, world
+Hello, world
+^C
+# However, it gets more interesting when I do the following:
+osx$ docker-compose run test ls /
+bin   dev  home  lib64  mnt  proc  run   selinux  sys  usr
+boot  etc  lib   media  opt  root  sbin  srv      tmp  var
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.1.0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 341, in run
+    dockerpty.start(project.client, container.id, interactive=not options['-T'])
+  File "/usr/local/lib/python2.7/site-packages/dockerpty/__init__.py", line 27, in start
+    PseudoTerminal(client, container, interactive=interactive).start()
+  File "/usr/local/lib/python2.7/site-packages/dockerpty/pty.py", line 151, in start
+    self._hijack_tty(pumps)
+  File "/usr/local/lib/python2.7/site-packages/dockerpty/pty.py", line 235, in _hijack_tty
+    if any([p.flush() is None for p in ready]):
+  File "/usr/local/lib/python2.7/site-packages/dockerpty/io.py", line 285, in flush
+    return self.to_stream.write(self.from_stream.read(n))
+  File "/usr/local/lib/python2.7/site-packages/dockerpty/io.py", line 119, in read
+    return self.fd.recv(n)
+  File "/usr/local/lib/python2.7/site-packages/requests/packages/urllib3/contrib/pyopenssl.py", line 183, in recv
+    data = self.connection.recv(*args, **kwargs)
+OpenSSL.SSL.ZeroReturnError
+Even more interesting is trying to run an interactive container:
+osx$ docker-compose run test sh
+root@5247252ac7a7:/#
+# At first everything seems fine here – but the terminal is non-interactive and I don't 
+# get any output in addition to the above. Typing doesn't give any feedback, nor does 
+# typing a command and blindly pressing enter.
+Some version info:
+$ boot2docker version
+Boot2Docker-cli version: v1.5.0
+Git commit: ccd9032
+$ docker-compose --version
+docker-compose 1.1.0
+$ boot2docker ssh docker --version
+Docker version 1.5.0, build a8a31ef
+$ pip freeze
+# I've removed packages that aren't in the dependency graph for docker-compose for this list
+PyYAML==3.11
+docker-compose==1.1.0
+docker-py==0.7.2
+dockerpty==0.3.2
+docopt==0.6.2
+fig==1.0.1
+pyOpenSSL==0.13
+requests==2.4.3
+six==1.9.0
+texttable==0.8.2
+urllib3==1.10.2
+websocket-client==0.26.0
+$ uname -a
+Darwin emilisto.local 14.1.0 Darwin Kernel Version 14.1.0: Thu Feb 26 19:26:47 PST 2015; root:xnu-2782.10.73~1/RELEASE_X86_64 x86_64
+Let me know if you want anything else!

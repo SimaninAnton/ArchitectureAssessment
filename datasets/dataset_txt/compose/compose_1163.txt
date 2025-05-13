@@ -1,0 +1,46 @@
+jaloren commented on 8 Oct 2017 •
+edited
+I have two docker compose files. I plan to do a docker-compose up on both files where the project name is the same.
+Here's the first compose file.
+version: '3.3'
+services:
+  alpha:
+    image: centos:7
+    entrypoint: /usr/bin/bash
+    command: -c 'sleep 600000'
+    volumes:
+      - xyz:/opt/bar
+volumes:
+  xyz:
+Here's the other compose file.
+version: '3.3'
+services:
+  beta:
+    image: centos:7
+    entrypoint: /usr/bin/bash
+    command: -c 'sleep 600000'
+Here are the commands I executed:
+ docker-compose -p proj -f compose2.yml up -d
+ docker-compose -p proj -f compose1.yml up -d
+ docker-compose -p proj -f compose1.yml down --volumes
+Since the volume is not used in compose2.yml, expectation is that the volume would be removed when executing the down command for compose1.yml.
+Here's version output:
+docker-compose version 1.16.1, build 6d1ac21
+
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:09 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:45:38 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+3

@@ -1,0 +1,5 @@
+Contributor
+mauvm commented on 21 Feb 2014
+What is the best way to do this?
+Currently I'm doing if [ $(fig ps | wc -l) -lt 3 ]; then .... But if Fig changes its output, this breaks.
+Also see: https://github.com/mauvm/doos/blob/c8f00e721d6a77f03f5e16723be56769c65a7a48/doos#L241

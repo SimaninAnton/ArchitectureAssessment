@@ -1,0 +1,7 @@
+blaggacao commented on 2 Jan 2015
+problem
+when wanting to deploy dedicated app clusters to clients through templating the orchestration yaml-files, the question is, how do i easly setup the dns for this.
+proposal
+there are great services such as dnssimple with an api. hashicorp's competing tool terraform has got some additionals "outside world" providers like said dnssimple
+rational
+If I might decide to go with fig/composer, and decide against beeing system agnostic, because I just know I want to do all I do the docker way - for some whatever reason - I might also want to be able to set up adjacent services such as DNS and probably mailchimp or similar...

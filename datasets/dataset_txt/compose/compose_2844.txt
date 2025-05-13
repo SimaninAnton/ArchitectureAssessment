@@ -1,0 +1,40 @@
+hairyhenderson commented on 4 Feb 2016
+I'm trying to run an s3fs-fuse docker image, which requires the ability to mount. When running in Docker 1.10, I need to provide my own seccomp profile to allow mounting.
+This works fine:
+$ docker run -it --cap-add mknod --cap-add sys_admin --device /dev/fuse --security-opt seccomp:./my_seccomp_profile.json myimage
+This docker-compose file does not:
+service:
+  image: myimage
+  security_opt:
+    - seccomp:./my_seccomp_profile.json
+  devices:
+    - /dev/fuse
+  cap_add:
+    - mknod
+    - sys_admin
+$ docker-compose up
+ERROR: Cannot start container 4b13ef917b9f3267546e6bb8d8f226460c903e8f12a1d068aff994653ec12d0b: Decoding seccomp profile failed: invalid character '.' looking for beginning of value
+If I provide a full path to the profile, I get the same error (except '/' instead of '.').
+environment
+$ docker version  
+Client:
+ Version:      1.10.0-rc3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   08c24cc
+ Built:        Tue Feb  2 23:01:16 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.10.0-rc1
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   677c593
+ Built:        Fri Jan 15 18:17:17 2016
+ OS/Arch:      linux/amd64
+$ docker-compose version
+docker-compose version 1.6.0rc2, build 695c692
+docker-py version: 1.7.0-rc3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+4

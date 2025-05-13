@@ -1,0 +1,4 @@
+lucaszanella commented on 8 Mar 2018
+I tested on both raspberry pi zero w and raspberry pi 2, and the docker-compose utility takes a lot of time (more than 1 minute) to start building or running things. Not the first time, but every time.
+ps: instructions on docker for linux do not work for raspberry
+ps2: I'd love to get compose installed together with docker

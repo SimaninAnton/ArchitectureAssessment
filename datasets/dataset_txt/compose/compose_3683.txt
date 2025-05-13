@@ -1,0 +1,5 @@
+EntilZha commented on 24 Apr 2015
+This is a feature proposal/request to add a capability to docker-compose run. I have checked in the docker and docker-dev IRC channels and looked at prior issues and it seems this isn't on the radar.
+Currently, if you have a docker-compose.yml you can start a specific container with possibly its dependencies using docker-compose run CONTAINER_NAME. However, this starts/creates a new container with the ordinary compose name appended by _run_1, where 1 could be any number. There is no way to tell docker-compose what this should be named.
+The main use case would be overriding the run command for a specific container (in my case flags for development/production mode), but keeping the original name. This change would allow for this and also be flexible enough to support any name.
+1

@@ -1,0 +1,4 @@
+babatundebusari commented on 25 Mar 2016
+I will like to add several hundreds of hosts to the docker container /etc/hosts file but using the extra_hosts that comes with docker-compose will require adding all hosts on the docker-compose file.
+Any way to reference a file or template instead? for adding several hundred hosts?
+Thanks

@@ -1,0 +1,4 @@
+honyyang commented on 2 Jan 2019
+docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services.hello: 'runtime'

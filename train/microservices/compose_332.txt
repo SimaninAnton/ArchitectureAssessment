@@ -1,0 +1,98 @@
+Contributor
+smueller18 commented on 10 Jan 2019
+Description of the issue
+The execution of following code snippet leads mostly to the error shown below.
+import docker
+from compose.cli.command import project_from_options
+
+client = docker.from_env()
+try:
+    client.images.remove("alpine:latest")
+except:
+    pass
+
+project = project_from_options(".", {})
+project.services[0].pull()
+project.services[0].image()
+Explanation
+When an image pull HTTP request is sent to the docker daemon, the daemon answers with three events:
+curl -sS --no-buffer --unix-socket /var/run/docker.sock -XPOST "http:/v1.35/images/create?tag=latest&fromImage=alpine"
+{"status":"Pulling from library/alpine","id":"latest"}
+{"status":"Digest: sha256:46e71df1e5191ab8b8034c5189e325258ec44ea739bba1e5645cff83c9048ff1"}
+{"status":"Status: Image is up to date for alpine:latest"}
+When project.services[0].pull() is executed, the image digest is returned before the last event was successfully sent.
+compose/compose/progress_stream.py
+Lines 100 to 108 in c956785
+ def get_digest_from_pull(events): 
+     for event in events: 
+         status = event.get('status') 
+         if not status or 'Digest' not in status: 
+             continue 
+            _, digest = status.split(':', 1) 
+         return digest.strip() 
+     return None 
+
+While the daemon is still busy answering the request, the second function project.services[0].image() is called in parallel and often fails because the image pull has not been finally finished.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0dev, build unknown
+docker-py version: 3.6.0
+CPython version: 3.7.1
+OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+version: '2.4'
+services:
+  test:
+    image: alpine:latest
+Steps to reproduce the issue
+Run python script from above
+Observed result
+latest: Pulling from library/alpine
+Traceback (most recent call last):
+  File "/home/sm/git/github/docker/compose/venv/lib/python3.7/site-packages/docker/api/client.py", line 246, in _raise_for_status
+    response.raise_for_status()
+  File "/home/sm/git/github/docker/compose/venv/lib/python3.7/site-packages/requests/models.py", line 940, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: http+docker://localhost/v1.35/images/alpine:latest/json
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sm/git/github/docker/compose/compose/service.py", line 368, in image
+    return self.client.inspect_image(self.image_name)
+  File "/home/sm/git/github/docker/compose/venv/lib/python3.7/site-packages/docker/utils/decorators.py", line 19, in wrapped
+    return f(self, resource_id, *args, **kwargs)
+  File "/home/sm/git/github/docker/compose/venv/lib/python3.7/site-packages/docker/api/image.py", line 245, in inspect_image
+    self._get(self._url("/images/{0}/json", image)), True
+  File "/home/sm/git/github/docker/compose/venv/lib/python3.7/site-packages/docker/api/client.py", line 252, in _result
+    self._raise_for_status(response)
+  File "/home/sm/git/github/docker/compose/venv/lib/python3.7/site-packages/docker/api/client.py", line 248, in _raise_for_status
+    raise create_api_error_from_http_exception(e)
+  File "/home/sm/git/github/docker/compose/venv/lib/python3.7/site-packages/docker/errors.py", line 31, in create_api_error_from_http_exception
+    raise cls(e, response=response, explanation=explanation)
+docker.errors.ImageNotFound: 404 Client Error: Not Found ("no such image: alpine:latest: No such image: alpine:latest")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker_compose_test.py", line 12, in <module>
+    project.services[0].image()
+  File "/home/sm/git/github/docker/compose/compose/service.py", line 370, in image
+    raise NoSuchImageError("Image '{}' not found".format(self.image_name))
+compose.service.NoSuchImageError: Image 'alpine:latest' not found
+Expected result
+latest: Pulling from library/alpine
+Digest: sha256:46e71df1e5191ab8b8034c5189e325258ec44ea739bba1e5645cff83c9048ff1
+Status: Downloaded newer image for alpine:latest
+Additional information
+Ubuntu 18.10

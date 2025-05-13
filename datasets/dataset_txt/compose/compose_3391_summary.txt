@@ -1,0 +1,1 @@
+docker-compose up with volumes_from without recreate

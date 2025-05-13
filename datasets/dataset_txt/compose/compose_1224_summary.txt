@@ -1,0 +1,1 @@
+How do I resolve host address for an api container url that another web container has a dependency on in compose 3 ?

@@ -1,0 +1,27 @@
+ashb commented on 29 Apr 2016 •
+edited
+Best iluustrated with a simple example:
+My compose file docker-compose-test.yml:
+---
+version: '2'
+networks:
+  public:
+services:
+  test:
+    image: alpine:3.3
+    command: ["/bin/sleep", "60"]
+    networks:
+      public: {}
+And then try to run create
+% docker-compose -p test -f docker-compose-test.yml create test
+Creating test_test_1
+ERROR: network test_public not found
+but a up works fine:
+% docker-compose -p test -f docker-compose-test.yml up
+Creating network "test_public" with the default driver
+Creating test_test_1
+Attaching to test_test_1
+Version
+docker-compose --version
+docker-compose version 1.7.0, build unknown
+3

@@ -1,0 +1,1 @@
+Environment variables are not set when using docker-compose through ssh

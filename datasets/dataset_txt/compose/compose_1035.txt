@@ -1,0 +1,42 @@
+scythargon commented on 6 Dec 2017 •
+edited
+READ MY COMMENTS BELOW FIRST
+Some weird stuff is happening here. In my GitLab CI config file I have:
+    - docker pull "$CI_REGISTRY_IMAGE:latest" || true
+    - docker build --cache-from "$BACKEND_IMAGE_LATEST" --pull -t "$BACKEND_IMAGE_LATEST" backend
+    - docker push "$BACKEND_IMAGE_LATEST"
+    - docker-compose -f docker-compose.ci.yml run backend flake8
+And docker-compose.ci.yml states:
+version: '3.2'
+
+services:
+  backend:
+    build:
+      context: backend
+      cache_from:
+        - ${BACKEND_IMAGE_LATEST}
+Full log of the CI pipeline runner is here - https://pastebin.com/VYiWxrxa
+Till line 89 it sets up the runner container
+Till 167 - download BACKEND_IMAGE_LATEST layers
+Till 263 does some other preparations
+At 264 starts to build new docker image using downloaded cached layers
+Interesting part here is lines 289-294:
+Step 5/13 : WORKDIR /code
+ ---> Using cache
+ ---> 07b675dda7f7
+Step 6/13 : COPY requirements.txt dev-requirements.txt /code/
+ ---> Using cache
+ ---> 2c9e98a4eefa
+It uses the cached layer.
+5. Then it proceeds with the next steps and uploads them to the remote registry till the line 365 where it first time calls docker-compose.
+6. At first, docker-compose uses caches too, but from the sixth step - refuses to do so!
+Step 5/13 : WORKDIR /code
+ ---> Using cache
+ ---> 07b675dda7f7
+Step 6/13 : COPY requirements.txt dev-requirements.txt /code/
+ ---> 6989f138d57f
+Step 7/13 : RUN pip install -r requirements.txt     && pip install -r dev-requirements.txt     && python -m nltk.downloader -d /usr/local/share/nltk_data punkt
+ ---> Running in aadd77342564
+Collecting git+https://github.com/rsennrich/Bleualign.git (from -r requirements.txt (line 22))
+And spends the precious time to download and install everything from scratch.
+Thanks for any info!

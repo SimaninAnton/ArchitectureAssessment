@@ -1,0 +1,4 @@
+evgenyneu commented on 5 Jan 2015
+I tried putting the following script into /etc/rc.local, but it did not start docker when I rebooted the system.
+FIG_FILE=/my_app/fig.yml fig start
+Thanks

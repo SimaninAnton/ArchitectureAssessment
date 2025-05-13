@@ -1,0 +1,16 @@
+terion-name commented on 18 Aug 2015
+I use such file structure:
+project
+|-environments
+|-|-environment_name
+|-|-|-docker-compose.yml
+|-|-|-Dockerfile
+It gives me (theoretical) possibility to run different environments (devel, test, stage, prod) easy.
+When running docker-compose -f environments/production/docker-compose.yml up dockerfile's context is stil the same directory where the file is placed, not the call directory.
+This is a problem because it makes impossible to properly add files to container.
+Adding to compose of this:
+web:
+  build: ../../
+  dockerfile: environments/production/Dockerfile
+Doesn't help
+Really in this case Dockerfile's context should be the call directory

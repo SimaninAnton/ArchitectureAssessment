@@ -1,0 +1,41 @@
+jayfk commented on 9 Mar 2016
+I wasn't able to remove a container that failed to start when running docker-compose up. I had to reboot the machine to resolve the issue.
+docker-compose -v
+docker-compose version 1.6.0, build d99cad6
+docker -v                                                                                                              
+Docker version 1.10.2, build c3959b1
+docker version                                                                                                         
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 21:37:01 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 21:37:01 2016
+ OS/Arch:      linux/amd64
+docker-compose ps                                                                                                      
+          Name                         Command               State     Ports
+------------------------------------------------------------------------------
+7236570cd4_project_nginx_1   nginx -g daemon off;             Exit 0
+docker-compose logs nginx                                                                                              
+Attaching to 7236570cd4_project_nginx_1
+7236570cd4_project_nginx_1 | Error attaching: open /var/lib/docker/containers/7236570cd4ea0443d48e944ec8bbf76b17275452ca40b44af6a69db313ab6a3f/7236570cd4ea0443d48e944ec8bbf76b17275452ca40b44af6a69db313ab6a3f-json.log: no such file or directory
+7236570cd4_project_nginx_1 exited with code 0
+docker-compose rm                                                                                                      
+Going to remove 7236570cd4_project_nginx_1
+Are you sure? [yN] y
+Removing 7236570cd4_project_nginx_1 ... error
+
+ERROR: for 7236570cd4_project_nginx_1  Driver aufs failed to remove root filesystem 7236570cd4ea0443d48e944ec8bbf76b17275452ca40b44af6a69db313ab6a3f: rename /var/lib/docker/aufs/mnt/c802f1d67f0d650f68ace7fadb65c6db2f1dd36c9a2e615defea6e01419f96fc /var/lib/docker/aufs/mnt/c802f1d67f0d650f68ace7fadb65c6db2f1dd36c9a2e615defea6e01419f96fc-removing: device or resource busy
+docker-compose rm -f                                                                                                   
+Going to remove 7236570cd4_project_nginx_1
+Removing 7236570cd4_project_nginx_1 ... error
+
+ERROR: for 7236570cd4_project_nginx_1  Driver aufs failed to remove root filesystem 7236570cd4ea0443d48e944ec8bbf76b17275452ca40b44af6a69db313ab6a3f: rename /var/lib/docker/aufs/mnt/c802f1d67f0d650f68ace7fadb65c6db2f1dd36c9a2e615defea6e01419f96fc /var/lib/docker/aufs/mnt/c802f1d67f0d650f68ace7fadb65c6db2f1dd36c9a2e615defea6e01419f96fc-removing: device or resource busy

@@ -1,0 +1,15 @@
+genki commented on 3 Sep 2015
+According to the spec, "volumes_from" should accept the name of a service or container, but it can't find the container if the name is custom container name.
+Example of docker-compose.yml here;
+dev:
+  image: busybox
+  container_name: data
+  volumes:
+    - ./db/mongodb:/data/mongodb
+mongo:
+  image: mongodb
+  volumes_from:
+   - data
+If I type docker-compose ps then an error raises as follows:
+Service "mongo" mounts volumes from "data", which is not the name of a service or container. 
+May be the timing of name resolution is too early.

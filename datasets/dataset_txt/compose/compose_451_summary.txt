@@ -1,0 +1,1 @@
+`docker-compose ps` do not list stopped container created by `docker-compose run`

@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 19 Feb 2016
+I believe volume_driver is only relevant for named volumes, so the driver would need to be specified in the volumes section, not the config section.
+I think we can remove volume_driver from the service config for v2.

@@ -1,0 +1,1 @@
+Option to don't show logs date and time when tailing (for development)

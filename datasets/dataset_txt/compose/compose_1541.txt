@@ -1,0 +1,34 @@
+lrkwz commented on 6 Apr 2017
+I cannot run docker-composer exec having set container_name in my docker-compose yml.
+This is the situation:
+    $ docker ps
+    CONTAINER ID        IMAGE                                    COMMAND                  CREATED             STATUS              PORTS                    NAMES
+    52e76f68eb08        lrkwz/docker-php-magento-ready:5.6-fpm   "docker-php-entryp..."   2 minutes ago       Up 2 minutes        0.0.0.0:9000->9000/tcp   culti-magento
+    $ docker-compose ps
+    Name                   Command               State           Ports          
+    -------------------------------------------------------------------------------
+    culti-magento   docker-php-entrypoint /sta ...   Up      0.0.0.0:9000->9000/tcp 
+    $ docker-compose exec culti-magento bash
+    ERROR: No such service: culti-magento
+    $ docker-compose exec 52e76f68eb08 bash 
+    ERROR: No such service: 52e76f68eb08
+Instead docker exec works fine
+$ docker exec -it culti-magento bash 
+root@4fa71b775cc6:/var/www/culti.com/magento# 
+The docker-compose.yml is
+    version: '3'
+    services:
+      php:
+        container_name: culti-magento
+        image: lrkwz/docker-php-magento-ready:5.6-fpm
+        volumes:
+        - ./magento:/var/www/culti.com/magento
+        working_dir: /var/www/culti.com/magento
+        ports:
+           - "9000:9000"
+Versions are
+    $ docker-compose --version
+    docker-compose version 1.11.2, build dfed245
+    $ docker --version 
+    Docker version 17.04.0-ce, build 4845c56
+4

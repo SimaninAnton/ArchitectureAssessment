@@ -1,0 +1,7 @@
+colegleason commented on 27 Jul 2014
+I'm running fig version 0.5.1 on OSX (with docker daemon on CoreOS VM). Running fig build with a setup similar to the Django example results in the following output:
+cole@norway:~/code/liquid $ fig --verbose build                                                                                          
+db uses an image, skipping
+Building web...
+The build never seems to complete, even after leaving it for ~40 minutes.
+EDIT: After retrying a few times it finally worked. Not sure what caused the hang before. Successful build took 3 minutes.

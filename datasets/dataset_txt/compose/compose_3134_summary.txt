@@ -1,0 +1,1 @@
+Don't set hostname to service name when using --x-networking

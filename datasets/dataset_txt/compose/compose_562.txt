@@ -1,0 +1,80 @@
+xjlnnetcompany commented on 24 Jul 2018 •
+edited
+Description of the issue
+I have a docker-container running nodejs with nodemon on windows 10. This docker-container runs fine on one pc, yet on another I get the following startup-messages:
+web_1            | [nodemon] 1.18.3
+web_1            | [nodemon] to restart at any time, enter `rs`
+web_1            | [nodemon] watching: *.*
+web_1            | [nodemon] starting `nodemon -L app/bin/www app/bin/www`
+web_1            | [nodemon] 1.18.3
+web_1            | [nodemon] to restart at any time, enter `rs`
+web_1            | [nodemon] watching: *.*
+web_1            | [nodemon] starting `nodemon -L app/bin/www app/bin/www app/bin/www`
+web_1            | [nodemon] 1.18.3
+web_1            | [nodemon] to restart at any time, enter `rs`
+web_1            | [nodemon] watching: *.*
+web_1            | [nodemon] starting `nodemon -L app/bin/www app/bin/www app/bin/www app/bin/www`
+web_1            | [nodemon] 1.18.3
+web_1            | [nodemon] to restart at any time, enter `rs`
+web_1            | [nodemon] watching: *.*
+web_1            | [nodemon] starting `nodemon -L app/bin/www app/bin/www app/bin/www app/bin/www app/bin/www`
+web_1            | [nodemon] 1.18.3
+web_1            | [nodemon] to restart at any time, enter `rs`
+web_1            | [nodemon] watching: *.*
+web_1            | [nodemon] starting `nodemon -L app/bin/www app/bin/www app/bin/www app/bin/www app/bin/www app/bin/www`
+web_1            | [nodemon] 1.18.3
+web_1            | [nodemon] to restart at any time, enter `rs`
+web_1            | [nodemon] watching: *.*
+web_1            | [nodemon] starting `nodemon -L app/bin/www app/bin/www app/bin/www app/bin/www app/bin/www app/bin/www app/bin/www`
+You see the pattern. It keeps repeating the CMD in the dockerfile infinite amount of times. I'm kinda new to docker, so the error might be a misconfiguration.
+Context information (for bug reports)
+OS: Windows 10
+Dockerfile:
+FROM node:latest
+
+RUN mkdir /src
+
+RUN npm install nodemon -g
+
+WORKDIR /src
+ADD package.json package.json
+RUN npm install
+
+ADD nodemon.json nodemon.json
+
+CMD ["nodemon", "-L", "app/bin/www"]
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 7641a569
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:48 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+services:
+  web:
+    build:
+      context: C:\Users\bob\Desktop\test\app
+    ports:
+    - 3030:3000/tcp
+    restart: always
+    volumes:
+    - C:\Users\bob\Desktop\test\app:/src/app:rw

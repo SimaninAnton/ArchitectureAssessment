@@ -1,0 +1,7 @@
+mekanixdk commented on 3 Nov 2015
+I have a little snippet in docker-compose.yml like:
+volumes:
+  - ${HOST_PATH}:/container/path
+If I change the value of HOST_PATH any subsequent up or build, the container will still mount the volume with the old value of HOST_PATH.
+Is this because volumes is not a run time option like docker -v or is this a bug?
+1

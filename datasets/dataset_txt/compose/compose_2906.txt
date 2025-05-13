@@ -1,0 +1,4 @@
+joelwurtz commented on 19 Jan 2016
+I feel very stupid but i just loose an entire hour trying to know why my docker wasn't working because i mix up image with build in my docker compose :/
+In this case docker compose only say : ERROR: 404 page not found which is not very hepful.
+Maybe catching this error and showing something like : Image %s not found on any registry, did you mispell something ?

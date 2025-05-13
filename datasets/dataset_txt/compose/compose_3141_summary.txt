@@ -1,0 +1,1 @@
+hostname and domainname ignored when using the host=net option

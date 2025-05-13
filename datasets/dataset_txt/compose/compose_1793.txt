@@ -1,0 +1,20 @@
+dkarlovi commented on 16 Jan 2017
+I have a setup where I setup the "main" docker-compose.yml and then override per environment with docker-compose.dev.yml, docker-compose.prod.yml, etc. There's a warning which gets cast, but it's not valid so please consider fixing it.
+Say I have
+# f1.yml
+version: '2.1'
+services:
+  test:
+    image: hello-world
+    environment:
+    - MY_VAR="${MY_VAR}"
+and
+# f2.yml
+version: '2.1'
+services:
+  test:
+    environment:
+    - MY_VAR="specified"
+If I run docker-compose -f f1.yml -f f2.yml up, I get WARNING: The MY_VAR variable is not set. Defaulting to a blank string. which is not true as the container indeed gets the value specified in f2.yml.
+As this is currently the only way (I know of) to have env-specific configuration, it would be great if the warning was not cast improperly as it needlessly confuses.
+1

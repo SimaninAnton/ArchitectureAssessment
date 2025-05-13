@@ -1,0 +1,8 @@
+theronic commented on 5 Mar 2014
+Please add an option in fig.yml to mount the working directory like with docker run -w /path/to/workdir <image> <command>, which is also specified in a Dockerfile with:
+WORKDIR /path/to/workdir
+Something like this in fig.yml:
+web:
+  - image: my-image
+  - command: my-command
+  - workdir: /path/on/container

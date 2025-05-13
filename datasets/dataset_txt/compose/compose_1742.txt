@@ -1,0 +1,80 @@
+gabriel30 commented on 30 Jan 2017
+Hi, I'm having problems with docker-compose and a docker-compose.yml that i created. The thing is when I use the command "docker-compose up -d" the containers looks like they are starting but a few seconds the state of the instances is "Exit", I'm not sure what is wrong, it looks that when the startup script that I define in the docker-compose.yml in "command" label, end, the instances just stop.
+This is my docker-compose.yml
+version: '3'
+services:
+catalogHost:
+build: .
+image: ciscatalog
+hostname: dsi_catalogHost
+command: sh startup.sh
+stdin_open: true
+volumes:
+- /home/docker:/opt/host
+ports:
+- 6600
+- 6601
+containerHost:
+image: dis/ciscontainer
+hostname: dsi_containerHost
+command: sh startup.sh
+tty: true
+volumes:
+- /home/docker:/opt/host
+ports:
+- 2809
+inboundHost:
+image: dsi/cisinbound
+hostname: dsi_inboundHost
+depends_on:
+- catalogHost
+links:
+- catalogHost
+command: sh startup.sh
+tty: true
+volumes:
+- /home/docker:/opt/host
+outboundHost:
+image: dsi/cisoutbound
+hostname: dsi_outboundHost
+depends_on:
+- catalogHost
+links:
+- catalogHost
+command: sh startup.sh
+tty: true
+volumes:
+- /home/docker:/opt/host
+example run:
+root@docker1:/home/docker/DSI# docker-compose scale catalog=3 container=4 inbound=1 outbound=1
+Creating and starting dsi_catalog_1 ... done
+Creating and starting dsi_catalog_2 ... done
+Creating and starting dsi_catalog_3 ... done
+Creating and starting dsi_container_1 ... done
+Creating and starting dsi_container_2 ... done
+Creating and starting dsi_container_3 ... done
+Creating and starting dsi_container_4 ... done
+Creating and starting dsi_inbound_1 ... done
+Creating and starting dsi_outbound_1 ... done
+root@docker1:/home/docker/DSI# docker-compose up -d
+Starting dsi_container_4
+Starting dsi_catalog_3
+Starting dsi_catalog_1
+Starting dsi_container_3
+Starting dsi_catalog_2
+Starting dsi_container_1
+Starting dsi_outbound_1
+Starting dsi_inbound_1
+Starting dsi_container_2
+root@docker1:/home/docker/DSI# docker-compose ps
+Name Command State Ports
+-------------------------------------------
+dsi_catalog_1 hostname Exit 0
+dsi_catalog_2 hostname Exit 0
+dsi_catalog_3 hostname Exit 0
+dsi_container_1 hostname Exit 0
+dsi_container_2 hostname Exit 0
+dsi_container_3 hostname Exit 0
+dsi_container_4 hostname Exit 0
+dsi_inbound_1 hostname Exit 0
+dsi_outbound_1 hostname Exit 0

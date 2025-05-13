@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 9 Sep 2015
+Right now extra_hosts and labels use "one of: object or array", but no validation is done on the contents of the object.
+I think this can be improved by creating a schema for the object that uses patternProperties, so that it will fail if someone uses nested objects, or arrays within the object.
+{
+  "type": "object",
+  "patternProperties": {"type": "string"},
+}

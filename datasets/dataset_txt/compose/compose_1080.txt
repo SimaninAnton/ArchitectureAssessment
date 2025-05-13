@@ -1,0 +1,5 @@
+Rikhart commented on 14 Nov 2017
+¿How I can limit memory in "docker-compose build" command?
+I need to setup a limit for building because my tiny droplet is out of memory when run the building process.
+Thanks for your answers
+1

@@ -1,0 +1,16 @@
+chris13524 commented on 18 Aug 2016
+I encountered this issue while trying to setup a postfix server. It appears that docker-compose cannot bind any ports below 60. A simple test case can be done as well.
+In this case, I'm using a popular Docker image, nginx.
+Setup a docker-compose.yml file like so:
+version: '2'
+
+services:
+  test:
+    image: nginx
+    ports:
+      - 60:60
+This is the control group, start the server docker-compose up and then verify that port 60 has been opened: netstat -tnulp.
+Then change the port number to 59, stop, and start the server: docker-compose down; docker-compose up -d. Then rerun netstat: netstat -tnulp. As you can see (or, at least on my machine and a friends), port 59 is not bound, instead, another random port is bound (3280x).
+Now I'm not much of a networking expert (so I don't know much about netstat and it's args) so I could be doing this wrong.
+I tried many ports, all below 60 don't work. Here's a simple command to test rapidly:
+nano docker-compose.yml; docker-compose down; docker-compose up -d; sudo netstat -tnulp

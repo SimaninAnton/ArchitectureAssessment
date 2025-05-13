@@ -1,0 +1,1 @@
+container logs are missing when `fig up` by Webstorm

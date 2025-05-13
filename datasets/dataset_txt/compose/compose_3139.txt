@@ -1,0 +1,7 @@
+peter-leonov commented on 4 Nov 2015
+Would be nice to get a replacement for capistrano shell with docker-compose shell.
+Use cases:
+check if a host is reachable from all the boxes: docker-compose shell frontend ping -c 1 8.8.8.8
+calculate a size of distributed cache: docker-compose shell nginx sudo du -sh /var/cache/nginx/
+emergency kill all the unicorns docker-compose shell app pkill ruby
+As far as all the containers started with docker-compose up foo should have the same binaries no conflicts would happen in terms of commands.

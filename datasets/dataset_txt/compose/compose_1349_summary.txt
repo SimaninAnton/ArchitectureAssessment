@@ -1,0 +1,1 @@
+docker-machine ls returns timeouts and errors when machine are on different providers

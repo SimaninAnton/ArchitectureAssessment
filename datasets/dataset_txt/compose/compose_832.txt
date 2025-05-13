@@ -1,0 +1,6 @@
+Contributor
+kinghuang commented on 1 Mar 2018
+This issue relates to #4994 and #5110, and possibly #5684.
+Docker Compose currently has a mock implementation of secrets using host binds. However, this does not apply to configs. The difference between the two is rather inconvenient when designing Compose files that are meant to work via both docker-compose up and docker swarm deploy.
+My workarounds so far have been to declare configs as secrets, or manually write in host binds in volumes: in addition to having configs. It would be preferable if Docker Compose applied the same mock implementation of secrets to configs.
+9

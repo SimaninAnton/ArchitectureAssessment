@@ -1,0 +1,5 @@
+Nithya25Mari commented on 25 Jan 2018
+Hi
+I am getting this error:
+service must be mapping , not a none type
+how do I resolve this?

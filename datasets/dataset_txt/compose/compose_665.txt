@@ -1,0 +1,124 @@
+y3ti commented on 18 May 2018
+Description of the issue
+docker-compose build doesn't use docker cache for COPY instruction created by docker image build
+Context information (for bug reports)
+$ docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+$ docker version
+Client:
+ Version:      18.05.0-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   f150324
+ Built:        Wed May  9 22:12:05 2018
+ OS/Arch:      darwin/amd64
+ Experimental: true
+ Orchestrator: kubernetes
+
+Server:
+ Engine:
+  Version:      18.05.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.10.1
+  Git commit:   f150324
+  Built:        Wed May  9 22:20:16 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+ Kubernetes:
+  Version:     v1.9.6
+  StackAPI:                   v1beta1
+$ docker-compose config
+services:
+  myservice:
+    build:
+      context: /Users/y3ti/tmp/docker
+version: '2.3'
+Steps to reproduce the issue
+$ mkdir my_project
+
+$ cd my_project
+
+$ echo "Hello World" > myfile.txt
+
+$ cat Dockerfile
+FROM alpine:3.6@sha256:3d44fa76c2c83ed9296e4508b436ff583397cac0f4bad85c2b4ecc193ddb5106
+
+RUN apk add --no-cache curl
+WORKDIR /app
+COPY myfile.txt myfile.txt 
+
+$ cat docker-compose.yml
+version: '2.3'
+
+services:
+  myservice:
+    build: .
+Observed result
+First, let's create a new image tmp/foo by docker image build:
+$  docker image build -t tmp/foo .
+Sending build context to Docker daemon  4.096kB
+Step 1/4 : FROM alpine:3.6@sha256:3d44fa76c2c83ed9296e4508b436ff583397cac0f4bad85c2b4ecc193ddb5106
+sha256:3d44fa76c2c83ed9296e4508b436ff583397cac0f4bad85c2b4ecc193ddb5106: Pulling from library/alpine
+605ce1bd3f31: Already exists 
+Digest: sha256:3d44fa76c2c83ed9296e4508b436ff583397cac0f4bad85c2b4ecc193ddb5106
+Status: Downloaded newer image for alpine:3.6@sha256:3d44fa76c2c83ed9296e4508b436ff583397cac0f4bad85c2b4ecc193ddb5106
+ ---> 77144d8c6bdc
+Step 2/4 : RUN apk add --no-cache curl
+ ---> Running in b3dd6573b297
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.6/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.6/community/x86_64/APKINDEX.tar.gz
+(1/4) Installing ca-certificates (20161130-r2)
+(2/4) Installing libssh2 (1.8.0-r1)
+(3/4) Installing libcurl (7.59.0-r0)
+(4/4) Installing curl (7.59.0-r0)
+Executing busybox-1.26.2-r9.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 6 MiB in 15 packages
+Removing intermediate container b3dd6573b297
+ ---> 5575a3101768
+Step 3/4 : WORKDIR /app
+Removing intermediate container 5efd69d1558e
+ ---> c47db3952acc
+Step 4/4 : COPY myfile.txt myfile.txt
+ ---> d54475bca249
+Successfully built d54475bca249
+Successfully tagged tmp/foo:latest
+Next, let's create an image by docker-compose build:
+$ docker-compose build myservice
+Building myservice
+Step 1/4 : FROM alpine:3.6@sha256:3d44fa76c2c83ed9296e4508b436ff583397cac0f4bad85c2b4ecc193ddb5106
+ ---> 77144d8c6bdc
+Step 2/4 : RUN apk add --no-cache curl
+ ---> Using cache
+ ---> 5575a3101768
+Step 3/4 : WORKDIR /app
+ ---> Using cache
+ ---> c47db3952acc
+Step 4/4 : COPY myfile.txt myfile.txt
+ ---> a8fd8a7c2bef
+
+Successfully built a8fd8a7c2bef
+Successfully tagged my_project_myservice:latest
+Expected result
+docker-compose build should use docker's cache created by docker image build. Here is an expected result
+$ docker-compose build myservice
+  Building myservice
+  Step 1/4 : FROM 
+  alpine:3.6@sha256:3d44fa76c2c83ed9296e4508b436ff583397cac0f4bad85c2b4ecc193ddb5106
+   ---> 77144d8c6bdc
+  Step 2/4 : RUN apk add --no-cache curl
+   ---> Using cache
+   ---> 5575a3101768
+  Step 3/4 : WORKDIR /app
+   ---> Using cache
+   ---> c47db3952acc
+  Step 4/4 : COPY myfile.txt myfile.txt
++  ---> Using cache
++  ---> d54475bca249
+-  ---> a8fd8a7c2bef
+
+  Successfully built a8fd8a7c2bef
+  Successfully tagged my_project_myservice:latest

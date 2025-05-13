@@ -1,0 +1,1 @@
+Improve behavior when yaml contains a string where a list should be

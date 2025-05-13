@@ -1,0 +1,1 @@
+Compose exits with "Missing dependencies for SOCKS support"

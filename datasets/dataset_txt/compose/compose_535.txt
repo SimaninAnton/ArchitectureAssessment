@@ -1,0 +1,11 @@
+posterboyamazon commented on 14 Aug 2018
+I am trying to run gravitee-AM from command line in docker with the following
+$ curl -L http://bit.ly/graviteeio-am | bash -s 8080
+It still gives me the error
+WARNING: The PORT variable is not set. Defaulting to a blank string.
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.nginx.ports is invalid: Port ranges don't match in length
+If I just run
+curl -L http://bit.ly/graviteeio-am | bash
+without specufying the port I still get the error
+How can I run gravitee AM from docker with this error ?

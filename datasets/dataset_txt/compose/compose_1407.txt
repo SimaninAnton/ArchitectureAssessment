@@ -1,0 +1,17 @@
+luckydonald commented on 7 Jun 2017 •
+edited
+There should be a easy way to list the available services in a docker-compose.yml file, without the need to open it in a editor.
+$ docker-compose ls
+ nginx    apache    php    php-xdebug
+
+$ docker-compose up -d apache php-xdebug
+# start the xdebug version of php, and a nginx
+vs
+$ cat docker-compose.yml
+# very long file
+# ...
+# ...
+# ...
+
+$ docker-compose up -d apache php-xdebug
+# start the xdebug version of php, and a nginx

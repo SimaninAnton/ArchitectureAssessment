@@ -1,0 +1,3 @@
+iffy commented on 1 Apr 2015
+If you have no containers running and you do docker-compose restart it exits with 0. It failed to restart so it should exit with non-zero. This will let you do something like:
+docker-compose restart || docker-compose up -d

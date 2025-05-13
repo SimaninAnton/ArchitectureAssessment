@@ -1,0 +1,1 @@
+docker-compose up creates directories on host system

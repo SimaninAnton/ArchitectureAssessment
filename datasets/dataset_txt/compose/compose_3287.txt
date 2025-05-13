@@ -1,0 +1,4 @@
+jasonm-makerbot commented on 15 Sep 2015
+I have a container that has data put into a VOLUME. So when I run docker-compose run container cmd and then just docker-compose up I am actually creating two separate volumes which is not the use case I would want. I want to have the data consistent between running it with either method.
+From docker inspect I see the different is in naming scheme one is dir_container_1 and the other is dir_container_run_1
+considering docker-compose has moved to using labels over names I am sure you can see how things are about to get very very messy.

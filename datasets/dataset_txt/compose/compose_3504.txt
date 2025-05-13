@@ -1,0 +1,2 @@
+vincentriemer commented on 5 Jul 2015
+Looking through the documentation & from doing my own testing this doesn't seem possible. Would this be something to look into implementing? I'm currently trying to use this for load testing other services. Doing docker-compose up --no-deps test after scaling the service works but the logging stops tailing once one of the containers exits.

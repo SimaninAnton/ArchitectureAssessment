@@ -1,0 +1,10 @@
+krasi-georgiev commented on 1 Dec 2015
+I use the same compose file to deploy 2 servers the only difference between the two servers are the envs set in the env file so that I can use and maintain only one compose file
+env_file:
+- env
+the env file has
+INTERNAL_IP=............
+I use 2x lsyncd containers to keep some files synced between 2 hosts so I use the INTERNAL_IP to set them to listen only on the internal ip
+instead I am hoping that docker-compose can parse the env file first so that I can use something like
+ports:
+- "${INTERNAL_IP}:11211:11211"

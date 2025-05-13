@@ -1,0 +1,14 @@
+resouer commented on 19 Jan 2015
+If I upgrade volume source docker and use fig run to start it again, it seems intermediate container cannot deal with this porperly?
+e.g.
+dbdata has a volume /dbdata
+db1 --volume-from dbdata
+if fig use docker rm dbdata and then docker run -v /dbdata --name dbdata
+db1 and dbdata will not share the same volume anymore.
+And, intermediate container is responsible for record only one-way (get_volumes_from) direction?
+ container.start(
+            links=self._get_links(link_to_self=options.get('one_off', False)),
+            port_bindings=port_bindings,
+            binds=volume_bindings,
+            volumes_from=self._get_volumes_from(intermediate_container),
+            privileged=privileged,

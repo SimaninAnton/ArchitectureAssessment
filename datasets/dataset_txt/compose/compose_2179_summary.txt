@@ -1,0 +1,1 @@
+Error: Endpoint config is not supported for API version

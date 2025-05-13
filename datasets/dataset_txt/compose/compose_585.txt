@@ -1,0 +1,8 @@
+luislobo commented on 10 Jul 2018
+Description of the issue
+In #4675 (comment), @shin- comments that the issue is locked by spam, saying +1s just serve to aggravate people subscribed to the issue. If you've got nothing constructive to add, just use the thumbs up button.
+Thing is, after locking the issue, the thumbs-up button is disabled.
+How to address/solve it?
+I don't have a solution, but enabling comments, even if I receive the ocassional +1, it allows me (at least) to be notified that the issue is still required.
+May be if you want to handle "issue voting" but not commenting, a new Issue tracker needs to be implemented? And what about people coming in with possible solutions to a still unresolved issue?
+Finally, there is no status update of whether the issue is being considered or planned for the future, as it was kept open.

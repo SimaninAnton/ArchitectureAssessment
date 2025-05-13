@@ -1,0 +1,1 @@
+docker-compose config interpolation type mapping issue with services whose name contains dot

@@ -1,0 +1,41 @@
+tleyden commented on 14 Feb 2016
+Version info:
+Docker version 1.10.0, build 590d5108
+docker-compose version 1.6.0, build d99cad6
+CentOS Linux release 7.2.1511
+Running docker compose up -d with this docker-compose.yml file:
+version: '2'
+
+services:
+  uniqush:
+    container_name: uniqush
+    ports:
+      - "9898:9898"
+    image: tleyden5iwx/uniqush
+    entrypoint: uniqush-push
+    links:
+      - redis
+    volumes:
+      - ~/docker/volumes/uniqush/uniqush-push.conf:/etc/uniqush/uniqush-push.conf
+  redis:
+    container_name: redis
+    image: redis
+I'm verifying by using docker exec and trying to run ping and look at the /etc/hosts file.
+# docker-compose up -d
+Creating redis
+Creating uniqush
+[root@nemesis01-s619 uniqush]# docker ps
+CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS              PORTS                    NAMES
+010f95b0a9d6        tleyden5iwx/uniqush     "uniqush-push"           9 seconds ago       Up 8 seconds        0.0.0.0:9898->9898/tcp   uniqush
+88beaa8bc1a7        redis                   "/entrypoint.sh redis"   11 seconds ago      Up 9 seconds        6379/tcp                 redis
+# docker exec -ti 010f bash
+cat /etc/hosts
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.18.0.3  010f95b0a9d6
+root@010f95b0a9d6:/# ping redis
+ping: unknown host redis

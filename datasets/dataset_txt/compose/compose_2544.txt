@@ -1,0 +1,7 @@
+mattgiles commented on 3 Apr 2016
+I believe I am seeing some variant of the issue noted in the docs around recreating containers with mapped ports.
+However, the containers in question do not have any volumes defined.
+I have three swarm nodes, each with the label type set to nginx. If I docker-compose scale my service (with a constraint to be scheduled on nodes so labelled) to 3 containers, and then try to update the containers by running docker-compose up, I get the following error:
+Recreating project_service_3
+unable to find a node that satisfies type==nginx
+Is there any suggested way around this problem, or plans to mitigate in the future?

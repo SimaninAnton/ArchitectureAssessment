@@ -1,0 +1,8 @@
+atrauzzi commented on 7 Oct 2015
+Trying to run compose on a fresh Windows 10 and Docker Toolbox install. Haven't customized or modified the environment, running in the msys based terminal that comes with toolbox.
+I get the following error:
+Warning: There is a boolean value, True in the 'environment' key.
+Environment variables can only be strings.
+Please add quotes to any boolean values to make them string (eg, 'True').
+This warning will become an error in a future release.
+My YAML files don't have booleans in them, so I'm not sure where it's finding this boolean value or where I should be changing it if it's something on my end.

@@ -1,0 +1,4 @@
+Contributor
+kojiromike commented on 7 Jul 2015
+Docker Compose is great, but if you have to manage a Python runtime outside of a container, you're losing some of the value of Docker itself. I've created a proof-of-concept of containerizing docker-compose itself, so that you can use docker-compose from within Docker, thus avoiding the need to manage Python dependencies outside a container. All you need is docker (and, frankly, bash, but that can be dealt with.)
+Anyway, we're using this now. Hope you like it.

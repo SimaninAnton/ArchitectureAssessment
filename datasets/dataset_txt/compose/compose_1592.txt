@@ -1,0 +1,35 @@
+BretFisher commented on 17 Mar 2017 •
+edited
+Hi all!
+docker-compose version 1.11.2, build dfed245
+I wanted to use docker-compose config output with override file to build my stack file for 1.13.1 stacks+secrets. As I understand it, using config is the proper way to override since docker stack deploy doesn't take overrides yet.
+If I try: docker-compose -f docker-compose.yml -f docker-compose.test.yml config
+Problem: In output, the root secrets: is missing regardless if I try file: or external:. Note it shows up fine with assigning in services, but no root definition is shown:
+docker-compose.yml
+version: '3.1'
+services:
+  postgres:
+    image: postgres:9.6
+docker-compose.test.yml
+version: '3.1'
+services:
+  postgres:
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/psql-pw
+    secrets:
+      - psql-pw
+secrets:
+  psql-pw:
+    file: psql-fake-password.txt
+output
+networks: {}
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/psql-pw
+    image: postgres:9.6
+    secrets:
+    - source: psql-pw
+version: '3.1'
+volumes: {}
+Is this expected and just a missing feature, or a bug?

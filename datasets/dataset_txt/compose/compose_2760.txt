@@ -1,0 +1,10 @@
+matthewborden commented on 17 Feb 2016
+The run command when run with an executable and passed options with arguments (eg, rspec -e 'closing all discussions', unquotes string arguments provided as options. Thus, when the command is interpolated by docker-compose rspec -e 'closing all discussions' is transformed to rspec -e 'closing' all discussions. It appears the docker-compose is unquoting the string and providing more arguments to the process than intended.
+An example of this can be seen on docker-compose version 1.6.0, when running: vagrant@dev:/vagrant$ docker-compose run superapi bash -c 'echo a b c'. Nothing is printed.
+Running docker-compose run superapi bash and proceeding to run 'echo a b c', works as expected.
+When preforming the same command on earlier versions of docker-compose, the command prints 'a b c' as expected.
+vagrant@stiledev:/vagrant$ docker-compose run publicapitest bash -c 'echo a b c'
+
+vagrant@stiledev:/vagrant$ docker-compose run publicapitest bash
+[root@b48e8159b9f3 app]# echo a b c
+a b c

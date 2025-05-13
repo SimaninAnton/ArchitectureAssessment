@@ -1,0 +1,10 @@
+zjxpsetp commented on 12 Oct 2017 •
+edited
+Docker version 1.12.3, build 6b644ec
+Problem 1:
+When we start "compose up", we found all the containers are in "created" status, from container log, we get "failed to set memory.kmem.limit_in_bytes, because either tasks have already joined this cgroup or it has children."
+Problem 2:
+All of our containers are start as "host" network mode, and when we start the "compose up", I find the compose will create a bridge interface (even though, there is no container really use "bridge") using IP "172.18.0.1", that is ok.
+But when we found the "compose up" failed, and try to run "compose up" again, we don't know why the docker-compose create another "bridge" (IP 172.19.0.1), and not disable the privious "bridge" interface(172.18.0.1).
+So, in our host, we found many bridge interfaces if we try many "compose up" and failed.
+And idea about these 2 problems?

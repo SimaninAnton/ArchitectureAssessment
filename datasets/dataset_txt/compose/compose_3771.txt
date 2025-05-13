@@ -1,0 +1,48 @@
+leiblix commented on 30 Mar 2015
+If I run official image of tomcat with this command:
+docker exec -d -e JAVA_OPTS="-Xms5000m -Xmx10000m" tomcat:8
+tomcat starts successfully
+but if i create docker-compose.yml with this content
+tomcat:
+  image: tomcat:8
+  environment:
+    - JAVA_OPTS="-Xms5000m -Xmx10000m"
+and then I run:
+docker-compose up
+I get this output:
+Recreating temp_tomcat_1...
+Attaching to temp_tomcat_1
+tomcat_1 | Invalid initial heap size: -Xms5000m -Xmx10000m
+tomcat_1 | Error: Could not create the Java Virtual Machine.
+tomcat_1 | Error: A fatal exception has occurred. Program will exit.
+temp_tomcat_1 exited with code 1
+Gracefully stopping... (press Ctrl+C again to force)
+Any ideas what is wrong?
+my system:
+docker -v
+Docker version 1.5.0, build a8a31ef/1.5.0
+docker-compose --version
+docker-compose 1.1.0
+ uname -a
+Linux docker.mzk.cz 3.18.7-200.fc21.x86_64 #1 SMP Wed Feb 11 21:53:17 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+docker -D info
+Containers: 11
+Images: 40
+Storage Driver: btrfs
+ Build Version: Btrfs v3.18.1
+ Library Version: 101
+Execution Driver: native-0.2
+Kernel Version: 3.18.7-200.fc21.x86_64
+Operating System: Fedora 21 (Twenty One)
+CPUs: 2
+Total Memory: 15.67 GiB
+Name: docker.mzk.cz
+ID: GYRC:LL2X:GT6M:IAGQ:UUIN:XQ7Q:WHUY:SICW:IB3Z:FJZP:LCDI:K6LW
+Debug mode (server): false
+Debug mode (client): true
+Fds: 22
+Goroutines: 40
+EventsListeners: 0
+Init SHA1: a2b40aadd44cc16541a4c34c5572d145d2c052d5
+Init Path: /usr/libexec/docker/dockerinit
+Docker Root Dir: /var/lib/docker

@@ -1,0 +1,7 @@
+Contributor
+TomasTomecek commented on 20 Apr 2016
+We've been happily using docker compose for a couple of months in our project (~9 service, moderately complex setup). From time to time, usually when a new team member tries to set up the development environment, there's an issue with bringing up the environment. When this happens, all we get is some cryptic error message:
+No such file or directory
+Container command not found or does not exist.
+At this point, we usually have to dig into the person's machine and check what's wrong. We usually have to: check container logs, check images, inspect containers, try to start them manually using docker directly. From time to time, we even have to check docker logs, start stuff with strace...
+It would be so much better if compose printed way more information when an error occurs: service name, engine API call, all arguments... Ideally, engine would do the same by sending more detailed error messages.

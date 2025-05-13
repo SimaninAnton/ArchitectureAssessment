@@ -1,0 +1,1 @@
+Service 'myproject' failed to build: COPY failed: Forbidden path outside the build context

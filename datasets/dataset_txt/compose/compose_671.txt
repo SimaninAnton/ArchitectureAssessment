@@ -1,0 +1,51 @@
+codablock commented on 15 May 2018
+Description of the issue
+A recently added check for changed volume configuration (#5776) resulted in our use-case to not work anymore. We do not start docker-compose directly but have implemented a service instead which manages multiple docker-compose projects on the target machines. This service is also responsible for pre-creating volumes which match the naming of the volumes specified in docker-compose.yml. These volumes then point to our content storage and thus are not meant to be empty on first start.
+Example docker-compose.yml:
+version: '2.1'
+
+services:
+  hellonginx:
+    restart: unless-stopped
+    build: hello-nginx
+    volumes:
+      - content:/var/lib/www
+      - content2:/test
+
+volumes:
+  content:
+  content2:
+Our service would then choose a name for the deployment (an internal id, lets say deploymentid as an example) and pre-create the 2 volumes before actually starting the docker-compose project.
+The volumes would be named deploymentid_content and deploymentid_content2 and would have appropriate labels and options set to bind mount to the correct location on the target machine were the content was pre-installed.
+With the fix from #5776, this stopped working as docker-compose now expects that the docker volume configuration matches the configuration derived from the docker-compose.yml.
+We understand that external: true volumes are kind of made for this, but this puts some burden onto the application developers (which are not necessarily us) as they would have to know the names of the pre-created volumes in advance.
+I would like to suggest/request to make the configuration checks in check_remote_volume_config become optional or at least optionally relaxed (only compare driver and ignore options). I'm not sure what would be the best way to mark it as optional. I see 2 ways to implement it:
+Add a flag (e.g. --skip-volume-checks) to the up command which basically reverts to the old behavior
+Add a property to the volumes in docker-compose.yml so that this behavior can be specified per-volume
+I'm willing to implement this by myself and create a PR, I would just need some guidance on which solution would be the preferred one.
+Context information (for bug reports)
+$ docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5                                                                                                                                                                                                                                                         
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016  
+$ docker version                                                                                                                                                                                                                         
+Client:                                                                                                                                                                                                                                                                        
+ Version:       18.04.0-ce                                                                                                                                                                                                                                                     
+ API version:   1.37                                                                                                                                                                                                                                                           
+ Go version:    go1.9.4                                                                                                                                                                                                                                                        
+ Git commit:    3d479c0                                                                                                                                                                                                                                                        
+ Built: Tue Apr 10 18:22:52 2018                                                                                                                                                                                                                                               
+ OS/Arch:       linux/amd64                                                                                                                                                                                                                                                    
+ Experimental:  false                                                                                                                                                                                                                                                          
+ Orchestrator:  swarm                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                               
+Server:                                                                                                                                                                                                                                                                        
+ Engine:                                                                                                                                                                                                                                                                       
+  Version:      18.04.0-ce                                                                                                                                                                                                                                                     
+  API version:  1.37 (minimum version 1.12)                                                                                                                                                                                                                                    
+  Go version:   go1.9.4                                                                                                                                                                                                                                                        
+  Git commit:   3d479c0                                                                                                                                                                                                                                                        
+  Built:        Tue Apr 10 18:20:59 2018                                                                                                                                                                                                                                       
+  OS/Arch:      linux/amd64                                                                                                                                                                                                                                                    
+  Experimental: false              

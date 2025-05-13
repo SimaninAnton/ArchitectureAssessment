@@ -1,0 +1,43 @@
+docteurklein commented on 26 Apr 2016 •
+edited
+Depending wether I use docker-compose run with or without --rm, the exit status code is ignored.
+Using docker-compose exec returns me a exit status code 129, while the same command with docker exec returns the correct status code.
+I tried to understand what's happening under the hood, but I can't make sense of it, so I'll paste my results here.
+ % $(docker exec qspot_php_1 php -r"exit(2);"); echo $?
+2
+ % $(docker-compose exec php php -r"exit(2);"); echo $?
+129
+ % $(docker-compose exec php sh -c "exit 2;"); echo $?
+2
+ % $(docker-compose run php php -r"exit(2);"); echo $? 
+0
+ % $(docker-compose run --rm php php -r"exit(2);"); echo $?
+2
+As you can see, there are quite a few differences :)
+Is it a normal behavior?
+What command should I use if I care about the exit status code?
+PS: I'd like to be able to use the docker-compose exec version.
+PPS: my versions:
+ % docker-compose version
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 3.5.1
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+
+ % docker version
+Client:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Sat Mar 12 19:18:57 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.0
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   4dc5990
+ Built:        Wed Apr 13 19:36:04 2016
+ OS/Arch:      linux/amd64
+21

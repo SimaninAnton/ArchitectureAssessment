@@ -1,0 +1,27 @@
+wenlock commented on 20 Nov 2015
+Hi, I'm trying to use docker-compose version 1.5.1 with docker-machine. My system is Ubuntu 14.04 and the remote system is a RHEL 7.1 system. When i try docker-compose ps, I get this error:
+docker-compose ps
+ERROR: SSL error: hostname '16.xx.xx.xx' doesn't match 'localhost'
+The --verbose log output looks like this:
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Trying /home/eraigosa/.docker/config.json
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'xxxxx', username=u'xxxxx')
+docker.auth.auth.parse_auth: Found entry (registry=u'xx.xxx:443', username=u'xxxx')
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/compose/cli/main.py", line 54, in main
+  File "/code/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/code/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/code/compose/cli/main.py", line 169, in perform_command
+  File "/code/compose/cli/command.py", line 54, in project_from_options
+  File "/code/compose/cli/command.py", line 91, in get_project
+  File "/code/compose/cli/command.py", line 73, in get_client
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/api/daemon.py", line 78, in version
+  File "/code/.tox/py27/lib/python2.7/site-packages/docker/client.py", line 110, in _get
+  File "/code/.tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 477, in get
+  File "/code/.tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 465, in request
+  File "/code/.tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+  File "/code/.tox/py27/lib/python2.7/site-packages/requests/adapters.py", line 431, in send
+requests.exceptions.SSLError: hostname '16.xx.xx.xx' doesn't match 'localhost'
+I saw another issue in the list about updating openssl, but that didn't work for me. Also the workarounds looked specific to OSX. Any ideas?

@@ -1,0 +1,69 @@
+leaanthony commented on 13 Sep 2018 •
+edited
+Description of the issue
+When using an .env file, variables with underscores do not get resolved in the 'image:' directive during docker-compose up
+Context information (for bug reports)
+I wish to provide a dynamic tag name for the image used in docker-compose. A .env file is generated during the workflow and the variable used in the docker-compose.yml. Here are my files:
+.env:
+MY_TAG=mytag
+docker-compose.yml:
+...
+services:
+  myservice:
+    env_file: 
+      - .env
+    image: "repo-url/image-name:${MY_TAG}"
+...
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of "docker-compose config"
+services:
+  myservice:
+    environment:
+      MY_TAG: mytag
+    image: repo-url/image-name:latest
+version: '3.0'
+Steps to reproduce the issue
+Create an env file with a variable containing an underscore
+Add a container definition using the variable as the image tag
+Run docker-compose config
+Observed result
+services:
+  myservice:
+    environment:
+      MY_TAG: mytag
+    image: repo-url/image-name:latest
+version: '3.0'
+Expected result
+services:
+  myservice:
+    environment:
+      MY_TAG: mytag
+    image: repo-url/image-name:mytag
+version: '3.0'
+Additional information
+Removing the underscore makes it work as expected.
+OSX 10.13.6 (Build 17G65)
+Standard OSX docker installation

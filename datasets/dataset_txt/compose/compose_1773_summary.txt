@@ -1,0 +1,1 @@
+Path with forward slash in DOCKER_CERT_PATH not handled on Windows

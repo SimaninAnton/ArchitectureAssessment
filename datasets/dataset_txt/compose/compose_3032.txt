@@ -1,0 +1,3 @@
+pandeiro commented on 1 Dec 2015
+When calling docker-compose up --force-recreate, I see warnings about volumes from previous containers being used, even though, as I understand it (per conversion w/ @dnephin on #docker-compose), this should be a non-issue.
+WARNING: Service "frontend" is using volume "/.foo" from the previous container. Host mapping "/home/user/.foo" has no effect. Remove the existing containers (with `docker-compose rm frontend`) to use the host volume mapping.

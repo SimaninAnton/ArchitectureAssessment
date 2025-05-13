@@ -1,0 +1,17 @@
+Contributor
+aanand commented on 7 Aug 2015
+Currently, Compose will treat the part of a volumes entry before the : (if present) in two different ways:
+If you've specified a volume_driver, it will treat it as a volume name and pass it straight through to the Docker API.
+Otherwise, it will treat it as a filesystem path and perform expansion of relative paths and the ~ character.
+However, Docker will eventually be adding support for volumes as a top-level concept (docker volumes), and therefore implicitly for named local volumes - e.g. a volume named data which refers to an arbitrary filesystem path on the host machine, which you can mount with docker run -v data:/data.
+The Docker daemon decides whether to treat the value as a path or a volume name based on whether it's an absolute path, which on Unix means it starts with a slash and on Windows is, uh, complicated. But we've got an extra challenge because Compose allows relative paths and ~. We need a way of deciding whether or not to perform path expansion before passing the value to the API.
+We have a number of options. In increasing order of my personal preference:
+Try passing the value straight through to the API. If it fails, perform expansion and try again. I don't like this because it complicates the client-side flow a lot (we can't know what the right value is until it's time to create a container) and requires multiple API calls.
+Perform expansion on the value, see if it's a valid local path, and use that if so; otherwise, pass it straight through. I don't like this because it means we'll do completely different things if you misspell a path, forget to create it etc.
+Treat the value as a path if it contains (or perhaps starts with) any of .~/. This is simple enough, but will break backwards compatibility. Entries like this one will now be treated differently:
+volumes:
+  - data:/data
+Where this previously meant "mount the data subdirectory of the current directory", it would now mean "mount the volume named data".
+If we go down this route, it might be best to put out a deprecation warning in the next release whenever we see host paths that don't start with one of the special characters, so users have a release cycle to update their YAML (i.e. to change data to ./data), and then make the breaking change in the subsequent release.
+If we do that, we need to do it now - 1.4 will be out very soon.
+Thoughts?

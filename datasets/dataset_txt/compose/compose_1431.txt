@@ -1,0 +1,46 @@
+BorntraegerMarc commented on 26 May 2017
+When I define multiple docker-compose files with the -f option then the last container gets build from the wrong Image.
+I have the file Frontend/docker-compose.yml and Backend/.docker/docker-compose.yml
+How to reproduce:
+cd into ./Frontend
+execute docker-compose -f ..\Backend\.docker\docker-compose.yml -f docker-compose.yml up --build
+See output:
+PS D:\projects\upwork-nginx\Frontend> docker-compose -f ..\Backend\.docker\docker-compose.yml -f docker-compose.yml up --build
+Building komed-app
+Step 1/9 : FROM node:6.9.2-alpine
+ ---> e1f21a19c1b5
+Step 2/9 : RUN addgroup -g 997 -S app && adduser -G app -u 998 -D -S app
+ ---> Using cache
+ ---> 46fef21e2a7d
+Step 3/9 : ENV HOME /home/app
+ ---> Using cache
+ ---> 46a46cbe621e
+Step 4/9 : RUN mkdir -p $HOME
+ ---> Using cache
+ ---> 5d718a3b719e
+Step 5/9 : RUN chown -R app:app $HOME
+ ---> Using cache
+ ---> 7dbd6f97f33c
+Step 6/9 : WORKDIR $HOME/
+ ---> Using cache
+ ---> 7cec6bcf2d97
+Step 7/9 : VOLUME /home/app/uploads
+ ---> Using cache
+ ---> ac01f9b4ce97
+Step 8/9 : EXPOSE 8000
+ ---> Using cache
+ ---> ac588bca9b5e
+Step 9/9 : CMD node app.js
+ ---> Using cache
+ ---> 7adf44d29515
+Successfully built 7adf44d29515
+Building komed-nginx
+Step 1/2 : FROM jwilder/nginx-proxy:alpine
+ ---> f742875b8ffb
+Step 2/2 : COPY proxy.conf /etc/nginx/proxy.conf
+ ---> Using cache
+ ---> 41ec29715054
+Successfully built 41ec29715054
+Building komed-web-nginx
+Step 1/9 : FROM node:6.9.2-alpine
+Most important is the last line: Step 1/9 : FROM node:6.9.2-alpine. This one should be actually Step 1/9 : FROM nginx:1.13.0-alpine

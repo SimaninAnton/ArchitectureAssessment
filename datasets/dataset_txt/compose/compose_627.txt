@@ -1,0 +1,59 @@
+jsynowiec commented on 14 Jun 2018 •
+edited
+Description of the issue
+I think that the 5fe3aff broke backward compatibility regarding project names when running commands on pre-existing containers/project.
+Assuming my project is in some-directory directory and that I have containers build and started with compose before 1.21.0, after upgrading to 1.21.1, when I run docker-compose start <service>, compose is using project name with a dash:
+> docker-compose start some-service
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=some-directory', 'com.docker.compose.service=some-service', 'com.docker.compose.oneoff=False']})
+...
+but when I try tu run ps or logs, nothing is outputted.
+Workaround is to use -p with a project name derived from directory but with all special chars (like dash or underscore) removed for every command other than start.
+Context information (for bug reports)
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Steps to reproduce the issue
+Build & start containers using docker-compose start <service name> using compose prior to 1.21.0
+Stop containers.
+Upgrade compose to 1.21.1
+Start the same containers as in (1)
+Try getting list of containers or their logs
+Observed result
+➜ docker-compose ps     
+Name   Command   State   Ports
+------------------------------
+Expected result
+➜ docker-compose ps
+              Name                             Command               State            Ports         
+----------------------------------------------------------------------------------------------------
+somedirectory_rabbitmq_1   docker-entrypoint.sh rabbi ...   Exit 0    
+Additional information
+There is the following note in 1.21.1 release notes:
+In 1.21.0, we introduced a change to how project names are sanitized for
+internal use in resource names. This caused issues when manipulating an
+existing, deployed application whose name had changed as a result.
+This release properly detects resources using "legacy" naming conventions.
+but it doesn't work for me.
+macOS 10.13.5
+Docker for Mac CE 18.03.1-ce-mac65 (24312) (stable) 

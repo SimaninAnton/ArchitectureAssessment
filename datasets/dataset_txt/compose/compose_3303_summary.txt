@@ -1,0 +1,1 @@
+Allow compose to run arbitrary commands at the host level after or before containers are started

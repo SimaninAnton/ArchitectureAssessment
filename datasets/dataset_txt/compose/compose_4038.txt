@@ -1,0 +1,10 @@
+mjo09a commented on 19 Dec 2014
+I'm trying to run a replica mongodb project. If I add links under the "replica1" service as
+links:
+replica2
+arbiter
+and then underneath the "replica2" service add links like this
+links:
+replica1
+arbiter
+I get error "Circular import between replica1 and replica2". Although, if I specify all the links under "replica1" it at least runs but the other services do not get the links in the hosts file. Is this a bug?

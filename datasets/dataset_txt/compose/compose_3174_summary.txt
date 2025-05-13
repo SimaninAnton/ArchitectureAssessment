@@ -1,0 +1,1 @@
+Environment variables in env_file: parameter not recognized in dockerfile

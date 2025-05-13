@@ -1,0 +1,64 @@
+petertsu commented on 6 Dec 2018
+Failed to mount windows folder to container on windows 2016
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.3
+ Git commit:        33a45cd0a2
+ Built:             unknown-buildtime
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.24)
+  Go version:       go1.10.3
+  Git commit:       33a45cd0a2
+  Built:            11/07/2018 00:24:12
+  OS/Arch:          windows/amd64
+  Experimental:     false
+Output of docker-compose config
+networks:
+  default:
+    external:
+      name: nat
+services:
+  my:
+    build:
+      context: C:\tmp
+    volumes:
+    - c:\tmp:/app:rw
+version: '3.0'
+Steps to reproduce the issue
+Run docker-compose up
+Observed result
+Creating tmp_my_1 ... error
+ERROR: for tmp_my_1 Cannot create container for service my: invalid volume specification: 'C:\tmp:/app:rw'
+ERROR: for my Cannot create container for service my: invalid volume specification: 'C:\tmp:/app:rw'
+ERROR: Encountered errors while bringing up the project.
+Stacktrace / full error message
+Creating tmp_my_1 ... error
+
+ERROR: for tmp_my_1  Cannot create container for service my: invalid volume specification: 'C:\tmp:/app:rw'
+
+ERROR: for my  Cannot create container for service my: invalid volume specification: 'C:\tmp:/app:rw'
+ERROR: Encountered errors while bringing up the project.
+Additional information
+OS Name: Microsoft Windows Server 2016 Standard
+OS Version: 10.0.14393 N/A Build 14393
+Hotfix(s): 8 Hotfix(s) Installed.
+[01]: KB3192137
+[02]: KB3199986
+[03]: KB4013418
+[04]: KB4049065
+[05]: KB4091664
+[06]: KB4132216
+[07]: KB4465659
+[08]: KB4467684

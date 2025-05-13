@@ -1,0 +1,1 @@
+ps should show the host information as well

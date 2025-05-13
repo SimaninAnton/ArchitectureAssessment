@@ -1,0 +1,7 @@
+gionn commented on 18 Jan 2016
+Hi,
+we would love the possibility to have arbitrary metadata in a docker-compose.yml file, to be simply ignored by compose itself, but would be consumed by third-party tools that integrates with compose.
+We are aware of labels, but they apply to single containers only.
+Just to keep things simple, just having a first-level keyword like "metadata" that would not be treated as a new service by composer would be great.
+An ugly and felon workaround would be to put metadata as comments inside the YAML, but then is not trivial anymore to parse a docker-compose.yml with any standard YAML library.
+Thanks.

@@ -1,0 +1,17 @@
+jmreicha commented on 10 Feb 2016
+I ran in to an issue, I'm not sure it is a compose thing but that's how I discovered it. I also commented on an older docker issue to see if they had any ideas.
+I am in the process of switching from the old v1 templates to the v2 templates. I have an nginx service defined in the new template, identical in both formats:
+nginx:
+    image: nginx
+    hostname: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      # Assets
+      - "../public:/etc/nginx/www"
+      # Configuration
+      - "./nginx:/etc/nginx"
+This definition works correctly using the v1 format but not the v2 format. I have checked that the volumes get mounted properly and indeed they do for both formats, checking with docker inspect and looking inside the container. All the networking works as I would expect as well. I am able to get the v2 container working if I exec in to the container and reload nginx (nginx -s reload). It seems like nginx starts before the mounts are visible.
+I'm not sure how else to troubleshoot this, maybe there is a workaround I can use for now?
+I can provide more details, I know this isn't a lot of information but I didn't want to go overboard if this isn't the correct forum to post this issue.

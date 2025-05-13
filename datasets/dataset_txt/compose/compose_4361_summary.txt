@@ -1,0 +1,1 @@
+Build progress bars are broken

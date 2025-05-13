@@ -1,0 +1,14 @@
+tjamet commented on 16 May 2016
+Hi,
+I'm about to run docker-compose inside a container built with Dockerfile:
+FROM alpine
+
+RUN apk update && apk add curl
+RUN curl -o /usr/local/bin/docker-compose -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` && chmod +x /usr/local/bin/docker-compose
+ENTRYPOINT ["/usr/local/bin/docker-compose"]
+but then, running:
+docker run -v /var/run/docker.sock:/var/run/docker.sock compose --help
+leads to a no such file or directoryerror.
+I read that this is due to docker-compose being binary compiled from python sources, using the glibc while alpine runs musl.
+Would it be possible to get a docker-compose binary running on alpine?
+24

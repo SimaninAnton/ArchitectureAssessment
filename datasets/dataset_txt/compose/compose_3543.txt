@@ -1,0 +1,38 @@
+sstarcher commented on 24 Jun 2015
+The first time I do docker-compose up -d everything works
+The second time I get the following error
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 460, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 221, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 261, in _get_convergence_plans
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 278, in convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 101, in containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.container", line 28, in from_ps
+TypeError: coercing to Unicode: need string or buffer, NoneType found
+docker-compose --version
+docker-compose version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+docker info
+Containers: 8
+Images: 98
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 114
+ Dirperm1 Supported: false
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.13.0-53-generic
+Operating System: Ubuntu 14.04.2 LTS
+CPUs: 1
+Total Memory: 992.5 MiB
+Name: ip-10-0-11-99
+ID: 3RM6:3ZR5:FK7P:N6TM:CE35:2VFA:BUJ7:UDBR:IUDR:OSB7:7BP2:TEHS
+WARNING: No swap limit support

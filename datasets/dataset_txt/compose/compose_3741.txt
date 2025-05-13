@@ -1,0 +1,16 @@
+larsks commented on 8 Apr 2015
+In compose/service.py, docker-compose creates a container with an
+explicit entrypoint of /bin/echo:
+    intermediate_container = Container.create(
+        self.client,
+        image=container.image,
+        entrypoint=['/bin/echo'],
+        command=[],
+        detach=True,
+        host_config=create_host_config(volumes_from=[container.id]),
+    )
+This will fail for containers that do not contain /bin/echo,
+resulting in the error:
+# docker-compose -f outside.yml up
+Recreating bouncer_pause_1...
+Cannot start container 28348618afd2204afec750f2644e686c267024d913484759319adc967d80812b: exec: "/bin/echo": stat /bin/echo: no such file or directory

@@ -1,0 +1,1 @@
+Yml network option for build not resolving the project name automatically

@@ -1,0 +1,14 @@
+xiaods commented on 20 Oct 2014
+$ fig run web rake test
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 49, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 78, in get_project
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 54, in get_client
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docker_client", line 20, in docker_client
+AttributeError: 'NoneType' object has no attribute 'split'
+my home name is dxiao, not ben.

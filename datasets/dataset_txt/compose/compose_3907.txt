@@ -1,0 +1,4 @@
+cpuguy83 commented on 20 Feb 2015
+Docker 1.5 introduced the ability to ignore both the .dockerignore and the Dockerfile (in the .dockerignore file), but this is processed on the server since and only for dealing with the build cache (ie, when someone does ADD., Dockerfile changes can be ignored).
+Currently with the docker-compose 1.2 RC2 build, if Dockerfile is in .dockerignore, Dockerfile won't be sent to the server, so the server can't be built.
+Basically, .dockerignore, and Dockerfile should be treated as special case entries in the .dockerignore so that they still get sent up to the server.

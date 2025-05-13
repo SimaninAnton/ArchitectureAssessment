@@ -1,0 +1,135 @@
+harshsharma22 commented 17 days ago •
+edited
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.17.1, build 6d101fb
+Output of docker version
+Docker version 19.03.5, build 633a0ea
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+(paste here)
+Steps to reproduce the issue
+connection break with Mongo container
+service get restarted
+mongo connection time out
+service started to giving this.app.get() is not a function
+Expected result
+container should get restarted
+Stacktrace / full error message
+2020-01-12T10:40:21.901925934Z unhandledRejection { MongoNetworkError: failed to connect to server [xxx:yy] on first connect [MongoNetworkError: connection timed out]
+
+
+2020-01-12T10:40:21.901941834Z     at Pool.<anonymous> (/app/node_modules/mongodb/lib/core/topologies/server.js:431:11)
+
+
+2020-01-12T10:40:21.901946034Z     at emitOne (events.js:116:13)
+
+
+2020-01-12T10:40:21.901949134Z     at Pool.emit (events.js:211:7)
+
+
+2020-01-12T10:40:21.901952234Z     at connect (/app/node_modules/mongodb/lib/core/connection/pool.js:580:14)
+
+
+2020-01-12T10:40:21.901955234Z     at makeConnection (/app/node_modules/mongodb/lib/core/connection/connect.js:39:11)
+
+
+2020-01-12T10:40:21.901958234Z     at callback (/app/node_modules/mongodb/lib/core/connection/connect.js:261:5)
+
+
+2020-01-12T10:40:21.901961034Z     at Socket.err (/app/node_modules/mongodb/lib/core/connection/connect.js:286:7)
+
+
+2020-01-12T10:40:21.901963834Z     at Object.onceWrapper (events.js:313:30)
+
+
+2020-01-12T10:40:21.901966534Z     at emitNone (events.js:106:13)
+
+
+2020-01-12T10:40:21.901969234Z     at Socket.emit (events.js:208:7)
+
+
+2020-01-12T10:40:21.901971834Z     at Socket._onTimeout (net.js:422:8)
+
+
+2020-01-12T10:40:21.901990535Z     at ontimeout (timers.js:498:11)
+
+
+2020-01-12T10:40:21.901994135Z     at tryOnTimeout (timers.js:323:5)
+
+
+2020-01-12T10:40:21.901996435Z     at Timer.listOnTimeout (timers.js:290:5)
+
+
+2020-01-12T10:40:21.901998835Z   name: 'MongoNetworkError',
+
+
+2020-01-12T10:40:21.902001035Z   errorLabels: [ 'TransientTransactionError' ],
+
+
+2020-01-12T10:40:21.902003335Z   [Symbol(mongoErrorContextSymbol)]: {} } Promise {
+
+
+2020-01-12T10:40:21.902005635Z   <rejected> { MongoNetworkError: failed to connect to server [xxx:yy] on first connect [MongoNetworkError: connection timed out]
+
+
+2020-01-12T10:40:21.902008535Z     at Pool.<anonymous> (/app/node_modules/mongodb/lib/core/topologies/server.js:431:11)
+
+
+2020-01-12T10:40:21.902011035Z     at emitOne (events.js:116:13)
+
+
+2020-01-12T10:40:21.902020535Z     at Pool.emit (events.js:211:7)
+
+
+2020-01-12T10:40:21.902023235Z     at connect (/app/node_modules/mongodb/lib/core/connection/pool.js:580:14)
+
+
+2020-01-12T10:40:21.902025735Z     at makeConnection (/app/node_modules/mongodb/lib/core/connection/connect.js:39:11)
+
+
+2020-01-12T10:40:21.902028035Z     at callback (/app/node_modules/mongodb/lib/core/connection/connect.js:261:5)
+
+
+2020-01-12T10:40:21.902030435Z     at Socket.err (/app/node_modules/mongodb/lib/core/connection/connect.js:286:7)
+
+
+2020-01-12T10:40:21.902032735Z     at Object.onceWrapper (events.js:313:30)
+
+
+2020-01-12T10:40:21.902035035Z     at emitNone (events.js:106:13)
+
+
+2020-01-12T10:40:21.902037235Z     at Socket.emit (events.js:208:7)
+
+
+2020-01-12T10:40:21.902039435Z     at Socket._onTimeout (net.js:422:8)
+
+
+2020-01-12T10:40:21.902041735Z     at ontimeout (timers.js:498:11)
+
+
+2020-01-12T10:40:21.902044035Z     at tryOnTimeout (timers.js:323:5)
+
+
+2020-01-12T10:40:21.902046235Z     at Timer.listOnTimeout (timers.js:290:5)
+
+
+2020-01-12T10:40:21.902048435Z   name: 'MongoNetworkError',
+
+
+2020-01-12T10:40:21.902051335Z   errorLabels: [ 'TransientTransactionError' ],
+
+
+2020-01-12T10:40:21.902053735Z   [Symbol(mongoErrorContextSymbol)]: {} } }
+
+
+2020-01-12T10:40:21.903230542Z {"level":20,"pid":21,"hostname":"585d221e342d","arg1":{},"arg2":{"name":"MongoNetworkError","errorLabels":["TransientTransactionError"]},"lvl":"DEBUG","msg":"DEBUG - ../index.js - Unhandled Rejection at:","v":1}
+Additional information
+my service in docker compose
+api-service:
+environment:
+- PORT=80
+- MONGO_URL=${MONGO_URL}
+restart: always

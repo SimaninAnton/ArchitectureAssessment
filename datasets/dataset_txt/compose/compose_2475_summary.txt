@@ -1,0 +1,1 @@
+error on launching docker-compose by piping to sh ( echo 'docker-compose ... ' | sh )

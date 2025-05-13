@@ -1,0 +1,2 @@
+robbiev commented on 23 Feb 2015
+Docker 1.5 added the ability to disable process isolation (docker run --pid=host).

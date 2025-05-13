@@ -1,0 +1,7 @@
+bryce-gibson commented on 17 Nov 2015
+We're currently using an older version of Compose and are looking at updating.
+However, our docker-compose file has some bits of shell scripting in them, hence there are a number of dollar signs.
+It's kind of awkward for us to migrate to the new version because the dollar syntax is incompatible between old versions and new versions, and it's logistically difficult for us to all migrate at once...
+As a thought, if it were possible to disable the interpolation (which we're not planning to use anyway) then the docker-compose file would be backwards compatible, and hence the update process would be simple again.
+I also thought it may be useful for users (like us) who don't plan to use interpolation to be able to disable it so that we don't have to worry about escaping things (as it can be a bit of a surprise, and hence a tad frustrating, when you're not expecting it).
+Just wanted to see if this was something that others thought might be worth considering?

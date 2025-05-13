@@ -1,0 +1,1 @@
+No stdout on docker-compose run when using xargs on Windows

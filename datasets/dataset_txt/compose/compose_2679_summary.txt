@@ -1,0 +1,1 @@
+Support docker --ip option in docker-compose.yml files

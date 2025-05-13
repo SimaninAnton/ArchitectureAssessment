@@ -1,0 +1,1 @@
+Request: Add guidelines about testing to CONTRIBUTING.md

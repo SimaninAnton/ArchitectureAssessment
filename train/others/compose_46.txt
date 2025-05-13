@@ -1,0 +1,2 @@
+psytron commented on 22 Nov 2019
+It would be cool if one could specify secrets:* to grant a certain container access to all available secrets in the swarm.

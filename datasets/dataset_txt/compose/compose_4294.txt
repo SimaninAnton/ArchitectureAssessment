@@ -1,0 +1,12 @@
+Contributor
+d11wtq commented on 2 Jul 2014
+I've been getting this on master for a while. Just about to start looking into it now. Gimme a heads-up if you know what's causing it. Latest master (4f7cbc3) against docker 1.0.0.
+Creating python2_console_1...
+Cannot start container 2832f502554b666b9fa36b98067551823f33a13915bd71748d97aa58e18fd827: Cannot link to a non running container: /python2_console_1 AS /python2_console_run_1/console_1
+fig.yml (very basic)
+console:
+  image: d11wtq/python:2.7.7
+  volumes:
+    - "./projects:/projects"
+  command: python
+Using fig run --rm console bash.

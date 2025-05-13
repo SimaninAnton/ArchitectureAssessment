@@ -1,0 +1,8 @@
+waldbaer commented on 16 Nov 2017 •
+edited
+Hello docker-compose team,
+I would be happy to have the docker run options "cpu-rt-period" and "cpu-rt-runtime" also available in docker-compose.
+These options allow modification of the scheduling policy inside containers.
+Based on my research these options are available in docker-py, but are not released yet.
+Best regards
+Sebastian

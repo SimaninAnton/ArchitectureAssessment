@@ -1,0 +1,9 @@
+xiaoxuan220 commented on 21 Sep 2016
+[root@NODE01 ~]# docker -v
+Docker version 1.12.1, build 23cf638
+[root@NODE01 ~]# docker-compose -v
+docker-compose version 1.8.0, build f3628c7
+centos 7
+[root@NODE01 ~]# uname -a
+Linux NODE01 3.10.0-327.28.3.el7.x86_64 #1 SMP Thu Aug 18 19:05:49 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+I don`t want to use docker-machine,but I want to use compose on swarm mode,I mean let container run on swam node.How to realize?Tks

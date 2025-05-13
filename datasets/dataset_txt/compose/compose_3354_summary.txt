@@ -1,0 +1,1 @@
+Cannot forward port 25 in Compose, in plain Docker it works

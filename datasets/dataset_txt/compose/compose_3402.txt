@@ -1,0 +1,76 @@
+ricardobranco777 commented on 7 Aug 2015
+1- To reproduce this bug it's convenient to save /var/lib/docker and start with a fresh one:
+sudo service docker stop
+sudo mv /var/lib/docker /var/lib/docker.bak
+2- Then create a docker-compose.yml file with these contents:
+test:
+  restart: always
+  image: busybox
+  ports:
+   - "0.0.0.0.1234:1234"
+Notice the typo at ".1234".
+3- Now run:
+docker-compose -f docker-compose.yml up -d
+
+Pulling test (busybox:latest)...
+latest: Pulling from busybox
+cf2616975b4a: Pull complete
+6ce2e90b0bc7: Pull complete
+8c2e06607696: Already exists
+busybox:latest: The image you are pulling has been verified. Important: image verification is a tech preview feature and should not be relied on to provide security.
+Digest: sha256:38a203e1986cf79639cfb9b2e1d6e773de84002feea2d4eb006b52004ee8502d
+Status: Downloaded newer image for busybox:latest
+Creating tmp_test_1...
+Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+4- Restart Docker:
+sudo service docker stop
+sudo service docker start
+5- Try to run docker:
+sudo docker ps
+
+Cannot connect to the Docker daemon. Is 'docker -d' running on this host?
+6- Try to remove /var/lib/docker:
+sudo rm -rf /var/lib/docker/
+
+rm: cannot remove ‘/var/lib/docker/aufs/mnt/99b76f4d6842ab6f23e3da5221f6cb2812d818b0cec596153adfeeca3e1e7d4c’: Device or resource busy
+7- Check file:
+sudo ls -l /var/lib/docker/aufs/mnt/99b76f4d6842ab6f23e3da5221f6cb2812d818b0cec596153adfeeca3e1e7d4c
+
+ls: cannot access /var/lib/docker/aufs/mnt/99b76f4d6842ab6f23e3da5221f6cb2812d818b0cec596153adfeeca3e1e7d4c: Stale file handle
+8- Check /var/log/syslog:
+Multiple lines like these:
+Aug  6 18:28:14 ricardox kernel: [600440.626929] audit: type=1400 audit(1438903694.849:118): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="docker-default" pid=8114 comm="apparmor_parser"
+Aug  6 18:28:14 ricardox kernel: [600440.636323] init: docker main process (8076) terminated with status 2
+Aug  6 18:28:14 ricardox kernel: [600440.636335] init: docker main process ended, respawning
+Aug  6 18:28:15 ricardox kernel: [600441.011280] init: docker main process (8144) terminated with status 2
+Aug  6 18:28:15 ricardox kernel: [600441.011292] init: docker respawning too fast, stopped
+Aug  6 18:31:54 ricardox kernel: [600660.125766] audit_printk_skb: 3 callbacks suppressed
+$ docker version
+Client version: 1.7.1
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 786b29d
+OS/Arch (client): linux/amd64
+Server version: 1.7.1
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 786b29d
+OS/Arch (server): linux/amd64
+$ docker info
+Containers: 0
+Images: 0
+Storage Driver: aufs
+Root Dir: /var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 0
+Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.19.0-25-generic
+Operating System: Ubuntu 14.04.3 LTS
+CPUs: 4
+Total Memory: 15.55 GiB
+Name: ricardox
+ID: WLPD:IT5D:KF2Q:7GPM:5ICH:4MOH:5CWF:XK5Y:EIR7:3GNF:C7VY:BHOK

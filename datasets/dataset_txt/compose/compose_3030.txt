@@ -1,0 +1,85 @@
+nazar-pc commented on 1 Dec 2015
+I've just found that at least most recent versions of Compose reuse volumes during recreation of containers (when docker-compose.yml changes or new images were pulled).
+But there is a bug, when --x-networking is used recreation doesn't happen.
+# docker-compose.yml
+data:
+  image: nazarpc/webserver:data
+nginx:
+  image: nazarpc/webserver:nginx
+nazar-pc@nazar-pc /m/Data> docker-compose --x-networking up -d
+Creating data_data_1
+Creating data_nginx_1
+nazar-pc@nazar-pc /m/Data> docker volume ls
+DRIVER              VOLUME NAME
+local               acaa915a51bb0328094b536b26bbf125449af93cb4c9ce47b358cc2d0eb96412
+local               4d0ea92c1abf4b2ad8b92365386a5d074aadbddaa72c2c54377c48e979374769
+local               b4e7d70ec2a64447b73ba5f8f4649d1cb19fabdf9092271a768e160f30b2782d
+local               ad1e2a5063fb973c535a6198ee5b8648d4c5c49ad87e0459a30e705b0eda0b62
+local               e8bbba6761fd397bd4499d96dcb53e1905dbbdaee754584137b8f7ccb8ea4555
+local               65540fed150dca6051f8b48c0dbf1f48f714c29e7624d1019e0d15b5c4a0e439
+local               a8e65d0bf0316936c646b7130c15586c233ad523d6fae70fafb1a644f52ec225
+local               5c33510c032a11467f71386128d60a795c382fcff074fe248755e0e6d67e1177
+local               f0e860a6e6360d30eef2244ce7b5a343111c417f74244d08117f2bcbbc7da406
+local               a5459184a7c01255f79ae29a25fcc041d3e2d5020720045cfe3d5914689a0d3f
+We have some volumes, lets make introduce modifications:
+# docker-compose.yml
+data:
+  image: nazarpc/webserver:data
+  environment:
+    x: y
+nginx:
+  image: nazarpc/webserver:nginx
+  volumes_from:
+    - data
+  environment:
+    x: y
+nazar-pc@nazar-pc /m/Data> docker-compose --x-networking up -d
+Recreating data_data_1
+Recreating data_nginx_1
+nazar-pc@nazar-pc /m/Data> docker volume ls
+DRIVER              VOLUME NAME
+local               39db4692a4fc6d7d7ceaa6fabbb1d46d3c7a6293f7e0ff3ce38ef5ce2efe764b
+local               b4e7d70ec2a64447b73ba5f8f4649d1cb19fabdf9092271a768e160f30b2782d
+local               7fc10cdaadcf5e12261f773847c150056930afc28854231fb9dae0d5bf442c1b
+local               5f9fc789f14365240c0f12b17d707f72b0fbef0e6cd93556c2c3d34aee410841
+local               ef50d79890234f6364998297b6c6f50aef86720fbc46650dbfe388e36adff377
+local               322f8456dd9c6a2cc1022cbf8d124713c19eae3f39ceaf39243beadb177bb872
+local               ad1e2a5063fb973c535a6198ee5b8648d4c5c49ad87e0459a30e705b0eda0b62
+local               e8bbba6761fd397bd4499d96dcb53e1905dbbdaee754584137b8f7ccb8ea4555
+local               65540fed150dca6051f8b48c0dbf1f48f714c29e7624d1019e0d15b5c4a0e439
+local               94aa16996997c4399040444cf04020499ccbe72123dbfc224f637e23376eee47
+local               a8e65d0bf0316936c646b7130c15586c233ad523d6fae70fafb1a644f52ec225
+local               5c33510c032a11467f71386128d60a795c382fcff074fe248755e0e6d67e1177
+local               f0e860a6e6360d30eef2244ce7b5a343111c417f74244d08117f2bcbbc7da406
+local               47dc8d976a6ba41717e056de1b742a753540e5b45a65b16668a33a495cbf8c23
+local               a5459184a7c01255f79ae29a25fcc041d3e2d5020720045cfe3d5914689a0d3f
+local               1e20d9aaa22b4d08b4a503b87d2d030106e79eca30d926173eae8d37fbc62a6f
+local               acaa915a51bb0328094b536b26bbf125449af93cb4c9ce47b358cc2d0eb96412
+local               95a032481ec13628727c655b0bcd942baa09b3be931ee12de65c53377be64036
+local               4d0ea92c1abf4b2ad8b92365386a5d074aadbddaa72c2c54377c48e979374769
+local               9d84992c9cb78178b1589b35a861cf0cb0941cbc4ee589770705d4e183ff8d79
+Recreation resulted in twice as many volumes, none of volumes were reused, while duplication doesn't happen without --x-networking.
+I suspect this is because --x-networking might be used in multi-host setup but in this case Docker Compose can easily add dynamic constraint to recreate container on exactly the same node.
+docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:20:08 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:20:08 UTC 2015
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+uname -a
+Linux nazar-pc 4.3.0-haswell #1 SMP Mon Nov 2 06:42:33 CET 2015 x86_64 x86_64 x86_64 GNU/Linux

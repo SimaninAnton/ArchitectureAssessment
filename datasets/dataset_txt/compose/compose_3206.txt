@@ -1,0 +1,9 @@
+HonzaMac commented on 14 Oct 2015
+What can I do with this?
+for command: docker-compose up docker-compose ps and etc.
+I got:
+Unknown device fc48c30df78ed5876fbfa9bfb5d0193ec883ab1082762a0cf3d077b29716d40f
+docker-compose version: 1.4.2
+docker-py version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

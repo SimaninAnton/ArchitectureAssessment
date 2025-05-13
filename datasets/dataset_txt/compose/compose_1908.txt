@@ -1,0 +1,43 @@
+matteo-bombelli commented on 24 Nov 2016 •
+edited
+I know that there is another issue of the same type but the other issue is closed and I tried all the solutions proposed but with no effect.
+still not working:
+matteo@ubuntuDockerMB:~/wordpress-docker$ sudo docker -v
+Docker version 1.12.3, build 6b644ec
+matteo@ubuntuDockerMB:~/wordpress-docker$ sudo docker-compose up
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+matteo@ubuntuDockerMB:~/wordpress-docker$ sudo service docker start
+start: Job is already running: docker
+matteo@ubuntuDockerMB:~/wordpress-docker$ echo $DOCKER_HOST
+
+matteo@ubuntuDockerMB:~/wordpress-docker$ DOCKER_HOST=127.0.0.1
+matteo@ubuntuDockerMB:~/wordpress-docker$ echo $DOCKER_HOST
+127.0.0.1
+matteo@ubuntuDockerMB:~/wordpress-docker$ sudo docker-compose up
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+matteo@ubuntuDockerMB:~/wordpress-docker$ unset DOCKER_HOST
+matteo@ubuntuDockerMB:~/wordpress-docker$ sudo docker-compose up
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+matteo@ubuntuDockerMB:~/wordpress-docker$ groups matteo
+matteo : matteo adm cdrom sudo dip plugdev sambashare lpadmin docker
+I'm part of the docker group
+I'm using also sudo
+The process is up
+The DOCKER_HOST variable is unset or 127.0.0.1
+Reconnected the user
+Restarted the server
+I think that I've tried all the possible configurations am I right?
+Specs:
+OS: Ubuntu 14.04.04 on Virtualbox on Windows 10 Home.
+Docker version 1.12.3, build 6b644ec
+Thank You!
+103
+5
+8
+2

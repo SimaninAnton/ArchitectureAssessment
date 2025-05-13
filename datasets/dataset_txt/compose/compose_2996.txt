@@ -1,0 +1,10 @@
+jasw commented on 11 Dec 2015
+Hi all,
+My usecase requires the running app aware of the docker instance name, so that it can push performance metrics to a Elastic Search index with the right container name.
+For example, if I scale my "web" tier compose to 3, compose would generate some names like web-myapp-01, 02, 03. I am hoping there is a way for me to access the name from within the web app so that each app could create a new elastic search index like web.metrics.web-myapp-01.xxx.
+I have done a few searches and readings, there seems to be no easy way of doing this.
+The 1st idea pops in mind is a feature request for docker-compose to add the name parameter as a runtime environment name.
+I guess similar things the people have been wanted for IP and port awareness which we now use service registration and discovery to solve can be done the same way.
+Please let me know if thats a sensible feature request. If you have a good workaround, I am all ears.
+Thank you!
+Jason W

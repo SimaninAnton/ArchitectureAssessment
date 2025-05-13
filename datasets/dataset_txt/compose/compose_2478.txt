@@ -1,0 +1,61 @@
+nickjj commented on 19 Apr 2016 •
+edited
+I can't reproduce it but I would say about 10% of the time when I hit CTRL+C, the containers that were started with docker-compose up fail to stop. I'll get an ABORT message in the terminal but they are still up. When it works, it says "gracefully stopping..." instead of ABORT.
+At this point I need to docker-compose stop them to "really" stop them.
+It was much worse in earlier versions of Compose but it's still happening often enough that I feel like it needs some attention. If you need more info let me know.
+Environment
+System
+# Distro (it's actually xubuntu, not Ubuntu)
+nick@oriath:~ ⚡ lsb_release --all
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 14.04.4 LTS
+Release:    14.04
+Codename:   trusty
+
+# Kernel
+nick@oriath:~ ⚡ uname -a
+Linux oriath 3.13.0-71-generic #114-Ubuntu SMP Tue Dec 1 02:34:22 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+
+# Terminal info
+nick@oriath:~ ⚡ xfce4-terminal --version
+xfce4-terminal 0.6.3 (Xfce 4.10)
+Docker
+nick@oriath:~ ⚡ docker info
+Containers: 4
+ Running: 0
+ Paused: 0
+ Stopped: 4
+Images: 187
+Server Version: 1.11.0
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 300
+ Dirperm1 Supported: false
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: bridge host null
+Kernel Version: 3.13.0-71-generic
+Operating System: Ubuntu 14.04.4 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 5.877 GiB
+Name: oriath
+ID: 2P6Z:G7DQ:46LR:WO63:BDMP:ZAPH:XADM:AJNB:2WON:FTQD:RPIY:DYKH
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Username: nickjj
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Docker Compose
+nick@oriath:~ ⚡ docker-compose --version
+docker-compose version 1.7.0, build 0d7bf73
+Potentially relevant information
+When I encounter the issue I'm always running multiple containers, such as postgres, redis, and multiple web services. I never run 1 container so I can't say for sure if it would happen with only 1.
+It happens with and without using links and both the legacy and v2 docker-compose.yml files.
+42

@@ -1,0 +1,1 @@
+logging to a service does not work

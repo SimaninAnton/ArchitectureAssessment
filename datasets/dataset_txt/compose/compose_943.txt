@@ -1,0 +1,17 @@
+mvasin commented on 13 Jan 2018
+Variable substitution works for YAML's array elements and hash values, but does not work for hash keys (see the last line):
+version: "3"
+
+services:
+  ubuntu:
+    image: ubuntu
+    volumes:
+      - $VOL
+
+volumes:
+  ${VOL}:
+=>
+$ VOL=some_vol docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+volumes value '${VOL}' does not match any of the regexes: u'^[a-zA-Z0-9._-]+$'
+I'm running docker-compose version 1.17.1, build 6d101fb.

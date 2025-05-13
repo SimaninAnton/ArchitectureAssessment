@@ -1,0 +1,111 @@
+gagarine commented on 28 Jul 2016
+Output of docker version:
+➜  ~ docker version
+Client:
+ Version:      1.12.0-rc4
+ API version:  1.24
+ Go version:   go1.6.2
+ Git commit:   e4a0dbc
+ Built:        Wed Jul 13 03:28:51 2016
+ OS/Arch:      darwin/amd64
+ Experimental: true
+
+Server:
+ Version:      1.12.0-rc4
+ API version:  1.24
+ Go version:   go1.6.2
+ Git commit:   e4a0dbc
+ Built:        Wed Jul 13 03:28:51 2016
+ OS/Arch:      linux/amd64
+ Experimental: true
+Output of docker info:
+Containers: 6
+ Running: 4
+ Paused: 0
+ Stopped: 2
+Images: 112
+Server Version: 1.12.0-rc4
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 106
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.15-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.954 GiB
+Name: moby
+ID: 4RBQ:T4IN:ZTHV:SWON:PTLB:Q3W7:I4QW:2X3K:JB46:UNMO:CVP7:DFJJ
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 46
+ Goroutines: 85
+ System Time: 2016-07-28T07:31:23.297671004Z
+ EventsListeners: 2
+No Proxy: *.local, 169.254/16
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Additional environment details (AWS, VirtualBox, physical, etc.):
+Docker for mac
+Steps to reproduce the issue:
+stop docker for mac
+launch docker-compose up
+Describe the results you received:
+You get error message
+➜  ehnv git:(dev) docker-compose up
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 60, in main
+  File "compose/cli/main.py", line 108, in perform_command
+  File "compose/cli/command.py", line 35, in project_from_options
+  File "compose/cli/command.py", line 112, in get_project
+  File "compose/project.py", line 100, in from_config
+  File "compose/project.py", line 533, in get_volumes_from
+  File "compose/project.py", line 522, in build_volume_from
+  File "compose/container.py", line 42, in from_id
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 182, in inspect_container
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 138, in _get
+  File "site-packages/requests/sessions.py", line 477, in get
+  File "site-packages/requests/sessions.py", line 465, in request
+  File "site-packages/requests/sessions.py", line 573, in send
+  File "site-packages/requests/adapters.py", line 415, in send
+requests.exceptions.ConnectionError: ('Connection aborted.', error(2, 'No such file or directory'))
+Describe the results you expected:
+A nicer error message
+** Can't connect to Docker for MAC, please check it's running. **
+
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 60, in main
+  File "compose/cli/main.py", line 108, in perform_command
+  File "compose/cli/command.py", line 35, in project_from_options
+  File "compose/cli/command.py", line 112, in get_project
+  File "compose/project.py", line 100, in from_config
+  File "compose/project.py", line 533, in get_volumes_from
+  File "compose/project.py", line 522, in build_volume_from
+  File "compose/container.py", line 42, in from_id
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 182, in inspect_container
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 138, in _get
+  File "site-packages/requests/sessions.py", line 477, in get
+  File "site-packages/requests/sessions.py", line 465, in request
+  File "site-packages/requests/sessions.py", line 573, in send
+  File "site-packages/requests/adapters.py", line 415, in send
+requests.exceptions.ConnectionError: ('Connection aborted.', error(2, 'No such file or directory'))

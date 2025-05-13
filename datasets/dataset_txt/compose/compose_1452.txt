@@ -1,0 +1,4 @@
+oliveiraev commented on 17 May 2017 •
+edited
+I have several applications that share the same docker-compose.yaml boilerplate. The unique difference is the application name.
+I would love to replace all my $application_name occurrences with $COMPOSE_PROJECT_NAME.

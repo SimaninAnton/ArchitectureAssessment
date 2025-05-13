@@ -1,0 +1,59 @@
+trajano commented on 2 Jun 2017
+In docker compose I set up a graylog service. However, when I use logging to the graylog service it responds with
+ERROR: for member Cannot start service member: Failed to initialize logging driver: gelf: cannot connect to GELF endpoint: graylog:12201 dial udp: lookup graylog on 192.168.65.1:53: no such host
+The configuration file (I took out the other services and just left it with a mariadb service)
+version: "3"
+services:
+  database:
+    image: mariadb:10.1
+    volumes:
+    - 'mariadb_data:/var/lib/mysql'
+    depends_on:
+    - graylog
+    environment:
+      MYSQL_DATABASE: "jeesample"
+      MYSQL_USER: "jeeuser"
+      MYSQL_PASSWORD: "password"
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://graylog:12201"
+  graylog:
+    image: graylog2/server:2.2.3-1
+    depends_on:
+    - graylog-db
+    - graylog-es
+    environment:
+      GRAYLOG_PASSWORD_SECRET: somepasswordpepper
+      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      GRAYLOG_WEB_ENDPOINT_URI: http://127.0.0.1:9000/api
+      GRAYLOG_MONGODB_URI: mongodb://graylog-db/graylog
+    ports:
+    - "9000:9000"
+    expose:
+    - "12201/udp"
+    volumes:
+      - graylog_config:/usr/share/graylog/data/config
+      - graylog_journal:/usr/share/graylog/data/journal
+  graylog-db:
+    image: mongo:3
+    volumes:
+      - graylog_mongo_data:/data/db
+  graylog-es:
+    image: elasticsearch:2
+    command: "elasticsearch -Des.cluster.name='graylog'"
+    volumes:
+      - graylog_es_data:/usr/share/elasticsearch/data
+volumes:
+  mariadb_data:
+    driver: local
+  graylog_mongo_data:
+    driver: local
+  graylog_es_data:
+    driver: local
+  graylog_config:
+    driver: local
+  graylog_journal:
+    driver: local
+1

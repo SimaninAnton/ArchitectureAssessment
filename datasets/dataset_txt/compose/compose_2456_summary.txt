@@ -1,0 +1,1 @@
+strange exit status code behavior

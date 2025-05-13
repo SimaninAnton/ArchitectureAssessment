@@ -1,0 +1,3 @@
+np commented on 18 Jul 2016
+Would it be possible to make statically linked binaries for docker-compose. I've looked at some of the existing issues about this topic but couldn't get a definitive answer.
+1

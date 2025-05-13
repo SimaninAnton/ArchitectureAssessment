@@ -1,0 +1,1 @@
+Share env vars among services

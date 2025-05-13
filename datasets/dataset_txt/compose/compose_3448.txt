@@ -1,0 +1,24 @@
+pierreozoux commented on 21 Jul 2015
+Ok, I feel this is border line, but I'd like to have your opinion on that. And maybe tell me what direction to take.
+The problem
+I'm an IndieHosters, and I love the idea of having one command to rule all my apps! Nowadays, I just put a docker-compose.yml file on each application of my users, and I just go to this dir and docker-compose up no matter if it is a meteor app or a wordpress :) This is amazing and this is the only way to scale. On top, more and more free and open source project are adopting Dockerfile, and docker-compose will follow hopefully!
+For a bit of background you can check the following links:
+https://github.com/indiehosters/documents/issues/18
+https://fhackts.wordpress.com/2015/02/09/public-virtual-appliance-repositories-docker-vs-turnkeylinux-vs-vmware-which-is-the-largest-community/?hc_location=ufi
+docker/hub-feedback#57
+So I really have the feeling that docker is the packaging system of the future! And I'm sure you are as enthusiast as me!
+But I still see one piece missing! Describe how to backup a service. This is sincerely annoying! You have to learn for every kind of services how to do it.
+Solution
+Here could be an example:
+db:
+  image: mysql
+  backup: mysqldump --all-databases --events -uadmin -p$MYSQL_ROOT_PASSWORD -h db > /dump/dump.sql
+  volumes:
+    - mysql/runtime:/var/lib/mysql
+    - mysql/dump:/dump
+  environment:
+    MYSQL_ROOT_PASSWORD: example
+and then, when I run docker-compose backup, it will run it on all the started instances.
+I know this is borderline in the sense I don't want docker-compose make the coffee. But you see the problem, and I'm sure you share the idea. So if it doesn't feet in docker-compose, how would you envision to standardise the way to backup services like mysql.
+For now, I do it like this: https://github.com/indiehosters/Rocket.Chat/blob/master/BACKUP
+Looking forward hearing your feedback!

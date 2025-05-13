@@ -1,0 +1,1 @@
+Support npipe url values for DOCKER_HOST

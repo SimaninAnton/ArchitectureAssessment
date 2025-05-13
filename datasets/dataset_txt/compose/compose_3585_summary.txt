@@ -1,0 +1,1 @@
+`Docker-compose up api` doesn't mount volume but `docker-compose run api /bin/bash` does

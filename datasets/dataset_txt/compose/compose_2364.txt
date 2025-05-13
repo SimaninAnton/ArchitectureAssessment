@@ -1,0 +1,4 @@
+nschoe commented on 24 May 2016
+It's possible to use ENV varaible in docker-compose files with ${ENV_VAR} but it defaults to empty when ENV_VAR is not set.
+I think it would be good to support default value, as in shell syntax, like so: ${ENV_VAR:-defaultValue}.
+7

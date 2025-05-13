@@ -1,0 +1,1 @@
+docker-compose build will rebuild image multiple times when using extends or re-using same build dir

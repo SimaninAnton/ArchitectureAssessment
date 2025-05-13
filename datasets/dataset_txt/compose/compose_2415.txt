@@ -1,0 +1,24 @@
+darkn3rd commented on 10 May 2016
+Summary
+Enhancement request that environment variables set from within the docker-compose.yml file could be used elsewhere.
+This would make docker-compose more dynamic instead of current static nature. Right now have to compose some wrapper script to compose docker-compose to compose containers.
+Docker-Compose file examples
+version: '2'
+services:
+  database:
+    environment:
+      - POSTGRES_VERSION="9.4"
+    image: "postgres:${POSTGRES_VERSION}"
+version: '2'
+services:
+  web:
+    environment:
+      - APP_ROOT="/app"
+    build: .
+    command: ${APP_ROOT}/wrapper.sh
+    volumes:
+      - ./logs/:${APP_ROOT}/logs
+    ports:
+      - "8080:8080"
+31
+3

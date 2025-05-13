@@ -1,0 +1,1 @@
+SSL issue on Windows 10 with Docker-Compose.exe

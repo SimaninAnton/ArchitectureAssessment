@@ -1,0 +1,10 @@
+nitinprakash96 commented on 12 Mar 2017
+Hi, I edited a compose file for my app and added a healthcheck option. But whenever I try running docker-compose up I get the following error.
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for balrogadmin: 'healthcheck'
+My docker configurations are:
+docker-compose --version
+docker-compose version 1.11.2, build dfed245
+docker --version
+Docker version 17.03.0-ce, build 3a232c8
+3

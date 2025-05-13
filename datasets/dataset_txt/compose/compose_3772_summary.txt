@@ -1,0 +1,1 @@
+'docker-compose up' stops showing logs after 'docker-compose restart xxx'

@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 26 Jan 2015
+Our CI tests should run on several recent versions of Docker. The best way to do that would probably be to use Docker's Jenkins instance, managed by @jfrazelle I think.

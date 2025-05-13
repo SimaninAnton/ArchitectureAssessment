@@ -1,0 +1,2 @@
+gburch commented on 7 Jun 2014
+When working with services that are resilient if I put in fig start container or fig stop container it should only start/stop that container and not recreate a new container. This same container should have the same ip address so that links continue to work.

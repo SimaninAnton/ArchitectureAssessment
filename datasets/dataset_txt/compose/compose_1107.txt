@@ -1,0 +1,22 @@
+cklabautermann commented on 2 Nov 2017
+after upgrading via update.sh mailcow did not come up. the following message appears:
+ERROR: for unbound-mailcow  Container "e4688c6dbf6a" is unhealthy.
+ERROR: Encountered errors while bringing up the project.
+docker logs e4688c6dbf6a tells me:
+2017-11-02  8:54:37 140513385863040 [Note] InnoDB: Highest supported file format is Barracuda.
+2017-11-02  8:54:37 140513385863040 [Note] InnoDB: 128 out of 128 rollback segments are active.
+2017-11-02  8:54:37 140513385863040 [Note] InnoDB: Creating shared tablespace for temporary tables
+2017-11-02  8:54:37 140513385863040 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2017-11-02  8:54:37 140513385863040 [ERROR] InnoDB: preallocating 12582912 bytes for file ./ibtmp1 failed with error 22
+2017-11-02  8:54:37 140513385863040 [ERROR] InnoDB: Could not set the file size of './ibtmp1'. Probably out of disk space
+2017-11-02  8:54:37 140513385863040 [ERROR] InnoDB: Unable to create the shared innodb_temporary
+2017-11-02  8:54:37 140513385863040 [ERROR] InnoDB: Plugin initialization aborted with error Generic error
+2017-11-02  8:54:42 140513385863040 [Note] InnoDB: Starting shutdown...
+2017-11-02  8:54:42 140513385863040 [Note] InnoDB: Removed temporary tablespace data file: "ibtmp1"
+2017-11-02  8:54:42 140513385863040 [ERROR] Plugin 'InnoDB' init function returned error.
+2017-11-02  8:54:42 140513385863040 [ERROR] Plugin 'InnoDB' registration as a STORAGE ENGINE failed.
+2017-11-02  8:54:42 140513385863040 [ERROR] Unknown/unsupported storage engine: InnoDB
+2017-11-02  8:54:42 140513385863040 [ERROR] Aborting
+Please help, as I don´t know how to cope with this.
+Thanks and regards,
+Claudio

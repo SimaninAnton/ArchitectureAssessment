@@ -1,0 +1,1 @@
+env_file is ignored and not validated when no .env is present

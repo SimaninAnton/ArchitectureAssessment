@@ -1,0 +1,4 @@
+Contributor
+schmunk42 commented on 9 Apr 2015
+docker-compose pull downloads the latest version of an image tag, if the service has an image attribute.
+But for services which are build you have to docker pull manually. Would be nice if docker-compose could check these images also, maybe with --pull-build-from-images or another option.

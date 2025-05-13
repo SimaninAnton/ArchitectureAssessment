@@ -1,0 +1,5 @@
+Contributor
+denismakogon commented on 24 May 2016
+CLITestCase.test_events_human_readable fails due to wrong assumption that host where tests were launched will have the same date time as Docker daemon.
+Example, instance works with US East coast time, but compose tests were launched at host that does have UTC + 3 date time.
+So, assertion that is made assert lines[0].startswith(datetime.date.today().isoformat()) is incorrect.

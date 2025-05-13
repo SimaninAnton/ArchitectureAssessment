@@ -1,0 +1,6 @@
+hervenicol commented on 22 Mar 2016
+Hello,
+It would be nice to add support for "--dns-opt" Docker parameter.
+Docker feature documented here: https://docs.docker.com/engine/userguide/networking/default_network/configure-dns/
+Thanks!
+17

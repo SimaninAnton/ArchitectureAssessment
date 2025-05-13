@@ -1,0 +1,15 @@
+serazoli commented on 1 May 2017 •
+edited
+Hi
+Where I should place the env_file if I run docker-compose from a subfolder?
+if I place same folder as docker-compose.yml then I get warring message that "WARNING: The APP_ROOT variable is not set. Defaulting to a blank string."
+if I place the subfolder where I run the docker-compose command then I get error that "ERROR: Couldn't find env file: /home/xxxxx/xxxxx/xxxxx/.env"
+if I place both folder (beside the docer-compose.yml and the subfolder) then working well
+It is OK that the env_file must be present in two folder?
+In the docker-compos file I use the following
+env_file: .env
+I try with docker-compose version 1.11.2, build dfed245 and docker-compose version 1.13.0-rc1, build 38af513
+Sorry my bad Englis
+Thaks
+Zoli
+2

@@ -1,0 +1,46 @@
+ghost commented on 15 Dec 2016
+Given a private google container repository on us.gcr.io
+Given two images on the private repo, mysql and wildfly
+Given a local dockerfile 'application' that extends the private wildfly image
+Given a docker-compose.yml that basically looks like:
+version: '2'  
+services:
+   mysql:
+     image: us.gcr.io/xxx/mysql
+   application:
+     build: application
+     image: us.gcr.io/xxx/application
+      depends_on:
+      - mysql  
+Given I authenticated my private repo with:
+> docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" us.gcr.io
+Login Succeeded
+Then docker-compose up will successfully download mysql from us.gcr.io but fails to build the 'application' dockerfile:
+> docker-compose up
+Creating network "docker_default" with the default driver
+Pulling mysql (us.gcr.io/xxx/mysql:latest)...
+latest: Pulling from x/mysql
+386a066cd84a: Pull complete
+827c8d62b332: Pull complete
+de135f87677c: Pull complete
+05822f26ca6e: Pull complete
+63ddbddf6165: Pull complete
+15fe0fbc587e: Pull complete
+50ca5a1cb72c: Pull complete
+6b52bffe9c7d: Pull complete
+14d2ee09f828: Pull complete
+3920bfd7c917: Pull complete
+4df65a8d81c9: Pull complete
+Digest: sha256:f78918c370d30f59c2bfbc6d58213e5914449b8a289f51c684e69e9ffa762737
+Status: Downloaded newer image for us.gcr.io/xxx/mysql:latest
+Building administration
+Step 1 : FROM us.gcr.io/xxx/wildfly
+Pulling repository us.gcr.io/xxx/wildfly
+ERROR: Service 'administration' failed to build: Error: Status 403 trying to pull repository xxx/wildfly: "Unable to access the repository: xxx/wildfly; please verify that it exists and you have permission to access it (no valid credential was supplied)."
+Note that 'docker build application' succeeds, so the Dockerfile itself is correct.
+Setup:
+macos Sierra 10.12.1,
+I installed "Docker for Mac", versions:
+Docker version 1.12.3, build 6b644ec
+docker-compose version 1.8.1, build 878cff1
+The credentials are saved to the keychain

@@ -1,0 +1,6 @@
+Member
+thaJeztah commented on 24 Jul 2014
+(Mis-using the issue-tracker for this, so feel free to close this)
+Just read the official announcement that Orchard's founders @bfirsh and @aanand are joining Docker to work on the orchestration part of the Docker ecosystem.
+I am very excited to see this announcement and wanted to congratulate you on this. Hoping to see even better orchestration with less 'hacking' around missing features upstream.
+Great news!

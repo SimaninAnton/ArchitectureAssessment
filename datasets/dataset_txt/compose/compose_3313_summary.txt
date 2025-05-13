@@ -1,0 +1,1 @@
+Installing docker-compose through pip will sometimes(?) not upgrade websocket to required version

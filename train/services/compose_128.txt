@@ -1,0 +1,32 @@
+tutul2010 commented on 18 Jul 2019
+Hi All,
+I am using Windows server 2016 with docker(64 bit) ,it gave info as ran "docker version" at PS
+PS C:\Users\tutul2018> docker version
+Client:
+ Version:           18.03.1-ee-3
+ API version:       1.37
+ Go version:        go1.10.2
+ Git commit:        b9a5c95
+ Built:             Thu Aug 30 18:42:35 201
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.03.1-ee-3
+  API version:      1.37 (minimum version 1
+  Go version:       go1.10.2
+  Git commit:       b9a5c95
+  Built:            Thu Aug 30 18:56:49 201
+  OS/Arch:          windows/amd64
+  Experimental:     false
+I am using Visual studio 2017 IDE for windows dockerizing purpose of a Mvc app(.Net 4.5) which depends on sql server .
+When i build ed that Mvc app by visuals studio 2017 , it gave a success but when i tried to run the Mvc app with container at windows server 2016 by visual studio 2017 , it gave error as "HNS failed with error : Unspecified error” .
+Recreating dockercompose10638987249071720390_webapplicationdockerapp_1 ... 
+Recreating dockercompose10638987249071720390_webapplicationdockerapp_1 ... error
+ERROR: for dockercompose10638987249071720390_webapplicationdockerapp_1  Cannot start service webapplicationdockerapp: failed to create endpoint dockercompose10638987249071720390_webapplicationdockerapp_1 on network nat: HNS failed with error : Unspecified error
+ERROR: for webapplicationdockerapp  Cannot start service webapplicationdockerapp: failed to create endpoint dockercompose10638987249071720390_webapplicationdockerapp_1 on network nat: HNS failed with error : Unspecified error
+Encountered errors while bringing up the project..
+Can anybody help me to fix the issue, Plss?
+Thanks,
+Tutul

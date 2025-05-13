@@ -1,0 +1,1 @@
+docker compose -f servicename will exit when service container restarts.

@@ -1,0 +1,4 @@
+paulcanning commented on 3 Jan 2018
+I am trying to get a basic Apache, PHP MySQL container up and running, but the PHP container exits straight away after starting, with the following message in the logs
+(98)Address already in use: AH00072: make_sock: could not bind to address 0.0.0.0:80
+I'm on a Mac, using Docker 17.09.1-ce and Docker Compose 1.17.1

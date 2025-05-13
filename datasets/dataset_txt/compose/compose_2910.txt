@@ -1,0 +1,3 @@
+Contributor
+TomasTomecek commented on 18 Jan 2016
+I've realized that docker-compose ps shows container names, instead of service names. Would it possible to provide a command which would show service names instead of container names? (I know I can open my compose file, but why would I do that? docker-compose is the interface for managing my project)

@@ -1,0 +1,1 @@
+Change command name from down to clear, clean or purge

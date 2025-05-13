@@ -1,0 +1,4 @@
+kballenegger commented on 6 Feb 2014
+I'd like to be able to specify:
+build: myfile.docker
+Right now, this throws an error, even if there's a valid docker file at that path. Instead, it expects a directory with a file named Dockerfile. That's a good default, but it'd be nice the support pointing to files directly, also.

@@ -1,0 +1,66 @@
+marcellodesales commented on 20 Feb 2016
+I've been constantly getting this error while trying to stop containers with docker-compose...
+[root@pe2enpmas300 npmo-server]# DATA_CENTER=qydc NPMO_ROLE=primary ENV=e2e LOG_FORMAT=docker docker-compose up -d
+Starting npmoserver_elasticsearchData_1
+Starting npmoserver_authData_1
+ERROR: Cannot start container d8080c52f579112791f065456e65453e44bfaac0ab5f5724d5d5d9c2730f7a44:
+ [8] System error: write /sys/fs/cgroup/devices/system.slice/docker-d8080c52f579112791f065456e65453e44bfaac0ab5f5724d5d5d9c2730f7a44.scope/cgroup.procs: no such device
+I need to stop, remove, and restart them all... It is getting annoying... Then, sometimes I get the following...
+Removing npmoserver_elasticsearchData_1 ... done
+
+ERROR: for npmoserver_esfollower_1  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+Then, trying to start the containers again takes a few tries...
+[root@pe2enpmas300 npmo-server]# DATA_CENTER=qydc NPMO_ROLE=primary ENV=e2e LOG_FORMAT=docker docker-compose up -d
+Creating npmoserver_elasticsearchData_1
+Creating npmoserver_authData_1
+Creating npmoserver_redis_1
+ERROR: Cannot start container 377c9f74c22b7d2a41fa2b93023e5c2c8473c7f32a5e5d273db3d2766e03e074:
+ [8] System error: write /sys/fs/cgroup/devices/system.slice/docker-377c9f74c22b7d2a41fa2b93023e5c2c8473c7f32a5e5d27
+3db3d2766e03e074.scope/cgroup.procs: no such device
+Anything wrong?
+Docker Version
+Docker Compose
+[root@pe2enpmas300 npmo-server]#  docker-compose version
+docker-compose version 1.5.2, build 7240ff3
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Docker Engine
+[root@pe2enpmas300 npmo-server]# docker info
+Containers: 79
+Images: 498
+Server Version: 1.9.1
+Storage Driver: devicemapper
+ Pool Name: docker-253:1-202438970-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 107.4 GB
+ Backing Filesystem:
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 10.08 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 24.92 GB
+ Metadata Space Used: 24.28 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.123 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107-RHEL7 (2015-10-14)
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.10.0-327.3.1.el7.x86_64
+Operating System: Red Hat Enterprise Linux Server 7.2 (Maipo)
+CPUs: 4
+Total Memory: 15.51 GiB
+Name: pe2enpmas300.corp.intuit.net
+ID: K5LS:CFO6:2V4H:BMZM:ERKU:EFFJ:UXE5:LNHB:FH7Q:SCWW:B2DB:2WWX
+Username: marcellodesales
+Registry: https://index.docker.io/v1/
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled```

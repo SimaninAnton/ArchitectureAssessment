@@ -1,0 +1,13 @@
+etki commented on 3 Apr 2017
+Hi.
+Currently i (and, i think, other people too) spend lot of time simply copy-pasting logging configuration to prevent log bloat:
+service_a:
+  logging:
+    max-file: '10'
+    max-size: 1mb
+service_b:
+  logging:
+    max-file: '10'
+    max-size: 1mb
+I think it would be cool to define logging options at compose-level to remove that burden. Extends functionality is somewhat close, but not exactly what's necessary (also it will launch service that is being used as template unless it is specified in another file - not good).
+1

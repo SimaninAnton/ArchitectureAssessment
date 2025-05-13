@@ -1,0 +1,7 @@
+McPo commented on 15 Apr 2019 •
+edited
+I wish to set environment variables for several containers within a compose file (using env_file). However as there are multiple deployments of the system, I wish to load the env_file from a directory sitting on the hosts file system (Which is interacted with using docker-machine ssh, ie ~/config/deployment.env). I also wish to be able to run docker-compose up -d from my client machine. Currently env_file only loads files from the clients machine, not the hosts (A "file does not exist error is returned").
+This is at odds with the way bind-mounts works. When giving a full path, it will bind to the hosts file system, when given a relative path it will bind to the clients file system. This behaviour should be replicated with env_file.
+At the moment I am now adding a custom entry-point to each image to source a file which is passed in using configs/bind-mounts, to get around this limitation.
+Cheers,
+Emmet

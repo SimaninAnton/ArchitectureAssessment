@@ -1,0 +1,21 @@
+ducnguyenhuy commented on 16 Aug 2017 •
+edited
+I want to create a data volumesrc to map to a directory /home/app in my container. The directory /home/app has data already and I should get a data volume src with same data as '/home/app'. But I was not lucky and I got an empty folder /home/app in my container. Below is volumes section in my docker-compose file:
+volumes: - ./src:/home/app
+Docker host is on MacOS and Docker version shows:
+`Client:
+Version: 17.06.0-ce
+API version: 1.30
+Go version: go1.8.3
+Git commit: 02c1d87
+Built: Fri Jun 23 21:31:53 2017
+OS/Arch: darwin/amd64
+Server:
+Version: 17.06.0-ce
+API version: 1.30 (minimum version 1.12)
+Go version: go1.8.3
+Git commit: 02c1d87
+Built: Fri Jun 23 21:51:55 2017
+OS/Arch: linux/amd64
+Experimental: true`
+And I'm creating a Docker compose version 1

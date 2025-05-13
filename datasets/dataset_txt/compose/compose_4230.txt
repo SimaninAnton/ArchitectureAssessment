@@ -1,0 +1,2 @@
+helander commented on 18 Aug 2014
+I have tried to run fig on Windows but it fails due to missing fcntl module. Is there some way to get fig working on Windows ?

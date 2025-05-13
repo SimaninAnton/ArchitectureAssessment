@@ -1,0 +1,39 @@
+dz0ny commented on 16 Jan 2014
+➤ sudo fig up
+Attaching to wp_mysql_1, wp_web_1
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.0.2', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 228, in up
+    log_printer = LogPrinter(containers)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/log_printer.py", line 15, in __init__
+    self.generators = self._make_log_generators()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/log_printer.py", line 28, in _make_log_generators
+    generators.append(self._make_log_generator(container, color_fn))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/log_printer.py", line 34, in _make_log_generator
+    websocket = self._attach(container)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/log_printer.py", line 47, in _attach
+    return container.attach_socket(params=params, ws=True)
+  File "/usr/local/lib/python2.7/dist-packages/fig/container.py", line 133, in attach_socket
+    return self.client.attach_socket(self.id, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 251, in attach_socket
+    return self._attach_websocket(container, params)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 217, in _attach_websocket
+    return self._create_websocket_connection(full_url)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 220, in _create_websocket_connection
+    return websocket.create_connection(url)
+  File "/usr/local/lib/python2.7/dist-packages/websocket.py", line 178, in create_connection
+    websock.connect(url, **options)
+  File "/usr/local/lib/python2.7/dist-packages/websocket.py", line 419, in connect
+    hostname, port, resource, is_secure = _parse_url(url)
+  File "/usr/local/lib/python2.7/dist-packages/websocket.py", line 141, in _parse_url
+    raise ValueError("scheme %s is invalid" % scheme)
+ValueError: scheme unix is invalid

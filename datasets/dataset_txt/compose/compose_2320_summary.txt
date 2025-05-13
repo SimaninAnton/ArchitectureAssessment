@@ -1,0 +1,1 @@
+Add support for "oom_score_adj" in manifest file

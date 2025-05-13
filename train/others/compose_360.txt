@@ -1,0 +1,61 @@
+NotSoShaby commented on 11 Dec 2018
+I have a jenkins job that builds all my docker images and pushes them to my docker hub. It then ssh to the server on which I want to deploy and runs docker-compose pull && docker-compose up.
+For some reason, this mechanism is not handling changes in the dockers well. I changed one of my requirements in one of the images. I can see in jenkins that it recognized the change and did not use the cache for that stage:
+    Step 16/33 : RUN ldconfig
+     ---> Using cache
+     ---> 15284e3997f6
+    Step 17/33 : ADD requirements.txt requirements.txt
+     ---> 1c2d81548e55
+    Step 18/33 : RUN pip install -r requirements.txt
+     ---> Running in 679034a149d4
+    Collecting alembic==0.9.5 (from -r requirements.txt (line 1))
+you can see here that step 16 was still using cache and step 17 did not. Which is working as expected.
+I then push the images:
+    -------------
+    Publishing Images
+    -------------
+    
+        Pushing base (<docker-hub-server>/base:latest)...
+        The push refers to repository [<docker-hub-server>/base].
+After that I ssh to the server and pull the image.
+The problem is that for some reason, the new image with the updated dependecies was not pushed for some reason.
+I tried removing all containers and images both in the jenkins server and in the destination server.
+This feels like is something is being cached incorrectly.
+After checking in jenkins, the right image is there, but still when I push it says that all layers already exist even though Step 16, 17 were changed.
+    The push refers to repository [<docker-hub-server>/base]
+    9430005e84f9: Preparing
+    48e6dda22a29: Preparing
+    972483a80c7c: Preparing
+    a534cbaa9205: Preparing
+    23b2691ba244: Preparing
+    0f29e137999a: Layer already exists
+    b154080f7784: Layer already exists
+    0c7778ab05f8: Layer already exists
+    b2a1e0120631: Layer already exists
+    a597ec0005e2: Layer already exists
+    a5dc291ad4b4: Layer already exists
+    c54dfcd94152: Layer already exists
+    3415f7db917e: Layer already exists
+    0c01967aaa96: Layer already exists
+    7f969e99b7b3: Layer already exists
+    45652f92e451: Layer already exists
+    4acd815bd647: Layer already exists
+    72a531f31293: Layer already exists
+    b9624af892c1: Layer already exists
+    3c0dc8487715: Layer already exists
+    d54136b410c5: Layer already exists
+    cc349f2a25e3: Layer already exists
+    b8b4502cfe14: Layer already exists
+    a2bc3f3bafb5: Layer already exists
+    db067458dfa6: Layer already exists
+    ccec44bf5310: Layer already exists
+    a1ae7010d9f9: Layer already exists
+    03a6b6877a9b: Layer already exists
+    ef68f6734aa4: Layer already exists
+Output of docker version
+docker-compose version 1.23.0, build c8524dc
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f 25 May 2017
+Additional information
+is there a way to forcefully push the image?

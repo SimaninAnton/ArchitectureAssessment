@@ -1,0 +1,25 @@
+vfarcic commented on 26 Apr 2016 •
+edited
+Is the new Swarm reschedule feature working with Docker Compose? If it is, what should be the syntax?
+I tried the following:
+docker-compose \
+    -f docker-compose-demo.yml \
+    -p books-ms \
+    up -d app
+
+docker-compose \
+    -f docker-compose-demo.yml \
+    -p books-ms \
+    scale app=3
+
+docker-machine rm -f swarm-node-2
+
+docker logs swarm-agent-master
+The logs output is:
+time="2016-04-26T01:50:41Z" level=info msg="Removed Engine swarm-node-2" 
+time="2016-04-26T01:50:41Z" level=info msg="Rescheduled container 25384fd14b052c67066c4073ca990205c402c3c6450cae642a624b78c0f1eb62 from swarm-node-2 to swarm-node-1 as 554576586a25ed1e1cb2282e9139e84e38b8d8b9704db92c7fd7d9d53a200f78" 
+time="2016-04-26T01:50:41Z" level=info msg="Container 25384fd14b052c67066c4073ca990205c402c3c6450cae642a624b78c0f1eb62 was running, starting container 554576586a25ed1e1cb2282e9139e84e38b8d8b9704db92c7fd7d9d53a200f78" 
+time="2016-04-26T01:50:41Z" level=error msg="Failed to start rescheduled container 554576586a25ed1e1cb2282e9139e84e38b8d8b9704db92c7fd7d9d53a200f78: 500 Internal Server Error: service endpoint with name booksms_app_3 already exists\n" 
+time="2016-04-26T01:51:02Z" level=error msg="HTTP error: No such container booksms_app_4" status=404 
+The compose file is in https://gist.github.com/vfarcic/02cf5809efe84b82c9ca73180b50c66f .
+2

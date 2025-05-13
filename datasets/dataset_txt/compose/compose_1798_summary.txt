@@ -1,0 +1,1 @@
+Failed healthcheck raises uncaught exception and kills execution.

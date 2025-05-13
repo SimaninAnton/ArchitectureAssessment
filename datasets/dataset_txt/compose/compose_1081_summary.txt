@@ -1,0 +1,1 @@
+Feature request docker-compose up to check if build's Dockerfile is newer than image

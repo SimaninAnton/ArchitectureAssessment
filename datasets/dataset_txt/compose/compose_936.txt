@@ -1,0 +1,6 @@
+louisgjohnson commented on 15 Jan 2018
+I'm not sure if this is a docker issue or Raiblocks issue but when I try and run this command on my mac I get this error:
+docker: Error response from daemon: driver failed programming external connectivity on endpoint sharp_perlman (afe5756707e492b061ed6e855e9eadb47bdfd2de84987e97747927fde0152d1e): Error starting userland proxy: port is not a proto:IP:port: 'tcp:[:'.
+I've also tried running this command on another mac I own and I got the exact same error.
+The command I've been running is:
+sudo docker run -d -p 7075:7075/udp -p 7075:7075 -p [::1]:7076:7076 -v ~:/root clemahieu/rai_node /rai_node --daemon

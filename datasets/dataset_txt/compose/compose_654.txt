@@ -1,0 +1,22 @@
+alwinaugustin commented on 23 May 2018 •
+edited
+I am trying to create a MySQL container inside Jenkins pipeline using Docker Compose . I run the following command after installing docker-compose version 1.9.0
+docker-compose -f ./jenkins/docker-compose.yml run -rm' redis
+and my compose file looks like
+version: '2.1'
+services:
+redis:
+image: "redis:alpine"
+When running this I am getting the error as follows :
+docker-compose $'\342\200\223f' ./jenkins/docker-compose.yml run $'\342\200\223rm' redis
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 62, in main
+  File "compose/cli/main.py", line 93, in dispatch
+  File "compose/cli/docopt_command.py", line 31, in parse
+  File "compose/cli/docopt_command.py", line 42, in get_handler
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+docker-compose returned -1
+How to fix this ?
+Output of "docker-compose version" 1.19.0
+Output of "docker version"  18.03.1-ce-mac65 (24312)

@@ -1,0 +1,9 @@
+c0b commented on 18 Jul 2017
+I'm designing a docker-compose deployment which contains one web service and multiple workers, use like docker-compose up --scale worker=3 -d to deploy one web service and 3 workers; the workers are running some special application would better have hostname distinct from each other, so it would be ideal to have something like index number of scale when it's loop creating the 3 workers,
+web:
+   ...
+
+worker:
+   ...
+   hostname: worker${SCALE_NUMBER_INDEX}-${OTHER}.local
+please let me know if this is already supported, or any workaround would also be appreciated

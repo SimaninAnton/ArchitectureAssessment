@@ -1,0 +1,7 @@
+aschatten commented on 22 Dec 2017
+Right now, if a compose file references an undefined environment variable, docker-compose prints a warning and defaults it's value to an empty string, as described here.
+This may not always be the desired approach and can mask a failure in continuous deployment environment.
+I think there are 2 backward compatible ways to address this:
+Add a option to enable strict config validation. E.g. docker-compose config --strict
+Add support for ${VARIABLE?err_msg} and ${VARIABLE:?err_msg} substitution syntax.
+7

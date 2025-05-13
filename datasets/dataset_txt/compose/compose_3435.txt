@@ -1,0 +1,5 @@
+codl commented on 27 Jul 2015
+If my docker-compose.yml contains a volume that is a single file being mounted over a file that already exists in the image, it fails with the error "cannot mount volume over existing file, file exists"
+However I can do the same thing from docker run and it starts up just fine
+Also this used to work fine a few months ago
+1

@@ -1,0 +1,259 @@
+estenrye commented on 9 Mar 2018
+Issue
+docker-compose config reformats /var/run/docker.sock as \var\run\docker.sock in the source field of the long-form volume declaration syntax. On machines running Docker For Windows with linux containers enabled, this impacts the ability to use docker-compose config to merge compose files for deploying stacks that require a bind mount to the docker daemon socket.
+Steps to Reproduce ( Long-form Syntax )
+stack.base.yml
+version: "3.4"
+services:
+  traefik:
+    image: traefik
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: ingress
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: ingress
+stack.env.yml
+version: "3.4"
+services:
+  traefik:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      update_config:
+        failure_action: rollback
+        monitor: 30s
+        order: start-first
+execute the following commands ( Long-form Syntax )
+docker-compose -f .\stack.base.yml -f .\stack.env.yml config > deploy.stack.yml
+docker stack deploy -c .\deploy.stack.yml traefik
+docker service ps traefik_traefik --no-trunc
+Expected Output ( Long-form Syntax )
+deploy.stack.yml
+services:
+  traefik:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+        - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      update_config:
+        failure_action: rollback
+        monitor: 30s
+        order: start-first
+    image: traefik
+    ports:
+    - mode: ingress
+      protocol: tcp
+      published: 80
+      target: 80
+    - mode: ingress
+      protocol: tcp
+      published: 8080
+      target: 8080
+    volumes:
+    - source: /var/run/docker.sock
+      target: /var/run/docker.sock
+      type: bind
+version: '3.4'
+expected output of commands:
+An instance of traefik should be running on every manager instance of the swarm.
+Actual Output: ( Long-form Syntax )
+deploy.stack.yml
+services:
+  traefik:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+        - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      update_config:
+        failure_action: rollback
+        monitor: 30s
+        order: start-first
+    image: traefik
+    ports:
+    - mode: ingress
+      protocol: tcp
+      published: 80
+      target: 80
+    - mode: ingress
+      protocol: tcp
+      published: 8080
+      target: 8080
+    volumes:
+    - source: \var\run\docker.sock
+      target: /var/run/docker.sock
+      type: bind
+version: '3.4'
+Actual output from commands:
+> docker service ps traefik_traefik --no-trunc
+ID                          NAME                                            IMAGE                                                                                    NODE                    DESIRED STATE       CURRENT STATE                 ERROR                                                                     PORTS
+idj2ik8jzkxtrhhajyw8ovj1p   traefik_traefik.hxhznlefwub35xdmjoqha1x1v       traefik:latest@sha256:d277007b55a8a8d972b1983ef11387d05f719821a2d2e23e8fa06ac5081a302f   linuxkit-00155d555a01   Ready               Rejected 3 seconds ago        "invalid mount config for type "bind": bind source path does not exist"
+zrk3qwed7e4ag4zkr11k2hmy0    \_ traefik_traefik.hxhznlefwub35xdmjoqha1x1v   traefik:latest@sha256:d277007b55a8a8d972b1983ef11387d05f719821a2d2e23e8fa06ac5081a302f   linuxkit-00155d555a01   Shutdown            Rejected about a minute ago   "invalid mount config for type "bind": bind source path does not exist"
+zooqyww4eprosbr77rt9ixpzl    \_ traefik_traefik.hxhznlefwub35xdmjoqha1x1v   traefik:latest@sha256:d277007b55a8a8d972b1983ef11387d05f719821a2d2e23e8fa06ac5081a302f   linuxkit-00155d555a01   Shutdown            Rejected 3 minutes ago        "invalid mount config for type "bind": bind source path does not exist"
+zq9ort5zh0vc2le7dfnupmuc0    \_ traefik_traefik.hxhznlefwub35xdmjoqha1x1v   traefik:latest@sha256:d277007b55a8a8d972b1983ef11387d05f719821a2d2e23e8fa06ac5081a302f   linuxkit-00155d555a01   Shutdown            Rejected 3 minutes ago        "invalid mount config for type "bind": bind source path does not exist"
+zr4sfachvinnfhkbaaqffof8t    \_ traefik_traefik.hxhznlefwub35xdmjoqha1x1v   traefik:latest@sha256:d277007b55a8a8d972b1983ef11387d05f719821a2d2e23e8fa06ac5081a302f   linuxkit-00155d555a01   Shutdown            Rejected 3 minutes ago        "invalid mount config for type "bind": bind source path does not exist"
+zqaj5vl7nk05l52092zpbhrxy    \_ traefik_traefik.hxhznlefwub35xdmjoqha1x1v   traefik:latest@sha256:d277007b55a8a8d972b1983ef11387d05f719821a2d2e23e8fa06ac5081a302f   linuxkit-00155d555a01   Shutdown            Rejected 5 minutes ago        "invalid mount config for type "bind": bind source path does not exist"
+Steps to Reproduce ( Short-form Syntax )
+stack.base.yml
+version: "3.4"
+services:
+  traefik:
+    image: traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: ingress
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: ingress
+stack.env.yml
+version: "3.4"
+services:
+  traefik:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      update_config:
+        failure_action: rollback
+        monitor: 30s
+        order: start-first
+execute the following commands:
+docker-compose -f .\stack.base.yml -f .\stack.env.yml config > deploy.stack.yml
+docker stack deploy -c .\deploy.stack.yml traefik
+Expected Output: ( Short-form Syntax )
+deploy.stack.yml
+services:
+  traefik:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+        - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      update_config:
+        failure_action: rollback
+        monitor: 30s
+        order: start-first
+    image: traefik
+    ports:
+    - mode: ingress
+      protocol: tcp
+      published: 80
+      target: 80
+    - mode: ingress
+      protocol: tcp
+      published: 8080
+      target: 8080
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+version: '3.4'
+Expected output from commands
+C:\Source> docker stack deploy -c .\deploy.stack.yml traefik
+Creating network traefik_default
+Creating service traefik_traefik
+An instance of traefik should be running on each manger node.
+Actual Output ( Short-form Syntax )
+deploy.stack.yml
+services:
+  traefik:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+        - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      update_config:
+        failure_action: rollback
+        monitor: 30s
+        order: start-first
+    image: traefik
+    ports:
+    - mode: ingress
+      protocol: tcp
+      published: 80
+      target: 80
+    - mode: ingress
+      protocol: tcp
+      published: 8080
+      target: 8080
+    volumes:
+    - \var\run\docker.sock:/var/run/docker.sock:rw
+version: '3.4'
+Actual ouptut from commands:
+C:\Source> docker stack deploy -c .\deploy.stack.yml traefik
+Creating network traefik_default
+service traefik: undefined volume "\\var\\run\\docker.sock"
+Docker Version
+PS C:\source> docker version
+Client:
+ Version:       17.12.0-ce
+ API version:   1.35
+ Go version:    go1.9.2
+ Git commit:    c97c6d6
+ Built: Wed Dec 27 20:05:22 2017
+ OS/Arch:       windows/amd64
+
+Server:
+ Engine:
+  Version:      17.12.0-ce
+  API version:  1.35 (minimum version 1.12)
+  Go version:   go1.9.2
+  Git commit:   c97c6d6
+  Built:        Wed Dec 27 20:12:29 2017
+  OS/Arch:      linux/amd64
+  Experimental: true
+Docker-Compose Version
+PS C:\source> docker-compose version
+docker-compose version 1.19.0, build 9e633ef3
+docker-py version: 2.7.0
+CPython version: 2.7.14
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Observations
+Source field of volume long-form syntax is being reformatted to use the windows path separator \ instead of the linux path separator / specified in the compose file.
+Short-form volume syntax is also impacted with the same behavior.
+Possibly related issue: #5716

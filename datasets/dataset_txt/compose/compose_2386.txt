@@ -1,0 +1,4 @@
+nschoe commented on 18 May 2016
+When we create and start services containers with either docker-compose up or docker-compose start it creates a custom network, whose name is xxx_default with xxx being the current directory or the value of -p | --project-name.
+But apparently, it doesn't do that for docker-compose create.
+Have I missed a step, is this deliberate or is it a bug?

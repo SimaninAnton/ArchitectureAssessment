@@ -1,0 +1,3 @@
+cy8aer commented on 18 Mar 2015
+This would be a nice feature for creating and deploying of containers on a different (development) machine than the productive ones (which may run via image: option)
+61

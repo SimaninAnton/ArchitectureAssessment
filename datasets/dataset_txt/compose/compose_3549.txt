@@ -1,0 +1,8 @@
+moxiegirl commented on 20 Jun 2015
+Port https://github.com/docker/docs-base/issues/43 to here.
+Here: http://docs.docker.com/compose/
+it says "daemon mode" to the -d flag.
+in the cli reference it refers to it as "detached mode":
+image
+I believe the correct and accurate one is "detached mode".
+ping @ahmetalpbalkan original reporter

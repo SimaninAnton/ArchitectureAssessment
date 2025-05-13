@@ -1,0 +1,19 @@
+unhashable commented on 23 Aug 2014
+Let's say you have a test suite which is normally kicked off with the script testsuite.sh, in a container named web.
+With fig, you could call that with run like so:
+fig run web testsuite.sh
+And that works fine. But image being able to do the following:
+fig tests
+That would be just swell, and fig could internally call testsuite.sh on the web container.
+I imagine something like so in fig.yml that lets you configure these run aliases.
+web:
+  build: .
+  command: python run.py
+  ports:
+   - "5000:5000"
+  volumes:
+   - .:/code
+  run_aliases:
+    tests: testsuite.sh
+In the above example a tests command is defined in the run_aliases section of the web container. If another container defined an alias with the same name, an error would occur. Another note is that all the fig commands would be reserved, naturally.
+Thoughts?

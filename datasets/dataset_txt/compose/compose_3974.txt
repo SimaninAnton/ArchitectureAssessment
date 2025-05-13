@@ -1,0 +1,3 @@
+wernight commented on 26 Jan 2015
+fig seems to use another temporary directory than Docker. Docker's temp can be customized because the files are really large and most of my web servers have a small /tmp.
+I'd suggest to add an option to customize the temporary directory used by fig; or use the same as Docker.

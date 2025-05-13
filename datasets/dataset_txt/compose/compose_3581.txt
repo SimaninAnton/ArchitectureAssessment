@@ -1,0 +1,40 @@
+iMerica commented on 7 Jun 2015
+I saw this using Docker Compose while pulling an image earlier:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 208, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 214, in recreate_containers
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 199, in create_container
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 37, in stream_output
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 50, in print_output_event
+compose.progress_stream.StreamOutputError: Error pulling image (latest) from sebp/elk, HTTP code 400
+On regular Docker the error state is handled more gracefully:
+❯ docker pull sebp/elk                                                                                                             local_dev_plus/git/mikev +
+Pulling repository sebp/elk
+584f2553cde2: Error pulling image (latest) from sebp/elk, HTTP code 400 
+511136ea3c5a: Download complete 
+53f858aaaf03: Download complete 
+837339b91538: Download complete 
+615c102e2290: Download complete 
+b39b81afc8ca: Download complete 
+8254ff58b098: Download complete 
+ec5f59360a64: Download complete 
+2ce4ac388730: Download complete 
+2eccda511755: Download complete 
+5a14c1498ff4: Download complete 
+4c3000ef1d27: Download complete 
+4ef2cecf47ef: Download complete 
+a99d12d3e633: Download complete 
+8a761ce510ae: Download complete 
+ed7dfbbbeca0: Download complete 
+7b3fa873e22c: Download complete 
+743c7b01445d: Download complete 
+ea748274d37b: Download complete 
+e26b4e55630d: Error pulling dependent layers 
+FATA[0064] Error pulling image (latest) from sebp/elk, HTTP code 400 

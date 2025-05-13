@@ -1,0 +1,28 @@
+lsanders commented 9 days ago •
+edited
+Description of the issue
+The tagging naming scheme changed with 1.24.2. Was this intended? This may break some automation (it did for me).
+Context information (for bug reports)
+This isn't a bug, but I thought I'd report it since it seems that bootstraping via curl is fairly common. We had startup scripts like this:
+export latest_stable_compose=`git ls-remote https://github.com/docker/compose | grep refs/tags | grep -oP "[0-9]+\.[0-9][0-9]+\.[0-9]+$" | tail -n 1`
+sudo curl -L https://github.com/docker/compose/releases/download/${latest_stable_compose}/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compos
+That we probably snagged from some other example. In order to fix for our purposes, it was just a small change to the regex to optional consider leading v (v*):
+export latest_stable_compose=`git ls-remote https://github.com/docker/compose | grep refs/tags | grep -oP "v*[0-9]+\.[0-9][0-9]+\.[0-9]+$" | tail -n 1`
+Output of docker-compose version
+docker-compose version 1.25.2, build 698e2846
+docker-py version: 4.1.0
+CPython version: 3.7.5
+OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
+Output of docker version
+n/a
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+n/a
+Steps to reproduce the issue
+Automate docker-compose download with semver like regex, not considering v prefix
+Observed result
+Automation fails - docker-compose not downloaded
+Expected result
+docker-compose downloaded
+2

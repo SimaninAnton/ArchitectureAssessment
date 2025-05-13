@@ -1,0 +1,1 @@
+volumes: in docker-compose.yml error with invalid type or invalid volume error on Windows Server 2016 TP4

@@ -1,0 +1,1 @@
+Merge `fields_schema_vx.json` and `service_schema_vx.json`

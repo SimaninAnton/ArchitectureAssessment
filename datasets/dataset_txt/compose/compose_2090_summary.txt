@@ -1,0 +1,1 @@
+`docker-compose bundle` failed with ERROR: Some images are missing digests.

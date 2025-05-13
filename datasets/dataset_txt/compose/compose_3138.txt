@@ -1,0 +1,51 @@
+Contributor
+aanand commented on 4 Nov 2015
+Various types of invalid configuration in override files (i.e. docker-compose.override.yml, or any file passed in via -f after the first one) result in stack traces, rather than validation errors.
+Non-dictionary service entries:
+$ cat docker-compose.override.yml
+web: asdf
+
+$ docker-compose up
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/compose/cli/main.py", line 54, in main
+  File "/compose/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/compose/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/compose/compose/cli/main.py", line 168, in perform_command
+  File "/compose/compose/cli/command.py", line 54, in project_from_options
+  File "/compose/compose/cli/command.py", line 90, in get_project
+  File "/compose/compose/config/config.py", line 210, in load
+  File "/compose/compose/config/config.py", line 200, in merge_services
+  File "/compose/compose/config/config.py", line 200, in <dictcomp>
+  File "/compose/compose/config/config.py", line 364, in merge_service_dicts_from_files
+  File "/compose/compose/config/config.py", line 404, in merge_service_dicts
+AttributeError: 'str' object has no attribute 'get'
+docker-compose returned -1
+Invalid option values:
+$ cat docker-compose.override.yml
+web:
+  ports: 3
+
+$ docker-compose up
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/compose/cli/main.py", line 54, in main
+  File "/compose/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/compose/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/compose/compose/cli/main.py", line 168, in perform_command
+  File "/compose/compose/cli/command.py", line 54, in project_from_options
+  File "/compose/compose/cli/command.py", line 90, in get_project
+  File "/compose/compose/config/config.py", line 210, in load
+  File "/compose/compose/config/config.py", line 200, in merge_services
+  File "/compose/compose/config/config.py", line 200, in <dictcomp>
+  File "/compose/compose/config/config.py", line 364, in merge_service_dicts_from_files
+  File "/compose/compose/config/config.py", line 404, in merge_service_dicts
+TypeError: can only concatenate list (not "int") to list
+docker-compose returned -1
+Invalid option keys are ignored, rather than raising an error:
+$ cat docker-compose.override.yml
+web:
+  nonsense: option
+
+$ docker-compose up
+...command runs as usual...

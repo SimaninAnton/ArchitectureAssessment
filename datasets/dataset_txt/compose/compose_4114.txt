@@ -1,0 +1,8 @@
+aaronabramov commented on 10 Nov 2014
+whenever i mount a directory to my local host filesystem and run fig up with watch command my CPU usage goes to 200%
+config looks like:
+volumes:
+  - "./:/src"
+command: /bin/sh -c "cd /src && ./watch_files"
+however if i don't mount the directory and just copy files in there everything looks fine
+i'm trying to use it for node applications development and basically watch all src files for changes and restart server / rebundle assets on every change

@@ -1,0 +1,85 @@
+salterping commented on 28 Nov 2017 •
+edited by shin-
+docker-composer.yml
+version: "2"
+services:
+  web:
+    image: nginx:1.13.7
+    ports:
+      - 80:80
+    depends_on:
+      - php
+    volumes_from:
+      - php
+    volumes:
+      - ./images/nginx/conf.d:/etc/nginx/conf.d/:ro
+
+  php:
+    image: php:7.2-rc-fpm
+    volumes:
+      - ./hyaf:/service/hyaf
+      - ./images/php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    ports:
+      - 9000:9000
+  database:
+    user: "1000:50"
+    image: mysql:5.7.20
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "test123"
+      MYSQL_USER: "dev"
+      MYSQL_PASSWORD: "test123"
+    volumes:
+      - ./database:/var/lib/mysql
+  redis:
+    image: redis:3.2.11
+nginx.conf
+server {
+        listen 80;
+        server_name www.test.com;
+        charset UTF-8;
+
+        location ~ ^/ui/ {
+            root /service/hyaf/view/v5;
+        }
+
+        location ~ ^/(dist\/|img\/|css\/|css_v32\/|css_v4\/|css_v5\/|js\/|js_v32\/|js_v4\/|js_v5\/|css_qn\/|js_qn\/|img_v4\/|img_v5) {
+            root /service/hyaf/view;
+        }
+
+        location ~ /views/.*\.html {
+           root /service/hyaf/view;
+        }
+
+        location / {
+            root /service/hyaf/www;
+            index index.html index.php;
+            if (!-e $request_filename) {
+                rewrite .* /index.php last;
+            }
+        }
+
+        location ~ \.php$ {
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  /service/hyaf/www$fastcgi_script_name;
+                include        fastcgi_params;
+           }
+    }
+
+www-config
+[www]
+user = www-data
+group = www-data
+listen.owner = www-data
+listen.group = www-data
+listen.mode = 0777
+listen.allowed_clients = 127.0.0.1
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+listen = 127.0.0.1:9000
+how to process? the error connect() failed (111: Connection refused) while connecting to upstream

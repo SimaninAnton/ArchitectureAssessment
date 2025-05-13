@@ -1,0 +1,14 @@
+zinking commented on 24 Dec 2015
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 5, in
+from pkg_resources import load_entry_point
+File "/usr/lib/python2.6/site-packages/pkg_resources.py", line 2655, in
+working_set.require(requires)
+File "/usr/lib/python2.6/site-packages/pkg_resources.py", line 648, in require
+needed = self.resolve(parse_requirements(requirements))
+File "/usr/lib/python2.6/site-packages/pkg_resources.py", line 546, in resolve
+raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: jsonschema>=2.5.1,<3
+[]$ pip list | grep json
+jsonschema (2.5.1)
+using python 2.6 on centos

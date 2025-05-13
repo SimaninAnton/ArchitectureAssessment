@@ -1,0 +1,48 @@
+mvasin commented on 19 Dec 2016 •
+edited
+I try my best to dockerize multiple wordpress sites on a single host.
+I have an nginx container with port 80 published to host. It proxy_pass'es connections to appropriate containers based on "wordpress:php7.0-apache".
+I want to be able to add wordpress sites with SITE=example.com docker-compose up, using the same docker-compose.yaml sitting in the same directory.
+I have an external nginx_network that every "wordpress" container communicates to and ${SITE} network for communication exclusively between an each pair of "mysql" and "wordpress" containers.
+Here's the docker-compose.yaml:
+version: '2'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - /var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: wordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress
+     networks:
+       - ${SITE}
+
+   wordpress:
+     depends_on:
+       - db
+     image: wordpress:php7.0-apache
+     volumes:
+       - /var/www/html/
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_PASSWORD: wordpress
+     networks:
+       - ${SITE}
+       - nginx_network
+
+networks:
+  ${SITE}:
+  nginx_network:
+    external: true
+It must have been love so convenient, but
+networks:
+  ${SITE}:
+from the bottom of docker-compose.yaml isn't resolved to example.com. Why?
+I didn't find in the docs that it should be the case, that's why I open this issue.
+UPDATE:
+This crutch sed 's/\${SITE}/example.com/g' docker-compose.yaml | docker-compose -f - up kind of works, but maybe there is a better solution.

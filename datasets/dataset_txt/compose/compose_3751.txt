@@ -1,0 +1,8 @@
+stefanfoulis commented on 4 Apr 2015
+This used to work with fig, but no longer seems to work in docker-compose==1.2.0rc3:
+myservice:
+  volumes:
+    - ${DOCKER_CERT_PATH}:/certs
+DOCKER_CERT_PATH contains an absolute path to a directory (e.g /Users/me/.boot2docker/certs/boot2docker-vm).
+Instead of mounting that, it will make it relative to the directory of the docker-compose.yml file.
+Probably the code checks somewhere if it starts with / before expanding the variable, since setting it to - /${DOCKER_CERT_PATH}:/certs works.

@@ -1,0 +1,44 @@
+fsamir commented on 2 Oct 2016 •
+edited
+Hi,
+docker-compose started adding a trailing hyphen to both host and container hostnames, after I switched to docker-compose V2 file format and network_mode: "host"
+The original host's hostname is "foo" and docker compose changes it to "foo-"
+I would like to keep the container's hostname same as the host. Is it possible?
+Here is my docker-compose.yml
+version: '2'
+services:
+  web:
+    image: <mi image>
+    command: node server.js
+    ports:
+      - 80:80
+    container_name: somename
+    restart: "always"
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+      - PORT=80
+    network_mode: "host"
+    devices:
+        - "/dev/ttyUSB0:/dev/ttyUSB0"
+        - "/dev/mem:/dev/mem"
+    privileged: true
+    cap_add:
+      - ALL
+    tty: true
+    volumes:
+      - .:/usr/src/app
+  db:
+    image: cretzel/rpi-mongodb
+    container_name: mongodb
+    restart: "always"
+    ports:
+      - 27017
+    network_mode: "host"
+    volumes:
+      - /var/data/db:/data/db
+docker -v
+Docker version 1.12.1, build 6f9534c
+docker-compose -v
+docker-compose version 1.8.0, build f3628c7

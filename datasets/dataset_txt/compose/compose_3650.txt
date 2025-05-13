@@ -1,0 +1,12 @@
+icy commented on 14 May 2015
+I need to mount a host directory as different mount points in the container. However, docker-compose only mount the last entry of the list of volumes that have the same source.
+Example:
+db:
+  image: "icy/supervisor"
+  restart: always
+  volumes:
+  - "/tmp:/tmp1/"
+  - "/tmp:/tmp2/"
+Expected result: Any file from host directory (e.g. /tmp/foobar.txt) should appear in both /tmp2 and /tmp1 directories in the container;
+Actual result: Inside the container, I can see /tmp1 and /tmp2, but the contents are actually in /tmp2/, there isn't any file in /tmp1.
+Please note that there isnt' any problem when using pure docker command for mounting, e.,g docker run -v /tmp:/tmp1 -v /tmp:/tmp2

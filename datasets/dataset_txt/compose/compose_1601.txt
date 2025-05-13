@@ -1,0 +1,22 @@
+a1exus commented on 13 Mar 2017
+I followed Install as a container and while running docker-compose ps, I'm getting following error:
+# docker-compose ps
+ERROR: client and server don't have same version (client : 1.21, server: 1.18)
+# docker-compose version
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+# docker version
+Client version: 1.6.2
+Client API version: 1.18
+Go version (client): go1.3.3
+Git commit (client): 7c8fca2
+OS/Arch (client): linux/amd64
+Server version: 1.6.2
+Server API version: 1.18
+Go version (server): go1.3.3
+Git commit (server): 7c8fca2
+OS/Arch (server): linux/amd64
+# 
+Please advise.

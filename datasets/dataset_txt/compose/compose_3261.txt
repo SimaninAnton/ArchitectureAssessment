@@ -1,0 +1,28 @@
+mackeyja92 commented on 28 Sep 2015
+Greetings,
+This may already be being taken care of with some of the networking changes in the upcoming docker releases, however I feel it is worth putting on here. The problem is with apps that have to scale and connect back to themselves for clustering purposes. For example, rabbitmq clustering all nodes need to connect to each other for a cluster. The nodes that cannot connect will not be apart of the cluster. The problem is that links do not get created without making massive amounts of duplication in the docker-compose.yml. Eg rabbitmq1, rabbitmq2, rabbitmq3, rabbitmq4 ....
+For example, if I have a configuration like this:
+mastermq:
+  restart: always
+  ports:
+    - "9001:15672"
+    - "5672"
+  volumes:
+    - /var/lib/rabbitmq
+  environment:
+    - CLUSTERED=true
+
+slavemq:
+  restart: always
+  ports:
+    - "5672"
+  volumes:
+    - /var/lib/rabbitmq
+  environment:
+    - CLUSTERED=true
+    - CLUSTER_WITH=rabbitmq
+  links:
+    - mastermq:rabbitmq
+When I docker-compose scale slavemq=5, only one of them connects to the master and the rest are failing due to not being able to connect to the first instance slavemq.
+IMO a quick fix would be something along these lines docker-compose scale slavemq=5 --interlink. Or even allowing links to self in the yml file. Either way, this is really quite frustrating to me.
+Quick note: As a newcomer to the docker world, networking seems to be the most difficult thing to grasp.

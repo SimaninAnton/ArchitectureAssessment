@@ -1,0 +1,4 @@
+pandyamarut commented on 10 Oct 2018
+when i'm Giving this cmd = docker-compose run web /bin/bash
+I'm getting the below mentioned error.
+ERROR: Cannot start service web: OCI runtime create failed: container_linux.go:348: starting container process caused "exec: "/bin/bash": stat /bin/bash: no such file or directory": unknown

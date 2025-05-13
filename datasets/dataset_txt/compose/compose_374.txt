@@ -1,0 +1,49 @@
+zefexdeveloper commented on 2 Dec 2018 •
+edited
+I have setup a monorepo using lerna and yarn workspaces and I can easily config the env_file for each service I want, the thing is, for example:
+version: "3.7"
+services:
+  postgres:
+    image: postgres:11.1
+    ports:
+      - 5432:5432
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+
+  server:
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile.dev
+    ports:
+      - $GRAPHQL_PORT:$GRAPHQL_PORT
+    depends_on:
+      - postgres
+    volumes:
+      - ./packages/server:/usr/src/app/packages/server
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+    command: yarn start
+
+volumes:
+  pg-data:
+As you can see I have the variables for the database (DB_NAME) and also for the the server (GRAPHQL_PORT). I wanted to create a .env for server and one for the root with general variables for things like the database.
+The problem:
+docker-compose -f docker-compose.dev.yml up --build
+It will read the .env in the root directory for filling the docker-compose.dev.yml and so I was wondering:
+I can use -f to separate the docker compose files but if I create another .env inside the server directory it won't read the .env for that folder (with the server variables) and also the .env in the root for database variables.
+It would be something like that:
+├── packages
+├── ├── server
+├── ├── docker-compose.dev.yml
+├── ├── .env
+├── ├── .Dockerfile.dev
+├── .env
+├── docker-compose.dev.yml
+and in order to run: docker-compose -f docker-compose.dev.yml -f ./packages/server/docker-compose.env.yml up --build
+it works ONLY if the root .env has variables for both server and database, but if I put the server variables in the .env on the server folder the docker compose won't load that .env for the server and will throw me an error saying that the variable wans't set and is empty.
+Is there a way to accomplish that or I really have to have one .env in the root for everything or I can separate my .env (how)?

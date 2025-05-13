@@ -1,0 +1,153 @@
+jamiejackson commented on 30 Nov 2018
+Description of the issue
+docker-compose up fails with failed to get network during CreateEndpoint: network unzbmauxmu30vz2spqkj7gk47 not found
+This is similar to #5745, but in my case, the network does exist.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:48:22 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:19:08 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  hudx_dev_web:
+    attachable: true
+    driver: overlay
+  hudx_test1_web:
+    attachable: true
+    driver: overlay
+  hudx_test2_web:
+    attachable: true
+    driver: overlay
+secrets:
+  site_ssl_private_key:
+    file: /home/docker/secrets/common/star.mydomain.key
+    name: site_ssl_private_key-70
+services:
+  reverse-proxy:
+    build:
+      context: /home/jenkins/jenkins_slave/workspace/Launch Reverse-Proxy/checkout/web-reverse-proxy/build
+    container_name: reverse-proxy
+    environment:
+      SSL_POLICY: Mozilla-Modern
+    image: custom_reverse_proxy-70
+    labels:
+      permanent: "true"
+    networks:
+      hudx_dev_web: null
+      hudx_test1_web: null
+      hudx_test2_web: null
+    ports:
+    - published: 80
+      target: 80
+    - published: 443
+      target: 443
+    restart: unless-stopped
+    secrets:
+    - source: site_ssl_private_key
+      target: /etc/nginx/certs/mydomain.key
+    volumes:
+    - /home/docker/configs/common/star.mydomain.crt:/etc/nginx/certs/mydomain.crt:ro
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+version: '3.6'
+Steps to reproduce the issue
+Create a non-swarm container (an nginx reverse proxy that lets discriminates port 80 and 443 traffic by host name and proxies to downstream services) that sets up overlay networks which are used later by swarm services (downstream web apps running on various ports).
+Bring up one of those swarm services.
+Re-run docker-compose up on the non-swarm container.
+Observed result
+Compose throws the aforementioned error. However, the network it's complaining about does exist:
+$ docker network inspect unzbmauxmu30
+[
+    {
+        "Name": "reverse_proxy_hudx_test2_web",
+        "Id": "unzbmauxmu30vz2spqkj7gk47",
+        "Created": "2018-11-29T16:46:32.779495866Z",
+        "Scope": "swarm",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "10.0.2.0/24",
+                    "Gateway": "10.0.2.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": null,
+        "Options": {
+            "com.docker.network.driver.overlay.vxlanid_list": "4099"
+        },
+        "Labels": {
+            "com.docker.compose.network": "hudx_test2_web",
+            "com.docker.compose.project": "reverse_proxy",
+            "com.docker.compose.version": "1.21.2"
+        }
+    }
+]
+Expected result
+I'd expect subsequent docker-compose ups to work.
+Stacktrace / full error message
+Running in /home/jenkins/jenkins_slave/workspace/Launch Reverse-Proxy
+[Pipeline] {
+[Pipeline] sh
++ docker-compose -f artifacts/docker-compose-composite.yml -p reverse_proxy up --build -d
+The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use `docker stack deploy`.
+
+Building reverse-proxy
+Step 1/4 : FROM jwilder/nginx-proxy
+ ---> 1e3c23efda58
+Step 2/4 : COPY ./conf/nginx.tmpl.patch /tmp/
+ ---> Using cache
+ ---> 8101788c19f9
+Step 3/4 : COPY ./conf/client_max_body_size.conf /etc/nginx/conf.d/
+ ---> Using cache
+ ---> db63fe0dda6d
+Step 4/4 : RUN apt-get update &&   apt-get install -y patch &&   patch < /tmp/nginx.tmpl.patch &&   apt-get remove patch -y &&   apt-get autoremove &&   apt-get clean &&   rm -rf /var/lib/apt/lists/*
+ ---> Using cache
+ ---> 6edcee5dee80
+
+Successfully built 6edcee5dee80
+Successfully tagged custom_reverse_proxy-71:latest
+Recreating reverse-proxy ... 
+�[1A�[2K
+Recreating reverse-proxy ... �[31merror�[0m
+�[1B
+ERROR: for reverse-proxy  Cannot start service reverse-proxy: failed to get network during CreateEndpoint: network unzbmauxmu30vz2spqkj7gk47 not found
+
+ERROR: for reverse-proxy  Cannot start service reverse-proxy: failed to get network during CreateEndpoint: network unzbmauxmu30vz2spqkj7gk47 not found
+Encountered errors while bringing up the project.
+Additional information
+CentOS Linux release 7.5.1804 (Core) in AWS EC2.

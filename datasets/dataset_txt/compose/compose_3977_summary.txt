@@ -1,0 +1,1 @@
+Drop intermediate container and use renaming instead

@@ -1,0 +1,24 @@
+maneamarius commented on 17 Feb 2017
+Hello,
+When running "docker-compose down" from a different folder than the one originally used to run "docker-compose up", it will fail.
+It seems that it creates a network name with hardcoded folder name, which is bad design.
+Please see below example, showing it works while I am in folder1, but if I rename the folder to folder2, it doesn't work anymore.
+regards,
+Marius
+bash-4.2$ docker-compose up -d
+Creating network "folder1_default" with the default driver
+Creating rbc-jenkins-devops
+bash-4.2$ cd ..
+bash-4.2$ mv folder1 folder2
+bash-4.2$ cd folder2/
+bash-4.2$ docker-compose down
+Removing network folder2_default
+WARNING: Network folder2_default not found.
+bash-4.2$ docker-compose stop
+bash-4.2$ cd ..
+bash-4.2$ mv folder2/ folder1
+bash-4.2$ cd folder1/
+bash-4.2$ docker-compose down
+Stopping rbc-jenkins-devops ... done
+Removing rbc-jenkins-devops ... done
+Removing network folder1_default

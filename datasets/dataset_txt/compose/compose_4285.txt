@@ -1,0 +1,4 @@
+japrescott commented on 8 Jul 2014
+I love fig and docker but noticed it lacks some functionality; when I want to create a local base image (for instance, baseUbuntu) on which I build a collectd base image, from which I then start my actual service-specific containers (nginx), the order in which these are built is complete random and I get errors stating, the image isn't there. I would find it awesome if I could specify in the fig.yml a "order" number in which fig then builds the images. Or a "dependent of" array, similar to how links is implemented. Or even having fig build the images in the order specified in fig.yml would help alot.
+Thanks for giving this a thought..
+3

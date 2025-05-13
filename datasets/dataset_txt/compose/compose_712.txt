@@ -1,0 +1,42 @@
+beaugunderson commented on 27 Apr 2018 •
+edited
+Description of the issue
+The release notes for 1.21.0 state:
+Dashes and underscores in project names are no longer stripped out.
+This caused us a couple of hours of debugging time because we have lots of compose files that include things like this:
+networks:
+  home:
+    external:
+      name: homeapp_default
+Which under 1.21.0 need to be specified as home-app_default because 1.21.0 no longer removes dashes. There are no errors or warnings, it just becomes impossible to resolve hostnames that were previously resolvable.
+Context information (for bug reports)
+Multiple compose files with network references that include the default network name in the pre 1.21.0 format (e.g. sans dashes).
+Output of "docker-compose version"
+
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+cc @MatthewVita
+1

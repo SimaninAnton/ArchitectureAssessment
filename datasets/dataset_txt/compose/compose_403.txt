@@ -1,0 +1,13 @@
+hyousuf commented on 15 Nov 2018
+I have a problem where by running docker-compose up invariably gives me a timeout error as such
+ERROR: for test HTTPConnectionPool(host='localhost', port=2375): Read timed out. (read timeout=60)
+ERROR: compose.cli.errors.log_timeout_error: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+I can't replicate this reliably and cant fix this either.
+I am running the docker-compose through powershell and as suggested in other issues I try something like
+$env:HTTP_COMPOSE_TIMEOUT = 300
+but the problem persists and it still tells me that current value of timeout is 60
+Can I please get some clarity, as to whether I am using this incorrectly or is there a bug with docker-compose somewhere
+Info:
+OS: Windows Server 2016
+Docker: 17.06.2-ee-6, build e75fdb8

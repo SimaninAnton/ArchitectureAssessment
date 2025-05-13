@@ -1,0 +1,6 @@
+olalonde commented on 2 Jan 2015
+Hi fig team!
+I'm currently exploring options for automating the deployment of my app into production (fig does an awesome job locally). I have looked into the following solutions: Deis, Flynn, Kubernetes, Terraform, Atlas, Bosh, CloudFoundry, etc. but they all operate either at a too low or too high level of abstraction.
+My app consists of 10 git repositories, each with its own Dockerfile. Each service is a REST API and depends on a database service (so a minimum of 20 docker containers are needed to run the whole app). Only one service (the gateway API) is exposed externally. The REST API services can theoretically be replicated/load balanced automatically while it would be a bit harder to do for the database services.
+Theoretically, the fig.yml file could be used to specify which services can safely be "auto-scaled/load balanced", which data needs to be persisted and there could be a deploy tool that understands the fig.yml and be able deploy my app on a IaaS provider (e.g. AWS, Kubernetes cluster). It would be even better if external self contained fig based projects could be referenced from a fig.yml file as logical services.
+My question is, does such a tool exist? Or does the fig team plan to work on something along those lines? Just food for thought... sorry if this is a duplicate.

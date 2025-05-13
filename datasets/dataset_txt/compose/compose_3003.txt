@@ -1,0 +1,11 @@
+mikehaertl commented on 9 Dec 2015
+I've configured a syslog log driver for a container and now get an error whenever I try to run a command in that container:
+$ cat docker-compose.yml 
+foo:
+    image: php:5.6.10-apache
+    log_driver: "syslog"
+$ docker-compose up -d
+Starting test_foo_1
+$ docker-compose run --rm foo ls
+Error attaching: configured logging reader does not support reading
+                                                                   Error attaching: configured logging reader does not support reading

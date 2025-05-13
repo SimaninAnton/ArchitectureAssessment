@@ -1,0 +1,26 @@
+jszwedko commented on 6 Oct 2014
+We are attempting to use fig with images specified as private repositories hosted on quay.io, but, when running fig up, it reports a 403 Unauthorized even though we ran docker login quay.io beforehand.
+Running docker pull quay.io/foo/bar works as expected.
+Example fig.yml:
+---
+recommendations:
+  build .
+  links:
+    - redis:redis
+    - memcached:memcached
+  ports:
+    - 3000:3000
+  environment:
+    RAILS_ENV: demo
+    RACK_ENV: demo
+redis:
+  image: quay.io/modcloth/redis:latest
+  ports:
+    - 6379:6379
+memcached:
+  image: quay.io/modcloth/memcached:latest
+  environment:
+    MEMCACHED_INTERFACE: 0.0.0.0
+  ports:
+    - 11211:11211
+/cc @joeforsythe

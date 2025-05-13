@@ -1,0 +1,18 @@
+wsad137 commented on 7 Mar 2017 •
+edited by shin-
+version: '3'
+services:    
+  tomcat7jar8:
+        container_name: tomcat7-jar8
+        image: tomcat:8.5
+        ports:
+            - 8080
+        volumes:
+            - ./tomcat/webapps:/usr/local/tomcat/webapps
+            - ./tomcat/logs:/usr/local/tomcat/logs
+Adding the first line causes the file in the container to be removed.
+Log file synchronization is normal.
+Commented out webapps tomcat is normal.
+This question is very strange, I do not know how to solve.
+Or other ways to solve.
+3

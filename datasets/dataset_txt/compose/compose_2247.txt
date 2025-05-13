@@ -1,0 +1,8 @@
+dgageot commented on 7 Jul 2016
+To hint proxies about connection hijacking, Compose should send connection upgrade headers like the docker cli does.
+From https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/4-2-hijacking:
+In this version of the API, /attach, uses hijacking to transport stdin, stdout, and stderr on the same socket.
+To hint potential proxies about connection hijacking, Docker client sends connection upgrade headers similarly to websocket.
+Upgrade: tcp
+Connection: Upgrade
+On Docker for Desktop, the proxy that sits between Docker Compose and the daemon will not be aware that the connection will be hijacked. This can lead to an issue where the proxy will install a CloseNotifier and just after that will hijack the connection, which is know to be incompatible. See #3685

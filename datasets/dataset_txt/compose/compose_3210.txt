@@ -1,0 +1,29 @@
+ghost commented on 13 Oct 2015
+docker-compose [stop | kill | rm] will properly cleanup docker-compose up.
+But it does not appear to have worked for docker-compose run <SERVICE>
+For example
+Cleanup will remove cibackbeatbackbeatserver274_ci_1 but not cibackbeatbackbeatserver274_ci_run_1
+$ docker-compose -f docker-compose.yml -p cibackbeatbackbeatserver274 run -T ci
+Creating cibackbeatbackbeatserver274_redis_1...
+Creating cibackbeatbackbeatserver274_database_1...
+
+$ docker-compose -f docker-compose.yml -p cibackbeatbackbeatserver274 ps
+                 Name                               Command               State    Ports
+------------------------------------------------------------------------------------------
+cibackbeatbackbeatserver274_ci_run_1     bin/run-tests.sh                 Up
+cibackbeatbackbeatserver274_database_1   /docker-entrypoint.sh postgres   Up      5432/tcp
+cibackbeatbackbeatserver274_redis_1      /entrypoint.sh redis-server      Up      6379/tcp
+where
+$ docker-compose -f docker-compose.yml -p cibackbeatbackbeatserver274 kill 
+$ docker-compose -f docker-compose.yml -p cibackbeatbackbeatserver274 rm -v --force
+Does not properly cleanup docker-compose run <SERVICE>
+$ docker-compose -f docker-compose.yml -p cibackbeatbackbeatserver274 ps
+Name   Command   State   Ports
+------------------------------
+cibackbeatbackbeatserver274_ci_run_1     bin/run-tests.sh                 Up
+So I ended up having to bash trap
+$ for i in `docker-compose -f docker-compose.yml -p cibackbeatbackbeatserver274 ps -q`; do docker kill $i; docker rm -v --force $i; done
+To ensure a complete cleanup per
+$ docker-compose -f docker-compose.yml -p cibackbeatbackbeatserver274 ps
+Name   Command   State   Ports
+------------------------------

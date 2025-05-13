@@ -1,0 +1,22 @@
+jamiejackson commented on 8 Apr 2016
+Windows 7 host
+Boot2Docker version 1.10.3, build master : 625117e - Thu Mar 10 22:09:02 UTC 2016
+Docker version 1.10.3, build 20f81dd
+docker-compose version 1.6.2, build e80fc83
+docker-machine version 0.6.0, build e27fb87
+I'm running docker-compose up -d with the following:
+cadvisor:
+  image: google/cadvisor
+  ports:
+    - "8080:8080"
+  volumes:
+    - "/:/rootfs:ro"
+    - "/var/run:/var/run:rw"
+    - "/sys:/sys:ro"
+    - "/var/lib/docker/:/var/lib/docker:ro"
+This yields:
+C:\www\nmc_docker>docker-compose up -d
+Recreating d3a4e7a0de45_d3a4e7a0de45_d3a4e7a0de45_d3a4e7a0de45_d3a4e7a0de45_d3a4e7a0de45_nmcdocker_cadvisor_1
+←[31mERROR←[0m: Invalid volume spec "ro": volumeabs: Invalid volume destination path: 'ro' mount path must be absolute.
+The equivalent docker run works from both Windows and in an SSH session in the docker machine.
+I'm brand-new to docker-machine & docker-compose, so I might be doing something wrong.

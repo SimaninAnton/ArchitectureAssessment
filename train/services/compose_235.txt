@@ -1,0 +1,71 @@
+tlc commented on 30 Mar 2019 •
+edited
+Description of the issue
+docker-compose build works for 1.19.0, but fails for 1.20.0 and higher through at least 1.24.0.
+I am behind a corporate proxy and the failure mode resembles a proxy issue.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.20.0, build ca8d3c6
+Output of docker version
+Docker version 18.09.3, build 774a1f4
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  backend:
+    build:
+      args:
+        http_proxy: http://IP_REDACTED:8000/
+        https_proxy: http://IP_REDACTED:8000/
+      context: /home/troy/mimic-recording-studio/backend
+    container_name: mrs-backend
+    environment:
+      APIPORT: '5001'
+      CORPUS: english_corpus.csv
+      WEBWORKERS: '1'
+    ports:
+    - 5001:5001/tcp
+    volumes:
+    - /home/troy/mimic-recording-studio/backend:/src:rw
+version: '2.0'
+Steps to reproduce the issue
+pip install docker-compose==1.20.0 or any higher version
+docker-compose build (fails)
+pip install docker-compose==1.19.0
+docker-compose build (succeeds)
+Observed result
+Failure in step 2.
+Expected result
+Success in step 2.
+Stacktrace / full error message
+$ docker-compose build backend
+Building backend
+Step 1/7 : FROM python:3.6-alpine3.6
+ ---> 316214a5f0e2
+Step 2/7 : COPY requirements.txt /src/
+ ---> Using cache
+ ---> 7d9f3cedafcc
+Step 3/7 : WORKDIR /src
+ ---> Using cache
+ ---> 9dbd85ddf936
+Step 4/7 : RUN apk update
+ ---> Running in 166149bfd1b8
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.6/main/x86_64/APKINDEX.tar.gz
+ERROR: http://dl-cdn.alpinelinux.org/alpine/v3.6/main: could not connect to server (check repositories file)
+WARNING: Ignoring APKINDEX.84815163.tar.gz: No such file or directory
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.6/community/x86_64/APKINDEX.tar.gz
+ERROR: http://dl-cdn.alpinelinux.org/alpine/v3.6/community: could not connect to server (check repositories file)
+WARNING: Ignoring APKINDEX.24d64ab1.tar.gz: No such file or directory
+2 errors; 25 distinct packages available
+ERROR: Service 'backend' failed to build: The command '/bin/sh -c apk update' returned a non-zero code: 2
+Additional information
+Note that I am behind a corporate proxy. This build fails in apk update, in a way that resembles a proxy issue. It may be a proxy handling issue.
+Dockerfile:
+FROM python:3.6-alpine3.6
+
+COPY requirements.txt /src/
+WORKDIR /src
+RUN apk update
+RUN apk add ffmpeg make automake gcc g++ subversion python3-dev
+RUN pip install -r requirements.txt
+CMD ["sh", "start_prod.sh"]
+Docker is installed by apt on ubuntu 16.04 from download.docker.com. Docker-compose is installed by pip.

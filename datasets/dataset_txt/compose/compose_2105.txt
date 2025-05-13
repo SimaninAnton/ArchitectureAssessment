@@ -1,0 +1,89 @@
+davidkarlsen commented on 1 Sep 2016 •
+edited
+I have this compose file (1) which fails if I try to recreate the services - for instance after having pulled updates for the images.
+I noticed that the docker-proxy processes remain running even if I remove the containers.
+Even removing the network (docker network rm apps) and recreating it will fail.
+I have to nuke /var/lib/docker and start from scratch.
+DOCKER_OPTS="-s btrfs --iptables=true --log-driver=syslog"
+versions:
+root@main:/srv/salt/elk# docker version
+Client:
+Version: 1.12.1
+API version: 1.24
+Go version: go1.6.3
+Git commit: 23cf638
+Built: Thu Aug 18 05:33:38 2016
+OS/Arch: linux/amd64
+Server:
+Version: 1.12.1
+API version: 1.24
+Go version: go1.6.3
+Git commit: 23cf638
+Built: Thu Aug 18 05:33:38 2016
+OS/Arch: linux/amd64
+root@main:/srv/salt/elk# uname -a
+Linux main.davidkarlsen.com 4.4.0-36-generic #55-Ubuntu SMP Thu Aug 11 18:01:55 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+root@main:/srv/salt/elk# docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+root@main:/srv/salt/elk#
+(1)
+version: '2'
+
+services:
+  elasticsearch:
+    image: davidkarlsen/elasticsearchhq:latest
+    networks:
+      - apps
+    ports:
+      - "192.168.3.1:9200:9200"
+    restart: always
+    #mem_limit: 2g
+    logging:
+      driver: syslog
+    volumes:
+      - /srv/elasticsearch/data:/usr/share/elasticsearch/data
+    environment:
+      ES_HEAP_SIZE: 2g
+      SERVICE_CHECK_HTTP: /
+      SERVICE_9300_CHECK_TCP: "true"
+      SERVICE_NAME: elasticsearch
+  kibana:
+    image: kibana:4.6
+    networks:
+      - apps
+    restart: always
+    logging:
+      driver: syslog
+    ports: 
+      - "192.168.3.1:5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      SERVICE_CHECK_HTTP: /app/kibana
+  logstash:
+    image: logstash:2.4
+    networks:
+      - apps
+    logging:
+      driver: syslog
+    environment:
+      SERVICE_4560_CHECK_TCP: "true"
+    restart: always
+    ports:
+      - "127.0.0.1:4560:4560"
+    command: logstash -e 'input { tcp { port => 4560 codec => json_lines } } output { elasticsearch { hosts => ["elasticsearch:9200"] } }'
+  curator:
+    image: bobrik/curator
+    networks:
+      - apps
+    logging:
+      driver: syslog
+    volumes:
+      - ./curator.yml:/curator.yml
+      - ./action.yml:/action.yml
+
+networks:
+  apps:
+    external: true

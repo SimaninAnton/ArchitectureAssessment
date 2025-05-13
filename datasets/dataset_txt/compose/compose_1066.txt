@@ -1,0 +1,66 @@
+bladerunner512 commented on 22 Nov 2017
+Docker can pull images from insecure private registry, but docker-compose fails:
+docker.errors.InvalidRepository: Repository name cannot contain a scheme
+docker-compose.yml
+version: '2'
+services:
+zookeeper:
+image: http://10.126.57.142:5000/confluentinc/cp-zookeeper:latest
+network_mode: host
+environment:
+ZOOKEEPER_CLIENT_PORT: 32181
+ZOOKEEPER_TICK_TIME: 2000
+extra_hosts:
+- "moby:127.0.0.1"
+kafka:
+image: http://10.126.57.142:5000/confluentinc/cp-kafka:latest
+network_mode: host
+depends_on:
+- zookeeper
+environment:
+KAFKA_BROKER_ID: 1
+KAFKA_ZOOKEEPER_CONNECT: localhost:32181
+KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092
+KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+extra_hosts:
+- "moby:127.0.0.1"
+$ docker-compose up -d
+Pulling zookeeper (http://192.126.57.142:5000/confluentinc/cp-zookeeper:latest)...
+Traceback (most recent call last):
+File "bin/docker-compose", line 6, in
+File "compose/cli/main.py", line 68, in main
+File "compose/cli/main.py", line 121, in perform_command
+File "compose/cli/main.py", line 952, in up
+File "compose/project.py", line 431, in up
+File "compose/service.py", line 312, in ensure_image_exists
+File "compose/service.py", line 1029, in pull
+File "site-packages/docker/api/image.py", line 371, in pull
+File "site-packages/docker/auth.py", line 24, in resolve_repository_name
+docker.errors.InvalidRepository: Repository name cannot contain a scheme (http://192.126.57.142:5000/confluentinc/cp-zookeeper)
+Failed to execute script docker-compose
+$ docker-compose --verbose pull
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.find_config_file: Trying paths: ['/home/user01/.docker/config.json', '/home/user01/.dockercfg']
+docker.auth.find_config_file: No config file found
+compose.cli.command.get_client: docker-compose version 1.17.0, build ac53b73
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=3.10.0-693.2.2.el7.x86_64, Arch=amd64, BuildTime=2017-06-23T20:13:39.727050622+00:00, ApiVersion=1.27, Version=17.03.1-ce, MinAPIVersion=1.12, GitCommit=276fd32, Os=linux, GoVersion=go1.7.5
+compose.service.pull: Pulling zookeeper (http://192.126.57.142:5000/confluentinc/cp-zookeeper:latest)...
+compose.cli.verbose_proxy.proxy_callable: docker pull <- (u'http://192.126.57.142:5000/confluentinc/cp-zookeeper', tag=u'latest', stream=True)
+Traceback (most recent call last):
+File "bin/docker-compose", line 6, in
+File "compose/cli/main.py", line 68, in main
+File "compose/cli/main.py", line 121, in perform_command
+File "compose/cli/main.py", line 659, in pull
+File "compose/project.py", line 514, in pull
+File "compose/service.py", line 1029, in pull
+File "compose/cli/verbose_proxy.py", line 55, in proxy_callable
+File "site-packages/docker/api/image.py", line 371, in pull
+File "site-packages/docker/auth.py", line 24, in resolve_repository_name
+docker.errors.InvalidRepository: Repository name cannot contain a scheme (http://192.126.57.142:5000/confluentinc/cp-zookeeper)
+Failed to execute script docker-compose
+$ curl -X GET http://192.126.57.142:5000/v2/_catalog
+{"repositories":["confluentinc/cp-kafka","confluentinc/cp-zookeeper"]}

@@ -1,0 +1,15 @@
+hookenz commented on 9 Sep 2015
+'command' - works inside a container composer definition currently and from what I understand overrides the default cmd
+Can you also pull it back out to the top level or host level?
+This would allow scenarios that currently have to be managed outside of docker-compose.
+e,g,
+couchbase1:
+container_name: couchbase1
+image: couchbase/server:community-3.0.1
+volumes:
+- /opt/couchbase/node1:/opt/couchbase/var
+net: none
+command: pipework add br1 couchbase 192.168.1.1@192.168.1.254
+That would of course make command a keyword at the top level, but that's a small sacrifice and should be fairly easy to implement.
+Unless someone has a better idea.
+6

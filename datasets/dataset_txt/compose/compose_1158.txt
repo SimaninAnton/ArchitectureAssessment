@@ -1,0 +1,6 @@
+amankapoor commented on 11 Oct 2017
+Hi,
+When I first installed docker compose on my ubuntu, I had a very tough time as the curl command and the chmod commands were not letting me use docker-compose. Whenever I ran docker-compose --version, it returned -bash: /usr/bin/docker-compose: No such file or directory.
+This made me spent a lot of time searching for the solution on the internet, many suggested symlinking, many suggested some other solutions. I finally got it working through pip on my desktop. Now, I was installing docker-compose on my aws ubuntu and the earlier hurdle repeated itself. But by this time, I had read so much that I knew, I have to export the path to resolve this issue. Ran export PATH=$PATH and solved. I am new to docker and a student and not very experienced with deployment works. But still, it would be great if all details are added so that anyone experienced or inexperienced gets started quickly.
+Therefore, I suggest that export PATH=$PATH should be added in the installation instructions so that anyone who has not set up the path doesn't have to search around the internet for solutions.
+Thank you.

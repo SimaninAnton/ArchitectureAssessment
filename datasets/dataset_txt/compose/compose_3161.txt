@@ -1,0 +1,4 @@
+sebglon commented on 29 Oct 2015
+If i run Curl command that i found on https://docs.docker.com/compose/install/
+I have this error: /usr/local/bin/docker-compose: ligne 1: {error:Not Found} : commande introuvable
+the URL on CURL command have "VERSION_NUM' but not real version number like 1.4.2

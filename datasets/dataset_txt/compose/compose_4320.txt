@@ -1,0 +1,27 @@
+nonsense commented on 26 May 2014
+When trying to install RUN /bin/bash -l -c 'passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx' from Docker, I get:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 39, in main
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 31, in dispatch
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 50, in perform_command
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 108, in build
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.project", line 123, in build
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.service", line 313, in build
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.service", line 374, in stream_output
+  File "/Users/nonsense/code/fig/build/fig/out00-PYZ.pyz/fig.service", line 419, in print_output_event
+UnicodeEncodeError: 'ascii' codec can't encode character u'\u2023' in position 2: ordinal not in range(128)
+I guess the reason is that at this point nginx shows a list of languages and there is a unicode character used as a bullet point in front of each language.
+fig version is: 0.4.1
+docker version is:
+Client version: 0.11.1
+Client API version: 1.11
+Go version (client): go1.2.1
+Git commit (client): fb99f99
+Server version: 0.11.1
+Server API version: 1.11
+Git commit (server): fb99f99
+Go version (server): go1.2.1

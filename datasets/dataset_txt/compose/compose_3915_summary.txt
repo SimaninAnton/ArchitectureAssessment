@@ -1,0 +1,1 @@
+If you restarting the source container, the linked containers /etc/hosts files is not automatically updated

@@ -1,0 +1,46 @@
+Member
+StefanScherer commented on 20 Mar 2016
+The Windows Docker Engine recently got support for named pipe (think of the unix socket on Linux) instead of listening on local http port 2375. See moby/moby#19911 for the first PR.
+Now it seems that Docker Compose needs this support as well when the Docker Engine is no longer listening on tcp port.
+C:\> docker-compose --verbose up
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "C:\projects\compose\compose\cli\main.py", line 55, in main
+  File "C:\projects\compose\compose\cli\docopt_command.py", line 23, in sys_dispatch
+  File "C:\projects\compose\compose\cli\docopt_command.py", line 26, in dispatch
+  File "C:\projects\compose\compose\cli\main.py", line 172, in perform_command
+  File "C:\projects\compose\compose\cli\command.py", line 52, in project_from_options
+  File "C:\projects\compose\compose\cli\command.py", line 85, in get_project
+  File "C:\projects\compose\compose\cli\command.py", line 68, in get_client
+  File "c:\projects\compose\venv\lib\site-packages\docker\api\daemon.py", line 78, in version
+  File "c:\projects\compose\venv\lib\site-packages\docker\utils\decorators.py", line 47, in inner
+  File "c:\projects\compose\venv\lib\site-packages\docker\client.py", line 112, in _get
+  File "c:\projects\compose\venv\lib\site-packages\requests\sessions.py", line 477, in get
+  File "c:\projects\compose\venv\lib\site-packages\requests\sessions.py", line 465, in request
+  File "c:\projects\compose\venv\lib\site-packages\requests\sessions.py", line 573, in send
+  File "c:\projects\compose\venv\lib\site-packages\requests\adapters.py", line 415, in send
+requests.exceptions.ConnectionError: ('Connection aborted.', error(10061, 'No connection could be made because the target machine actively refused it'))
+docker-compose returned -1
+
+C:\> docker-compose --version
+docker-compose version 1.6.0, build cdb920a
+
+C:\> docker version
+Client:
+ Version:      1.11.0-dev
+ API version:  1.23
+ Go version:   go1.6
+ Git commit:   9e53024
+ Built:        Sat Mar 19 14:35:55 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.11.0-dev
+ API version:  1.23
+ Go version:   go1.6
+ Git commit:   9e53024
+ Built:        Sat Mar 19 14:35:55 2016
+ OS/Arch:      windows/amd64
+Tested on a TP4 with the nightly docker.exe

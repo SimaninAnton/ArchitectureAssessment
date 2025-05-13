@@ -1,0 +1,36 @@
+BenCAllen commented on 19 Feb 2018
+Apologies for the awkward title. Essentially, I have found that when attempting to interpolate an environment variable which has a default of an environment variable, compose now generates the interpolated variable differently to how it did previously.
+A simple proof of concept
+A compose file with the following contents:
+version: "3"
+services:
+
+  test:
+    image: alpine:latest
+    environment:
+      - TEST_VAR=${TEST_VAR-$TEST_VAR}
+Install docker-compose 1.15.0 (works correctly) and generate config for file.
+sudo curl -L https://github.com/docker/compose/releases/download/1.15.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+ docker-compose -f example.yml config > interpolated.yml
+Check the file:
+services:
+  test:
+    environment:
+      TEST_VAR: $TEST_VAR
+    image: alpine:latest
+version: '3.0'
+Now we do the same thing with the newest version of compose:
+sudo curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+ docker-compose -f example.yml config > interpolated.yml
+Check the file:
+services:
+  test:
+    environment:
+      TEST_VAR: $$TEST_VAR
+    image: alpine:latest
+version: '3.0'
+This functionality appears to have changed in version 1.16.0. I've had a look through the diff between 1.16 and 1.15, and I think that the issue might be with commit ID 770d943 (Escape dollar sign in serialized config output) - although I could be wrong (DevOps sysadmin rather than a dev so code interpretation may not be 100% correct!)
+In the above example, would you class the current behaviour as correct or was the previous behaviour correct? If so then I need to find a different elegant solution around our problem.
+Thanks!

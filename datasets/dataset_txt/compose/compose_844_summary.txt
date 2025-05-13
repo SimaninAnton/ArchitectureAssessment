@@ -1,0 +1,1 @@
+Can the regex be relaxed to allow "/" in volume names?

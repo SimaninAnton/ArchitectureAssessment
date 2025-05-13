@@ -1,0 +1,6 @@
+a1exus commented on 15 Sep 2016
+I'm looking and I can't find anything in order to implement HEALTHCHECK using docker-compose.
+$ docker-compose --version
+docker-compose version 1.8.0, build f3628c7
+$ 
+Please advise.

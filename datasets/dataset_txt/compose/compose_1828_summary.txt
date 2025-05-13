@@ -1,0 +1,1 @@
+docker-compose up throw TypeError:list indices must be integers, not unicode

@@ -1,0 +1,10 @@
+Contributor
+dnephin commented on 16 Jan 2016
+We should provide a migration script or command for converting from the v1 format to the v2 format. We'll need to use a "round trip" yaml parser like https://pypi.python.org/pypi/ruamel.yaml
+I don't think we should change our yaml parser entirely, we can just use this library for the conversion and keep pyyaml for everything else.
+I think we can do something like this:
+run the v1 config through docker-compose config -q to make sure it's valid
+run the convertion
+run the converted v2 config through docker-compose config -q again to make sure it's still valid.
+We could even compare the output from 1 and 3, and they should be the same.
+Doing it as a script would be easier (we don't have to go adding ruamel and all it's dependencies, which will increase the size of the binary for everyone), but a new command migrate-to-v2 is possible.

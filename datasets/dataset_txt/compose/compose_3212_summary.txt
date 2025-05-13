@@ -1,0 +1,1 @@
+fluentd-address i/o timeout when using links instead of host

@@ -1,0 +1,3 @@
+Contributor
+andrerom commented on 13 Oct 2015
+With several extends and substitution needs coming into place now for 1.5.0, only thing missing from my POV is being able to set default values ala extended shell

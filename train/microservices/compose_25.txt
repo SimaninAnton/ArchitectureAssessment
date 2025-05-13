@@ -1,0 +1,7 @@
+rdaysky commented 28 days ago
+docker-compose.yml does not allow env_file: /dev/null, because it tests the provided path with os.path.isfile, and /dev/null is not a regular file. This breaks the following use case:
+env_file:
+    - defaults.env
+    - ${EXTRA_ENV_FILE:-/dev/null}
+which, if not for the overly strict check, would allow EXTRA_ENV_FILE=extra.env docker-compose up, while also letting the user run the service without overriding the environment. There is a workaround of adding a blank file to version control and using that instead, but it’s clumsy.
+I suggest that env_file: /dev/null be permitted, either by allowing any path that exists, or by special-casing /dev/null (so it also works on Windows).

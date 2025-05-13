@@ -1,0 +1,41 @@
+ngtuna commented on 7 Sep 2016 •
+edited
+I would like to convert a simple compose k8s guestbook below to bundle format.
+version: "2"
+
+services:
+  redis-master:
+    image: gcr.io/google_containers/redis:e2e 
+    ports:
+      - "6379"
+  redis-slave:
+    image: gcr.io/google_samples/gb-redisslave:v1
+    ports:
+      - "6379"
+    environment:
+      - GET_HOSTS_FROM=dns
+  frontend:
+    image: gcr.io/google-samples/gb-frontend:v4
+    ports:
+      - "80:80"
+    environment:
+      - GET_HOSTS_FROM=dns
+I tried docker-compose up -d first without issue. By running that command, docker would pulled the images.
+$ docker images
+REPOSITORY                               TAG                 IMAGE ID            CREATED             SIZE
+gcr.io/google-samples/gb-frontend        v4                  e2b3e8542af7        4 months ago        512.2 MB
+gcr.io/google_samples/gb-redisslave      v1                  5f026ddffa27        13 months ago       109.5 MB
+gcr.io/google_containers/redis           e2e                 e5e67996c442        17 months ago       419 MB
+However then using docker-compose bundle getting error like this:
+$ docker-compose bundle --out guestbook.dsb
+ERROR: Some images are missing digests.
+
+The following images need to be pulled:
+
+    gcr.io/google-samples/gb-frontend:v4
+    gcr.io/google_containers/redis:e2e
+    gcr.io/google_samples/gb-redisslave:v1
+
+Use `docker-compose pull gcr.io/google-samples/gb-frontend:v4 gcr.io/google_containers/redis:e2e gcr.io/google_samples/gb-redisslave:v1` to pull them.
+Any suggest ?
+3

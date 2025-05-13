@@ -1,0 +1,1 @@
+Failed to destroy btrfs snapshot: operation not permitted

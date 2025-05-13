@@ -1,0 +1,40 @@
+jdel commented on 8 Sep 2017
+Documentation states that from 2.1, start_period is supported in healthchecks, but it is not.
+Source: https://docs.docker.com/compose/compose-file/compose-file-v2/#healthcheck
+This compose will fail with services.nginx.healthcheck value Additional properties are not allowed ('start_period' was unexpected):
+version: '2.2'
+services:
+  nginx:
+    image: nginx:stable
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost"]
+      interval: 30s
+      timeout: 5s
+      retries: 1
+      start_period: 30s
+Changing version to 2.1, 3, 3.1, 3.2, 3.3 yields the same error message.
+For reference:
+$ docker-compose version                                                                                                                                            
+docker-compose version 1.14.0, build c7bdf9e
+docker-py version: 2.3.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+
+$ docker version                                                                                                                                                      
+Client:
+ Version:      17.06.2-ce
+ API version:  1.30
+ Go version:   go1.8.3
+ Git commit:   cec0b72
+ Built:        Tue Sep  5 20:12:06 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.06.2-ce
+ API version:  1.30 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   cec0b72
+ Built:        Tue Sep  5 19:59:19 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+1

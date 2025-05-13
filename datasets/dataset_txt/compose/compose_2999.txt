@@ -1,0 +1,4 @@
+dmp1ce commented on 10 Dec 2015
+I recently updated to docker-compose 1.5.2. Currently when I docker-compose build && docker-compose up -d my newly created containers use old images named "image_name" instead of the the newer images named "/image_name".
+For some containers I have deleted the old "image_name" but some of the containers are data containers and I dont' want to lose the data.
+Any help is appreciated. I'd like docker-compose to use the latest images available.

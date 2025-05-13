@@ -1,0 +1,19 @@
+powersplay commented on 13 Jan 2016
+PS C:\Users\Administrator\test> docker-compose version docker-compose version 1.6.0dev, build 304a44a docker-py version: 1.6.0 CPython version: 2.7.11 OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+Given the docker-compose.yml:
+   build: .
+   ports: 
+     - 8080:80
+   volumes:
+     - ".\testdir:\foo"
+docker-compose config
+PS C:\Users\Administrator\test> docker-compose config
+my_nginx:
+  build: !!python/unicode 'C:\Users\Administrator\test'
+  ports:
+  - 8080:80
+  volumes:
+  - !!python/object/new:compose.config.types.VolumeSpec
+    - !!python/unicode '/c/Users/Administrator/test/testdir'
+    - !!python/unicode '/foo'
+    - !!python/unicode 'rw'

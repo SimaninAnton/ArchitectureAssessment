@@ -1,0 +1,17 @@
+Glueon commented on 5 Sep 2015
+There is a selenium container and a django one where I run functional tests connecting to selenium.
+I need a bidirectional link so selenium should be reachable from django container and django's liveserver from selenium.
+As far as I understand one way to solve this is to use net:container_name, so all exposed ports from both containers will be accessible on their loopback devices. Reduced docker-compose.yml:
+web:
+    build: .
+    ....
+selenium:
+    image: selenium/standalone-firefox
+    net: "container:web"
+And this does not work. selenium container exposes 4444 port but it's not reachable from a web. If I use --link selenium:selenium for a web container then 4444 port is reachable, but selenium can't reach django.
+I could only make it work with net: ... by replacing web parameter with it's auto-generated name, like:
+net: "container:folder_web_run_1"
+Then with this:
+docker-compose run --rm web py.test functional_tests
+Everything worked fine.
+So as far as I understand docker-compose automatically figures out the real container's name when used in links: one_name:another_name and other parameters but it does not work with net parameter?

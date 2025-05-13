@@ -1,0 +1,1 @@
+Multiple file parameter does not use the correct working directory

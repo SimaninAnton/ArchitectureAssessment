@@ -1,0 +1,9 @@
+EvgenyOrekhov commented on 8 Feb 2018
+I have always used Docker Compose as a container, as described here: https://docs.docker.com/compose/install/#install-as-a-container.
+But it became unusable since 1.19.0.
+When I run docker-compose exec I get the following error:
+ERROR: Couldn't find `docker` binary. You might need to install Docker:
+
+https://docs.docker.com/engine/installation/
+I have the docker binary on my host system.
+1

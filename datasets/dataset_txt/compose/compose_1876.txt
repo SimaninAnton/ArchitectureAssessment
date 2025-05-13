@@ -1,0 +1,43 @@
+JoyceBabu commented on 5 Dec 2016 •
+edited
+When I use
+$ docker run -ti --rm -h test.example.com ubuntu bash
+root@test:/# hostname       
+test.example.com
+root@test:/# hostname -s
+test
+root@test:/# hostname -d
+example.com
+root@test:/# hostname -f
+test.example.com
+
+root@test:/# cat /etc/hostname
+test.example.com
+But when using docker compose, I am getting
+$ docker exec -ti test bash
+root@test:/# hostname       
+test.example.com
+root@test:/# hostname -s
+test
+root@test:/# hostname -d
+example.com
+root@test:/# hostname -f
+test.example.com
+
+root@test:/# cat /etc/hostname
+test
+docker-compose.yml
+version: "2"
+services:
+    test:
+        container_name: test 
+        image: ubuntu
+        hostname: test
+        domainname: example.com
+        tty: true
+        stdin_open: true
+I am getting the same output even when using
+hostname: test.example.com
+instead of
+hostname: test
+domainname: example.com

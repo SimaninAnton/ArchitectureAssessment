@@ -1,0 +1,9 @@
+myhro commented on 1 Jul 2014
+How can I handle environment variables in a secure way, e.g. not explicitly writing them on Dockerfile or fig.yml? This is needed for settings like Django's SECRET_KEY.
+I've tried some approaches, without success:
+Load them from a file that is on .gitignore
+Load them from the current env which fig is called, using "_env:VARIABLE_NAME[:DEFAULT]", like docker-registry
+Specify them as an argument of fig up, to be passed to the docker client as -e
+I'll try to implement the second one (guess it needs just a little modification here), but if someone is already doing this in another way, I would really like to know.
+Regards,
+Tiago.

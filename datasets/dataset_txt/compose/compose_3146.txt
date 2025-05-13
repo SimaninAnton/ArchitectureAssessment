@@ -1,0 +1,13 @@
+brianbolt commented on 4 Nov 2015
+When using the --x-networking feature in docker-compose 1.5 (docker-engine 1.9), is it possible to get a "simple name" added to /etc/hosts without knowing the container name beforehand and without using the container_name directive?
+For example, the following compose file in a directory called dockercompose might produce the /etc/hosts entries below:
+web:
+  image: firstapp
+web2:
+  image: secondapp
+/etc/hosts entries in the auto generated "dockercompose_web_1" container looks like:
+172.18.0.2  dockercompose_web2_1
+172.18.0.2  dockercompose_web2_1.dockercompose
+I was hoping I would see the following entry as well:
+172.18.0.2  web2
+Let's say the image firstapp is hardcoded to communicate with a host named web2 and secondapp is harcoded to communicate with a host named web. Is it possible to get this circular communication working and maintain the ability to startup multiple instances of the overall app?

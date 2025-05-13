@@ -1,0 +1,195 @@
+udalrich commented on 13 Jan 2018
+This was originally reported against moby/moby at moby/moby#35852. They claimed it was a docker-compose issue and requested I report it here.
+Description
+I am trying to use an environment variable to limit the number of CPUs by a container.
+Steps to reproduce the issue:
+Create this docker-compose file
+test.yml
+version: "2.2"
+services:
+neo4j:
+image: neo4j:3.2
+cpus: ${MAX_CPUS}
+# volumes:
+# - ${MAX_CPUS}:/foo
+Create this script
+test.sh
+#!/bin/sh
+export MAX_CPUS=4
+docker-compose -f test.yml up -d
+Run the script: ./test.sh
+Describe the results you received:
+Docker-compose complained that the cpus parameter was not a number.
+$ ./test.sh
+ERROR: The Compose file './test.yml' is invalid because:
+services.neo4j.cpus contains an invalid type, it should be a number
+Describe the results you expected:
+It should start the neo4j container, with the number of cpus limited to 4.
+Additional information you deem important (e.g. issue happens only occasionally):
+If I uncomment the volumes lines and comment the cpus line, then it does complain about an unknown value 4, so the value of the variable is being correctly read.
+Output of docker version:
+Client:
+Version: 17.09.1-ce
+API version: 1.32
+Go version: go1.8.3
+Git commit: 19e2cf6
+Built: Thu Dec 7 22:22:25 2017
+OS/Arch: darwin/amd64
+Server:
+Version: 17.09.1-ce
+API version: 1.32 (minimum version 1.12)
+Go version: go1.8.3
+Git commit: 19e2cf6
+Built: Thu Dec 7 22:28:28 2017
+OS/Arch: linux/amd64
+Experimental: false
+Output of docker info:
+Containers: 0
+Running: 0
+Paused: 0
+Stopped: 0
+Images: 21
+Server Version: 17.09.1-ce
+Storage Driver: aufs
+Root Dir: /mnt/sda1/var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 41
+Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: bridge host macvlan null overlay
+Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+init version: 949e6fa
+Security Options:
+seccomp
+Profile: default
+Kernel Version: 4.4.104-boot2docker
+Operating System: Boot2Docker 17.09.1-ce (TCL 7.2); HEAD : e7de9ae - Fri Dec 8 19:41:36 UTC 2017
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 11.44GiB
+Name: gridsafe
+ID: WXFJ:D2IP:3GQE:WX3K:ZBUC:FGZT:6BIL:QQGD:CWVH:OOHN:AEYE:G4H3
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+File Descriptors: 17
+Goroutines: 27
+System Time: 2017-12-20T20:02:50.171308316Z
+EventsListeners: 0
+Registry: https://index.docker.io/v1/
+Labels:
+provider=virtualbox
+Experimental: false
+Insecure Registries:
+ads-nexus.str.corp:5000
+ads-nexus.str.corp:5001
+ads-nexus:5000
+ads-nexus:5001
+127.0.0.0/8
+Live Restore Enabled: false
+Additional environment details (AWS, VirtualBox, physical, etc.):
+docker-machine inspect output
+{
+"ConfigVersion": 3,
+"Driver": {
+"IPAddress": "192.168.99.101",
+"MachineName": "xxx",
+"SSHUser": "docker",
+"SSHPort": 63873,
+"SSHKeyPath": "/Users/me/.docker/machine/machines/xxx/id_rsa",
+"StorePath": "/Users/me/.docker/machine",
+"SwarmMaster": false,
+"SwarmHost": "tcp://0.0.0.0:3376",
+"SwarmDiscovery": "",
+"VBoxManager": {},
+"HostInterfaces": {},
+"CPU": 4,
+"Memory": 12000,
+"DiskSize": 100000,
+"NatNicType": "82540EM",
+"Boot2DockerURL": "",
+"Boot2DockerImportVM": "",
+"HostDNSResolver": false,
+"HostOnlyCIDR": "192.168.99.1/24",
+"HostOnlyNicType": "82540EM",
+"HostOnlyPromiscMode": "deny",
+"UIType": "headless",
+"HostOnlyNoDHCP": false,
+"NoShare": false,
+"DNSProxy": true,
+"NoVTXCheck": false,
+"ShareFolder": ""
+},
+"DriverName": "virtualbox",
+"HostOptions": {
+"Driver": "",
+"Memory": 0,
+"Disk": 0,
+"EngineOptions": {
+"ArbitraryFlags": [],
+"Dns": null,
+"GraphDir": "",
+"Env": [],
+"Ipv6": false,
+"InsecureRegistry": [
+"ads-nexus:5000",
+"ads-nexus:5001",
+"ads-nexus.str.corp:5000",
+"ads-nexus.str.corp:5001"
+],
+"Labels": [],
+"LogLevel": "",
+"StorageDriver": "",
+"SelinuxEnabled": false,
+"TlsVerify": true,
+"RegistryMirror": [],
+"InstallURL": "https://get.docker.com"
+},
+"SwarmOptions": {
+"IsSwarm": false,
+"Address": "",
+"Discovery": "",
+"Agent": false,
+"Master": false,
+"Host": "tcp://0.0.0.0:3376",
+"Image": "swarm:latest",
+"Strategy": "spread",
+"Heartbeat": 0,
+"Overcommit": 0,
+"ArbitraryFlags": [],
+"ArbitraryJoinFlags": [],
+"Env": null,
+"IsExperimental": false
+},
+"AuthOptions": {
+"CertDir": "/Users/me/.docker/machine/certs",
+"CaCertPath": "/Users/me/.docker/machine/certs/ca.pem",
+"CaPrivateKeyPath": "/Users/me/.docker/machine/certs/ca-key.pem",
+"CaCertRemotePath": "",
+"ServerCertPath": "/Users/me/.docker/machine/machines/xxx/server.pem",
+"ServerKeyPath": "/Users/me/.docker/machine/machines/xxx/server-key.pem",
+"ClientKeyPath": "/Users/me/.docker/machine/certs/key.pem",
+"ServerCertRemotePath": "",
+"ServerKeyRemotePath": "",
+"ClientCertPath": "/Users/me/.docker/machine/certs/cert.pem",
+"ServerCertSANs": [],
+"StorePath": "/Users/me/.docker/machine/machines/xxx"
+}
+},
+"Name": "xxx"
+}
+docker-compose version
+docker-compose version 1.17.1, build 6d101fb
+docker-py version: 2.5.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j 26 Sep 2016

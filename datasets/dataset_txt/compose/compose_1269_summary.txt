@@ -1,0 +1,1 @@
+cache_from works with docker, not with docker-compose v3.2

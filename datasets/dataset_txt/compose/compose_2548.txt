@@ -1,0 +1,15 @@
+yotov commented on 1 Apr 2016
+Hi folks.
+I use Windows and I have a problem with docker-compose build. It returns an error:
+"Cannot locate specified Dockerfile"
+It workds under Linux.
+After some research here is what I thought the problem is:
+Here is the output from docker-compose config
+ cache_manager:
+    build:
+      context: C:\Users\...
+      dockerfile: Dockerfile_cache_manager
+    volumes:
+    - /c/Users/...
+The file paths for context and volumes have different styles.
+In compose/config/types.py there is a function normalize_paths_for_engine used by VolumeSpec.parse. This function converts Windows paths to be a Linux style paths and then volumes have a proper output in docker-compose config. It is used for volume paths, but not for build contexts.

@@ -1,0 +1,11 @@
+Contributor
+clkao commented on 13 Feb 2016
+docker-compose config prints processed yml with extend and variables resolved, however it is not keeping the literal dollar sign, making the output yml semantically different when feeding to docker-compose again.
+web:
+  build: .
+  command: "$$VAR_NOT_INTERPOLATED_BY_COMPOSE"
+becomes
+web:
+  build: .
+  command: $VAR_NOT_INTERPOLATED_BY_COMPOSE
+1

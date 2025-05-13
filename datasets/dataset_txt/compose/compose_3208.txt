@@ -1,0 +1,4 @@
+AndersKOlsson commented on 14 Oct 2015
+docker-compose logs only returns when the service(s) exit. docker logs returns directly. This is confusing, and makes it hard to get logs in a automation environment.
+I suggest the default behavior of docker-compose logs should be to return, just like docker does. Then the '-f, --follow' flag could be introduced, which would mimic the behavior that we have today.
+Related: #1549

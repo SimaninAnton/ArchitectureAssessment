@@ -1,0 +1,1 @@
+Domains resolve between containers with `docker-compose up` but not `docker-compose exec`

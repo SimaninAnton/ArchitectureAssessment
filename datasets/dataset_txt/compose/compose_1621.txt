@@ -1,0 +1,119 @@
+mrburrito commented on 8 Mar 2017 •
+edited
+I've got a docker-compose setup for a project I'm working on that spins up a few companion services and both a Python2 and Python3 environment for testing. My GitLab CI job is configured to launch the docker-compose stack and then run tests inside the two python containers.
+When I run locally (macOS), everything works as intended. When I run on the CI server, which launches a custom Docker image that installs docker-compose on top of the docker:git base image, the volume mounts do not include all the files in my project directory.
+docker-compose.yaml
+version: '2'
+
+services:
+  nginx:
+    image: "nginx"
+    ports:
+      - 80
+      - 443
+    volumes:
+      - ./dockerfiles/sites-enabled:/etc/nginx/sites-enabled
+      - ./dockerfiles/ssl:/etc/nginx/ssl
+  p2:
+    build:
+      context: .
+      dockerfile: Dockerfile.2
+    command: ["/bin/sh", "-c", "/usr/bin/yes >/dev/null"]
+    volumes:
+      - .:/mycode
+    links:
+      - nginx
+    working_dir: /mycode
+  p3:
+    build:
+      context: .
+      dockerfile: Dockerfile.3
+    command: ["/bin/sh", "-c", "/usr/bin/yes >/dev/null"]
+    volumes:
+      - .:/nginx
+    links:
+      - nginx
+    working_dir: /nginx
+Local (macOS)
+Versions
+$ docker --version
+Docker version 17.03.0-ce, build 60ccb22
+$ docker-compose --version
+docker-compose version 1.11.2, build dfed245
+Output
+$ ls -ln
+total 24K
+-rw-r--r-- 1 501 20  127 Mar  7 11:03 Dockerfile.2
+-rw-r--r-- 1 501 20  127 Mar  7 11:03 Dockerfile.3
+-rw-r--r-- 1 501 20 2.2K Mar  8 11:06 README.md
+drwxr-xr-x 3 501 20  102 Mar  7 16:09 __pycache__/
+-rw-r--r-- 1 501 20 1.3K Mar  7 11:15 build.py
+-rw-r--r-- 1 501 20 1.7K Mar  7 11:15 build.pyc
+-rw-r--r-- 1 501 20  951 Mar  8 12:39 docker-compose.yml
+drwxr-xr-x 4 501 20  136 Mar  7 13:51 dockerfiles/
+drwxr-xr-x 4 501 20  136 Mar  7 10:50 src/
+drwxr-xr-x 5 501 20  170 Mar  7 16:09 target/
+
+$ docker-compose exec p2 pwd
+/mycode
+
+$ docker-compose exec p2 ls -ln
+total 24
+-rw-r--r--    1 0        0              127 Mar  7 16:03 Dockerfile.2
+-rw-r--r--    1 0        0              127 Mar  7 16:03 Dockerfile.3
+-rw-r--r--    1 0        0             2221 Mar  8 16:06 README.md
+drwxr-xr-x    3 0        0              102 Mar  7 21:09 __pycache__
+-rw-r--r--    1 0        0             1328 Mar  7 16:15 build.py
+-rw-r--r--    1 0        0             1691 Mar  7 16:15 build.pyc
+-rw-r--r--    1 0        0              951 Mar  8 17:39 docker-compose.yml
+drwxr-xr-x    4 0        0              136 Mar  7 18:51 dockerfiles
+drwxr-xr-x    4 0        0              136 Mar  7 15:50 src
+drwxr-xr-x    5 0        0              170 Mar  7 21:09 target
+
+$ docker-compose exec -T p2 ls -ln dockerfiles/*
+dockerfiles/sites-enabled:
+total 8
+-rw-r--r--    1 0        0              290 Mar  7 18:52 alt
+-rw-r--r--    1 0        0              404 Mar  7 18:53 ssl
+
+dockerfiles/ssl:
+total 8
+-rw-r--r--    1 0        0             1428 Mar  7 19:00 proxy.crt
+-rw-r--r--    1 0        0             1675 Mar  7 19:00 proxy.key
+Remote (GitLab-CI)
+Note -- this behavior occurs on both our GitLab-CI instance (docker-machine + Amazon EC2/CentOS7 host) and if I run locally, sharing my /var/run/docker.sock with the build container.
+Versions
+$ docker --version
+Docker version 17.03.0-ce, build 60ccb22
+$ docker-compose --version
+docker-compose version 1.11.2, build dfed245
+Output
+$ ls -ln
+total 24
+-rw-r--r--    1 0        0              127 Mar  7 16:03 Dockerfile.2
+-rw-r--r--    1 0        0              127 Mar  7 16:03 Dockerfile.3
+-rw-r--r--    1 0        0             2221 Mar  8 16:06 README.md
+drwxr-xr-x    3 0        0              102 Mar  7 21:09 __pycache__
+-rw-r--r--    1 0        0             1328 Mar  7 16:15 build.py
+-rw-r--r--    1 0        0             1691 Mar  7 16:15 build.pyc
+-rw-r--r--    1 0        0              951 Mar  8 17:39 docker-compose.yml
+drwxr-xr-x    4 0        0              136 Mar  7 18:51 dockerfiles
+drwxr-xr-x    4 0        0              136 Mar  7 15:50 src
+drwxr-xr-x    5 0        0              170 Mar  7 21:09 target
+
+$ docker-compose exec -T p2 pwd
+/mycode
+
+$ docker-compose exec -T p2 ls -ln
+total 0
+drwxr-xr-x    4 0        0               80 Mar  8 18:01 dockerfiles
+
+$ docker-compose exec -T p2 ls -ln dockerfiles/*
+dockerfiles/sites-enabled:
+total 0
+
+dockerfiles/ssl:
+total 0
+The dockerfiles directory does not contain any files -- only the subdirectories, so it appears that the actual files are not getting mounted.
+12
+1

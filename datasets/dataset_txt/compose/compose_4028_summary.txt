@@ -1,0 +1,1 @@
+docker-compose.yml should support every docker run option

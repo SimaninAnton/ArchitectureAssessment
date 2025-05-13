@@ -1,0 +1,4 @@
+psilva261 commented on 25 Jul 2017
+Since today, curl (and Firefox) report TLS error/a deceptive site when loading https://github.com/docker/compose/releases/download/1.11.1/docker-compose-Linux-x86_64
+It seems that - at a minimum - there is a problem with the TLS configuration (no certificate).
+1

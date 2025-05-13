@@ -1,0 +1,1 @@
+docker-compose up doesn't rebuild image although Dockerfile has changed

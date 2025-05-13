@@ -1,0 +1,200 @@
+mmisztal1980 commented on 3 Oct 2017
+I have a docker-compose.yaml file consisting of 3 containers:
+version: '3'
+
+services:
+  demo-app-db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=demo-app-db
+
+  demo-app-db-migrator:
+    depends_on:
+      - demo-app-db
+    image: demo-app-db-migrator
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development-DockerCompose
+    build:
+      context: ./artifacts/demo-app-db-migrator
+      dockerfile: Dockerfile
+      args:
+        source: .
+
+  demo-app-web:
+    depends_on:
+      - demo-app-db-migrator
+    image: demo-app-web
+    ports:
+      - 8080:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development-DockerCompose
+    build:
+      context: ./artifacts/demo-app-web
+      dockerfile: Dockerfile
+      args:
+        source: .
+After I run docker-compose up, I'm getting the below STDOUT output.
+For some reason, the demo-app-web container instance is having it's ASPNETCORE_ENVIRONMENT variable set to a different value then the one specified in docker-compose.yaml
+Expected
+demo-app-web_1 | ASPNETCORE_ENVIRONMENT = Development-DockerCompose
+Actual
+(demo-app-web_1 | ASPNETCORE_ENVIRONMENT = Development)
+Can anyone explain this behavior of docker-compose?
+Stdout output
+Building demo-app-db-migrator
+Step 1/7 : FROM microsoft/dotnet:2.0.0-runtime-jessie
+ ---> 988a1f2fc05a
+Step 2/7 : MAINTAINER @mmisztal1980
+ ---> Using cache
+ ---> 4813b0df772a
+Step 3/7 : ARG source
+ ---> Using cache
+ ---> 1eda99994809
+Step 4/7 : WORKDIR /app
+ ---> Using cache
+ ---> b34eb57c21b3
+Step 5/7 : EXPOSE 80
+ ---> Using cache
+ ---> 7bfcd23529ea
+Step 6/7 : COPY ${source:-obj/Docker/publish} .
+ ---> a904dcae807b
+Step 7/7 : ENTRYPOINT dotnet DemoApp.Migrator.dll
+ ---> Running in 1598da91c120
+ ---> 701a2bb86fe7
+Removing intermediate container 1598da91c120
+Successfully built 701a2bb86fe7
+Successfully tagged demo-app-db-migrator:latest
+WARNING: Image for service demo-app-db-migrator was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+Building demo-app-web
+Step 1/8 : FROM microsoft/aspnetcore:2.0.0-jessie
+ ---> eab0a5a01878
+Step 2/8 : MAINTAINER @mmisztal1980
+ ---> Running in f5305bb60464
+ ---> 22730ae05a32
+Removing intermediate container f5305bb60464
+Step 3/8 : ARG source
+ ---> Running in c001273bc4f7
+ ---> ac4315cbdc64
+Removing intermediate container c001273bc4f7
+Step 4/8 : WORKDIR /app
+ ---> 0cde56ec3600
+Removing intermediate container e3c6172afbb2
+Step 5/8 : EXPOSE 80
+ ---> Running in e611294956a4
+ ---> 2ff91c82b877
+Removing intermediate container e611294956a4
+Step 6/8 : COPY ${source:-obj/Docker/publish} .
+ ---> 9c61645d8f51
+Step 7/8 : ENV ASPNETCORE_ENVIRONMENT Development
+ ---> Running in 4d37051a92e5
+ ---> c27d5b9d37a5
+Removing intermediate container 4d37051a92e5
+Step 8/8 : ENTRYPOINT dotnet DemoApp.Web.dll
+ ---> Running in e4ceef035694
+ ---> c8740667226b
+Removing intermediate container e4ceef035694
+Successfully built c8740667226b
+Successfully tagged demo-app-web:latest
+WARNING: Image for service demo-app-web was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+Creating demoapp_demo-app-db_1 ...
+Creating demoapp_demo-app-db_1 ... done
+Creating demoapp_demo-app-db-migrator_1 ...
+Creating demoapp_demo-app-db-migrator_1 ... done
+Creating demoapp_demo-app-web_1 ...
+Creating demoapp_demo-app-web_1 ... done
+Attaching to demoapp_demo-app-db_1, demoapp_demo-app-db-migrator_1, demoapp_demo-app-web_1
+demo-app-db_1           | The files belonging to this database system will be owned by user "postgres".
+demo-app-db_1           | This user must also own the server process.
+demo-app-db_1           |
+demo-app-db-migrator_1  | Starting the migrator
+demo-app-db_1           | The database cluster will be initialized with locale "en_US.utf8".
+demo-app-db-migrator_1  | Migrator target environment is : Development-DockerCompose
+demo-app-db_1           | The default database encoding has accordingly been set to "UTF8".
+demo-app-db_1           | The default text search configuration will be set to "english".
+demo-app-db_1           |
+demo-app-db_1           | Data page checksums are disabled.
+demo-app-db_1           |
+demo-app-db_1           | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+demo-app-db_1           | creating subdirectories ... ok
+demo-app-db_1           | selecting default max_connections ... 100
+demo-app-db_1           | selecting default shared_buffers ... 128MB
+demo-app-db_1           | selecting dynamic shared memory implementation ... posix
+demo-app-db_1           | creating configuration files ... ok
+demo-app-db_1           | running bootstrap script ... ok
+demo-app-db_1           | performing post-bootstrap initialization ... ok
+demo-app-db_1           | syncing data to disk ... ok
+demo-app-db_1           |
+demo-app-db_1           | Success. You can now start the database server using:
+demo-app-db_1           |
+demo-app-db_1           |     pg_ctl -D /var/lib/postgresql/data -l logfile start
+demo-app-db_1           |
+demo-app-db_1           |
+demo-app-db_1           | WARNING: enabling "trust" authentication for local connections
+demo-app-db_1           | You can change this by editing pg_hba.conf or using the option -A, or
+demo-app-db_1           | --auth-local and --auth-host, the next time you run initdb.
+demo-app-db_1           | waiting for server to start....LOG:  could not bind IPv6 socket: Cannot assign requested address
+demo-app-db_1           | HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+demo-app-db_1           | LOG:  database system was shut down at 2017-10-02 22:19:42 UTC
+demo-app-db_1           | LOG:  MultiXact member wraparound protections are now enabled
+demo-app-db_1           | LOG:  database system is ready to accept connections
+
+demo-app-db_1           | LOG:  autovacuum launcher started
+demo-app-web_1          | Starting demo-app-web in Development
+demo-app-web_1          | Env Variables:
+demo-app-web_1          |   DOTNET_DOWNLOAD_SHA = 2D4A3F8CB275C6F98EC7BE36BEF93A3B4E51CC85C418B9F6A5EEF7C4E0DE53B36587AF5CE23A56BC6584B1DE9265C67C0C3136430E02F47F44F9CFE194219178
+demo-app-web_1          |   ASPNETCORE_RUNTIMESTORE_DOWNLOAD_URL = https://dist.asp.net/runtimestore/2.0.0/linux-x64/aspnetcore.runtimestore.tar.gz
+demo-app-web_1          |   PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+demo-app-web_1          |   ASPNETCORE_ENVIRONMENT = Development
+demo-app-web_1          |   ASPNETCORE_URLS = http://+:80
+demo-app-web_1          |   ASPNETCORE_PKG_VERSION = 2.0.0
+demo-app-web_1          |   DOTNET_VERSION = 2.0.0
+demo-app-web_1          |   HOSTNAME = 9ec2dd754963
+demo-app-web_1          |   HOME = /root
+demo-app-web_1          |   DOTNET_DOWNLOAD_URL = https://dotnetcli.blob.core.windows.net/dotnet/Runtime/2.0.0/dotnet-runtime-2.0.0-linux-x64.tar.gz
+demo-app-web_1          | warn: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository[60]
+demo-app-web_1          |       Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+demo-app-web_1          | info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[0]
+demo-app-web_1          |       User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest. demo-app-web_1          | info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[58]
+demo-app-web_1          |       Creating key {1af7a27d-e171-4ced-a553-d73dfbeb3605} with creation date 2017-10-02 22:19:43Z, activation date 2017-10-02 22:19:43Z, and expiration date 2017-12-31 22:19:43Z.
+demo-app-web_1          | warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+demo-app-web_1          |       No XML encryptor configured. Key {1af7a27d-e171-4ced-a553-d73dfbeb3605} may be persisted to storage in unencrypted form.
+demo-app-web_1          | info: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository[39]
+demo-app-web_1          |       Writing data to file '/root/.aspnet/DataProtection-Keys/key-1af7a27d-e171-4ced-a553-d73dfbeb3605.xml'.
+demo-app-db_1           |  done
+demo-app-db_1           | server started
+demo-app-web_1          | Hosting environment: Development
+demo-app-web_1          | Content root path: /app
+demo-app-web_1          | Now listening on: http://[::]:80
+demo-app-web_1          | Application started. Press Ctrl+C to shut down.
+demo-app-db_1           | CREATE DATABASE
+demo-app-db_1           |
+demo-app-db_1           | ALTER ROLE
+demo-app-db_1           |
+demo-app-db_1           |
+demo-app-db_1           | /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+demo-app-db_1           |
+demo-app-db_1           | LOG:  received fast shutdown request
+demo-app-db_1           | LOG:  aborting any active transactions
+demo-app-db_1           | LOG:  autovacuum launcher shutting down
+demo-app-db_1           | waiting for server to shut down....LOG:  shutting down
+demo-app-db_1           | LOG:  database system is shut down
+demo-app-db_1           |  done
+demo-app-db_1           | server stopped
+demo-app-db_1           |
+demo-app-db_1           | PostgreSQL init process complete; ready for start up.
+demo-app-db_1           |
+demo-app-db_1           | LOG:  database system was shut down at 2017-10-02 22:19:44 UTC
+demo-app-db_1           | LOG:  MultiXact member wraparound protections are now enabled
+demo-app-db_1           | LOG:  database system is ready to accept connections
+
+demo-app-db_1           | LOG:  autovacuum launcher started
+demo-app-db-migrator_1  | Migrator target environment is : Development-DockerCompose
+demoapp_demo-app-db-migrator_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping demoapp_demo-app-web_1 ... done
+Stopping demoapp_demo-app-db_1  ... done
+1

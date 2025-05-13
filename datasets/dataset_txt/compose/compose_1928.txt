@@ -1,0 +1,19 @@
+ostrbor commented on 15 Nov 2016
+Version: docker-compose version 1.8.0, build f3628c7
+Command: docker-compose -f docker-compose/development.yml run --rm postgres
+ERROR: Cannot create container for service postgres: json: cannot unmarshal number into Go value of type string
+development.yml
+version: '2'
+services:
+  postgres:
+    build:
+      context: ..
+      dockerfile: Docker/Dockerfile-postgres
+    image: bet_postgres
+    logging:
+      options:
+        max-size: 50m
+        max-file: 2
+    ports:
+    - "5432:5432"
+To avoid error: max-file: "2"

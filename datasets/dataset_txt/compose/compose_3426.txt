@@ -1,0 +1,26 @@
+jsonxr commented on 30 Jul 2015
+docker-compose does not pass environment variable 'true', 'false', 'yes', 'no' (without quotes) unchanged to the container. YML parser recognizes these values as a boolean and converts them to either True or False. This is confusing since environment variables are generally just a string. I would expect all values to be passed to the container exactly as defined in the yml file as if they were a string.
+Simple work around is to force them to be a string by quoting all environment variables.
+test.sh
+echo $SHOW
+docker-compose.yml
+test:
+  image: ubuntu
+  environment:
+    SHOW: true
+  command: sh /tmp/test.sh
+  volumes:
+    - './test.sh:/tmp/test.sh'
+Expected Output:
+test_1 | true
+Actual Output:
+test_1 | True
+Work Around:
+Put all environment variables in quotes to force it to behave as a string.
+test:
+  image: ubuntu
+  environment:
+    SHOW: 'true'
+  command: sh /tmp/test.sh
+  volumes:
+    - './test.sh:/tmp/test.sh'

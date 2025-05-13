@@ -1,0 +1,19 @@
+suliangxd commented on 9 Oct 2016 •
+edited
+Daemon socket to connect to a swarm master node, Sometimes an error occurs！But, sometimes it's success!
+my command
+docker-compose -H 10.99.226.22:8100 --skip-hostname-check --tlsverify --tlscacert /home/work/client/ca.pem --tlscert /home/work/client/localCRT.pem --tlskey /home/work/client/localKEY.pem -f /home/work/compose/yaml/yueguangbin/49.yaml -p 097651e1110c4e4788f2e4001a5a7b600000000049 up -d --remove-orphans
+my yaml file
+yaml file
+the error message
+Creating network "fc5ac3ef75e241968054db25f0d2ea5a0000000049_default" with the default driver
+ERROR: for tomcat No JSON object could be decoded
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 61, in main
+File "compose/cli/main.py", line 113, in perform_command
+File "compose/cli/main.py", line 835, in up
+File "compose/project.py", line 400, in up
+File "compose/parallel.py", line 64, in parallel_execute
+ValueError: No JSON object could be decoded
+docker-compose returned -1

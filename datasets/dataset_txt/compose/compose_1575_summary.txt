@@ -1,0 +1,1 @@
+docker-compose config is always generating absolutes paths when converting v2 compose files to v3

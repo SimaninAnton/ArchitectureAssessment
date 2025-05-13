@@ -1,0 +1,100 @@
+rgorodischer commented on 10 Mar 2016
+Here's a minimal setup to reproduce the issue:
+Dockerfile content:
+FROM debian:jessie
+
+CMD ["/bin/bash"]
+docker-compose.yml content:
+test-system:
+  build: .
+  stdin_open: true
+  tty: true
+Here's what happens when I try docker-compose up:
+$ docker-compose up test-system
+Creating testcompose_test-system_1
+Attaching to testcompose_test-system_1
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+My user is added to docker group, and the output is the same when run from sudo.
+It manages to attach only with docker-compose run command.
+I tried the experiment with same outcomes on Docker version 1.9.1, build a34a1d5, and compose versions 1.4.0, 1.6.0, and 1.6.2.
+UPD:
+docker info output:
+$ docker info
+Containers: 2
+Images: 152
+Server Version: 1.9.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 156
+ Dirperm1 Supported: false
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.13.0-29-generic
+Operating System: Ubuntu 14.04.2 LTS
+CPUs: 8
+Total Memory: 11.62 GiB
+Name: romang-HP
+ID: GDTJ:MBV5:DD5J:3IO2:T4K4:6A4P:QMXM:PLER:TIQA:2MIH:UZ52:VVDE
+WARNING: No swap limit support
+docker-compose --verpose up output:
+$ docker-compose --verbose up test-system
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=3.13.0-29-generic, Os=linux, BuildTime=Fri Nov 20 13:12:04 UTC 2015, ApiVersion=1.21, Version=1.9.1, GitCommit=a34a1d5, Arch=amd64, GoVersion=go1.4.2
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=testcompose', u'com.docker.compose.service=test-system', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'15cbcae7bf798470b019b4cd4474bb04a353d3b6338a321916b3c42d066b0917')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/bash'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'],
+             u'Hostname': u'15cbcae7bf79',
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=testcompose', u'com.docker.compose.service=test-system', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- (u'testcompose_test-system')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/bash'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'15cbcae7bf798470b019b4cd4474bb04a353d3b6338a321916b3c42d066b0917')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/bash'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': [u'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'],
+             u'Hostname': u'15cbcae7bf79',
+...
+compose.service.execute_convergence_plan: testcompose_test-system_1 is up-to-date
+Attaching to testcompose_test-system_1
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'15cbcae7bf798470b019b4cd4474bb04a353d3b6338a321916b3c42d066b0917', stderr=True, logs=True, stream=True, stdout=True)
+compose.cli.verbose_proxy.proxy_callable: docker attach -> <generator object _stream_raw_result at 0x7f10446e9780>
+docker.auth.auth.load_config: File doesn't exist
+ERROR: compose.cli.main.main: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+30

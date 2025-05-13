@@ -1,0 +1,31 @@
+Wilfred commented on 8 May 2018
+Description of the issue
+The following configuration produces an error from docker-compose:
+version: '3'
+services:
+  webserver:
+    image: nginx
+    volumes:
+    - /tmp/foo:/tmp/foo
+    - /tmp/foo:/tmp/foo
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.webserver.volumes value ['/tmp/foo:/tmp/foo', '/tmp/foo:/tmp/foo'] has non-unique elements
+However, the following variants do not:
+version: '3'
+services:
+  webserver:
+    image: nginx
+    volumes:
+    - /tmp/foo:/tmp/foo
+    - /tmp/foo:/tmp/foo:rw
+version: '3'
+services:
+  webserver:
+    image: nginx
+    volumes:
+    - /x:/y
+    - /z:/y
+Whilst it's easy to spot in simple cases like this, we've been tripped up by this in large configurations, where we assume docker-compose config would error on invalid configurations.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.0, build 5920eb0

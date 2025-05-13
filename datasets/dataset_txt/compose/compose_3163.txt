@@ -1,0 +1,26 @@
+Contributor
+dave-tucker commented on 29 Oct 2015
+$ docker-compose --x-networking up -d
+Creating network "counter" with driver "bridge"
+Creating counter_web_1
+Creating counter_mongo_1
+
+$ docker-compose --x-networking stop
+Stopping counter_mongo_1 ... done
+Stopping counter_web_1 ... done
+
+$ docker-compose --x-networking rm
+Going to remove counter_mongo_1, counter_web_1
+Are you sure? [yN] y
+Removing counter_mongo_1 ... done
+Removing counter_web_1 ... done
+
+$ docker network ls
+NETWORK ID          NAME                DRIVER
+d84962a207f8        counter             bridge
+f60408bc3b3b        bridge              bridge
+13a612e10bd7        none                null
+517effa88694        host                host
+After, rm I still have a network created with the project name
+I would expect this to be removed
+NOTE: This also causes an issue with Swarm that I will raise another issue for

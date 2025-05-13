@@ -1,0 +1,1 @@
+docker-compose is not adding prefix and postfix to aux_addresses

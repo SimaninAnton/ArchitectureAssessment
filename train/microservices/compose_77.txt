@@ -1,0 +1,98 @@
+marcelloromani commented on 23 Oct 2019
+Description of the issue
+I define two services in a docker-compose.yaml file. One of them requires an environment variable to point to a local file.
+If I make this variable required, docker-compose complains even if I start the service which doesn't mak use of that variable.
+docker-compose.yaml
+version: '2.1'
+services:
+  novolumes:
+    image: alpine:3.10.3
+    command: ["echo", "hello world"]
+
+  withvolume:
+    image: alpine:3.10.3
+    command: ["cat", "/etc/app.config"]
+    volumes:
+      - ${CONFIG_FILE?Missing env variable CONFIG_FILE}:/etc/app.config
+config.yaml
+appName: "hello world"
+Scenario 1
+I set the required env variable. Both services work as expected.
+$ export CONFIG_FILE=$(pwd)/config.yaml
+
+$ docker-compose run --rm novolumes
+hello world
+
+$ docker-compose run --rm withvolume
+appName: "hello world"
+Scenario 2
+I don't set the environment variable.
+Running service 1, which doesn't require the variable, should not result in an error.
+$ unset CONFIG_FILE
+
+$ docker-compose run --rm novolumes
+ERROR: Missing mandatory value for "volumes" option in service "withvolume": Missing env variable CONFIG_FILE
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:26:49 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:32:21 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+If I don't set the evnironment variable, I get:
+$ docker-compose config
+ERROR: Missing mandatory value for "volumes" option in service "withvolume": Missing env variable CONFIG_FILE
+If I set the environment variable:
+services:
+  novolumes:
+    command:
+    - echo
+    - hello world
+    image: alpine:3.10.3
+  withvolume:
+    command:
+    - cat
+    - /etc/app.config
+    image: alpine:3.10.3
+    volumes:
+    - /Users/marcelloromani/dev/docker_compose_env_var_bug/config.yaml:/etc/app.config:rw
+version: '2.1'
+Steps to reproduce the issue
+Create a docker-compose.yaml file as reported in the description.
+Try to run the service which doesn't require the env var
+Observed result
+docker-compsoe complains about the missing env var
+Expected result
+docker-compose runs the service which doesn't require the env var
+Additional information
+OS version / distribution, docker-compose install method, etc.
+OS: macOS Mojave 10.14.6 (18G103)

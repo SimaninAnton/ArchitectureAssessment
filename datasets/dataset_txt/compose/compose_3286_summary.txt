@@ -1,0 +1,1 @@
+`DOCKER_VERSIONS=all script/test` doesn't work any more

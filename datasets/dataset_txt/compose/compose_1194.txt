@@ -1,0 +1,16 @@
+OnkelTem commented on 20 Sep 2017
+I have both docker-compose.yml and its override file. The essential part of the content is:
+docker-compose.yml:
+version: "3"
+services:
+  web:
+    volumes:
+      - "../app:/var/www/drupal:ro"
+docker-compose.override.yml:
+version: "3"
+services:
+  web:
+    volumes:
+      - "../app:/var/www/drupal:rw"
+      - "./environments/local/data/composer:/home/developer/.composer:rw"
+For some reason the override for ../app doesn't work - it is mounted in ro mode. But if comment out the second line (- "./environments/local/data/composer:/home/developer/.composer:rw") all of a sudden it starts seeing the override and works correctly. I don't see any logic in this behavior. Any ideas?

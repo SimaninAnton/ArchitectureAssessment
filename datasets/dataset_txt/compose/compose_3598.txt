@@ -1,0 +1,6 @@
+xinity commented on 1 Jun 2015
+hi,
+i had a strange behavior lately regarding docker-compose, at first i though of a mistake i've made, but after digging in, i found that some containers (i haven't found something deterministic) won't start using docker-compose if docker option --iptables=false is set.
+a very strange thing is in my case the container involved has no port forwarded, only using linked containers.
+digging more i found a exit status 128 regarding the involved container.
+any clues maybe ?

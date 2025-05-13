@@ -1,0 +1,43 @@
+simonvc commented on 27 Nov 2014
+Occasionally when fig up'ing our environments we get this error:
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==1.0.1', 'console_scripts', 'fig')()
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 28, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 56, in perform_command
+    handler(project, command_options)
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 427, in up
+    insecure_registry=insecure_registry,
+  File "/Library/Python/2.7/site-packages/fig/project.py", line 174, in up
+    for (_, container) in service.recreate_containers(insecure_registry=insecure_registry):
+  File "/Library/Python/2.7/site-packages/fig/service.py", line 207, in recreate_containers
+    tuples.append(self.recreate_container(c, insecure_registry=insecure_registry, **override_options))
+  File "/Library/Python/2.7/site-packages/fig/service.py", line 237, in recreate_container
+    new_container = self.create_container(**options)
+  File "/Library/Python/2.7/site-packages/fig/service.py", line 178, in create_container
+    return Container.create(self.client, **container_options)
+  File "/Library/Python/2.7/site-packages/fig/container.py", line 38, in create
+    return cls.from_id(client, response['Id'])
+  File "/Library/Python/2.7/site-packages/fig/container.py", line 33, in from_id
+    return cls(client, client.inspect_container(id))
+  File "/Library/Python/2.7/site-packages/docker/client.py", line 629, in inspect_container
+    self._get(self._url("/containers/{0}/json".format(container))),
+  File "/Library/Python/2.7/site-packages/docker/client.py", line 76, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/Library/Python/2.7/site-packages/requests-2.2.1-py2.7.egg/requests/sessions.py", line 395, in get
+    return self.request('GET', url, **kwargs)
+  File "/Library/Python/2.7/site-packages/requests-2.2.1-py2.7.egg/requests/sessions.py", line 383, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Library/Python/2.7/site-packages/requests-2.2.1-py2.7.egg/requests/sessions.py", line 486, in send
+    r = adapter.send(request, **kwargs)
+  File "/Library/Python/2.7/site-packages/requests-2.2.1-py2.7.egg/requests/adapters.py", line 387, in send
+    raise Timeout(e)
+requests.exceptions.Timeout: HTTPSConnectionPool(host='192.168.59.103', port=2376): Read timed out.
+Very transient. Is this fig talking to the local docker? or fig talking to the remote docker host directly?

@@ -1,0 +1,13 @@
+toby-griffiths commented on 21 Mar 2017
+I've just tried running docker-compose on my remote server, to build containers that I can build on my local machine, however I'm seeing the following error when run on the remote server...
+Version in "./docker/docker-compose.dev.yml" is unsupported. You might be seeing this error 
+because you're using the wrong Compose file version. Either specify a version of "2" (or "2.0") and 
+place your service definitions under the `services` key, or omit the `version` key and place your 
+service definitions at the root of the file to use version 1.
+Local machine (Docker for Mac)
+$ docker --version
+Docker version 17.03.0-ce, build 60ccb22
+Remote machine (Docker on Ubuntu)
+$ docker --version
+Docker version 17.03.0-ce, build 60ccb22
+Can anyone help me with whatever it is I'm missing here?

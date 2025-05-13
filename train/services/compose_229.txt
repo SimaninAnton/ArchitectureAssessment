@@ -1,0 +1,133 @@
+gavindsouza commented on 6 Apr 2019
+Description of the issue
+I tried running docker-compose build in a local repository with a docker-compose.yml but got the error mentioned in this issue. When i tried running docker-compose config to make this issue, the output came out the first time, but gave the same error when I ran it again.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa5906
+docker-py version: 3.7.2
+CPython version: 3.7.3
+OpenSSL version: OpenSSL 1.1.1b  26 Feb 2019
+Output of docker version
+Client:
+ Version:           18.09.4-ce
+ API version:       1.39
+ Go version:        go1.12.1
+ Git commit:        d14af54266
+ Built:             Thu Mar 28 11:37:11 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.4-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.12.1
+  Git commit:       d14af54266
+  Built:            Thu Mar 28 11:36:50 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+networks:
+  cache:
+    driver: bridge
+  db:
+    driver: bridge
+  proxy:
+    driver: bridge
+services:
+  app:
+    build:
+      context: /mnt/SECOND/Code/_contributions/candis/candis
+    depends_on:
+    - db
+    environment:
+      CANDIS_CACHE_HOST: cache
+      CANDIS_DATABASE_HOST: db
+    networks:
+      cache: null
+      db: null
+      proxy: null
+    restart: unless-stopped
+  cache:
+    image: redis
+    networks:
+      cache: null
+    restart: unless-stopped
+  db:
+    expose:
+    - '5432'
+    image: postgres
+    networks:
+      db: null
+    restart: unless-stopped
+  proxy:
+    depends_on:
+    - app
+    image: nginx
+    networks:
+      proxy: null
+    ports:
+    - published: 4000
+      target: 80
+    restart: unless-stopped
+    volumes:
+    - /mnt/SECOND/Code/_contributions/candis/candis/nginx.conf:/etc/nginx/nginx.conf:rw
+version: '3.4'
+Steps to reproduce the issue
+run docker-compose build or docker-compose config
+errors come up
+Observed result
+After first time of running the command, errors occur
+Expected result
+docker-compose builds the images or prints config information without running into errors
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3012, in _dep_map
+    return self.__dep_map
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 2806, in __getattr__
+    raise AttributeError(attr)
+AttributeError: _DistInfoDistribution__dep_map
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3003, in _parsed_pkg_info
+    return self._pkg_info
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 2806, in __getattr__
+    raise AttributeError(attr)
+AttributeError: _pkg_info
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 6, in <module>
+    from pkg_resources import load_entry_point
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3241, in <module>
+    @_call_aside
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3225, in _call_aside
+    f(*args, **kwargs)
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3254, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 583, in _build_master
+    ws.require(__requires__)
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 900, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 794, in resolve
+    new_requirements = dist.requires(req.extras)[::-1]
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 2727, in requires
+    dm = self._dep_map
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3014, in _dep_map
+    self.__dep_map = self._compute_dependencies()
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3023, in _compute_dependencies
+    for req in self._parsed_pkg_info.get_all('Requires-Dist') or []:
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 3005, in _parsed_pkg_info
+    metadata = self.get_metadata(self.PKG_INFO)
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 1419, in get_metadata
+    value = self._get(self._fn(self.egg_info, name))
+  File "/usr/lib/python3.7/site-packages/pkg_resources/__init__.py", line 1607, in _get
+    with open(path, 'rb') as stream:
+FileNotFoundError: [Errno 2] No such file or directory: '/home/gavin/.local/lib/python3.7/site-packages/urllib3-1.22.dist-info/METADATA'
+Additional information
+OS version: 5.0.5-arch1-1-ARCH
+Distribution: Arch Linux
+Install method: Using pacman; by running pacman -S docker-compose

@@ -1,0 +1,3 @@
+ashb commented on 19 Jul 2018
+The Sums listed on https://github.com/docker/compose/releases/tag/1.22.0 have the same value for the Darwin and Linux versions.
+The .sum files are correct though

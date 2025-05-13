@@ -1,0 +1,1 @@
+Version 2 of the docker-compose.yml cause slowdowns in the reverse lookup

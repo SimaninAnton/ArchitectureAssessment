@@ -1,0 +1,20 @@
+cesarjorgemartinez commented on 20 Mar 2017
+Hi,
+I'm trying to do a docker-compose.yml with conditional flow.
+It is posibble?
+An example is for example a command tag.
+With an image entrypoint:
+ENTRYPOINT ["/usr/bin/mibinprocess"]
+Then in the docker-compose.yml:
+...
+command: -param1 ${MIPARAM1}
+...
+But if need to use other params, howto describe this?
+...
+if a condition then use:
+command: -param1 ${MIPARAM1}
+else use:
+command: -param1 ${MIPARAM1} -param2 ${MIPARAM2}
+...
+Regards
+1

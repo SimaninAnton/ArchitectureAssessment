@@ -1,0 +1,10 @@
+totallymike commented on 5 Dec 2014
+When environment variables are configured in the fig.yml file like so:
+environment:
+  - MIX_ENV=test
+running fig run -e MIX_ENV=dev causes python to throw up because it tries to treat the environment options like a dictionary instead of a list.
+Translating the environment settings to:
+environment:
+  MIX_ENV: test
+resolves the error.
+The relevant line in the source is cli/main.py#318.

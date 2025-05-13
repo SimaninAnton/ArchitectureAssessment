@@ -1,0 +1,5 @@
+djschilling commented on 20 Oct 2014
+I want to access my private Docker Registry which uses https.
+I use a ssl certificate which is signed by my own ca.
+As far as i could find it there is no way to tell fig to use my own ca.cert to do https.
+I only found out, that the python lib requests is used to do https and that there is a tool called certifi which is used to manage ca's. But i could not find a way to add my own ca.

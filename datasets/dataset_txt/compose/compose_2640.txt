@@ -1,0 +1,36 @@
+gittycat commented on 13 Mar 2016
+When running docker-compose run <service> <cmd> in a swarm context, the relationship between services and their mounted volumes as listed in docker-compose.yml doesn't seen to be respected.
+(docker 1.10.2, swarm 1.1.0, compose 1.6.2, amazonec2, CLI from OSX)
+I've better show an example to explain:
+docker-compose.yml
+version: '2'
+services:
+  bucket:
+    image: alpine:3.3
+    container_name: bucket
+    volumes:
+      - data:/data
+    command: /bin/true
+volumes:
+  data:
+Then we do
+docker-compose up -d
+echo "hello there" > foo.txt
+docker cp foo.txt bucket:/data/
+and look at the results using:
+docker run --rm --volumes-from bucket alpine:3.3 ls -al /data
+docker-compose run --rm bucket ls -al /data
+Under a non swarm host, both of the last two commands return the same result as expected (the listing of foo.txt).
+In a swarm node, the first command returns foo.txt but not the second. Here's the output
++ docker run --rm --volumes-from bucket alpine:3.3 ls -al /data
+total 12
+drwxr-xr-x    2 root     root          4096 Mar 12 13:04 .
+drwxr-xr-x   24 root     root          4096 Mar 12 13:04 ..
+-rw-r--r--    1 root     root            12 Mar 12 13:04 foo.txt
+
++ docker-compose run --rm bucket ls -al /data
+Creating volume "test_data" with default driver
+total 8
+drwxr-xr-x    2 root     root          4096 Mar 12 13:04 .
+drwxr-xr-x   24 root     root          4096 Mar 12 13:04 ..
+Note that docker-compose created a new volume "test_data" instead of using the one specified in the docker-compose.yml.

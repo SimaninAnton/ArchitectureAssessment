@@ -1,0 +1,78 @@
+drnybble commented on 3 Aug 2017 •
+edited
+Description
+Docker for Windows 2016 recreates anonymous volumes on container recreate
+This behaviour is different than Linux. It means that any time a container is recreated its volumes are orphaned.
+Obviously this is a major problem that will appear to cause data loss on any container recreate (although in fact it litters your system with orphan volumes).
+Find the required files attached below.
+Windows:
+docker build -t voltest .
+docker-compose up -d
+docker inspect voltest | sls volumes
+docker-compose up -d --force-recreate
+docker inspect voltest | sls volumes
+-> volume is not the same, data in anonymous volume is orphaned
+Linux:
+docker build -t voltest .
+docker-compose up -d
+docker inspect voltest | grep volumes
+docker-compose up -d --force-recreate
+docker inspect voltest | grep volumes
+-> volume is the same
+This is a long-standing behaviour of container recreate.
+Additional information you deem important (e.g. issue happens only occasionally):
+Output of docker version:
+PS C:\docker_bug> docker version
+Client:
+ Version:      17.03.2-ee-5
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   fa09039
+ Built:        Wed Jul 19 23:56:45 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.03.2-ee-5
+ API version:  1.27 (minimum version 1.24)
+ Go version:   go1.7.5
+ Git commit:   fa09039
+ Built:        Wed Jul 19 23:56:45 2017
+ OS/Arch:      windows/amd64
+ Experimental: false
+Output of docker info:
+Containers: 24
+ Running: 1
+ Paused: 0
+ Stopped: 23
+Images: 198
+Server Version: 17.03.2-ee-5
+Storage Driver: windowsfilter
+ Windows:
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: l2bridge l2tunnel nat null overlay transparent
+Swarm: inactive
+Default Isolation: process
+Kernel Version: 10.0 14393 (14393.1480.amd64fre.rs1_release.170706-2004)
+Operating System: Windows Server 2016 Standard
+OSType: windows
+Architecture: x86_64
+CPUs: 4
+Total Memory: 16 GiB
+Name: WIN-MJSFDPF05F4
+ID: TWMY:IFT5:SD65:U72L:6TEM:UKYA:KDMS:JQC3:VQKN:7UGR:57IB:G23Q
+Docker Root Dir: C:\ProgramData\docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ pa-docker:5000
+ 127.0.0.0/8
+Live Restore Enabled: false
+Output of docker-compose --version
+PS C:\docker_bug> docker-compose --version
+docker-compose version 1.15.0, build e12f3b94
+I tried back to docker-compose 1.10.0 and docker 1.12.2-cs2-ws-beta-rc1 and the behaviour was the same.
+docker_bug.zip

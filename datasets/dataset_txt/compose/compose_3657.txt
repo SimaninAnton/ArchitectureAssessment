@@ -1,0 +1,26 @@
+Contributor
+viranch commented on 7 May 2015
+Consider following docker-compose.yml:
+web:
+    build: .
+    links:
+        - db
+db:
+    image: mysql
+I run the services.
+$ docker-compose up -d
+Creating project_db_1...
+Creating project_web_1...
+$
+When I want to restart (recreate) my web service after some changes, I issue:
+$ docker-compose up -d web
+Recreating project_db_1...
+Recreating project_web_1...
+$ 
+I would normally expect only my web service to start without interrupting the depending services.
+But it doesn't happen so. The dependent services should not be re-created when recreating depending services. Dependent should only be started if not running already.
+On the other hand, if I re-create dependent service, the depending service should be re-created, which does not happen.
+$ docker-compose up -d db
+Recreating project_db_1...
+$ 
+The web service then loses the link and has no idea of the new db service.

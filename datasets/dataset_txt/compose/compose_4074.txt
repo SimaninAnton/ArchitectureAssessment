@@ -1,0 +1,24 @@
+Contributor
+dtenenba commented on 27 Nov 2014
+Hi,
+On Mac OS 10.9.2/Python 2.7.5 I tried to install fig using
+sudo pip install -U fig
+When I try
+fig --version
+I get
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 2603, in <module>
+    working_set.require(__requires__)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 666, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 565, in resolve
+    raise DistributionNotFound(req)  # XXX put more info here
+pkg_resources.DistributionNotFound: six>=1.3.0,<2
+I interpret this to mean that I need six version 1.3.0 or higher (but less than 2). Seems like I already have that:
+$ pip freeze |grep six
+Warning: cannot find svn location for mercurial==2.6.2-20130606
+six==1.8.0
+Any idea what the problem is? BTW, this comes after attempting the
+regular install and getting Illegal instruction: 4 when trying to run the resulting binary.

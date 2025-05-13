@@ -1,0 +1,4 @@
+dgageot commented on 7 Jul 2016
+Since Docker 1.11, the docker CLI has been connecting to the daemon on npipe:////./pipe/docker_engine named pipe on Windows. Before 1.11, the default behaviour was to connect to localhost:2375
+Compose 1.8RC1 still defaults to localhost:2375.
+I believe we should have the same behaviour.

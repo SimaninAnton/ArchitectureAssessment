@@ -1,0 +1,1 @@
+UnicodeEncodeError: 'ascii' codec can't encode character '\u2714' in position 21: ordinal not in range(128)

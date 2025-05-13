@@ -1,0 +1,6 @@
+greg0ire commented on 10 Oct 2015
+I have a complex problem I'm trying to solve. I have an appserver containers, on which I want to run tests (on Gitlab CI). I can run most of the tests like this :
+docker-compose run --rm appserver /bin/su greg -c "make -f /srv/Makefile test"
+My problem is that amongst this test suites, there is one that uses an http client that tests my application "from the outside", and that to do that, the webserver container that runs nginx needs to be booted. It would be if appserver was linked to webserver, but I cannot do that because webserver is itself linked to appserver, which means it would create a circular reference. I need to link webserver to appserver, because appserver runs an upstream service needed for the nginx instanced run inside webserver to boot properly.
+My problem would be solved if I had the option to start other containers (with an option maybe), after the container I want to run. A workaround is to use up, run the tests, and then use stop, but if the tests fail, stop is simply not run by gitlab-ci, so I am left with dangling containers. Not cool.
+Any ideas?

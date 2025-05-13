@@ -1,0 +1,50 @@
+hiphamster commented on 4 Aug 2019
+I have a compose file with declared services, one of which has 'FROM xxx' in its Dockerfile, and the 'xxx' is an image located in my private registry in gitlab.
+Expectation:
+Whey i run docker-composer -f compose-file build, i expect the image from private registry to be pulled and used.
+Actual:
+On linux (ubuntu 18.04 under virtualbox) it works as expected - the image is pulled
+On mac i get an error:
+Building panda_app Step 1/26 : FROM registry.gitlab.com/xxx/xxx/xxx:3.7.4 ERROR: Service 'xxx_app' failed to build: Get https://registry.gitlab.com/v2/xxx/xxx/xxx/manifests/3.7.4: denied: access forbidden
+I tried logging out / logging it, that didn't help. Below is additional info i got from running with --verbose flag:
+  1 compose.cli.verbose_proxy.proxy_callable: docker close <- ()
+  2 compose.cli.verbose_proxy.proxy_callable: docker close -> None
+  3 compose.service.build: Building xxxxx_app
+  4 compose.cli.verbose_proxy.proxy_callable: docker build <- (
+  5  path='/Users/axxxxx/dev/xxxxx/build/xxxxx_app',
+  6  tag='registry.gitlab.com/xxxxx/xxxxx/xxxxx_app:dev',
+  7  rm=True,
+  8  forcerm=False,
+  9  pull=False,
+ 10  nocache=False,
+ 11  dockerfile=None,
+ 12  cache_from=None,
+ 13  labels=None,
+ 14  buildargs={'xxxxx',
+ 15  'sentry_dsn': 'xxxxxxx',
+ 16  'sqlalchemy_uri': 'mysql+pymysql://xxxxx'},
+ 17  network_mode=None,
+ 18  target=None,
+ 19  shmsize=None,
+ 20  extra_hosts=None,
+ 21  container_limits={'memory': None},
+ 22  gzip=False,
+ 23  isolation=None,
+ 24  platform=None)
+ 25 docker.api.build._set_auth_headers: Looking for auth config
+ 26 docker.auth._resolve_authconfig_credstore: Looking for auth entry for 'https://registry.gitlab.com'
+ 27 docker.api.build._set_auth_headers: Sending auth config ('https://registry.gitlab.com', 'registry.gitlab.com')
+ 28 urllib3.connectionpool._make_request:
+ 29   http://localhost:None
+ 30   "POST /v1.38/build?t=registry.gitlab.com%2Fxxxxx%2Fxxxxx%2Fxxxxx_app%3Adev&
+ 31   q=False&
+ 32   nocache=False&
+ 33   rm=True&
+ 34   forcerm=False&
+ 35   pull=False&
+ 36   buildargs=xxxxxxxxxx HTTP/1.1" 200 None
+ 37 compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object APIClient._stream_helper at 0x10c36be08>
+ 38 Step 1/26 : FROM registry.gitlab.com/xxxxx/xxxxx/xxxxx_py:3.7.4
+ 39 compose.cli.main.main: Service 'xxxxx_app' failed to build:
+ 40 Get https://registry.gitlab.com/v2/xxxxx/xxxxx/xxxxx_py/manifests/3.7.4: denied: access forbidden
+19

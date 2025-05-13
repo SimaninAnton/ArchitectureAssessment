@@ -1,0 +1,63 @@
+jamieshiz commented on 19 Jun 2017
+when running docker-compose up -d for project A, it recreates the container for project B. if i switch over to project B and run docker-compose up -d, it recreates the container for project A. Both projects use the same base image but they each should have their own containers. I tried some of the suggestions here, but nothing worked. Here are examples of my two docker-compose.yml files
+Project A
+version: '3'
+services:
+web:
+build: .
+container_name: company
+environment:
+COMPOSE_PROJECT_NAME: company
+ports:
+- "8080:80"
+- "9000"
+- "9004"
+volumes:
+- ../src:/var/www/html
+- ./configs/nginx/default.conf:/etc/nginx/sites-enabled/default
+depends_on:
+- db
+db:
+image: mysql:5.5
+container_name: company_db
+volumes:
+- ./db:/docker-entrypoint-initdb.d
+ports:
+- 3306:3306
+environment:
+COMPOSE_PROJECT_NAME: company
+WP_ENV: LOCAL
+MYSQL_ROOT_PASSWORD: password
+MYSQL_USER: user
+MYSQL_PASSWORD: password2
+MYSQL_DATABASE: databaseName
+Project B
+version: '3'
+services:
+web:
+build: .
+container_name: site
+environment:
+COMPOSE_PROJECT_NAME: site
+ports:
+- "8080:80"
+- "9000"
+- "9004"
+volumes:
+- ../html:/var/www/html
+- ./configs/nginx/default.conf:/etc/nginx/sites-enabled/default
+depends_on:
+- db
+db:
+image: mysql:5.5
+container_name: site_db
+volumes:
+- ./db:/docker-entrypoint-initdb.d
+ports:
+- 3306:3306
+environment:
+COMPOSE_PROJECT_NAME: site
+MYSQL_ROOT_PASSWORD: password
+MYSQL_USER: user
+MYSQL_PASSWORD: password2
+MYSQL_DATABASE: databaseName

@@ -1,0 +1,21 @@
+hamadatakaki commented on 26 Mar 2019
+I want to keep launching the server using docker-compose.
+but I want to use command | entrypoint when I launched the server.
+I wrote docker-compose.yml as follows.
+version: '3'
+services:
+  db: ##pass##
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    command: echo "entry!!"  # this is dummy command
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+However, the server stopped if it was up.
+Please help me.
+Can anyone teach me about how to solve this problem?
+(sorry, I'm Japanese student. I am not good writing in English.

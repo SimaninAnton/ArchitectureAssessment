@@ -1,0 +1,29 @@
+gunboe commented on 20 Dec 2016
+I've tried to make a service Unit to initialize some Docker images by docker-compose in Systemd. I have saw somes examples at Internet, but the only works, there is one trap...
+With these harbor.service file:
+[Unit]
+Description=Servico de manutencao do Harbor
+After=network.target docker.service
+[Service]
+Type=simple
+WorkingDirectory=/opt//harbor
+ExecStart=/usr/local/bin/docker-compose -f /opt/harbor/docker-compose.yml up
+ExecStop=/usr/local/bin/docker-compose -f /opt/harbor/docker-compose.yml down
+#Restart=always
+[Install]
+WantedBy=multi-user.target
+I start de Unit and after I receive this status:
+# systemctl start harbor
+# systemctl status harbor
+● harbor.service - Servico de manutencao do Harbor
+Loaded: loaded (/etc/systemd/system/harbor.service; disabled; vendor preset: disabled)
+Active: active (running) since Mon 2016-12-19 20:09:44 BRST; 16min ago
+Main PID: 2028 (docker-compose)
+Memory: 34.3M
+CGroup: /system.slice/harbor.service
+├─2028 /usr/local/bin/docker-compose -f /opt/harbor/docker-compose.yml up
+└─2029 /usr/local/bin/docker-compose -f /opt/harbor/docker-compose.yml up
+Everything is OK, all Dockers container running. I can stop the harbor service without any problem. But now I have two docker-compose process.
+Is there normal? Could I have problems in Future with these two process? How to make service Unit file better for docker-compose?
+Thanks.
+1

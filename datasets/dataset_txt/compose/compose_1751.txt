@@ -1,0 +1,20 @@
+osethan commented on 27 Jan 2017 •
+edited
+docker-compose version 1.8.0. The container is linked to another container. I'm not sure if that has anything to do with why the container isn't exiting
+mongodb:
+  image: 'mongo:3.2'
+  ports:
+    - '27017:27017'
+  environment:
+    - AUTH=no
+
+test:
+  image: node:6.3.1
+  command: node tests/ref-api.js
+  working_dir: /opt/runapp
+  volumes:
+    - ./:/opt/runapp
+    - ../webapp/server:/opt/runapp/node_modules/server
+    - ../webapp/package/node_modules:/opt/runapp/node_modules/server/node_modules
+  links:
+    - mongodb

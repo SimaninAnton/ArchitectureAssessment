@@ -1,0 +1,59 @@
+GuillaumeRochat commented 20 days ago
+Description of the issue
+Doing a Ctrl+C on a docker-compose up does not send the signals to the containers. However, signals are reaching the container fine with doing a docker stop or docker kill. Doing a Ctrl+C on a docker run also works as expected.
+This behavior seems to be new as it is causing an issue in my dev environment I've never had until very recently.
+Context information (for bug reports)
+To show the issue, I created a minimal project to debug it. https://github.com/GuillaumeRochat/docker-signal-bug
+I tried following the docker events to see what was going on, and I clearly see an event with the signal=15 being sent when doing Ctrl+C. So I really don't understand what's going on.
+2020-01-10T17:36:24.652363796-05:00 container kill bd9e09d03cf852a76968af5a7d2fcff7405dd8abbf9b06ae35ed03bcd0e360bb (com.docker.compose.config-hash=4cfb00a831ce1d3b7ee745c0909bc85dbdc280101b19a0c3e31db7af97968780, com.docker.compose.container-number=1, com.docker.compose.oneoff=False, com.docker.compose.project=docker-signal-bug, com.docker.compose.project.config_files=docker-compose.yml, com.docker.compose.project.working_dir=/home/grochat/code/docker-signal-bug, com.docker.compose.service=service, com.docker.compose.version=1.25.1, image=docker-signal-bug, name=docker-signal-bug_service_1, signal=15)
+I spent a few hours trying to figure this out and isolate the scenario, as I though I wasn't handling the signals correctly in the containers. However, since the issue does not happen with docker run, docker stop or docker kill, I decided to file an issue on docker-compose,. as it seems to be the logical place to search for a fix.
+Output of docker-compose version
+docker-compose version 1.25.1, build unknown
+docker-py version: 4.1.0
+CPython version: 3.8.1
+OpenSSL version: OpenSSL 1.1.1d  10 Sep 2019
+Output of docker version
+Client:
+ Version:           19.03.5-ce
+ API version:       1.40
+ Go version:        go1.13.4
+ Git commit:        633a0ea838
+ Built:             Fri Nov 15 03:19:09 2019
+ OS/Arch:           linux/amd64
+ Experimental:      true
+
+Server:
+ Engine:
+  Version:          19.03.5-ce
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.13.4
+  Git commit:       633a0ea838
+  Built:            Fri Nov 15 03:17:51 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.3.2.m
+  GitCommit:        d50db0a42053864a270f648048f9a8b4f24eced3.m
+ runc:
+  Version:          1.0.0-rc9
+  GitCommit:        d736ef14f0288d6993a1845745d6756cfc9ddd5a
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+See repo with the example issue. https://github.com/GuillaumeRochat/docker-signal-bug
+Steps to reproduce the issue
+See repo https://github.com/GuillaumeRochat/docker-signal-bug for scripts and configs.
+Build the container with a single start.sh script that handles signals and sleeps while waiting for them.
+Up the container with the docker-compose up command.
+Do a Ctrl+C
+Notice that there is no Caught Term or Caught Int message appearing.
+Up the container with the docker-compose up command.
+Stop it with a docker stop docker-signal-bug_service_1 command.
+Notice that there is a Caught Term message appearing.
+Observed result
+Ctrl+C does not send a signal to the services.
+Expected result
+Ctrl+C on a docker-compose should send a signal to the services.
+Additional information
+OS: Arch Linux Kernel 5.4.10-arch1-1

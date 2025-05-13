@@ -1,0 +1,32 @@
+saschaarthur commented on 3 Apr 2015
+Hello
+Dockerfile seems broken:
+docker build -t aero .
+Sending build context to Docker daemon 7.168 kB
+Sending build context to Docker daemon
+Step 0 : FROM debian:7
+---> 1265e16d0c28
+Step 1 : ENV AEROSPIKE_VERSION 3.5.4
+---> Using cache
+---> f3d981e7b2e1
+Step 2 : ENV AEROSPIKE_SHA256 80c23ea858278419297c51d8fd924ac64d7b62684b24334440c16725ba856e45
+---> Using cache
+---> 7bce2db446ab
+Step 3 : RUN apt-get update -y && apt-get install -y wget logrotate ca-certificates && wget "https://www.aerospike.com/artifacts/aerospike-server-community/${AEROSPIKE_VERSION}/aerospike-server-community-${AEROSPIKE_VERSION}-debian7.tgz" -O aerospike-server.tgz && echo "$AEROSPIKE_SHA256 aerospike-server.tgz" | sha256sum -c - && mkdir aerospike && tar xzf aerospike-server.tgz --strip-components=1 -C aerospike && dpkg -i aerospike/aerospike-server-.deb && apt-get purge -y --auto-remove wget ca-certificates && rm -rf aerospike-server.tgz aerospike /var/lib/apt/lists/*
+---> Using cache
+---> 9ec698f300b6
+Step 4 : ADD aerospike.conf /etc/aerospike/aerospike.conf
+---> Using cache
+---> d09cfaeb5c7a
+Step 5 : VOLUME /opt/aerospike/data
+---> Using cache
+---> 6430d913cf09
+Step 6 : EXPOSE 3000 3001 3002 3003
+---> Using cache
+---> e075b26b611c
+Step 7 : CMD /usr/bin/asd --foreground
+---> Using cache
+---> 5e8055e0a3aa
+Successfully built 5e8055e0a3aa
+root@aero:~/dockertest/aero# docker run -t aero
+Apr 03 2015 01:55:49 GMT: WARNING (as): (signal.c::67) found unexpected old signal handler 0x1 for 1

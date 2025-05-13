@@ -1,0 +1,19 @@
+mindo commented on 20 Oct 2014
+Hi,
+I just updated to docker 1.3 and fig 1.0 and one of my containers now fails to build with the following error:
+Step 5 : ADD https://dl.bintray.com/mitchellh/serf/0.6.3_linux_amd64.zip serf.zip
+Traceback (most recent call last):
+File "<string>", line 3, in <module>
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 51, in perform_command
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 119, in build
+File "/code/build/fig/out00-PYZ.pyz/fig.project", line 166, in build
+File "/code/build/fig/out00-PYZ.pyz/fig.service", line 394, in build
+File "/code/build/fig/out00-PYZ.pyz/fig.progress_stream", line 22, in stream_output
+KeyError: 'id
+The offending line on the Dockerfile is:
+ADD https://dl.bintray.com/mitchellh/serf/0.6.3_linux_amd64.zip serf.zip
+With docker 1.2 and fig 0.5.3 this was working perfectly and running a docker build with docker 1.3 also works.

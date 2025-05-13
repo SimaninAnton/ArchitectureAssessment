@@ -1,0 +1,19 @@
+Contributor
+mrfuxi commented on 18 Jul 2015
+I could not run tests while I had experimental version of Docker installed (1.8.x-dev)
+Traceback to one of failing tests included. As far as I've noticed they all failed like that
+======================================================================
+ERROR: test_build_no_cache (tests.integration.cli_test.CLITestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/path/compose/tests/integration/cli_test.py", line 30, in tearDown
+    super(CLITestCase, self).tearDown()
+  File "/path/compose/tests/integration/testcases.py", line 20, in tearDown
+    self.client.kill(c['Id'])
+  File "/usr/local/lib/python2.7/site-packages/docker/utils/decorators.py", line 20, in wrapped
+    return f(self, resource_id, *args, **kwargs)
+  File "/usr/local/lib/python2.7/site-packages/docker/client.py", line 494, in kill
+    self._raise_for_status(res)
+  File "/usr/local/lib/python2.7/site-packages/docker/clientbase.py", line 102, in _raise_for_status
+    raise errors.APIError(e, response, explanation=explanation)
+APIError: 500 Server Error: Internal Server Error ("Cannot kill container b4a458c4a6bc88dae43f46ccdaf0e22a8148f2bb386c44818321969304742721: Container b4a458c4a6bc88dae43f46ccdaf0e22a8148f2bb386c44818321969304742721 is not running")

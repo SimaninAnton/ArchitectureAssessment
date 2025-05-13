@@ -1,0 +1,1 @@
+Append a scale number at the tail of hostname

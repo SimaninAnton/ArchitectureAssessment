@@ -1,0 +1,1 @@
+Please make `docker-compose exec` an alias to `docker-compose run`

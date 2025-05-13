@@ -1,0 +1,66 @@
+fuelen commented on 3 Jan 2018
+$ docker-compose pull
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.18.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 121, in perform_command
+    project = project_from_options('.', options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/command.py", line 37, in project_from_options
+    override_dir=options.get('--project-directory'),
+  File "/usr/lib/python3.6/site-packages/compose/cli/command.py", line 91, in get_project
+    config_data = config.load(config_details)
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 375, in load
+    for config_file in config_details.config_files
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 375, in <listcomp>
+    for config_file in config_details.config_files
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 506, in process_config_file
+    environment)
+  File "/usr/lib/python3.6/site-packages/compose/config/config.py", line 497, in interpolate_config_section
+    environment
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 44, in interpolate_environment_variables
+    for name, config_dict in config.items()
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 44, in <genexpr>
+    for name, config_dict in config.items()
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 39, in process_item
+    for key, val in (config_dict or {}).items()
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 39, in <genexpr>
+    for key, val in (config_dict or {}).items()
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 54, in interpolate_value
+    return recursive_interpolate(value, interpolator, get_config_path(config_key, section, name))
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 74, in recursive_interpolate
+    for (key, val) in obj.items()
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 74, in <genexpr>
+    for (key, val) in obj.items()
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 70, in recursive_interpolate
+    return converter.convert(config_path, interpolator.interpolate(obj))
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 184, in convert
+    return self.map[rexp](value)
+  File "/usr/lib/python3.6/site-packages/compose/config/interpolation.py", line 141, in to_int
+    return int(s, base=0)
+ValueError: invalid literal for int() with base 0: '1g'
+Arch Linux, docker-compose from official repos.
+When I try to use binary docker-compose:
+$ docker-compose logs
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/command.py", line 37, in project_from_options
+  File "compose/cli/command.py", line 91, in get_project
+  File "compose/config/config.py", line 375, in load
+  File "compose/config/config.py", line 506, in process_config_file
+  File "compose/config/config.py", line 497, in interpolate_config_section
+  File "compose/config/interpolation.py", line 44, in interpolate_environment_variables
+  File "compose/config/interpolation.py", line 44, in <genexpr>
+  File "compose/config/interpolation.py", line 39, in process_item
+  File "compose/config/interpolation.py", line 39, in <genexpr>
+  File "compose/config/interpolation.py", line 54, in interpolate_value
+  File "compose/config/interpolation.py", line 74, in recursive_interpolate
+  File "compose/config/interpolation.py", line 74, in <genexpr>
+  File "compose/config/interpolation.py", line 70, in recursive_interpolate
+  File "compose/config/interpolation.py", line 184, in convert
+  File "compose/config/interpolation.py", line 141, in to_int
+ValueError: invalid literal for int() with base 0: '1g'
+Failed to execute script docker-compose

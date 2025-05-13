@@ -1,0 +1,1 @@
+Networking doesn't work with Windows containers due to disconnecting containers from networks

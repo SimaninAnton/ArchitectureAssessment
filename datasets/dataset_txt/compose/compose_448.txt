@@ -1,0 +1,5 @@
+triesa commented on 15 Oct 2018
+I use docker-compose on ubuntu 18 on remote server. How, with iptables, can i block access from the internet to the docker port and only allow access to it from the localhost of this server?
+For instance, i want to block 4150 port for internet. Trying this: iptables -A DOCKER-USER -p tcp --dport 4150 -j DROP does not block the port - still can access to it from the internet (not from server machine).
+How can i block access from internet to all ports that are on the server, but allow only 22,80 ? And keep that ports available from localhost of the server (eg from the server itself) ?
+Is there any flag to docker-compose, that i can set for hide that ports from internet?

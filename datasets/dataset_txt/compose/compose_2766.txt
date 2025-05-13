@@ -1,0 +1,69 @@
+connorbode commented on 16 Feb 2016
+I have a simple docker-compose.yml file. I've just spent the past 2 hours puzzled due to an unhelpful error message.
+I had a build arg that was a number, rather than a string. Here is a sample docker-compose.yml:
+version: '2'
+services: 
+  web:
+    build:
+      context: .
+      args:
+        some_ip: "192.168.9.2"
+        some_port: 1812 # culprit
+        some_other_var: "var"
+    ports:
+     - "80:80"
+edit: added the other args from my docker-compose.yml just in case they had an effect.
+The build command I was using is as follows:
+horrorscope:Sat-Elite connorbode$ docker-compose --verbose up
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Couldn't find 'auths' or 'HttpHeaders' sections
+docker.auth.auth.load_config: 'auth'
+docker.auth.auth.load_config: Attempting to parse legacy auth file format
+docker.auth.auth.load_config: list index out of range
+docker.auth.auth.load_config: All parsing attempts failed - returning empty config
+compose.cli.command.get_client: docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+compose.cli.command.get_client: Docker base_url: https://192.168.99.100:2376
+compose.cli.command.get_client: Docker version: KernelVersion=4.1.17-boot2docker, Os=linux, BuildTime=2016-02-11T20:39:58.688092588+00:00, ApiVersion=1.22, Version=1.10.1, GitCommit=9e83765, Arch=amd64, GoVersion=go1.5.3
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'satelite_default')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {u'Containers': {},
+ u'Driver': u'bridge',
+ u'IPAM': {u'Config': [{u'Gateway': u'172.18.0.1/16',
+                        u'Subnet': u'172.18.0.0/16'}],
+           u'Driver': u'default',
+           u'Options': None},
+ u'Id': u'7a72e5a7a3a591e186796c7709d9578dc0619a3a59d4526c46c826663d3e8936',
+ u'Name': u'satelite_default',
+ u'Options': {},
+ u'Scope': u'local'}
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=satelite', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=satelite', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- (u'satelite_web')
+compose.service.build: Building web
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag=u'satelite_web', buildargs={'some_port': '1812'}, rm=True, forcerm=False, path='/Users/connorbode/Workspaces/net-satori/Sat-Elite', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.auth.load_config: Couldn't find 'auths' or 'HttpHeaders' sections
+docker.auth.auth.load_config: 'auth'
+docker.auth.auth.load_config: Attempting to parse legacy auth file format
+docker.auth.auth.load_config: list index out of range
+docker.auth.auth.load_config: All parsing attempts failed - returning empty config
+docker.api.build._set_auth_headers: No auth config found
+ERROR: compose.cli.main.main: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+Changing my docker-compose.yml to use a string for the build arg fixed the error. Not sure what happened, but again, it was a few hours of Googling for me.
+version: '2'
+services: 
+  web:
+    build:
+      context: .
+      args:
+        some_ip: "192.168.9.2"
+        some_port: "1812" # changed
+        some_other_var: "var"
+    ports:
+     - "80:80"
+edit: added the other args from my docker-compose.yml just in case they had an effect.

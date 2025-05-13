@@ -1,0 +1,14 @@
+itsNikolay commented on 7 Feb 2015
+$ docker-compose ps 
+      Name                    Command               State             Ports          
+------------------------------------------------------------------------------------ 
+myapp_web_1        /bin/sh -c tail -f /dev/null     Up       0.0.0.0:3000->3000/tcp  
+myapp_web_run_53   bundle exec rails s -b0.0. ...   Up       3000/tcp
+[not working] Ports column has a different values, thus a page is not available on http://localhost:3000 when running $ docker-compose run web rails server -b '0.0.0.0'
+[working] But if run docker-compose up with config line command: bundle exec rails server -b '0.0.0.0' in docker-compose.yml the page is available.
+Probably if Ports will have the same values we will able to get page through running $ docker-compose run web rails server -b '0.0.0.0'
+And localhost:3000 will be able to visit.
+P.S.
+my Docker & docker-compose.yml
+I run on Ubuntu and do not have boot2docker
+In first case I am able to visit page just through http://172.17.0.156:3000/

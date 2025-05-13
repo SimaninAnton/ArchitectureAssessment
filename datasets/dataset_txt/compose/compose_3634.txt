@@ -1,0 +1,3 @@
+stephenlawrence commented on 21 May 2015
+Running the latest build from master branch:
+When I try to docker-compose logs MYSERVICE I get the entire stack of services log output.

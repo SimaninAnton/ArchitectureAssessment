@@ -1,0 +1,8 @@
+d2xdt2 commented on 4 Sep 2015
+There are added 3 dots after the container name when doing up
+# docker-compose up
+Starting dockercomposetest_helloworld_1...
+Attaching to dockercomposetest_helloworld_1
+which makes copy/pasing the name on Linux slow, as you can't just double click on the name without also getting the 3 dots. So one would have to drag the mouse cursor over the name and make sure not to get any of the dots included.
+Proposal
+Don't add the 3 dots.

@@ -1,0 +1,10 @@
+jianghaitao commented on 28 Apr 2015
+According to http://docs.docker.com/compose/env/, one can query the environment variables available to a given service by doing docker-compse run env. I noticed that it is, however, not stable, as one can see from examples below:
+$ docker-compose run redis env | grep redis_1
+$ docker-compose run redis env | grep redis_1
+REDIS_1_NAME=/composepythonwebserver_redis_run_41/redis_1
+COMPOSEPYTHONWEBSERVER_REDIS_1_NAME=/composepythonwebserver_redis_run_41/composepythonwebserver_redis_1
+$ docker-compose run redis env | grep redis_1
+REDIS_1_NAME=/composepythonwebserver_redis_run_42/redis_1
+COMPOSEPYTHONWEBSERVER_REDIS_1_NAME=/composepythonwebserver_redis_run_42/composepythonwebserver_redis_1
+Notice that 1st execution resulted no output. The test example was based on http://docs.docker.com/compose/

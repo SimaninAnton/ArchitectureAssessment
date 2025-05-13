@@ -1,0 +1,69 @@
+kklepper commented on 15 Mar 2016
+example:
+git clone https://github.com/tutumcloud/hello-world.git
+docker build -t hello-world .
+add docker-compose.yml
+version: '2'
+services:
+  web:
+    image: hello-world
+    ports:
+      - "80:80"
+    links:
+      - mem
+  mem:
+    image: memcached 
+run:
+$ docker-compose up -d && sudo docker-compose ps
+Creating network "helloworld2_default" with the default driver
+Creating helloworld2_mem_1
+Creating helloworld2_web_1
+      Name                     Command               State         Ports
+-------------------------------------------------------------------------------
+helloworld2_mem_1   /entrypoint.sh memcached         Up      11211/tcp
+helloworld2_web_1   /bin/sh -c php-fpm -d vari ...   Up      0.0.0.0:80->80/tcp
+Now point your browser to the right address. You'd expect to see links here - but you don't.
+Hello world!
+My hostname is 79c7b04ff3bd         
+Comment the first 2 lines out, then you'll see the links you expect.
+Hello world!
+My hostname is caafd3f11f11
+Links found
+HELLOWORLD2_MEM_1 listening in 11211 available at tcp://172.17.0.2:11211
+MEM listening in 11211 available at tcp://172.17.0.2:11211
+MEM_1 listening in 11211 available at tcp://172.17.0.2:11211
+As a consequence, if you have a fairly complicated setup with lots of links, they can't connect as advertised with version 2.
+Am I missing something here?
+docker
+$ docker info
+Containers: 6
+ Running: 5
+ Paused: 0
+ Stopped: 1
+Images: 53
+Server Version: 1.10.2
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 111
+ Dirperm1 Supported: false
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: bridge null host
+Kernel Version: 3.13.0-79-generic
+Operating System: Ubuntu 14.04.4 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 992.5 MiB
+Name: ip-172-31-30-16
+ID: YCVV:YNAX:447K:W5Y7:UMCK:QIJB:3QMI:N47Z:Q2UH:IMFW:HQXA:GWIO
+WARNING: No swap limit support
+compose
+$ docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

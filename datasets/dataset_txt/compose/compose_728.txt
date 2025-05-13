@@ -1,0 +1,11 @@
+POD666 commented on 20 Apr 2018
+I'm trying to run few projects that have services that expose same ports.
+I have found the same unanswered question here.
+When I try to run second project I get
+Bind for 0.0.0.0:8000 failed: port is already allocated
+First project is available at localhost and its subnet. I don't want it to be available on localhost.
+How to do that?
+$ docker -v
+Docker version 18.03.0-ce, build 0520e24
+$ docker-compose -v
+docker-compose version 1.17.0, build ac53b73

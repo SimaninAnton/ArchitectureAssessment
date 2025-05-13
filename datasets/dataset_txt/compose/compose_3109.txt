@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 11 Nov 2015
+This flag became a no-op warning in 1.4. So there have been two full releases which warned about this deprecated flag.
+I think we can drop it as part of the 1.6 release. What do you think?

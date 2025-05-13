@@ -1,0 +1,1 @@
+rm --stop is not working in compose 1.11.2 (Docker for Mac 17.03.1-ce-mac5)

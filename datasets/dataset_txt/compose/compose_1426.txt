@@ -1,0 +1,58 @@
+jggc commented on 30 May 2017
+When merging two files defining the same service with python 3.6, and the head defines both host and container port but the base defines only the container port, I get the following error :
+(python3/6) docker-compose -f docker-compose-base.yml -f docker-compose-head.yml config
+Traceback (most recent call last):
+  File "/tmp/venv/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/tmp/venv/lib/python3.6/site-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/tmp/venv/lib/python3.6/site-packages/compose/cli/main.py", line 112, in perform_command
+    handler(command, options, command_options)
+  File "/tmp/venv/lib/python3.6/site-packages/compose/cli/main.py", line 289, in config
+    compose_config = get_config_from_options(self.project_dir, config_options)
+  File "/tmp/venv/lib/python3.6/site-packages/compose/cli/command.py", line 47, in get_config_from_options
+    config.find(base_dir, config_path, environment)
+  File "/tmp/venv/lib/python3.6/site-packages/compose/config/config.py", line 337, in load
+    service_dicts = load_services(config_details, main_file)
+  File "/tmp/venv/lib/python3.6/site-packages/compose/config/config.py", line 459, in load_services
+    service_config = merge_services(service_config, next_config)
+  File "/tmp/venv/lib/python3.6/site-packages/compose/config/config.py", line 450, in merge_services
+    for name in all_service_names
+  File "/tmp/venv/lib/python3.6/site-packages/compose/config/config.py", line 450, in <dictcomp>
+    for name in all_service_names
+  File "/tmp/venv/lib/python3.6/site-packages/compose/config/config.py", line 823, in merge_service_dicts_from_files
+    new_service = merge_service_dicts(base, override, version)
+  File "/tmp/venv/lib/python3.6/site-packages/compose/config/config.py", line 898, in merge_service_dicts
+    merge_ports(md, base, override)
+  File "/tmp/venv/lib/python3.6/site-packages/compose/config/config.py", line 931, in merge_ports
+    md[field] = [item for item in sorted(merged.values())]
+TypeError: '<' not supported between instances of 'str' and 'NoneType'
+But with python 2.7 it works even though it's not merging properly but rather appending :
+(python2.7) docker-compose -f docker-compose-base.yml -f docker-compose-head.yml config
+networks: {}
+services:
+  test:
+    image: nginx
+    ports:
+    - 80/tcp
+    - 8080:80/tcp
+version: '2.0'
+volumes: {}
+And the minimal content of the files :
+docker-compose-base.yml
+version: '2'
+
+services:
+    test:
+        image: nginx
+        ports:
+            - '80'
+docker-compose-head.yml
+version: '2'
+
+services:
+    test:
+        image: nginx
+        ports:
+            - '8080:80'
+1

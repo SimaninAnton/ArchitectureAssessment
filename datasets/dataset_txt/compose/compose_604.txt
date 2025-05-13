@@ -1,0 +1,62 @@
+ibocon commented on 28 Jun 2018 •
+edited
+Description of the issue
+I accidentally delete docker's system environment variables on Windows 10.
+Error Message:
+The DOCKER_REGISTRY variable is not set. Defaulting to a blank string.
+Context information (for bug reports)
+I change my Windows edition from Home to Enterprise.
+I got an error from Docker for Windows because of Docker Toolbox's system environment variable.
+Therefore, I delete Docker related system environment variable and re-install Docker for windows.
+Then I got an error on building ASP.NET Core MVC template project.
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 7641a56
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k 26 Jan 2017
+Output of "docker version"
+Client:
+Version: 18.03.1-ce
+API version: 1.37
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:12:48 2018
+OS/Arch: windows/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.1-ce
+API version: 1.37 (minimum version 1.24)
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:21:42 2018
+OS/Arch: windows/amd64
+Experimental: false
+Output of "docker-compose config"
+ERROR:
+Can't find a suitable configuration file in this directory or any
+parent. Are you in the right directory?
+    Supported filenames: docker-compose.yml, docker-compose.yaml
+Steps to reproduce the issue
+Delete docker related system environment variables
+Re-install "docker for windows"
+Check system environment variables
+Observed result
+No system environment variables for docker
+Expected result
+Restore system system environment variables for docker
+Stacktrace / full error message
+Severity Code Description Project File Line Suppression State
+Error The DOCKER_REGISTRY variable is not set. Defaulting to a blank string.
+Building server
+Creating dockercompose2577525810590707085_server_1 ...
+Creating dockercompose2577525810590707085_server_1 ... error
+ERROR: for dockercompose2577525810590707085_server_1 Cannot create container for service server: invalid volume specification: '/c/Program Files (x86)/dotnet/sdk/NuGetFallbackFolder:c:.nuget\fallbackpackages:ro'
+ERROR: for server Cannot create container for service server: invalid volume specification: '/c/Program Files (x86)/dotnet/sdk/NuGetFallbackFolder:c:.nuget\fallbackpackages:ro'
+Encountered errors while bringing up the project..
+For more troubleshooting information, go to http://aka.ms/DockerToolsTroubleshooting docker-compose C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets 363
+(if applicable)
+Additional information
+Stackoverflow
+OS version / distribution, docker-compose install method, etc.

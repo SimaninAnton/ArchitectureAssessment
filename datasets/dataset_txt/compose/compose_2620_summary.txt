@@ -1,0 +1,1 @@
+compose doesn't create an unused network in swarm

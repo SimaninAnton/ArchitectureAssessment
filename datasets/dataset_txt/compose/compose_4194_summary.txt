@@ -1,0 +1,1 @@
+CommandError: /code/manage.py already exists,

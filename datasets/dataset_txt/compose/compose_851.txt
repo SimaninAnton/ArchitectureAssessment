@@ -1,0 +1,4 @@
+bendikro commented on 23 Feb 2018
+Currently compose/config/config.py will always call validate_service() which rasises a ConfigurationError e.g. if a service depends on a service that is missing.
+The result is that it's not possible to read a config if there is a error.
+Having error checking optional would be useful.

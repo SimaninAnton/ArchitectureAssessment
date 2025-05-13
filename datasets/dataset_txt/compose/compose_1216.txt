@@ -1,0 +1,50 @@
+zacheryph commented on 7 Sep 2017
+docker-compose config prints out a configuration that docker-compose considers invalid. This happens starting with version: "2.1" and regards volume configurations.
+This issue appears to originate from name being allowed directly under volume but does not get along with external. According to documentation name started being allowed under the volume with 2.1. Having name directly under the volume will auto-create it. Having it under external complains and it must be manually made. However according to documentation (and testing) name is not allowed directly under the volume in 3.x.
+This issue escalates all the way through version 2.1 -> 3.3.
+##### version: "2.0"
+➜  $  cat orig-20.yml 
+version: "2.0"
+volumes:
+  vol:
+    external:
+      name: vol
+
+➜  $  docker-compose -f orig-20.yml config > conf-20.yml
+➜  $  cat conf-20.yml 
+services: {}
+version: '2.0'
+volumes:
+  vol:
+    external:
+      name: vol
+
+➜  $  docker-compose -f orig-20.yml up
+ERROR: Volume vol declared as external, but could not be found. Please create the volume manually using `docker volume create --name=vol` and try again.
+
+➜  $  docker-compose -f conf-20.yml up
+ERROR: Volume vol declared as external, but could not be found. Please create the volume manually using `docker volume create --name=vol` and try again.
+
+##### version: "2.1"
+➜  $  cat orig-21.yml 
+version: "2.1"
+volumes:
+  vol:
+    external:
+      name: vol
+
+➜  $  docker-compose -f orig-21.yml config > conf-21.yml 
+➜  ~/src/broken-config-volumes  cat conf-21.yml 
+services: {}
+version: '2.1'
+volumes:
+  vol:
+    external: true
+    name: vol
+
+➜  $  docker-compose -f orig-21.yml up
+ERROR: Volume vol declared as external, but could not be found. Please create the volume manually using `docker volume create --name=vol` and try again.
+
+➜  $  docker-compose -f conf-21.yml up
+ERROR: Volume vol declared as external but specifies additional attributes (name).
+1

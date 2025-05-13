@@ -1,0 +1,11 @@
+serandel commented on 22 Apr 2016
+I just tried to install Docker Compose in a brand new VirtualBox Ubuntu 16.04 installation, following the instructions:
+curl -L https://github.com/docker/compose/releases/download/1.7.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+But now, when I try to use it, this happens:
+$ docker-compose version
+bash: /usr/bin/docker-compose: No existe el archivo o el directorio
+(It's a "file not found" error in Spanish. :)
+Symlinking /usr/bin/docker-compose -> /usr/local/bin/docker-compose works OK.
+12
+1

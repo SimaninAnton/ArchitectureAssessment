@@ -1,0 +1,11 @@
+eduarddrenth commented on 27 Mar 2019
+Description of the issue
+in shell
+VERSION=1.3
+in compose file
+image: oat:${VERSION}
+the version remains empty when doing stack deploy
+Context information (for bug reports)
+docker version: 18.06.0-ce
+compose version: 1.22.0-rc1
+ubuntu 18.04

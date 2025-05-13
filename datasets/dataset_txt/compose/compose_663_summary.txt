@@ -1,0 +1,1 @@
+Losing stdout and stderr after a minute

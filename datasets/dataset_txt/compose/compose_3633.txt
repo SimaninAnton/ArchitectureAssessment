@@ -1,0 +1,9 @@
+Agasper commented on 21 May 2015
+How to prevent BUILD command to leave old untagged image for service ?
+REPOSITORY TAG IMAGE ID
+service_image latest b91d042e6279
+sudo docker-compose build image
+REPOSITORY TAG IMAGE ID
+service_image latest 9ea7fae84122
+b91d042e6279
+Is it expected behavior ?

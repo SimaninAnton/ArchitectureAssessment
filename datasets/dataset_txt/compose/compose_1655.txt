@@ -1,0 +1,3 @@
+Anvil commented on 22 Feb 2017
+Due to docker/docker-py#1472, compose 1.11.1 is unable to propagate the HttpHeaders from config.json on "events" commands.
+Compose looks for containers events when performing "docker-compose up".

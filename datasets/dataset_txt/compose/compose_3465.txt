@@ -1,0 +1,17 @@
+dunk commented on 16 Jul 2015
+I get a circular reference when I use the pattern below, which I believe should work.
+docker-compose.yml
+one:
+    extends:
+        file: another.yml
+        service: two
+another.yml
+two:
+    image: ubuntu:latest
+    extends:
+        file: another.yml
+        service: three
+
+three:
+    user: blah
+May be the same root cause #1343, but the behaviour is slightly different.

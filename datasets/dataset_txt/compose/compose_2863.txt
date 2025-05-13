@@ -1,0 +1,98 @@
+marksullivancrowd commented on 30 Jan 2016
+in my CMD script
+i catch the SIGTERM
+trap 'term_handler' SIGTERM
+and forward it to a handler
+#####
+bootstrapping code
+#####
+php-fpm &
+phpfpm_pid="$!"
+
+term_handler() {
+    kill -SIGTERM $phpfpm_pid
+    wait $phpfpm_pid
+    kill -SIGTERM `pgrep tail`
+}
+# wait indefinetely
+while true
+do
+  tail -f /dev/null & wait ${!}
+  exit 0
+done
+when i terminate using CTRL+C
+i get the following
+php-fpm_1 | + trap term_handler SIGTERM
+php-fpm_1 | + phpfpm_pid=19
+php-fpm_1 | + true
+php-fpm_1 | + wait 20
+php-fpm_1 | + tail -f /dev/null
+php-fpm_1 | + php-fpm
+php-fpm_1 | No log handling enabled - turning on stderr logging
+php-fpm_1 | Created directory: /var/lib/net-snmp/mib_indexes
+php-fpm_1 | [29-Jan-2016 22:56:55] NOTICE: fpm is running, pid 19
+php-fpm_1 | [29-Jan-2016 22:56:55] NOTICE: ready to handle connections
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping operations_php-fpm_1 ... done
+ERROR:
+Aborting.
+in the actual logs
++ trap term_handler SIGTERM
++ phpfpm_pid=19
++ true
++ wait 20
++ tail -f /dev/null
++ php-fpm
+No log handling enabled - turning on stderr logging
+Created directory: /var/lib/net-snmp/mib_indexes
+[29-Jan-2016 22:56:55] NOTICE: fpm is running, pid 19
+[29-Jan-2016 22:56:55] NOTICE: ready to handle connections
+++ term_handler
+++ kill -SIGTERM 19
+++ wait 19
+[29-Jan-2016 22:57:12] NOTICE: Terminating ...
+[29-Jan-2016 22:57:12] NOTICE: exiting, bye-bye!
++++ pgrep tail
+++ kill -SIGTERM 20
++ exit 0
+and the container exitcode is 0
+docker inspect  -f '{{.State.ExitCode}}' operations_php-fpm_1
+0
+these are the docker events
+2016-01-29T23:03:52.608409359Z 4d386101f9fcea2856011e37736be51d89b875dc54f6192002c08125ca0e8673: (from myimage) kill
+2016-01-29T23:03:52.638800498Z 4d386101f9fcea2856011e37736be51d89b875dc54f6192002c08125ca0e8673: (from myimage) die
+2016-01-29T23:03:52.696166130Z 4d386101f9fcea2856011e37736be51d89b875dc54f6192002c08125ca0e8673: (from myimage) stop
+i also have traps for
+trap 'exit 2' SIGINT
+trap 'exit 3' SIGKILL
+incase the first kill event was sending a SIGINT/SIGKILL but these never get called
+but for some reason docker-compose thinks theres an error, does not seem intuitive
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping operations_php-fpm_1 ... done
+ERROR:
+Aborting.
+with verbose on
+^CGracefully stopping... (press Ctrl+C again to force)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=operations', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'4d386101f9fcea2856011e37736be51d89b875dc54f6192002c08125ca0e8673')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/start.sh'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+Stopping operations_php-fpm_1 ...
+compose.cli.verbose_proxy.proxy_callable: docker stop <- (u'4d386101f9fcea2856011e37736be51d89b875dc54f6192002c08125ca0e8673', timeout=10)
+compose.cli.verbose_proxy.proxy_callable: docker wait <- (u'4d386101f9fcea2856011e37736be51d89b875dc54f6192002c08125ca0e8673')
+compose.cli.verbose_proxy.proxy_callable: docker stop -> None
+Stopping operations_php-fpm_1 ... done
+ERROR: compose.cli.main.main:
+Aborting.
+Compose version 1.5.1
+Docker version: KernelVersion=4.1.13-boot2docker, Os=linux, BuildTime=Fri Nov 20 17:56:04 UTC 2015, ApiVersion=1.21, Version=1.9.1, GitCommit=a34a1d5, Arch=amd64, GoVersion=go1.4.3

@@ -1,0 +1,92 @@
+Contributor
+j0hnsmith commented on 6 Mar 2014
+I'm getting an error when I run fig build, docker build ... works fine. This part of the build is just installing packages via apt-get.
+  Setting up ca-certificates-java (20130815) ...
+  Adding debian:Camerfirma_Chambers_of_Commerce_Root.pem
+  Adding debian:DigiCert_Global_Root_CA.pem
+  Adding debian:Thawte_Server_CA.pem
+  Adding debian:Root_CA_Generalitat_Valenciana.pem
+  Adding debian:Network_Solutions_Certificate_Authority.pem
+  Adding debian:TURKTRUST_Certificate_Services_Provider_Root_1.pem
+  Adding debian:QuoVadis_Root_CA_3.pem
+  Adding debian:Security_Communication_RootCA2.pem
+  Adding debian:Verisign_Class_1_Public_Primary_Certification_Authority.pem
+  Adding debian:Swisscom_Root_CA_1.pem
+  Adding debian:Verisign_Class_1_Public_Primary_Certification_Authority_-_G2.pem
+  Adding debian:WellsSecure_Public_Root_Certificate_Authority.pem
+  Adding debian:T-TeleSec_GlobalRoot_Class_3.pem
+  Adding debian:AddTrust_Public_Services_Root.pem
+  Adding debian:E-Guven_Kok_Elektronik_Sertifika_Hizmet_Saglayicisi.pem
+  Adding debian:Sonera_Class_1_Root_CA.pem
+  Adding debian:ACEDICOM_Root.pem
+  Adding debian:Hongkong_Post_Root_CA_1.pem
+  Adding debian:TURKTRUST_Certificate_Services_Provider_Root_2.pem
+  Adding debian:SwissSign_Silver_CA_-_G2.pem
+  Adding debian:America_Online_Root_Certification_Authority_1.pem
+  Adding debian:Certum_Root_CA.pem
+  Adding debian:ValiCert_Class_1_VA.pem
+  Adding debian:StartCom_Certification_Authority_G2.pem
+  Adding debian:thawte_Primary_Root_CA.pem
+  Adding debian:NetLock_Express_=Class_C=_Root.pem
+  Adding debian:Verisign_Class_3_Public_Primary_Certification_Authority_-_G3.pem
+  Adding debian:TC_TrustCenter_Class_2_CA_II.pem
+  Adding debian:QuoVadis_Root_CA.pem
+  Traceback (most recent call last):
+    File "<string>", line 3, in <module>
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 39, in main
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 30, in dispatch
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 47, in perform_command
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 104, in build
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.project", line 136, in build
+    File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 287, in build
+  UnicodeEncodeError: 'ascii' codec can't encode character u'\xed' in position 19: ordinal not in range(128)
+This is what's being installed (I imagine it's the ca-certificates-java package where the error happens)
+The following NEW packages will be installed:
+  binutils build-essential ca-certificates-java cifs-utils cpp cpp-4.8
+  default-jre-headless dpkg-dev emacsen-common erlang erlang-appmon
+  erlang-asn1 erlang-base erlang-common-test erlang-corba erlang-crypto
+  erlang-debugger erlang-dev erlang-dialyzer erlang-diameter erlang-doc
+  erlang-edoc erlang-eldap erlang-erl-docgen erlang-et erlang-eunit
+  erlang-examples erlang-gs erlang-ic erlang-ic-java erlang-inets
+  erlang-jinterface erlang-megaco erlang-mnesia erlang-mode erlang-observer
+  erlang-odbc erlang-os-mon erlang-parsetools erlang-percept erlang-pman
+  erlang-public-key erlang-reltool erlang-runtime-tools erlang-snmp erlang-src
+  erlang-ssh erlang-ssl erlang-syntax-tools erlang-test-server erlang-toolbar
+  erlang-tools erlang-tv erlang-typer erlang-webtool erlang-xmerl fakeroot
+  fontconfig-config fonts-dejavu-core g++ g++-4.8 gcc gcc-4.8 geoip-database
+  git git-man icedtea-7-jre-jamvm java-common keyutils libalgorithm-diff-perl
+  libalgorithm-diff-xs-perl libalgorithm-merge-perl libasan0 libasn1-8-heimdal
+  libatomic1 libavahi-client3 libavahi-common-data libavahi-common3
+  libc-dev-bin libc6-dev libclass-isa-perl libcloog-isl4 libcups2
+  libcurl3-gnutls libdcerpc0 libdpkg-perl libdrm-intel1 libdrm-nouveau2
+  libdrm-radeon1 libelf1 liberror-perl libexpat1-dev libfile-fcntllock-perl
+  libfontconfig1 libfontenc1 libfreetype6 libgcc-4.8-dev libgd3 libgdbm3
+  libgensec0 libgeoip1 libgl1-mesa-dri libgl1-mesa-glx libglapi-mesa
+  libglib2.0-0 libglib2.0-data libgmp10 libgomp1 libgssapi3-heimdal
+  libhcrypto4-heimdal libhdb9-heimdal libheimbase1-heimdal
+  libheimntlm0-heimdal libhx509-5-heimdal libice6 libisl10 libitm1 libjbig0
+  libjpeg-turbo8 libjpeg8 libkrb5-26-heimdal liblcms2-2 libldap-2.4-2
+  libldap2-dev libldb1 libllvm3.3 libltdl7 libmpc3 libmpfr4 libndr-standard0
+  libndr0 libnspr4 libnss3 libnss3-1d libodbc1 libpciaccess0 libpcsclite1
+  libpython-dev libpython2.7 libpython2.7-dev libquadmath0 libroken18-heimdal
+  librtmp0 libsamba-credentials0 libsamba-hostconfig0 libsamba-util-dev
+  libsamba-util0 libsamdb0 libsasl2-2 libsasl2-dev libsasl2-modules
+  libsasl2-modules-db libsctp1 libsm6 libsmbclient libsmbclient-dev
+  libsmbclient-raw-dev libsmbclient-raw0 libssl-dev libssl-doc
+  libstdc++-4.8-dev libswitch-perl libtalloc2 libtdb1 libtevent0 libtiff5
+  libtimedate-perl libtsan0 libtxc-dxtn-s2tc0 libutempter0 libvpx1
+  libwbclient0 libwind0-heimdal libx11-xcb1 libxaw7 libxcb-dri2-0 libxcb-glx0
+  libxcb-shape0 libxcomposite1 libxdamage1 libxfixes3 libxft2 libxi6
+  libxinerama1 libxml2 libxml2-dev libxmu6 libxpm4 libxrandr2 libxrender1
+  libxslt1-dev libxslt1.1 libxss1 libxt6 libxtst6 libxv1 libxxf86dga1
+  libxxf86vm1 linux-libc-dev lksctp-tools make manpages manpages-dev nginx
+  nginx-common nginx-full openjdk-7-jre-headless patch perl perl-modules
+  pkg-config python-dev python-meld3 python-pip python-pkg-resources
+  python-setuptools python-support python-talloc python-virtualenv
+  python2.7-dev rsync samba-common samba-common-bin samba-dsdb-modules
+  sgml-base shared-mime-info smbclient supervisor tcl tcl-lib tcl8.5
+  tcl8.5-lib tk tk-lib tk8.5 tk8.5-lib ttf-dejavu-core tzdata-java x11-common
+  x11-utils xbitmaps xml-core xterm xz-utils zlib1g-dev

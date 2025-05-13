@@ -1,0 +1,40 @@
+SamirTalwar commented on 17 Mar 2016
+I discovered a few days ago that when building images, a cache generated from docker build will not be used by docker-compose build or vice versa. This happens both on my Mac laptop (Docker Machine, Docker v1.10.3 installed through Homebrew) and on an Ubuntu 14.04 server (Docker v1.10.2 installed through apt-get).
+It is simple to reproduce. The directory tiny-app in https://github.com/SamirTalwar/docker-build-weirdness shows the issue:
+$ docker build --tag=tiny-app .
+Sending build context to Docker daemon 4.096 kB
+Step 1 : FROM ruby
+ ---> 0f58cbcb8dce
+Step 2 : WORKDIR /app
+ ---> Running in be80cb8a6324
+ ---> 2972973d66d4
+Removing intermediate container be80cb8a6324
+Step 3 : COPY script ./
+ ---> 77bc9f2b16eb
+Removing intermediate container dc9beae186af
+Step 4 : CMD ./script
+ ---> Running in ea5f91334ea4
+ ---> d69db9b758e0
+Removing intermediate container ea5f91334ea4
+Successfully built d69db9b758e0
+
+$ docker-compose build
+Building tiny-app
+Step 1 : FROM ruby
+ ---> 0f58cbcb8dce
+Step 2 : WORKDIR /app
+ ---> Using cache
+ ---> 2972973d66d4
+Step 3 : COPY script ./
+ ---> abb5045392d4
+Removing intermediate container 1b1450dd66eb
+Step 4 : CMD ./script
+ ---> Running in a0c7889ca68a
+ ---> 354c8fcf4876
+Removing intermediate container a0c7889ca68a
+Successfully built 354c8fcf4876
+From the COPY operation onwards, it no longer uses the cache.
+I don't know, but I am pretty sure, that this is because the tarballs sent to the Docker server are different. Also in that repo are the uploaded tarballs and hex dumps (hexdump -C), of the same from the CLI and Compose, captured through a fake HTTP server, server.py in the repo. The only real differences seem to be the inclusion of the owner user and group names in the latter, and a flag in the file mode header (grep for 0100644 vs. 0000644) which I cannot find the life of me find documentation on. I'm sure this boils down to how docker-py works, not Docker Compose, but I also can't be sure it'll be considered a bug here as opposed to the server.
+I could, of course, be way off.
+Whatever the reason, I'd love it if we could reconcile these so the cache is used. Cheers!
+20

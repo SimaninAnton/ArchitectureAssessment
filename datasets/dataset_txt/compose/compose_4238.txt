@@ -1,0 +1,9 @@
+dsyer commented on 12 Aug 2014
+$ fig up
+Recreating <xxx>...
+Cannot start container a3e4fd060d01a12ab7f810a91a341a44a5f9414fb814a3d29d8229bbb4dd3004: set apparmor profile docker-default: no such file or directory
+This change to docker claims to have fixed the problem: moby/moby#6180, but it's still failing for me.
+$ docker -v
+Docker version 1.1.2, build d84a070
+$ fig --version
+fig 0.5.2

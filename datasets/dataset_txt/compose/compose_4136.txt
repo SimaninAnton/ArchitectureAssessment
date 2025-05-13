@@ -1,0 +1,2 @@
+coderlol commented on 30 Oct 2014
+Any chance fig.yml can support the docker run option --add-host?

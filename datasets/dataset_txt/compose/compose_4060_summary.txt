@@ -1,0 +1,1 @@
+Command line -e flag causes an error when fig.yml has a list of environment variables

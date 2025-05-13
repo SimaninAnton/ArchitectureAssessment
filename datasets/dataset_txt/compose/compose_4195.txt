@@ -1,0 +1,14 @@
+blackrosezy commented on 3 Sep 2014
+This is an idea to have options to run a command on fig up / fig stop so script have a chance to do some prep.
+e.g.:
+pre-command: cp /root/.ssh/id_rsa .
+post-command: do some cleanup, send email notification, etc.
+
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  volumes:
+What do you think?
+Update:
+The pre-command and post-command will be run on host machine, not container.
+18

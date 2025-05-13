@@ -1,0 +1,1 @@
+Extract progress stream logic into a separate library

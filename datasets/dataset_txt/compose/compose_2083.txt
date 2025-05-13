@@ -1,0 +1,23 @@
+laggingreflex commented on 9 Sep 2016 •
+edited
+Description
+It seems mounting a host directory as a data volume with relative path to current host dir using docker-compose no longer works in Windows.
+version: '2'
+services:
+  test:
+    build:
+      context: ./
+    volumes:
+      - .:/test
+I've tested it with Windows 10, Docker version 1.12.1, docker-compose version 1.8.0, which didn't work. And on Ubuntu 14, Docker version 1.12.0, docker-compose version 1.9.0dev, which works as usual.
+Steps to reproduce:
+Clone https://github.com/laggingreflex/docker-test
+Run it on windows, and for comparison run it on Linux
+Expected result:
+The current dir which is mounted should be ls-ed and its contents output.
+CMD ls /test
+Actual result:
+On windows it outputs nothing (ls of an empty dir, means it didn't actually mount). Works on Linux, shows the two files of the test project.
+Absolute paths still work as usual, like
+   volumes:
+      - /c:/test

@@ -1,0 +1,3 @@
+zxf969175364 commented on 15 Jun 2019
+I start docker every day after the company, and then start redis, mariadb, consul, but every docker container can not link successfully every half an hour or so including navicat chrome java program but docker ps found everything is normal,
+Telnet localhost 3306 is also normal, even docker exec redis, but I did not find this problem when using docker at home, is it related to the company network, restarting once every half an hour, I am going to collapse

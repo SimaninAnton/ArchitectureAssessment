@@ -1,0 +1,4 @@
+oszi commented on 9 Aug 2016
+I'd like to be able to tag images built by compose into a private registry and push them.
+Looking at the code, the push command processes the 'image' field, however:
+Service test has both an image and build path specified. A service can either be built to image or use an existing image, not both.

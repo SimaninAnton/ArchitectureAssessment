@@ -1,0 +1,105 @@
+Contributor
+activatedgeek commented on 20 Jan 2017 •
+edited
+docker-compose up -d is not working if the image does not exist.
+VERSION
+# docker-compose --version
+docker-compose version 1.10.0, build 4bd6f1a
+
+# docker info
+Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 18
+Server Version: 1.13.0
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 29
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 03e5862ec0d8d3b3f750e19fca3ee367e13c090e
+runc version: 2f7393a47307a16f8cee44a37b262e8b81021e3e
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.4.0-59-generic
+Operating System: Ubuntu 16.04.1 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 15.56 GiB
+Name: sanyamkapoor
+ID: ZUHM:M4Y7:CJRY:RPGF:W73H:M4CN:EOLW:23OG:5U7H:UPT3:ITKV:Q2U4
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+docker-compose.yml
+version: '2'
+
+services:
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: my_rabbitmq
+    restart: always
+    networks:
+      mynet:
+        ipv4_address: 172.12.23.11
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - "./.data/rabbitmq:/var/lib/rabbimq:rw"
+    environment:
+      RABBITMQ_DEFAULT_USER: 'guest'
+      RABBITMQ_DEFAULT_PASS: 'guest'
+      RABBITMQ_DEFAULT_VHOST: '/'
+
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.12.23.0/24
+          gateway: 172.12.23.1
+ERROR LOG
+Pulling rabbit (rabbitmq:3-management)...
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 64, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 848, in up
+    remove_orphans=remove_orphans)
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 389, in up
+    svc.ensure_image_exists(do_build=do_build)
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 312, in ensure_image_exists
+    self.pull()
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 878, in pull
+    output = self.client.pull(repo, tag=tag, stream=True)
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/image.py", line 333, in pull
+    header = auth.get_config_header(self, registry)
+AttributeError: 'module' object has no attribute 'get_config_header'
+STEPS TO REPRODUCE
+Delete the image from host
+Run docker-compose up -d

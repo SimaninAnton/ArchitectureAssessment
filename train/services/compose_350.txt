@@ -1,0 +1,201 @@
+Contributor
+amezin commented on 21 Dec 2018
+Description of the issue
+The optimization introduced in 6ff6528 doesn't work anymore
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build unknown
+Output of docker version
+Client:
+ Version:           18.09.0-ce
+ API version:       1.39
+ Go version:        go1.11.2
+ Git commit:        4d60db472b
+ Built:             Fri Nov  9 00:05:34 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.0-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.11.2
+  Git commit:       4d60db472b
+  Built:            Fri Nov  9 00:05:11 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  service0:
+    image: busybox
+  service1:
+    image: busybox
+  service10:
+    image: busybox
+  service11:
+    image: busybox
+  service12:
+    image: busybox
+  service13:
+    image: busybox
+  service14:
+    image: busybox
+  service15:
+    image: busybox
+  service16:
+    image: busybox
+  service17:
+    image: busybox
+  service18:
+    image: busybox
+  service19:
+    image: busybox
+  service2:
+    image: busybox
+  service20:
+    image: busybox
+  service21:
+    image: busybox
+  service22:
+    image: busybox
+  service23:
+    image: busybox
+  service24:
+    image: busybox
+  service25:
+    image: busybox
+  service26:
+    image: busybox
+  service27:
+    image: busybox
+  service28:
+    image: busybox
+  service29:
+    image: busybox
+  service3:
+    image: busybox
+  service30:
+    image: busybox
+  service31:
+    image: busybox
+  service32:
+    image: busybox
+  service33:
+    image: busybox
+  service34:
+    image: busybox
+  service35:
+    image: busybox
+  service36:
+    image: busybox
+  service37:
+    image: busybox
+  service38:
+    image: busybox
+  service39:
+    image: busybox
+  service4:
+    image: busybox
+  service40:
+    image: busybox
+  service41:
+    image: busybox
+  service42:
+    image: busybox
+  service43:
+    image: busybox
+  service44:
+    image: busybox
+  service45:
+    image: busybox
+  service46:
+    image: busybox
+  service47:
+    image: busybox
+  service48:
+    image: busybox
+  service49:
+    image: busybox
+  service5:
+    image: busybox
+  service6:
+    image: busybox
+  service7:
+    image: busybox
+  service8:
+    image: busybox
+  service9:
+    image: busybox
+version: '2.2'
+Actual docker-compose.yml:
+services:
+  service0: {image: busybox}
+  service1: {extends: service0}
+  service10: {extends: service9}
+  service11: {extends: service10}
+  service12: {extends: service11}
+  service13: {extends: service12}
+  service14: {extends: service13}
+  service15: {extends: service14}
+  service16: {extends: service15}
+  service17: {extends: service16}
+  service18: {extends: service17}
+  service19: {extends: service18}
+  service2: {extends: service1}
+  service20: {extends: service19}
+  service21: {extends: service20}
+  service22: {extends: service21}
+  service23: {extends: service22}
+  service24: {extends: service23}
+  service25: {extends: service24}
+  service26: {extends: service25}
+  service27: {extends: service26}
+  service28: {extends: service27}
+  service29: {extends: service28}
+  service3: {extends: service2}
+  service30: {extends: service29}
+  service31: {extends: service30}
+  service32: {extends: service31}
+  service33: {extends: service32}
+  service34: {extends: service33}
+  service35: {extends: service34}
+  service36: {extends: service35}
+  service37: {extends: service36}
+  service38: {extends: service37}
+  service39: {extends: service38}
+  service4: {extends: service3}
+  service40: {extends: service39}
+  service41: {extends: service40}
+  service42: {extends: service41}
+  service43: {extends: service42}
+  service44: {extends: service43}
+  service45: {extends: service44}
+  service46: {extends: service45}
+  service47: {extends: service46}
+  service48: {extends: service47}
+  service49: {extends: service48}
+  service5: {extends: service4}
+  service6: {extends: service5}
+  service7: {extends: service6}
+  service8: {extends: service7}
+  service9: {extends: service8}
+version: '2.2'
+Steps to reproduce the issue
+$ docker-compose ps
+Observed result
+$ time docker-compose ps
+Name   Command   State   Ports
+------------------------------
+11.55user 0.07system 0:11.69elapsed 99%CPU (0avgtext+0avgdata 52836maxresident)k
+0inputs+0outputs (0major+23971minor)pagefaults 0swaps
+Expected result
+$ time docker-compose ps
+Name   Command   State   Ports
+------------------------------
+0.51user 0.05system 0:00.57elapsed 98%CPU (0avgtext+0avgdata 38024maxresident)k
+8inputs+7256outputs (0major+24728minor)pagefaults 0swaps
+Stacktrace / full error message
+No error messages
+Additional information
+Arch Linux, everything (docker, compose) is installed from distribution packages

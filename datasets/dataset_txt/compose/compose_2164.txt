@@ -1,0 +1,44 @@
+Ox24 commented on 8 Aug 2016 •
+edited
+Hey, i used the old discription for docker-compose and updated it to Version 2. Now i get an error while running it.
+Building kafka
+Traceback (most recent call last):
+File "/usr/local/bin/docker-compose", line 9, in
+load_entry_point('docker-compose==1.8.0', 'console_scripts', 'docker-compose')()
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 61, in main
+command()
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 113, in perform_command
+handler(command, command_options)
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 835, in up
+remove_orphans=remove_orphans)
+File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 382, in up
+svc.ensure_image_exists(do_build=do_build)
+File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 305, in ensure_image_exists
+self.build()
+File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 727, in build
+buildargs=build_opts.get('args', None),
+File "/usr/local/lib/python2.7/dist-packages/docker/api/build.py", line 54, in build
+path, exclude=exclude, dockerfile=dockerfile, gzip=gzip
+File "/usr/local/lib/python2.7/dist-packages/docker/utils/utils.py", line 103, in tar
+t.add(os.path.join(root, path), arcname=path, recursive=False)
+File "/usr/lib/python2.7/tarfile.py", line 2007, in add
+tarinfo = self.gettarinfo(name, arcname)
+File "/usr/lib/python2.7/tarfile.py", line 1879, in gettarinfo
+statres = os.lstat(name)
+my compose file looks like this
+version: '2'
+services:
+zookeeper:
+image: wurstmeister/zookeeper
+ports:
+- "2181:2181"
+kafka:
+build: .
+ports:
+- "9092"
+environment:
+KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+volumes:
+- /var/run/docker.sock:/var/run/docker.sock
+can someone help?

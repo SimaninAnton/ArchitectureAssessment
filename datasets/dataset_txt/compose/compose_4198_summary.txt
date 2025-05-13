@@ -1,0 +1,1 @@
+Make fig restart the container if memory goes beyond limit

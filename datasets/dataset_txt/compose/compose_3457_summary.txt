@@ -1,0 +1,1 @@
+Pressing ctrl-C twice to force kill no longer works

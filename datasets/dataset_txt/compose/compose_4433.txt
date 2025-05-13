@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 20 Jan 2014
+E.g. an environment variable for all redis hosts, comma separated.

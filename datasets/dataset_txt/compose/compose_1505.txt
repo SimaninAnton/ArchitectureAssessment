@@ -1,0 +1,22 @@
+NicolasRannou commented on 26 Apr 2017
+Trying to setup a bind volume and it does not work:
+Followed the documentation to write the docker-compose file:
+version: '3'
+services:
+  web:
+    #build: .
+    image: fnndsc/fnndsc.babymri.org
+    ports:
+      - "8060:8080"
+    volumes:
+      - type: bind
+        source: .
+        target: /src/website
+    labels:
+      name: "FNNDSC Web App"
+      role: "FNNDSC Web App development server"
+Docker version 17.03.1-ce, build c6d412e
+docker-compose version 1.12.0, build b31ff33
+docker-compose up:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.web.volumes contains an invalid type, it should be a string

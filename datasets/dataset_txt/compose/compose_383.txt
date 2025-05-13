@@ -1,0 +1,3 @@
+mmphego commented on 27 Nov 2018
+Also maybe change case to "python-pip" (or just "pip") and "env[ironment]".
+Originally posted by @hartwork in #6366

@@ -1,0 +1,17 @@
+netroby commented on 2 Sep 2016
+PS D:\workspace\hzfeng\deyihome-phpsource> docker-compose up -d
+Building db
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 61, in main
+  File "compose\cli\main.py", line 113, in perform_command
+  File "compose\cli\main.py", line 835, in up
+  File "compose\project.py", line 382, in up
+  File "compose\service.py", line 305, in ensure_image_exists
+  File "compose\service.py", line 727, in build
+  File "site-packages\docker\api\build.py", line 54, in build
+  File "site-packages\docker\utils\utils.py", line 103, in tar
+  File "tarfile.py", line 2021, in add
+IOError: [Errno 22] invalid mode ('rb') or filename: 'D:\\...\\public\\mas\\node_modu
+es\\.bin\\cake'
+docker-compose returned -1

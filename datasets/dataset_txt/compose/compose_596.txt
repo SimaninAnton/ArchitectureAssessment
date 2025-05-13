@@ -1,0 +1,65 @@
+seanlewis413 commented on 3 Jul 2018
+Description of the issue
+Bootstrap.yml and Application.yml properties not being picked up for specific service
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+version: '2'
+services:
+  config-server.c2s.com:
+    image: smcpartners/config-server
+    mem_limit: 1000m
+    ports:
+      - "8888:8888"
+    environment:
+      JAVA_OPTS: -Xms512m -Xmx700m -Xss1m
+      TZ: "US/Eastern"
+      security.user.name: ${BASIC_AUTH_USER}
+      security.user.password: ${BASIC_AUTH_PASSWORD}
+    restart: always
+
+  rest-handler.c2s.com:
+    image: smcpartners/rest-handler
+    environment:
+      JAVA_OPTS: -Xms512m -Xmx700m -Xss1m
+      TZ: "US/Eastern"
+    ports:
+      - "8999:8080"
+    mem_limit: 1500m
+    restart: always
+
+  discovery-server.c2s.com:
+    image: smcpartners/discovery-server
+    environment:
+      JAVA_OPTS: -Xms512m -Xmx700m -Xss1m
+      TZ: "US/Eastern"
+    mem_limit: 1500m
+    ports:
+      - "8761:8761"
+    restart: always
+Steps to reproduce the issue
+docker-compose run -d against this file on Amazon Linux AMI on EC2
+Observed result
+I'm working with several services in a spring cloud project, several of which I've omitted for proprietary reasons and because they have no bearing on the service in question. When I run this docker-compose script, none of the properties from the corresponding application.yml or bootstrap.yml (internal to .jar file) files are loaded, but all other services run fine, including Eureka, Zuul, and my other custom services. They all work when run as .jars locally and on Amazon AMI, they all work when run as separate Docker images locally and on Amazon AMI, and they all work when run in docker-compose script locally. It only does NOT work when I try to run this exact same docker-compose script on the server. The service comes up as unknown, does not register to Eureka, and cannot connect to my config server, or anything else specified in these resource files. I have the same versions of docker and docker-compose running on both my machine and the Amazon AMI, except for the OS/Arch. This seems very odd to me as I would think the resources would be packaged up in the .jar file, which should not make a difference when running the exact same docker-compose script.
+Expected result
+Service is able to register with Eureka and retrieve config data in docker-compose environment on Amazon AMI

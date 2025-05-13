@@ -1,0 +1,4 @@
+alphaDev23 commented on 21 Jun 2018
+Same issue that is referenced in #2847 which has been in existence for over 2 years.
+docker-compose version 1.16.1, build 6d1ac21
+Server Version: 17.09.0-ce

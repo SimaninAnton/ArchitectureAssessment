@@ -1,0 +1,44 @@
+jandudulski commented on 26 Feb 2015
+I'm stuck. I've got simple rails app with such Dockerfile:
+FROM ruby:2.2.0
+
+RUN apt-get update -qq && apt-get install -y build-essential
+
+RUN apt-get install -y libpq-dev
+
+RUN apt-get install -y libxml2-dev libxslt1-dev
+
+RUN apt-get install -y libqt4-webkit libqt4-dev xvfb
+
+RUN apt-get install -y nodejs
+
+RUN mkdir /app
+WORKDIR /app
+
+ADD Gemfile /app/Gemfile
+ADD Gemfile.lock /app/Gemfile.lock
+RUN bundle install
+
+ADD . /app
+and docker-compose.yml:
+web:
+  build: .
+  command: bundle exec rails server --port 3000 --binding=0.0.0.0
+  volumes:
+    - .:/app
+  ports:
+    - "3000:3000"
+  links:
+    - db
+db:
+  image: postgres
+  ports:
+    - "5432"
+When I run docker-compose build everything looks fine - images are downloaded, bundler install gems etc. But when I run e.g. docker-compose run web rake db:create...:
+Starting exampleapp_db_1...
+/app/Gemfile not found
+Is it bug or am I doing something wrong?
+OS: Fedora 21
+Docker: 1.5.0
+Compose: 1.1.0
+5

@@ -1,0 +1,91 @@
+cupofnestor commented on 22 Mar 2017
+We're running a pretty basic compose file - for mongoose models - on a dev server and several dev machines:
+Docker-compose.yml:
+version: '2'
+services:
+   "fng":
+      build: .
+      ports:
+      - "${FNG_IP}:80:9000"
+      volumes:
+      - ./app:/app
+      - "$MODEL_DIR:/app/server/models"
+      links:
+      - "mongo"
+      depends_on:
+      - "mongo"
+   "mongo":
+      image: mongo
+      expose: 
+      - 27017
+      volumes:
+      - $FNG_DATA_DIR:/data/db
+Example .env:
+FNG_IP=192.168.12.66
+FNG_DATA_DIR=~/my-data/data-17
+MODEL_DIR=~/models/my-models
+Intended Dev. workflow is this:
+Developer creates an empty models directory and git inits a repo there.
+Developer points compose to that directory and a tmp data dir for mongo by editing the .env
+Developer builds and ups the compose file
+Developer creates and edits model files locally
+grunt watch task within container 'sees' the changes and updates/restarts server accordingly
+Developer views changes on server container
+Developer commits/pushes for review.
+(Everything works fine up to this point)
+Intended Devops workflow:
+(Dev server is running the same compose file with its own .env.)
+Devops cds to its $MODEL_DIR and pulls remote changes.
+grunt watch task within server container 'sees' the changes to the volume and updates/restarts server accordingly
+QA types and editors view changes on server container.
+Issue
+Server container does not update volumes from host after git pull, editing the files with nano, etc.
+I realize this must be related to the compose #preserve volume data feature and possibly #1981. I have even stopped the running containers, docker rm'ed the server container and rebuilt using compose. My models are still not changing.
+I'm running slightly different versions of the engine on dev machines than on the dev server:
+Dev machine:
+docker version
+Client:
+Version:      1.13.1
+API version:  1.26
+Go version:   go1.7.5
+Git commit:   092cba3
+Built:        Wed Feb  8 08:47:51 2017
+
+OS/Arch:      darwin/amd64
+
+Server:
+Version:      1.13.1
+API version:  1.26 (minimum version 1.12)
+Go version:   go1.7.5
+Git commit:   092cba3
+Built:        Wed Feb  8 08:47:51 2017
+OS/Arch:      linux/amd64
+Experimental: true
+docker-compose version
+docker-compose version 1.11.1, build 7c5d5e4
+docker-py version: 2.0.2
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+Server
+docker version
+Client:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 21:44:32 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 21:44:32 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.8.1, build 878cff1
+docker-py version: 1.10.3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Is there a better way to make this 'flow work?

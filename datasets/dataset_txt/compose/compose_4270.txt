@@ -1,0 +1,3 @@
+sheax0r commented on 23 Jul 2014
+I have created a ruby project that parses fig.yml files that use "latest" tags in order to produce fig.yml files that use specific version tags. The idea here is to do something similar to Gemfile.lock for fig. I have found this very useful in a development environment where we use several docker images that need to interact with each other, but we want fig files that reference specific versions when we deploy to production.
+Fig could support this functionality natively. Here is a link to the project: https://github.com/sheax0r/fig-lock

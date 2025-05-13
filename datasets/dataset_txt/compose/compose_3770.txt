@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 30 Mar 2015
+Currently, if a service with build is extended by a service that sets image, the resulting configuration will have both options, resulting in an error.

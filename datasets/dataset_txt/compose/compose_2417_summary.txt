@@ -1,0 +1,1 @@
+ProjectError class have no msg attribute

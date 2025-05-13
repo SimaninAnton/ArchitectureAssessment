@@ -1,0 +1,6 @@
+seralf commented on 21 Sep 2017
+Hi there seems to be a small typo on the instructions for installing docker-compose version 1.16.1 on linux machine.
+Instructions provided for the installation of release 1.16.1 are
+curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+while on the guide it is:
+sudo curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose

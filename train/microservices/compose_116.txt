@@ -1,0 +1,154 @@
+itssadon commented on 1 Aug 2019
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.1
+ API version:       1.40
+ Go version:        go1.12.5
+ Git commit:        74b1e89
+ Built:             Thu Jul 25 21:18:17 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.1
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.5
+  Git commit:       74b1e89
+  Built:            Thu Jul 25 21:17:52 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  db:
+    environment:
+      POSTGRES_DB: pyconng_dev
+      POSTGRES_PASSWORD: pyconng
+      POSTGRES_USER: pyconng
+    image: postgres:10.1-alpine
+    volumes:
+    - postgres_data:/var/lib/postgresql/data:rw
+  web:
+    build:
+      context: /Users/itssadon/Code/pyconng-2019/web
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+    - db
+    environment:
+      DATABASE: postgres
+      DEBUG: '1'
+      SECRET_KEY: devk33s
+      SQL_DATABASE: pyconng_dev
+      SQL_ENGINE: django.db.backends.postgresql
+      SQL_HOST: db
+      SQL_PASSWORD: pyconng
+      SQL_PORT: '5432'
+      SQL_USER: pyconng
+    links:
+    - db:db
+    ports:
+    - published: 8000
+      target: 8000
+    volumes:
+    - /Users/itssadon/Code/pyconng-2019/web:/usr/src/web:rw
+version: '3.7'
+volumes:
+  postgres_data: {}
+Steps to reproduce the issue
+Run docker-compose up -d
+Run docker-compose ps -a
+Run docker-compose --verbose ps -a
+Observed result
+Traceback (most recent call last):
+File "docker-compose", line 6, in
+File "compose/cli/main.py", line 71, in main
+File "compose/cli/main.py", line 127, in perform_command
+File "compose/cli/main.py", line 712, in ps
+TypeError: '<' not supported between instances of 'Container' and 'Container'
+[29233] Failed to execute script docker-compose
+Expected result
+Show all stopped containers (including those created by the run command)
+Stacktrace / full error message
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.utils.config.find_config_file: Trying paths: ['/Users/itssadon/.docker/config.json', '/Users/itssadon/.dockercfg']
+docker.utils.config.find_config_file: Found file at path: /Users/itssadon/.docker/config.json
+docker.auth.load_config: Found 'credsStore' section
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.38/version HTTP/1.1" 200 849
+compose.cli.command.get_client: docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+compose.cli.command.get_client: Docker base_url: http+docker://localhost
+compose.cli.command.get_client: Docker version: Platform={'Name': 'Docker Engine - Community'}, Components=[{'Name': 'Engine', 'Version': '19.03.1', 'Details': {'ApiVersion': '1.40', 'Arch': 'amd64', 'BuildTime': '2019-07-25T21:17:52.000000000+00:00', 'Experimental': 'false', 'GitCommit': '74b1e89', 'GoVersion': 'go1.12.5', 'KernelVersion': '4.9.184-linuxkit', 'MinAPIVersion': '1.12', 'Os': 'linux'}}, {'Name': 'containerd', 'Version': 'v1.2.6', 'Details': {'GitCommit': '894b81a4b802e4eb2a91d1ce216b8817763c29fb'}}, {'Name': 'runc', 'Version': '1.0.0-rc8', 'Details': {'GitCommit': '425e105d5a03fabd737a126ad93d62a9eeede87f'}}, {'Name': 'docker-init', 'Version': '0.18.0', 'Details': {'GitCommit': 'fec3683'}}], Version=19.03.1, ApiVersion=1.40, MinAPIVersion=1.12, GitCommit=74b1e89, GoVersion=go1.12.5, Os=linux, Arch=amd64, KernelVersion=4.9.184-linuxkit, BuildTime=2019-07-25T21:17:52.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('pyconng2019_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.38/networks/pyconng2019_default HTTP/1.1" 404 52
+compose.cli.verbose_proxy.proxy_callable: docker inspect_volume <- ('pyconng2019_postgres_data')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.38/volumes/pyconng2019_postgres_data HTTP/1.1" 404 60
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={'label': ['com.docker.compose.project=pyconng-2019']})
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.38/containers/json?limit=-1&all=1&size=0&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dpyconng-2019%22%5D%7D HTTP/1.1" 200 4350
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 3 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- ('30f9b8f8233ef9eda83aafb3b8038d120f96d4b6971d3105fe7b4ef051031c61')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.38/containers/30f9b8f8233ef9eda83aafb3b8038d120f96d4b6971d3105fe7b4ef051031c61/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {'AppArmorProfile': '',
+ 'Args': ['-g', 'daemon off;'],
+ 'Config': {'AttachStderr': False,
+            'AttachStdin': False,
+            'AttachStdout': False,
+            'Cmd': ['nginx', '-g', 'daemon off;'],
+            'Domainname': '',
+            'Entrypoint': None,
+            'Env': ['PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                    'NGINX_VERSION=1.15.12'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- ('cd5d5928beef7c64bfd2b0c5145c886408d7deb0fbbe023ab90b50354154977c')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.38/containers/cd5d5928beef7c64bfd2b0c5145c886408d7deb0fbbe023ab90b50354154977c/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {'AppArmorProfile': '',
+ 'Args': ['gunicorn', 'pyconng.wsgi:application', '--bind', '0.0.0.0:8000'],
+ 'Config': {'AttachStderr': False,
+            'AttachStdin': False,
+            'AttachStdout': False,
+            'Cmd': ['gunicorn',
+                    'pyconng.wsgi:application',
+                    '--bind',
+                    '0.0.0.0:8000'],
+            'Domainname': '',
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- ('e673eee872d84effe2ed7c409c33d44b14acef4b8a3083bd7736d593b9831214')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.38/containers/e673eee872d84effe2ed7c409c33d44b14acef4b8a3083bd7736d593b9831214/json HTTP/1.1" 200 None
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {'AppArmorProfile': '',
+ 'Args': ['postgres'],
+ 'Config': {'AttachStderr': False,
+            'AttachStdin': False,
+            'AttachStdout': False,
+            'Cmd': ['postgres'],
+            'Domainname': '',
+            'Entrypoint': ['docker-entrypoint.sh'],
+            'Env': ['POSTGRES_USER=pyconng',
+                    'POSTGRES_PASSWORD=pyconng',
+...
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 712, in ps
+TypeError: '<' not supported between instances of 'Container' and 'Container'
+[29310] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.

@@ -1,0 +1,20 @@
+bjoerndev commented on 26 Jan 2018 •
+edited
+By mistake, I had two volume sections in one (big) service definition, e.g.
+services:
+   test:
+        volumes:
+           - ./test1:/test1
+        environment:
+           - testenv=abc
+        volumes:
+           - ./test2:/test2
+It took me some time to find this bug because compose didn't act as expected.
+Current behavior:
+Compose used only the last volumes section. All other volumes sections were silently ignored
+Expected behavior: One of
+Throw an error: Invalid syntax
+Use all volumes sections
+Probably this can be generalized to other sections than "volumes".
+Probably this is just expected behavior because of yml syntax (overwriting), but from developer point of view it should be fixed. In big / complex compose files this isn't always obviously.
+Version: docker-compose version 1.18.0, build 8dd22a9

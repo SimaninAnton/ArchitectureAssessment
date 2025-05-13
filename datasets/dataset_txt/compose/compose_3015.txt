@@ -1,0 +1,41 @@
+Contributor
+aanand commented on 4 Dec 2015
+In the next version of the Compose file format, we plan to implement support for declaring networks and volumes in the Compose file, for use by services declared in the same application (see #2421, #2478).
+It's likely that, as @dnephin raises in point 2 of #2478 (comment), we'll need to prefix the names of networks/volumes with the project name so that they don't conflict with networks/volumes declared in other applications.
+This raises the issue of how to refer to locally-declared versus externally-created networks/volumes. Our requirements are:
+I want to define a network/volume in my Compose file with a particular name, and later refer to it by that name (without having to prefix it with an unpredictable project name). It'll be defined in a block looking something like this:
+networks:
+  locally-defined-network:
+    driver: default
+volumes:
+  locally-defined-volume:
+    driver: default
+I want to create a network/volume manually via docker network create or docker volume create with a particular name, and later refer to it by that name.
+Note that this is already possible: you can refer to an externally-created network with net, or an externally-created volume with volumes. (We're not obliged to carry the existing syntax over, however - we're defining a new structure for the Compose file, so it's acceptable to introduce changes as long as the old syntax continues to work for files using the old format.)
+When looking at a name in net or volumes, it's not an acceptable solution to first check for a locally-defined entity of the appropriate type that matches the name, and fall back to assuming that it's an externally-created entity if we don't find one. As described in #2501, this is error-prone and could make the file harder to read for users who aren't fluent in the Compose file format.
+I have a couple of ideas as to how we could approach it. A key question, unanswered by either, is of which case should be considered the default - local versus external.
+Separate keys
+Instead of overloading net and volumes with two different behaviours, we could split them into separate config options (we can bikeshed the actual prefix/suffix later if we choose to go down this route):
+local_net: locally-defined-network
+net: externally-created-network
+local_volumes: ["locally-defined-volume:/data"]
+volumes: ["externally-created-volume:/data"]
+or, more in line with with links and external_links:
+net: locally-defined-network
+external_net: externally-created-network
+volumes: ["locally-defined-volume:/data"]
+external_volumes: ["externally-created-volume:/data"]
+Arguably, the example above implies that old-style volume bind mounts like .:/code should also live under external_volumes, rather than volumes, which feels a bit weird.
+Sigils
+We could rule that one (or both?) of local and external entities should be explicitly marked with a sigil of some kind. For example:
+net: @locally-defined-network
+net: externally-created-network
+volumes: ["@locally-defined-volume:/data"]
+volumes: ["externally-created-volume:/data"]
+If we flip the requirement around, then perhaps the sigil should be something that makes it clear that there's an external dependency, which should stand out:
+net: locally-defined-network
+net: !externally-created-network
+volumes: ["locally-defined-volume:/data"]
+volumes: ["!externally-created-volume:/data"]
+(Does this imply, similarly to the external_volumes example, that old-style bind mounts should also be prefixed? I'm not sure it does.)
+Note: the design problem in #2501 is closely related to this one, but there's a crucial distinction: net and volumes_from deal with not just with entities created in different ways (locally defined versus externally created) but with entities of different types (service versus container).

@@ -1,0 +1,83 @@
+nihn commented on 22 Feb 2016
+Hi,
+I have problem when I want to create containers in swarm connected to bridge network by docker-compose.
+docker-compose -f swarm.yml up -d
+Creating network "autofill_front" with driver "bridge"
+Starting autofill_dbdata_1
+autofill_db_1 is up-to-date
+Starting autofill_frontend_1
+ERROR: No such network: autofill_front
+docker network ls
+NETWORK ID          NAME                 DRIVER
+f1e3a7265a9a        n1/bridge            bridge              
+587320b678b9        autofill_backend     overlay             
+f40a4e955e9c        n2/autofill_front    bridge              
+f1cd3957eaa2        n1/autofill_front    bridge              
+b1d6f4ceada7        n2/docker_gwbridge   bridge              
+901db7e85754        n1/autofill_front    bridge              
+4c3ad2026015        autofill_frontend    overlay             
+561da159463d        m2/autofill_front    bridge              
+07168fa181f7        n2/none              null                
+33a091c19045        n2/autofill_front    bridge              
+8259c2eda80f        n1/none              null                
+1c02d0363c06        m2/bridge            bridge              
+57d17ac2462b        autofill_default     overlay             
+8f945a96e610        m2/none              null                
+bb4bfb9236ca        m2/docker_gwbridge   bridge              
+43d96a09e100        n1/autofill_front    bridge              
+0d725951f827        n1/autofill_front    bridge              
+f713f0f25d57        n1/autofill_front    bridge              
+791aa1b710b1        n1/host              host                
+7ceffb544fea        n1/autofill_front    bridge              
+ba38658146eb        autofill_back        overlay             
+88e8830a44ef        n2/host              host                
+49418cf0b978        n2/autofill_front    bridge              
+be15f0ddfcbb        n1/autofill_front    bridge              
+edfa42171532        n1/autofill_front    bridge              
+b2b76c4170bd        m2/host              host                
+48591b413992        n2/autofill_front    bridge              
+4b12b07bb916        n1/autofill_front    bridge              
+a99077bdd11a        n2/autofill_front    bridge              
+3acaafbcf45d        n1/autofill_front    bridge              
+01c14ecb84fc        n1/docker_gwbridge   bridge              
+19475fa8ebb1        n2/autofill_front    bridge              
+0dcbe2a70ed9        n2/bridge            bridge              
+da19cd91015f        n2/autofill_front    bridge    
+version: "2"
+
+services:
+
+  frontend:
+    image: registry.services.ams.osa:80/autofill/prod:latest
+    networks:
+      - front
+      - back
+
+  db:
+    image: mongo:3.0.8
+    volumes_from:
+      - dbdata
+    networks:
+      - back
+    links:
+      - dbdata
+
+  dbdata:
+    image: busybox
+    volumes:
+      - /data/db
+
+  nginx:
+    image: nginx
+    networks:
+      - front
+
+networks:
+  back:
+    driver: overlay
+  front:
+    driver: bridge
+It seems that network is created at every docker-compose up -d but not used. Overlay driver works fine.
+docker-compose: 1.6.0
+docker: 1.10.1
+swarm: 1.1.2

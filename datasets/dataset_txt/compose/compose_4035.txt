@@ -1,0 +1,8 @@
+luebken commented on 22 Dec 2014
+It seems that fig pulls all image tags. Whereas docker uses an explicit command line flag "-a". The default is to download just the latest tag.
+E.g. with this fig.yml:
+web:
+  image: busybox
+  command: /bin/echo hello 
+a fig pull downloads 5 images. docker pull busybox just downloads one (the :latest) image.
+Is this on purpose? What is the reasoning for this?

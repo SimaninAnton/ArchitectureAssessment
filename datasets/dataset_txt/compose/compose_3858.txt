@@ -1,0 +1,4 @@
+iMerica commented on 7 Mar 2015
+Hey guys,
+The Fig CLI reference has a deprecation warning and points users to Docker Compose. The Docker compose repo has had a failing status on Wercker for some time. I totally get it and this isn't a problem (it's open source software and under development currently). Would it better to not declare Fig as deprecated until Docker Compose has a consistent green streak on Wercker? To the outside world (people not using Compose or Fig) both options appear unstable - which they're not. This matters because it would be a shame for people to survey Fig and Compose, see the status of both and decide to roll their own Docker abstraction when this one is so good. Or worse not use Docker for a local development environment at all because the tools appear unready. Anyway, thanks for everything. This is one of my favorite pieces of software at the moment.
+Michael

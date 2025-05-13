@@ -1,0 +1,1 @@
+Compose doesn't work with SOCKS proxy

@@ -1,0 +1,101 @@
+ghost commented on 3 Jun 2016
+Problem: When a bridge network is created manually on swarm nodes and we try to scale a service using docker-compose on swarm master using that network, it will give an error message “no such network found”. But when we execute the same scale command a second time, it works fine.
+Steps to reproduce (you will need Docker Toolbox):
+Create a docker-compose.yaml file on your desktop (or change the affinity below) with the following contents:
+version: '2'
+networks:
+  swarmlocal:
+    external: true
+services:
+  memcached1:
+    image: memcached
+    environment:
+      - "affinity:container!=desktop_memcached1_*"
+    networks:
+      - swarmlocal
+Create a swarm master called 'swarm1':
+docker-machine create -d virtualbox swarm1
+Set up a discovery backend (key value store):
+docker-machine ssh swarm1 docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap
+Run swarm manager:
+docker-machine ssh swarm1 docker run -d -p 4000:4000 swarm manage -H :4000 --advertise `docker-machine ip swarm1`:4000 consul://`docker-machine ip swarm1`:8500
+Create two swarm nodes test1 and test2:
+docker-machine create -d virtualbox test1
+docker-machine create -d virtualbox test2
+Disable tls on test1 and test2:
+docker-machine ssh test1 sudo "sh -c \"echo DOCKER_HOST=\'-H tcp://0.0.0.0:2375\' >> /var/lib/boot2docker/profile\""
+docker-machine ssh test1 sudo "sh -c \"echo DOCKER_TLS=no >> /var/lib/boot2docker/profile\""
+docker-machine ssh test1 sudo /etc/init.d/docker restart
+
+docker-machine ssh test2 sudo "sh -c \"echo DOCKER_HOST=\'-H tcp://0.0.0.0:2375\' >> /var/lib/boot2docker/profile\""
+docker-machine ssh test2 sudo "sh -c \"echo DOCKER_TLS=no >> /var/lib/boot2docker/profile\""
+docker-machine ssh test2 sudo /etc/init.d/docker restart
+Join swarm nodes to swarm cluster:
+docker-machine ssh test1 docker run -d swarm join --advertise=`docker-machine ip test1`:2375 consul://`docker-machine ip swarm1`:8500
+docker-machine ssh test2 docker run -d swarm join --advertise=`docker-machine ip test2`:2375 consul://`docker-machine ip swarm1`:8500
+Create a network on both test nodes called swarmlocal
+DOCKER_TLS_VERIFY= DOCKER_CERT_PATH= docker -H `docker-machine ip swarm1`:4000 network create -d bridge test1/swarmlocal
+DOCKER_TLS_VERIFY= DOCKER_CERT_PATH= docker -H `docker-machine ip swarm1`:4000 network create -d bridge test2/swarmlocal
+Execute docker-compose (attached docker-compose.yaml must be in current directory):
+DOCKER_TLS_VERIFY= DOCKER_CERT_PATH= docker-compose -H `docker-machine ip swarm1`:4000 scale memcached1=2
+What we get now is the following error:
+Creating and starting desktop_memcached1_1 ... error
+Creating and starting desktop_memcached1_2 ... error
+ERROR: for desktop_memcached1_2 No such network: swarmlocal
+ERROR: for desktop_memcached1_1 No such network: swarmlocal
+However, if we repeat the same docker-compose command a second time, everything works fine:
+Starting desktop_memcached1_1 ... done
+Starting desktop_memcached1_2 ... done
+Output of 'docker version':
+Client:
+Version: 1.11.1
+API version: 1.23
+Go version: go1.5.4
+Git commit: 5604cbe
+Built: Tue Apr 26 23:44:17 2016
+OS/Arch: darwin/amd64
+Server:
+Version: 1.11.1
+API version: 1.23
+Go version: go1.5.4
+Git commit: 5604cbe
+Built: Wed Apr 27 00:34:20 2016
+OS/Arch: linux/amd64
+Output of 'docker info':
+Containers: 5
+Running: 1
+Paused: 0
+Stopped: 4
+Images: 170
+Server Version: 1.11.1
+Storage Driver: aufs
+Root Dir: /mnt/sda1/var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 180
+Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: null host bridge
+Kernel Version: 4.4.8-boot2docker
+Operating System: Boot2Docker 1.11.1 (TCL 7.0); HEAD : 7954f54 - Wed Apr 27 16:36:45 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 3.858 GiB
+Name: default
+ID: FOO6:MEB4:LN4X:MSTC:XYOP:AKKB:BUOX:R7CU:4ZWI:JY3P:2EZS:QYVW
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug mode (client): false
+Debug mode (server): true
+File Descriptors: 47
+Goroutines: 71
+System Time: 2016-06-03T10:14:09.16697415Z
+EventsListeners: 0
+Username: dspitzer
+Registry: https://index.docker.io/v1/
+Labels:
+provider=virtualbox
+docker-compose version:
+docker-compose version 1.7.0, build 0d7bf73

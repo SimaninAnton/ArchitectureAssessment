@@ -1,0 +1,1 @@
+Compose 'build' fails after the first 'up'

@@ -1,0 +1,3 @@
+prdoyle commented on 30 Nov 2017
+When I start my 30+ containers on my laptop, they all compete with each other for resources. I don't care what order they start (I'm not asking to be able to control startup ordering, or delay until dependencies are healthy); I just don't want them to all start at once.
+Would you consider adding an option to the scale command that would make it ramp up gradually, rather than start all containers at once?

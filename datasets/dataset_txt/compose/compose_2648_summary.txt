@@ -1,0 +1,1 @@
+`docker-compose up` hangs when tty parameter is true

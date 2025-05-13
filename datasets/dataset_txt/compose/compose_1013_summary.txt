@@ -1,0 +1,1 @@
+Compose looks for .env file in current working directory, not docker-compose.yml directory

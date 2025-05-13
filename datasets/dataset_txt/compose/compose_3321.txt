@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 4 Sep 2015
+Currently if we re-create a container that has a data volume, and the contents of that data volume were changed by the image, we re-use the old data-volume (because we don't want to lose data).
+In my experience (and some related github issues) it seems like this is unexpected behaviour. If an image defines a data volume, and it changes the contents of that data volume, we should use the new one, not the old one.

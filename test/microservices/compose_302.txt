@@ -1,0 +1,2252 @@
+MockingMagician commented on 2 Feb 2019
+Description of the issue
+Each time I run docker-compose up this arrive:
+➜  dev-env-initializer git:(master) ✗ dco up -d
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 42, in project_from_options
+  File "compose/cli/command.py", line 128, in get_project
+  File "compose/project.py", line 100, in from_config
+  File "compose/network.py", line 320, in get_networks
+  File "compose/network.py", line 125, in true_name
+  File "compose/network.py", line 146, in _set_legacy_flag
+  File "compose/network.py", line 106, in inspect
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/network.py", line 211, in inspect_network
+  File "site-packages/docker/utils/decorators.py", line 46, in inner
+  File "site-packages/docker/api/client.py", line 215, in _get
+  File "site-packages/requests/sessions.py", line 537, in get
+  File "site-packages/requests/sessions.py", line 524, in request
+  File "site-packages/requests/sessions.py", line 637, in send
+  File "site-packages/requests/adapters.py", line 449, in send
+  File "site-packages/urllib3/connectionpool.py", line 600, in urlopen
+  File "site-packages/urllib3/connectionpool.py", line 354, in _make_request
+  File "http/client.py", line 1239, in request
+  File "http/client.py", line 1285, in _send_request
+  File "http/client.py", line 1234, in endheaders
+  File "http/client.py", line 1026, in _send_output
+  File "http/client.py", line 964, in send
+  File "site-packages/docker/transport/unixconn.py", line 41, in connect
+OverflowError: timestamp too large to convert to C _PyTime_t
+[12658] Failed to execute script docker-compose
+This error arrive only with this project, other project which used docker-compose does not fail like this one.
+timestamp too large to convert to C _PyTime_t seems to be an timestamp convert error in the py library but I can figure it out, where and when this error is throw during the deployment.
+Any help is welcomed.
+Also, knows that project run very well on my other laptop computer with config below:
+➜  ~ dco version
+docker-compose version 1.17.0, build ac53b73
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+➜  ~ docker version
+Client:
+Version:           18.06.1-ce
+API version:       1.38
+Go version:        go1.10.3
+Git commit:        e68fc7a
+Built:             Tue Aug 21 17:24:56 2018
+OS/Arch:           linux/amd64
+Experimental:      false
+
+Server:
+Engine:
+ Version:          18.06.1-ce
+ API version:      1.38 (minimum version 1.12)
+ Go version:       go1.10.3
+ Git commit:       e68fc7a
+ Built:            Tue Aug 21 17:23:21 2018
+ OS/Arch:          linux/amd64
+ Experimental:     false
+Context information (for bug reports)
+Output of docker-compose version
+➜  dev-env-initializer git:(master) ✗ dco version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+➜  dev-env-initializer git:(master) ✗ docker version         
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:36 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:02:44 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  crawler:
+    driver: bridge
+  dashboard-generator:
+    driver: bridge
+  eex-importer:
+    driver: bridge
+  enedis-api:
+    driver: bridge
+  invoice-generator:
+    driver: bridge
+  launcher:
+    driver: bridge
+  p10-importer:
+    driver: bridge
+  platform:
+    driver: bridge
+  rte-capacity-days-collector:
+    driver: bridge
+  scraper:
+    driver: bridge
+  synthesis-generator:
+    driver: bridge
+services:
+  crawler:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/crawler
+        XDEBUG_PORT: '9010'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/hidden
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: hidden
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      crawler: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/crawler:/var/www/crawler:rw
+  dashboard-generator:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/dashboard-generator
+        XDEBUG_PORT: '9005'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      dashboard-generator: null
+      synthesis-generator: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/dashboard-generator:/var/www/dashboard-generator:rw
+  db:
+    image: mongo:3.6.7
+    networks:
+      crawler: null
+      dashboard-generator: null
+      eex-importer: null
+      enedis-api: null
+      invoice-generator: null
+      launcher: null
+      p10-importer: null
+      platform: null
+      rte-capacity-days-collector: null
+      synthesis-generator: null
+    ports:
+    - 27017:27017/tcp
+    volumes:
+    - /mnt/data/dev/enoptea/dev-env-initializer/.data/db:/data/db:rw
+    - /mnt/data/dev/enoptea/dev-env-initializer/data/TLCFEtsv.txt:/root/TLCFEtsv.txt:rw
+  eex-importer:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/eex-importer
+        XDEBUG_PORT: '9007'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      eex-importer: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/eex-importer:/var/www/eex-importer:rw
+  enedis-api:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/enedis-api
+        XDEBUG_PORT: '9011'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      enedis-api: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/enedis-api:/var/www/enedis-api:rw
+  invoice-generator:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/invoice-generator
+        XDEBUG_PORT: '9006'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      invoice-generator: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/invoice-generator:/var/www/invoice-generator:rw
+  launcher:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/launcher
+        XDEBUG_PORT: '9008'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      launcher: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/launcher:/var/www/launcher:rw
+  nginx:
+    image: nginx
+    networks:
+      platform:
+        aliases:
+        - enoptea.localhost
+      synthesis-generator:
+        aliases:
+        - synthesis-generator.enoptea.localhost
+    ports:
+    - 80:80/tcp
+    - 443:443/tcp
+    volumes:
+    - /mnt/data/dev/enoptea/dev-env-initializer/logs/nginx:/var/log/nginx:rw
+    - /mnt/data/dev/enoptea/dev-env-initializer/docker/nginx/dev/enoptea.conf:/etc/nginx/conf.d/enoptea.conf:rw
+    volumes_from:
+    - service:platform:rw
+    - service:synthesis-generator:rw
+  p10-importer:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/p10-importer
+        XDEBUG_PORT: '9004'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      p10-importer: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/p10-importer:/var/www/p10-importer:rw
+  platform:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        XDEBUG_PORT: '9001'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/php7-fpm/dev/platform
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      platform: null
+      synthesis-generator: null
+    shm_size: 512M
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/platform:/var/www/symfony:rw,cached
+    - /mnt/data/dev/enoptea/dev-env-initializer/docker/php7-fpm/dev/platform/platform.conf:/usr/local/etc/php-fpm.d/platform.conf:rw
+    - /mnt/data/dev/enoptea/dev-env-initializer/docker/php7-fpm/dev/platform/platform.ini:/usr/local/etc/php/conf.d/platform.ini:rw
+  redis:
+    image: redis:alpine
+    networks:
+      dashboard-generator: null
+      launcher: null
+      platform: null
+      scraper: null
+      synthesis-generator: null
+    ports:
+    - 6379:6379/tcp
+  rte-capacity-days-collector:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/rte-capacity-days-collector
+        XDEBUG_PORT: '9009'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      rte-capacity-days-collector: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/rte-capacity-days-collector:/var/www/rte-capacity-days-collector:rw
+  runner:
+    build:
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/pm2/dev
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      platform: null
+    ports:
+    - 82:8081/tcp
+    - 444:443/tcp
+    - 43554:43554/tcp
+    - 5665:5665/tcp
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/runner:/app:rw
+    - /mnt/data/dev/enoptea/dev-env-initializer/logs/runner:/app/logs:rw
+  scraper:
+    build:
+      args:
+        AWS_S3_ACCESS_KEY: hidden
+        AWS_S3_SECRET_KEY: hidden
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/scraper
+        XDEBUG_PORT: '9003'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/serverless/dev/scraper
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      scraper: null
+    tty: true
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/scraper:/var/www/scraper:rw
+  synthesis-generator:
+    build:
+      args:
+        GIT_TOKEN: hidden
+        GIT_TOKEN_HOST: hidden
+        PRIVATE_KEY: hidden
+        WORK_DIR: /var/www/synthesis-generator
+        XDEBUG_PORT: '9002'
+      context: /mnt/data/dev/enoptea/dev-env-initializer/docker/php7-fpm/dev/service
+    environment:
+      ADMIN_URL: http: hidden
+      ALGOLIA_API_KEY: hidden
+      ALGOLIA_APP_ID: hidden
+      API_INVOICE_INSERT: /invoices/insert
+      API_INVOICE_LIST: /invoices/list/
+      API_KEY: hidden
+      API_PATH: /api
+      APP_ENV: '[change-this]'
+      ASSETS_FOLDER_PATH: /assets
+      AWS_BUCKET_ENCRYPTION_KEY__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__EDF_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET_ENCRYPTION_KEY__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__ALTERNA_SCRAPER: hidden
+      AWS_BUCKET__CRAWLER: hidden
+      AWS_BUCKET__EDF_SCRAPER: hidden
+      AWS_BUCKET__ENEDIS: hidden
+      AWS_BUCKET__ENEDIS_ARCHIVE: hidden
+      AWS_BUCKET__ENEDIS_SCRAPER: hidden
+      AWS_BUCKET__ENGIE_SCRAPER: hidden
+      AWS_BUCKET__INVOICES_HTML_EXPORT: hidden
+      AWS_BUCKET__LOGO: hidden
+      AWS_BUCKET__PROVIDER_INVOICES: hidden
+      AWS_BUCKET__PROVIDER_REQUESTS_FOR_QUOTATION: hidden
+      AWS_BUCKET__SCRAPER: hidden
+      AWS_CLOUDWATCHLOGS_KEY: hidden
+      AWS_CLOUDWATCHLOGS_REGION: hidden
+      AWS_CLOUDWATCHLOGS_SECRET: hidden
+      AWS_CLOUDWATCHLOGS_VERSION: hidden
+      AWS_LAMBDA_ACCESS_KEY: hidden
+      AWS_LAMBDA_REGION: hidden
+      AWS_LAMBDA_SECRET_KEY: hidden
+      AWS_LAMBDA_SYNTHESIS_GENERATOR: hidden
+      AWS_S3_ACCESS_KEY: hidden
+      AWS_S3_ACCESS_KEY__MARC: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_ACCESS_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_REGION: hidden
+      AWS_S3_SECRET_KEY: hidden
+      AWS_S3_SECRET_KEY__MARC: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__ENEDIS: hidden
+      AWS_S3_SECRET_KEY__SPECIFIC__LOGO: hidden
+      AWS_S3_VERSION: hidden
+      AWS_SES_ACCESS_KEY: hidden
+      AWS_SES_REGION: hidden
+      AWS_SES_SECRET_KEY: hidden
+      AWS_SES_VERSION: hidden
+      AWS_SQS_ACCESS_KEY: hidden
+      AWS_SQS_REGION: hidden
+      AWS_SQS_SECRET_KEY: hidden
+      AWS_SQS_VERSION: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ALTERNA_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__CRAWLER__QUEUE_NAME: hidden
+      AWS_SQS__CRAWLER__QUEUE_URL: https: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__EDF_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENEDIS_SCRAPER__QUEUE_URL: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__ENGIE_SCRAPER__QUEUE_URL: https: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_NAME: hidden
+      AWS_SQS__INVOICE_GENERATOR__QUEUE_URL: https: hidden
+      AWS_SQS__RUNNER__QUEUE_NAME: hidden
+      AWS_SQS__RUNNER__QUEUE_URL: "\thttps: hidden
+      AWS_SQS__SCRAPER__QUEUE_NAME: hidden
+      AWS_SQS__SCRAPER__QUEUE_URL: https: hidden
+      BASE_URL: http: hidden
+      CERTIFICATE_FILE: ''
+      COMPOSE_HTTP_TIMEOUT: '9999999999999999'
+      COMPOSE_PROJECT_NAME: enoptea
+      CONFIG_MANAGER_PREFIX: change-this
+      CRAWLER_APP_PATH: ../repositories/crawler
+      CRAWLER_FOLDER_PATH: /var/www/symfony/runner/scripts/download_invoices
+      DASHBOARD_GENERATOR_APP_PATH: ../repositories/dashboard-generator
+      DESTINATION_PATH: /var/www/symfony
+      DETECT_FILENAME: detectProvider.json
+      EDF_API_CLIENT_APP_PATH: ../repositories/edf-api-client
+      EEX_CREDENTIALS_PASSWORD: hidden
+      EEX_CREDENTIALS_USERNAME: ydolbeau_at_enoptea.fr
+      EEX_IMPORTER_APP_PATH: ../repositories/eex-importer
+      EEX_POWER_BASE_URL: https: hidden
+      EKOTCHEK_ACCESS_TOKEN_PASSWORD: hidden
+      EKOTCHEK_ACCESS_TOKEN_URL: http: hidden
+      EKOTCHEK_ACCESS_TOKEN_USERNAME: hidden
+      EKOTCHEK_DEFAULT_START_DATE: 01/01/2018
+      EKOTCHEK_URL_API: http: hidden
+      ENCRYPTION_KEY: hidden
+      ENDPOINT_FOLDER: /var/www/crawler/src/Enoptea/Crawler
+      ENEDIS_API_APP_PATH: ../repositories/enedis-api
+      ENEDIS_API_CONTRACT_ID: hidden
+      ENEDIS_API_ENV: APPROVAL
+      ENEDIS_API_LOGIN: change-this
+      ENEDIS_API_WSDL_CACHE_CLEAR: "false"
+      ENEDIS_OPENSSL_KEY: hidden
+      ENEDIS_OPENSSL_METHOD: chage-this
+      ENEDIS_OPENSSL_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_CODE: hidden
+      EVELER_ACCESS_TOKEN_GRANT_TYPE: hidden
+      EVELER_ACCESS_TOKEN_PASSWORD: hidden
+      EVELER_ACCESS_TOKEN_URL: hidden
+      EVELER_ACCESS_TOKEN_USERNAME: hidden
+      EVELER_DEFAULT_START_DATE: change-this (dd/mm/yyyy)
+      EVELER_URL_API: hidden
+      EXCEL_FILE_PASSWORD: hidden
+      FAKE_SYNTHESIS: "false"
+      GITHUB_TOKEN: hidden
+      GOOGLE_API_KEY: hidden
+      HOSTNAME: development-machine-[change-this]
+      INVOICE_GENERATOR_APP_PATH: ../repositories/invoice-generator
+      INVOICE_SYNTHESIS_GENERATOR_DOMAIN: http: hidden
+      LAUNCHER_APP_PATH: ../repositories/launcher
+      LAUNCHER_ENV: dev
+      LAUNCHER_START_DATE: '2016-01-01'
+      LEGAL_CGU_VERSION: '20170101'
+      LEGAL_MANDATE_VERSION: '20170101'
+      LOCALE: fr
+      LOGGER_MODE: "off"
+      LOGS_PATH: /app/logs/runner
+      LOGZIO_TOKEN: hidden
+      LOG_ERROR_TO_EMAIL: hidden
+      MAILER_HOST: 127.0.0.1
+      MAILER_PASSWORD: hidden
+      MAILER_TRANSPORT: smtp
+      MAILER_USER: ''
+      MAIL_WEBHOOK: change-this
+      MARKET_SYNTHESIS_GENERATOR_APP_PATH: ../repositories/market-synthesis-generator
+      MONGODB_CONNECTION_STRING: mongodb://db:27017/enoptea
+      MONGODB_HOST: mongodb://db:27017/
+      NEW_RELIC_API_KEY: hidden
+      NEW_RELIC_APP_NAME: platform
+      NEW_RELIC_ENV: dev
+      P10_IMPORTER_APP_PATH: ../repositories/p10-importer
+      PORT: '8081'
+      PRIVATE_KEY: hidden
+      PROVIDER_LOGO_PATH: hidden
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      RTE_CAPACITY_DAYS_COLLECTOR_APP_PATH: ../repositories/rte-capacity-days-collector
+      RTE_SIGNAL_API_PASSWORD: hidden
+      RTE_SIGNAL_API_USER_ID: hidden
+      RUNNER_APP_PATH: ../repositories/runner
+      SCRAPER_APP_PATH: ../repositories/scraper
+      SCRAPER_ENV: dev
+      SCRIPTS_PATH: /app/scripts
+      SECRET: e4c877b2228b548ded337c3df952ccbefd320407
+      SYMFONY_APP_PATH: ../repositories/platform
+      SYNC_NAME: enoptea-sync
+      SYNTHESIS_GENERATOR_APP_PATH: ../repositories/synthesis-generator
+      TAX_TCCFE_DEFAULT: '8.5'
+      TAX_TDCFE_DEFAULT: '4.25'
+      TEAMS_WEBHOOK: change-this
+      URL_SYNTHESIS_GENERATOR: http: hidden
+      USER_FILES_PATH: /var/www/symfony/data/clients/
+      USER_LOGO_PATH: clients_logo/
+      USE_SSL: "false"
+    networks:
+      synthesis-generator: null
+    volumes:
+    - /mnt/data/dev/enoptea/repositories/synthesis-generator:/var/www/synthesis-generator:rw
+version: '2.0'
+Steps to reproduce the issue
+Observed result
+Expected result
+Stacktrace / full error message
+➜  dev-env-initializer git:(master) ✗ dco up -d
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 42, in project_from_options
+  File "compose/cli/command.py", line 128, in get_project
+  File "compose/project.py", line 100, in from_config
+  File "compose/network.py", line 320, in get_networks
+  File "compose/network.py", line 125, in true_name
+  File "compose/network.py", line 146, in _set_legacy_flag
+  File "compose/network.py", line 106, in inspect
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/network.py", line 211, in inspect_network
+  File "site-packages/docker/utils/decorators.py", line 46, in inner
+  File "site-packages/docker/api/client.py", line 215, in _get
+  File "site-packages/requests/sessions.py", line 537, in get
+  File "site-packages/requests/sessions.py", line 524, in request
+  File "site-packages/requests/sessions.py", line 637, in send
+  File "site-packages/requests/adapters.py", line 449, in send
+  File "site-packages/urllib3/connectionpool.py", line 600, in urlopen
+  File "site-packages/urllib3/connectionpool.py", line 354, in _make_request
+  File "http/client.py", line 1239, in request
+  File "http/client.py", line 1285, in _send_request
+  File "http/client.py", line 1234, in endheaders
+  File "http/client.py", line 1026, in _send_output
+  File "http/client.py", line 964, in send
+  File "site-packages/docker/transport/unixconn.py", line 41, in connect
+OverflowError: timestamp too large to convert to C _PyTime_t
+[12658] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.

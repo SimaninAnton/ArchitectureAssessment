@@ -1,0 +1,1 @@
+docker-compose won't install [Linux mint 17.1 | Python3 | Anaconda3]

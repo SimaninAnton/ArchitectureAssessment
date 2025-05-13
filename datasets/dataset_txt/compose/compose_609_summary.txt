@@ -1,0 +1,1 @@
+compose should support `docker run` option `--init`

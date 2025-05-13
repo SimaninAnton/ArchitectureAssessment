@@ -1,0 +1,25 @@
+rahman-mahfuz commented 7 days ago
+Hi,
+I have installed Docker Desktop for Mac on my Mac with macOS Sierra version 10.12.6
+Docker is working fine but when I run "docker-compose --version" to check whether docker-compose is installed properly, it shows the following error:
+[8807] Error loading Python lib '/Applications/Docker.app/Contents/Resources/bin/docker-compose/.Python': dlopen: dlopen(/Applications/Docker.app/Contents/Resources/bin/docker-compose/.Python, 10): Symbol not found: _futimens
+Referenced from: /Applications/Docker.app/Contents/Resources/bin/docker-compose/.Python
+Expected in: /usr/lib/libSystem.B.dylib
+in /Applications/Docker.app/Contents/Resources/bin/docker-compose/.Python
+And when I run the command "docker-machine --version", it says command not found.
+If you need more information, please let me know. I would appreciate if someone can help me on this as I am trying to use docker for my developments for the first time.
+Thanks,
+Mahfuz
+I have tried with the latest version of my channel (Stable or Edge)
+I have uploaded Diagnostics
+Diagnostics ID: C2A4874B-6D77-45B2-80E3-F3D0FACDA238/20200123220957
+Expected behavior
+docker-compose and docker-machine should be installed when Docker Desktop for Mac is installed.
+Actual behavior
+docker-compose and docker-machine commands are not running
+Information
+macOS Version: macOS Sierra version 10.12.6
+Diagnostic logs
+Docker for Mac: version 12.2.0.0 (42247)
+10
+1

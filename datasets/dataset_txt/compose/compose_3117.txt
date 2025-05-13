@@ -1,0 +1,30 @@
+jeron-diovis commented on 10 Nov 2015
+Mac OS X 10.10.5
+$ docker-compose up
+Pulling redis (redis:2.8)...
+2.8: Pulling from library/redis
+
+1d53ee5b1800: Pull complete
+74872ba2a3b0: Pull complete
+b73eb536e646: Pull complete
+733ba5d512e3: Pull complete
+00b5a1f6aeae: Pull complete
+65b0d3a3cd30: Pull complete
+a46a54050037: Pull complete
+344888176fa7: Pull complete
+2380915c0807: Pull complete
+f454f845714a: Pull complete
+b04e3558e7f0: Pull complete
+e25f48bc0233: Pull complete
+acaeeb5be8f7: Pull complete
+bdccb64d4c06: Pull complete
+96288bc75a66: Pull complete
+47130e6037f2: Pull complete
+ca6553f7ffad: Pull complete
+Digest: sha256:2e89addcd3b13e473e4302c202c0171f8e83f4d31af3bbcd8d6c3f68a31fde7c
+Status: Downloaded newer image for redis:2.8
+Creating rejum_redis_1
+ERROR: Cannot start container 6f546315c9ad94337c201b95b22668549d27423b850c366a30de66c46a9c7372: 
+failed to update store for object type *libnetwork.endpointCnt: Key not found in store
+Didn't find any info about this error, can you explain what this means and what to do?
+Do I need to show my docker-compose file?

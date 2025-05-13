@@ -1,0 +1,38 @@
+hervenicol commented on 24 Aug 2016 •
+edited
+If you run «docker-compose logs» and one container's logging driver is set to syslog, compose has an unexpected behaviour.
+It may show logs from some of the containers that use default json-file logging driver, but exits as soon as it reaches a container using syslog. Sometimes it shows no logs at all.
+docker-compose test file:
+version: '2'
+
+services:
+  serviceA:
+    image: ubuntu:16.04
+    command: echo serviceA
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:514"
+
+  serviceB:
+    image: ubuntu:16.04
+    command: echo serviceB
+Tests:
+$ docker-compose logs
+Attaching to testlogs_serviceB_1, testlogs_serviceA_1
+ERROR: configured logging reader does not support reading
+$ docker-compose logs
+Attaching to testlogs_serviceB_1, testlogs_serviceA_1
+serviceB_1  | serviceB
+ERROR: configured logging reader does not support reading
+$ 
+I guess it should consistently show logs from containerA and containerB, like when logging driver is set to «none»:
+$ docker-compose logs
+Attaching to testlogs_serviceA_1, testlogs_serviceB_1
+serviceA_1  | WARNING: no logs are available with the 'none' log driver
+serviceB_1  | serviceB
+$ 
+Please note that I did not test how it behaves with other drivers.
+Versions used:
+Docker version 1.12.1, build 23cf638
+docker-compose version 1.8.0, build f3628c7

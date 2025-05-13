@@ -1,0 +1,1 @@
+When service is down, error message is not helpfull

@@ -1,0 +1,37 @@
+VinceBarresi commented on 29 Jul 2015
+I have a muti-container web application which I'm linking with Docker-Compose. One of the containers is an ubuntu trusty based image which installs automation tools to headlessly test the front end of the app. For some reason, this container is being killed right after its created. Is this expected? Is there a way I can keep it 'alive'? I apologize before hand if this is something obvious but I haven't found many resources online so I figured I'd ask here.
+Console output:
+done.
+ ---> ecbea2f08b26
+Removing intermediate container fe7b632d2926
+Here is my docker-compose.yml:
+postgres:
+  image: postgres:9.3
+  environment:
+    POSTGRES_USER: ####
+    POSTGRES_PASSWORD: ####
+    POSTGRES_DB: ####
+  volumes:
+    - "../db_dump/outfile.sql:/temp/outfile.sql"
+
+csmock:
+  build: ../cs_mock
+  ports:
+    - "8080:8080"
+
+web:
+  build: ../web_cda
+  links: 
+    - csmock
+  ports:
+    - "8090:8080"
+  volumes:
+    - "../web_cda/web-server-config.groovy:/usr/local/tomcat/conf/web-server-config.groovy"
+    - "../web_cda/env.js:/usr/local/tomcat/conf/web/env.js"
+
+automation:
+  build: ../automation
+  ports:
+    - "4444:4444"
+  links:
+    - web

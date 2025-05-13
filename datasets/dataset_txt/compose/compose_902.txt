@@ -1,0 +1,103 @@
+karai17 commented on 31 Jan 2018
+BUG REPORT INFORMATION
+Description
+In Visual Studio Code's built-in powershell terminal, I am using docker-compose to be able to see output while I code. Abruptly and randomly, docker-compose will crash and unattach from the terminal (containers still run and work).
+Steps to reproduce the issue:
+docker-compose up
+Dink around on website I am currently coding
+Abrupt crash mid-output.
+Describe the results you received:
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 124, in perform_command
+  File "compose\cli\main.py", line 975, in up
+  File "compose\cli\log_printer.py", line 105, in run
+  File "compose\cli\log_printer.py", line 109, in write
+  File "codecs.py", line 370, in write
+  File "site-packages\colorama\ansitowin32.py", line 40, in write
+  File "site-packages\colorama\ansitowin32.py", line 141, in write
+  File "site-packages\colorama\ansitowin32.py", line 166, in write_and_convert
+  File "site-packages\colorama\ansitowin32.py", line 174, in write_plain_text
+IOError: [Errno 0] Error
+Failed to execute script docker-compose
+Describe the results you expected:
+Not a crash?
+Additional information you deem important (e.g. issue happens only occasionally):
+Happens mid-output:
+web_1   | 2018/01/26 04:26:25 [notice] 16#16: *1 [lua] [C]:-1: [200] GET /admin - {  }, client: 172.19.0.1, server: , request: "GET /admin HTTP/1.1", host: "localhost:1000", referrer: "http://localhost:1000/admin/divisions/create"
+
+
+web_1   | 2018/01/26 04:27:15 [notice] 16#16: *1 [lua] [C]:-1: [200] GTraceback (most recent call last):
+api_1   | 2018/01/26 04:27:15 [notice] 18#18: *33 [lua] postgres.lua:91: select(): SQL: SELECT * from "divisions" where season_id = 2, client: 172.19.0.4, server: , request: "GET /api/seasons/2/divisions HTTP/1.1", host: "api"
+
+
+api_1   | 2018/01/27 04:21:40 [notice] 19#19: *6 [lua] postgres.lua:91: select(): STraceback (most recent call last):
+Output of docker version:
+Client:
+ Version:       17.12.0-ce
+ API version:   1.35
+ Go version:    go1.9.2
+ Git commit:    c97c6d6
+ Built: Wed Dec 27 20:05:22 2017
+ OS/Arch:       windows/amd64
+
+Server:
+ Engine:
+  Version:      17.12.0-ce
+  API version:  1.35 (minimum version 1.12)
+  Go version:   go1.9.2
+  Git commit:   c97c6d6
+  Built:        Wed Dec 27 20:12:29 2017
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of docker info:
+Containers: 18
+ Running: 0
+ Paused: 0
+ Stopped: 18
+Images: 369
+Server Version: 17.12.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 89623f28b87a6004d4b785663257362d1658a729
+runc version: b2567b37d7b75eb4cf325b77297b140ea686ce8f
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.60-linuxkit-aufs
+Operating System: Docker for Windows
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.934GiB
+Name: linuxkit-00155d41010f
+ID: D7XI:7YVT:P4B2:M3NA:T5CJ:2J54:BJSB:4PT2:B7Z2:P3HU:E2SE:A76C
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 19
+ Goroutines: 36
+ System Time: 2018-01-27T04:39:05.6817004Z
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+Additional environment details (AWS, VirtualBox, physical, etc.):
+Windows 10 Pro x86-64, This issue cropped up a couple days ago and has persisted through a Docker update.

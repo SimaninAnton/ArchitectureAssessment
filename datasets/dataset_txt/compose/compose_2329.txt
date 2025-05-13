@@ -1,0 +1,9 @@
+10xcloud commented on 5 Jun 2016 •
+edited
+services:
+web:
+cap-add:
+- NET_ADMIN
+docker engine 1.11.1, docker-compose version 1.7.0, build 0d7bf73
+Is this related to moby/moby#14318 ?
+Thx

@@ -1,0 +1,7 @@
+DarioTurchi commented on 3 Sep 2019 •
+edited
+I have a problem similar to that described in issue #2033 (multiple commands for a compose service), with the difference that the first command to be executed is a "source"
+Assuming to have the script script.sh where the command alias myAlias is defined, the following (solution proposed in issue #2033 )
+command: bash -c "source script.sh && myAlias"
+generates the following error
+bash: myAlias: command not found

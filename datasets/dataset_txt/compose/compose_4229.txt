@@ -1,0 +1,40 @@
+bibendi commented on 19 Aug 2014
+When I send signal USR2 to unicorn, all running services are exiting.
+gems:
+  image: 'busybox'
+  volumes:
+    - /usr/local/lib/ruby/gems
+
+dbdata:
+  image: 'busybox'
+  volumes:
+    - /data
+
+db:
+  image: 'bibendi/pg'
+  ports:
+    - '5432'
+  volumes_from:
+    - dbdata
+
+web:
+  build: .
+  command: bundle exec unicorn -c config/unicorn.rb
+  volumes:
+    - .:/myapp
+  volumes_from:
+    - gems
+  ports:
+    - '3000:3000'
+  links:
+    - db
+$ fig up
+Recreating myapp_gems_1...
+Recreating myapp_dbdata_1...
+Recreating myapp_db_1...
+Recreating myapp_web_1...
+Attaching to myapp_db_1, myapp_web_1
+$ docker kill -s USR2 myapp_web_1
+myapp_web_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping myapp_db_1...

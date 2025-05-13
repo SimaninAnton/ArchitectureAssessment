@@ -1,0 +1,1 @@
+Volumes of linked images are not mounted with docker-compose up

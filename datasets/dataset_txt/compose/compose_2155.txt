@@ -1,0 +1,36 @@
+daftshady commented on 11 Aug 2016
+While I'm using variable substitution to initialize mysql with existing dump, I noticed that variable substitution works strangely in pipelined container settings.
+For example,
+export resource_path=some_path
+# mysql.yml
+mysql:
+  image: "mysql:5.6"
+  restart: always
+  environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - "3306:3306"
+  volumes:
+    - ./${resource_path}/mysql-config:/docker-entrypoint-initdb.d
+and running docker-compose -f mysql.yml up works fine. All sqls in mysql-config are executed successfully.
+But, when I pipelined two containers,
+# web.yml
+web:
+  build: .
+  dockerfile: Dockerfile
+  links:
+    - mysql
+  ports:
+    - "8080:8080"
+mysql:
+  image: "mysql:5.6"
+  restart: always
+  environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - "3306:3306"
+  volumes:
+    - ./${resource_path}/mysql-config:/docker-entrypoint-initdb.d
+volumes option is silently ignored and sqls are not executed.
+If I change ${resource_path} to a hard coded path, it works well. I can't find anything about this strange behavior in official document.
+Am I doing something wrong here? If not, I will take a swing at it.

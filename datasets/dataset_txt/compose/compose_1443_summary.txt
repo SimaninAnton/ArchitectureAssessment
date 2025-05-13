@@ -1,0 +1,1 @@
+Runing with -v drops all the volume definitions in the docker-compose.yml file

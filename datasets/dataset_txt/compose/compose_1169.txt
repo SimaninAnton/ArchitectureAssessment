@@ -1,0 +1,40 @@
+titangate commented on 6 Oct 2017 •
+edited
+Docker on Mac
+docker-compose version 1.16.1, build 6d1ac21
+docker-py version: 2.5.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j 26 Sep 2016
+docker-compose.yml:
+services:
+  wtf:
+    image: "ubuntu:16.04"
+    volumes:
+      - .:/var
+    working_dir: /var
+    entrypoint: /bin/sh /var/starter.sh
+  wtf2:
+    image: "ubuntu:16.04"
+    volumes:
+      - .:/var
+    working_dir: /var
+    entrypoint: sleep infinity
+starter.sh
+echo "heyheyhey"
+
+sleep infinity
+now in terminal A I ran docker-compose up,
+on the terminal B i ran docker-compose restart wtf repeatedly.
+here's output from terminal A
+each color change indicates a restart
+every time the the container was restarted, the script was run more than once.
+What's even stranger is that if i want to guard the other scripts from running, i tried to use a volume to map a lockfile on my host machine and setup guard in the script.
+if [ ! -f setup ]; then
+  echo "Running first time setup..."
+  touch setup
+else
+  echo "NOT running first time setup"
+fi
+
+sleep infinity
+This time, with each restart, there is always one script that was run that didn't acknowledge the existence of that file.

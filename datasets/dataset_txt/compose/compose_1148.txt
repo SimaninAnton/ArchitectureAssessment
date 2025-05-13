@@ -1,0 +1,62 @@
+AkimaLunar commented on 13 Oct 2017
+I am getting a persistent error on docker-compose up. I am getting the same error on two different Windows 10 Pro machines.
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 68, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 954, in up
+  File "compose\cli\log_printer.py", line 105, in run
+  File "compose\cli\log_printer.py", line 109, in write
+  File "codecs.py", line 370, in write
+  File "site-packages\colorama\ansitowin32.py", line 40, in write
+  File "site-packages\colorama\ansitowin32.py", line 141, in write
+  File "site-packages\colorama\ansitowin32.py", line 167, in write_and_convert
+  File "site-packages\colorama\ansitowin32.py", line 181, in convert_ansi
+  File "site-packages\colorama\ansitowin32.py", line 212, in call_win32
+  File "site-packages\colorama\winterm.py", line 132, in erase_screen
+UnboundLocalError: local variable 'cells_to_erase' referenced before assignment
+Failed to execute script docker-compose
+After the error the port is open and the application is running, but the volumes are not mounted. Here is my setup:
+Edition: Windows 10 Pro
+Version: 1703
+OS Build 15063.674
+Docker version 17.09.0-ce, build afdb6d4
+docker-compose version 1.16.1, build 6d1ac21
+Dockerfile
+# Use an official Ubuntu Xenial as a parent image
+FROM ubuntu:16.04
+
+# Install Node.js 8 and npm 5
+RUN apt-get update
+RUN apt-get -qq upgrade
+RUN apt-get install -y build-essential
+RUN apt-get install -y curl
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
+RUN apt-get install -y nodejs
+
+# Set the working directory to /pretty-prism
+WORKDIR /pretty-prism
+
+# Copy the package.json into the container at /pretty-prism
+COPY package.json /pretty-prism
+
+# Install any needed packages specified in package.json
+RUN npm install
+
+# Define environment variable
+
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
+
+# Run `npm start` when the container launches
+CMD ["npm", "start"]
+docker-compose.yml
+version: '3'
+services:
+  preact:
+    build: .
+    command: npm start
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/pretty-prism

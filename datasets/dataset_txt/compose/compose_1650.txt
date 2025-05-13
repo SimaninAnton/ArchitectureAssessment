@@ -1,0 +1,3 @@
+ahromis commented on 24 Feb 2017
+Currently all services created with the latest compose format default to VIP load balancing mode. Is there plans to add support to compose for that to be configurable?
+Right now the only way to change to round-robin mode is to update the service after it's been created.

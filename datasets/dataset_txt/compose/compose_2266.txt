@@ -1,0 +1,12 @@
+netroby commented on 30 Jun 2016 •
+edited
+While create service using docker-compose. the real container name will be a bit longer.
+So can we add a command to get container name for a service?
+for example : the real name of redis service will be ahugelongproject_redis_1
+while we exec
+docker-compose svc redis
+it will display the real redis service name
+ahugelongproject_redis_1
+We have to find out the container name by ourself, it is hard and a ugly way
+docker-compose ps | grep redis | awk '{ print $1 }'
+14

@@ -1,0 +1,1 @@
+network_mode: bridge is ignored when using multiple compose files or extends

@@ -1,0 +1,3 @@
+marinho commented on 12 May 2014
+It would be helpful to have an entry in fig.yml file to determine a container that should load again instead of just stop all services and finishing the whole set.
+We could solve that by setting fig to start and be managed by Supervisor but that is not a good idea, in case we have many running containers to wait for all of them to stop and then to start the "fig up" again.

@@ -1,0 +1,21 @@
+pointcom commented on 19 Oct 2015
+I have just upgraded my version of docker-compose from 1.4.2 to 1.5.0rc1 but now I get the following error everytime I use the docker-compose command :
+$ docker-compose --help
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 2793, in <module>
+    working_set.require(__requires__)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 673, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 576, in resolve
+    raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: functools32
+I followed the instructions from the 1.5.0 RC1 release page to install it and use the command below :
+$ pip install -U docker-compose==1.5.0rc1
+My config :
+OS : OSX Yosemite 10.10.3
+Docker version : Docker version 1.6.2, build 7c8fca2
+Python version : Python 2.7.6
+If there's anything I can do to get better insights, let me know and I'll paste the output here.
+Thanks

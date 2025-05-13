@@ -1,0 +1,1 @@
+Docker for Windows 2016 recreates anonymous volumes on container recreate

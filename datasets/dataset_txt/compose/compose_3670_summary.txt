@@ -1,0 +1,1 @@
+Allow scaling services with static ports on Swarm with affinity

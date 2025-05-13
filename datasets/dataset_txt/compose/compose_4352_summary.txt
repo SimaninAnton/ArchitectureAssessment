@@ -1,0 +1,1 @@
+Scary error when build directory doesn't exist

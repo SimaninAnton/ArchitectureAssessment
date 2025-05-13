@@ -1,0 +1,79 @@
+rpeleg1970 commented on 24 Feb 2016
+To reproduce execute the command:
+docker-compose -p demo -f compose.yml up test & docker-compose -p demo -f compose.yml up test2
+where the file compose.yml is:
+version: "2"
+services:
+  test:
+    image: ubuntu:14.04
+    command: ping -c 5 test2
+  test2:
+    image: ubuntu:14.04
+    command: ping -c 5 test
+You will see that the 2 services are not recognizing each other. The workaround is to create the network upfront, or avoid the concurrent launch first time around.
+Now this is a result of an issue I reported for docker where concurrent calls to docker network create with the same name creates multiple network instance.
+The use case I saw with compose was that each call to start a service was in a different upstart script. Both scripts started simultanously and triggered the above scenario. If the network is created upfront - all works well.
+compose version:
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+docker version:
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 21:37:01 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 21:37:01 2016
+ OS/Arch:      linux/amd64
+docker info:
+Containers: 7
+ Running: 5
+ Paused: 0
+ Stopped: 2
+Images: 24
+Server Version: 1.10.2
+Storage Driver: devicemapper
+ Pool Name: docker-8:1-262711-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: ext4
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 2.01 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 37.19 GB
+ Metadata Space Used: 4.145 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.143 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/231072.231072/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
+ Metadata loop file: /var/lib/docker/231072.231072/devicemapper/devicemapper/metadata
+ Library Version: 1.02.77 (2012-10-15)
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins: 
+ Volume: local
+ Network: bridge null host
+Kernel Version: 3.13.0-67-generic
+Operating System: Ubuntu 14.04.3 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 1.955 GiB
+Name: vagrant-ubuntu-trusty-64
+ID: XHSN:N4BF:J6HX:PVNW:GP7J:QES5:QYLN:W7YY:NFJK:4OKF:M2GH:6GHD
+WARNING: No swap limit support
+1

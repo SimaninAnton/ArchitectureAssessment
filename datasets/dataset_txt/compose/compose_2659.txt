@@ -1,0 +1,69 @@
+keithbentrup commented on 8 Mar 2016
+I have 2 nodes controlled by swarm, and I'm using a simple docker-compose.yml (below). I'm attempting to bring up cadvisor on both nodes with docker-compose scale cadvisor=2. It fails with: ERROR: for compose_cadvisor_2 500 Internal Server Error: container bc1b9be76edfa562c85e18d1b8219d4672890c4f33358f7d1787ba6d1975fb56: endpoint create on GW Network failed: failed to create endpoint gateway_bc1b9be76edf on network docker_gwbridge: Bind for 0.0.0.0:10080 failed: port is already allocated
+This may be a simple misunderstanding of how docker-compose should behave but shouldn't 1 cadvisor container start and bind on port 10080 of EACH host node given the configuration below?
+docker-compose.yml
+version: '2'
+services:
+  cadvisor:
+    image: google/cadvisor:latest
+    environment:
+      - affinity:container!=/cadvisor/
+    ports:
+      - 10080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+Output of docker version:
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.6
+ Git commit:   c3959b1
+ Built:        Tue Feb 23 21:11:36 UTC 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      swarm/1.1.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   f947993
+ Built:        Thu Feb 18 08:28:32 UTC 2016
+ OS/Arch:      linux/amd64
+Output of docker info:
+Containers: 7
+ Running: 6
+ Paused: 0
+ Stopped: 1
+Images: 5
+Server Version: swarm/1.1.2
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 2
+ swarm-master: 192.168.98.103:2376
+  └ Status: Healthy
+  └ Containers: 4
+  └ Reserved CPUs: 0 / 8
+  └ Reserved Memory: 0 B / 4.05 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.18-boot2docker, operatingsystem=Boot2Docker 1.10.2 (TCL 6.4.1); master : 611be10 - Mon Feb 22 22:47:06 UTC 2016, provider=virtualbox, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-07T21:17:24Z
+ swarm-node-1: 192.168.98.102:2376
+  └ Status: Healthy
+  └ Containers: 3
+  └ Reserved CPUs: 0 / 8
+  └ Reserved Memory: 0 B / 4.05 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.18-boot2docker, operatingsystem=Boot2Docker 1.10.2 (TCL 6.4.1); master : 611be10 - Mon Feb 22 22:47:06 UTC 2016, provider=virtualbox, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-03-07T21:17:42Z
+Plugins:
+ Volume:
+ Network:
+Kernel Version: 4.1.18-boot2docker
+Operating System: linux
+Architecture: amd64
+CPUs: 16
+Total Memory: 8.101 GiB
+Name: swarm-master

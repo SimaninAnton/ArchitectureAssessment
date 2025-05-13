@@ -1,0 +1,8 @@
+cap10morgan commented on 22 Feb 2014
+To recreate:
+fig up -d
+fig ps # everything's running
+fig scale foo=2
+docker stop my_foo_1
+fig scale foo=2 # restarts my_foo_1
+fig ps # empty and fig commands don't work until you stop & rm all containers with docker

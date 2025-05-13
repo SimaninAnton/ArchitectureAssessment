@@ -1,0 +1,12 @@
+trajano commented on 22 Feb 2019 •
+edited
+Is your feature request related to a problem? Please describe.
+Related to #4799
+What I discovered was if I defined and set up a server to only connect to internal only networks the ports that I specified to expose are not exposed.
+Describe the solution you'd like
+I would like to see a warning that when the service will not be exposed because all their networks are internal.
+Describe alternatives you've considered
+Crying and swearing at docker-compose
+Additional context
+The service '%s' will not have any ports exposed as it is only associated with networks that are internal only.
+https://stackoverflow.com/a/54830863/242042

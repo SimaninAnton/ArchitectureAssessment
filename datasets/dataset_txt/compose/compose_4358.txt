@@ -1,0 +1,17 @@
+zires commented on 27 Mar 2014
+I followed the Get started with Rails
+when i finished fig run web rails new . --force --database=postgresql --skip-bundle, i can't see the volume /myapp mount successful, it was still three files.
+The environment:
+osx 10.9.2
+
+fig 0.3.2
+
+Docker version 0.9.1, build 3600720
+Client version: 0.9.1
+Go version (client): go1.2.1
+Git commit (client): 3600720
+Server version: 0.9.1
+Git commit (server): 3600720
+Go version (server): go1.2.1
+BTW, i use boot2docker instead of docker-osx.
+need help, thanks.

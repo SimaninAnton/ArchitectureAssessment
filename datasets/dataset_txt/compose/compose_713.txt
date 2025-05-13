@@ -1,0 +1,5 @@
+jedie commented on 26 Apr 2018
+It seems to me that the output of docker-compose config is not sorted. e.g.: The volumes: and links: sections. (Maybe other sections, too.)
+So it's not easy to compare a extending compose configurations by a diff :(
+(compose v1.18 I will try a newer version...)
+1

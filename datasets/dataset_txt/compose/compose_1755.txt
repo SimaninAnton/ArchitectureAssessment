@@ -1,0 +1,5 @@
+nanawel commented on 25 Jan 2017
+Hi,
+Would it be a problem in some cases to also allow underscore character in the project name? That would be very convenient.
+(see get_project_name() at https://github.com/docker/compose/blob/master/compose/cli/command.py#L118)
+Thanks in advance

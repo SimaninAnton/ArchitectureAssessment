@@ -1,0 +1,33 @@
+BentCoder commented on 17 May 2019
+Hi,
+I wonder if this is bug or an expected behaviour.
+When I use docker-compose build --no-cache && docker-compose up -d, the named volume doesn't get refreshed completely hence reason some changes to .dockerignore is ignored.
+e.g. If I create a new file/folder in app's source folder and add them to .dockerignore it is fine. However, if I add an existing file/folder to .dockerignore, they are still in the named volume.
+Is there a way to sync named volumes as well? I guess docker volume rm .. is not ideal in production for no downtime.
+Note: I am using named volume in production to keep source code in a container in order to prevent exposing it to host OS.
+Thanks
+docker-compose.yml
+version: "3"
+
+services:
+  dev_source:
+    build:
+      context: "../.."
+      dockerfile: "docker/dev/source/Dockerfile"
+    volumes:
+      - "sourcecode:/app"
+
+volumes:
+  sourcecode:
+Dockerfile
+FROM alpine:3.9
+
+COPY . /app
+
+CMD tail -f /dev/null
+System (Debian 9)
+$ docker -v
+Docker version 18.06.1-ce, build e68fc7a
+
+$ docker-compose --version
+docker-compose version 1.21.2, build a133471

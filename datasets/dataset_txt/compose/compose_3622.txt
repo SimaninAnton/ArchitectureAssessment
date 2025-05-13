@@ -1,0 +1,28 @@
+Contributor
+dnephin commented on 25 May 2015
+An even more aggressive step from #693, compose could entirely remove the ability to build images.
+Rational: If compose is a tool for composing services, the process of building images for those services is distinct from the concerns of running services.
+The docker images already provides a great interface for separating these concerns. The existing compose support for building an image is pretty primitive, and could be easily replaced.
+There are many different build scenarios, each of which could be handled by a separate tool:
+build from urls (#1209, #1369)
+the naming of images (#1363, #2092)
+using builder containers (#1257)
+pushing images to a registry (#1126)
+tagging images (#974, #213)
+don't build the same path twice (#963)
+pulling base images (#726)
+build ordering (#295, #610, #583, #663, #1548)
+building base images (#1661 (comment))
+--build-arg command line flag (#2111 (comment))
+Some of these problems are already solved by existing build tools:
+https://github.com/6si/shipwright - building many containers from a git repo, where images extend each other
+https://github.com/openshift/source-to-image - creating minimal images using a builder container
+(There are probably other tools that I'm not aware of at this time.)
+Backwards Compatibility
+In order to preserve some form of backwards compatibility we could:
+in one release, warn if a build tag exists, and continue to build images
+in the next release
+allow both build and image keys for a service
+ignore build and dockerfile keys
+provide a new command to build images in the way that compose does now (based on the same config)
+finally in some future release remove the build and dockerfile fields, and require a separate config for building images. Initially that config might be in a similar format, but likely it would evolve to support many of the scenarios described above

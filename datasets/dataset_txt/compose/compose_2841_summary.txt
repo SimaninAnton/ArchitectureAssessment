@@ -1,0 +1,1 @@
+Containers started with --project-name set not affected by other commands

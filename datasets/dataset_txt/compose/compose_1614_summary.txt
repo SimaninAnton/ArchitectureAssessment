@@ -1,0 +1,1 @@
+Docker-compose via container doesn't connect pipes correctly

@@ -1,0 +1,40 @@
+Bewi42 commented on 30 Oct 2019
+Description of the issue
+docker-compose fails to run when /tmp is in noexec mode.
+Context information (for bug reports)
+/tmp is mounted in noexec mode
+Output of docker-compose version
+docker-compose: error while loading shared libraries: libz.so.1: failed to map segment from shared object: Operation not permitted
+Output of docker version
+Client:
+ Version:         1.13.1
+ API version:     1.26
+ Package version: docker-1.13.1-94.gitb2f74b2.el7.x86_64
+ Go version:      go1.10.8
+ Git commit:      b2f74b2/1.13.1
+ Built:           Mon Feb 25 14:45:39 2019
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.13.1
+ API version:     1.26 (minimum version 1.12)
+ Package version: docker-1.13.1-94.gitb2f74b2.el7.x86_64
+ Go version:      go1.10.8
+ Git commit:      b2f74b2/1.13.1
+ Built:           Mon Feb 25 14:45:39 2019
+ OS/Arch:         linux/amd64
+ Experimental:    false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+docker-compose: error while loading shared libraries: libz.so.1: failed to map segment from shared object: Operation not permitted
+Steps to reproduce the issue
+install docker-compose
+run docker-compose
+Observed result
+docker-compose: error while loading shared libraries: libz.so.1: failed to map segment from shared object: Operation not permitted
+Expected result
+docker-compose should run even if /tmp is in noexec mode.
+Stacktrace / full error message
+docker-compose: error while loading shared libraries: libz.so.1: failed to map segment from shared object: Operation not permitted
+Additional information
+No workaround will be accepted. Many software manage to run even if /tmp is in noexec. Why not docker-compose ?

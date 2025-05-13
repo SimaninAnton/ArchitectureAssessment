@@ -1,0 +1,37 @@
+marcelmfs commented on 18 Mar 2016
+Nice misinformational bug in release notes for compose 1.6:
+[docker@guest ~]# docker-compose version
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+[docker@guest ~]# docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:25:01 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:25:01 UTC 2015
+ OS/Arch:      linux/amd64
+[docker@guest ~]# docker-compose up
+ERROR: client is newer than server (client API version: 1.22, server API version: 1.21)
+[docker@guest ~]# cat docker-compose.yml
+version: "2"
+services:
+ server1:
+  image: alpine
+  container_name: server1
+  entrypoint: /bin/true
+[docker@guest ~]#
+But, quoting https://github.com/docker/compose/releases/tag/1.6.0:
+Note that Compose 1.6.0 requires Docker Engine 1.9.1 or later, or 1.10.0 if you're using version 2 of the Compose File format (see the changelog below).
+published Feb 4.
+Is it just a documentation bug?

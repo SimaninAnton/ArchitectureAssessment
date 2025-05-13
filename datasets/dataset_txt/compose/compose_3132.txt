@@ -1,0 +1,7 @@
+Contributor
+jake-low commented on 6 Nov 2015
+Currently compose outputs a warning when using extensions other than .yml for the config file:
+WARNING: Please be aware that .yml is the expected extension in most cases, and using .yaml can cause compatibility issues in future.
+However, the creators of YAML request that we use .yaml when possible. [1]
+Additionally, I don't think it's fruitful to warn users about this particular "compatibility issue"; things like which character is used for \n in text files or using uppercase or non-ASCII characters in file names can also be "compatibility issues" when multiple platforms are involved, yet most programs don't force a user of a particular platform to use a convention which is compatible with other platforms.
+Just my two cents. If the devs agree that this can/should be removed, I'll make a PR.

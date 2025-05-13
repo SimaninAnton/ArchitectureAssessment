@@ -1,0 +1,1 @@
+Compose doesn't read ~/.docker/config.json

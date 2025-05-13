@@ -1,0 +1,9 @@
+jamshid commented on 8 May 2017
+Do I really have to hard-code the scale value in docker-compose.yml? Why not allow it to be specified by an env variable like:
+  elasticsearch:
+    scale: ${ELASTICSEARCH_SCALE}
+With docker-compose 1.13.0 I get this error when attempting that:
+$ export ELASTICSEARCH_SCALE=3
+$ docker-compose up -d
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.elasticsearch.scale contains an invalid type, it should be an integer

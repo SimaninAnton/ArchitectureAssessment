@@ -1,0 +1,41 @@
+semperos commented on 3 Mar 2014
+System specs:
+Mac OSX 10.8.5
+Python 2.7.2 (built-in)
+Fig 0.2.2
+My fig.yml:
+image: stackbrew/ubuntu
+ports:
+  - 3306:3306
+  - 6379:6379
+links:
+   - mysql
+   - redis
+mysql:
+  image: orchardup/mysql
+redis:
+  image: orchardup/redis
+When running fig up, I get the following error:
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.2.2', 'console_scripts', 'fig')()
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 26, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Library/Python/2.7/site-packages/fig/cli/docopt_command.py", line 27, in perform_command
+    handler(command_options)
+  File "/Library/Python/2.7/site-packages/fig/cli/main.py", line 287, in up
+    (old, new) = self.project.recreate_containers(service_names=options['SERVICE'])
+  File "/Library/Python/2.7/site-packages/fig/cli/utils.py", line 22, in get
+    x = self._property_cache[f] = f(self)
+  File "/Library/Python/2.7/site-packages/fig/cli/command.py", line 75, in project
+    return Project.from_config(self.project_name, config, self.client)
+  File "/Library/Python/2.7/site-packages/fig/project.py", line 64, in from_config
+    service['name'] = service_name
+TypeError: 'str' object does not support item assignment
+I tried removing everything from the fig.yml shy of the image entry, and the same error occurs regardless. Any help would be greatly appreciated.

@@ -1,0 +1,56 @@
+jlupox commented on 1 Feb 2016
+I have a working docker-compose example running a static html with nginx.
+The directory tree:
+├── docker-compose.yml
+├── nginx
+│   ├── app
+│   │   └── index.html
+│   └── Dockerfile
+The docker-compose.yml:
+nginx:
+  build: ./nginx
+  volumes:
+    - ./nginx/app:/usr/share/nginx/html
+  ports:
+    - 8080:80
+The nginx directory has the Dockerfile:
+FROM nginx
+Everything is working right.
+The problem is that I build a Docker-Swarm infrastructure with docker-machine following the Docker documentation: The Local, the swarm-master and two nodes.
+Everything seems to work fine too.
+$ eval $(docker-machine env --swarm swarm-master)
+$[swarm-master]$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                  NAMES
+d8afafeb9f05        few_nginx           "nginx -g 'daemon off"   20 minutes ago      Up 3 seconds        443/tcp, 192.168.99.102:8080->80/tcp   swarm-host-00/few_nginx_1
+But nginx is returning a Forbidden
+$[swarm-master]$ curl http://192.168.99.102:8080/
+<html>
+<head><title>403 Forbidden</title></head>
+<body bgcolor="white">
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.9.10</center>
+</body>
+</html>
+I enter into the virtualbox and into the container:
+$[swarm-master]$ docker-machine ssh swarm-host-00
+docker@swarm-host-00:~$ docker exec -ti d8afafeb9f05 bash
+and nothing inside the nginx/html directory:
+root@d8afafeb9f05:/# ls /usr/share/nginx/html/
+Version:
+$[swarm-master]$ docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:12:04 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.0.1
+ API version:  1.21
+ Go version:   go1.5.2
+ Git commit:   744e3a3
+ Built:        
+ OS/Arch:      linux/amd64
+Is it necessary to do something different in compose/swarm for the volumes? Am I doing something wrong?

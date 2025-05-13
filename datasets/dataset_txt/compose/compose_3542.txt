@@ -1,0 +1,47 @@
+kostko commented on 24 Jun 2015
+A docker-compose.yml that works without issues on Docker 1.6.2 fails to work in Docker 1.7.0. The problem seems to be in parsing the entrypoint, as the following error appears when running docker-compose up:
+Cannot start container 7e2e8a41223f7c111c325fcd5deb549e6afda5ad1b3a81cc8add678b25d2687d: [8] System error: exec: "\"/code/scripts/docker-run\"": stat "/code/scripts/docker-run": no such file or directory
+Notice an extra " that is not present in the entrypoint definition:
+web:
+    build: .
+    command: "scripts/docker-cleanup; scripts/docker-wait-pgsql; python manage.py runserver 0.0.0.0:8000"
+    working_dir: /code
+    entrypoint: /code/scripts/docker-run
+    environment:
+        PYTHONUNBUFFERED: 1
+    volumes:
+        - .:/code
+    ports:
+        - "8000:8000"
+The same configuration works without issues on Docker 1.6.2, so I am not sure if this is a problem with Docker or with Docker Compose.
+$ docker-compose --version
+docker-compose version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+$ docker version
+Client version: 1.7.0
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 0baf609
+OS/Arch (client): linux/amd64
+Server version: 1.7.0
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 0baf609
+OS/Arch (server): linux/amd64
+$ docker info
+Containers: 6
+Images: 330
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 342
+ Dirperm1 Supported: false
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.13.0-55-generic
+Operating System: Ubuntu 14.04.2 LTS
+CPUs: 4
+Total Memory: 11.44 GiB
+Username: kostko
+Registry: https://index.docker.io/v1/

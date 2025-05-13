@@ -1,0 +1,12 @@
+rapha-opensource commented on 13 Apr 2017 •
+edited
+I'm using 1.11.2 (as listed in the online docs).
+I'm using 'docker-compose config' to generate a stack file from a list of 'version 3' compose files,
+now that 'extends' is gone.
+I added a 'deploy' key to some services in their individual compose file.
+When generating the final stack file using 'docker-compose -f ... -f ... -f ... config > stack.yml', I noticed my deploy keys were gone.
+Is this the expected behavior?
+Also looked in the code (compose/compose/config/config.py) and saw this warning string:
+'Compose does not support deploy configuration...', yet the documentation for compose lists 'deploy' as a valid key.
+I'm deeply confused as to how we are supposed to use compose in combination with stack.
+The only conclusion I can come to is we must maintain a duplicated single file for use with stack.

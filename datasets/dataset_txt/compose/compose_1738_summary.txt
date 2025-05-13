@@ -1,0 +1,1 @@
+docker-compose using --no-recreate --no-build still requires the build directories to be present

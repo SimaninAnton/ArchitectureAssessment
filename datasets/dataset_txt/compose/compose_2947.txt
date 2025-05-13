@@ -1,0 +1,36 @@
+lfn3 commented on 6 Jan 2016
+The minimal docker-compose.yml file:
+test:
+  image: busybox
+  dns: 127.0.0.1
+Fails to start when I do docker-compose up with ERROR: compose.cli.main.main: json: cannot unmarshal string into Go value of type []string (Full verbose logs are here)
+Changing the file to:
+test:
+  image: busybox
+  dns: 
+    - 127.0.0.1
+Causes the container to start up correctly.
+Note I'm using docker-machine to talk to a physical ubuntu host. Output from my machine:
+Docker compose version: docker-compose version 1.5.2, build 7240ff3
+Docker version: Docker version 1.9.1, build a34a1d5
+Os: OSX 10.10.5
+And from the ubuntu host:
+Docker version:
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:16:54 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:16:54 UTC 2015
+ OS/Arch:      linux/amd64
+Os: Ubuntu 15.04
+Rampant speculation starts here:
+Guessing that the parameters required by the docker api became more restrictive, or that the way docker-compose passes them inadvertently changed.

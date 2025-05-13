@@ -1,0 +1,38 @@
+hadim commented on 6 Oct 2016 •
+edited
+After the recent addition of #3108.
+See the following :
+version: '2.1'
+services:
+
+  test:
+    container_name: test-name
+    image: busybox
+    command: "true"
+    privileged: true
+    volumes:
+      - ${DATA_DIR-/home/hadim/test_data_dir}:/data:Z
+And the error :
+ERROR: Invalid interpolation format for "volumes" option in service "test": "${DATA_DIR-/home/hadim/test_data_dir}:/data:Z"
+$ docker version
+Client:
+ Version:      1.12.2-rc2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   ad9538a
+ Built:        Tue Oct  4 18:23:48 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.2-rc2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   ad9538a
+ Built:        Tue Oct  4 18:23:48 2016
+ OS/Arch:      linux/amd64
+
+$ docker-compose version
+docker-compose version 1.9.0dev, build unknown
+docker-py version: 1.10.3
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016

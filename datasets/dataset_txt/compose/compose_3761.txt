@@ -1,0 +1,18 @@
+gastonmorixe commented on 2 Apr 2015
+Hey guys,
+I'd be great if there's a stats command available. A short cut of the following, or at least adding in the README this handy.
+sudo docker stats (sudo docker-compose ps | awk -v col=1 'NR > 2 {print $col}')
+CONTAINER                CPU %               MEM USAGE/LIMIT      MEM %               NET I/O
+company_app_15            12.13%              1.4 GiB/13.7 GiB     10.22%              18.6 MiB/11.89 MiB
+company_bgcache_1         20.27%              1.153 GiB/13.7 GiB   8.42%               3.452 GiB/1.329 GiB
+company_cron_1            0.00%               1.574 MiB/13.7 GiB   0.01%               4.56 GiB/695.6 MiB
+company_db_1              10.76%              288 MiB/13.7 GiB     2.05%               39.97 GiB/219.3 GiB
+company_delayedjob_1      0.00%               227.6 MiB/13.7 GiB   1.62%               757.9 MiB/524.9 MiB
+company_elasticsearch_1   0.57%               138.8 MiB/13.7 GiB   0.99%               37.28 KiB/1.16 KiB
+company_nginx_1           0.44%               47.89 MiB/13.7 GiB   0.34%               370 MiB/748.4 MiB
+company_redis_1           2.80%               3.463 GiB/13.7 GiB   25.28%              67.01 GiB/25.5 GiB
+company_resque_24         0.00%               180 MiB/13.7 GiB     1.28%               2.517 GiB/1.379 GiB
+company_resque_25         0.00%               164.5 MiB/13.7 GiB   1.17%               2.532 GiB/1.388 GiB
+company_resque_26         18.57%              205 MiB/13.7 GiB     1.46%               1.904 GiB/1.039 GiB
+company_resque_27         0.27%               158.4 MiB/13.7 GiB   1.13%               1.915 GiB/1.044 GiB
+Thank you

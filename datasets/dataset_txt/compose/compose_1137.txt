@@ -1,0 +1,9 @@
+jwipeout commented on 19 Oct 2017 •
+edited
+I thought you guys would find it helpful that I went to install docker compose and found that you are referencing a release that has not yet come out yet.
+on installing for linux
+https://docs.docker.com/compose/install/#install-compose
+we are instructed to run this curl command.
+sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+this leads you to download a file that says 'not found' inside of it. The current latest release is 1.16.1
+/usr/local/bin/docker-compose: 1: /usr/local/bin/docker-compose: Not: not found

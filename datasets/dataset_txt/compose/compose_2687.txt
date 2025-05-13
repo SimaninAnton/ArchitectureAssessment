@@ -1,0 +1,12 @@
+schuppo commented on 29 Feb 2016
+I can't find the syntax error in my docker-compose.yml. Under services: it has (beneath others):
+  elasticsearch:
+    image: elasticsearch:latest
+    networks:
+       log:
+         aliases:
+           - elasticsearch
+When I run docker-compose up elasticsearch I get:
+ERROR: Validation failed in file './docker-compose.yml', reason(s): services.elasticsearch.networks contains an invalid type, it should be an array
+Do you have any clue?
+I use docker-compose version 1.7.0dev, build 77cf67b due to #271 on MacOSX

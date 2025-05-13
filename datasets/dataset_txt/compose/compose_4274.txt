@@ -1,0 +1,56 @@
+mustela commented on 23 Jul 2014
+Hi there, I'm a newbie here so don't be hard :).
+I've installed docker and I followed the fig wp installation instructions but seems that I can't have a wp running. This is what I have:
+docker
+Client version: v1.1.1
+Git commit: 8dd1935
+fig 0.5.1
+DOCKER_HOST=tcp://192.168.59.103:2375
+:example mustela$ fig up
+Recreating example_db_1...
+Recreating example_web_1...
+Attaching to example_db_1, example_web_1
+db_1 | 140723 14:26:55 [Warning] Using unique option prefix key_buffer instead of key_buffer_size is deprecated and will be removed in a future release. Please use the full name instead.
+db_1 | 140723 14:26:55 [Warning] Using unique option prefix key_buffer instead of key_buffer_size is deprecated and will be removed in a future release. Please use the full name instead.
+db_1 | 140723 14:26:55 [Warning] Using unique option prefix myisam-recover instead of myisam-recover-options is deprecated and will be removed in a future release. Please use the full name instead.
+db_1 | 140723 14:26:55 [Note] Plugin 'FEDERATED' is disabled.
+db_1 | 140723 14:26:55 InnoDB: The InnoDB memory heap is disabled
+db_1 | 140723 14:26:55 InnoDB: Mutexes and rw_locks use GCC atomic builtins
+db_1 | 140723 14:26:55 InnoDB: Compressed tables use zlib 1.2.3.4
+db_1 | 140723 14:26:55 InnoDB: Initializing buffer pool, size = 128.0M
+db_1 | 140723 14:26:55 InnoDB: Completed initialization of buffer pool
+db_1 | 140723 14:26:55 InnoDB: highest supported file format is Barracuda.
+db_1 | 140723 14:26:55 InnoDB: Waiting for the background threads to start
+db_1 | 140723 14:26:56 InnoDB: 5.5.38 started; log sequence number 1595675
+db_1 | 140723 14:26:56 InnoDB: Starting shutdown...
+db_1 | 140723 14:26:56 InnoDB: Shutdown completed; log sequence number 1595675
+db_1 | 140723 14:26:56 [Warning] Using unique option prefix key_buffer instead of key_buffer_size is deprecated and will be removed in a future release. Please use the full name instead.
+db_1 | 140723 14:26:56 [Warning] Using unique option prefix myisam-recover instead of myisam-recover-options is deprecated and will be removed in a future release. Please use the full name instead.
+db_1 | 140723 14:26:56 [Note] Plugin 'FEDERATED' is disabled.
+db_1 | 140723 14:26:56 InnoDB: The InnoDB memory heap is disabled
+db_1 | 140723 14:26:56 InnoDB: Mutexes and rw_locks use GCC atomic builtins
+db_1 | 140723 14:26:56 InnoDB: Compressed tables use zlib 1.2.3.4
+db_1 | 140723 14:26:56 InnoDB: Initializing buffer pool, size = 128.0M
+db_1 | 140723 14:26:56 InnoDB: Completed initialization of buffer pool
+db_1 | 140723 14:26:56 InnoDB: highest supported file format is Barracuda.
+db_1 | 140723 14:26:57 InnoDB: Waiting for the background threads to start
+db_1 | 140723 14:26:58 InnoDB: 5.5.38 started; log sequence number 1595675
+db_1 | 140723 14:26:58 [Note] Server hostname (bind-address): '0.0.0.0'; port: 3306
+db_1 | 140723 14:26:58 [Note] - '0.0.0.0' resolves to '0.0.0.0';
+db_1 | 140723 14:26:58 [Note] Server socket created on IP: '0.0.0.0'.
+db_1 | 140723 14:26:58 [Note] Event Scheduler: Loaded 0 events
+db_1 | 140723 14:26:58 [Note] /usr/sbin/mysqld: ready for connections.
+db_1 | Version: '5.5.38-0ubuntu0.12.04.1-log' socket: '/var/run/mysqld/mysqld.sock' port: 3306 (Ubuntu)
+web_1 | [Wed Jul 23 14:27:28 2014] 192.168.59.3:54053 [404]: / - No such file or directory
+web_1 | [Wed Jul 23 14:27:30 2014] 192.168.59.3:54054 [404]: / - No such file or directory
+web_1 | [Wed Jul 23 14:27:34 2014] 192.168.59.3:54055 [404]: /example_web_1 - No such file or directory
+web_1 | [Wed Jul 23 14:27:52 2014] 192.168.59.3:54056 Invalid request (Unexpected EOF)
+web_1 | [Wed Jul 23 14:28:16 2014] 192.168.59.3:54081 [404]: /example_web_1 - No such file or directory
+web_1 | [Wed Jul 23 14:28:34 2014] 192.168.59.3:54082 Invalid request (Unexpected EOF)
+web_1 | [Wed Jul 23 14:31:55 2014] 192.168.59.3:54188 [404]: /code - No such file or directory
+web_1 | [Wed Jul 23 14:32:12 2014] 192.168.59.3:54187 Invalid request (Unexpected EOF)
+web_1 | [Wed Jul 23 14:32:37 2014] 192.168.59.3:54191 [404]: /code - No such file or directory
+web_1 | [Wed Jul 23 14:32:56 2014] 192.168.59.3:54192 Invalid request (Unexpected EOF)
+I've tried with http://192.168.59.103:8000/, http://192.168.59.103:8000/code, http://192.168.59.103:8000/example, but doesn't work.
+Any clue?
+Thanks!!

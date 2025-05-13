@@ -1,0 +1,14 @@
+Contributor
+bfirsh commented on 5 Sep 2015
+It is a common pattern to define a base Compose file, and then define Compose files for different environments with a few small changes.
+It is currently possible to extend single services, but it is very verbose to include a large number of services and make a small change to one of them (for example, setting RAILS_ENV=production).
+It should be possible to extend a Compose file with a complete set of services from another Compose file. All of those services will be copied into the Compose file, as if you were extending each of the services individually:
+If you don't define a service in the child file, it is copied as-is.
+If you do define a service, it should behave as if you've extended that single service.
+There is no way of undefining a service (yet)
+This is an intentionally simple first step, and I am intentionally not defining a syntax so we can discuss.
+Design questions:
+This is the first top-level configuration we have added to Compose. How should we do this?
+Related issues / suggested designs: #318 #1380 dcao-merge
+(This is part of an initiative to define an app once in a way that can be used across dev, test and prod.)
+3

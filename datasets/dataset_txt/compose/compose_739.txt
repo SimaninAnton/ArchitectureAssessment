@@ -1,0 +1,22 @@
+mnebuerquo commented on 16 Apr 2018
+Description of the issue
+I have some scripts I use for devops, which include some shell scripts and docker-compose to build, lint, test, and run a python project. It's been working great until a recent update. Now it says "Cannot locate specified Dockerfile", but then prints out the correct full path to the Dockerfile.
+I have created a repo for reproducing this issue. It contains a very stripped-down replica of my devops scripts, and a directory structure to reproduce this issue. It also contains logs of the build command in two different environments to show expected and actual.
+See the example repo here: https://github.com/mnebuerquo/compose-example
+Observed result
+Cannot locate specified Dockerfile: /opt/compose-example/compose/dockerfile/Dockerfile
+Expected result
+The container builds successfully in 1.18.0.
+Additional information
+This is the docker-compose.yml after the environment variables have been expanded:
+# /opt/compose-example/compose/docker-compose.yml
+version: '3'
+services:
+  dev:
+    build:
+      context: /opt/compose-example/context
+      dockerfile: /opt/compose-example/compose/dockerfile/Dockerfile
+Related
+I think this might be related to one of these issues:
+#5869
+#4857

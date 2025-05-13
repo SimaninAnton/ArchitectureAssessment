@@ -1,0 +1,7 @@
+Contributor
+aanand commented on 6 Aug 2015
+(This is closely related to #1784.)
+The Docker image format, along with the Hub, registry and Dockerfile build system, constitute a really good way to distribute single-container software. There's no equivalent for multi-container applications. The closest you can get is a Compose file that references a bunch of images hosted elsewhere.
+If there were a way to package up a whole multi-container app - its container's images and configuration - for one-step distribution and deployment (as simple as docker push, docker pull and docker run make distributing single-container software), it would enable much smoother distribution of much more complex apps than a Docker registry can currently supply you with.
+This might entail designing an artifact that's generated from a Compose file, much as a container image is generated from a Dockerfile.
+There are also interesting use cases regarding deployment and rollback - if you could serialise/deserialise between the state of an app and an immutable artifact, rolling back a deployment would become a single logical step.

@@ -1,0 +1,1 @@
+Multiple v1 config files breaks logging

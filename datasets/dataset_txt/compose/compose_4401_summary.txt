@@ -1,0 +1,1 @@
+Terminal incorrectly initialized when using fig run

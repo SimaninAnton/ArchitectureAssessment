@@ -1,0 +1,1 @@
+When COMPOSE_HTTP_TIMEOUT is reached the exit code should be non-zero

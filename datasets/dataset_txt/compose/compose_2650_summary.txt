@@ -1,0 +1,1 @@
+[Question] is there any compose configuration option as the counterpart for "--ip" option of "docker run"

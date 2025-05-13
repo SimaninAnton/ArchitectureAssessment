@@ -1,0 +1,17 @@
+jamshid commented on 4 Feb 2018
+Something broke after Docker for Mac Edge updated my docker-compose 1.18 to 1.19.0-rc2.
+I'm seeing tons of InsecureRequestWarning whenever I use docker-compose with my Ubuntu 16.04 docker server, configured with docker-machine (now at 0.13.0).
+Does compose no longer use the certs and key files in DOCKER_CERT_PATH? Compose works fine if I use explicit --tlscacert etc parameters.
+$ eval $(docker-machine env 61)
+$ env | grep -Ei 'machines|tls'
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/Users/jamshid/.docker/machine/machines/61
+$ docker-compose ps
+...
+/var/folders/83/y1z9b5111l35yb2rbnpzn7j00000gp/T/_MEIOolV7O/urllib3/connectionpool.py:852: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+(repeated)
+...
+$ docker-compose $(docker-machine config 61 | xargs ) ps
+(no InsecureRequestWarning)
+That last command (which works) expands to:
+$ docker-compose --tlsverify --tlscacert=/Users/jamshid/.docker/machine/machines/61/ca.pem --tlscert=/Users/jamshid/.docker/machine/machines/61/cert.pem --tlskey=/Users/jamshid/.docker/machine/machines/61/key.pem -H=tcp://192.168.1.61:2376 ps

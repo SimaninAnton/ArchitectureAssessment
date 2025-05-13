@@ -1,0 +1,5 @@
+kennu commented on 18 Mar 2014
+Apparently there is no way to pull each configured image to update them to latest versions. I frequently do this because I deploy new versions of my apps by pushing new images to a private repository. Currently I have to run "docker pull" manually for each of them.
+Could there be a command like:
+fig pull [service]
+(If there already is a command for this, I missed it while trying to grep the source code and read the docs.)

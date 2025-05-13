@@ -1,0 +1,8 @@
+pedro93 commented on 9 Mar 2018 •
+edited
+I've been digging across the docker-compose documentation and found the following page regarding container event streaming.
+My question is, given that it is possible to be alerted about a container hitting lifecycle stages (created, started, restarts, stops etc ...), full list here, it is possible with docker-compose to listen for such service events and perform an arbitrary script at each stage, such that, that hook pauses the docker-compose process?
+As an example, let's say I have an orchestration between two services A, B where B depends on A being healthy. Additionally, service A needs to know some information about B which is dynamically generated on service bootup.
+The solution I am looking is some form of before entry point on service B, halt the docker-compose up process so that I can, in the host retrieve the dynamic information from A, generate a bash script with that information, execute the script on service B and then proceed with the docker-compose process.
+Thank you for maintaining this project, it is extremely useful :)
+Edit: Updated last paragraph, mixed up the service order, my apologies

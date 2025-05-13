@@ -1,0 +1,5 @@
+galan commented on 12 May 2016 •
+edited
+When using a hostname directive for a service, it is only recognized using docker-compose up. If a single service is started using docker-compose run it is not.
+This leads to services that can't discover other services within the same network.
+This issue might be relatd to #2061

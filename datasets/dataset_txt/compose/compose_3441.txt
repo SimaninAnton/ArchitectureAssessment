@@ -1,0 +1,16 @@
+Contributor
+bfirsh commented on 22 Jul 2015
+Run this app:
+web:
+  image: nginx
+  links:
+   - redis
+redis:
+  image: redis
+Now change to this:
+web:
+  image: nginx
+and then:
+$ docker-compose up
+Starting composedemo_web_1...
+Cannot start container 757b1fb7911f12a2cb06a22c7de192da687f5042daf6a4db30d76a487f71f94a: Cannot link to a non running container: /composedemo_redis_1 AS /composedemo_web_1/composedemo_redis_1

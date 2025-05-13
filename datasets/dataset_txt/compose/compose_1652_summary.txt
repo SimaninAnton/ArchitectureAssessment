@@ -1,0 +1,1 @@
+docker-compose fails on Windows when building container pywintypes.error: (232, 'WriteFile', 'The pipe is being closed.')

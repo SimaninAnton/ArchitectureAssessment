@@ -1,0 +1,48 @@
+jouve commented on 26 Apr 2018
+Description of the issue
+I see 2 ways of mounting a tmpfs in docker-compose:
+tmpfs:
+  - /my/mount/point
+volumes:
+  - type: tmpfs
+    target: /my/mount/point
+Now if I want to give options for the mount point, I can do it with the first syntax:
+tmpfs:
+  - /my/mount/point:exec,size=1G
+but I can't do it with the other syntax (or it's not documented):
+      - type: tmpfs
+        target: /var/tmp/portage
+        ???
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.3
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Output of "docker version"
+Client:
+ Version:       18.04.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    3d479c0
+ Built: Tue Apr 10 18:21:20 2018
+ OS/Arch:       linux/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.04.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   3d479c0
+  Built:        Tue Apr 10 18:19:27 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+services:
+  toto:
+    image: alpine:3.7
+    tmpfs:
+    - /var/tmp/portage:exec,size=1G
+version: '2.3

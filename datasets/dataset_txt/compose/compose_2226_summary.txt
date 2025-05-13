@@ -1,0 +1,1 @@
+allow to extend extra_hosts when using several configuration files

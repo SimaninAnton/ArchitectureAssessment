@@ -1,0 +1,65 @@
+jaggerwang commented on 2 Jul 2016 •
+edited
+The go code and output:
+go code
+func emptyDB() (err error) {
+    cmd := exec.Command("docker-compose", "-p", "zqctest", "exec", "server", "pwd")
+    cmd.Stdout = os.Stdout
+    cmd.Stderr = os.Stderr
+    cmd.Dir = filepath.Join(os.Getenv("GOPATH"), "src", "zaiqiuchang.com", "server")
+    err = cmd.Run()
+    fmt.Printf("%+v\n", cmd)
+    fmt.Println(err)
+    return err
+}
+output:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 58, in main
+  File "compose/cli/main.py", line 109, in perform_command
+  File "compose/cli/main.py", line 396, in exec_command
+  File "site-packages/dockerpty/pty.py", line 338, in start
+  File "site-packages/dockerpty/io.py", line 32, in set_blocking
+ValueError: file descriptor cannot be a negative integer (-1)
+docker-compose returned -1
+&{Path:/usr/local/bin/docker-compose Args:[docker-compose -p zqctest exec server pwd] Env:[] Dir:/Users/jagger/go/src/zaiqiuchang.com/server Stdin:<nil> Stdout:0xc820090008 Stderr:0xc820090010 ExtraFiles:[] SysProcAttr:<nil> Process:0xc82020c5a0 ProcessState:exit status 255 lookPathErr:<nil> finished:true childFiles:[0xc820090188 0xc820090008 0xc820090010] closeAfterStart:[0xc820090188] closeAfterWait:[] goroutine:[] errch:0xc82006f740}
+exit status 255
+As you can see, the err returned by emptyDB is "exit status 255".
+Make sure docker-compose exec works fine on local command line:
+➜  server git:(master) ✗ pwd
+/Users/jagger/go/src/zaiqiuchang.com/server
+➜  server git:(master) ✗ docker-compose -p zqctest exec server pwd
+/go/src/zaiqiuchang.com/server
+➜  server git:(master) ✗ echo $?
+0
+Environment:
+➜  server git:(master) docker version
+Client:
+ Version:      1.12.0-rc2
+ API version:  1.24
+ Go version:   go1.6.2
+ Git commit:   906eacd
+ Built:        Fri Jun 17 20:35:33 2016
+ OS/Arch:      darwin/amd64
+ Experimental: true
+
+Server:
+ Version:      1.12.0-rc2
+ API version:  1.24
+ Go version:   go1.6.2
+ Git commit:   a7119de
+ Built:        Wed Jun 29 10:03:33 2016
+ OS/Arch:      linux/amd64
+ Experimental: true
+
+➜  server git:(master) docker-compose version
+docker-compose version 1.8.0-rc1, build 9bf6bc6
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+
+➜  server git:(master) go version
+go version go1.6.2 darwin/amd64
+
+➜  server git:(master) uname -a
+Darwin jagger-mbp 15.5.0 Darwin Kernel Version 15.5.0: Tue Apr 19 18:36:36 PDT 2016; root:xnu-3248.50.21~8/RELEASE_X86_64 x86_64

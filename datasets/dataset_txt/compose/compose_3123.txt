@@ -1,0 +1,13 @@
+arun-gupta commented on 9 Nov 2015
+Started an application using https://github.com/arun-gupta/docker-images/blob/master/wildfly-mysql-javaee7/docker-compose.yml as:
+docker-compose --x-networking up -d
+Creating network "wildflymysqljavaee7" with driver "None"
+Creating wildflymysqljavaee7_mywildfly_1
+Creating db
+The message shows network is created with driver "None" but listing the network as docker network ls shows otherwise:
+> docker network ls
+NETWORK ID          NAME                  DRIVER
+a3c9994d6134        none                  null                
+91537bec6510        host                  host                
+b1770955e5aa        wildflymysqljavaee7   bridge              
+6fda61934fbe        bridge                bridge  

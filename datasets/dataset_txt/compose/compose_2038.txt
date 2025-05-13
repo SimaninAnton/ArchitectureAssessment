@@ -1,0 +1,143 @@
+PsychoThinker commented on 27 Sep 2016
+docker version
+Client:
+ Version:      1.12.1
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   23cf638
+ Built:        Thu Aug 18 17:52:38 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.12.1
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   23cf638
+ Built:        Thu Aug 18 17:52:38 2016
+ OS/Arch:      linux/amd64
+docker-compose.yml
+version: '2'
+services:
+    hello:
+        image: tutum/hello-world
+        ports:
+            - "80:80"
+docker-compose --verbose up
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.auth.load_config: Found 'credsStore' section
+compose.cli.command.get_client: docker-compose version 1.8.0, build d988a55
+docker-py version: 1.9.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+compose.cli.command.get_client: Docker base_url: http://127.0.0.1:2375
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.20-moby, Os=linux, BuildTime=2016-08-18T17:52:38.255390991+00:00, ApiVersion=1.24, Version=1.12.1, GitCommit=23cf638, Arch=amd64, GoVersion=go1.6.3
+compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+compose.cli.verbose_proxy.proxy_callable: docker info -> {u'Architecture': u'x86_64',
+ u'BridgeNfIp6tables': True,
+ u'BridgeNfIptables': True,
+ u'CPUSet': True,
+ u'CPUShares': True,
+ u'CgroupDriver': u'cgroupfs',
+ u'ClusterAdvertise': u'',
+ u'ClusterStore': u'',
+ u'Containers': 6,
+ u'ContainersPaused': 0,
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'default_default')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {u'Containers': {},
+ u'Driver': u'bridge',
+ u'EnableIPv6': False,
+ u'IPAM': {u'Config': [{u'Gateway': u'172.19.0.1/16',
+                        u'Subnet': u'172.19.0.0/16'}],
+           u'Driver': u'default',
+           u'Options': None},
+ u'Id': u'8cfa51101b448d9b9c41774d41b77fdfc00aa56bdc3c5e40518c0e4b4b0946da',
+ u'Internal': False,
+ u'Labels': {},
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=default', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=default', u'com.docker.compose.service=hello', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'75883080f9e0664e87b61a95698c050257e681581b600b4b39c91fcde17c3e59')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'-c',
+           u'php-fpm -d variables_order="EGPCS" && (tail -F /var/log/nginx/access.log &) && exec nginx -g "daemon off;"'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh',
+                      u'-c',
+                      u'php-fpm -d variables_order="EGPCS" && (tail -F /var/log/nginx/access.log &) && exec nginx -g "daemon off;"'],
+             u'Domainname': u'',
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('tutum/hello-world')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'support@tutum.co',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh',
+                      u'-c',
+                      u'php-fpm -d variables_order="EGPCS" && (tail -F /var/log/nginx/access.log &) && exec nginx -g "daemon off;"'],
+             u'Domainname': u'',
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=default', u'com.docker.compose.service=hello', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('tutum/hello-world')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'support@tutum.co',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh',
+                      u'-c',
+                      u'php-fpm -d variables_order="EGPCS" && (tail -F /var/log/nginx/access.log &) && exec nginx -g "daemon off;"'],
+             u'Domainname': u'',
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'75883080f9e0664e87b61a95698c050257e681581b600b4b39c91fcde17c3e59')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'-c',
+           u'php-fpm -d variables_order="EGPCS" && (tail -F /var/log/nginx/access.log &) && exec nginx -g "daemon off;"'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh',
+                      u'-c',
+                      u'php-fpm -d variables_order="EGPCS" && (tail -F /var/log/nginx/access.log &) && exec nginx -g "daemon off;"'],
+             u'Domainname': u'',
+...
+compose.parallel.feed_queue: Pending: set([<Service: hello>])
+compose.parallel.feed_queue: Starting producer thread for <Service: hello>
+compose.service.start_container_if_stopped: Starting default_hello_1
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'75883080f9e0664e87b61a95698c050257e681581b600b4b39c91fcde17c3e59', stream=True, stderr=True, stdout=True)
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+..
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.parallel_execute_iter: Failed: <Service: hello>
+compose.parallel.feed_queue: Pending: set([])
+
+ERROR: for hello  HTTPConnectionPool(host='127.0.0.1', port=2375): Read timed out. (read timeout=60)
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 61, in main
+  File "compose\cli\main.py", line 113, in perform_command
+  File "contextlib.py", line 35, in __exit__
+  File "compose\cli\errors.py", line 56, in handle_connection_errors
+TypeError: log_timeout_error() takes exactly 1 argument (0 given)
+docker-compose returned -1
+I can invoke the same command on OSX without any problems (logs on the console appear immediately), also adding "-d" option on windows machine fixes the issue, but without it i have "Read timed out." every time :(

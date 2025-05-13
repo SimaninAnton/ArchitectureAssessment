@@ -1,0 +1,9 @@
+domdorn commented on 26 Jan 2017
+Hi!
+I installed docker-compose (1.9.0) on three servers around december 25th 2016. Now all three servers report Linux.Xor.DDoS by chkrootkit.
+The list of files. md5sums, the output of chkrootkit is in this pastebin: http://pastebin.com/uS2b8uyG
+I couldn't attach a copy of the files, so I uploaded a tar.gz to a cloud-hoster:
+http://filebin.ca/3A9L1AIVGblT/docker_possible_backdoor.tar.gz
+I really hope this is a false positive..
+Thanks,
+Dominik

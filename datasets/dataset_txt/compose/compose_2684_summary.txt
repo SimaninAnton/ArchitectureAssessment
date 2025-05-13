@@ -1,0 +1,1 @@
+extending a service with links errors rather than just ignoring the links

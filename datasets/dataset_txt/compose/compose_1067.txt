@@ -1,0 +1,10 @@
+bhaidar commented on 22 Nov 2017 •
+edited
+Hi,
+I have an shell script that would create a volume using docker volume create --name volumeName.
+Then, I am referencing the volume inside a docker run container. At this stage I am generating some code and placing it in the mapped directory to the volume.
+After that, inside a docker-compose file, I need to reference that volume so that I can use those files generated previously.
+Is that doable?
+What happens now is that, after the container runs (via docker-compose) the volume is available and the data is there, but while Dockerfile is being run, there is no data in that mapped directory to volume.
+I am facing some issues if you can have a look here: https://stackoverflow.com/questions/47414253/cannot-run-script-sh-with-entrypoint-docker?noredirect=1#comment81787374_47414253
+Thanks

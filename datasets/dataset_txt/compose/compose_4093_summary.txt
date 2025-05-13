@@ -1,0 +1,1 @@
+Truncated output with `fig run`

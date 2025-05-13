@@ -1,0 +1,25 @@
+johanneswuerbach commented on 7 Feb 2018 •
+edited
+With a docker-compose config like:
+version: '2'
+
+services:
+  nginx:
+    image: nginx
+
+  bash:
+    image: ubuntu
+    command: bash
+    depends_on:
+      - nginx
+And an initial execution of
+$ docker-compose up -d
+With 1.19.0-rc3, build cdd0282 (macOS) is get
+docker-compose up -d bash
+Recreating dockerbug_nginx_1 ... done
+Recreating dockerbug_bash_1 ... done
+but with 1.18.0, build 8dd22a9
+docker-compose up -d bash
+dockerbug_nginx_1 is up-to-date
+Starting dockerbug_bash_1 ... done
+as the nginx service didn't change I would expect 1.19 to also return up-to-date and to not restart the service.

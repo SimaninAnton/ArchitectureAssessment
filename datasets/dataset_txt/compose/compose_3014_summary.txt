@@ -1,0 +1,1 @@
+Move logging configuration under `logging` key

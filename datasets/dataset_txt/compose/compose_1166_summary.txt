@@ -1,0 +1,1 @@
+no basic auth credentials when using docker-cred-helper with docker-compose build

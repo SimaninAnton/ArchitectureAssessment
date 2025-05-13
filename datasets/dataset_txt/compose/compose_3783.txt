@@ -1,0 +1,17 @@
+tk421 commented on 27 Mar 2015
+Hi,
+I am trying to create a container using docker-compose 1.1.0 and this case looks like it is not using the environment variable:
+File docker-compose-mysql.yml
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD:password
+Run it:
+sudo docker-compose -f docker-compose-mysql.yml up
+Recreating compose_mysql_1...
+Attaching to compose_mysql_1
+mysql_1 | error: database is uninitialized and MYSQL_ROOT_PASSWORD not set
+mysql_1 |   Did you forget to add -e MYSQL_ROOT_PASSWORD=... ?
+compose_mysql_1 exited with code 1
+Gracefully stopping... (press Ctrl+C again to force)
+Any ideas ?

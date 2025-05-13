@@ -1,0 +1,13 @@
+Contributor
+aanand commented on 3 Mar 2014
+There are a lot of ways to confuse Compose with a badly-formed docker-compose.yml. This file should be checked when it is read and good error messages should be produced to help users fix the problem.
+This could be done by producing a schema for the file, like was done in #1348.
+These sorts of things should be checked:
+Top-level object is a dict
+Each key (a service name) maps to a dict (#128)
+String config options (e.g. image) - are numbers allowed? When? Don't accept YAML's eager interpretation of values (e.g. true) which should be quoted (#1788)
+List config options (e.g. volumes) either must be a list, or we helpfully wrap single values in a list for you
+String-or-list config options (e.g. command, entrypoint)
+Dictionary config options (e.g. environment)
+Format of various options (e.g. volumes - see #260)
+References: #117 #127

@@ -1,0 +1,20 @@
+mnieber commented on 5 Feb 2018 •
+edited
+docker-compose version 1.19.0dev
+When I run docker-compose --verbose -p test up --no-build I'm getting this in my output:
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {'AppArmorProfile': '',
+ 'Args': ['install', '--modules-folder=/srv/jobpal/node_modules'],
+ 'Config': {'AttachStderr': False,
+            'AttachStdin': False,
+            'AttachStdout': False,
+            'Cmd': ['yarn',
+                    'install',
+                    '--modules-folder=/srv/node_modules'],
+            'Domainname': '',
+            'Entrypoint': None,
+This seems to refer to the following step in my Dockerfile:
+RUN yarn install --modules-folder /srv/node_modules
+Since I'm using the --no-build option, I expected docker-compose to ignore this build step and only execute the CMD line:
+# Run api service
+CMD ["node", "index.js"]
+Is this a bug?

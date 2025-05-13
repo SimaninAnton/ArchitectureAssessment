@@ -1,0 +1,133 @@
+rayjohnson commented on 13 Oct 2017 •
+edited
+I have the following compose-file:
+version: '3.2'
+services:
+  wordpress:
+    image: wordpress:4.7
+    environment:
+      - WORDPRESS_DB_HOST=mysql:3306
+      - WORDPRESS_DB_USER=wordpressuser
+      - WORDPRESS_DB_PASSWORD=change_this_db_password
+      - WORDPRESS_DB_NAME=wordpress
+    volumes:
+      - html_data:/var/www/html
+    links:
+      - db:mysql
+    ports:
+      - "80:80"
+    hostname: wordpress
+    domainname: wordpress.local
+    mac_address: 8a:ca:58:b9:e9:51
+    networks:
+      - front
+      - back
+
+  db:
+    image: mariadb:10.1.13
+    environment:
+      - MYSQL_ROOT_PASSWORD=change_this_root_password
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpressuser
+      - MYSQL_PASSWORD=change_this_db_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - back
+
+volumes:
+  html_data:
+  mysql_data:
+
+networks:
+  front:
+    external:
+      name: qnet-dhcp-eth1
+  # front:
+  #   driver: qnet
+  #   ipam:
+  #     driver: qnet
+  #     options: 
+  #       iface: eth1
+  back:
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+The container wordpress has two networks front and back. The front one is external I create with the following command before runnning docker-compose up: docker network create -d qnet --ipam-driver=qnet --ipam-opt=iface=eth1 qnet-dhcp-eth1
+The problem I have is the mac_address is set properly on the "back" network - but not the "front" network (which is where I really need to set it!)
+Here is what I get from docker inspect:
+            "MacAddress": "8a:ca:58:b9:e9:51",
+            "OnBuild": null,
+            "Labels": {
+                "com.docker.compose.config-hash": "63a0b882bab0b519128a2d5c89f34638ec5842a5010581e909b106a2d31c86c3",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "wordpress",
+                "com.docker.compose.service": "wordpress",
+                "com.docker.compose.version": "1.16.1"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "0d52789a1a1b987632e64bff6912fb49b9f19e07d070e5a24e975772d6679f56",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {},
+            "SandboxKey": "/var/run/docker/netns/0d52789a1a1b",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "qnet-dhcp-eth1": {
+                    "IPAMConfig": null,
+                    "Links": [
+                        "wordpress_db_1:db_1",
+                        "wordpress_db_1:mysql",
+                        "wordpress_db_1:wordpress_db_1"
+                    ],
+                    "Aliases": [
+                        "fc7182429e1f",
+                        "wordpress"
+                    ],
+                    "NetworkID": "c4f4713f933d8a6a6d3a623b5502ff80a42d0e6581ca8ec9260d35831b1ebff0",
+                    "EndpointID": "67a4665e3b505835a0cac76272ea4b0903ee735b43eca4ef6e13abfc10829740",
+                    "Gateway": "192.168.2.1",
+                    "IPAddress": "192.168.2.60",
+                    "IPPrefixLen": 24,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:e9:f5:17:12"
+                },
+                "wordpress_back": {
+                    "IPAMConfig": null,
+                    "Links": [
+                        "wordpress_db_1:db_1",
+                        "wordpress_db_1:mysql",
+                        "wordpress_db_1:wordpress_db_1"
+                    ],
+                    "Aliases": [
+                        "fc7182429e1f",
+                        "wordpress"
+                    ],
+                    "NetworkID": "b48d420567c210afe71274313517997f78fe611fe16f8510420649c71bc0650a",
+                    "EndpointID": "f2d166caf02103b8c1502589b31772e3d195b9a758b32e833aa7a89c9ecdefaf",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.3",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "8a:ca:58:b9:e9:51"
+                }
+            }
+So why is the mac_address used for the "back" network but not the "front" network?

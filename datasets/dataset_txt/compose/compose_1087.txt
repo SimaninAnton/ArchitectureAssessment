@@ -1,0 +1,49 @@
+Seros commented on 10 Nov 2017
+Version
+Docker version 17.09.0-ce, build afdb6d4
+docker-compose version 1.17.1, build 6d101fb
+Problem
+executing docker-compose run with user directive in cli command or docker-compose.yml always runs as root
+Example
+$ docker-compose run --rm --user=application workspace bash
+Expected behaviour
+application@b5b7be02da2f:/app#
+Actual behaviour
+root@b5b7be02da2f:/app#
+More information
+docker-compose.yml:
+version: "3"
+services:
+  workspace:
+    build:
+      context: docker/app
+      args:
+        - INSTALL_YARN=${APP_INSTALL_YARN}
+        - YARN_VERSION=${APP_YARN_VERSION}
+        - TZ=${APP_TIMEZONE}
+    volumes:
+      - ${APPLICATION}:/app
+      - ${COMPOSER_HOME}:/home/application/.composer
+      - ${NPM_HOME}:/home/application/.npm
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
+    ports:
+      - "${APP_SSH_PORT}:22"
+    expose:
+      - "9000"
+    environment:
+      - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+    tty: true
+    user: application
+    working_dir: /app
+    networks:
+      - frontend
+      - backend
+
+### Networks Setup ############################################
+
+networks:
+  frontend:
+    driver: "bridge"
+  backend:
+    driver: "bridge"

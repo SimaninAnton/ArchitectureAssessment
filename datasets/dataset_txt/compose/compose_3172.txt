@@ -1,0 +1,28 @@
+ghost commented on 27 Oct 2015
+The default behavior when extending a service or overriding a whole docker-compose.yml file is to concatenate the sets of values on the multi-value options: ports, expose, external_links, dns and dns_search.
+The problem appears when for example you have two production hosts both serving on the port 80 and a single machine for development, there is no way of extending or overriding the services for a development environment that avoids the port collision on the host.
+An example: lets assume there are two servers one is a REST API and the other is a webpage that uses the API, both listen on port 80 on the production host
+compose.yml on host A:
+restserver:
+  image: node
+  ports:
+    - "80:80"
+compose.yml on host B:
+webserver:
+  image: django
+  ports:
+    - "80:80"
+On a development environment where you want to test this setup you would define:
+compose.override.yml on dev for A:
+restserver:
+  ports:
+    - "127.0.0.1:3030:80"
+compose.override.yml on dev for B:
+webserver:
+  external_links:
+    - "service_restserver_1:api.restserver.domain.com"
+  ports:
+    - "127.0.0.1:8080:80"
+Of course the "ports" option is concatenated with the production and there is no way of running both containers on the same host because both try to bind to port 80.
+Is there any workaround or yml specific syntax for this use case?
+22

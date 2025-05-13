@@ -1,0 +1,10 @@
+EvgenyOrekhov commented on 10 Feb 2017
+$ docker-compose scale app=2
+Starting app_2 ... error
+
+ERROR: for app_2  Container is marked for removal and cannot be started.
+$ echo $?
+0
+docker-compose scale should return a non-zero exit code when an error happens.
+Docker version 1.13.1, build 092cba3
+docker-compose version 1.11.1, build 7c5d5e4

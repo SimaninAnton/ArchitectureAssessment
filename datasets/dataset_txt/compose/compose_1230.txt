@@ -1,0 +1,3 @@
+umrashrf commented on 1 Sep 2017
+I would like to set order/priority of services to be built. depends_on is not solving my problem because some services do not run but their build order matters.
+1

@@ -1,0 +1,21 @@
+rivaros commented on 29 Mar 2017 •
+edited
+Probably I found some misbehavior with named volumes & chmod 777
+Imagine scenario where we have 2 containers sharing the same named volume (cache-volume) and having the same mount point for it /opt/cache
+version "3"
+services:
+  container1:
+  volumes:
+      - cache-volume:/opt/cache
+
+  container2:
+  volumes:
+      - cache-volume:/opt/cache
+
+volumes:
+  cache-volume:
+Imagine that both container1's and container2's images are extending some common baseimage. If inside Dockerfile for baseimage we put a statement
+RUN mkdir /opt/cache && chmod 777 /opt/cache
+that won't work - the /opt/cache inside container1 & container2 will be mounted as root and rwxr-xr-x
+Only if we declare the above statement inside both container1's & container2's Dockerfiles it behaves correctly & resulting volume will get rwxrwxrwx permissions.
+Hope I was clear enough in describing the scenario.

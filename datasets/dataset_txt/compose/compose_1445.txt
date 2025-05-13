@@ -1,0 +1,10 @@
+jamshid commented on 19 May 2017
+Seeing this on docker-compose 1.12.0, don't know if it's fixed in 1.13.0 or related to #4803.
+$ docker-compose rm -fs myservice
+Stopping example48_foo_2 ... done
+Stopping example48_foo_1 ... done
+Stopping example48_db_1 ... done
+Stopping example48_socat_foo ... done
+...
+Stopping example48_myservice_1 ... done
+Why stop all services, especially the ones that aren't even dependent on the service I'm stopping?

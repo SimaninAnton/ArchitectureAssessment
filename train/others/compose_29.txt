@@ -1,0 +1,2 @@
+2063113624 commented on 26 Dec 2019
+I install docker-compose with run.sh,but when I run docker-compose --version it appear error "/usr/local/bin/docker-compose: exec: line 63: docker: not found

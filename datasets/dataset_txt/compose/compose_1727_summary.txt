@@ -1,0 +1,1 @@
+docker-compose 1.10.1 causes build to fail on 14.04 (module object has no attribute connection)

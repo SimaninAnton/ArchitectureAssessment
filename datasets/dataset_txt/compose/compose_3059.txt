@@ -1,0 +1,14 @@
+krasi-georgiev commented on 23 Nov 2015
+https://github.com/vipconsult/dockerfiles
+docker-compose -f always-on-prod.yml --x-networking up -d
+this extends always-on.yml which on it side extends common.yml which has
+env_file:
+- env
+always-on-prod.yml defines its own env_file
+env_file:
+- env-prod
+the problem is that envs defined in the env-prod don't override the envs defined in common.yml
+I think this worked as expected before I upgraded from 1.5.0
+Docker version 1.9.0, build 76d6bc9
+docker-compose version: 1.6.0dev
+linux debian jessie

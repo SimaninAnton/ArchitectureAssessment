@@ -1,0 +1,14 @@
+Nurlan199206 commented on 23 Jun 2018
+Pulling nginx (nginx:1.13)...
+1.13: Pulling from library/nginx
+f2aa67a397c4: Already exists
+3c091c23e29d: Pull complete
+4a99993b8636: Pull complete
+Digest: sha256:b1d09e9718890e6ebbbd2bc319ef1611559e30ce1b6f56b2e3b479d9da51dc35
+Status: Downloaded newer image for nginx:1.13
+Starting nginx_php_1 ... done
+Creating nginx_nginx_1 ... error
+ERROR: for nginx_nginx_1 Cannot start service nginx: OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:402: container init caused "rootfs_linux.go:58: mounting \"/home/nurlan/nginx/nginx/nginx.conf\" to rootfs \"/var/lib/docker/overlay2/1a4ee513e5df2fa5fbad00f6f150702de028f74b8d6e6ca29810b218d3de35be/merged\" at \"/var/lib/docker/overlay2/1a4ee513e5df2fa5fbad00f6f150702de028f74b8d6e6ca29810b218d3de35be/merged/etc/nginx/nginx.conf\" caused \"not a directory\""": unknown: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+ERROR: for nginx Cannot start service nginx: OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:402: container init caused "rootfs_linux.go:58: mounting \"/home/nurlan/nginx/nginx/nginx.conf\" to rootfs \"/var/lib/docker/overlay2/1a4ee513e5df2fa5fbad00f6f150702de028f74b8d6e6ca29810b218d3de35be/merged\" at \"/var/lib/docker/overlay2/1a4ee513e5df2fa5fbad00f6f150702de028f74b8d6e6ca29810b218d3de35be/merged/etc/nginx/nginx.conf\" caused \"not a directory\""": unknown: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+ERROR: Encountered errors while bringing up the project.
+root@fssp:/home/nurlan/nginx#

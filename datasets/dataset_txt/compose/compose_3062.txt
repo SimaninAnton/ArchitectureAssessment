@@ -1,0 +1,9 @@
+0x4d4c commented on 22 Nov 2015
+When the Dockerfile contains a COPY of a directory and the Dockerfile is listed in the .dockerignore then docker-compose build doesn't pick up on changes of files in this directory and uses the build cache instead. Building the same image with docker build works as expected. Removing the Dockerfile from the .dockerignore also leads to the expected behaviour.
+I created some example files to illustrate and reproduce the issue.
+Tested with:
+docker-compose version: 1.4.0
+docker-compose version: 1.5.1
+docker-compose version 1.6.0dev, build unknown
+and
+Docker version 1.9.0, build 76d6bc9

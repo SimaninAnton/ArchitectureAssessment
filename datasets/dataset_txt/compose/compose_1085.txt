@@ -1,0 +1,6 @@
+milanchotai commented on 11 Nov 2017 •
+edited
+Hi,
+Apologies if this is already in the issues list - I searched but couldn't find it.
+I had a question that is exactly the same as: https://stackoverflow.com/questions/38164939/can-we-mount-sub-directories-of-a-named-volume-in-docker
+I wanted to ask if there are plans for this. Presently, I've tried the solutions mentioned in the link without luck, so landed on using multiple named volumes or binds, but ideally, it would be great to structure a single named volume with different sub-directory mappings.

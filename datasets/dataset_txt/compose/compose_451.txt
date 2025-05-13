@@ -1,0 +1,50 @@
+floostmodern commented on 12 Oct 2018
+Description of the issue
+When calling docker-compose ps, stopped containers created by docker-compose up are listed, but stopped container created by docker-compose run are not.
+This is an hindrance to one of our workflows that goes as follow:
+docker-compose run a container that creates a file in its filesystem
+container_name = docker-compose ps
+container_id = docker ps
+docker cp container_id:/path/to/the/file file to copy those files on the host machine
+Context information (for bug reports)
+Output of "docker-compose version"
+
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of "docker-compose config"
+I am afraid I can't post that last one for professional secret reason.
+Steps to reproduce the issue
+Run a container using docker-compose run {container-name}
+Stop the container
+Run docker-compose ps
+Observed result
+The container is not listed
+Expected result
+The container should be listed
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Mac OSX
+Docker CE

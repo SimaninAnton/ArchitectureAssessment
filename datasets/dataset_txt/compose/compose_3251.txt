@@ -1,0 +1,31 @@
+AlexKovalevych commented on 30 Sep 2015
+I use a build tool called bldr.io, it runs and prints output of each job, but for some reason it doesn't print any output from the docker-compose commands. The question is, does docker-compose actually print to stdout? E.g.:
+docker-compose run   data "bin/phpunit -c app"
+PHPUnit 4.8.9 by Sebastian Bergmann and contributors.
+
+.............................................................
+
+Time: 2.08 seconds, Memory: 24.50Mb
+
+OK (61 tests, 183 assertions)
+which works fine, but absolutely no output running the same command within the bldr.io:
+ Using the 'test' profile
+  - Run tests -
+
+
+
+Running the tests job > Run tests
+
+    [exec] - Starting
+
+==============================
+
+  RUN  'docker-compose' 'run' 'data' 'bin/phpunit -c app'
+
+  RES  'docker-compose' 'run' 'data' 'bin/phpunit -c app'
+
+==============================
+
+
+  Build Success!
+The non-compose commands prints output without any problems which makes me think docker-compose is different here.

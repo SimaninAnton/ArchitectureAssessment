@@ -1,0 +1,25 @@
+turtlemonvh commented on 22 Nov 2016
+I've noticed a lot of issues related to the behavior of docker-compose wrt dns settings on this project while I was having issues myself. Here are some example issues that center on confusion about v1 vs v2 networks:
+#2847
+#2847 (comment): answer saying to read the docker docs
+#3703
+#3703 (comment): answer saying to read the docker docs
+#3877
+#3412
+These are the links to the docker documentation that are sometimes provided:
+https://github.com/docker/docker/blob/docs/docs/userguide/networking/dockernetworks.md
+https://github.com/docker/docker/blob/docs/docs/userguide/networking/configure-dns.md
+These links do not really answer the main question the users have: What changed in the behavior of docker-compose between v1 and v2? This would be a good thing to put here:
+https://docs.docker.com/compose/compose-file/#/upgrading
+I would love to contribute this myself, but I am still kind of fuzzy on what is going on.
+Details of my problem that caused me to notice these tickets
+This section is not strictly necessary to solve the issue reported. It just reinforces the issue.
+I was seeing that, after switching to the v2 file format, my dns services were no longer handling recursive resolves as expected.
+I read all the linked docker docs, but I am still am not clear on why some addresses that resolve when diging against my dns server directly do not work when setting that dns server as my primary resolver in the dns section of the v2 config.
+I'm running a consul container on a bridge network and listing the bridge ip as the resolver that docker should use. I did notice that when targeting that ip when diging from inside the container I would get this error:
+$ docker exec -it worker dig svca.node.us-west-2.deveng.com @172.17.42.1
+;; reply from unexpected source: 172.18.0.1#53, expected 172.17.42.1#53
+;; reply from unexpected source: 172.18.0.1#53, expected 172.17.42.1#53
+;; reply from unexpected source: 172.18.0.1#53, expected 172.17.42.1#53
+I think that error may have been causing docker's build in resolver to fall back to by secondary resolver 8.8.8.8, which would explain why I got a negative response.
+I was able to solve my problem my setting every container to network_mode: bridge, which stopped docker from using the 127.0.0.11 dns proxy mentioned in the docs. My dns server then showed up in /etc/resolv.conf as expected and all local and recursive resolves worked as expected.

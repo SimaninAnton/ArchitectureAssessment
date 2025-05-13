@@ -1,0 +1,35 @@
+alberto56 commented on 3 Mar 2017
+Containers stuck in "restarting mode" sometimes cannot be stopped
+$ docker-compose ps
+           Name                         Command                 State      Ports 
+--------------------------------------------------------------------------------
+dcyclemetrics_drupal_run_2   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_3   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_4   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_5   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_6   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_7   docker-php-entrypoint /bin ...   Restarting         
+$ docker-compose stop
+$ docker-compose kill
+$ docker-compose rm -f
+No stopped containers
+$ docker-compose ps
+           Name                         Command                 State      Ports 
+--------------------------------------------------------------------------------
+dcyclemetrics_drupal_run_2   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_3   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_4   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_5   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_6   docker-php-entrypoint /bin ...   Restarting         
+dcyclemetrics_drupal_run_7   docker-php-entrypoint /bin ...   Restarting         
+I need to pass the container ids to "docker kill", I am expecting docker-compose to be able to kill these containers without using this:
+$ docker-compose ps -q|xargs docker kill
+b06bf13e282d5c39de4b2039b48a9a1324f35041e4c8af14d1032f2b02d1f735
+ee0fc4877cb07626e424d0c1b6abf7499be8129de6af7a2839e821b09c04bd20
+c19b4a8afd169637094f0bf41641580c278f51979bab3a485f067a7ac86f4d3f
+5646de010ab2333eb08d10630a53635d64797ed8c958a0490e64227a20617e38
+ab4066bd1d5dfb0700b571a1501e9b3bc11d332ca6f3d63f7bfd4cf2c178f176
+$ docker-compose ps
+Name   Command   State   Ports 
+------------------------------
+$ 

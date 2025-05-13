@@ -1,0 +1,4 @@
+suliangxd commented on 13 Oct 2016
+I used docker-compose to create docker, but it always blocked.
+At the sametime, The docker status is 'Created'. Why?
+I had set COMPOSE_HTTP_TIMEOUT=1200

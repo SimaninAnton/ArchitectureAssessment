@@ -1,0 +1,4 @@
+MikeH-Halo commented on 11 Feb 2016
+When running docker-compose with a /tmp filesystem that is set to noexec in fstab docker-compose fails with error message similar to: "error while loading shared libraries: libz.so.1".
+In earlier versions of docker-compose we have worked-around this by setting TMP environment-variable to point to some other directory where noexec is not set, but this doesn't work anymore in 1.6.0.
+Is there a suggested workaround for this?

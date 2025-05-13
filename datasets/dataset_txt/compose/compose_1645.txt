@@ -1,0 +1,21 @@
+xenoterracide commented on 28 Feb 2017
+I've read #942 I don't see that that fixes this. In order to build our cluster currently we use the following "shell script"
+docker build --pull -t dex/oracle-xe:latest etc/docker/oracle-xe/ &&
+docker build -t dex/oracle-xe-with-sshd:latest etc/docker/oracle-xe-with-sshd/ &&
+
+
+docker build --pull -t dex/tomcat:latest etc/docker/tomcat/ &&
+docker build -t dex/dex:latest etc/docker/dex/
+these prior images exists due to needing additional things (such ass sshd for legacy code) (or in tomcats case the fact that the default image is very insecure), so the images have been split so that the "base" image is more of a pure tomcat/oracle-xe. I would like to t be able to do this with compose. Maybe via
+services:
+    db:
+        build:
+           - ./oracle-xe
+           - ./oracle-xe-with-sshd
+or with nested (I think this is correct yaml)
+services:
+    db:
+        build:
+           - oracle-xe:
+               context: ./oracle-xe
+           - ./oracle-xe-with

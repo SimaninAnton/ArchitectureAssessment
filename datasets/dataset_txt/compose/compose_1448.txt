@@ -1,0 +1,25 @@
+arozumenko commented on 18 May 2017
+installation of pypiwin32 should be added either to docks or to requirements
+PS D:\Downloads> docker-compose up -d
+Traceback (most recent call last):
+File "c:\python27\lib\runpy.py", line 174, in _run_module_as_main
+"main", fname, loader, pkg_name)
+File "c:\python27\lib\runpy.py", line 72, in run_code
+exec code in run_globals
+File "C:\Python27\Scripts\docker-compose.exe_main.py", line 9, in
+File "c:\python27\lib\site-packages\compose\cli\main.py", line 68, in main
+command()
+File "c:\python27\lib\site-packages\compose\cli\main.py", line 115, in perform_command
+project = project_from_options('.', options)
+File "c:\python27\lib\site-packages\compose\cli\command.py", line 37, in project_from_options
+override_dir=options.get('--project-directory'),
+File "c:\python27\lib\site-packages\compose\cli\command.py", line 99, in get_project
+host=host, environment=environment
+File "c:\python27\lib\site-packages\compose\cli\command.py", line 71, in get_client
+environment=environment, tls_version=get_tls_version(environment)
+File "c:\python27\lib\site-packages\compose\cli\docker_client.py", line 95, in docker_client
+return APIClient(**kwargs)
+File "c:\python27\lib\site-packages\docker\api\client.py", line 123, in init
+'Install pypiwin32 package to enable npipe:// support'
+docker.errors.DockerException: Install pypiwin32 package to enable npipe:// support
+installation of pypiwin32 with pip solves the exception

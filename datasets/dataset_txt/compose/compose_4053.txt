@@ -1,0 +1,6 @@
+delfick commented on 9 Dec 2014
+Hello,
+I was wondering if the progress stream logic could be extracted out into a separate library similar to the situation with dockerpty.
+I'd love to be able to use it in the docker client I've built, but don't want to just copy paste it.
+Thanks.
+Stephen.

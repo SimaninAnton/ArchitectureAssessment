@@ -1,0 +1,1 @@
+If a data only container starts with the same name than the active container, compose fails

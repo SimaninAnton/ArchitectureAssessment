@@ -1,0 +1,12 @@
+ghost commented on 3 Sep 2015
+Hi,
+Currently trying to specify max-file & max-size options for default log_driver "json-file", but just can't make it work.
+Tried this for example, as suggested in the compose syntax for syslog driver:
+log_driver: "json-file"
+log_opt:
+max-size:"30m"
+max-file:"10"
+but throws error when starting container
+Looked in the associated schema, but ends with type "object" for log_opt which leads me nowhere.
+Also looked in unit tests, but only the test for syslog is implemented.
+Thanks

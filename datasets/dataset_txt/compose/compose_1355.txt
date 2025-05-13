@@ -1,0 +1,53 @@
+Contributor
+vmalloc commented on 28 Jun 2017
+I'm using docker 17.03.2-ce, docker-compose 1.14.0:
+# docker version
+Client:
+ Version:      17.03.2-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   f5ec1e2
+ Built:        Tue Jun 27 02:09:56 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.2-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   f5ec1e2
+ Built:        Tue Jun 27 02:09:56 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+I'm using a docker-compose file containing this service definition:
+  nginx:
+    image: gitlab:4567/infradev/infradev-admin
+    volumes:
+      - "conf:/conf"
+    environment:
+      - INFRADEV_ADMIN_HOSTNAME=
+    command: ["dockerize",
+              "-timeout", "300s",
+              "-wait", "http://webapp:8000",
+              "-stdout", "/var/log/nginx/access.log", "-stderr", "/var/log/nginx/error.log",
+              ".env/bin/python3.6", "manage.py", "docker-nginx-start"]
+    ports:
+      - "8000:80"
+When I try to start it with docker-compose up, I get:
+ERROR: for nginx  expected string or buffer
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 926, in up
+    scale_override=parse_scale_args(options['--scale']),
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 424, in up
+    get_deps
+  File "/usr/local/lib/python2.7/dist-packages/compose/parallel.py", line 69, in parallel_execute
+    raise error_to_reraise
+TypeError: expected string or buffer
+No matter what I tried I couldn't get more details out of that traceback, or figure out how to get logs from the parallel execution or what it tried to do...
+The thing is, I noticed that once I drop the ports section -- everything works just fine. Is this a known issue? How can I discover what I'm doing wrong?
+Thanks in advance!

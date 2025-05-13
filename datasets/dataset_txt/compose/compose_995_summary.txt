@@ -1,0 +1,1 @@
+docker-compsoe tries to pull windows versions of containers under LCOW

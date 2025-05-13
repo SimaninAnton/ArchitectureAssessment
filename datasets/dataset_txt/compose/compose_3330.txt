@@ -1,0 +1,34 @@
+Contributor
+nhumrich commented on 2 Sep 2015
+I cant seam to run anything with docker-compose now that I am using the development version.
+$ docker-compose --version
+docker-compose version: 1.5.0dev
+
+$ git log --oneline --decorate
+83c514f (origin/master, origin/HEAD) Merge pull request #1933 from dnephin/fix_scale_test_flakes
+235fe21 Prevent flaky test by changing container names.
+Trying to run up spins up the container, then immediately closes it:
+$ docker-compose up
+Recreating smeservice_web_1...
+Attaching to 
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping smeservice_web_1...
+running
+docker run -it busybox /bin/sh -c "while true; do /bin/echo 'hello'; sleep 5; done;"
+works fine.
+Here is my docker-compose.yml
+web:
+  image: busybox
+  command: /bin/sh -c "while true; do /bin/echo 'hello'; sleep 5; done;"
+Running on version 1.4.0 gives me the following:
+$ docker-compose up
+Starting smeservice_web_1...
+Attaching to smeservice_web_1 
+web_1 | hello
+web_1 | hello
+Other info:
+$ python --version
+Python 3.4.0
+Running Ubuntu 14.10
+$ uname -r
+3.19.0-26-generic

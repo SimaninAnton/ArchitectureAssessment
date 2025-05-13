@@ -1,0 +1,36 @@
+florentdestremau commented on 18 Feb 2018
+I just setup a jenkins server and I noticed that my builds failed because my docker-compose setup did not boot at all ! Here is the command that blocks everything.
+jenkins@windoo-jenkins:~/workspace/Windoo Saas$ docker-compose -f docker-compose.test.yml up -d
+Building php_test
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/main.py", line 1001, in up
+  File "compose/cli/main.py", line 997, in up
+  File "compose/project.py", line 463, in up
+  File "compose/service.py", line 326, in ensure_image_exists
+  File "compose/service.py", line 989, in build
+  File "site-packages/docker/api/build.py", line 150, in build
+  File "site-packages/docker/utils/build.py", line 14, in tar
+  File "site-packages/docker/utils/utils.py", line 103, in create_archive
+IOError: Can not access file in context: /var/lib/jenkins/workspace/Windoo Saas/vendor/salavert/time-ago-in-words/bin/phpunit
+Failed to execute script docker-compose
+
+jenkins@windoo-jenkins:~/workspace/Windoo Saas$ ls -la vendor/salavert/time-ago-in-words/bin/phpunit 
+lrwxrwxrwx 1 jenkins jenkins 33 Feb 18 16:22 vendor/salavert/time-ago-in-words/bin/phpunit -> ../vendor/phpunit/phpunit/phpunit
+
+jenkins@windoo-jenkins:~/workspace/Windoo Saas$ ls -la vendor/phpunit/phpunit/phpunit
+-rwxr-xr-x 1 jenkins jenkins 1277 Dec 10 08:06 vendor/phpunit/phpunit/phpunit
+My docker-compose version:
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+On my pc it works like a charm with this configuration:
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.6.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+It may have link with docker/docker-py#1841 ? But this issue is closed so I don't know..
+9

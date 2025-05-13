@@ -1,0 +1,81 @@
+magmasystems commented on 15 Nov 2016 •
+edited by shin-
+I am running Docker for Windows, and I am using Windows containers and windowsservercore.
+From this article, I see that docker-compose is not fully supported on Windows 10. But I am hoping that, with a few hints here, I can get something working.
+I am composing something simple …. Just a Redis container that works fine under Windows 10. However, no matter what I try to compose, I get an error about HNS failing with an incorrect parameter. But there is no information to tell me which param is the bad one.
+If you have any hints on what I could do to get over this hump, I would appreciate it. If Windows 10 support is not coming soon, then I might as well change to Windows Server 2016. Thanks.
+docker-compose --verbose -f .\docker-composeRedis.yml up
+compose.config.config.find: Using configuration files: .\.\docker-composeRedis.yml
+docker.auth.auth.find_config_file: Trying paths: ['C:\\Users\\madler\\.docker\\config.json', 'C:\\Users\\madler\\.dockercfg']
+docker.auth.auth.find_config_file: No config file found
+compose.cli.command.get_client: docker-compose version 1.9.0-rc4, build bd5d90b
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localnpipe
+compose.cli.command.get_client: Docker version: KernelVersion=10.0 14393 (14393.351.amd64fre.rs1_release_inmarket.161014-1755), Os=windows, BuildTime=2016-10-11T02:35:40.337930554+00:00, ApiVersion=1.25, Version=1.12.2-cs2-ws-beta, GitCommit=050b611, Arch=amd64, GoVersion=go1.7.1
+compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+compose.cli.verbose_proxy.proxy_callable: docker info -> {u'Architecture': u'x86_64',
+u'BridgeNfIp6tables': True,
+u'BridgeNfIptables': True,
+u'CPUSet': False,
+u'CPUShares': False,
+u'CgroupDriver': u'',
+u'ClusterAdvertise': u'',
+u'ClusterStore': u'',
+u'Containers': 0,
+u'ContainersPaused': 0,
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'dockerredis_default')
+compose.network.ensure: Creating network "dockerredis_default" with the default driver
+compose.cli.verbose_proxy.proxy_callable: docker create_network <- (name=u'dockerredis_default', enable_ipv6=False, ipam=None, labels=None, driver=None, internal=False, options=None)
+
+**ERROR: compose.cli.errors.log_api_error: HNS failed with error : The parameter is incorrect.**
+docker-composeRedis.yml
+version: '2'
+services:
+  redis:
+    build:
+      context: .
+      dockerfile: DockerfileRedis
+    image: marc-redis
+DockerfileRedis
+FROM microsoft/windowsservercore
+
+RUN powershell -Command \
+       $ErrorActionPreference = 'Stop'; \
+       Invoke-WebRequest -Method Get -Uri https://github.com/MSOpenTech/redis/releases/download/win-3.2.100/Redis-x64-3.2.100.zip -OutFile c:\redis.zip ; \
+       Expand-Archive -Path c:\redis.zip -DestinationPath c:\redis ; \
+       Remove-Item c:\redis.zip -Force
+
+WORKDIR /redis
+CMD redis-server.exe --protected-mode no
+docker info
+Containers: 0
+Running: 0
+Paused: 0
+Stopped: 0
+Images: 0
+Server Version: 1.12.2-cs2-ws-beta
+Storage Driver: windowsfilter
+Windows:
+Logging Driver: json-file
+Plugins:
+Volume: local
+Network: nat null overlay
+Swarm: inactive
+Security Options:
+Kernel Version: 10.0 14393 (14393.351.amd64fre.rs1_release_inmarket.161014-1755)
+Operating System: Windows 10 Pro
+OSType: windows
+Architecture: x86_64
+CPUs: 4
+Total Memory: 16 GiB
+Name: madlerwin10dock
+ID: ITFA:6FLB:7B7L:P4XW:E4KE:IILC:YIV5:FYYZ:LWHH:EFWZ:K6ID:EUYA
+Docker Root Dir: C:\ProgramData\Docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Insecure Registries:
+127.0.0.0/8

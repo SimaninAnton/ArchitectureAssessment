@@ -1,0 +1,5 @@
+dsifford commented on 5 Mar 2016
+Hello,
+Thanks for your hard work on this.
+Just as an FYI, in Arch distros /usr/bin/env python is python 3. This is causing some build issues (which, I assume is related to compose's partial python 3 support).
+Is there any possibility of changing the shebang line in the binary to explicitly call #!/usr/bin/env python2?

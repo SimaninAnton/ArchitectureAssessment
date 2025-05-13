@@ -1,0 +1,6 @@
+bendk commented on 23 Aug 2014
+As far as I can tell, if these are set in the Dockerfile, there is no way to unset them with fig.yml. I would like to be able to unset them with something like this:
+    entrypoint:
+    command:
+The use case is simple, suppose a Dockerfile specifies both and I want to run /bin/bash in the container. It's not obvious how to do this. For example, if I use enrtypoint: /bin/bash, it will pass the command to bash.
+There are various ways to make it work, for example command: -i. But it should be more obvious.

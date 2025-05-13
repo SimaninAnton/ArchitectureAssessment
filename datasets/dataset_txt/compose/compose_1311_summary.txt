@@ -1,0 +1,1 @@
+feature request: can docker-compose.yml file use the scale number index?

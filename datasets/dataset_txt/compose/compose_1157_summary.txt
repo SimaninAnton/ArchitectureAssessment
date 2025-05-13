@@ -1,0 +1,1 @@
+docker config output format is not compatible when compose yml version >= 3.2

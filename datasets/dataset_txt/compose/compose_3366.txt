@@ -1,0 +1,5 @@
+fgirardey commented on 18 Aug 2015
+Hi,
+I am experiencing a problem with the command docker-compose.
+I am on OS X 10.10.5, I just installed the new Docker Toolbox and try to run a docker-compose up and I got an Illegal instruction: 4 error.
+Even if I do a simple docker-compose --version I got the same error. I tried to install by the CURL way and I've got the same error again.

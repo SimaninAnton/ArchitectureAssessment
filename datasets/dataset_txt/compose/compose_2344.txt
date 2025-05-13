@@ -1,0 +1,67 @@
+pszczekutowicz commented on 30 May 2016
+Hi
+I have following example structure of project:
+.
+├── app1
+│   ├── docker-compose.yml
+│   ├── service1
+│   │   └── Dockerfile
+│   └── service2
+│       └── Dockerfile
+└── app2
+    ├── docker-compose.yml
+    └── service3
+        └── Dockerfile
+with files:
+app1/docker-compose.yml
+version: '2'
+services:
+  service1:
+    build:
+      context: ./service1
+    image: service1
+  service2:
+    build:
+      context: ./service2
+    image: service2
+
+networks:
+  default:
+    driver: bridge
+app2/docker-compose.yml
+version: '2'
+services:
+  service3:
+    build:
+      context: ./service3
+    image: service3
+
+networks:
+  default:
+    driver: bridge
+all Dockerfiles contents looks like this:
+FROM alpine:latest
+When I try to run following command:
+docker-compose -f app1/docker-compose.yml -f app2/docker-compose.yml  config
+I get:
+ERROR: build path /path/to/project/app1/service3 either does not exist, is not accessible, or is not a valid URL.
+I expect that context for service3 is taken from app2/service3.
+I use:
+$ docker-compose -v
+docker-compose version 1.7.1, build 0a9ab35
+$ docker version
+Client:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:43:49 2016
+ OS/Arch:      linux/amd64
+Server:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:43:49 2016
+ OS/Arch:      linux/amd64
+4

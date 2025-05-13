@@ -1,0 +1,2 @@
+italomaia commented on 7 Jul 2017
+I have a scenario where a container should only be "kept running" in development. In production, it just compile some files and exit. Is there a way for me to make a container wait for another to exit, before initializing?

@@ -1,0 +1,8 @@
+Globegitter commented on 21 Dec 2014
+Just testing out fig on Ubuntu and the installation instruction could imo be much better for that. Ran into a few issues and still have some not completely resolved.
+First, if I install docker as mentioned in the ubuntu instructions fig only works if I run it as sudo via sudo fig up and I had to use follow instructions: https://gist.github.com/RuslanHamidullin/94d95328a7360d843e52
+Next issue, I could not run
+curl -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m` > /usr/local/bin/fig; chmod +x /usr/local/bin/fig
+without sudo. Which I suppose would be alright, but now when I run for example fig run server sails new . all the files are owned by root which causes other issues.
+So what is the best practice to setup docker and fig that I can run fig without sudo and that when fig creates new files (through commands that are run in a container) these are not owned by root?
+This has not been at all an issue on my Mac and I would be more than happy to add these additional instructions to the 'Installing' section.

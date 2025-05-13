@@ -1,0 +1,36 @@
+andyliddle commented on 14 Feb 2017
+HI,
+Trying to switch docker to use windows containers causes error to occur
+Any thoughts?
+Version 1.13.1 (10072)
+Channel: Stable
+94675c5
+Docker daemon failed with message:
+time="2017-02-14T09:06:07Z" level=warning msg="Running experimental build"
+time="2017-02-14T09:06:07.082671000Z" level=debug msg="Listener created for HTTP on npipe (//./pipe/docker_engine_windows)"
+time="2017-02-14T09:06:07.084668000Z" level=info msg="Windows default isolation mode: hyperv"
+time="2017-02-14T09:06:07.084668000Z" level=debug msg="Using default logging driver json-file"
+time="2017-02-14T09:06:07.085669500Z" level=debug msg="WindowsGraphDriver InitFilter at C:\ProgramData\Docker\windowsfilter"
+time="2017-02-14T09:06:07.085669500Z" level=debug msg="Using graph driver windowsfilter"
+time="2017-02-14T09:06:07.085669500Z" level=debug msg="Max Concurrent Downloads: 3"
+time="2017-02-14T09:06:07.085669500Z" level=debug msg="Max Concurrent Uploads: 5"
+time="2017-02-14T09:06:07.097672500Z" level=info msg="Graph migration to content-addressability took 0.00 seconds"
+time="2017-02-14T09:06:07.097672500Z" level=info msg="Loading containers: start."
+time="2017-02-14T09:06:07.097672500Z" level=debug msg="Option Experimental: true"
+time="2017-02-14T09:06:07.097672500Z" level=debug msg="Option DefaultDriver: nat"
+time="2017-02-14T09:06:07.097672500Z" level=debug msg="Option DefaultNetwork: nat"
+time="2017-02-14T09:06:07.114668100Z" level=debug msg="Network Response : [ ]"
+time="2017-02-14T09:06:07.114668100Z" level=debug msg="Launching DNS server for network%!(EXTRA string=none)"
+time="2017-02-14T09:06:07.115668800Z" level=debug msg="Allocating IPv4 pools for network nat (efae0dc11bb30cf1cfe001964ec19efb29dfff9784e336d5639a0bb4199bde7f)"
+time="2017-02-14T09:06:07.116670300Z" level=debug msg="RequestPool(LocalDefault, , , map[], false)"
+time="2017-02-14T09:06:07.116670300Z" level=debug msg="RequestAddress(0.0.0.0/0, , map[RequestAddressType:com.docker.network.gateway])"
+time="2017-02-14T09:06:07.116670300Z" level=debug msg="HNSNetwork Request ={"Name":"nat","Type":"nat","Subnets":[{"AddressPrefix":"0.0.0.0/0","GatewayAddress":"0.0.0.0"}]} Address Space=[{0.0.0.0/0 0.0.0.0 []}]"
+time="2017-02-14T09:06:07.150687900Z" level=debug msg="releasing IPv4 pools from network nat (efae0dc11bb30cf1cfe001964ec19efb29dfff9784e336d5639a0bb4199bde7f)"
+time="2017-02-14T09:06:07.150687900Z" level=debug msg="ReleaseAddress(0.0.0.0/0, 0.0.0.0)"
+time="2017-02-14T09:06:07.150687900Z" level=debug msg="ReleasePool(0.0.0.0/0)"
+time="2017-02-14T09:06:07.150687900Z" level=debug msg="start clean shutdown of all containers with a 15 seconds timeout..."
+Error starting daemon: Error initializing network controller: Error creating default network: HNS failed with error : The parameter is incorrect.
+at Docker.Backend.ContainerEngine.Windows.DoStart(Settings settings)
+at Docker.Backend.ContainerEngine.Windows.Start(Settings settings)
+at Docker.Core.Pipe.NamedPipeServer.<>c__DisplayClass8_0.b__0(Object[] parameters)
+at Docker.Core.Pipe.NamedPipeServer.RunAction(String action, Object[] parameters)

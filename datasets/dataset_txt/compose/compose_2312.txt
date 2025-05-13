@@ -1,0 +1,20 @@
+Contributor
+sanmai-NL commented on 10 Jun 2016
+readline method returns a str.
+With CPython 3.5.1
+@ https://github.com/docker/compose/tree/e502417df28e689d07006eb6e7a7e29729ddda82
+Traceback (most recent call last):
+  File "/opt/venvs/docker-compose/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.8.0.dev0', 'console_scripts', 'docker-compose')()
+  File "/opt/venvs/docker-compose/lib64/python3.5/site-packages/compose/cli/main.py", line 58, in main
+    command()
+  File "/opt/venvs/docker-compose/lib64/python3.5/site-packages/compose/cli/main.py", line 109, in perform_command
+    handler(command, command_options)
+  File "/opt/venvs/docker-compose/lib64/python3.5/site-packages/compose/cli/main.py", line 553, in rm
+    or yesno("Are you sure? [yN] ", default=False):
+  File "/opt/venvs/docker-compose/lib64/python3.5/site-packages/compose/cli/utils.py", line 33, in yesno
+    answer = input(prompt).strip().lower()
+  File "/opt/venvs/docker-compose/lib64/python3.5/site-packages/compose/cli/utils.py", line 52, in input
+    return sys.stdin.readline().rstrip(b'\n')
+TypeError: rstrip arg must be None or str
+Will submit PR for it.

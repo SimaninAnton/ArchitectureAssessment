@@ -1,0 +1,1 @@
+Want a way to specify a dockerfile outside the context in the docker-compose dockerfile directive

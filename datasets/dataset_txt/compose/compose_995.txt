@@ -1,0 +1,19 @@
+eiximenis commented on 21 Dec 2017 •
+edited
+How to reproduce
+Using Docker For Windows (version 17.12.0-ce-rc3, build 80c8033) switch to LCOW mode and use some compose file like that:
+version: '3'
+
+services:
+  wp:
+    image: wordpress:4.9.1-apache
+Then do a docker-compose up. And the following error is received:
+Pulling wp (wordpress:4.9.1-apache)...
+4.9.1-apache: Pulling from library/wordpress
+ERROR: no matching manifest for windows/amd64 in the manifest list entries
+Expected behavior
+Linux version of the image is pulled
+Additional notes
+Under LCOW using docker pull wordpress:4.9.1-apache pulls the correct version of the image.
+Once the images are pulled docker-compose up works as expected.
+1

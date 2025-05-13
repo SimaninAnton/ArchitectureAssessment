@@ -1,0 +1,19 @@
+rmichela commented on 3 Feb 2017
+I get the following error trying to run docker-compose --version.
+rmichela@rmichela-wsl:/usr/lib/python2.7/dist-packages$ docker-compose --version
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 7, in <module>
+    from compose.cli.main import main
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 41, in <module>
+    from . import errors
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/errors.py", line 12, in <module>
+    from requests.exceptions import ReadTimeout
+ImportError: cannot import name 'ReadTimeout'
+pip freeze shows the following relevant versions:
+docker==2.0.2
+docker-compose==1.10.1
+docker-pycreds==0.2.1
+dockerpty==0.4.1
+requests==2.13.0
+I'm running python 3.5.2 on Ubuntu 14.04.
+Any ideas?

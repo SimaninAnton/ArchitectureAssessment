@@ -1,0 +1,11 @@
+smakam commented on 13 Aug 2016
+Hi
+Both docker compose yml file and docker bundle dab files defines multi-container application. I have used both docker compose with Swarm as well as Docker dab file with Swarm mode. I have few basic questions:
+One of the comparisons used between compose file and dab is that compose file is like Dockerfile while dab is like Docker image. I am not sure if this analogy is completely true since dab also defines application like compose yml but in json format. dab creation does not allow build options and dab uses container images with digest so that there is consistency in what gets deployed. Is the reason for the analogy because deploying bundle with dab always gives same results while compose file does not have to give same results?
+According to some documents I read, Docker compose is a client side functionality while docker dab is described as a server side functionality. Is the reason to make this distinction that docker compose spawns individual containers and Docker engine takes care of just running containers while in dab case, docker engine takes care of spawning the services mentioned in dab?
+In Swarm mode, will docker-compose be limited to creation of dab files? Is there any plan to have more deeper integration of docker compose with Swarm mode?
+In long run, will dab files always get generated from compose or would there be any alternate options?
+Currently, Docker dab file does not support options like volume, constraints. In long run, will dab have all functionality thats present in compose?
+Thanks
+Sreenivas
+2

@@ -1,0 +1,24 @@
+blackrosezy commented on 5 Sep 2014
+I wonder if we can have an export flag? An example (/root/blog/fig.yml):
+web:
+  build: ./web 
+  environment:
+    MYSQL_PASS: abc123
+  volumes:
+    - /mywebsite/web:/var/www
+  links:
+    - db
+db:
+  build: ./db
+  environment:
+    MYSQL_PASS: abc123
+  volumes:
+    - /mywebsite/db/data:/var/lib/mysql
+    - /mywebsite/db/config:/etc/mysql
+Run fig export :
+fig export output.txt or just fig export
+...and it will dump original docker syntax:
+docker build -t blog_db .
+docker build -t blog_web .
+docker run --name=blog_db_1 -v /mywebsite/db/data:/var/lib/mysql -v /mywebsite/db/config:/etc/mysql --env MYSQL_PASS=abc123 blog_db
+docker run --name=blog_web_1 -v /mywebsite/web:/var/www --env MYSQL_PASS=abc123 --link blog_db_1 blog_web

@@ -1,0 +1,29 @@
+xiaods commented on 30 Sep 2014
+i follow rails guide in fig document, it not hints one thing,
+every RUN in Dockerfile will cache in every build "fig build", it seem like
+db uses an image, skipping
+Building web...
+ ---> f400673689a5
+Step 1 : RUN apt-get update -qq && apt-get install -y build-essential libpq-dev libmagickwand-dev
+ ---> Using cache
+ ---> c404ef2973ea
+Step 2 : RUN mkdir /myapp
+ ---> Using cache
+ ---> c185966a87aa
+Step 3 : WORKDIR /myapp
+ ---> Using cache
+ ---> 8ff34027f045
+Step 4 : ADD Gemfile /myapp/Gemfile
+ ---> Using cache
+ ---> 6643b8588d0e
+Step 5 : RUN bundle install
+ ---> Using cache
+ ---> 0b81d8d3f8d5
+Step 6 : ADD . /myapp
+ ---> 13123568f6bb
+Removing intermediate container 2ef440c3d6d5
+Successfully built 13123568f6bb
+dxiao at localhost in ~/Documents/Code/rails/giggle on develop
+please recheck the Step 5, when you modify Gemfile, the same RUN will get different result. but docker can't figure out this change, you need handle it by yourself. how to do it?
+solution:
+fig build --no-cache

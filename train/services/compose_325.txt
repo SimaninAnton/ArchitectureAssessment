@@ -1,0 +1,156 @@
+Vmadmax commented on 15 Jan 2019
+Description of the issue
+I don't know exactly if this is a docker-compose bug or docker bug.
+Connection faild on docker-compose -H 'ssh://xxx@192.168.1.1' up
+Without the host parameter, the docker-compose will start without problems.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+docker-py version: 3.7.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Local:
+Client: Docker Engine - Community
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:33:12 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:41:49 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Remote:
+Client:
+ Version:           18.09.1
+ API version:       1.38 (downgraded from 1.39)
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:31 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       e68fc7a
+  Built:            Mon Oct  1 14:25:33 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  app:
+    build:
+      context: /Users/xx/xx/project
+      dockerfile: app.dockerfile
+    environment:
+      DB_HOST: database
+      DB_PORT: '3306'
+    volumes:
+    - /Users/xx/xx/project:/var/www:rw
+    working_dir: /var/www
+  database:
+    environment:
+      MYSQL_DATABASE: xxx
+      MYSQL_PASSWORD: xxx
+      MYSQL_ROOT_PASSWORD: xxx
+      MYSQL_USER: xxx
+    image: mariadb:10.1.26
+    ports:
+    - 33061:3306/tcp
+    volumes:
+    - dbdata:/var/lib/mysql:rw
+  web:
+    build:
+      context: /Users/xx/xx/project
+      dockerfile: web.dockerfile
+    ports:
+    - 8080:80/tcp
+    volumes:
+    - /Users/xx/xx/project:/var/www:rw
+    working_dir: /var/www
+version: '3.0'
+volumes:
+  dbdata: {}
+Steps to reproduce the issue
+docker-compose -H 'ssh://xxx@192.168.1.1' up
+Expected result
+Creating huelle_app_1      ... done
+Creating huelle_database_1 ... done
+Creating huelle_web_1      ... done
+Stacktrace / full error message
+ docker-compose -H 'ssh://xxx@192.168.1.1' up
+Connected (version 2.0, client OpenSSH_7.6p1)
+Authentication (publickey) successful!
+Creating huelle_app_1 ...
+Creating huelle_database_1 ...
+Creating huelle_web_1      ...
+ERROR: Secsh channel 10 open FAILED: open failed: Connect failed
+
+ERROR: for huelle_app_1  (2, 'Connect failed')
+ERROR: Secsh channel 11 open FAILED: open failed: Connect failed
+
+ERROR: for huelle_web_1  (2, 'Connect failed')
+ERROR: Secsh channel 12 open FAILED: open failed: Connect failed
+
+ERROR: for huelle_database_1  (2, 'Connect failed')
+
+ERROR: for app  (2, 'Connect failed')
+
+ERROR: for web  (2, 'Connect failed')
+
+ERROR: for database  (2, 'Connect failed')
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1085, in up
+  File "compose/cli/main.py", line 1081, in up
+  File "compose/project.py", line 555, in up
+  File "compose/parallel.py", line 112, in parallel_execute
+  File "compose/parallel.py", line 210, in producer
+  File "compose/project.py", line 541, in do
+  File "compose/service.py", line 533, in execute_convergence_plan
+  File "compose/service.py", line 455, in _execute_convergence_create
+  File "compose/parallel.py", line 112, in parallel_execute
+  File "compose/parallel.py", line 210, in producer
+  File "compose/service.py", line 453, in <lambda>
+  File "compose/service.py", line 441, in create_and_start
+  File "compose/service.py", line 337, in create_container
+  File "compose/container.py", line 52, in create
+  File "site-packages/docker/api/container.py", line 427, in create_container
+  File "site-packages/docker/api/container.py", line 437, in create_container_from_config
+  File "site-packages/docker/api/client.py", line 284, in _post_json
+  File "site-packages/docker/utils/decorators.py", line 46, in inner
+  File "site-packages/docker/api/client.py", line 221, in _post
+  File "site-packages/requests/sessions.py", line 572, in post
+  File "site-packages/requests/sessions.py", line 524, in request
+  File "site-packages/requests/sessions.py", line 637, in send
+  File "site-packages/requests/adapters.py", line 449, in send
+  File "site-packages/urllib3/connectionpool.py", line 600, in urlopen
+  File "site-packages/urllib3/connectionpool.py", line 354, in _make_request
+  File "http/client.py", line 1239, in request
+  File "http/client.py", line 1285, in _send_request
+  File "http/client.py", line 1234, in endheaders
+  File "http/client.py", line 1026, in _send_output
+  File "http/client.py", line 964, in send
+  File "site-packages/docker/transport/sshconn.py", line 29, in connect
+  File "site-packages/paramiko/transport.py", line 806, in open_session
+  File "site-packages/paramiko/transport.py", line 944, in open_channel
+paramiko.ssh_exception.ChannelException: (2, 'Connect failed')
+[4866] Failed to execute script docker-compose
+Additional information
+OS version local: macOS Mojave, 10.14.2 (18C54)
+OS version remote: Ubuntu 18.04.1 LTS
+1

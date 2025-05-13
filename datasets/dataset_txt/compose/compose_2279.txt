@@ -1,0 +1,5 @@
+nathanleclaire commented on 25 Jun 2016 •
+edited
+The getting started example of Compose doesn't work with docker-compose bundle when I tried it (Docker for Mac on a pretty new Macbook at DockerCon), due to the build: ..
+To get a DAB from with content-addressable image SHAs would be fantastic. Maybe this could also have built-in support for push to ensure image availability?
+5

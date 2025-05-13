@@ -1,0 +1,3 @@
+iatsiuk commented on 21 Dec 2018
+Bash completion for docker-compose missing --parallel flag for docker-compose build command.
+1

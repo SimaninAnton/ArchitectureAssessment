@@ -1,0 +1,6 @@
+Contributor
+aanand commented on 15 May 2015
+Prompted partly by @thaJeztah's remarks in #1356 (comment), I think it'd be good to have a high-level document that described:
+What Compose does: where in the stack it fits, which problems it solves (or plans to eventually solve) and which ones it doesn't.
+How it works: not delving beneath Docker's abstraction layer, but explaining how Compose decides what to do (build/pull images, create/start/stop/remove containers), when to do it, and salient details (How do we generate the container configuration? How do we keep track of containers and images? etc)
+Thoughts?

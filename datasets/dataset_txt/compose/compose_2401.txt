@@ -1,0 +1,3 @@
+duraiz commented on 12 May 2016
+I am running a redis cluster on 200 containers which are placed on different nodes using docker-compose and docker and docker-swarm.
+Now if i want to restart service on some containers instead of restarting all 200 containers at once how can i do it ? or how can i stop the service on some containers instead on stoping whole service?

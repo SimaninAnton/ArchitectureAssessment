@@ -1,0 +1,2 @@
+jmreicha commented on 9 Feb 2016
+Would it make sense to have docker-compose config return a warn or error if the hostname is set to the same name as the service?

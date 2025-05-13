@@ -1,0 +1,23 @@
+Contributor
+dave-tucker commented on 29 Oct 2015
+Running through the same example in #2279 on Docker Swarm with --x-network-driver overlay
+I have big problems after up -d && stop && rm
+When I bring up my compose file again...
+Instead of re-using the network (as happens in the single host use case), Compose creates a new network with the same name!
+$ docker network ls
+NETWORK ID          NAME                        DRIVER
+bf7b620324cd        swl-demo0/bridge            bridge
+c95de382559f        swl-demo0/none              null
+6969ca97b168        swl-demo1/host              host
+088077f4f115        counter                     overlay
+1da7cb004cc3        swl-demo0/host              host
+80b98c58f67d        swl-demo1/none              null
+ad8432162868        swl-demo1/docker_gwbridge   bridge
+1d63fedd167f        swl-demo1/bridge            bridge
+2f0520ac885e        counter                     overlay
+f8702a176805        swl-demo0/docker_gwbridge   bridge
+I cannot do this manually with Swarm on the CLI as I get an error
+$ docker network create -d overlay counter
+Error response from daemon: 500 Internal Server Error: network with name counter already exists
+Not sure if this is a Swarm issue, or a Compose one... but hoping we can figure it out soon!
+/cc @dnephin @aanand @vieux @mavenugo

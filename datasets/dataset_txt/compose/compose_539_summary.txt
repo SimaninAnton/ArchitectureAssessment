@@ -1,0 +1,1 @@
+restart command doesn't respect order and healthchecks

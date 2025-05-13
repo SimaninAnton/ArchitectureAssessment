@@ -1,0 +1,132 @@
+Contributor
+nickhiggs commented on 4 Jul 2018
+Description of the issue
+When containers are restarted after crashing with restart: always the logs do not come out of docker-compose up or docker-compose logs -f until they are flushed on another restart.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.6.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of "docker version"
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:42:18 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:56 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Output of "docker-compose config"
+services:
+  container1:
+    command: /bin/bash -c 'for i in {1..10}; do echo hello world1; sleep 1; done;
+      /bin/false'
+    image: ubuntu:latest
+    restart: always
+  container2:
+    command: /bin/bash -c 'while true; do echo hello world2; sleep 1; done'
+    image: ubuntu:latest
+    restart: always
+version: '3'
+Steps to reproduce the issue
+docker-compose up using the docker-compose config
+Observed result
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+container2_1  | hello world2
+ubuntu_container1_1 exited with code 1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+Expected result
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+ubuntu_container1_1 exited with code 1
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+container1_1  | hello world1
+container2_1  | hello world2
+...
+Additional information
+We could reproduce it on both linux 4.4.0-1061-aws #70-Ubuntu and osx Darwin Kernel Version 17.6.0 with compose 2.3 & 3.

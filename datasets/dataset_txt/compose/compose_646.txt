@@ -1,0 +1,88 @@
+Sytten commented on 29 May 2018
+Description of the issue
+I found out that docker-compose seems to not include the nameservers of the host by default as it should when using a simple bridge network. This was reported a long time ago here: #2847 but it seems like it is still not fixed. I tried to disable firewalld without any luck. It worked though if I specify the dns directly for the containers who need them.
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:20:16 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:23:58 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+services:
+  database:
+    image: postgres:10.3
+    ports:
+    - 5432:5432/tcp
+    restart: always
+    volumes:
+    - /home/degel/data:/var/lib/postgresql/data:rw
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+    - /home/degel/nginx/certs:/etc/nginx/certs:rw
+    - /home/degel/nginx/vhost.d:/etc/nginx/vhost.d:rw
+    - /home/degel/nginx/html:/usr/share/nginx/html:rw
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: ''
+    ports:
+    - 80:80/tcp
+    - 443:443/tcp
+    restart: always
+    volumes:
+    - /home/degel/nginx/certs:/etc/nginx/certs:ro
+    - /home/degel/nginx/vhost.d:/etc/nginx/vhost.d:rw
+    - /home/degel/nginx/html:/usr/share/nginx/html:rw
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+  service:
+    depends_on:
+    - database
+    - letsencrypt
+    - nginx-proxy
+    entrypoint:
+    - java
+    - -Djava.security.egd=file:/dev/./urandom
+    - -jar
+    - -Dspring.profiles.active=deploy
+    - app.jar
+    environment:
+      LETSENCRYPT_EMAIL: ****************
+      LETSENCRYPT_HOST: ****************
+      VIRTUAL_HOST: localhost,*****************
+      VIRTUAL_PORT: '8080'
+    image: ************************
+    ports:
+    - 8080:8080/tcp
+    restart: always
+version: '3.0'
+Steps to reproduce the issue
+Setup a standard centos 7 installation
+docker-compose up -d with a valid docker-compose.yml
+docker exec -it nginx-proxy sh
+wget http://www.perdu.com
+Observed result
+It will say:
+wget: unable to resolve host address 'www.perdu.com'
+Expected result
+It should access the website and download the index.html
+Additional information
+Centos 7

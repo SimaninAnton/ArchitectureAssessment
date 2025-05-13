@@ -1,0 +1,1 @@
+After a successful 'fig up' running a second 'fig up' command fails.

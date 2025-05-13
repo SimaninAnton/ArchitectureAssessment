@@ -1,0 +1,8 @@
+jimzucker commented on 2 Feb 2016
+Use case: You have a project with many components and users what to pick and chose which to install but he compose file installs them all.
+Proposal: We add a option to put int he docker-cmpose.overrider.yml to exclude a image defined in the docker.compose
+ie
+some-image:
+exclude: yes
+The behavior would be to ignore that entry in the docker-compose.yml
+Can you let me know what the team thinks, I would be in interested in making the change.

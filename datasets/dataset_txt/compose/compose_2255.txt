@@ -1,0 +1,5 @@
+RotemEmergi commented on 4 Jul 2016 •
+edited
+Hi ,
+I want to save log from the services that run inside the compose file after the dockoer-compose up -d commaned run.
+I want to save the db from mongo image to /mypath/mongodb/db

@@ -1,0 +1,1 @@
+docker-compose down throws an error, if there has never been an up before

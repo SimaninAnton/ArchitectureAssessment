@@ -1,0 +1,30 @@
+Lemon-le commented on 14 Mar 2019 •
+edited
+Good morning：
+My docker-compose.yml network is set this：
+networks:
+cow-cow:
+service：
+......
+networks:
+- cow-cow
+the cow is not exsits；when docker-compose up，docker network create cow-cow；but create the default subnet is 172...* ；when I modify the yml is：
+networks:
+cow-cow:
+driver: bridge
+ipam:
+driver: default
+config:
+- subnet: 10.88.12.0/24
+gateway: 10.88.12.1
+when docker-compose up，docker network create cow-cow； the container‘s ip is 10.88.12.* ;This approach achieved the results I wanted；but I have a lot of yml file；I don't want to change them one by one；
+Is there a way like modify docker0；only modify daemon.json ; all docker run container use the daemon.json defined IP ；like this：
+when my yml file is
+networks:
+cow-cow:
+service：
+......
+networks:
+- cow-cow
+when docker-compose up , automatic create cow-cow is my defined .
+thank you

@@ -1,0 +1,4 @@
+bitliner commented on 28 Jan 2015
+I run fig up, then I want to run a separate docker container, using docker command, that will be linked to one container started with fig.
+But using the name provided by fig.sh, to the container to link to, throws the error: Error response from daemon: Could not find entity for
+Is there a way to avoid the error?

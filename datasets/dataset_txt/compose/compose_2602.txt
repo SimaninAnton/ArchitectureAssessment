@@ -1,0 +1,18 @@
+vegidio commented on 19 Mar 2016
+Hi,
+I'm trying to set the log configuration for my container through docker-compose. This is how my YAML file looks like:
+db:
+  image: mariadb
+  environment:
+    - MYSQL_ROOT_PASSWORD=password
+  log_opt:
+    max-size: "1m"
+    max-file: "20"
+  ports:
+    - 3306:3306
+But when I inspect my container using the command:
+docker inspect --format='{{json .HostConfig.LogConfig}}' docker_db_1
+It says the log config is empty:
+{"Type":"json-file","Config":{}}
+I also checked the log location (available in the field .LogPath) and I confirmed that my container log is not following the parameters that I set in the YAML file -- the log keeps growing indefinitely.
+I'm not sure if this is a bug or if I'm doing something wrong. Please, help.

@@ -1,0 +1,37 @@
+yuklia commented on 10 May 2016 •
+edited
+docker ps --all
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                PORTS               NAMES
+9adaaacc30d3        3d93fd21072f        "/bin/bash"         12 weeks ago        Removal In Progress                       9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_9adaaacc30_web
+$ docker info
+Containers: 1
+ Running: 0
+ Paused: 0
+ Stopped: 1
+Images: 35
+Server Version: 1.11.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 146
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: bridge null host
+Kernel Version: 3.19.0-58-generic
+Operating System: Ubuntu 14.04.4 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 11.65 GiB
+Name: yuklia
+ID: X2GJ:JAQ3:MU3L:44E6:5O45:LHAY:RLRR:FQ25:PZ55:3SDP:KPY5:BQ6H
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Username: yuklia
+Registry: https://index.docker.io/v1/
+docker rm -f 9adaaacc30d3 makes no sense
+2

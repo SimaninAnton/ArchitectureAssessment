@@ -1,0 +1,7 @@
+zirkome commented on 19 Mar 2015
+I installed docker-compose on my server I reconnect later it said :
+Cannot open self /usr/bin/docker-compose or archive /usr/bin/docker-compose.pkg
+I have to reinstall it all the time :/
+Thanks for your help!
+11
+1

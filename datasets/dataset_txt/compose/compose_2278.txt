@@ -1,0 +1,25 @@
+kelvv commented on 25 Jun 2016
+my docker-compose file :
+db:
+    image: mongo:3.2
+    ports:
+      - "0.0.0.0:27017:27017"
+    container_name: daaiMongo
+
+daai-test:
+    image: daai-docker
+    ports:
+      - "0.0.0.0:3300:3000"
+      - "0.0.0.0:3301:22"
+      - "0.0.0.0:3302:3100"
+    links:
+      - db
+    environment:
+      - NODE_ENV=test
+      - Name=kelvv
+      - MONGODB_URL="mongodb://$DAAIMONGO_PORT_27017_TCP_ADDR:$DAAIMONGO_PORT_27017_TCP_PORT/daai-test"
+      - ddddddd=${NODE_ENV}
+    container_name: daai-test
+$DAAIMONGO_PORT_27017_TCP_ADDR is empty
+${NODE_ENV} is empty
+wait help

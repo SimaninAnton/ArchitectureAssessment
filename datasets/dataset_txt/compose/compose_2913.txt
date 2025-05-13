@@ -1,0 +1,8 @@
+emilebosch commented on 17 Jan 2016
+Use case: I have a couple of build files and a private registry and docker swarm running locally, i want to build and push to the private registry so swarm can access all the images.
+The private registry is 10.0.0.0:4000 the build directory for containers is ./docker/lb/.
+I want to build the container and push it to my private registry using docker-compose build --push
+When running i want to pull it from that image (i.e private registry).
+Instead of having image: and the build: mutuality exclusive in the yaml we could just allow them both and add a push operator to build.
+This way the workflow for private registries and running them would be made much easier when using swarm.
+What you people think?

@@ -1,0 +1,46 @@
+cbuchacher commented on 27 Nov 2018
+Description of the issue
+This is a resubmission of issue #5950 which was fixed by @shin- for Linux. I confirmed that this is indeed fixed on Linux, but same issue persists on Windows.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.0-rc3, build ea3d406e
+docker-py version: 3.5.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      true
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  prometheus:
+[...strip...]
+version: '2.1'
+Steps to reproduce the issue
+gcloud auth configure-docker
+Run docker-compose build -f compose.yml, where compose.yml contains a private image or a build context with a private image stored on the google container registry.
+Observed result
+The docker-compose build commands crashes when it tries to pull the image.
+Expected result
+The image is pulled successfully on demand.
+Stacktrace / full error message
+Step 16/19 : FROM eu.gcr.io/project/image:tag
+ERROR: Service 'foo' failed to build: unauthorized: You don't have the needed permissions to perform this operation, and you may have invalid credentials. To authenticate your request, follow the steps in: https://cloud.google.com/container-registry/docs/advanced-authentication
+Additional information
+Windows 10

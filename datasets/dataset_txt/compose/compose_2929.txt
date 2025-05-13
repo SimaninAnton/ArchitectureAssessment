@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 13 Jan 2016
+The artifacts built by appveyor are fine, but on bintray they are 3 bytes.
+Something about the deployment from appveyor to bintray is broken. Could be something appveyor changed, I haven't had a chance to look into it yet.

@@ -1,0 +1,33 @@
+pmlopes commented on 16 May 2014
+the docker file is:
+FROM ubuntu:14.04
+RUN apt-get update &&
+LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get -y -q install --no-install-recommends openjdk-7-jre-headless
+when installing ca-certificates it crashes with the following stack trace:
+Traceback (most recent call last):
+File "/usr/local/bin/fig", line 9, in
+load_entry_point('fig==0.4.1', 'console_scripts', 'fig')()
+File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 39, in main
+command.sys_dispatch()
+File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+self.dispatch(sys.argv[1:], None)
+File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 31, in dispatch
+super(Command, self).dispatch(_args, *_kwargs)
+File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in dispatch
+self.perform_command(_self.parse(argv, global_options))
+File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 50, in perform_command
+return super(Command, self).perform_command(options, *args, *_kwargs)
+File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 27, in perform_command
+handler(command_options)
+File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 108, in build
+self.project.build(service_names=options['SERVICE'])
+File "/usr/local/lib/python2.7/dist-packages/fig/project.py", line 123, in build
+service.build(**options)
+File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 312, in build
+all_events = stream_output(build_output, sys.stdout)
+File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 373, in stream_output
+print_output_event(event, stream, is_terminal)
+File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 418, in print_output_event
+stream.write("%s%s" % (event['stream'], terminator))
+UnicodeEncodeError: 'ascii' codec can't encode character u'\xed' in position 19: ordinal not in range(128)
+If i run it on the machine itself (not xterm) it does not crash...

@@ -1,0 +1,1 @@
+the install link is broken on http://www.fig.sh/install.html

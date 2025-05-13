@@ -1,0 +1,1 @@
+use env in the compose file from the env_file

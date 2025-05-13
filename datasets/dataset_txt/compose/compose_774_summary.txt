@@ -1,0 +1,1 @@
+ERROR: In file 'docker-compose.yml', service 'ï»¿version' must be a mapping not a string.

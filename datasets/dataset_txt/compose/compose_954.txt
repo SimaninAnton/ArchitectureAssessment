@@ -1,0 +1,72 @@
+yangm97 commented on 9 Jan 2018
+It works on my machine (docker-compose version 1.17.1, build 6d101fb) but not on my CI (docker-compose version 1.18.0, build 8dd22a9).
+docker-compose -f docker-compose.yml -f docker-compose.env.yml config > docker-compose.deploy.yml
+docker-compose.yml
+version: '3.3'
+
+services:
+  botrouter:
+    environment:
+      - BOTS
+    image: ${IMAGE:-botrouter}:${TAG:-latest}
+    labels:
+      - "traefik.backend=production-bot-router"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host: bot.domain.com"
+      - "traefik.port=80"
+    restart: always
+docker-compose.env.yml
+version: '3.3'
+
+services:
+  botrouter:
+    labels:
+      traefik.backend: "${ENV}-bot-router"
+      traefik.frontend.rule: "Host: ${ENV}.bot.domain.com"
+Output:
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 118, in perform_command
+    handler(command, options, command_options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 322, in config
+    print(serialize_config(compose_config, image_digests))
+  File "/usr/lib/python2.7/site-packages/compose/config/serialize.py", line 93, in serialize_config
+    width=80
+  File "/usr/lib/python2.7/site-packages/yaml/__init__.py", line 218, in safe_dump
+    return dump_all([data], stream, Dumper=SafeDumper, **kwds)
+  File "/usr/lib/python2.7/site-packages/yaml/__init__.py", line 190, in dump_all
+    dumper.represent(data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 28, in represent
+    node = self.represent_data(data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 57, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 225, in represent_dict
+    return self.represent_mapping(u'tag:yaml.org,2002:map', data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 123, in represent_mapping
+    node_value = self.represent_data(item_value)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 57, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 225, in represent_dict
+    return self.represent_mapping(u'tag:yaml.org,2002:map', data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 123, in represent_mapping
+    node_value = self.represent_data(item_value)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 57, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 225, in represent_dict
+    return self.represent_mapping(u'tag:yaml.org,2002:map', data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 123, in represent_mapping
+    node_value = self.represent_data(item_value)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 57, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 225, in represent_dict
+    return self.represent_mapping(u'tag:yaml.org,2002:map', data)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 123, in represent_mapping
+    node_value = self.represent_data(item_value)
+  File "/usr/lib/python2.7/site-packages/yaml/representer.py", line 57, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/usr/lib/python2.7/site-packages/compose/config/serialize.py", line 30, in serialize_string
+    data = data.replace('$', '$$')
+UnicodeDecodeError: ‘ascii’ codec can't decode byte 0xe2 in position 1: ordinal not in range(128)

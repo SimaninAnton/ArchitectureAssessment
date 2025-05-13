@@ -1,0 +1,306 @@
+ahammond commented on 2 Sep 2017
+We have docker-compose files which look like this:
+version: '2'
+services:
+  cron-send-report:
+    container_name: cron-send-report
+    image: anchorfree/cron-send-report:prod
+    restart: always
+    network_mode: "host"
+    mem_limit: 80M
+    privileged: true
+    pid: "host"
+    environment:
+      - TZ=US/Pacific
+    volumes:
+      - "${VOLUME_PREFIX}/var/log:/var/log"
+      - "${VOLUME_PREFIX}/tmp:/tmp"
+      - "${VOLUME_PREFIX}/var/tmp/af-report:/var/tmp/af-report"
+      - "/dev/log:/dev/log"
+These generally start up exactly how you'd expect them to, however on a number of our servers I've found the following:
+$ docker inspect cron-openx-reports
+[
+{
+"Id": "df2da1d117cbe27c1b14e7ff62906a1fdb6346923e42515411ebf847289d667c",
+"Created": "2017-08-26T02:37:08.885213302Z",
+"Path": "/bin/sh",
+"Args": [
+"/usr/local/bin/parse_and_aggregate_ads.sh"
+],
+"State": {
+"Status": "running",
+"Running": true,
+"Paused": false,
+"Restarting": false,
+"OOMKilled": false,
+"Dead": false,
+"Pid": 32756,
+"ExitCode": 0,
+"Error": "",
+"StartedAt": "2017-08-26T02:37:10.025855293Z",
+"FinishedAt": "0001-01-01T00:00:00Z"
+},
+"Image": "sha256:dc322991364b9076ae64f7e4756860a1f7704948cc8c5d21555d5f84d3fec9c5",
+"ResolvConfPath": "/var/lib/docker/containers/df2da1d117cbe27c1b14e7ff62906a1fdb6346923e42515411ebf847289d667c/resolv.conf",
+"HostnamePath": "/var/lib/docker/containers/df2da1d117cbe27c1b14e7ff62906a1fdb6346923e42515411ebf847289d667c/hostname",
+"HostsPath": "/var/lib/docker/containers/df2da1d117cbe27c1b14e7ff62906a1fdb6346923e42515411ebf847289d667c/hosts",
+"LogPath": "",
+"Name": "/cron-openx-reports",
+"RestartCount": 0,
+"Driver": "overlay2",
+"MountLabel": "",
+"ProcessLabel": "",
+"AppArmorProfile": "docker-default",
+"ExecIDs": [
+"736e2879f33b330596cb918517578e01e52670a4915c887868a6136d553a8b09"
+],
+"HostConfig": {
+"Binds": [
+"/var/run/docker.sock:/var/run/docker.sock:rw",
+"/var/log/reports:/tmp/report:rw",
+"425dbcbb7ff7661fbc16d73ce00dbf45d305af7a6346976b6c0c5bcad5f19440:/var/www:rw",
+"/usr/local/var/lock:/usr/local/var/lock:rw"
+],
+"ContainerIDFile": "",
+"LogConfig": {
+"Type": "fluentd",
+"Config": {
+"fluentd-address": "tcp://localhost:24224",
+"tag": "docker.{{.Hostname}}.{{.ID}}"
+}
+},
+"NetworkMode": "dockercompose_default",
+"PortBindings": {},
+"RestartPolicy": {
+"Name": "always",
+"MaximumRetryCount": 0
+},
+"AutoRemove": false,
+"VolumeDriver": "",
+"VolumesFrom": [],
+"CapAdd": null,
+"CapDrop": null,
+"Dns": [],
+"DnsOptions": [],
+"DnsSearch": [],
+"ExtraHosts": null,
+"GroupAdd": null,
+"IpcMode": "",
+"Cgroup": "",
+"Links": null,
+"OomScoreAdj": 0,
+"PidMode": "",
+"Privileged": false,
+"PublishAllPorts": false,
+"ReadonlyRootfs": false,
+"SecurityOpt": null,
+"UTSMode": "",
+"UsernsMode": "",
+"ShmSize": 67108864,
+"Runtime": "runc",
+"ConsoleSize": [
+0,
+0
+],
+"Isolation": "",
+"CpuShares": 0,
+"Memory": 83886080,
+"NanoCpus": 0,
+"CgroupParent": "",
+"BlkioWeight": 0,
+"BlkioWeightDevice": null,
+"BlkioDeviceReadBps": null,
+"BlkioDeviceWriteBps": null,
+"BlkioDeviceReadIOps": null,
+"BlkioDeviceWriteIOps": null,
+"CpuPeriod": 0,
+"CpuQuota": 0,
+"CpuRealtimePeriod": 0,
+"CpuRealtimeRuntime": 0,
+"CpusetCpus": "",
+"CpusetMems": "",
+"Devices": null,
+"DeviceCgroupRules": null,
+"DiskQuota": 0,
+"KernelMemory": 0,
+"MemoryReservation": 0,
+"MemorySwap": -1,
+"MemorySwappiness": -1,
+"OomKillDisable": false,
+"PidsLimit": 0,
+"Ulimits": null,
+"CpuCount": 0,
+"CpuPercent": 0,
+"IOMaximumIOps": 0,
+"IOMaximumBandwidth": 0
+},
+"GraphDriver": {
+"Data": {
+"LowerDir": "/var/lib/docker/overlay2/59f0d337ec8a15bdc96411d43a6dd92d4d037f65fbcab1c2b3438bf74d7efd6e-init/diff:/var/lib/docker/overlay2/ff569d6b10137f92806c0880ebe65073a8bdce8a6db649d2e22417abf559e4bf/diff:/var/lib/docker/overlay2/a903f625023ca658cba911409131d9e6b17adae5776538dda89385fc3006092c/diff:/var/lib/docker/overlay2/bd0f1039133c7af4e2dee3e6aac59bdedc7b615d756d9a1a64f70a94a6c95f9e/diff:/var/lib/docker/overlay2/b4f56e90c4f58e6d604edca5fa10b0f9a00f97826ff8fe272ef5a1faecea6e61/diff:/var/lib/docker/overlay2/e3826da44836e7215d8b0c0d4738e288ee478062e46fde008e28aca3c597a9f1/diff:/var/lib/docker/overlay2/efa7fdf9f6c3c0f217046675b63c2f0fba4249bac35926143d8729705775b86b/diff:/var/lib/docker/overlay2/a2c1a6d7ee816dba69eef6721333fe905d0bd8470970e8fd5f15ea144cd00d13/diff:/var/lib/docker/overlay2/29d2f346500e9ae76b020792a22699a6fd145f5762de5f58cfeb11e608f63401/diff:/var/lib/docker/overlay2/006a132be73d3e709243a7d2068c4a6b50801381a224a54c74ba5ffe2648fe79/diff:/var/lib/docker/overlay2/523dd2b4201528aa121d468e24f568fb8c411f88fc7e554b7441e2e5e8c79f59/diff:/var/lib/docker/overlay2/2130eb77612bd2cd3e44cae7e184613abe984a0146a7f7a06dfe4c2a03f806d4/diff:/var/lib/docker/overlay2/f8448f964f567138f268c22751579657f271b89ffdb1cd01faddc41f723163f9/diff:/var/lib/docker/overlay2/659a74a9f726a40b19bd20f6507f33c1f49ec1fdf453e50de0287bd736fd04b4/diff:/var/lib/docker/overlay2/c86bcae10ba0d52aab60a44388a67bb559a0ccdaedffa4be9adafd3ddca01b0a/diff:/var/lib/docker/overlay2/0a9b305245107fd797d4e55d87f3ec51ce265849323512277773846aa1892d71/diff:/var/lib/docker/overlay2/4536549f0cc0ca10bf10fbef7fb84d80dd74ff54f135391332d762a3e2043cf6/diff:/var/lib/docker/overlay2/5f85de37d7e68937170252a724e646a125c3c48bd8176c146b9e04159c57689b/diff:/var/lib/docker/overlay2/ccea9fff9e070072b3d6676438a207f0afd8b1555aa44a79ce5e647135b16c83/diff:/var/lib/docker/overlay2/1bb4e6d4fff2ac595e0a9d489f17ed58efab894858c15d161bfbb45ff16c0b79/diff",
+"MergedDir": "/var/lib/docker/overlay2/59f0d337ec8a15bdc96411d43a6dd92d4d037f65fbcab1c2b3438bf74d7efd6e/merged",
+"UpperDir": "/var/lib/docker/overlay2/59f0d337ec8a15bdc96411d43a6dd92d4d037f65fbcab1c2b3438bf74d7efd6e/diff",
+"WorkDir": "/var/lib/docker/overlay2/59f0d337ec8a15bdc96411d43a6dd92d4d037f65fbcab1c2b3438bf74d7efd6e/work"
+},
+"Name": "overlay2"
+},
+"Mounts": [
+{
+"Type": "bind",
+"Source": "/var/log/reports",
+"Destination": "/tmp/report",
+"Mode": "rw",
+"RW": true,
+"Propagation": "rprivate"
+},
+{
+"Type": "bind",
+"Source": "/usr/local/var/lock",
+"Destination": "/usr/local/var/lock",
+"Mode": "rw",
+"RW": true,
+"Propagation": "rprivate"
+},
+{
+"Type": "bind",
+"Source": "/var/run/docker.sock",
+"Destination": "/var/run/docker.sock",
+"Mode": "rw",
+"RW": true,
+"Propagation": "rprivate"
+},
+{
+"Type": "volume",
+"Name": "425dbcbb7ff7661fbc16d73ce00dbf45d305af7a6346976b6c0c5bcad5f19440",
+"Source": "/var/lib/docker/volumes/425dbcbb7ff7661fbc16d73ce00dbf45d305af7a6346976b6c0c5bcad5f19440/_data",
+"Destination": "/var/www",
+"Driver": "local",
+"Mode": "rw",
+"RW": true,
+"Propagation": ""
+}
+],
+"Config": {
+"Hostname": "df2da1d117cb",
+"Domainname": "",
+"User": "",
+"AttachStdin": false,
+"AttachStdout": false,
+"AttachStderr": false,
+"ExposedPorts": {
+"9000/tcp": {}
+},
+"Tty": false,
+"OpenStdin": false,
+"StdinOnce": false,
+"Env": [
+"affinity:container==e08a8f3f7d5c2274c9c97069b7516b750f35e29a3880c11723769bf24e87992a",
+"TZ=US/Pacific",
+"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+"PHPIZE_DEPS=autoconf \t\tdpkg-dev dpkg \t\tfile \t\tg++ \t\tgcc \t\tlibc-dev \t\tmake \t\tpcre-dev \t\tpkgconf \t\tre2c",
+"PHP_INI_DIR=/usr/local/etc/php",
+"PHP_EXTRA_CONFIGURE_ARGS=--enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data",
+"PHP_CFLAGS=-fstack-protector-strong -fpic -fpie -O2",
+"PHP_CPPFLAGS=-fstack-protector-strong -fpic -fpie -O2",
+"PHP_LDFLAGS=-Wl,-O1 -Wl,--hash-style=both -pie",
+"GPG_KEYS=A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0 528995BFEDFBA7191D46839EF9BA0ADA31CBD89E",
+"PHP_VERSION=7.1.5",
+"PHP_URL=https://secure.php.net/get/php-7.1.5.tar.xz/from/this/mirror",
+"PHP_ASC_URL=https://secure.php.net/get/php-7.1.5.tar.xz.asc/from/this/mirror",
+"PHP_SHA256=d149a3c396c45611f5dc6bf14be190f464897145a76a8e5851cf18ff7094f6ac",
+"PHP_MD5=fb0702321c7aceac68c82b8c7a10d196"
+],
+"Cmd": [
+"/usr/local/bin/parse_and_aggregate_ads.sh"
+],
+"Image": "anchorfree/phpfpm-ar:master",
+"Volumes": {
+"/tmp/report": {},
+"/usr/local/var/lock": {},
+"/var/run/docker.sock": {},
+"/var/www": {}
+},
+"WorkingDir": "/",
+"Entrypoint": [
+"/bin/sh"
+],
+"OnBuild": null,
+"Labels": {
+"com.anchorfree.build": "2",
+"com.anchorfree.commit": "6b893bd309f087738a14ba6749ea3c84a2541baa",
+"com.docker.compose.config-hash": "30e09a3a960e1be8d1c03bccd29730317a6813dc1792141b756c9b8a7cff09a2",
+"com.docker.compose.container-number": "1",
+"com.docker.compose.oneoff": "False",
+"com.docker.compose.project": "dockercompose",
+"com.docker.compose.service": "cron-openx-reports",
+"com.docker.compose.version": "1.13.0"
+}
+},
+"NetworkSettings": {
+"Bridge": "",
+"SandboxID": "bd5f00cb799a7ec776979a332b9766abc73f02c6369d3466f9a45f5d28b58cf4",
+"HairpinMode": false,
+"LinkLocalIPv6Address": "",
+"LinkLocalIPv6PrefixLen": 0,
+"Ports": {
+"9000/tcp": null
+},
+"SandboxKey": "/var/run/docker/netns/bd5f00cb799a",
+"SecondaryIPAddresses": null,
+"SecondaryIPv6Addresses": null,
+"EndpointID": "",
+"Gateway": "",
+"GlobalIPv6Address": "",
+"GlobalIPv6PrefixLen": 0,
+"IPAddress": "",
+"IPPrefixLen": 0,
+"IPv6Gateway": "",
+"MacAddress": "",
+"Networks": {
+"dockercompose_default": {
+"IPAMConfig": null,
+"Links": null,
+"Aliases": [
+"df2da1d117cb",
+"cron-openx-reports"
+],
+"NetworkID": "fe1f7d8c46cc174ae745209a7b627f891dec570b0d0cb0ae85d607e020140958",
+"EndpointID": "b24b9b201e46256af1d52828b6f8ef3444c628be58c5606bf7187d7b84fecf0b",
+"Gateway": "172.18.0.1",
+"IPAddress": "172.18.0.19",
+"IPPrefixLen": 16,
+"IPv6Gateway": "",
+"GlobalIPv6Address": "",
+"GlobalIPv6PrefixLen": 0,
+"MacAddress": "02:42:ac:12:00:13",
+"DriverOpts": null
+}
+}
+}
+}
+]
+Note the /var/www mount is a volume mount:
+{
+"Type": "volume",
+"Name": "425dbcbb7ff7661fbc16d73ce00dbf45d305af7a6346976b6c0c5bcad5f19440",
+"Source": "/var/lib/docker/volumes/425dbcbb7ff7661fbc16d73ce00dbf45d305af7a6346976b6c0c5bcad5f19440/_data",
+"Destination": "/var/www",
+"Driver": "local",
+"Mode": "rw",
+"RW": true,
+"Propagation": ""
+}
+I compare that to servers where the container is functioning correctly and see:
+{
+"Type": "bind",
+"Source": "/var/www",
+"Destination": "/var/www",
+"Mode": "ro",
+"RW": false,
+"Propagation": "rprivate"
+}
+Which is what I'd expect given the docker-compose.yml that we're using. We have docker-compose running on a regular basis and it doesn't correct the issue. I'm not sure that docker-compose is actually causing it (maybe it's docker-core that's doing this?) but I thought I'd start here. We are using the same version of docker and docker-compose across all the servers involved.
+$ docker --version
+Docker version 17.06.0-ce, build 02c1d87
+$ docker-compose --version
+docker-compose version 1.13.0, build 1719ceb
+I am working on getting some statistics on how frequently this happens.

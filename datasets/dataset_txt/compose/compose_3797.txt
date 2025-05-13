@@ -1,0 +1,26 @@
+natarajanv commented on 25 Mar 2015
+using compose version 1.2.0rc1, docker version 1.5.0
+got this error when pulling image from private registry. The docker daemon is set with --insecure-regsitry=hostname:8443
+Traceback (most recent call last):
+File "", line 3, in
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 208, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 214, in recreate_containers
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 197, in create_container
+File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 710, in pull
+File "/code/build/docker-compose/out00-PYZ.pyz/docker.auth.auth", line 67, in resolve_repository_name
+File "/code/build/docker-compose/out00-PYZ.pyz/docker.auth.auth", line 46, in expand_registry_url
+docker.errors.DockerException: HTTPS endpoint unresponsive and insecure mode isn't enabled.
+When I add --allow-insecure-ssl to the docker-compose, I get this error:
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 214, in recreate_containers
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 199, in create_container
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 37, in stream_output
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 50, in print_output_event
+compose.progress_stream.StreamOutputError: Authentication is required.
+I confirmed that I am logged in by doing a docker pull from the private registry and it works fine.
+Thanks for looking...

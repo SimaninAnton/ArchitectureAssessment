@@ -1,0 +1,41 @@
+Folcon commented on 21 Aug 2014
+I've been following the instructions here and it's not really clear.
+Let me document my journey.
+Firstly, this line This will generate a Django app inside the current directory: is confusing.
+Because after I get Successfully built 435b71356b7b, calling ls in the shell shows me:
+$ ls
+Dockerfile      fig.yml         requirements.txt
+not:
+$ ls
+Dockerfile       fig.yml          figexample       manage.py        requirements.txt
+as the tutorial implies.
+Then it mentions figexample/settings.py. But I have no idea where this is. Maybe it's in the VM? So I call:
+fig run web cat figexample/settings.py
+
+"""
+Django settings for figexample project.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/1.6/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/1.6/ref/settings/
+"""
+*snip*
+Great! I found it, now how do I edit it?
+fig run web nano /code/figexample/settings.py
+Cannot start container 41e26599b6f7d272b476a80021ce1ccaa6258ecef5fbc6b65407f02a8fecf390: exec: "nano": executable file not found in $PATH
+fig run web vi /code/figexample/settings.py
+Cannot start container 4261202341c2ac4e993f175847563e4c48f15149d470cdbfba3af191524dfe05: exec: "vi": executable file not found in $PATH
+fig run web emacs /code/figexample/settings.py
+Cannot start container 16e0266a8e7876a36359694fdb91441ebc8eb5bf234117b2a7957d56e63dd47e: exec: "emacs": executable file not found in $PATH
+Not a clue, now I'm really lost.
+Maybe:
+fig run web bash
+Which just hangs, calling CTRL-C (^C) gives:
+root@c0c61829eeec:/code# 
+root@c0c61829eeec:/code# ls
+manage.py  figexample
+Now we're getting somewhere. But why is none of this mentioned? I still need to work out how to setup an editor, I've glossed over a lot of googling and I'm still feeling very lost.
+I'm not sure if this is of interest, but I thought I'd mention it.
+If I was a bit clearer what to do next, I'd submit a pr fix to the docs. I can do that anyway if you'd like.

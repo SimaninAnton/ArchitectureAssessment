@@ -1,0 +1,6 @@
+KyleAMathews commented on 7 Mar 2014
+I'm developing a node.js app with Fig that depends on two containers. I'd like while developing to be able to run my node app locally (not in a container) so it's easy to start/restart, edit files, etc. Building every time is far too slow for my use case. So far I've been exporting manually the ip/port information from the two fig created containers. This is annoying/tedious to do however so I was thinking this is a pattern Fig could support.
+Something like:
+fig up -e -d db redis
+This would start the two containers in detached mode and export the connection strings in the local shell. Then I could start my node.js app normally and it'd connect to the two containers.
+Thoughts? Other patterns for accomplishing the same thing?

@@ -1,0 +1,34 @@
+Fank commented on 13 Apr 2017 •
+edited
+Example:
+version: '3.2'
+services:
+  rabbitmq:
+    image: 'Asd'
+    secrets:
+      - source: api-config-v1
+        target: config.toml
+
+secrets:
+  api-config-v1:
+    file: ~/nx_configs/config.toml
+docker-compose config will export:
+networks: {}
+services:
+  rabbitmq:
+    image: Asd
+    secrets:
+    - source: api-config-v1
+      target: config.toml
+version: '3.2'
+volumes: {}
+It works fine with version 3.1
+I may found the problem:
+https://github.com/docker/compose/blob/master/compose/config/serialize.py#L10
+https://github.com/docker/compose/blob/master/compose/config/serialize.py#L12
+I think it should be:
+from compose.const import COMPOSEFILE_V2_2 as V2_2
+from compose.const import COMPOSEFILE_V3_2 as V3_2
+https://github.com/docker/compose/blob/master/compose/config/serialize.py#L53
+because variable V3_2 contains 3.1 and the version in the config is 3.2
+1

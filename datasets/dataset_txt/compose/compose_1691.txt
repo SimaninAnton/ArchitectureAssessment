@@ -1,0 +1,53 @@
+Umkus commented on 13 Feb 2017 •
+edited
+The issue
+Environment variables availability inside compose file provided from the following:
+shell or .env file
+defined in compose file
+feels inconsistent. Environment vars with default values are not available inside compose unless explicitly provided from outside of it.
+The example
+Consider the following minimal compose file:
+version: '3'
+services:
+    example:
+        environment:
+            TAG: edge
+        image: alpine:${TAG}
+The ${TAG} variable is not available anywhere inside compose file.
+E.g.:
+$ docker-compose up
+WARNING: The TAG variable is not set. Defaulting to a blank string.
+Pulling example (alpine:latest)...
+...
+But:
+$ TAG=edge docker-compose up
+Pulling example (alpine:edge)...
+...
+the $TAG is now available inside the compose file.
+The outcome
+It's required to always explicitly provide env variable values to be able to use them inside compose file.
+It feels natural to expect that all env variables are available/resolving inside the compose file, especially those that were defined by it in the first place. Although this seems to not be the case.
+Sorry if this was answered before, I didn't find this particular use-case in issues list.
+Tech specs:
+$ docker version
+Client:
+ Version:      1.13.1
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   092cba3
+ Built:        Wed Feb  8 08:47:51 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.13.1
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   092cba3
+ Built:        Wed Feb  8 08:47:51 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+$ docker-compose version
+docker-compose version 1.11.1, build 7c5d5e4
+docker-py version: 2.0.2
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016

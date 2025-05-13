@@ -1,0 +1,43 @@
+sjauck commented on 12 Feb 2016
+Hi.
+I used docker-compose for a selenium-grid. in my yml file i added extra-hosts to add the ip of my test system to the etc/hosts file. After Upgrading it didn´t work. Are there something broken with the last version?
+docker-compose version 1.6.0, build d99cad6
+Client:
+Version: 1.9.1
+API version: 1.21
+Go version: go1.4.2
+Git commit: a34a1d5
+Built: Fri Nov 20 13:16:54 UTC 2015
+OS/Arch: linux/amd64
+Server:
+Version: 1.9.1
+API version: 1.21
+Go version: go1.4.2
+Git commit: a34a1d5
+Built: Fri Nov 20 13:16:54 UTC 2015
+OS/Arch: linux/amd64
+yml file:
+selhub:
+image: selenium/hub
+ports:
+- 4444:4444
+nodeff:
+image: selenium/node-firefox-debug
+ports:
+- 5900
+links:
+- selhub:hub
+extra-hosts:
+- "domain.dev:172.17.0.1"
+nodechrome:
+image: selenium/node-chrome-debug
+ports:
+- 5900
+links:
+- selhub:hub
+extra-hosts:
+- "domain.dev:172.17.0.1"
+Error message:
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+Unsupported config option for nodechrome: 'extra-hosts'
+Unsupported config option for nodeff: 'extra-hosts'

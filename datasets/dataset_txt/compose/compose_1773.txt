@@ -1,0 +1,10 @@
+dessant commented on 20 Jan 2017
+Setting /d/certs/cluster1 for DOCKER_CERT_PATH results in this error:
+$ winpty docker-compose exec nginx bash
+ERROR: TLS configuration is invalid - make sure your DOCKER_TLS_VERIFY and DOCKE
+R_CERT_PATH are set correctly.
+You might need to run `eval "$(docker-machine env default)"`
+While using D:\\certs\\cluster1 works as expected:
+$ winpty docker-compose exec nginx bash
+bash-4.3# 
+Tested with compose 1.10.

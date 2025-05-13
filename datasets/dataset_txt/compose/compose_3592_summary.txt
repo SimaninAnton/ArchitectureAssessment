@@ -1,0 +1,1 @@
+Cannot pipe docker-compose output (node wrap)

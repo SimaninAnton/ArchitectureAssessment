@@ -1,0 +1,17 @@
+BeyondEvil commented on 7 Aug 2019
+I've tried installing docker-compose and I've tried copying the binary, both render the same result:
+/bin/sh: docker-compose: not found
+Here's the Dockerfile I'm using:
+FROM python:3.7.4-alpine3.9
+COPY --from=docker/compose:1.24.1 /usr/local/bin/docker-compose /usr/local/bin/docker-compose
+CMD ["sh"]
+It's there (good permissions and size):
+/ # ls -la /usr/local/bin | grep docker-compose
+-rwxr-xr-x    1 root     root      16168192 Jun 24 10:12 docker-compose
+But when I try to run it:
+/ # docker-compose
+/bin/sh: docker-compose: not found
+Not even from /usr/local/bin:
+/usr/local/bin # docker-compose
+/bin/sh: docker-compose: not found
+What am I doing wrong?

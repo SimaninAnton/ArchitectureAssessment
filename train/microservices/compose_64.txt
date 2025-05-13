@@ -1,0 +1,45 @@
+kiorky commented on 5 Nov 2019 •
+edited
+Description of the issue
+Context information (for bug reports)
+Since #6406, volumes handling is a bit unpredictable, and as things are moving, i want to be sure of the wanted behavior not to face more regressions in the future.
+Steps to reproduce the issue
+From #6406
+This config should fail
+version: "3.7"
+services:
+  test:
+    image: ubuntu
+    volumes:
+    - test:/test
+    - 2test:/test
+volumes:
+  test:
+  2test:
+But are we agreeing than this one would never fail ?
+version: "3.7"
+services:
+  test:
+    image: ubuntu
+    volumes:
+    - test:/test
+    - ./dev:/test
+volumes:
+  test:
+Idea being the scene is to allow simple prod/dev configs should still be supported as-is:
+docker-compose.yml
+version: "3.7"
+services:
+  test:
+    image: ubuntu
+    volumes:
+    - test:/test
+volumes:
+  test:
+docker-compose-dev.yml
+version: "3.7"
+services:
+  test:
+    volumes:
+    - ./dev:/test
+and use it with docker-compose -f docker-compose.yml -f docker-compose-dev.yml

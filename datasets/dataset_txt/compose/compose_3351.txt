@@ -1,0 +1,3 @@
+Contributor
+mnowster commented on 24 Aug 2015
+When a service is extended, we're not currently interpolating and validating that it is a valid service to extend. We should be.

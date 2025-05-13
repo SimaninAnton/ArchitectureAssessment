@@ -1,0 +1,1 @@
+Clarify how 'depends_on' considers a service 'ready'

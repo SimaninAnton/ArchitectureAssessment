@@ -1,0 +1,3 @@
+italomaia commented on 31 May 2017
+I've noticed that docker-compose is not wary of the current user $PATH. If in my dockerfile, I change my user to something other than root and change it's PATH, my docker-compose command won't have that changed PATH available.
+Imagine I have a binary path that was add to my user PATH. docker-compose.yml command can only reference it by full path. Shouldn't it have the current user PATH visibility?

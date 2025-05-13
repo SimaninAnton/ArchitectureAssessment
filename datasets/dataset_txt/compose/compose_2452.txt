@@ -1,0 +1,8 @@
+fabrii commented on 27 Apr 2016
+I dont know if this is the proper place for posting this. I apologize if it isn't.
+When running:
+i get the following error:
+C:\Program Files\Docker Toolbox\docker.exe Error parsing reference "Files/Docker" is not a valid repository/tag.
+What am i doing wrong?
+Btw, Kitematic isnt supported right?.
+Thanks.

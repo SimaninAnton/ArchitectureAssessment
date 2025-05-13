@@ -1,0 +1,19 @@
+MitchK commented on 5 Mar 2016
+I have this in my Dockerfile:
+...
+CMD bash on-start.sh
+I can run it using this and I get an interactive shell as desired.
+$ docker run -it imagename
+$ _
+But it does not work when doing this:
+$ docker-compose up
+...
+exited with code 0
+If I do this, it works as well, but dependent services are not started.
+$ docker-compose run myservice 
+$ _
+My versions:
+$ docker --version
+Docker version 1.10.0, build 590d5108
+$ docker-compose --version
+docker-compose version 1.6.0, build d99cad6

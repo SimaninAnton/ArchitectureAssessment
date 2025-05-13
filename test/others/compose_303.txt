@@ -1,0 +1,8 @@
+docwhat commented on 1 Feb 2019
+It would be nice to have a release binary for ppc64le so that the installation instructions would work correctly on Ubuntu 18.04 on ppc64le.
+Otherwise, maybe the instructions should be changed from:
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+to
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-x86_64" -o /usr/local/bin/docker-compose
+with extra instructions for non-x86_64 systems.
+1

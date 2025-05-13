@@ -1,0 +1,54 @@
+ScreamingDev commented on 11 Apr 2018
+Description of the issue
+Via docker compose it is possible to define networks and put container in them.
+When two people with different unix accounts work on the same machine running docker,
+the network fails with a message that the IP range is already used even when the other network has been shut down.
+Please allow multiple user to use the same network or reuse already defined networks.
+Two people working on the same laptop / computer have to docker network rm all the time blocking each anothers productivity.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of "docker version"
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:10:09 2018
+ OS/Arch: linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+Output of "docker-compose config"
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 10.11.17.0/24
+
+services:
+ db:
+    image: mysql:5.7
+    networks:
+      default:
+        ipv4_address: 10.11.17.100
+  nginx:
+    image: nginx:1.11
+    networks:
+      default:
+        ipv4_address: 10.11.17.200
+Steps to reproduce the issue
+docker-compose up -d && docker-compose down
+Login as another user
+Repeat
+Observed result
+Networks collide
+Expected result
+Reuse inactive network.
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

@@ -1,0 +1,7 @@
+dmitriyse commented on 9 Nov 2017
+I inspected docker-compose reference and did not find any means to provide "--runtime=some-runtime" argument for starting containers.
+Please provide some documentation or add a new feature if it's currently impossible.
+Main motivation:
+nvidia-docker 2.0 default usage is:
+docker run --runtime=nvidia ...
+13

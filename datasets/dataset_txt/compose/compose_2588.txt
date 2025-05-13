@@ -1,0 +1,15 @@
+gittycat commented on 23 Mar 2016
+Variable extrapolation doesn't occur inside a constraint environment variable.
+version: "2"
+services:
+  app:
+    image: alpine:3.3
+    environment:
+      "constraint:node==${VM_PREFIX}node01":
+    command: echo 'hello'
+docker-compose up -d gives the following error:
+Creating swarm_app_1
+ERROR: Value '${VM_PREFIX}node01' is invalid
+docker: 1.10.3
+docker-compose: 1.6.2
+virtualbox, swarm, OSX CLI

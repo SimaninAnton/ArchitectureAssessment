@@ -1,0 +1,311 @@
+pospispa commented on 26 Mar 2015
+I'm trying to use docker-compose for functional testing of a service. The service runs indefinitely. A functional test sends a series of queries,
+receives responses and finishes with exit code 0 (success) or 1 (failure). Some tests finish within 0.5 seconds some take much longer.
+I need to gather stdout and stderr from the functional test and I would like to gather stdout and stderr from the service too.
+Note: I don't need to scale the service.
+Note: docker and docker-compose versions I use:
+$ docker info
+Containers: 26
+Images: 2199
+Storage Driver: aufs
+ Root Dir: /www/docker-files/var/lib/aufs
+ Backing Filesystem: <unknown>
+ Dirs: 2917
+Execution Driver: native-0.2
+Kernel Version: 3.16.0-0.bpo.4-amd64
+Operating System: Debian GNU/Linux 7 (wheezy)
+CPUs: 24
+Total Memory: 94.57 GiB
+Name: vs-fluor.dev
+ID: RX7M:HZ4B:KN3Q:37SV:3AMI:ZI6S:ZNLV:3BMM:I2RY:SXGB:RP4R:3F6A
+WARNING: No memory limit support
+WARNING: No swap limit support
+$ docker-compose --version
+docker-compose 1.1.0
+I tried to use docker-compose in the following way. My .yml file:
+fulltextqueryprocessor:
+  build: test/queryprocessor/test_job_numberword/
+  volumes:
+  - /www/barrels-ro/:/www/fulltext/barrels/
+test:
+  image: docker.dev/test_env/python-protoclient:latest
+  volumes:
+  - .:/integration
+  links:
+  - fulltextqueryprocessor:link_to_qp
+  working_dir: /integration/test/queryprocessor/
+  command: python test_job_numberword.py -c docker
+Note: the build of the fulltextqueryprocessor image is only COPY of different configuration files for different functional tests.
+I use the below script in Jenkins to issue a functional test:
+PROJECT_NAME=$(basename $YML_FILE .yml | sed 's/_//g' | sed 's/-//g')
+docker-compose --project-name $PROJECT_NAME --file $YML_FILE pull --allow-insecure-ssl
+docker-compose --project-name $PROJECT_NAME --file $YML_FILE build --no-cache
+docker-compose --verbose --project-name $PROJECT_NAME --file $YML_FILE up --allow-insecure-ssl
+EXIT_CODE=$(docker-compose --project-name $PROJECT_NAME --file $YML_FILE ps | grep '.*test.*python.*Exit \+[0-9]\+' | sed 's/.*Exit \+\([0-9]\+\).*/\1/g' )
+docker-compose --project-name $PROJECT_NAME --file $YML_FILE rm --force
+exit $EXIT_CODE
+Note: I use Jenkins to start several tests at the same time in parallel on a single machine.
+I came across a problem with the above approach. Some tests hang up forever. It is indeterministic which tests hang up and which do not. IMHO, it is interesting that
+the more tests are started at the same time the more tests hang up.
+If a test hangs up I get the below output in Jenkins console from the above script:
+11:08:10 + basename test/queryprocessor/test_job_abbrevshrink.yml .yml
+11:08:10 + sed s/_//g
+11:08:10 + sed s/-//g
+11:08:10 + PROJECT_NAME=testjobabbrevshrink
+11:08:10 + docker-compose --project-name testjobabbrevshrink --file test/queryprocessor/test_job_abbrevshrink.yml pull --allow-insecure-ssl
+11:08:10 Pulling test (docker.dev/test_env/python-protoclient:latest)...
+11:08:10 + docker-compose --project-name testjobabbrevshrink --file test/queryprocessor/test_job_abbrevshrink.yml build --no-cache
+11:08:11 Building fulltextqueryprocessor...
+11:08:11 Step 0 : FROM docker.dev/deployed/szn-fulltext-queryprocessor:latest
+11:08:11  ---> cfb81fc8b871
+11:08:11 Step 1 : MAINTAINER Pavel Pospisil <pavel.pospisil@firma.seznam.cz>
+11:08:11  ---> Running in 0cb4932aa800
+11:08:11  ---> cb1b86304beb
+11:08:11 Removing intermediate container 0cb4932aa800
+11:08:11 Step 2 : COPY abbrevshrink-job.conf /www/fulltext/queryprocessor/conf/jobmanager.proto.conf
+11:08:13  ---> 3fe50cc81f73
+11:08:13 Removing intermediate container 59c3f15d828a
+11:08:13 Successfully built 3fe50cc81f73
+11:08:14 test uses an image, skipping
+11:08:14 + docker-compose --verbose --project-name testjobabbrevshrink --file test/queryprocessor/test_job_abbrevshrink.yml up --allow-insecure-ssl
+11:08:14 Compose version 1.1.0
+11:08:14 Docker base_url: http+unix://var/run/docker.sock
+11:08:14 Docker version: KernelVersion=3.16.0-0.bpo.4-amd64, Arch=amd64, ApiVersion=1.17, Version=1.5.0, GitCommit=a8a31ef, Os=linux, GoVersion=go1.4.1
+11:08:14 docker containers <- (all=True)
+11:08:14 docker containers -> (list with 10 items)
+11:08:14 Creating testjobabbrevshrink_fulltextqueryprocessor_1...
+11:08:14 docker containers <- (all=True)
+11:08:15 docker containers -> (list with 10 items)
+11:08:15 docker images <- (name=u'testjobabbrevshrink_fulltextqueryprocessor')
+11:08:21 docker images -> (list with 1 items)
+11:08:21 docker create_container <- (environment={}, image=u'testjobabbrevshrink_fulltextqueryprocessor', detach=False, name=u'testjobabbrevshrink_fulltextqueryprocessor_1', volumes={u'/www/fulltext/barrels/': {}})
+11:08:21 docker create_container -> {u'Id': u'd02281d13ec78bbd8daa61f8ef3f3efa49ffc1acea8565b33967c417c55590bd',
+11:08:21  u'Warnings': None}
+11:08:21 docker inspect_container <- (u'd02281d13ec78bbd8daa61f8ef3f3efa49ffc1acea8565b33967c417c55590bd')
+11:08:21 docker inspect_container -> {u'AppArmorProfile': u'',
+11:08:21  u'Args': [u'-c',
+11:08:21            u'service szn-fulltext-queryprocessor start && while true ; do sleep 10 ; done'],
+11:08:21  u'Config': {u'AttachStderr': True,
+11:08:21              u'AttachStdin': False,
+11:08:21              u'AttachStdout': True,
+11:08:21              u'Cmd': [u'/bin/bash',
+11:08:21                       u'-c',
+11:08:21                       u'service szn-fulltext-queryprocessor start && while true ; do sleep 10 ; done'],
+11:08:21              u'CpuShares': 0,
+11:08:21 ...
+11:08:21 docker start <- (u'd02281d13ec78bbd8daa61f8ef3f3efa49ffc1acea8565b33967c417c55590bd', links=[], cap_add=None, restart_policy=None, dns_search=None, network_mode=u'bridge', binds={u'/www/barrels-ro': {u'bind': u'/www/fulltext/barrels/', u'ro': False}}, dns=None, volumes_from=[], port_bindings={}, cap_drop=None, privileged=False)
+11:08:22 docker start -> None
+11:08:22 docker containers <- (all=True)
+11:08:22 docker containers -> (list with 21 items)
+11:08:22 Creating testjobabbrevshrink_test_1...
+11:08:22 docker containers <- (all=True)
+11:08:22 docker containers -> (list with 21 items)
+11:08:22 docker create_container <- (name=u'testjobabbrevshrink_test_1', image=u'docker.dev/test_env/python-protoclient:latest', environment={}, working_dir='/integration/test/queryprocessor/', command='python test_job_abbrevshrink.py -c docker', volumes={u'/integration': {}}, detach=False)
+11:08:22 docker create_container -> {u'Id': u'f133811406feccf20d52f343da8bb0430558c1678d9f64efcbf45685dda3732d',
+11:08:22  u'Warnings': None}
+11:08:22 docker inspect_container <- (u'f133811406feccf20d52f343da8bb0430558c1678d9f64efcbf45685dda3732d')
+11:08:22 docker inspect_container -> {u'AppArmorProfile': u'',
+11:08:22  u'Args': [u'test_job_abbrevshrink.py', u'-c', u'docker'],
+11:08:22  u'Config': {u'AttachStderr': True,
+11:08:22              u'AttachStdin': False,
+11:08:22              u'AttachStdout': True,
+11:08:22              u'Cmd': [u'python',
+11:08:22                       u'test_job_abbrevshrink.py',
+11:08:22                       u'-c',
+11:08:22                       u'docker'],
+11:08:22              u'CpuShares': 0,
+11:08:22 ...
+11:08:22 docker containers <- (all=False)
+11:08:23 docker containers -> (list with 18 items)
+11:08:23 docker start <- (u'f133811406feccf20d52f343da8bb0430558c1678d9f64efcbf45685dda3732d', links=[(u'testjobabbrevshrink_fulltextqueryprocessor_1', u'link_to_qp'), (u'testjobabbrevshrink_fulltextqueryprocessor_1', u'testjobabbrevshrink_fulltextqueryprocessor_1'), (u'testjobabbrevshrink_fulltextqueryprocessor_1', u'fulltextqueryprocessor_1')], cap_add=None, restart_policy=None, dns_search=None, network_mode=u'bridge', binds={u'/home/jenkins/workspace/OTVIRAK-QP-TESTS/YML_FILE/test/queryprocessor/test_job_abbrevshrink.yml/fluor/fluor': {u'bind': u'/integration', u'ro': False}}, dns=None, volumes_from=[], port_bindings={}, cap_drop=None, privileged=False)
+11:08:24 docker start -> None
+11:08:24 docker containers <- (all=False)
+11:08:24 docker containers -> (list with 25 items)
+11:08:24 docker containers <- (all=False)
+11:08:25 docker containers -> (list with 25 items)
+11:08:25 docker attach <- (u'd02281d13ec78bbd8daa61f8ef3f3efa49ffc1acea8565b33967c417c55590bd', stderr=1, logs=1, stream=1, stdout=1)
+11:08:25 docker attach <- (u'f133811406feccf20d52f343da8bb0430558c1678d9f64efcbf45685dda3732d', stderr=1, logs=1, stream=1, stdout=1)
+11:08:25 docker attach -> <generator object _multiplexed_socket_stream_helper at 0x18775f0>
+11:08:25 docker attach -> <generator object _multiplexed_socket_stream_helper at 0x1877640>
+If a test succeeds I get the below output:
+11:16:26 + docker-compose --verbose --project-name testjobneglectword --file test/queryprocessor/test_job_neglectword.yml up --allow-insecure-ssl
+11:16:27 Compose version 1.1.0
+11:16:27 Docker base_url: http+unix://var/run/docker.sock
+11:16:27 Docker version: KernelVersion=3.16.0-0.bpo.4-amd64, Arch=amd64, ApiVersion=1.17, Version=1.5.0, GitCommit=a8a31ef, Os=linux, GoVersion=go1.4.1
+11:16:27 docker containers <- (all=True)
+11:16:27 docker containers -> (list with 18 items)
+11:16:27 Creating testjobneglectword_fulltextqueryprocessor_1...
+11:16:27 docker containers <- (all=True)
+11:16:27 docker containers -> (list with 17 items)
+11:16:27 docker images <- (name=u'testjobneglectword_fulltextqueryprocessor')
+11:16:34 docker images -> (list with 1 items)
+11:16:34 docker create_container <- (environment={}, image=u'testjobneglectword_fulltextqueryprocessor', detach=False, name=u'testjobneglectword_fulltextqueryprocessor_1', volumes={u'/www/fulltext/barrels/': {}})
+11:16:34 docker create_container -> {u'Id': u'829ebf9cf60d40c76c258a63b3e5e4676bd89974c82c40da46bddc53d2581e0f',
+11:16:34  u'Warnings': None}
+11:16:34 docker inspect_container <- (u'829ebf9cf60d40c76c258a63b3e5e4676bd89974c82c40da46bddc53d2581e0f')
+11:16:35 docker inspect_container -> {u'AppArmorProfile': u'',
+11:16:35  u'Args': [u'-c',
+11:16:35            u'service szn-fulltext-queryprocessor start && while true ; do sleep 10 ; done'],
+11:16:35  u'Config': {u'AttachStderr': True,
+11:16:35              u'AttachStdin': False,
+11:16:35              u'AttachStdout': True,
+11:16:35              u'Cmd': [u'/bin/bash',
+11:16:35                       u'-c',
+11:16:35                       u'service szn-fulltext-queryprocessor start && while true ; do sleep 10 ; done'],
+11:16:35              u'CpuShares': 0,
+11:16:35 ...
+11:16:35 docker start <- (u'829ebf9cf60d40c76c258a63b3e5e4676bd89974c82c40da46bddc53d2581e0f', links=[], cap_add=None, restart_policy=None, dns_search=None, network_mode=u'bridge', binds={u'/www/barrels-ro': {u'bind': u'/www/fulltext/barrels/', u'ro': False}}, dns=None, volumes_from=[], port_bindings={}, cap_drop=None, privileged=False)
+11:16:35 docker start -> None
+11:16:35 docker containers <- (all=True)
+11:16:36 docker containers -> (list with 27 items)
+11:16:36 Creating testjobneglectword_test_1...
+11:16:36 docker containers <- (all=True)
+11:16:36 docker containers -> (list with 27 items)
+11:16:36 docker create_container <- (name=u'testjobneglectword_test_1', image=u'docker.dev/test_env/python-protoclient:latest', environment={}, working_dir='/integration/test/queryprocessor/', command='python test_job_neglectword.py -c docker', volumes={u'/integration': {}}, detach=False)
+11:16:37 docker create_container -> {u'Id': u'f92b38404c83cb40503305b5aadf41342e522ac29b90e18b91945b0441e9e693',
+11:16:37  u'Warnings': None}
+11:16:37 docker inspect_container <- (u'f92b38404c83cb40503305b5aadf41342e522ac29b90e18b91945b0441e9e693')
+11:16:37 docker inspect_container -> {u'AppArmorProfile': u'',
+11:16:37  u'Args': [u'test_job_neglectword.py', u'-c', u'docker'],
+11:16:37  u'Config': {u'AttachStderr': True,
+11:16:37              u'AttachStdin': False,
+11:16:37              u'AttachStdout': True,
+11:16:37              u'Cmd': [u'python',
+11:16:37                       u'test_job_neglectword.py',
+11:16:37                       u'-c',
+11:16:37                       u'docker'],
+11:16:37              u'CpuShares': 0,
+11:16:37 ...
+11:16:37 docker containers <- (all=False)
+11:16:37 docker containers -> (list with 25 items)
+11:16:37 docker start <- (u'f92b38404c83cb40503305b5aadf41342e522ac29b90e18b91945b0441e9e693', links=[(u'testjobneglectword_fulltextqueryprocessor_1', u'link_to_qp'), (u'testjobneglectword_fulltextqueryprocessor_1', u'testjobneglectword_fulltextqueryprocessor_1'), (u'testjobneglectword_fulltextqueryprocessor_1', u'fulltextqueryprocessor_1')], cap_add=None, restart_policy=None, dns_search=None, network_mode=u'bridge', binds={u'/home/jenkins/workspace/OTVIRAK-QP-TESTS/YML_FILE/test/queryprocessor/test_job_neglectword.yml/fluor/fluor': {u'bind': u'/integration', u'ro': False}}, dns=None, volumes_from=[], port_bindings={}, cap_drop=None, privileged=False)
+11:16:38 docker start -> None
+11:16:38 docker containers <- (all=False)
+11:16:38 docker containers -> (list with 24 items)
+11:16:38 docker containers <- (all=False)
+11:16:39 docker containers -> (list with 25 items)
+11:16:39 docker attach <- (u'829ebf9cf60d40c76c258a63b3e5e4676bd89974c82c40da46bddc53d2581e0f', stderr=1, logs=1, stream=1, stdout=1)
+11:16:39 docker attach <- (u'f92b38404c83cb40503305b5aadf41342e522ac29b90e18b91945b0441e9e693', stderr=1, logs=1, stream=1, stdout=1)
+11:16:39 docker attach -> <generator object _multiplexed_socket_stream_helper at 0x23d2f50>
+11:16:39 docker attach -> <generator object _multiplexed_socket_stream_helper at 0x2434780>
+11:16:39 docker wait <- (u'f92b38404c83cb40503305b5aadf41342e522ac29b90e18b91945b0441e9e693')
+11:16:39 docker wait -> 0
+11:16:39 docker containers <- (all=False)
+11:16:39 docker containers -> (list with 24 items)
+11:16:39 docker containers <- (all=False)
+11:16:39 docker containers -> (list with 24 items)
+11:16:39 Stopping testjobneglectword_fulltextqueryprocessor_1...
+11:16:39 docker stop <- (u'829ebf9cf60d40c76c258a63b3e5e4676bd89974c82c40da46bddc53d2581e0f')
+11:16:49 docker wait <- (u'829ebf9cf60d40c76c258a63b3e5e4676bd89974c82c40da46bddc53d2581e0f')
+11:16:49 docker stop -> None
+11:16:49 docker wait -> 137
+11:16:49 Attaching to testjobneglectword_fulltextqueryprocessor_1, testjobneglectword_test_1
+11:16:49 �[33mtest_1                   | �[0m
+11:16:49 �[33mtest_1                   | �[0mRunning tests...
+11:16:49 �[33mtest_1                   | �[0m----------------------------------------------------------------------
+11:16:49 �[33mtest_1                   | �[0m...
+11:16:49 �[33mtest_1                   | �[0m----------------------------------------------------------------------
+11:16:49 �[33mtest_1                   | �[0mRan 3 tests in 0.524s
+11:16:49 �[33mtest_1                   | �[0m
+11:16:49 �[33mtest_1                   | �[0mOK
+11:16:49 �[33mtest_1                   | �[0m
+11:16:49 �[33mtest_1                   | �[0mGenerating XML reports...
+11:16:49 �[36mfulltextqueryprocessor_1 | �[0mhttp-queryprocessorserver: Could not reliably determine the server's fully qualified domain name, using 172.17.10.123 for ServerName
+11:16:49 �[36mfulltextqueryprocessor_1 | �[0mStarting http-queryprocessorserver:done.
+11:16:49 �[33mtestjobneglectword_test_1 exited with code 0
+11:16:49 �[0mGracefully stopping... (press Ctrl+C again to force)
+11:16:49 + docker-compose --project-name testjobneglectword --file test/queryprocessor/test_job_neglectword.yml ps
+11:16:49 + grep .*test.*python.*Exit \+[0-9]\+
+11:16:49 + sed s/.*Exit \+\([0-9]\+\).*/\1/g
+11:16:50 stty: standard input: Inappropriate ioctl for device
+11:16:50 + EXIT_CODE=0
+11:16:50 + docker-compose --project-name testjobneglectword --file test/queryprocessor/test_job_neglectword.yml rm --force
+11:16:50 Removing testjobneglectword_fulltextqueryprocessor_1...
+11:16:50 Removing testjobneglectword_test_1...
+11:16:50 Going to remove testjobneglectword_test_1, testjobneglectword_fulltextqueryprocessor_1
+11:16:50 + exit 0
+If a test hangs up in the below state:
+11:16:27 + docker-compose --verbose --project-name testjobabbrevshrink --file test/queryprocessor/test_job_abbrevshrink.yml up --allow-insecure-ssl
+11:16:28 Compose version 1.1.0
+11:16:28 Docker base_url: http+unix://var/run/docker.sock
+11:16:28 Docker version: KernelVersion=3.16.0-0.bpo.4-amd64, Arch=amd64, ApiVersion=1.17, Version=1.5.0, GitCommit=a8a31ef, Os=linux, GoVersion=go1.4.1
+11:16:28 docker containers <- (all=True)
+11:16:28 docker containers -> (list with 15 items)
+11:16:28 Creating testjobabbrevshrink_fulltextqueryprocessor_1...
+11:16:28 docker containers <- (all=True)
+11:16:28 docker containers -> (list with 15 items)
+11:16:28 docker images <- (name=u'testjobabbrevshrink_fulltextqueryprocessor')
+11:16:35 docker images -> (list with 1 items)
+11:16:35 docker create_container <- (environment={}, image=u'testjobabbrevshrink_fulltextqueryprocessor', detach=False, name=u'testjobabbrevshrink_fulltextqueryprocessor_1', volumes={u'/www/fulltext/barrels/': {}})
+11:16:35 docker create_container -> {u'Id': u'aeca4d317f0b248e4b66ce2478e83e64d90879b076bcb387db56d4ffd3678060',
+11:16:35  u'Warnings': None}
+11:16:35 docker inspect_container <- (u'aeca4d317f0b248e4b66ce2478e83e64d90879b076bcb387db56d4ffd3678060')
+11:16:35 docker inspect_container -> {u'AppArmorProfile': u'',
+11:16:35  u'Args': [u'-c',
+11:16:35            u'service szn-fulltext-queryprocessor start && while true ; do sleep 10 ; done'],
+11:16:35  u'Config': {u'AttachStderr': True,
+11:16:35              u'AttachStdin': False,
+11:16:35              u'AttachStdout': True,
+11:16:35              u'Cmd': [u'/bin/bash',
+11:16:35                       u'-c',
+11:16:35                       u'service szn-fulltext-queryprocessor start && while true ; do sleep 10 ; done'],
+11:16:35              u'CpuShares': 0,
+11:16:35 ...
+11:16:35 docker start <- (u'aeca4d317f0b248e4b66ce2478e83e64d90879b076bcb387db56d4ffd3678060', links=[], cap_add=None, restart_policy=None, dns_search=None, network_mode=u'bridge', binds={u'/www/barrels-ro': {u'bind': u'/www/fulltext/barrels/', u'ro': False}}, dns=None, volumes_from=[], port_bindings={}, cap_drop=None, privileged=False)
+11:16:36 docker start -> None
+11:16:36 docker containers <- (all=True)
+11:16:36 docker containers -> (list with 27 items)
+11:16:36 Creating testjobabbrevshrink_test_1...
+11:16:36 docker containers <- (all=True)
+11:16:36 docker containers -> (list with 27 items)
+11:16:36 docker create_container <- (name=u'testjobabbrevshrink_test_1', image=u'docker.dev/test_env/python-protoclient:latest', environment={}, working_dir='/integration/test/queryprocessor/', command='python test_job_abbrevshrink.py -c docker', volumes={u'/integration': {}}, detach=False)
+11:16:37 docker create_container -> {u'Id': u'91abeccc63148a58621d0d929a4955224375ecf21f93e4b550382cbd99ece946',
+11:16:37  u'Warnings': None}
+11:16:37 docker inspect_container <- (u'91abeccc63148a58621d0d929a4955224375ecf21f93e4b550382cbd99ece946')
+11:16:37 docker inspect_container -> {u'AppArmorProfile': u'',
+11:16:37  u'Args': [u'test_job_abbrevshrink.py', u'-c', u'docker'],
+11:16:37  u'Config': {u'AttachStderr': True,
+11:16:37              u'AttachStdin': False,
+11:16:37              u'AttachStdout': True,
+11:16:37              u'Cmd': [u'python',
+11:16:37                       u'test_job_abbrevshrink.py',
+11:16:37                       u'-c',
+11:16:37                       u'docker'],
+11:16:37              u'CpuShares': 0,
+11:16:37 ...
+11:16:37 docker containers <- (all=False)
+11:16:37 docker containers -> (list with 25 items)
+11:16:37 docker start <- (u'91abeccc63148a58621d0d929a4955224375ecf21f93e4b550382cbd99ece946', links=[(u'testjobabbrevshrink_fulltextqueryprocessor_1', u'link_to_qp'), (u'testjobabbrevshrink_fulltextqueryprocessor_1', u'testjobabbrevshrink_fulltextqueryprocessor_1'), (u'testjobabbrevshrink_fulltextqueryprocessor_1', u'fulltextqueryprocessor_1')], cap_add=None, restart_policy=None, dns_search=None, network_mode=u'bridge', binds={u'/home/jenkins/workspace/OTVIRAK-QP-TESTS/YML_FILE/test/queryprocessor/test_job_abbrevshrink.yml/fluor/fluor': {u'bind': u'/integration', u'ro': False}}, dns=None, volumes_from=[], port_bindings={}, cap_drop=None, privileged=False)
+11:16:37 docker start -> None
+11:16:37 docker containers <- (all=False)
+11:16:38 docker containers -> (list with 24 items)
+11:16:38 docker containers <- (all=False)
+11:16:39 docker containers -> (list with 25 items)
+11:16:39 docker attach <- (u'aeca4d317f0b248e4b66ce2478e83e64d90879b076bcb387db56d4ffd3678060', stderr=1, logs=1, stream=1, stdout=1)
+11:16:39 docker attach -> <generator object _multiplexed_socket_stream_helper at 0x24a0e60>
+and I manually stop the running container with the service testjobabbrevshrink_fulltextqueryprocessor_1 (note: the corresponding test already finished and its container is stopped with exit code 0)
+then the docker-compose up command continues with the below output:
+11:24:50 docker wait <- (u'aeca4d317f0b248e4b66ce2478e83e64d90879b076bcb387db56d4ffd3678060')
+11:24:50 docker wait -> 137
+11:24:51 docker containers <- (all=False)
+11:24:51 docker containers -> (list with 17 items)
+11:24:51 docker containers <- (all=False)
+11:24:51 docker containers -> (list with 17 items)
+11:24:51 Attaching to testjobabbrevshrink_fulltextqueryprocessor_1
+11:24:51 �[36mfulltextqueryprocessor_1 | �[0mhttp-queryprocessorserver: Could not reliably determine the server's fully qualified domain name, using 172.17.10.124 for ServerName
+11:24:51 �[36mfulltextqueryprocessor_1 | �[0mStarting http-queryprocessorserver:done.
+11:24:51 �[36mtestjobabbrevshrink_fulltextqueryprocessor_1 exited with code 137
+11:24:51 �[0mGracefully stopping... (press Ctrl+C again to force)
+11:24:51 + docker-compose --project-name testjobabbrevshrink --file test/queryprocessor/test_job_abbrevshrink.yml ps
+11:24:51 + grep .*test.*python.*Exit \+[0-9]\+
+11:24:51 + sed s/.*Exit \+\([0-9]\+\).*/\1/g
+11:24:51 stty: standard input: Inappropriate ioctl for device
+11:24:51 + EXIT_CODE=0
+11:24:51 + docker-compose --project-name testjobabbrevshrink --file test/queryprocessor/test_job_abbrevshrink.yml rm --force
+11:24:51 Removing testjobabbrevshrink_fulltextqueryprocessor_1...
+11:24:51 Removing testjobabbrevshrink_test_1...
+11:24:51 Going to remove testjobabbrevshrink_test_1, testjobabbrevshrink_fulltextqueryprocessor_1
+11:24:51 + exit 0
+That's why I think that there is a bug in docker-compose that it is not able reliably recognize that the container with the test already stopped and that it should continue.
+What do you think? Is it a bug? Let me know if you need other information to find out the root cause of the bug.
+Am I using docker-compose for the above described functional testing in the wait it was intended to? If not, please let me know how I should use it. Thank you.

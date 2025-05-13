@@ -1,0 +1,1 @@
+docker swarm does not update images when it is a mode global

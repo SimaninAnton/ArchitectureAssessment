@@ -1,0 +1,1 @@
+allow security_opt during build

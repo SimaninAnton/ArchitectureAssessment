@@ -1,0 +1,1 @@
+Does run --rm need to wait for the container removal?

@@ -1,0 +1,54 @@
+thom-nic commented on 9 Aug 2016
+Output of docker version:
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        
+ OS/Arch:      linux/amd64
+Additional environment details (AWS, VirtualBox, physical, etc.):
+Using physical box (CentOS 7 host) via docker-machine or docker for mac, results are the same.
+Steps to reproduce the issue:
+Using docker-compose specify a named service (the base image does not seem to matter)
+run either of the following:
+docker-compose run [service] cat < somefile.txt
+# or :
+echo 'hello there' |docker-compose run [service] cat
+Describe the results you received:
+Client hangs and does not exit after contents of redirected input are consumed:
+± docker-compose run web cat < docker/postgres/grafana.sql
+CREATE ROLE grafana LOGIN PASSWORD 'grafana';
+CREATE DATABASE grafana;
+GRANT ALL PRIVILEGES ON DATABASE grafana TO grafana;
+^C^C^CERROR: Aborting.
+
+± echo 'hello there' |docker-compose run web cat
+hello there
+^C^CERROR: Aborting.
+Describe the results you expected:
+Client should exit after redirected stdin hits EOF. The same behavior with docker run exits cleanly as expected:
+± echo 'hello there' |docker run --rm -i alpine:latest cat
+hello there
+
+± docker run --rm -i alpine:latest cat < docker/postgres/grafana.sql
+CREATE ROLE grafana LOGIN PASSWORD 'grafana';
+CREATE DATABASE grafana;
+GRANT ALL PRIVILEGES ON DATABASE grafana TO grafana;
+
+± 
+Describe any additional info:
+I've noticed similar behavior when doing docker-compose run [servicename] /bin/sh - when I attempt to exit the shell (with exit or ^D) the client doesn't exit until I hit ^C:
+± docker-compose run web /bin/sh
+~ $ 
+~ $ exit
+^C^C^CERROR: Aborting.
+7

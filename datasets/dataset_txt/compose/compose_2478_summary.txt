@@ -1,0 +1,1 @@
+[1.7] CTRL+C fails to stop containers when running compose in the foreground

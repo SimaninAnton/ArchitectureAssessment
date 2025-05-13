@@ -1,0 +1,67 @@
+cezarypiatek commented on 28 Oct 2018
+Description of the issue
+I'm not able to connect from one container to another using service name at the second attempt.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client:
+ Version:      18.03.1-ee-2
+ API version:  1.37
+ Go version:   go1.10.2
+ Git commit:   ebbcd7e
+ Built:        Tue Jul 10 21:32
+ OS/Arch:      windows/amd64
+ Experimental: false
+
+Server:
+ Engine:
+  Version:      18.03.1-ee-2
+  API version:  1.37 (minimum v
+  Go version:   go1.10.2
+  Git commit:   ebbcd7e
+  Built:        Tue Jul 10 21:4
+  OS/Arch:      windows/amd64
+  Experimental: false
+Output of docker-compose config
+networks:
+  default: {}
+services:
+  clientapp:
+    depends_on:
+    - officeapp
+    image: image_from_private_registry_client
+    ports:
+    - published: 8009
+      target: 80
+    volumes:
+    - c:\logs\testui:C:\logs\app:rw
+  database:
+    image: image_from_private_registry_database
+  officeapp:
+    depends_on:
+    - database
+    image: image_from_private_registry_office
+    ports:
+    - published: 7010
+      target: 80
+    volumes:
+    - c:\logs\testui:C:\logs\app:rw
+version: '3.3'
+Steps to reproduce the issue
+docker-compose up
+container officeapp is able to connect to database container using database alias
+docker-compose down
+docker-compose up
+container officeapp IS NOT ABLE to connect to database container using database alias
+Restart-Service docker
+Repeat step 1
+Observed result
+After second attempt of using docker-compose up containers are not able to communicate with each others using service name. (Connecting using IP works always)
+Expected result
+I'm expecting that network between containers should work every time in the same way and the service name should be properly resolved in network communication.
+Additional information
+OS version: Windows 2016

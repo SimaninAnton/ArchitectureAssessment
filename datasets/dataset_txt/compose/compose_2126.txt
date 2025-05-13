@@ -1,0 +1,10 @@
+MitchK commented on 24 Aug 2016
+Example:
+version: '2'
+services:
+  some_service:
+    build: ./something
+    volumes: 
+    - ~/somedir:/root/somedir
+I use a remote docker daemon. I would expect ~ to resolute on the remote system rather than on the local system.
+I run docker-compose on a Mac system, so the docker-compose client expands ~ to /Users/myuser. This path does not exist on the remote system, so it will actually create a /Users/myuser/something folder on my Linux system.

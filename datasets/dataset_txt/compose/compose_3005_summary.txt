@@ -1,0 +1,1 @@
+Using docker-compose with cygwin and a private registry

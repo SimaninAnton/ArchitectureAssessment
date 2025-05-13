@@ -1,0 +1,26 @@
+johanneswuerbach commented on 12 May 2016 •
+edited
+When trying to docker-compose up with ~20 services on Docker for Mac 1.11.1-beta11 I quite often get errors like the following:
+ERROR: for ui  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
+
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+and another docker-compose up results in
+ERROR: for ui  argument of type 'NoneType' is not iterable
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 58, in main
+  File "compose/cli/main.py", line 109, in perform_command
+  File "compose/cli/main.py", line 734, in up
+  File "compose/project.py", line 398, in up
+  File "compose/parallel.py", line 60, in parallel_execute
+TypeError: argument of type 'NoneType' is not iterable
+The error is not limited to the ui service and hits different services in each up attempt.
+The ui service itself:
+$ docker ps -a | grep ui
+1d57c16d2ad3  lab_ui    "node_modules/.bin/gu"   5 minutes ago       Created   lab_ui_1
+$ docker inspect 1d57c16d2ad3
+https://gist.github.com/johanneswuerbach/da5f69e2a1da245f474eb61f4db93ae2
+When starting the service manually using docker start 1d57c16d2ad3, the error disappears.
+$ docker-compose -v
+docker-compose version 1.7.1, build 0a9ab35

@@ -1,0 +1,1 @@
+With --userland-proxy=false, dockerd listens on exposed ports (instead of docker-proxy)

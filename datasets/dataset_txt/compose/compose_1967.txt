@@ -1,0 +1,8 @@
+Contributor
+hholst80 commented on 2 Nov 2016 •
+edited
+The environment variable COMPOSE_FILE should allow me to use
+env COMPOSE_FILE=docker-compose.yml:docker-compose.admin.yml docker-compose pull
+but this fails on Windows with the error message:
++ env COMPOSE_FILE=docker-compose.yml:docker-compose.admin.yml docker-compose pull
+�[31mERROR�[0m: .IOError: [Errno 2] No such file or directory: u'.\\docker-compose.yml:docker-compose.admin.yml'

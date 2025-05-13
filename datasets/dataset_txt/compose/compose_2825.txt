@@ -1,0 +1,53 @@
+braska commented on 7 Feb 2016
+I use docker-compose v1.6.0 and docker engine 1.10.0.
+I have the following docker-compose.yml:
+version: '2'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test1234
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  web:
+    build: .
+    command: /bin/bash -c "bundle exec rake db:migrate && bundle exec rails s -p 3000 -b 0.0.0.0"
+    environment:
+      RAILS_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: test
+      DB_DB: test
+      DB_PASSWORD: test1234
+      SECRET_KEY_BASE: 5ffbf99dcae1dee8500abd759114f473a942cb23a23db2ef8ce61972d2eaeedbb656ddb184ff0175ab4f8c5bcb29fa860505a140a6442608192dee1e3b168928
+    ports:
+      - "3000:3000"
+    volumes:
+      - public:/myapp/public
+volumes:
+  db-data:
+    driver: local
+  public:
+    driver: local
+But while starting containers with docker-compose up command, I see following error: web_1 | PG::ConnectionBad: could not translate host name "db" to address: Name or service not known.
+I tried to find the reasons for this error:
+[user@localhost test_project]$ docker-compose run web bash
+Starting test_project_db_1
+root@9bd26d6496bd:/myapp# cat /etc/hosts
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.18.0.3  9bd26d6496bd
+root@9bd26d6496bd:/myapp# ping db
+ping: unknown host
+I added the following to web section in the docker-compose, but this has no effect:
+    links:
+      - db:db
+    depends_on:
+      - db

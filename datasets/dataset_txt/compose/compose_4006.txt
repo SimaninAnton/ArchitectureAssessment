@@ -1,0 +1,2 @@
+bencevans commented on 8 Jan 2015
+Canceling a build part way through just seems to close the fig command process without shutting down the docker build running behind it. If there's issues when building so the user cancels the build, changes something then expects to rebuild the the previous docker build process is still running it can sometimes get in the way and confuse the user.

@@ -1,0 +1,12 @@
+josephearl commented on 11 Apr 2016
+The usage instructions for Docker Compose (docker-compose version 1.7.0rc1, build 1ad8866) says:
+Define and run multi-container applications with Docker.
+
+Usage:
+  docker-compose [-f=<arg>...] [options] [COMMAND] [ARGS...]
+  docker-compose -h|--help
+Running docker-compose -f=docker-compose.yml fails with the error:
+ERROR: .IOError: [Errno 2] No such file or directory: u'./=docker-compose.yml'
+Using --file instead of -f works (i.e. docker-compose --file=docker-compose.yml).
+It looks like in the case -f=docker-compose.yml that Docker Compose is incorrectly treating the = as part of the argument value.
+2

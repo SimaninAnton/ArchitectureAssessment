@@ -1,0 +1,6 @@
+Contributor
+bfirsh commented on 8 Apr 2015
+http://docs.docker.com/compose/ is currently the landing page for Compose. A few things this page doesn't cater for:
+Somebody wants some help using Compose, in which case we should point them at the mailing list or IRC channel
+Somebody wants to suggest features, report bugs or contribute code, in which case we should point them at GitHub
+I think we should have links off to those things somewhere. @aanand @fredlf - WDYT?

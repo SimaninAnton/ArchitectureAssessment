@@ -1,0 +1,1 @@
+docker-compose push doesn't work while same image is successfully pushed using docker

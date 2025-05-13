@@ -1,0 +1,1 @@
+docker-compose.yaml variable substitution inconsistent with Dockerfile

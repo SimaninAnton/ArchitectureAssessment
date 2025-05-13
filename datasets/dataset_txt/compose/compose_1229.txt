@@ -1,0 +1,16 @@
+Canuteson commented on 2 Sep 2017 •
+edited by shin-
+This appears related to 1cf4cf4 in the 1.15 release.
+1cf4cf4#diff-7e15cdf56bafabd2844de219394ea620R578
+In v1.14, the following compose file worked fine:
+base:
+  image: some_base_service:latest
+  environment:
+    ENV_VAR1: some-variable-1
+    ENV_VAR2: some-variable-2
+
+worker:
+  extends: shared
+  image: someworkerimage:latest
+this now errors with:
+Cannot extend service 'base' in ##docker-compose.yml: Service not found #

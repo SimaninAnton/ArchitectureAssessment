@@ -1,0 +1,1 @@
+Error reading config file invalid character '\u007f' looking for beginning of value

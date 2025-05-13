@@ -1,0 +1,9 @@
+Contributor
+IlyaSkriblovsky commented on 8 Jan 2016
+Hi!
+Is it possible to acheive ordered stopping with Compose? My app needs to write something to DB when stopping gracefully.
+@aanand said in #1395:
+Container stopping/killing should be completely order-independent - if it's all going down, it doesn't matter what order we do it in.
+While this is true for almost any regular web app, I can't agree with that for something more stateful. For example, when my service receives stop signal, it gracefully closes all active connections and saves log records on each disconnection to DB. I'm trying to dockerize my app with Compose and this seems to be an issue :( Thanks for advice.
+For example, both SysV and Systemd have means for dependency-ordering both starting and stopping of services. I bet you won't like if your PC will unmount filesystems before all your apps is closed while shutting down :)
+6

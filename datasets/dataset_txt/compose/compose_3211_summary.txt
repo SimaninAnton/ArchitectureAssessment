@@ -1,0 +1,1 @@
+Update docs to say "environment" in `docker-compose.yml` has no effect during the build phase

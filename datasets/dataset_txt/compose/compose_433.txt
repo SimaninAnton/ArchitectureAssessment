@@ -1,0 +1,4 @@
+triesa commented on 26 Oct 2018
+docker-compose logs -f - display only several lines and not displaying container realtime server logs.
+For example i am using bitnami/node for some containers- there no logs.
+Please help! How to fix this?

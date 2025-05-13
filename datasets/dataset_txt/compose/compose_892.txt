@@ -1,0 +1,6 @@
+hantsy commented on 6 Feb 2018
+I am using Docker Toolbox 18.01 under Windows 10 64bit.
+And I have set COMPOSE_CONVERT_WINDOWS_PATHS=1 in the .env file.
+But docker-compose does work if I try to override a container file in volumes.
+volumes:
+- ./ssl/nginx.conf:/etc/nginx/conf.d/default.conf:ro

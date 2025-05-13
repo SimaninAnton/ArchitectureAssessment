@@ -1,0 +1,1 @@
+"docker-compose config" fails with UnicodeEncodeError when launched with output redirection if output contains unicode characters

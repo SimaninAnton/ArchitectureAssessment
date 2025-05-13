@@ -1,0 +1,1 @@
+COMMAND parameter to `fig run` should be optional.

@@ -1,0 +1,9 @@
+stephenemslie commented on 24 Sep 2014
+Start Charles Proxy
+Try to attach to a container
+$ cat fig.yml
+busybox:
+image: busybox
+$ fig run busybox /bin/sh
+Fig then appears to freeze up, but attaching to the container with docker attach works fine, and any output generated as a result will appear in the fig output too. It looks like having Charles open is somehow causing fig to block stdin.
+Here is a gist with the POST /containers/.../attach requests: https://gist.github.com/anonymous/acd7aa634ce668f1f93b

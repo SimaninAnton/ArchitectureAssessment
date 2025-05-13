@@ -1,0 +1,1 @@
+Truncated/missing terminal output when running 'docker-compose stop'

@@ -1,0 +1,3 @@
+Silex commented on 27 Jul 2018
+Hello,
+Why not support secrets using bind mount in version 2 like for version 3?

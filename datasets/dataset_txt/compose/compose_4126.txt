@@ -1,0 +1,16 @@
+kwk commented on 3 Nov 2014
+Hello,
+I want to use fig but there's a problem with port forwarding.
+With pure docker you can forward an container application's port (e.g. 5000) to multiple host ports by writing:
+docker run \
+  -p 10.1.2.3:111:5000 \
+  -p 10.1.2.3:222:5000 \
+  myimage
+This should create the two host ports 111 and 222 on the IP 10.1.2.3. Both forward to the container's port 5000.
+When I write this piece of code in my fig.yml, only the 222 will be created:
+    foo:
+      image: myimage
+      ports:
+        - "10.1.2.3:111:5000"
+        - "10.1.2.3:222:5000"
+Is this by design or is this a bug?

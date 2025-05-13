@@ -1,0 +1,4 @@
+imaia commented on 30 Aug 2017 •
+edited
+Hello; I have a setup where my container has all my dependencies built into it, but not my application code; the application code is mounted from a volume and when I update it, I just need to restart my docker compose. docker-compose up works nicely to load this setup in the first time but if the code is changed and I want to see the changes live, it requires me to use another command, docker-compose restart. I would like to suggest the possibility of reloading the application if it is already running for up, so I could use the same command to load the application or reload the code.
+ps: I'm assuming this feature doesn't exist in current docker-compose.

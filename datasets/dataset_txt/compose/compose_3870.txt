@@ -1,0 +1,6 @@
+Maxim-Filimonov commented on 5 Mar 2015
+I've noticed that docker-compose run seems to be significantly slower than plain docker run. Based on verbose logs it looks like it's slow due to docker resize command.
+See example:
+
+See logs https://gist.github.com/Maxim-Filimonov/7c90d303d102a0074c32
+Additionally i'm not sure is that a problem with my specific terminal but i've noticed that docker-compose run does not start terminal prompt until I type something into it. In the gif you can see me typing pwd otherwise it just sits there without prompt forever.

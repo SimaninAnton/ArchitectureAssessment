@@ -1,0 +1,33 @@
+yarons commented on 3 Feb 2019
+Description of the issue
+The progress percentage is going crazy, the numbers are increasing and nulled with absolutely no relation to the actual status, they are somehow also linked to one another.
+Symptoms
+(I could possibly attach a video that will show what happens, the download and extraction are working great, the progress display is the problematic part)
+This is what happened several seconds after running the command:
+Pulling basic_nfc          ... 
+Pulling basic_hw           ... downloading (57.9%)
+Pulling basic_bridge       ... downloading (57.9%)
+Pulling basic_relays       ... 
+Pulling basic_counters     ... waiting
+Pulling basic_rfid         ... downloading (57.9%)
+Pulling basic_zabbix-agent ... done
+Pulling basic_mr           ... 
+Pulling basic_ui           ... waiting
+This was the status several minutes later:
+Pulling basic_nfc          ... 
+Pulling basic_hw           ... extracting (1.8%)
+Pulling basic_bridge       ... extracting (1.8%)
+Pulling basic_relays       ... 
+Pulling basic_counters     ... done
+Pulling basic_rfid         ... extracting (1.8%)
+Pulling basic_zabbix-agent ... done
+Pulling basic_mr           ... extracting (1.8%)
+Pulling basic_ui           ... extracting (8.0%)
+The numbers are just increasing and decreasing randomly and there's no progress bar.
+Previously (Last time I remember) the numbers were meaningful and always increasing as it should be.
+Compose Version:
+docker-compose version 1.23.2, build 1110ad0
+Docker Version
+Docker version 18.09.1-ce, build 4c52b901c6cb019f7552cd93055f9688c6538be4
+Additional information
+Alpine 3.9.0

@@ -1,0 +1,76 @@
+Contributor
+thomascrha commented on 13 Jan 2018
+macos 10.12.6 (16G1114)
+Docker version 18.01.0-ce, build 03596f5
+docker-compose version 1.18.0, build 8dd22a9
+With built in python2.7
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 124, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 754, in run
+    service = self.project.get_service(options['SERVICE'])
+  File "/usr/local/lib/python2.7/site-packages/compose/project.py", line 148, in get_service
+    raise NoSuchService(name)
+  File "/usr/local/lib/python2.7/site-packages/compose/project.py", line 690, in __init__
+    self.msg = "No such service: %s" % self.name
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+Homebrew python2.7
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.18.0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/Cellar/docker-compose/1.18.0/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/local/Cellar/docker-compose/1.18.0/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 124, in perform_command
+    handler(command, command_options)
+  File "/usr/local/Cellar/docker-compose/1.18.0/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 754, in run
+    service = self.project.get_service(options['SERVICE'])
+  File "/usr/local/Cellar/docker-compose/1.18.0/libexec/lib/python2.7/site-packages/compose/project.py", line 148, in get_service
+    raise NoSuchService(name)
+  File "/usr/local/Cellar/docker-compose/1.18.0/libexec/lib/python2.7/site-packages/compose/project.py", line 690, in __init__
+    self.msg = "No such service: %s" % self.name
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+Now if I create a python virtualenv with python3 and install docker-compose via pip3, this error goes away (I get a connection error but that is to be expected) - is there a way to specify which version of python docker-compose uses ?
+Other than this the containers I have set up work as expected. Below is my docker-compose.yml - If you guys wanted each of the Dockerfiles for each container please let me know.
+version: '2'
+ 
+services:
+  web:
+    restart: always
+    build: ./web
+    expose:
+      - "8000"
+    volumes:
+      - /usr/src/app/web/project/static
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 wsgi:app 
+    depends_on:
+      - postgresql
+ 
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+    depends_on:
+      - web
+ 
+  data:
+    image: postgres:9.6
+    volumes:
+      - /var/lib/postgresql
+    command: "true"
+ 
+  postgresql:
+    restart: always
+    build: ./postgresql
+    volumes_from:
+      - data
+    expose:
+      - "5432"

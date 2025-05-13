@@ -1,0 +1,24 @@
+zambon commented on 1 Dec 2015
+Using the configuration file below (example.yml) as an example, I'm trying to have the run command start the linked services, which should be the default behaviour.
+db:
+  image: redis
+os:
+  image: busybox
+  command: /bin/sh -c 'sleep 2 && (printf "PING\r\n"; sleep 1) | nc compose_db_1 6379'
+Compose works as expected with the up command, as shown below.
+Command:
+$ docker-compose --x-networking -p compose -f example.yml up
+Output:
+...
+db_1 | 1:M 30 Nov 18:59:13.498 * The server is now ready to accept connections on port 6379
+os_1 | +PONG
+compose_os_1 exited with code 0
+...
+Now, using the run command, it doesn't work as expected.
+Command:
+docker-compose --x-networking -p compose -f example.yml \
+  run --rm os /bin/sh -c 'sleep 2 && (printf "PING\r\n"; sleep 1) | nc compose_db_1 6379'
+Output:
+nc: bad address 'compose_db_1'
+The db service is never started, therefore os cannot find it. Am I missing anything?
+Thanks!

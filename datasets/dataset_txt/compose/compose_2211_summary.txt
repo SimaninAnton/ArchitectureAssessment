@@ -1,0 +1,1 @@
+Force Compose to use a specific Docker binary

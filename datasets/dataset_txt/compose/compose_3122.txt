@@ -1,0 +1,13 @@
+arun-gupta commented on 9 Nov 2015
+Started an application using https://github.com/arun-gupta/docker-images/blob/master/wildfly-mysql-javaee7/docker-compose.yml as:
+docker-compose --x-networking up -d
+Creating network "wildflymysqljavaee7" with driver "None"
+Creating wildflymysqljavaee7_mywildfly_1
+Creating db
+docker-compose --x-networking up -d
+Creating network "wildflymysqljavaee7" with driver "None"
+Creating wildflymysqljavaee7_mywildfly_1
+Creating db
+Compose creates a bridge network (related to #2345). Stopping and removing the application remove the network as well.
+docker-compose --x-networking stop has no effect as well.
+Good thing is the network is not created with every invocation of docker compose up -d.

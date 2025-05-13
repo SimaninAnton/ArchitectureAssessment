@@ -1,0 +1,27 @@
+yank1 commented on 17 May 2016 •
+edited
+Compose + Swarm + Port Mapping error
+Environment: One node swarm.
+Step 1
+redis: 
+  image: daocloud.io/redis:3
+  ports: 
+    - "6378:6379"
+  restart: unless-stopped 
+docker-compose up
+everythink ok.
+Step 2
+redis: 
+  image: daocloud.io/redis:2
+  ports: 
+    - "6378:6379"
+  restart: unless-stopped 
+docker-compose up
+Error Message.
+2016-05-17 17:00:04   Recreating 01a75d7735a8_redis_redis_1
+2016-05-17 17:00:04  
+2016-05-17 17:00:04   ERROR: for redis  Unable to find a node that satisfies the following conditions 
+2016-05-17 17:00:04   [port 6378 (Bridge mode)]
+2016-05-17 17:00:04
+I know it's due to swarm issue but the compose+swarm cannot work in the upgrade image case.
+3

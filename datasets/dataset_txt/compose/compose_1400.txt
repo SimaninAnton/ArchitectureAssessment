@@ -1,0 +1,2 @@
+fsateler commented on 8 Jun 2017
+When running docker-compose run --rm $service $cmd, the expectation is that the container will be terminated when docker-compose terminates. If docker-compose terminates due to SIGHUP (which can happen for example when docker-compose is run in a remote server and the ssh connection is terminated), it will leave the container running. It should stop and remove (if --rm was passed) the container.

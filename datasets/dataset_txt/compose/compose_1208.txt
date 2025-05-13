@@ -1,0 +1,47 @@
+ghost commented on 14 Sep 2017
+I am using docker-engine 1.7 in El6.
+# docker version
+Client version: 1.7.0
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 0baf609
+OS/Arch (client): linux/amd64
+Server version: 1.7.0
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 0baf609
+OS/Arch (server): linux/amd64
+Installed docker-compose with
+curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+compose details:
+# docker-compose version
+docker-compose version 1.16.1, build 6d1ac21
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+docker-engine details
+# rpm -qa |grep -i docker
+docker-engine-1.7.0-1.el6.x86_64
+Getting this error while using docker-compose:
+# docker-compose up
+ERROR: client and server don't have same version (client API version: 1.22, server API version: 1.19)
+When I tried to use the workaround:
+export COMPOSE_API_VERSION=1.19
+Getting the error
+# docker-compose up
+/tmp/_MEIWqVCub/docker/api/client.py:161: UserWarning: The minimum API version supported is 1.21, but you are using version 1.19. It is recommended you either upgrade Docker Engine or use an older version of Docker SDK for Python.
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "compose/cli/main.py", line 938, in up
+  File "compose/project.py", line 419, in up
+  File "compose/project.py", line 468, in initialize
+  File "compose/network.py", line 257, in initialize
+  File "compose/network.py", line 61, in ensure
+  File "compose/network.py", line 93, in inspect
+  File "site-packages/docker/utils/decorators.py", line 31, in wrapper
+docker.errors.InvalidVersion: inspect_network is not available for version < 1.21
+Failed to execute script docker-compose
+No idea how to proceed further as this is the latest version available for el6.

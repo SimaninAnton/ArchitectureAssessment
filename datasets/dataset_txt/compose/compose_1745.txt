@@ -1,0 +1,4 @@
+jasonsoft commented on 29 Jan 2017
+Can we create service hostname in docker-compose file? I use the "docker stack deploy" command with compose file.
+https://github.com/docker/docker/blob/master/docs/reference/commandline/service_create.md#create-services-using-templates
+1

@@ -1,0 +1,4 @@
+freewil commented on 7 Aug 2014
+This may be an issue with docker, but when specifying a path that is a symlink to a directory with a Dockerfile using build in fig.yml.
+Building box7...
+Can't build a directory with no Dockerfile

@@ -1,0 +1,1 @@
+how can we define --memory-swap in docker-compose.yml?

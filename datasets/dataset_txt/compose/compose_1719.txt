@@ -1,0 +1,29 @@
+huanyu-liao commented on 7 Feb 2017
+I type the following command to start a docker compose file, and get the following error
+docker-compose up
+Traceback (most recent call last):
+File "/Users/leo/anaconda/bin/docker-compose", line 7, in
+from compose.cli.main import main
+File "/Users/leo/anaconda/lib/python2.7/site-packages/compose/cli/main.py", line 17, in
+from . import errors
+File "/Users/leo/anaconda/lib/python2.7/site-packages/compose/cli/errors.py", line 10, in
+from docker.errors import APIError
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/init.py", line 2, in
+from .api import APIClient
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/api/init.py", line 2, in
+from .client import APIClient
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/api/client.py", line 11, in
+from .build import BuildApiMixin
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/api/build.py", line 9, in
+from .. import utils
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/utils/init.py", line 2, in
+from .utils import (
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/utils/utils.py", line 19, in
+from .. import tls
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/tls.py", line 5, in
+from .transport import SSLAdapter
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/transport/init.py", line 3, in
+from .ssladapter import SSLAdapter
+File "/Users/leo/anaconda/lib/python2.7/site-packages/docker/transport/ssladapter.py", line 21, in
+from backports.ssl_match_hostname import match_hostname
+ImportError: No module named ssl_match_hostname

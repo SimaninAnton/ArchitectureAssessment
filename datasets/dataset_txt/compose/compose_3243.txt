@@ -1,0 +1,3 @@
+Contributor
+mnowster commented on 2 Oct 2015
+Due to us now using splitdrive in split_path_mapping it reads the .: as a drive, rather than a relative path.

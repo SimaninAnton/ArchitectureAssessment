@@ -1,0 +1,7 @@
+Contributor
+dave-tucker commented on 10 Aug 2016
+Only one test fails:
+compose/tests/unit/cli/errors_test.py
+Line 35 in 2812014
+ assert "Couldn't connect to Docker daemon at" in args[0] 
+This is probably a side effect of #3689

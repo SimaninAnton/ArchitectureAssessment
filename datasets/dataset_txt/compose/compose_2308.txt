@@ -1,0 +1,89 @@
+mj-nowak commented on 13 Jun 2016
+When attempting to run docker-compose up for the first time on a machine with about 30 services I am receiving this error:
+==> default: ERROR: for integrate-resourcepermissions  UnixHTTPConnectionPool(host='localhost', port=None): Pool is closed.
+==> default:
+==> default: ERROR: for integrate-roles  UnixHTTPConnectionPool(host='localhost', port=None): Pool is closed.
+==> default: Traceback (most recent call last):
+==> default:   File "/usr/bin/docker-compose", line 9, in <module>
+==> default:     load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+==> default:   File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 58, in main
+==> default:     command()
+==> default:   File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 109, in perform_command
+==> default:     handler(command, command_options)
+==> default:   File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 734, in up
+==> default:     remove_orphans=remove_orphans)
+==> default:   File "/usr/lib/python2.7/site-packages/compose/project.py", line 398, in up
+==> default:     get_deps
+==> default:   File "/usr/lib/python2.7/site-packages/compose/parallel.py", line 60, in parallel_execute
+==> default:     raise error_to_reraise
+==> default: requests.packages.urllib3.exceptions.ClosedPoolError: UnixHTTPConnectionPool(host='localhost', port=None): Pool is closed.
+Seems to only happen on the initial creation, if I rerun the command the error does not occur, but if I delete the containers and images and run again, the error occurs. Does not happen 100% of the time but more likely then not it fails.
+uname -a
+Linux mnowak 3.10.0-327.18.2.el7.x86_64 #1 SMP Thu May 12 11:03:55 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+docker info
+Linux mnowak 3.10.0-327.18.2.el7.x86_64 #1 SMP Thu May 12 11:03:55 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+[root@mnowak ~]# ^C
+[root@mnowak ~]# docker info
+Containers: 40
+ Running: 40
+ Paused: 0
+ Stopped: 0
+Images: 40
+Server Version: 1.11.1
+Storage Driver: devicemapper
+ Pool Name: docker-thinpool
+ Pool Blocksize: 524.3 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
+ Data file:
+ Metadata file:
+ Data Space Used: 12.95 GB
+ Data Space Total: 40.8 GB
+ Data Space Available: 27.85 GB
+ Metadata Space Used: 7.664 MB
+ Metadata Space Total: 427.8 MB
+ Metadata Space Available: 420.2 MB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Library Version: 1.02.107-RHEL7 (2015-12-01)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: null host bridge
+Kernel Version: 3.10.0-327.18.2.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 5.671 GiB
+Name: mnowak
+ID: LLH4:TRW5:AQN6:DTVW:GNRD:ARXF:JPVX:EX2L:B2UP:OO25:PTGP:YV4Y
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Registry: https://index.docker.io/v1/
+docker version
+Client:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Wed Apr 27 00:34:42 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Wed Apr 27 00:34:42 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.7.1, build 6c29830
+docker-py version: 1.8.1
+CPython version: 2.7.5
+OpenSSL version: OpenSSL 1.0.1e-fips 11 Feb 2013
+3

@@ -1,0 +1,21 @@
+erikj commented on 27 Oct 2017
+When a Dockerfile in a build block is a valid symlink to a valid file, docker-compose build is not able to find it:
+docker-compose.yml:
+version: '2'
+services:
+  app:
+    build:
+      context: docker/app
+ls -l docker/app/
+total 8
+lrwxr-xr-x  1 ej  1342  40 Oct 26 12:41 Dockerfile@ -> ../../eol_xras_aux/docker/app/Dockerfile
+cat docker/app/Dockerfile
+# ... content of ../../eol_xras_aux/docker/app/Dockerfile
+docker-compose build
+Building app
+ERROR: Cannot locate specified Dockerfile: Dockerfile
+Same behavior when using full path for symlink
+ls -l docker/app/
+total 8
+lrwxr-xr-x  1 ej  1342  76 Oct 26 13:07 Dockerfile@ -> /Users/ej/Dropbox/NCAR/presto/xras_submit/eol_xras_aux/docker/app/Dockerfile
+Same behavior w/ 1.14.0, 1.16.1 and 1.17.0-rc1, all on Darwin, as well as Compose-file format versions 2 => 3.2.

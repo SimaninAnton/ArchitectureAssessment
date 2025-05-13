@@ -1,0 +1,14 @@
+davidcurrie commented on 9 Feb 2016
+This is a variant of #2551 which has now been closed because it is possible for a container to ping itself using its container name based hostname. The issue I have is that the container itself still doesn't know what that name is!
+I have a product where, on startup, process B is required to register itself with process A and then, at some point later, process A is going to call back to process B. By default, process B registers with its local hostname but its smart enough to know that this is not always going to be resolvable by A so the hostname that it should register with can be overriden on startup.
+Given the decision that containers should be allocated hostnames on the overlay network based on container name rather than hostname (the rationale for which I've not found in writing anywhere) in the non-Compose scenario I have the following options:
+Set the hostname and container name to be the same
+Set the container name and pass that as a variable on container startup so that process B knows to register with this instead
+Neither of these options is available with Compose if I want to be able to scale the number of instances of process B. Just making the container name available inside the container would be one option (#1503) but there are also other possibilities. Providing an option to have compose set the hostname to be the container name being another one.
+My preference would be to have a variable available for use in the yml that represents the generated container name for a service instance. You then have choice whether to set the hostname e.g.
+processB:
+ hostname: ${CONTAINER_NAME}
+or pass it through to the container:
+processB:
+ environment:
+  - MY_VAR=${CONTAINER_NAME}

@@ -1,0 +1,80 @@
+ebr commented on 27 Feb 2016
+Issue
+It appears that the network_mode option only works when only one compose file is used, with no concatenation or extension. (Or perhaps the compose documentation is unclear on correct usage).
+Setup
+docker-compose.yml:
+version: '2'
+services:
+  redis:
+    image: redis
+    network_mode: "bridge"
+  app:
+    image: registry/app:latest
+    env_file: .env
+    network_mode: "bridge"
+dc-mapped.yml:
+version: '2'
+services:
+  redis:
+    extends:
+      file: docker-compose.yml
+      service: redis
+  app:
+    extends:
+      file: docker-compose.yml
+      service: app
+    volumes:
+      - .:/opt/app
+    links:
+      - redis
+    depends_on: 
+      - redis
+Run with the extending compose file
+$ docker-compose -f dc-mapped.yml up
+...
+$ docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "f31553121a0f685f2aff35a5831ee884d932ee2293b6dc87fdbb9f8f1db976a8",
+        "Scope": "local",
+        "Driver": "bridge",
+        ....
+        "Containers": {},
+        ....
+    }
+]
+But, run with the main compose file
+$ docker-compose -f docker-compose.yml up
+...
+$ docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "f31553121a0f685f2aff35a5831ee884d932ee2293b6dc87fdbb9f8f1db976a8",
+        "Scope": "local",
+        "Driver": "bridge",
+        ....
+        "Containers": {
+            "7ab09300580c7d0b8c4250fbeaa1c666f14a41db4565b360630de29a9224832b": {
+                "Name": "myapp_app_1",
+                "EndpointID": "17eeddf3a6cfa9e556bfbd0eebd53613acc92658f6461a6af73a70ebd56d2fb6",
+                "MacAddress": "02:42:ac:11:00:02",
+                "IPv4Address": "172.17.0.2/16",
+                "IPv6Address": ""
+            },
+            "dfa3ffeafd828537e0c8e9448a9cb94f582e9c30a382a90fa9c995f557580026": {
+                "Name": myapp_redis_1",
+                "EndpointID": "4773093e5e73d13ccd234ba46cf64ad9bc91ccfac7a0f2d5ef7fbcad283f03ec",
+                "MacAddress": "02:42:ac:11:00:03",
+                "IPv4Address": "172.17.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        ....
+    }
+]
+Further tests
+specifying network_mode in the extending compose file has no effect (containers do not attach to bridge network)
+same as above, but also removing network_mode from master compose file has no effect
+removing extends and passing both files to docker-compose (whether either or both of the files contains network_mode) has no effect

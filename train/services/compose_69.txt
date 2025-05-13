@@ -1,0 +1,56 @@
+Derkades commented on 3 Nov 2019
+Description of the issue
+According to Compose file version 2 reference, version 2.4 is supported on docker 17.12.0+. I am using version 19.03.4 and I can use version 2.3 but not 2.4.
+I had to use version 2.4 because, even though the docs say that long syntax for mounts is supported on 2.3+, the docker-compose output didn't agree. I need to use version 2 because #4513
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.17.1, build unknown
+docker-py version: 2.5.1
+CPython version: 2.7.15+
+OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.4
+ API version:       1.40
+ Go version:        go1.12.10
+ Git commit:        9013bf583a
+ Built:             Fri Oct 18 15:54:09 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.4
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.10
+  Git commit:       9013bf583a
+  Built:            Fri Oct 18 15:52:40 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+ERROR: Version in "./docker-compose.yaml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify a supported version (e.g "2.2" or "3.3") and place your service definitions under the `services` key, or omit the `version` key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+Steps to reproduce the issue
+Create docker-compose.yaml file with version set to 2.4
+Run docker-compose up -d
+Stacktrace / full error message
+ERROR: Version in "./docker-compose.yaml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify r the `services` key, or omit the `version` key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+Additional information
+Running on Ubuntu 18.04
+docker-compose.yaml:
+version: '2.4'
+networks:
+  ...
+services:
+  ...

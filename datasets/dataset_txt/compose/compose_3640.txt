@@ -1,0 +1,5 @@
+Contributor
+aanand commented on 18 May 2015
+Following @moxiegirl's recommendations in #1356 (comment):
+include an Upgrade Compose section in the compose release notes with instructions
+add an Upgrade Compose section to the installation docs

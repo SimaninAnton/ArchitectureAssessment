@@ -1,0 +1,31 @@
+iskyd commented on 19 Feb 2016
+Hi, I have set up two containers db and web app and now i'm trying to run it using docker-compose.
+This is my docker-compose.yml
+db:
+    image: mysql:latest
+    ports:
+    - "3309:3306"
+    volumes:
+        - /home/mattia/docker/data/mysql
+magento:
+    image: eone/magento
+    ports:
+        - "8001:80"
+    links:
+        - db
+    command:
+        bash -c "/sbin/virtualhost.sh create magento.docker /var/www/magento && /sbin/magento-setup.sh && apache2ctl -DFOREGROUND"
+    volumes:
+        - /home/mattia/docker/data/magento
+I omitted all env vars for better reading.
+The containers starts and works right, but i have a problem with data-persist.
+I created a two folders /home/mattia/docker/data/magento /home/mattia/docker/data/mysql and give them 777 permission.
+Now i try to create some db or apply some modify to web app but neither containers persist data on volumes.
+If i for example inspect mysql container i get :
+"Volumes": {
+            "/home/mattia/docker/data/mysql": {},
+            "/var/lib/mysql": {}
+        },
+If i run the containers using docker run and specify -v /home/mattia/docker/data/path the containers seems to persist data correctly.
+So where i'm wrong?
+Thanks in advance.

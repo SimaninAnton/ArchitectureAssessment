@@ -1,0 +1,1 @@
+"docker-compose run -T" inconsistently outputs stdout / stderr?

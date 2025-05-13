@@ -1,0 +1,16 @@
+MrMMorris commented on 20 Feb 2015
+So I have a docker-compose.yml that looks like this:
+mongo:
+    image: mongo:2.6
+    command: "--smallfiles"
+    volumes_from: data
+    restart: always
+    mem_limit: 100MB
+
+data:
+    image: mongo:2.6
+    volumes: /data/db
+When I run docker-compose up, I get this:
+Service "mongo" mounts volumes from "d", which is not the name of a service or container.
+Version: 1.1.0-rc2
+Queh?

@@ -1,0 +1,2 @@
+jamshid commented on 20 Apr 2016
+I'm surprised docker-compose 1.7.0 does not support the "docker run -v ..." option. I expect to be able to create and use volumes, e.g. docker-compose run -v ./Pictures:/var/source <service> .... Is this planned or not a supported use case?

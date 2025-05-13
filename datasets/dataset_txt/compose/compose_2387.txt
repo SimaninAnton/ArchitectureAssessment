@@ -1,0 +1,88 @@
+MaerF0x0 commented on 18 May 2016 •
+edited
+A docker-compose.yml file that references itself in the external_links section will result in an infinite loop/eventual timeout and also seems to take down docker ( docker ps works before, docker ps doesnt after) . A confounding factor maybe that I'm running via dinghy.
+docker-compose.yml:
+myservice:
+  image: alpine:latest
+  command: tail /dev/urandom
+  external_links:
+    - myservice_myservice_1:myservice
+docker-compose --verbose up -d:
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: Found 'auths' section
+compose.cli.command.get_client: docker-compose version 1.7.1, build unknown
+docker-py version: 1.8.1
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 0.9.8zg 14 July 2015
+compose.cli.command.get_client: Docker base_url: https://192.168.99.100:2376
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.8-boot2docker, Os=linux, BuildTime=2016-04-27T00:34:20.887998399+00:00, ApiVersion=1.23, Version=1.11.1, GitCommit=5604cbe, Arch=amd64, GoVersion=go1.5.4
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=myservice', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=myservice', u'com.docker.compose.service=myservice', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'8e0360f64cc2f77999f201235802d72a153614f93a5d2f0237ff2824b283002d')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'/dev/urandom'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'tail', u'/dev/urandom'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+             u'Hostname': u'8e0360f64cc2',
+...
+// Lots more logs
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+... repeat until timeout
+took me a while to figure it out, happened because I copied and pasted the service from another file and forgot to change the external_links: section.
+Environment info:
+ $ dc version
+docker-compose version 1.7.1, build unknown
+docker-py version: 1.8.1
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 0.9.8zg 14 July 2015
+$ docker info
+Containers: 18
+ Running: 11
+ Paused: 0
+ Stopped: 7
+Images: 38
+Server Version: 1.11.1
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 149
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge null host
+Kernel Version: 4.4.8-boot2docker
+Operating System: Boot2Docker 1.11.1 (TCL 7.0); HEAD : 7954f54 - Wed Apr 27 16:36:45 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 3.858 GiB
+Name: dinghy
+ID: <redacted>
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug mode (client): false
+Debug mode (server): true
+ File Descriptors: 47
+ Goroutines: 101
+ System Time: 2016-05-18T20:33:16.218516809Z
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox

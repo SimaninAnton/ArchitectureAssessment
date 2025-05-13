@@ -1,0 +1,1 @@
+containers stop during docker upgrade even if live-restore option is enabled

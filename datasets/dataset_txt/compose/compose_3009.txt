@@ -1,0 +1,43 @@
+kenhuang commented on 7 Dec 2015
+Hi:
+We found that 1.5.1 docker-compose with swarm not able to pull private image with using "docker.io/myrepo/my-app" image name pattern, I had tested using public image is working fine.
+Here is how we can replicate this issue, the following docker pull command showing all configuration is setup correctly for swarm to use private image, I am able to pull image manually with the command:
+$ docker pull docker.io/myrepo/my-app
+Using default tag: latest
+ip-1: Pulling docker.io/myrepo/my-app:latest... : downloaded
+ip-2: Pulling docker.io/myrepo/my-appp:latest... : downloaded
+ip-3: Pulling docker.io/myrepo/my-app:latest... : downloaded
+$ docker-compose pull blue
+Pulling blue (docker.io/yrepo/my-app:latest)...
+ip-1: Pulling docker.io/myrepo/my-app:latest... : Error: image myrepo/my-app:latest not found
+ip-2: Pulling docker.io/myrepo/my-app:latest... : Error: image myrepo/my-app:latest not found
+ip-3: Pulling docker.io/myrepo/my-app:latest... : Error: image yrepo/my-app:latest not found
+my docker-compse.yml:
+blue:
+ports:
+- 8080
+image: "docker.io/myrepo/my-app"
+here is the docker deamo log from one of the host node(/var/log/upstart/docker.log), seems normal with no error log:
+INFO[8995] POST /v1.15/images/create?fromImage=docker.io%2Fmyrepo%2Fmy-app%3Alatest
+$ docker version
+Client:
+Version: 1.9.1
+API version: 1.21
+Go version: go1.4.2
+Git commit: a34a1d5
+Built: Fri Nov 20 13:12:04 UTC 2015
+OS/Arch: linux/amd64
+Server:
+Version: swarm/1.0.0
+API version: 1.21
+Go version: go1.5.1
+Git commit: 087e245
+Built:
+OS/Arch: linux/amd64
+$ docker-compose version
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Regards
+Ken

@@ -1,0 +1,1 @@
+Output missing with container in TTY mode

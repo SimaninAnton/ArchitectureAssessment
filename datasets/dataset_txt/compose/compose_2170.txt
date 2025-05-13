@@ -1,0 +1,34 @@
+tlvince commented on 5 Aug 2016 •
+edited
+Given the following docker-compose.yml file:
+version: '2'
+services:
+  example:
+    build: .
+    image: example
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5984:5984'
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-west-1
+        awslogs-group: example
+        awslogs-stream: example
+… docker-compose returns:
+ERROR: for example  Cannot start service example: b'Failed to initialize logging driver: ResourceNotFoundException: The specified log group does not exist.\n\tstatus code: 400, request id: f7c750dd-5b1e-11e6-af27-fd40cd61baf0'
+ERROR: Encountered errors while bringing up the project.
+However, if I run the same thing with docker like the following:
+docker run \
+  --log-driver awslogs \
+  --log-opt awslogs-region=eu-west-1 \
+  --log-opt awslogs-group=example \
+  --log-opt awslogs-stream=example \
+  --env-file .env \
+  -p 5984:5984 \
+  example_example:latest
+… the service starts as expected and logs appear in CloudWatch. It appears that logging.options aren't passed through?
+docker-compose version 1.8.0, build 94f7016
+docker version 1.12.0, build 8eab29e

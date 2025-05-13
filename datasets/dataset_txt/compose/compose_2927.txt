@@ -1,0 +1,5 @@
+aknuds1 commented on 13 Jan 2016
+I would like to be able to refer to OS environment variables when defining environment variables in the environment section. The reason is that different Docker images may use environment variables whose names conflict with each other, and then the form of supplying only the environment variable name (which leads to expanding the corresponding environment variable in the OS) is a bad idea.
+An example of what I want:
+environment:
+  - SESSION_SECRET=${MY_SESSION_SECRET}

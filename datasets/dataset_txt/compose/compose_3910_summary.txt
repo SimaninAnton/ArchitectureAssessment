@@ -1,0 +1,1 @@
+Fig fails to start openssh container - works with 'docker run'

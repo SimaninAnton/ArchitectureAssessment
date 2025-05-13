@@ -1,0 +1,1 @@
+up commands exits with code 0 instead of staying open

@@ -1,0 +1,34 @@
+alexandrev commented on 14 Sep 2015
+First of all, I want to apologize because I don't know if this is a bug or a misconfiguration on my side, but I tried to look for this problem but I don't have any response back.
+I'm trying to use the docker-compose in Windows. I'm trying the pull request #1957 and I'm getting this error when I try to run an up command:
+jsonschema.exceptions.RefResolutionError: <urlopen error [Error 2] The system cannot find the file specified: u'\fields_schema.json'>
+This is the full stacktrace I'm getting:
+Traceback (most recent call last):
+File "", line 3, in
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.cli.main", line 51, in main
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.cli.docopt_command", line 23, in sys_dispa
+tch
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.cli.command", line 32, in dispatch
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.cli.docopt_command", line 26, in dispatch
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.cli.main", line 146, in perform_command
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.cli.command", line 62, in perform_command
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.cli.command", line 83, in get_project
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.config.config", line 153, in load
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.config.config", line 187, in make_service_
+dict
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.config.validation", line 224, in validate_
+against_service_schema
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\compose.config.validation", line 237, in _validate
+_against_schema
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\jsonschema.validators", line 98, in iter_errors
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\jsonschema._validators", line 320, in allOf_draft4
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\jsonschema.validators", line 114, in descend
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\jsonschema.validators", line 98, in iter_errors
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\jsonschema.validators", line 199, in ref
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\jsonschema.validators", line 336, in resolve
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\functools32.functools32", line 400, in wrapper
+File "D:\Projects\GitHub\compose\build\docker-compose\out00-PYZ.pyz\jsonschema.validators", line 346, in resolve_from
+url
+jsonschema.exceptions.RefResolutionError: <urlopen error [Error 2] The system cannot find the file specified: u'\fields
+_schema.json'>
+Thanks in advance and sorry if this is not a real bug :(

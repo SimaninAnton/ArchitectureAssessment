@@ -1,0 +1,7 @@
+Contributor
+benlangfeld commented on 10 Sep 2014
+Some of the containers in my project require sensitive data (such as 3rd party API tokens) to be passed as environment variables. I understand that I can enumerate these without values in my fig.yml to be picked up from the host environment, but then I still need some way to get them there, meaning one of:
+Passing these on every fig invocation (unacceptable due to the repetition), or
+Yet another script to wrap fig and load these environment variables from disk.
+Docker already provides support for loading a container environment from disk in the --env-file option to docker run. It would be nice if fig exposed this as environment_file as a parallel to the current environment option.
+I'd be happy to submit a PR for this, but in order to do so I would need pointing in the right direction by someone who actually knows Python. I figure the implementation would likely be as easy as extending this constant and that I'd probably need a test similar to this one. Am I on the right track so far?

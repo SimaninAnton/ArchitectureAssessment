@@ -1,0 +1,79 @@
+nazar-pc commented on 19 Dec 2015
+# docker-compose.yml
+busybox:
+  image: busybox
+$ docker-compose up -d
+Creating data_busybox_1
+$ docker-compose ps
+     Name        Command   State    Ports 
+-----------------------------------------
+data_busybox_1   sh        Exit 0         
+$ docker-compose scale busybox=5
+Starting data_busybox_1 ... done
+Creating and starting 2 ... done
+Creating and starting 3 ... done
+Creating and starting 4 ... done
+Creating and starting 5 ... done
+Removing data_busybox_5 ... done
+Removing data_busybox_4 ... done
+Removing data_busybox_2 ... done
+Removing data_busybox_3 ... done
+Removing data_busybox_1 ... done
+$ docker-compose ps
+Name   Command   State   Ports 
+------------------------------
+$ docker-compose scale busybox=5
+Creating and starting 1 ... done
+Creating and starting 2 ... done
+Creating and starting 3 ... done
+Creating and starting 4 ... done
+Creating and starting 5 ... done
+Removing data_busybox_3 ... done
+Removing data_busybox_2 ... done
+Removing data_busybox_5 ... done
+Removing data_busybox_4 ... done
+Removing data_busybox_1 ... done
+$ docker-compose ps
+Name   Command   State   Ports 
+------------------------------
+I do not understand why containers are removed, I've specified to scale to 5 instances, but it removed even first one.
+I'm aware that containers are stopped, they might be just data containers in Swarm cluster, they should not be removed in such cases!
+docker version
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:20:08 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.2
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 13:20:08 UTC 2015
+ OS/Arch:      linux/amd64
+docker info
+Containers: 10
+Images: 321
+Server Version: 1.9.1
+Storage Driver: btrfs
+ Build Version: Btrfs v4.0
+ Library Version: 101
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 4.4.0-rc5-haswell
+Operating System: Ubuntu 16.04 (containerized)
+CPUs: 8
+Total Memory: 15.59 GiB
+Name: nazar-pc
+ID: ***
+WARNING: No swap limit support
+docker-compose version
+docker-compose version 1.5.2, build 7240ff3
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+uname -a
+Linux nazar-pc 4.4.0-rc5-haswell #1 SMP Mon Dec 14 03:22:43 CET 2015 x86_64 x86_64 x86_64 GNU/Linux

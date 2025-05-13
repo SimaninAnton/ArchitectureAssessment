@@ -1,0 +1,19 @@
+hodiapa commented on 24 Mar 2016
+I have following dockerfile with following image name "deleteHelloworld_cpp:v1:"
+services: 
+  service1: 
+    build: "."
+    image: "deleteHelloworld_cpp:v1"
+    expose:
+      - "8083"
+    ports: 
+      - "8083:8083"
+version: "2"
+This causes:
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+but then if I change the image name to lowercase it works perfectly fine.
+Version Details:
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.6
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014

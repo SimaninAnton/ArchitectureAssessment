@@ -1,0 +1,7 @@
+nicodmf commented on 7 Jun 2015
+Same problem than #152
+Recently, I have encountered problems when using fig build due to my build relying on cached, outdated Docker images. In order to get the build to work, I'm forced to alter the Dockerfile trivially in some way to invalidate the cache. This seems like an annoying workaround.
+Since the importance of this tool is to allow agnostic deployment, it's pretty crucial to be able to follow exactly the same build steps on different machines. If two machines have different caches, they will no longer build in the same way (to my limited understanding) and the value is lost somewhat.
+Adding a --clear-cache flag that causes a container to be built from scratch, ignoring the cache, would be useful to avoid this problem. I don't know how easy/difficult it would be to implement, however.
+@cameronmaske can probably add more to this discussion.
+@bfirsh very important in my situation and a solution : 47bbc35 but not save in the last compose

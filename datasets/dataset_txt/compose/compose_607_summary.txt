@@ -1,0 +1,1 @@
+docker-compose build error due to empty tag: ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.

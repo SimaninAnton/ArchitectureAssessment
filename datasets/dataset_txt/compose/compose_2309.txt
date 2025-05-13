@@ -1,0 +1,12 @@
+awasilyev commented on 12 Jun 2016
+It will be very useful to have a flag enabling setting hostname equal to container name.
+Here is my case:
+I am trying to launch rabbitmq cluster with scaling and overlay multihost network.
+For successful cluster startup each node should be able to ping each other by hostname.
+When I using compose scale - each node get id-based hostname, but this hostname is not resolvable by other nodes. And I can't find a way to get container name inside container, to set hostname during startup process.
+something like
+if ('hostname' not in container_options):
+container_options['hostname'] = container_options['name']
+in the _get_container_create_options helps me.
+Or maybe any other, easier way?
+40

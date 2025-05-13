@@ -1,0 +1,46 @@
+niroowns commented on 9 Jun 2016 •
+edited by shin-
+Hi,
+I am using docker-compose v2 as such (edited for readability):
+version: '2'
+services:
+  12345:
+    image: yyyy/xxxx/12345
+    labels:
+      interlock.hostname: "aaaa"
+      interlock.domain: "bbbb"
+    ports:
+      - "8080"
+    restart: always
+    networks:
+     - center-network
+    environment:
+      - APP_OPTS=--mongo.address=12345-mongo
+      - JAVA_OPTS=-Xmx512m
+      - constraint:application==12345
+      - affinity:container!=/12345_*/
+  12345-mongo:
+    image: mongo:3.2
+    ports:
+      - "27017:27017"
+    networks:
+      - center-network
+    environment:
+      - constraint:application==12345
+    volumes:/data/db
+
+
+networks:
+    center-network:
+      driver: bridge
+When I run docker-compose scale 12345=2, I get the below errors:
+docker-compose up -d
+Creating network "12345-center-network" with driver "bridge"
+Creating 12345_1
+Creating 12345-mongo_1
+
+docker-compose scale 12345=2
+Creating and starting 2 ... error
+
+ERROR: for 2  network 12345-center-network not found
+Is docker-compose scale usable with networks?

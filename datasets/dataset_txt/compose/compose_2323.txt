@@ -1,0 +1,24 @@
+carolynvs commented on 7 Jun 2016
+Sometimes when tailing my logs using docker-compose logs -f a docker-compose error is dumped in the output. It doesn't stop the log tailing from continuing or anything, but it is confusing.
+I am using compose 1.7.1 and docker 1.11.1 and have seen this happen on both Windows and Mac.
+letsencrypt    | Reloading nginx configuration
+Exception in thread Thread-6:
+Traceback (most recent call last):
+  File "threading.py", line 801, in __bootstrap_inner
+  File "threading.py", line 754, in run
+  File "compose\cli\log_printer.py", line 190, in watch_events
+  File "compose\project.py", line 356, in events
+  File "compose\container.py", line 42, in from_id
+  File "site-packages\docker\utils\decorators.py", line 21, in wrapped
+  File "site-packages\docker\api\container.py", line 182, in inspect_container
+  File "site-packages\docker\client.py", line 161, in _result
+  File "site-packages\requests\models.py", line 812, in json
+  File "json\__init__.py", line 339, in loads
+  File "json\decoder.py", line 364, in decode
+  File "json\decoder.py", line 382, in raw_decode
+ValueError: No JSON object could be decoded
+
+letsencrypt    | nginx
+letsencrypt    | Starting the Let's Encrypt cron job
+letsencrypt    | crond: crond (busybox 1.24.2) started, log level 8
+Looks like this is triggered when one of the containers forces nginx to reload its configuration using docker kill --signal=HUP nginx.

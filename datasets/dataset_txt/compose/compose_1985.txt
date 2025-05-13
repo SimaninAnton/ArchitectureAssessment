@@ -1,0 +1,21 @@
+yashassai commented on 26 Oct 2016 •
+edited
+version: '2'
+services :
+hub:
+image: selenium/hub
+hostname: hub
+ports:
+- "4446:4444"
+environment:
+- no_proxy=localhost
+chrome:
+image: selenium/node-chrome-debug
+hostname: chrome
+links:
+- hub
+ports:
+- "5901:5900"
+environment:
+- HUB_PORT_4444_TCP_ADDR=hub
+- HUB_PORT_4444_TCP_PORT=4444

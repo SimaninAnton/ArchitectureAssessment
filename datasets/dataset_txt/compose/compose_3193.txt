@@ -1,0 +1,14 @@
+Contributor
+dnephin commented on 20 Oct 2015
+This epic covers a bunch of improvements we'd like to make to the logs command.
+default to not following (similar to docker logs) (#2187, #1549) in 1.7.0
+support -f, --follow (the current behaviour) to keep following log output in 1.7.0
+support --tail=<num> to only show a number of lines from the end of the log (#1083, #265) in 1.7.0
+-t, --timestamp to add timestamps to the logs (#2227 (comment)) in 1.7.0
+if a new container is started while logs is running, logs for that container should start to show up in the log stream (#1115) in 1.7.0
+if the log stream is done (the containers have stopped) logs should exit (#1866) in 1.7.0
+flush the buffer more frequently to deal with buffered output (#1060, #1549) Fixed in 1.5.1
+continue printing logs after the first SIGINT until all containers exit (or we get another SIGINT) (#592)
+--json output the raw json lines (#2156)
+#1866 includes a proposal for how to support many of these features
+1

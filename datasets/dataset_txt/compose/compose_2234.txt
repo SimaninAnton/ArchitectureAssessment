@@ -1,0 +1,21 @@
+pcgeek86 commented on 12 Jul 2016
+I'm not entirely sure if this should be considered a bug or a design enhancement, but here's the scenario:
+You create a docker-compose.yml file in an otherwise empty directory
+The contents of the file are below
+You run docker-compose up -d to launch in the background
+You run docker-compose scale redis=10
+You receive an error message about the container name being already taken
+version: '2'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+Now granted, I understand that a hard-coded container name was specified in the docker-compose.yml file, but shouldn't it still append a unique container number to the end of the container_name property? I guess I'm thinking of container_name being more like container_base_name rather than a singleton value.
+Any thoughts?
+Cheers,
+Trevor Sullivan
+Microsoft MVP: Cloud & Data Center Management
+https://trevorsullivan.net
+https://twitter.com/pcgeek86
+1

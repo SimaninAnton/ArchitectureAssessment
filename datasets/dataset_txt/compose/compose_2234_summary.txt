@@ -1,0 +1,1 @@
+Docker Compose can't scale containers with hard-coded name

@@ -1,0 +1,4 @@
+Richard-Mathie commented on 19 Jul 2016
+How do we set the service mode to global for a service when are using docker-compose bundle for docker 1.12.
+It seems there is no documentation on how/where to do this in the compose file. Is it even possible.
+5

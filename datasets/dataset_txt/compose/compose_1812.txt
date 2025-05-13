@@ -1,0 +1,54 @@
+jleetutorial commented on 7 Jan 2017 •
+edited
+When running docker-compose up, we get this error:
+ERROR: for dockerapp  Cannot create container for service dockerapp: Invalid bind mount spec "C:\\Users\\nidal\\dockerapp\\app:/app:rw": Invalid volume specification: 'C:\Users\nidal\dockerapp\app:/app:rw'
+�[31mERROR�[0m: Encountered errors while bringing up the project.
+The docker-compose file is attached below
+version: '2'
+services:
+  dockerapp:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+
+  redis:
+    image: redis:3.2.0
+We get the error both on Docker for Windows and Docker toolbox running on Windows.
+$ docker version
+Client:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      linux/amd64
+$ docker-compose version
+docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+$docker-compose --verbose config
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+networks: {}
+services:
+  dockerapp:
+    build:
+      context: C:\Users\nidal\dockerapp
+    ports:
+    - 5000:5000
+    volumes:
+    - C:\Users\nidal\dockerapp\app:/app:rw
+  redis:
+    image: redis:3.2.0
+version: '2.0'
+volumes: {}

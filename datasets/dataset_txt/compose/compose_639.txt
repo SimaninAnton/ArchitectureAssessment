@@ -1,0 +1,102 @@
+Qoyyuum commented on 5 Jun 2018 •
+edited
+Description of the issue
+Started when I wanted to boot up my docker container with docker-compose up -d and it suddenly gives an error for ModuleNotFoundError: No module named 'urllib3.packages.six'. I tried to install and upgrade several packages with:
+pip install -U websockets requests but nothing works.
+Steps to reproduce the issue
+Install bitnami_phabricator
+Run docker-compose up -d
+Observed result
+docker-compose -v
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.17.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 572, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2749, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2402, in load
+    return self.resolve()
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2408, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 17, in <module>
+    from . import errors
+  File "/usr/lib/python3.6/site-packages/compose/cli/errors.py", line 11, in <module>
+    from docker.errors import APIError
+  File "/usr/lib/python3.6/site-packages/docker/__init__.py", line 2, in <module>
+    from .api import APIClient
+  File "/usr/lib/python3.6/site-packages/docker/api/__init__.py", line 2, in <module>
+    from .client import APIClient
+  File "/usr/lib/python3.6/site-packages/docker/api/client.py", line 6, in <module>
+    import requests
+  File "/usr/lib/python3.6/site-packages/requests/__init__.py", line 43, in <module>
+    import urllib3
+  File "/usr/lib/python3.6/site-packages/urllib3/__init__.py", line 8, in <module>
+    from .connectionpool import (
+  File "/usr/lib/python3.6/site-packages/urllib3/connectionpool.py", line 11, in <module>
+    from .exceptions import (
+  File "/usr/lib/python3.6/site-packages/urllib3/exceptions.py", line 2, in <module>
+    from .packages.six.moves.http_client import (
+ModuleNotFoundError: No module named 'urllib3.packages.six'
+Expected result
+A working phabricator container launched and running
+Additional information
+System information:
+# uname -a
+Linux localhost.localdomain 4.16.12-200.fc27.x86_64 #1 SMP Fri May 25 21:10:16 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+Installed packages for docker:
+# rpm -qa | grep docker
+python3-docker-2.6.1-1.fc27.noarch
+docker-compose-1.17.1-1.fc27.noarch
+docker-ce-18.03.1.ce-1.fc27.x86_64
+python3-docker-pycreds-0.2.1-5.fc27.noarch
+python3-dockerpty-0.4.1-7.fc27.noarch
+My installed pips:
+# pip freeze
+asn1crypto==0.23.0
+bcrypt==3.1.4
+beautifulsoup4==4.6.0
+certifi==2018.4.16
+cffi==1.10.0
+chardet==3.0.4
+configobj==5.0.6
+contextlib2==0.5.5
+cryptography==2.0.2
+cssselect==0.9.2
+enum34==1.1.6
+Fabric==1.14.0
+gevent==1.3.2.post0
+gi==1.2
+greenlet==0.4.13
+html5lib==0.999999999
+idna==2.6
+ipaddress==1.0.18
+Jinja2==2.10
+lxml==4.1.1
+MarkupSafe==1.0
+olefile==0.45.1
+openxenmanager==0.1b1
+pandoc==1.0.2
+paramiko==2.3.2
+Pillow==4.3.0
+pipenv==2018.5.18
+ply==3.9
+pyasn1==0.3.7
+pycairo==1.15.3
+pycparser==2.14
+pycrypto==2.6.1
+pycurl==7.43.0
+pygobject==3.26.1
+PyNaCl==1.1.2
+pytz==2018.4
+raven==6.0.0
+requests==2.18.4
+six==1.11.0
+urllib3==1.22
+variety==0.6.9
+virtualenv==16.0.0
+virtualenv-clone==0.3.0
+webencodings==0.5.1
+websocket==0.2.1
+wxPython==3.0.2.0
+wxPython-common==3.0.2.0

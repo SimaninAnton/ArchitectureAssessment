@@ -1,0 +1,4 @@
+ailjushkin commented on 22 Apr 2015
+Subj.
+I want to set up normal timzone and time in my image.
+i can run it using docker run --timezone but the docker-compose says Unsupported config option for db service: 'timezone'

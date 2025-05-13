@@ -1,0 +1,1 @@
+Values for logging are not merged while using "extends"

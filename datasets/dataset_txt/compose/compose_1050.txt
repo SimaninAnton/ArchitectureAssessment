@@ -1,0 +1,13 @@
+chrissound commented on 29 Nov 2017
+sudo docker-compose images
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 11, in
+load_entry_point('docker-compose==1.17.1', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 68, in main
+command()
+File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 121, in perform_command
+handler(command, command_options)
+File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 517, in images
+repo_tags = image_config['RepoTags'][0].rsplit(':', 1)
+IndexError: list index out of range
+1

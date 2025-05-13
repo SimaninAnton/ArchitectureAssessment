@@ -1,0 +1,47 @@
+gionn commented on 4 Nov 2015
+This was my previously working docker-compose.yml:
+broker:
+  image: cloudesire/activemq
+  ports:
+    - "61616:61616"
+    - "8161:8161"
+pg:
+  image: postgres:9.3
+  ports:
+    - "5432:5432"
+  volumes:
+    - "/run/shm/pg:/var/lib/postgresql/data"
+mongo:
+  image: mongo:3.0
+  command: mongod --smallfiles
+  ports:
+    - "27017:27017"
+  volumes:
+    - "/run/shm/mongo:/data/db"
+Today I've upgraded to docker engine 1.9.0 and docker compose 1.5.0 and I am getting a very strange error on compose up:
+Creating cloudesire_broker_1
+ERROR: Could not find container for entity id 72845af4d9964d42eab55fd84c1a2cc25d7b32b8c587ed47b766d9a7a8fe5396
+docker.log contains:
+INFO[2253] GET /v1.19/images/cloudesire%2Factivemq/json 
+INFO[2253] POST /v1.19/containers/create?name=cloudesire_broker_1 
+ERRO[2253] Handler for POST /v1.19/containers/create returned error: Could not find container for entity id 72845af4d9964d42eab55fd84c1a2cc25d7b32b8c587ed47b766d9a7a8fe5396 
+ERRO[2253] HTTP Error                                    err=Could not find container for entity id 72845af4d9964d42eab55fd84c1a2cc25d7b32b8c587ed47b766d9a7a8fe5396 statusCode=500
+No container get created, however I can manually create the container without composer, e.g.:
+docker run -d -p "5432:5432" -v "/run/shm/pg:/var/lib/postgresql/data" postgres:9.3
+docker info
+Containers: 1
+Images: 37
+Server Version: 1.9.0
+Storage Driver: overlay
+ Backing Filesystem: extfs
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.19.0-31-generic
+Operating System: Ubuntu 14.04.3 LTS
+CPUs: 4
+Total Memory: 7.372 GiB
+Name: gt-xps
+ID: 2562:2TQM:TR3I:CDFJ:T6JP:WXBN:AV4F:LZYT:HIAX:ZFYC:MMWD:Q7AN
+Username: gionn
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support

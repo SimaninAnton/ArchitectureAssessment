@@ -1,0 +1,121 @@
+haf commented on 3 Jul 2015
+E.g.
+Compose version 1.3.1
+Docker base_url: http://172.17.8.100:2375
+Docker version: KernelVersion=4.0.5, Arch=amd64, ApiVersion=1.18, Version=1.6.2, GitCommit=7c8fca2-dirty, Os=linux, GoVersion=go1.4.2
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=heka', u'com.docker.compose.service=heka', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 1 items)
+Recreating heka_heka_1...
+docker stop <- (u'6db7f0825056efa25ac888849e4a678c7e3b8a300c07963f9743d8983431718d')
+docker stop -> None
+docker rename <- (u'6db7f0825056efa25ac888849e4a678c7e3b8a300c07963f9743d8983431718d', u'6db7f08250_heka_heka_1')
+docker rename -> None
+docker inspect_container <- (u'6db7f0825056efa25ac888849e4a678c7e3b8a300c07963f9743d8983431718d')
+docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'--config', u'/etc/hekad'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'hekad', u'--config', u'/etc/hekad'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+docker inspect_image <- ('haaf/heka:latest')
+docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'hekad', u'--config', u'/etc/hekad'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+...
+docker inspect_image <- ('haaf/heka:latest')
+docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'hekad', u'--config', u'/etc/hekad'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+...
+docker inspect_image <- (u'fc8c4377d0e824a3fa569b0f4e463a2f3751df3675fdb67671247b7fad0f0234')
+docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'hekad', u'--config', u'/etc/hekad'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+...
+docker create_container <- (name=u'heka_heka_1', image='haaf/heka:latest', labels={u'com.docker.compose.service': u'heka', 'com.docker.compose.config-hash': 'b784243e41cbc7418443f020fbe661dea6360f56309dbd656bf9ed62a2d60b3b', u'com.docker.compose.project': u'heka', 'com.docker.compose.version': u'1.3.1', u'com.docker.compose.oneoff': u'False', 'com.docker.compose.container-number': '1'}, host_config={'Links': [], 'PortBindings': {'4352/tcp': [{'HostPort': '', 'HostIp': ''}]}, 'Binds': [u'/Users/dev/logary/logary/examples/heka/hekad:/etc/hekad:rw'], 'ExtraHosts': [], 'LogConfig': {'Type': u'json-file', 'Config': {}}, 'VolumesFrom': []}, environment={u'affinity:container': u'=6db7f0825056efa25ac888849e4a678c7e3b8a300c07963f9743d8983431718d'}, volumes={u'/etc/hekad': {}}, detach=True, ports=['4352'])
+docker create_container -> {u'Id': u'edf843dc3b38490a3b6afe810c2604abb4662cf6a39c1124a75c044d48c00036',
+ u'Warnings': None}
+docker inspect_container <- (u'edf843dc3b38490a3b6afe810c2604abb4662cf6a39c1124a75c044d48c00036')
+docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'--config', u'/etc/hekad'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'hekad', u'--config', u'/etc/hekad'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+docker start <- (u'edf843dc3b38490a3b6afe810c2604abb4662cf6a39c1124a75c044d48c00036')
+docker start -> None
+docker remove_container <- (u'6db7f0825056efa25ac888849e4a678c7e3b8a300c07963f9743d8983431718d')
+docker remove_container -> None
+docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=heka', u'com.docker.compose.service=heka', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=False)
+docker containers -> (list with 1 items)
+Attaching to
+It's printed the error once out of a ~30 tries.
+But getting logs afterwards gives:
+$ docker-compose logs heka
+Attaching to heka_heka_1
+heka_1 | panic: assignment to entry in nil map
+heka_1 |
+heka_1 | goroutine 1 [running]:
+heka_1 | github.com/mozilla-services/heka/pipeline.(*PipelineConfig).LoadConfig(0xc208074400, 0x0, 0x0)
+heka_1 |    /usr/src/heka/build/heka/src/github.com/mozilla-services/heka/pipeline/config.go:715 +0x9c1
+heka_1 | main.loadFullConfig(0xc208074400, 0xc20802b210, 0x0, 0x0)
+heka_1 |    /usr/src/heka/build/heka/src/github.com/mozilla-services/heka/cmd/hekad/main.go:221 +0x504
+heka_1 | main.main()
+heka_1 |    /usr/src/heka/build/heka/src/github.com/mozilla-services/heka/cmd/hekad/main.go:188 +0x112a
+heka_1 |
+heka_1 | goroutine 2 [runnable]:
+heka_1 | runtime.forcegchelper()
+heka_1 |    /usr/src/go/src/runtime/proc.go:90
+heka_1 | runtime.goexit()
+heka_1 |    /usr/src/go/src/runtime/asm_amd64.s:2232 +0x1
+heka_1 |
+heka_1 | goroutine 3 [runnable]:
+heka_1 | runtime.bgsweep()
+heka_1 |    /usr/src/go/src/runtime/mgc0.go:82
+heka_1 | runtime.goexit()
+heka_1 |    /usr/src/go/src/runtime/asm_amd64.s:2232 +0x1
+heka_1 |
+heka_1 | goroutine 4 [runnable]:
+heka_1 | runtime.runfinq()
+heka_1 |    /usr/src/go/src/runtime/malloc.go:712
+heka_1 | runtime.goexit()
+heka_1 |    /usr/src/go/src/runtime/asm_amd64.s:2232 +0x1
+heka_1 |
+heka_1 | goroutine 5 [runnable]:
+heka_1 | os/signal.loop()
+heka_1 |    /usr/src/go/src/os/signal/signal_unix.go:19
+heka_1 | created by os/signal.init·1
+heka_1 |    /usr/src/go/src/os/signal/signal_unix.go:27 +0x35

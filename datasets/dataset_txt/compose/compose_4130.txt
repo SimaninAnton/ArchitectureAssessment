@@ -1,0 +1,15 @@
+Contributor
+SvenDowideit commented on 1 Nov 2014
+I thought I'd try using fig insteam of my usual Makefile, and played with @crosbymichael 's dsh: https://github.com/SvenDowideit/dsh/tree/go-dockerclient
+it also hangs when setting the command: /bin/bash - i'm assuming that this is because you're not setting docker run -i to get stdin - I'm hoping you'll tell me there's a simple flag i didn't notice :)
+(but having fig sit there when I can see that the container existed almost instantly is probably not really what is intended either)
+[sven@t440s dsh]$ fig up
+Recreating dsh_dsh_1...
+Attaching to 
+
+
+^CGracefully stopping... (press Ctrl+C again to force)
+
+Aborting.
+[sven@t440s dsh]$ fig --version
+fig 1.0.0

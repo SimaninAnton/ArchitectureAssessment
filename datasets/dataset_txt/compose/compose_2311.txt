@@ -1,0 +1,55 @@
+darkn3rd commented on 11 Jun 2016
+SUMMARY
+This is weird issue, where docker compose recreates a container with a different name. It does not save and preserve the original container name. Should this new container name already be in use, such as CI server using docker-compose concurrently in two different directories with uniquely named containers, you'll get a traceback.
+STEPS
+$ pwd
+/opt/teamcity/work/59a62b32b135fdaf
+$ WORKAREA=${PWD: -16}
+$ NAME_DB=postgres_${WORKAREA}
+$ NAME_APP=bloodhound_${WORKAREA}
+$ #### START DATABASE
+$ NAME_DB=${NAME_DB} /usr/local/bin/docker-compose up -d database
+Creating postgres_59a62b32b135fdaf
+$ docker ps | grep -v NAMES | awk '{ print $NF }'
+postgres_59a62b32b135fdaf
+$ #### START APPLICATION
+$ NAME_APP=${NAME_APP}  /usr/local/bin/docker-compose up -d app
+Recreating postgres_59a62b32b135fdaf
+Creating bloodhound_59a62b32b135fdaf
+$ docker ps | grep -v NAMES | awk '{ print $NF }'
+bloodhound_59a62b32b135fdaf
+postgres
+CONFIGURATION
+docker-compose.yml
+version: '2'
+services:
+  database:
+    build: ${BUILD_PATH}/postgres
+    container_name: ${NAME_DB}
+  app:
+    extends:
+      file: ${CONFIG_PATH}/${APP_ENV}/compose.yml
+      service: app
+    links:
+      - database
+.env
+APP_ENV=dev
+APP_ROOT=/gobalto
+BUILD_PATH=ci/docker/builds
+CONFIG_PATH=ci/docker/configs
+NAME_DB=postgres
+NAME_APP=bloodhound
+ACTUAL RESULTS
+$ docker-compose up -d database
+ERROR: for database  Conflict. The name "/postgres" is already in use by container 4081cb8ec2de8d491889229d8e59bf72c26ce2347d74d5343d72ec35ef16f777. You have to remove (or rename) that container to be able to reuse that name.
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 63, in main
+    log.error(e.msg)
+AttributeError: 'ProjectError' object has no attribute 'msg'
+$ docker ps | grep -v appname
+CONTAINER ID IMAGE                     COMMAND                CREATED      STATUS      PORTS    NAMES
+4081cb8ec2de b39b5b1d1c86c816_database "/docker-entrypoint.s" 29 hours ago Up 29 hours 5432/tcp postgres
+EXPECTED RESULTS
+I did not expect the name collision as I took care to avoid name collision with container names. I did not know the database would need to be "recreated", and did not expect that this would rename the recreated container to a name different than its current name.

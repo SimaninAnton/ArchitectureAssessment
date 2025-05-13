@@ -1,0 +1,1 @@
+Env var expansion with default value: empty default is not handled properly

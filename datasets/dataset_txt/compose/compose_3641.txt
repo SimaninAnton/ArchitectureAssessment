@@ -1,0 +1,21 @@
+heidarxvpn commented on 18 May 2015
+It doesn't matter how I kick it, it always returns 1 and my ansible task fails! However, without --rm it returns 0.
+docker-compose.yml
+test:
+  image: debian:wheezy
+Ubuntu 14.04.2 LTS
+Docker version 1.6.2, build 7c8fca2
+docker-compose 1.2.0
+root@megabox:~# docker-compose run --rm test true
+root@megabox:~# echo $?
+1
+I believe the exit code comes from compose/cli/main.py:346, however, --rm doesn't seem to affect the exit code so this doesn't make much sense...
+    ¦   ¦   exit_code = container.wait()
+    ¦   ¦   if options['--rm']:
+    ¦   ¦   ¦   log.info("Removing %s..." % container.name)
+    ¦   ¦   ¦   project.client.remove_container(container.id)
+    ¦   ¦   sys.exit(exit_code)
+How come it's always 1?
+It should also be noted that the containers still show up in docker ps -a despite using --rm, so I'm guessing something is wrong.
+I thought it might be apparmor at first so I disabled it service apparmor teardown but no change.
+Any ideas? Thanks!

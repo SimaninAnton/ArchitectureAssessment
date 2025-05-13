@@ -1,0 +1,1 @@
+`docker-compose rm` can not remove containers with a project name contains `-`

@@ -1,0 +1,1 @@
+Docker Compose parses host paths for ENV substitution, but not container paths

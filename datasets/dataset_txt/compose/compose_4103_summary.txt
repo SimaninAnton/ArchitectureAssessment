@@ -1,0 +1,1 @@
+--no-color flag not honoured on fig up

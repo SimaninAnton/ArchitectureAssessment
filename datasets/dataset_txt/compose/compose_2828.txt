@@ -1,0 +1,29 @@
+kuhnroyal commented on 6 Feb 2016
+rm -v leaves data volumes in place and removes unnamed volumes (declared volumes from docker file).
+down -v removes data volumes but leaves unnamed volumes, thus after down -v there are left over volumes.
+Docker: 1.10
+Docker-Compose: 1.6.0
+foo@bar: docker-compose up -d
+foo@bar:$ docker volume ls -f dangling=false
+DRIVER              VOLUME NAME
+local               dcd2cd833c2336174e43550e9e43d77a47fcd4633a0b131cc99a511a72d1ee58
+local               project_volume
+
+foo@bar: docker-compose stop
+foo@bar: docker-compose rm -vf
+foo@bar:$ docker volume ls -f dangling=true
+DRIVER              VOLUME NAME
+local               project_volume
+foo@bar: docker-compose up -d
+foo@bar:$ docker volume ls -f dangling=false
+DRIVER              VOLUME NAME
+local               dcd2cd833c2336174e43550e9e43d77a47fcd4633a0b131cc99a511a72d1ee58
+local               project_volume
+
+foo@bar: docker-compose down -v
+foo@bar:$ docker volume ls -f dangling=true
+DRIVER              VOLUME NAME
+local               dcd2cd833c2336174e43550e9e43d77a47fcd4633a0b131cc99a511a72d1ee58
+So from what I understand the down command is supposed to cleanup everything, it should not leave the unnamed volumes.
+Besides that, I think it is not intuitive for the -v switch to have different behavior on these commands.
+I think -v should behave as it does now for rm -v and there should be an extra switch to remove data volumes.

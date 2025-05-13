@@ -1,0 +1,15 @@
+giggio commented on 13 Dec 2016 •
+edited
+When using a different DOCKER_HOST, unless you set COMPOSE_CONVERT_WINDOWS_PATHS=0, any mount you specify on your docker-compose file will fail with:
+ERROR: for db  Cannot create container for service db: create <volume>: "<volume>" includes invalid characters for a local volume name, only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed
+ERROR: Encountered errors while bringing up the project.
+This is really confusing. This used to work fine before.
+I am on 1.9.0 build 2585387.
+DOCKER_HOST is set to a remote linux server.
+Volumes is:
+    volumes:
+      - /opt/data/foo/html/:/var/www/html
+Only works when COMPOSE_CONVERT_WINDOWS_PATHS=0 is set or when it is set to COMPOSE_CONVERT_WINDOWS_PATHS=1. In other words, it only fails if COMPOSE_CONVERT_WINDOWS_PATHS is unset.
+On the 1.9.0 release you mention that:
+When using Compose with Docker Toolbox/Machine on Windows, volume paths are no longer converted from C:\Users to /c/Users-style by default. To re-enable this conversion so that your volumes keep working, set the environment variable COMPOSE_CONVERT_WINDOWS_PATHS=1. Users of Docker for Windows are not affected and do not need to set the variable.
+The last part Users of Docker for Windows are not affected and do not need to set the variable is not true.

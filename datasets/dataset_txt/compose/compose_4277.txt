@@ -1,0 +1,31 @@
+pmlopes commented on 21 Jul 2014
+Hi,
+I've a simple container where i want to check some logging functionality, here is my Docker file:
+FROM ubuntu:14.04
+MAINTAINER Paulo Lopes "my@email"
+ADD syslog_tester /bin/syslog_tester
+CMD /bin/syslog_tester
+My fig.yml is:
+app:
+  build: .
+  volumes:
+    - /dev/log:/dev/log
+and for the sake of it the syslog_tester source code is:
+#include <syslog.h>
+
+int main() {
+  openlog("docker-syslog-tester", LOG_PID, LOG_USER);
+  syslog(LOG_INFO, "Sample log message");
+  closelog();
+  return 0;
+}
+Now i build the container as usual:
+sudo fig build
+and if i run it from docker:
+sudo docker run -v /dev/log:/dev/log logging_app
+always works, however if i do:
+sudo fig up
+about 50% of the time i get:
+Recreating logging_app_1...
+Cannot start container d3a0422f77c1cadcc2b14ebaa7418864d292eca732e6ae487f5779981a7e8223: stat /var/lib/docker/aufs/mnt/14dc4061f945e9293c5817624a65c94aade73d547e5b3e0cbd6cb15f228c9c45/dev/log: no such file or directory
+my fig version is 0.5.0 and docker 1.1.1 on ubuntu 14.04 64bit

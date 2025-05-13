@@ -1,0 +1,3 @@
+CthulhuDen commented on 23 Mar 2016
+I cannot find a way to specify in the docker-compose file (even v2) that a network must be internal (as if it was created with docker network create --internal ...).
+8

@@ -1,0 +1,1 @@
+docker-compose CLI not output error msg when violating lowercase repo name only

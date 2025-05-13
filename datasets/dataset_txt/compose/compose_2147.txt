@@ -1,0 +1,9 @@
+rcholic commented on 15 Aug 2016
+By following the examples in the documentation page, I have the following block in my docker-compose.yml file:
+networks:
+   default:
+    driver: overlay
+But when I try to do docker-compose build, I got this error:
+Unsupported config option for services.networks: 'default'
+What does this mean? the version of my docker-compose is 1.8.1 by the way. Thanks
+9

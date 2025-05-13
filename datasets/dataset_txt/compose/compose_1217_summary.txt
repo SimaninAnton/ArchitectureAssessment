@@ -1,0 +1,1 @@
+Support --remove-orphans with docker-compose create

@@ -1,0 +1,14 @@
+andykais commented on 25 Jan 2017 •
+edited
+With docker it is possible to run
+bash$ docker run -it --name "add_yarn" node:7.4 bash
+container$ npm install -g yarn
+bash$ docker start "add_yarn"
+bash$ docker attach "add_yarn"
+container$ yarn --version # still persists
+however if I run something similar in docker-compose (but with different files)
+docker-compose -f docker-compose.yml -f docker-compose.init.yml -p "project1" up
+# docker-compose.init.yml has command: npm install -g yarn
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml -p "project1" up
+# docker-compose.dev.yml has command: yarn --version
+# outputs unknown command yarn

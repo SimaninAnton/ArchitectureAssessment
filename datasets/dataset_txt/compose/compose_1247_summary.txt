@@ -1,0 +1,1 @@
+docker --init support on compose v3+

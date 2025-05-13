@@ -1,0 +1,19 @@
+iMerica commented on 6 Mar 2015
+I'm seeing this error when I attempt to stop services with control-c that were previously started with fig up
+Full error:
+Stopping foo...
+Stopping baz
+Stopping quuux
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 56, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 437, in up
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.log_printer", line 22, in run
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.multiplexer", line 25, in loop
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/Queue", line 182, in get
+thread.error: release unlocked lock
+The strange thing is: I don't have a user named "ben" on my machine.

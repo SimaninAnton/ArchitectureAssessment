@@ -1,0 +1,12 @@
+psychowico commented on 17 Feb 2015
+From changelog:
+1.5.0 (2015-02-10)
+
+Builder
+
+* Dockerfile to use for a given docker build can be specified with the -f flag
+It's means that we can point our Dockerfile in diffrent place than context directory is, for example:
+docker build -f ./backend/Dockerfile .
+(Context is current directory, dockerfile is inside ./backend directory)
+So, we need new yaml key to support this.
+I propose left build key and simply add Dockerfile key, to support this flag.

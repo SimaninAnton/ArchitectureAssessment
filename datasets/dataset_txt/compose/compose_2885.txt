@@ -1,0 +1,20 @@
+rajasaur commented on 24 Jan 2016
+Environment:
+Docker compose : 1.6.0rc1
+Docker client: 1.10.0-rc1
+OSX
+Im trying to use the networking feature along with providing an alias to one of the services defined in the compose.yml file. The links section in https://github.com/docker/compose/blob/master/docs/networking.md indicates that you could do this with the following snippet
+version: 2
+services:
+  web:
+    build: .
+    links:
+      - "db:database"
+  db:
+    image: postgres
+however, this errors out with
+emerald:docker-symfony raja$ docker-compose -f test1.yml config
+ERROR: Validation failed in file './test1.yml', reason(s):
+Unsupported config option for 'services' service: 'links'
+The documentation at https://github.com/docker/compose/blob/master/docs/compose-file.md#version-2 also indicates that links are not allowed but we should be using networking for communication between containers but the first link contains an example of using it (And I do need that feature since my code contains the alias for connecting to another container).
+Can you please clarify which one is correct and if there is a way to use alias names in links as before ?

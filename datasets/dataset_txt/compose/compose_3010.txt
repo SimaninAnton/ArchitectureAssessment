@@ -1,0 +1,18 @@
+cyphar commented on 6 Dec 2015
+Given a setup like this:
+% cat docker-compose.yml
+test:
+    extends:
+        file: docker/common-compose.yml
+        service: testapp
+    env_file: docker/environment
+    command: env
+% cat docker/common-compose.yml
+testapp:
+    image: ubuntu:14.04
+% cat docker/environment
+TEST_ENVIRONMENT="This won't show up."
+% docker-compose run --rm test
+# No TEST_ENVIRONMENT.
+%
+If the env_file entry is moved to docker/common-compose.yml, then the environment variable is set properly. This sounds like a bug to me.

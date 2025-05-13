@@ -1,0 +1,56 @@
+endophage commented on 8 Feb 2016
+If I declare my env vars in bash, I get the following:
+10:07 $ export TESTVAR=test
+10:08 $ echo $TESTVAR
+test
+10:08 $ export TESTVAR="test"
+10:08 $ echo $TESTVAR
+test
+However, if I create the following files:
+Dockerfile:
+FROM ubuntu:latest
+COPY ./test.sh /test/test.sh
+WORKDIR /test
+ENTRYPOINT [ "/test/test.sh" ]
+test.sh:
+#!/bin/bash
+echo "--------------TEST RUN---------------"
+echo $TESTVAR
+
+case $TESTVAR in
+    test)
+        echo "no quotes"
+    ;;
+esac
+echo "------------END TEST RUN-------------"
+docker-compose.yml
+testthing:
+    dockerfile: Dockerfile
+    build: .
+    environment:
+        - TESTVAR="test"
+I get the following output:
+10:07 $ docker-compose up
+Recreating compose_testthing_1
+Attaching to compose_testthing_1
+testthing_1 | --------------TEST RUN---------------
+testthing_1 | "test"
+testthing_1 | ------------END TEST RUN-------------
+compose_testthing_1 exited with code 0
+Changing the environment variable to TESTVAR=test produces:
+10:07 $ docker-compose up
+Creating compose_testthing_1
+Attaching to compose_testthing_1
+testthing_1 | --------------TEST RUN---------------
+testthing_1 | test
+testthing_1 | no quotes
+testthing_1 | ------------END TEST RUN-------------
+compose_testthing_1 exited with code 0
+For the record, docker itself appears to handle the quotes correctly (test:latest is the same Dockerfile above being run directly):
+10:11 $ docker run -it --rm -e TESTVAR="test" test:latest 
+--------------TEST RUN---------------
+test
+no quotes
+------------END TEST RUN-------------
+Also, compose behaves correctly when using the map syntax, i.e. TESTVAR: "test" and TESTVAR: test behave the same way, and consistently with bash (no quotes is printed).
+22

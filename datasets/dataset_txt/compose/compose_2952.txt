@@ -1,0 +1,5 @@
+Contributor
+kevinsimper commented on 4 Jan 2016
+It does not seem like it is possible to use docker-compose run backend bash when you have create your project with docker-compose --x-networking up
+The error
+ERROR: Cannot start container b65824c461a75d4cd7ced08b893ba521147eb1b60e64765933c0280654c7cd4f: Cannot link to /xx_xxx_1, as it does not belong to the default network

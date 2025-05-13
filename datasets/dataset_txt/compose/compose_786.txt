@@ -1,0 +1,24 @@
+danielkza commented on 21 Mar 2018
+I have a setup with Compose 1.20.0 installed inside a virtualenv. When building an image using a local Dockerfile, it crashes. I can confirm the same behavior in 3 different Linux environments
+Fedora 27 x86_64 (dev machine)
+Debian Jessie x86_64 (different dev machine)
+Ubuntu 14.04 (Travis CI)
+Building cassandra
+ERROR: Error processing tar file(exit status 1): open /venv/include/python2.7/Python-ast.h: no such file or directory
+It seems to me for some reason an absolute path is being used, and my virtualenv obviously does not reside inside my system root. Compose 1.19.0 does not seem to show the same problem.
+The Dockerfile and Compose config follow.
+FROM cassandra:3.11.1
+RUN sed -e 's/authorizer: AllowAllAuthorizer/authorizer: CassandraAuthorizer/' -e 's/authenticator: AllowAllAuthenticator/authenticator: PasswordAuthenticator/' -i /etc/cassandra/cassandra.yaml
+version: '2.3'
+services:
+  cassandra:
+    build:
+      context: .
+      dockerfile: Dockerfile-cassandra
+    environment:
+      MAX_HEAP_SIZE: 250M
+      HEAP_NEWSIZE: 50M
+    ports:
+      - "9042:9042"
+      - "7199:7199"
+3

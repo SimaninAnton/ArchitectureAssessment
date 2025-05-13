@@ -1,0 +1,15 @@
+lmesz commented on 19 Aug 2016 •
+edited
+Hy,
+I set SERVICE_NAME to "test".
+Tried docker-compose up -d with the following compose file:
+jenkins_${SERVICE_NAME}:
+    image: jenkins
+    ports:
+      - "8080:8080"
+Following error appears:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Invalid service name 'rbp_${USER}' - only [a-zA-Z0-9._-] characters are allowed
+Is it possible to somehow create service dynamically, pass env_var to service name?
+docker-compose version: docker-compose version 1.7.1, build 6c29830
+Thanks in advance,

@@ -1,0 +1,49 @@
+CrimsonGlory commented on 27 Jan 2017
+I have a log file inside a container
+$ sudo docker-compose exec syslog ls -lh /var/log/messages           
+-rw-r--r--    1 root     root       80.8M Jan 26 18:49 /var/log/messages
+its about 600k lines
+$ sudo docker-compose exec syslog wc -l /var/log/messages
+639629 /var/log/messages
+The following command works:
+sudo docker-compose exec syslog cat /var/log/messages
+Also the following (there are few results for this command):
+sudo docker-compose exec syslog cat /var/log/messages | grep "asdfasdf"
+But greping for http (almost all the lines), crash after printing a few hundred lines
+sudo docker-compose exec syslog cat /var/log/messages | grep "http"
+Traceback (most recent call last):.1 <redacted. just a random line from messages file>
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 64, in main
+  File "compose/cli/main.py", line 116, in perform_command
+  File "compose/cli/main.py", line 461, in exec_command
+  File "site-packages/dockerpty/pty.py", line 334, in start
+  File "site-packages/dockerpty/pty.py", line 370, in _hijack_tty
+  File "site-packages/dockerpty/io.py", line 164, in do_write
+OSError: [Errno 32] Broken pipe
+docker-compose returned -1
+I can reproduce the bug everytime.
+Yes, I can avoid the bug using grep http messages instead of the useless use of cat. But this is just for the sake of reporting the bug.
+Seems related to #1509 #3352
+Info
+$ sudo docker-compose --version
+docker-compose version 1.10.0, build 4bd6f1a
+$ sudo docker version
+Client:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 21:44:32 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 21:44:32 2016
+ OS/Arch:      linux/amd64
+$ uname -a
+Linux codexServer 4.2.0-42-generic #49~14.04.1-Ubuntu SMP Wed Jun 29 20:22:11 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+$ grep -i desc /etc/lsb-release 
+DISTRIB_DESCRIPTION="Ubuntu 14.04.5 LTS"

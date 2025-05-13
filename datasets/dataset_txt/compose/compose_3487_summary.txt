@@ -1,0 +1,1 @@
+Add support for referring to images by digest in docker-compose.yml

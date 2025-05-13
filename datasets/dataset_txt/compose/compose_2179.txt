@@ -1,0 +1,49 @@
+iMerica commented on 3 Aug 2016 •
+edited
+Issue
+I'm running Docker Compose commands in Circle CI. Docker build steps appear to be working fine, but once I run up -d or run I see this:
+$ docker-compose -f selenium.yml up
+Creating network "appdjango_default" with the default driver
+Creating appdjango_selenium_1
+Creating appdjango_db_1
+Creating appdjango_broker_1
+
+ERROR: for db  Endpoint config is not supported for API version < 1.22
+
+ERROR: for selenium  Endpoint config is not supported for API version < 1.22
+
+ERROR: for broker  Endpoint config is not supported for API version < 1.22
+Traceback (most recent call last):
+  File "/home/ubuntu/virtualenvs/venv-system/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/home/ubuntu/virtualenvs/venv-system/local/lib/python2.7/site-packages/compose/cli/main.py", line 61, in main
+    command()
+  File "/home/ubuntu/virtualenvs/venv-system/local/lib/python2.7/site-packages/compose/cli/main.py", line 113, in perform_command
+    handler(command, command_options)
+  File "/home/ubuntu/virtualenvs/venv-system/local/lib/python2.7/site-packages/compose/cli/main.py", line 835, in up
+    remove_orphans=remove_orphans)
+  File "/home/ubuntu/virtualenvs/venv-system/local/lib/python2.7/site-packages/compose/project.py", line 400, in up
+    get_deps
+  File "/home/ubuntu/virtualenvs/venv-system/local/lib/python2.7/site-packages/compose/parallel.py", line 64, in parallel_execute
+    raise error_to_reraise
+docker.errors.InvalidVersion: Endpoint config is not supported for API version < 1.22
+
+docker-compose -f selenium.yml up returned exit code 1
+Info
+$ docker version
+Client:
+ Version:      1.10.0-circleci
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   543ec7b-unsupported
+ Built:        Tue Feb 16 17:11:12 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.0-circleci
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   543ec7b-unsupported
+ Built:        Tue Feb 16 17:11:12 2016
+ OS/Arch:      linux/amd64
+Docker Compose version 1.8.0

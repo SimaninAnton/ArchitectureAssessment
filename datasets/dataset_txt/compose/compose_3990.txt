@@ -1,0 +1,27 @@
+bernieperez commented on 16 Jan 2015
+Hello,
+On my AWS Ubuntu 14.04 LTS instance, I run:
+cd /tmp
+git clone git@github.com:docker/fig.git
+cd fig
+./script/build-linux
+It clones and builds the image fine, but when it gets the to docker run step of the install, I get an error:
+...
+Removing intermediate container e5c4fdbe2649
+Successfully built 6ca37849371a
++ pwd
++ docker run -u user -v /tmp/fig/dist:/code/dist --rm --entrypoint pyinstaller fig -F bin/fig
+FATA[0000] Error response from daemon: Cannot start container 40d0986c04453beeb40daa61e8e0680eb5cda2020df27c5335a5bd1f7b49cdcf: Error getting container 40d0986c04453beeb40daa61e8e0680eb5cda2020df27c5335a5bd1f7b49cdcf from driver devicemapper: Error mounting '/dev/mapper/docker-202:1-156776-40d0986c04453beeb40daa61e8e0680eb5cda2020df27c5335a5bd1f7b49cdcf' on '/var/lib/docker/devicemapper/mnt/40d0986c04453beeb40daa61e8e0680eb5cda2020df27c5335a5bd1f7b49cdcf': no such file or directory 
+# docker --version
+Docker version 1.4.1, build 5bc2ff8
+
+# docker version
+Client version: 1.4.1
+Client API version: 1.16
+Go version (client): go1.3.3
+Git commit (client): 5bc2ff8
+OS/Arch (client): linux/amd64
+Server version: 1.4.1
+Server API version: 1.16
+Go version (server): go1.3.3
+Git commit (server): 5bc2ff8

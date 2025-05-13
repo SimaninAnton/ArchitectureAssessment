@@ -1,0 +1,45 @@
+ronaldpetty commented on 18 Jul 2017
+When trying to scale a service using a fixed hostport, it fails, which is expected. What is not expected (by myself at least) is the attempt is not in the log.
+$ docker-compose up
+....
+$ docker-compose scale web=2
+
+WARNING: The scale command is deprecated. Use the up command with the --scale flag instead.
+WARNING: The "web" service specifies a port on the host. If multiple containers for this service are created on a single host, the port will clash.
+Starting microservice_web_1 ... done
+Creating microservice_web_2 ...
+Creating microservice_web_2 ... error
+
+ERROR: for microservice_web_2  Cannot start service web: driver failed programming external connectivity on endpoint microservice_web_2 (62c95b53f9470476110588d22b8fffff5354f4dc5dd56eb8c70da3a3a6bbeabd): Bind for 0.0.0.0:5000 failed: port is already allocated
+ERROR: Cannot start service web: driver failed programming external connectivity on endpoint microservice_web_2 (62c95b53f9470476110588d22b8fffff5354f4dc5dd56eb8c70da3a3a6bbeabd): Bind for 0.0.0.0:5000 failed: port is already allocated
+$
+While the error would not be part of any existing container, it is also not part of the failed container.
+user@ubuntu:~/microservice$ docker container logs microservice_web_2
+user@ubuntu:~/microservice$
+I don't have enough knowledge, but would expect a log aggregator to show this type of activity. Maybe it is showing microservice_web_2 (which happens to be empty). Just curious, am I wrong wanting this type of info in the Compose aggregate log?
+Related to this (I think), if you stop a service, you see it in the log, if you start the service again the log shows the previous logs, plus the new logs; but excludes the shutdown log line. Again, I would expect some kind of aggregate and immutable behavior (aka replay the same output as before).
+No biggie, just more curious than anything.
+$ docker version
+Client:
+ Version:      17.06.0-ce
+ API version:  1.30
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:23:31 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.06.0-ce
+ API version:  1.30 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:19:04 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+$
+$ docker-compose version
+docker-compose version 1.15.0-rc1, build 2188098
+docker-py version: 2.4.2
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+$

@@ -1,0 +1,7 @@
+karlmutch commented on 1 Feb 2017
+During a testing phase for our CI/CD pipeline we wish to be able to run docker-compose with just the existing docker-compose.yml file, and the pulled docker images.
+However if the 'build:' yml blocks are left in the compose file then the tool tries to read the build directories and fails, even if the --no-recreate --no-build options are specified.
+For example:
+ubuntu@ip-xxx-xx-xx-x:$ docker-compose -f docker-compose.yml up --no-recreate --no-build
+ERROR: build path /home/ubuntu/db_populate either does not exist, is not accessible, or is not a valid URL.
+ubuntu@ip-xxx-xx-xx-x:$

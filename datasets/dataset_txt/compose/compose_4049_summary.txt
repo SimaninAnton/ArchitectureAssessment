@@ -1,0 +1,1 @@
+I should be able to observe only 1 container's logs for a service which is multiplied by 'fig scale'

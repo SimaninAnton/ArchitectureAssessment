@@ -1,0 +1,6 @@
+blah238 commented on 13 Apr 2016
+I am using Compose 1.7.0-rc2 and the V2 compose file format. No explicit network defined, just the default networking.
+I have a backend container running Node.js and an Nginx container set up to proxy_pass requests to the backend container.
+This all works fine except if I restart the backend container. Then it seems the backend's IP changes, but Nginx continues to use the old IP.
+I have gone down the rabbit hole of trying to figure out how to get Nginx to resolve the IP dynamically, but the complexity skyrockets quickly, and nothing specific to V2 compose files has apparently been written.
+Is there a simple and up-to-date way of accomplishing this apparently monumental task?

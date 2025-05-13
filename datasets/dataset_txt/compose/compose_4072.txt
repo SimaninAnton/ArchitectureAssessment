@@ -1,0 +1,28 @@
+mhubig commented on 28 Nov 2014
+Currently when I start a container with fig the /etc/hosts file typically looks like this (with 172.17.0.61
+as the IP-Address of the current container):
+172.17.0.61 b2e3a12debf4
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.17.0.59 database
+172.17.0.59 database_1
+172.17.0.59 atlassian_database_1
+It would be nice if there where the same predictable entries for the current container like the ones for the linked database container ... e.g.:
+172.17.0.61 b2e3a12debf4
+172.17.0.61     crowd
+172.17.0.61     crowd_1
+172.17.0.61     atlassian_crowd_
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.17.0.59 database
+172.17.0.59 database_1
+172.17.0.59 atlassian_database_1
+EDIT: And maybe also set the hostname to the service name instead of the container id ...

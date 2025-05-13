@@ -1,0 +1,13 @@
+YannRobert commented on 30 Jun 2017
+On GNU/Linux, docker-compose does support when the docker-compose.yml file is a symbolic link to some other regular file.
+Suppose we have a regular (and valid) YAML file docker-compose-something.yml and want to have a symbolic link on it. Then use the symbolic link.
+# ln -s docker-compose-something.yml docker-compose.yml
+# docker-compose pull
+But on Windows 10, docker-compose does not support this case.
+# ln -s docker-compose-something.yml docker-compose.yml
+# docker-compose pull
+yaml.reader.ReaderError: 'utf8' codec can't decode byte #xff: invalid start byte
+  in ".\docker-compose.yml", position 10
+It would help to have the same behavior on Windows than on Linux.
+So that a team with developers on Linux and developers on Windows can work the same way.
+Out of context : I know we can use docker-compose -f docker-compose-something.yml as a workaround, but when a project has multiple docker-compose YAML files, and one of them is proposed as a default in source control, symbolic link is handy so that we don't have to use "-f" when we want the default.

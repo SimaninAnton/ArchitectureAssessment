@@ -1,0 +1,1 @@
+Installation on OSX with boot2docker

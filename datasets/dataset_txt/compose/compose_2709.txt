@@ -1,0 +1,16 @@
+Contributor
+AvdN commented on 25 Feb 2016
+it is difficult to trace/debug what is wrong with one service not willing to be brought up because during handling of exceptions other exceptions occured. The latter one can be traced to the first line
+of log_api_error()
+there client is newer than server (str) is not of the same type as e.explanation (bytes).
+I am not sure where the bytestring come from but probably from the failed http request results which IIRC are bytestreams. At least on 3.5.1 (what I am running docker-compose in) you need to do::
+def log_api_error(e):
+    expl = e.explanation
+    try:
+        if isinstance(e.explanation, bytes):
+            expl = e.explanation.decode('utf-8')
+    except:
+        pass
+    if 'client is newer than server' in expl:
+After changing that, I was able to see and address the real problem
+If you are running under Python 2.7 you will not see this problem and utf-8 encoding should not be necessary. In any case a failed decoding leads to the in test to be as good as the original

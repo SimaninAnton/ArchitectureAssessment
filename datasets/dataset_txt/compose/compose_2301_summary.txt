@@ -1,0 +1,1 @@
+docker-compose scale should allow for scaling down instances using filter criteria

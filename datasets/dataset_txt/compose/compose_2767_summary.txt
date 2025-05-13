@@ -1,0 +1,1 @@
+docker-compose logging shutdowns the service

@@ -1,0 +1,1 @@
+Dockerfile example of docs/rails.md throws errors as written

@@ -1,0 +1,21 @@
+matthewmueller commented on 16 Jul 2016 •
+edited
+Basically if I have something like this:
+cspan:
+    volumes:
+      - ./src:/home/app/cspan/src
+    ports:
+      - "5000"
+    build: .
+    command: ./node_modules/.bin/node-dev --poll --respawn src/api.js
+And then run:
+docker-compose build
+docker-compose up
+docker-compose scale cspan=4
+It gives you a bunch of randomized ports that point to 5000:
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                              NAMES
+d57c9bbd55d8        cspan_cspan         "./node_modules/.bin/"   7 seconds ago       Up 6 seconds        0.0.0.0:32961->5000/tcp                            cspan_cspan_3
+e3716814cba1        cspan_cspan         "./node_modules/.bin/"   8 seconds ago       Up 7 seconds        0.0.0.0:32960->5000/tcp                            cspan_cspan_2
+6169ec60679d        cspan_cspan         "./node_modules/.bin/"   9 seconds ago       Up 8 seconds        0.0.0.0:32959->5000/tcp                            cspan_cspan_4
+3f047dfeacab        cspan_cspan         "./node_modules/.bin/"   10 seconds ago      Up 9 seconds        0.0.0.0:32958->5000/tcp                            cspan_cspan_1
+Is there a way to just ping http://cspan_cspan:5000/ from the host and have docker map to one of the containers? I'm using Version 1.12.0-rc4-beta19.

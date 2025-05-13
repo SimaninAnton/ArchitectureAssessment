@@ -1,0 +1,16 @@
+Contributor
+aanand commented on 20 Jan 2015
+These are the steps to take before the stable release of Compose 1.1.0.
+Rename the GitHub repo
+Update install docs with new binary URL (#1021)
+Update completion docs with new script URL (#1021)
+Add "previously known as Fig" note to README.md (#1022)
+Update Bash completion script
+Create a fig-stable branch from the 1.0.0 tag
+Add a deprecation warning to all pages on http://www.fig.sh (#1025)
+Create the #docker-compose IRC channel
+After releasing on PyPi:
+Add a deprecation notice to the PyPi page for fig
+After the docs have been deployed:
+Deploy http://www.fig.sh from fig-stable
+Update README.md with new docs URL and IRC channel (#1028)

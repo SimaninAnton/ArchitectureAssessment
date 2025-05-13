@@ -1,0 +1,222 @@
+leialexisjiang commented on 2 Aug 2016
+Hi, actually I want to deploy all my applications in one machine and I use "network_mode: host" for sharing the same network of host machine inside docker container.
+But I find that I can't access my application with "localhost" in the host machine.
+example :
+Inside docker container, this command works well, but not work in the host machine
+curl -H "Content-Type: application/json" http://localhost:8761/eureka/apps
+ifconfig in the container (IP is 192.168.65.2) :
+root@moby:/edge-service# ifconfig
+br-11d1260a7759 Link encap:Ethernet  HWaddr 02:42:8c:42:40:f1
+          inet addr:172.20.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+br-812e2bf1341c Link encap:Ethernet  HWaddr 02:42:5e:fc:f0:00
+          inet addr:172.19.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+br-8ddc0704ebaa Link encap:Ethernet  HWaddr 02:42:d0:5a:52:52
+          inet addr:172.18.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+docker0   Link encap:Ethernet  HWaddr 02:42:01:ce:32:86
+          inet addr:172.17.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+eth0      Link encap:Ethernet  HWaddr c0:ff:ee:c0:ff:ee
+          inet addr:192.168.65.2  Bcast:192.168.65.7  Mask:255.255.255.248
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:7431 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:4343 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:10443531 (9.9 MiB)  TX bytes:245727 (239.9 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3199 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3199 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1
+          RX bytes:363061 (354.5 KiB)  TX bytes:363061 (354.5 KiB)
+ifconfig in the host machine (IP is 192.168.1.99) :
+mobilecenter:~ $ ifconfig
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
+    options=3<RXCSUM,TXCSUM>
+    inet6 ::1 prefixlen 128
+    inet 127.0.0.1 netmask 0xff000000
+    inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1
+    nd6 options=1<PERFORMNUD>
+gif0: flags=8010<POINTOPOINT,MULTICAST> mtu 1280
+stf0: flags=0<> mtu 1280
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+    ether 60:f8:1d:bb:54:66
+    inet6 fe80::62f8:1dff:febb:5466%en0 prefixlen 64 scopeid 0x4
+    inet 192.168.1.99 netmask 0xffffff00 broadcast 192.168.1.255
+    nd6 options=1<PERFORMNUD>
+    media: autoselect
+    status: active
+en1: flags=963<UP,BROADCAST,SMART,RUNNING,PROMISC,SIMPLEX> mtu 1500
+    options=60<TSO4,TSO6>
+    ether 72:00:07:fe:3f:a0
+    media: autoselect <full-duplex>
+    status: inactive
+en2: flags=963<UP,BROADCAST,SMART,RUNNING,PROMISC,SIMPLEX> mtu 1500
+    options=60<TSO4,TSO6>
+    ether 72:00:07:fe:3f:a1
+    media: autoselect <full-duplex>
+    status: inactive
+p2p0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 2304
+    ether 02:f8:1d:bb:54:66
+    media: autoselect
+    status: inactive
+awdl0: flags=8943<UP,BROADCAST,RUNNING,PROMISC,SIMPLEX,MULTICAST> mtu 1484
+    ether 5a:15:f9:99:be:bf
+    inet6 fe80::5815:f9ff:fe99:bebf%awdl0 prefixlen 64 scopeid 0x8
+    nd6 options=1<PERFORMNUD>
+    media: autoselect
+    status: active
+bridge0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+    options=63<RXCSUM,TXCSUM,TSO4,TSO6>
+    ether 62:f8:1d:bb:23:00
+    Configuration:
+        id 0:0:0:0:0:0 priority 0 hellotime 0 fwddelay 0
+        maxage 0 holdcnt 0 proto stp maxaddr 100 timeout 1200
+        root id 0:0:0:0:0:0 priority 0 ifcost 0 port 0
+        ipfilter disabled flags 0x2
+    member: en1 flags=3<LEARNING,DISCOVER>
+            ifmaxaddr 0 port 5 priority 0 path cost 0
+    member: en2 flags=3<LEARNING,DISCOVER>
+            ifmaxaddr 0 port 6 priority 0 path cost 0
+    nd6 options=1<PERFORMNUD>
+    media: <unknown type>
+    status: inactive
+I'm a little confused, IP inside container and host machine should not be the same in network_mode: host ?
+Between the docker containers, they can share network (the two containers of my docker-compose.yml can communicate well between them with localhost) , but not with the host machine.
+I think maybe I misunderstand the network_mode host.
+The docker-compose.yml looks like :
+version:` '2'
+
+services:
+  edge-service:
+    restart: restart
+    image: registry.raimtec.com/edge-service
+    volumes:
+      - edge_service_log:/edge-service/logs
+    ports:
+      - 9080:9080
+    container_name: edge-service
+    depends_on:
+      - discovery-service
+    network_mode: host
+    environment:
+      - HOST_NAME=localhost
+      - SERVER_PORT=9080
+      - LEASE_RENEWAL_INTERVAL_SECS=30
+      - DISCOVERY_HOST=http://localhost:8761
+      - HYSTRIX_ISOL_TIMEOUT=60000
+      - RIBBON_CONNECT_TIMEOUT=3000
+      - RIBBON_READ_TIMOUT=60000
+      - RESTART_ENABLED=true
+      - SHUTDOWN_ENABLED=true
+      - HEALTH_ENABLED=false
+      - NEBULA_REF_SERVICE_ROUTE=/nebula/v1/**
+  discovery-service:
+    restart: restart
+    image: registry.raimtec.com/discovery-service
+    volumes:
+      - discovery_service_log:/discovery-service/logs
+    ports:
+      - 8761:8761
+    container_name: discovery-service
+    network_mode: host
+    environment:
+      - HOST_NAME=localhost
+      - SERVER_PORT=8761
+      - LEASE_RENEWAL_INTERVAL_SECS=30
+      - REGISTER_WITH_EUREKA=true
+      - FETCH_REGISTRY=false
+      - WAIT_TIME_MS_WHEN_SYNC_EMPTY=0
+      - ENABLE_SELF_PRESERVATION=true
+      - RESTART_ENABLED=true
+      - SHUTDOWN_ENABLED=true
+      - HEALTH_ENABLED=true
+volumes:
+  edge_service_log: {}
+  discovery_service_log: {}
+Docker inspect (network part) :
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "9a7eb00e08cbf5f1dbd3fe87d1643f8a5fa31414a6bd7fa7e04081949284d363",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {},
+            "SandboxKey": "/var/run/docker/netns/default",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "host": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "NetworkID": "d3a065edac656a838506f1975c755a9732cc5d458de7ef30c2a8c128ce1249da",
+                    "EndpointID": "a8b37dac419e8fdd1cbfc5f80bfd7e117359274f56c1fe0ea752d739f713f936",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": ""
+                }
+            }
+        }
+Docker/Docker compose version:
+mobilecenter:~ $ docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      linux/amd64
+
+mobilecenter:~ $ docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+Thanks in advance
+25

@@ -1,0 +1,1 @@
+docker-compose doesn't refresk 'links' hostnames on restart (or kill and up)

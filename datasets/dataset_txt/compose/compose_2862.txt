@@ -1,0 +1,3 @@
+holymonson commented on 30 Jan 2016
+Hi, I set my DNS in compose file, and it works well when running containers.
+However, when using docker-compose build it won't set the dns, and in the building container dns is inherited from host machine. Is it an issue or expected behaviour?

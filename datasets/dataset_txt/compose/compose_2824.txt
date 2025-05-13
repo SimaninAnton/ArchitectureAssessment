@@ -1,0 +1,28 @@
+kongslund commented on 7 Feb 2016
+I have the following files:
+docker-compose.yml
+version: "2"
+services:
+  some-service:
+    image: busybox
+    command: "sleep 120000"
+    networks:
+      - some-tier
+
+networks:
+  some-tier:
+docker-compose.override.yml
+version: "2"
+services:
+  some-service:
+    environment:
+      FOO: bar
+When running Compose I experience the following
+$ docker-compose --version
+docker-compose version 1.6.0, build d99cad6
+$ docker-compose up -d
+WARNING: Some networks were defined but are not used by any service: some-tier
+Creating developer_some-service_1
+$ docker inspect -f "{{json .NetworkSettings.Networks}}" developer_some-service_1
+{"developer_default":{...}}
+I would've expected that the network some-tier would be used by some-service. Is my expectation wrong?

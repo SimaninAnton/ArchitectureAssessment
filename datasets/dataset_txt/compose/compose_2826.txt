@@ -1,0 +1,5 @@
+pjorquera commented on 6 Feb 2016
+When using docker-compose (v1.6) with multiple configuration files with "-f" like the following:
+docker-compose -f docker-compose.yml -f preproduction.yml build
+docker-compose -f docker-compose.yml -f preproduction.yml up -d
+If services are using network_mode: "host" then this configuration is disabled (dropping to "bridge" mode)

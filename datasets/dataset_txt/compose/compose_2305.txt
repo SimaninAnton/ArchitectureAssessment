@@ -1,0 +1,8 @@
+rmmcnulty9 commented on 14 Jun 2016
+I set COMPOSE_HTTP_TIMEOUT to 300, but when it times out the error message says:
+An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+I looked at the source on master and it appears to still be using the const HTTP_TIMEOUT in the message.
+This is:
+Docker version 1.11.2, build b9f10c9
+docker-compose version 1.7.1, build 0a9ab35

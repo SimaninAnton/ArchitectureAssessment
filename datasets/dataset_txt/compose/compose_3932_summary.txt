@@ -1,0 +1,1 @@
+Allow using docker-compose from subdirectories

@@ -1,0 +1,1 @@
+how can I stop a container if it is paused

@@ -1,0 +1,7 @@
+Contributor
+SvenDowideit commented on 2 Nov 2014
+or perhaps the first service even?
+I'm playing with fig to replace my use of Makefiles for experiments - expecially using the official onbuild images, where even a Dockerfile could be almost optional (just needs FROM golang::onbuild
+initially, there will only be one service, so thats 'easy', but if I can specify the default service to run that would rock.
+Thinking about it - It would be even better to specify in the fig.yml that this is an interactive service, requiring a tty, and for fig up to be just as magical then :)
+Note: fig run is not really 'just to run a one-off command in a service (for that, we should presumably now use docker exec - its necessary to run an interactive service too - and its possible that this interactive UI interacts with other services.

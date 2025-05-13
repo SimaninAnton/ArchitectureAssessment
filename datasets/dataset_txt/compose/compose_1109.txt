@@ -1,0 +1,7 @@
+abousselmi commented on 31 Oct 2017
+Hello,
+The idea is to be able to mount a remote github repo just like mounting a local host path. Example:
+volumes:
+      - "github.com/repo/volume:/app/volume"
+Thanks.
+1

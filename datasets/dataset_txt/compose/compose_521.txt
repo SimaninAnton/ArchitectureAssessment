@@ -1,0 +1,14 @@
+rafacouto commented on 26 Aug 2018 •
+edited
+It's a bit annoying to specify the service name when the docker-compose.yml contains just one service. It's redundant information and sometimes people have to review the file to remember the service name. Beginners who start defining docker-compose.yml with only one service don't understand the need to put a service name (obviously, they get aware the importance after when defining more services).
+As an usability feature, docker-compose could allow a service pseudo-name like _default_ definition in order to allow command execution without service name and take that service as the only one to process with the command. Definition example:
+version: '3'
+services:
+  _default_:
+    image: 'certbot/certbot'
+Presumably, it should be easy to implement since docker-compose produces this error:
+$ docker-compose run
+Run a one-off command on a service.
+Before exiting with error, _default_ service name can be scanned from docker-compose.yml and get it as the service name to execute.
+If default service is not found, the error message becomes something like Run a one-off command on a service or define a service with _default_ servicename.
+1

@@ -1,0 +1,4 @@
+errordeveloper commented on 12 Jun 2015
+Aims:
+showcase docker network UX
+expose the scaled-out web app to the world

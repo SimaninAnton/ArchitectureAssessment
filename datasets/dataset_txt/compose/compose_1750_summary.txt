@@ -1,0 +1,1 @@
+piping data out of Docker crash

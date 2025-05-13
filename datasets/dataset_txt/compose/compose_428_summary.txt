@@ -1,0 +1,1 @@
+web server exiting without error message on docker-compose up

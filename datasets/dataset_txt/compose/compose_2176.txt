@@ -1,0 +1,6 @@
+sprd-bena commented on 4 Aug 2016
+Hi *,
+Is there a reason why docker-compose is not provided as a deb-package via apt.dockerproject.org?
+My request is that docker-compose is provided as a deb-package with its version and dependency. There are many good reasons do so (, and personally I do not consider pip as an alternative for deployments in development nor even production). Currently I package it myself with fpm, but it would be nice to have it directly from upstream, without the need of various scripts I have to trigger manually or even write a rss-parser just to get a new version of it... You have the infrastructure, so why do you not use it?
+Thanks.
+7

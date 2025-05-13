@@ -1,0 +1,3 @@
+tuanmh commented on 3 Jul 2015
+Hi guys, after I upgraded to boot2docker 1.7.2, docker-compose up keeps throwing this error: json: cannot unmarshal string into Go value of type []string.
+Could you please help me in this case. Thanks!

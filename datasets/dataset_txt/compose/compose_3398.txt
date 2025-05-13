@@ -1,0 +1,3 @@
+Contributor
+sherter commented on 8 Aug 2015
+Compose refuses to list containers if a environment file is missing. This is an unnecessary limitation, isn't it? One could use docker exec $(docker-compose ps -q service) env to restore the environment file, if the container is still running.

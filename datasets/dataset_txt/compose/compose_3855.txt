@@ -1,0 +1,6 @@
+djessup commented on 9 Mar 2015
+A feature I've thought would be useful since originally using Fig, and now Compose would be the ability to clear the log history for Composed-managed containers. Long-running or "chatty" containers can end up with a lot of log noise that may not be wanted.
+I'd expect a command like the following would solve the problem:
+$ docker-compose logs --clear [service]
+192
+37

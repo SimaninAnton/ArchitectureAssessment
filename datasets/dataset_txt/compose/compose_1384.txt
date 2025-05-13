@@ -1,0 +1,45 @@
+scobb commented on 14 Jun 2017
+I realize this looks like a dupe (#634), but the issue resurfaced with newest urllib3 and newest requests.
+>pip freeze
+...
+docker==2.3.0
+docker-pycreds==0.2.1
+...
+requests==2.18.0
+requests-oauthlib==0.8.0
+requests-toolbelt==0.7.1
+...
+urllib3==1.21.1
+...
+Running python 2.7.10 on Windows 10.
+Full stack trace:
+>>> client.images.list()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "c:\Python27\lib\site-packages\docker\models\images.py", line 223, in list
+    resp = self.client.api.images(name=name, all=all, filters=filters)
+  File "c:\Python27\lib\site-packages\docker\api\image.py", line 93, in images
+    res = self._result(self._get(self._url("/images/json"), params=params),
+  File "c:\Python27\lib\site-packages\docker\utils\decorators.py", line 47, in inner
+    return f(self, *args, **kwargs)
+  File "c:\Python27\lib\site-packages\docker\api\client.py", line 183, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "c:\Python27\lib\site-packages\requests\sessions.py", line 515, in get
+    return self.request('GET', url, **kwargs)
+  File "c:\Python27\lib\site-packages\requests\sessions.py", line 502, in request
+    resp = self.send(prep, **send_kwargs)
+  File "c:\Python27\lib\site-packages\requests\sessions.py", line 612, in send
+    r = adapter.send(request, **kwargs)
+  File "c:\Python27\lib\site-packages\requests\adapters.py", line 440, in send
+    timeout=timeout
+  File "c:\Python27\lib\site-packages\requests\packages\urllib3\connectionpool.py", line 587, in urlopen
+    timeout_obj = self._get_timeout(timeout)
+  File "c:\Python27\lib\site-packages\requests\packages\urllib3\connectionpool.py", line 302, in _get_timeout
+    return Timeout.from_float(timeout)
+  File "c:\Python27\lib\site-packages\requests\packages\urllib3\util\timeout.py", line 154, in from_float
+    return Timeout(read=timeout, connect=timeout)
+  File "c:\Python27\lib\site-packages\requests\packages\urllib3\util\timeout.py", line 94, in __init__
+    self._connect = self._validate_timeout(connect, 'connect')
+  File "c:\Python27\lib\site-packages\requests\packages\urllib3\util\timeout.py", line 127, in _validate_timeout
+    "int, float or None." % (name, value))
+ValueError: Timeout value connect was Timeout(connect=None, read=None, total=None), but it must be an int, float or None.

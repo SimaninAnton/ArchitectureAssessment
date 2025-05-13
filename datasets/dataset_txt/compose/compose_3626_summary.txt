@@ -1,0 +1,1 @@
+document labels in config-file reference

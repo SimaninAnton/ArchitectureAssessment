@@ -1,0 +1,1 @@
+Feature request: set hostname equal to container name

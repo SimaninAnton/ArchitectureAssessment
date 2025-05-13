@@ -1,0 +1,1 @@
+Works w/o compose but not w/ compose

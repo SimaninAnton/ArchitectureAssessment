@@ -1,0 +1,112 @@
+jbrasted commented on 13 Aug 2016 •
+edited
+I think that this might be related to #3657.
+$ docker-compose -v
+docker-compose version 1.8.0-rc1, build 9bf6bc6
+I noticed that Docker Compose version 1.8.0-rc1 throws an error when a container with a mapped volume is recreated with a modified docker-compose.yml file
+I created a simple example to prove this.
+.
+├── Dockerfile
+├── docker-compose.yml
+├── hello.txt
+└── run.sh
+
+0 directories, 4 files
+Dockerfile
+FROM alpine:3.4
+
+ENV APP_DIR /app
+
+RUN mkdir ${APP_DIR}
+
+VOLUME [${APP_DIR}]
+
+COPY run.sh /run.sh
+
+RUN chmod u+x /run.sh
+docker-compose.yml
+version: '2'
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+hello.txt
+Hello
+run.sh
+#!/usr/bin/env sh
+
+cat /app/hello.txt
+
+echo ""
+echo "Finished running script"
+When I run docker-compose up for the first time, there are no errors.
+$ docker-compose up
+Building app
+Step 1 : FROM alpine:3.4
+ ---> 4e38e38c8ce0
+Step 2 : ENV APP_DIR /app
+ ---> Using cache
+ ---> 9e6eba6a3470
+Step 3 : RUN mkdir ${APP_DIR}
+ ---> Using cache
+ ---> 37092ba32454
+Step 4 : VOLUME [${APP_DIR}]
+ ---> Using cache
+ ---> b7c45ea5611d
+Step 5 : COPY run.sh /run.sh
+ ---> Using cache
+ ---> 408b4fb30aab
+Step 6 : RUN chmod u+x /run.sh
+ ---> Using cache
+ ---> a21512dd9ef2
+Step 7 : ENTRYPOINT /run.sh
+ ---> Using cache
+ ---> 6ce34d40a970
+Successfully built 6ce34d40a970
+Starting voltest_app_1
+Attaching to voltest_app_1
+app_1  | Hello
+app_1  | Finished running script
+voltest_app_1 exited with code 0
+If I modify the docker-compose.yml file, like so (in this case, by adding an environment variable):
+version: '2'
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - hello=friend
+and then try to run the container again by issuing docker-compose up --build, I see an error about not being able to mount the volume:
+$ docker-compose up --build
+Building app
+Step 1 : FROM alpine:3.4
+ ---> 4e38e38c8ce0
+Step 2 : ENV APP_DIR /app
+ ---> Using cache
+ ---> 9e6eba6a3470
+Step 3 : RUN mkdir ${APP_DIR}
+ ---> Using cache
+ ---> 37092ba32454
+Step 4 : VOLUME [${APP_DIR}]
+ ---> Using cache
+ ---> b7c45ea5611d
+Step 5 : COPY run.sh /run.sh
+ ---> Using cache
+ ---> 408b4fb30aab
+Step 6 : RUN chmod u+x /run.sh
+ ---> Using cache
+ ---> a21512dd9ef2
+Step 7 : ENTRYPOINT /run.sh
+ ---> Using cache
+ ---> 6ce34d40a970
+Successfully built 6ce34d40a970
+Recreating voltest_app_1
+
+ERROR: for app  Invalid bind mount spec "5d4dc70147cd597e3432699e8082e4451b04bf14486c531b86a51cb256fbb01c:[/app]:rw": Invalid volume destination path: '[/app]' mount path must be absolute.
+ERROR: Encountered errors while bringing up the project.
+If I take the change away, docker-compose does not error.
+8

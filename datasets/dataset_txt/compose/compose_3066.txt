@@ -1,0 +1,16 @@
+bpicolo commented on 21 Nov 2015
+I'm not sure if this really counts as an issue, just a quirk I noticed that makes it awkward to keep things in a single docker-compose.yml.
+Say I have a docker-compose with 3 targets:
+production:
+    build: .
+
+test:
+    build: .
+    links:
+        -elasticsearch
+
+elasticsearch:
+    image: elasticsearch:1.7.2
+If the images aren't built, and I docker-compose run test, it will build test, elasticsearch, AND production, despite production not being a dep to run test. It's possible I'm missing a case where it matters that they're all built though, not sure.
+Would be reasonably more efficient to not build unnecessary bits.
+Separating config files is nice and all but makes command-line usage a lot more awkward. (Porque just bash alias...the answer to everything verbose on linux >.>)

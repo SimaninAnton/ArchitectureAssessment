@@ -1,0 +1,31 @@
+Contributor
+KlaasH commented on 11 Jun 2019
+Description of the issue
+The --env-file option added in PR #6535 doesn't appear to work. The commands accept the argument, but the variables from the specified env file don't make it into the environment.
+I tried the option with run and up, both before and after the subcommand. For up it just gets ignored in either position. When I put it after run I get the usage message, but if I add the option into the options list in the run docstring, it accepts the option but ignores it, just like when it's in the other position.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0-rc1, build 8552e8e
+Output of docker version
+Docker version 18.09.5, build e8ff056
+Steps to reproduce the issue
+This makes a super-simple compose environment using the busybox image, creates default and override .env files, and runs the container to show the bug.
+cat <<\EOF > docker-compose.yml
+version: '3.7'
+services:
+  test:
+    image: busybox
+    env_file: .env.conf
+EOF
+
+echo 'WHEREAMI=config' > .env.conf
+echo 'WHEREAMI=override' > .env.override
+
+docker-compose --env-file .env.override run --rm test env | grep WHEREAMI
+Observed result
+WHEREAMI=config
+Expected result
+WHEREAMI=override
+Additional information
+If you remove the env_file line from the docker-compose.yml the variable disappears, so it's not a matter of preferring the config, it's just not managing to get the file from --env-file loaded into the environment.
+Installation details: Ubuntu 18.04, using system Docker and installing docker-compose with pipenv, both as docker-compose==1.25.0-rc1 and by installing the cloned repo at master (same result).

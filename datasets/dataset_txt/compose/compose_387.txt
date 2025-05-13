@@ -1,0 +1,12 @@
+xificurC commented on 23 Nov 2018
+Is your feature request related to a problem? Please describe.
+docker-compose config interpolates environment variables. To escape a dollar one needs to use two dollars. The output of two dollars is two dollars again. This makes it impossible to get $${FOO} resolved to ${FOO} in docker-compose config. Running docker-compose up does actually send ${FOO} in.
+We have a workflow where we have several compose files, process them and merge them into a final compose file via docker-compose config. This creates a nice snapshot of the current state of a project. This compose file can be stored in a "diary" and reused later if necessary very easily. The problem is getting an environment variable into the generated compose file. ${FOO} resolves into the value of the environment variable and $${FOO} resolves to $${FOO}. I'm failing to understand why the escaped dollar is re-escaped, nevertheless I cannot break backward compatibility at this point.
+Describe the solution you'd like
+The most elegant solution is to add --no-interpolate to docker-compose config, which will allow to turn off the environment variable interpolation. Currently docker-compose config does several things, namely - validation, merging, interpolation. The first 2 steps are idempotent (one can run them over and over again and the compose file won't change). The last one is mutating the output. With the suggested flag docker-compose config becomes a useful validation and merging tool.
+Describe alternatives you've considered
+not escaping the two dollars, where $${FOO} would become ${FOO}. This is problematic because it breaks backward compatibility. And it's still mutating.
+using an environment vairable like COMPOSE_DONT_INTERPOLATE. This is the easiest to implement but seems like an overkill for such a small feature.
+Additional context
+PR incoming
+3

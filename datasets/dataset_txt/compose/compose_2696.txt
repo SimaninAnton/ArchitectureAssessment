@@ -1,0 +1,79 @@
+leny commented on 27 Feb 2016
+Hi,
+(to begin, I'm sorry, english is not my first language, I will try to be as clear as possible)
+A bit of context
+I use a docker-compose environment to develop a "big" web application using node.js & mongodb. Some parts of the app uses a REST API which is hosted by four containers (server/nginx, api/node, database/mongodb & a data volume).
+I have implemented a big series of automated integration tests, which erase the db, fill with test data, perform a request on the API, check the response & doing asserts on it. Nothing really unusual here.
+At the time of this post, I have nearly 1200 tests running.
+My setup
+docker
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.6
+ Git commit:   c3959b1
+ Built:        Tue Feb 23 21:12:32 UTC 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 22:37:33 2016
+ OS/Arch:      linux/amd64
+docker-compose
+docker-compose version 1.6.2, build unknown
+docker-py version: 1.7.2
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 0.9.8zg 14 July 2015
+docker-machine
+docker-machine version 0.6.0, build e27fb87
+With a virtualbox driver, up-to-date.
+The issue
+The strange thing is, using the old version of docker-compose file format, all is ok, my 1200 tests are running perfectly.
+But, when using the new docker-compose file format, my tests are running good, until, near the 900th one, the docker-machine times out, making the rest of tests failing.
+I have no pertinent informations in my docker-compose logs, but, when logging on the machine, I got this message in /var/log/boot2docker.log file:
+udevadm settle - timeout of 5 seconds reached, the event queue contains:
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0700:00 (1352)
+  /sys/devices/LNXSYSTM:00 (1717)
+  /sys/devices/LNXSYSTM:00/LNXCPU:00 (1718)
+  /sys/devices/LNXSYSTM:00/LNXPWRBN:00 (1719)
+  /sys/devices/LNXSYSTM:00/LNXPWRBN:00/input/input0 (1720)
+  /sys/devices/LNXSYSTM:00/LNXPWRBN:00/input/input0/event0 (1721)
+  /sys/devices/LNXSYSTM:00/LNXSLPBN:00 (1722)
+  /sys/devices/LNXSYSTM:00/LNXSLPBN:00/input/input1 (1723)
+  /sys/devices/LNXSYSTM:00/LNXSLPBN:00/input/input1/event1 (1724)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00 (1725)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00 (1726)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/ACPI0003:00 (1727)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/ACPI0003:00/power_supply/AC (1728)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/LNXVIDEO:00 (1729)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/LNXVIDEO:00/device:01 (1730)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/LNXVIDEO:00/input/input6 (1731)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/LNXVIDEO:00/input/input6/event5 (1732)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/PNP0400:00 (1733)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/PNP0400:01 (1734)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/PNP0501:00 (1735)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/PNP0501:01 (1736)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/PNP0C02:00 (1737)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/PNP0C0A:00 (1738)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/PNP8390:00 (1739)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00 (1740)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/APP0001:00 (1741)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0000:00 (1742)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0100:00 (1743)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0103:00 (1744)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0200:00 (1745)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0303:00 (1746)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0700:00 (1747)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0B00:00 (1748)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:00/PNP0F03:00 (1749)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/device:02 (1750)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0F:00 (1751)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0F:01 (1752)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0F:02 (1753)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0F:03 (1754)
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:01 (1755)
+I hope all of this can be useful to help, please ask if you need anything to investigate.
+Thanks in advance.

@@ -1,0 +1,12 @@
+Contributor
+bfirsh commented on 23 Dec 2014
+Notable things missing:
+add-host #597 #1158
+cpuset #685
+device df87bd9
+memswap_limit #685
+mac_address added in this commit: b76ac6e
+The following run options aren't in docker-py; cpuset-mems, cpu-period, cpu-quota, oom-kill-disable, sig-proxy
+Related: #363
+Examples: #293 #830
+3

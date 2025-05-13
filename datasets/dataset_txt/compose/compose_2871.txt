@@ -1,0 +1,34 @@
+jamshid commented on 28 Jan 2016
+In docker-compose 1.5.x an empty env variable for the project name is okay, it uses the default of the directory name.
+In 1.6 behavior has changed and this is now an error. I prefer the 1.5 behavior but if this is intentional seems like it's good for a release note.
+$ env COMPOSE_PROJECT_NAME= docker-compose up -d
+Creating _npmlazy_1
+ERROR: Invalid container name (_npmlazy_1), only [a-zA-Z0-9][a-zA-Z0-9_.-] are allowed
+$ docker-compose --version
+docker-compose version 1.6.0rc2, build 695c692
+$ docker info
+Containers: 81
+Images: 1904
+Server Version: 1.9.1
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 2066
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 4.1.12-boot2docker
+Operating System: Boot2Docker 1.9.0 (TCL 6.4.1); HEAD : 16e4a2a - Thu Dec 10 06:53:38 UTC 2015
+CPUs: 4
+Total Memory: 4.719 GiB
+Name: dev
+ID: VHZ6:63LX:AV4M:RCLR:562Q:EXOS:S5SL:5REP:AOET:6ZZE:YZUU:FQMV
+Debug mode (server): true
+ File Descriptors: 177
+ Goroutines: 323
+ System Time: 2016-01-28T18:24:24.322889587Z
+ EventsListeners: 1
+ Init SHA1: 
+ Init Path: /usr/local/bin/docker
+ Docker Root Dir: /mnt/sda1/var/lib/docker
+Labels:

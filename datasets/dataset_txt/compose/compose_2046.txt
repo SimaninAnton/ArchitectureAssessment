@@ -1,0 +1,29 @@
+nicooga commented on 23 Sep 2016 •
+edited
+docker-compose hangs when running either:
+docker-compose  \
+  --file ./bin/../stacks/web.yml \
+  --file ./bin/../stacks/web.production.yml \
+  --project-name myapp_production\
+  --verbose  \
+  build web_server sidekiq
+.. or ..
+docker-compose  \
+  --file ./bin/../stacks/web.yml \
+  --file ./bin/../stacks/web.production.yml \
+  --project-name myapp_production\
+  --verbose  \
+  up -d
+.. at the same point, when trying to build ´web_server´ image:
+compose.service.build: Building web_server
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag=u'yavendeproduction_web_server', buildargs=None, rm=True, forcerm=False, path='/home/nepto/Source/yavende_deploy/sources/yavende', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.auth.load_config: File doesn't exist
+docker.api.build._set_auth_headers: No auth config found
+The issue dissappears when I run the same locally after eval $(docker-machine env --unset).
+The commands run almost instantly locally, but I don't see how the last command docker.api.build._set_auth_headers: No auth config found could be hanging the process.
+After a long time it fails with:
+ERROR: compose.cli.errors.handle_connection_errors: SSL error: ('The write operation timed out',)
+My internet connection seems to be slow now, that may have something to do with the issue.
+For now I resorted to cloning the source and running docker-compose directly on the server to achieve the wanted results.

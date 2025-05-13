@@ -1,0 +1,1 @@
+Symlinks cause ERROR: Error processing tar file(exit status 1): open X: no such file or directory during docker-compose build

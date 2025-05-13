@@ -1,0 +1,11 @@
+shlomita commented on 5 Apr 2017
+H,
+I would like to run docker command from perl script on Apache server (CentOS 7)
+I add user that run apache process to a docker group.
+When I run docker command, like 'docker images' from a command line everything goes okay.
+When I run from a browser, I get:
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.27/images/json: dial unix /var/run/docker.sock: connect: permission denied
+same user used in both cases.
+It's look like when it run from browser, apache miss something because it did not do regular login.
+Any idea why it happen?
+Thanks.

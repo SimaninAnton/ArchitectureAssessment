@@ -1,0 +1,9 @@
+chris-martin commented on 2 Nov 2015
+I just accidentally typed
+volumes: /data
+instead of
+volumes:
+ - /data
+I'd have expected it either to work, or to produce an error message along the lines of "list expected, got string instead". Instead it appears to just blindly iterate over "/data", because the actual output is:
+System error: mounting into / is prohibited
+docker-compose version 1.4.2

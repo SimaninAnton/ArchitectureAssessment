@@ -1,0 +1,1 @@
+[Request] - Implement -t | --timeout option for `docker-compose down

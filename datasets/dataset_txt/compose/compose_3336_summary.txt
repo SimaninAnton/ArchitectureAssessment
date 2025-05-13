@@ -1,0 +1,1 @@
+log_driver: none causes " Failed to get logging factory: logger: no log driver named 'none' is registered" message

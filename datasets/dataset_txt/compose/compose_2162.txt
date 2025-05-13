@@ -1,0 +1,212 @@
+saitima commented on 9 Aug 2016
+root@default:/home/docker# uname -a
+Linux default 4.4.16-boot2docker #1 SMP Fri Jul 29 00:13:24 UTC 2016 x86_64 GNU/Linux
+root@default:/home/docker# lsb_release -a 
+Boot2Docker 1.12.0 (TCL 7.2); HEAD : e030bab - Fri Jul 29 00:29:14 UTC 2016
+root@default:/home/docker# docker info
+
+Containers: 11
+ Running: 0
+ Paused: 0
+ Stopped: 11
+Images: 65
+Server Version: 1.12.0
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 388
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: null overlay bridge host
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.16-boot2docker
+Operating System: Boot2Docker 1.12.0 (TCL 7.2); HEAD : e030bab - Fri Jul 29 00:29:14 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 3.858 GiB
+Name: default
+ID: 62LD:CEGP:GHWZ:TQZD:CCZN:A6DI:HZCF:YPMV:OJVO:TRHW:F62H:Y2N2
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 13
+ Goroutines: 24
+ System Time: 2016-08-09T13:46:02.857390994Z
+ EventsListeners: 0
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox
+Insecure Registries:
+ 127.0.0.0/8
+root@default:/home/docker# docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 23:54:00 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 23:54:00 2016
+ OS/Arch:      linux/amd64
+Additional info:
+I just updated from docker 1.11.0 to docker 1.12.0 and when I try to run docker-compose up I get the following error and the following log in /var/log/docker.log
+time="2016-08-09T13:38:30.344770318Z" level=debug msg="Calling GET /v1.22/info"
+time="2016-08-09T13:38:30.412210632Z" level=debug msg="Calling GET /v1.22/networks/docker_default"
+time="2016-08-09T13:38:30.415582176Z" level=debug msg="Calling GET /v1.22/containers/json?all=0&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.468940729Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dzookeeper%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.473030378Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dnimbus%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.477544582Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dsupervisor%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.482281638Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkafka%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.486392237Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dui%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.490980229Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dcassandra%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.494514138Z" level=debug msg="Calling GET /v1.22/images/wurstmeister%2Fzookeeper/json"
+time="2016-08-09T13:38:30.500687347Z" level=debug msg="Calling GET /v1.22/images/efesaid%2Fstorm-nimbus%3A1.0.1/json"
+time="2016-08-09T13:38:30.505396442Z" level=debug msg="Calling GET /v1.22/images/efesaid%2Fstorm-supervisor%3A1.0.1/json"
+time="2016-08-09T13:38:30.511929336Z" level=debug msg="Calling GET /v1.22/images/wurstmeister%2Fkafka/json"
+time="2016-08-09T13:38:30.517533293Z" level=debug msg="Calling GET /v1.22/images/efesaid%2Fstorm-ui%3A1.0.1/json"
+time="2016-08-09T13:38:30.524081542Z" level=debug msg="Calling GET /v1.22/images/cassandra/json"
+time="2016-08-09T13:38:30.535046356Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dzookeeper%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.538811298Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dnimbus%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.542937370Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dsupervisor%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.547058276Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dkafka%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.551913666Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dui%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.555104662Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dcassandra%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.558769447Z" level=debug msg="Calling GET /v1.22/images/wurstmeister%2Fzookeeper/json"
+time="2016-08-09T13:38:30.565729825Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dzookeeper%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.569286309Z" level=debug msg="Calling GET /v1.22/images/wurstmeister%2Fzookeeper/json"
+time="2016-08-09T13:38:30.586173549Z" level=debug msg="Calling GET /v1.22/images/cassandra/json"
+time="2016-08-09T13:38:30.587313001Z" level=debug msg="Calling POST /v1.22/containers/create?name=docker_zookeeper_1"
+time="2016-08-09T13:38:30.587543690Z" level=debug msg="form data: {\"AttachStderr\":false,\"AttachStdin\":false,\"AttachStdout\":false,\"Env\":[],\"ExposedPorts\":{\"2181/tcp\":{}},\"HostConfig\":{\"Binds\":[],\"Links\":[],\"LogConfig\":{\"Config\":{},\"Type\":\"\"},\"NetworkMode\":\"docker_default\",\"PortBindings\":{\"2181/tcp\":[{\"HostIp\":\"\",\"HostPort\":\"2181\"}]},\"VolumesFrom\":[]},\"Image\":\"wurstmeister/zookeeper\",\"Labels\":{\"com.docker.compose.config-hash\":\"6ba9e4292b2d15b5080ea5e36d8e85af9de254ccc15870cd8211b5a01a89c6ec\",\"com.docker.compose.container-number\":\"1\",\"com.docker.compose.oneoff\":\"False\",\"com.docker.compose.project\":\"docker\",\"com.docker.compose.service\":\"zookeeper\",\"com.docker.compose.version\":\"1.8.0\"},\"NetworkDisabled\":false,\"NetworkingConfig\":{\"EndpointsConfig\":{\"docker_default\":{\"Aliases\":[\"zookeeper\"],\"IPAMConfig\":{}}}},\"OpenStdin\":false,\"StdinOnce\":false,\"Tty\":false,\"Volumes\":{}}"
+time="2016-08-09T13:38:30.599280445Z" level=debug msg="Calling GET /v1.22/containers/json?all=1&limit=-1&trunc_cmd=0&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Ddocker%22%2C+%22com.docker.compose.service%3Dcassandra%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&size=0"
+time="2016-08-09T13:38:30.602726447Z" level=debug msg="Calling GET /v1.22/images/cassandra/json"
+time="2016-08-09T13:38:30.609475520Z" level=debug msg="Calling POST /v1.22/containers/create?name=docker_cassandra_1"
+time="2016-08-09T13:38:30.609696835Z" level=debug msg="form data: {\"AttachStderr\":false,\"AttachStdin\":false,\"AttachStdout\":false,\"Env\":[],\"HostConfig\":{\"Binds\":[],\"Links\":[],\"LogConfig\":{\"Config\":{},\"Type\":\"\"},\"NetworkMode\":\"docker_default\",\"PortBindings\":{},\"Privileged\":true,\"VolumesFrom\":[]},\"Image\":\"cassandra\",\"Labels\":{\"com.docker.compose.config-hash\":\"0dfac8eb09eb7e72383b59c375f997b877762049978daacf554b6f80a3eea48e\",\"com.docker.compose.container-number\":\"1\",\"com.docker.compose.oneoff\":\"False\",\"com.docker.compose.project\":\"docker\",\"com.docker.compose.service\":\"cassandra\",\"com.docker.compose.version\":\"1.8.0\"},\"NetworkDisabled\":false,\"NetworkingConfig\":{\"EndpointsConfig\":{\"docker_default\":{\"Aliases\":[\"cassandra\"],\"IPAMConfig\":{}}}},\"OpenStdin\":false,\"StdinOnce\":false,\"Tty\":false,\"Volumes\":{}}"
+time="2016-08-09T13:38:30.669353220Z" level=debug msg="container mounted via layerStore: /mnt/sda1/var/lib/docker/aufs/mnt/0a3d1998201ebe7e0f8e2c55f1130c5e3a756c33b3d9bcaede1e505447efc520"
+time="2016-08-09T13:38:30.674576350Z" level=debug msg="container mounted via layerStore: /mnt/sda1/var/lib/docker/aufs/mnt/07908b1dbb6fb97e744f8ad4888d34e2428574f699f75bfac996a2179f7af5bb"
+time="2016-08-09T13:38:30.676601839Z" level=debug msg="Getting volume reference for name: 00fdb85081161a6329062669851a8233291c6eaf4419b0042682a6c94c135276"
+time="2016-08-09T13:38:30.676643149Z" level=debug msg="Probing all drivers for volume with name: 00fdb85081161a6329062669851a8233291c6eaf4419b0042682a6c94c135276"
+time="2016-08-09T13:38:30.676708395Z" level=debug msg="Registering new volume reference: driver \"local\", name \"00fdb85081161a6329062669851a8233291c6eaf4419b0042682a6c94c135276\""
+2016-08-09 13:38:30.680595 I | http: panic serving 192.168.99.1:55307: page 9 already freed
+goroutine 208 [running]:
+net/http.(*conn).serve.func1(0xc8210c5880)
+        /usr/local/go/src/net/http/server.go:1389 +0xc1
+panic(0x177d400, 0xc8207e3c00)
+        /usr/local/go/src/runtime/panic.go:443 +0x4e9
+github.com/boltdb/bolt.(*freelist).free(0xc82043d9b0, 0xad, 0x7fd7c013e000)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/freelist.go:117 +0x37b
+github.com/boltdb/bolt.(*node).spill(0xc820ada7e0, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/node.go:358 +0x2ca
+github.com/boltdb/bolt.(*Bucket).spill(0xc821178840, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/bucket.go:541 +0x1cf
+github.com/boltdb/bolt.(*Bucket).spill(0xc8210e0398, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/bucket.go:508 +0xbc2
+github.com/boltdb/bolt.(*Tx).Commit(0xc8210e0380, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/tx.go:163 +0x1d4
+github.com/boltdb/bolt.(*DB).Update(0xc8203ec000, 0xc820e78c00, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/db.go:602 +0x11d
+github.com/docker/docker/volume/store.(*VolumeStore).create(0xc82043d860, 0xc821178640, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/volume/store/store.go:304 +0xa67
+github.com/docker/docker/volume/store.(*VolumeStore).CreateWithRef(0xc82043d860, 0xc821178640, 0x40, 0x0, 0x0, 0xc8211fa9c0, 0x40, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/volume/store/store.go:222 +0x147
+github.com/docker/docker/daemon.(*Daemon).createContainerPlatformSpecificSettings(0xc82042a1a0, 0xc821097c20, 0xc821187b80, 0xc8211c4700, 0x0, 0x0)
+        /go/src/github.com/docker/docker/daemon/create_unix.go:48 +0x5be
+github.com/docker/docker/daemon.(*Daemon).create(0xc82042a1a0, 0xc8211e1ca3, 0x12, 0xc821187b80, 0xc8211c4700, 0xc820952048, 0x0, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/daemon/create.go:129 +0x653
+github.com/docker/docker/daemon.(*Daemon).containerCreate(0xc82042a1a0, 0xc8211e1ca3, 0x12, 0xc821187b80, 0xc8211c4700, 0xc820952048, 0xc8211f4900, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/daemon/create.go:55 +0x4c3
+github.com/docker/docker/daemon.(*Daemon).ContainerCreate(0xc82042a1a0, 0xc8211e1ca3, 0x12, 0xc821187b80, 0xc8211c4700, 0xc820952048, 0x0, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/daemon/create.go:29 +0xc2
+github.com/docker/docker/api/server/router/container.(*containerRouter).postContainersCreate(0xc820147400, 0x7fd7c195aa98, 0xc8211ec900, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700, 0xc8211ec4e0, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/router/container/container_routes.go:364 +0x3a4
+github.com/docker/docker/api/server/router/container.(*containerRouter).(github.com/docker/docker/api/server/router/container.postContainersCreate)-fm(0x7fd7c195aa98, 0xc8211ec900, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700, 0xc8211ec4e0, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/router/container/container.go:55 +0x74
+github.com/docker/docker/api/server/middleware.VersionMiddleware.WrapHandler.func1(0x7fd7c195aa98, 0xc8211ec900, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700, 0xc8211ec4e0, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/middleware/version.go:56 +0x9aa
+github.com/docker/docker/api/server/middleware.UserAgentMiddleware.WrapHandler.func1(0x7fd7c195aa98, 0xc8211ec8d0, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700, 0xc8211ec4e0, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/middleware/user_agent.go:45 +0x68e
+github.com/docker/docker/api/server/middleware.DebugRequestMiddleware.func1(0x7fd7c194c940, 0xc82000e698, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700, 0xc8211ec4e0, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/middleware/debug.go:53 +0x884
+github.com/docker/docker/api/server.(*Server).makeHTTPHandler.func1(0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700)
+        /go/src/github.com/docker/docker/api/server/server.go:139 +0x138
+net/http.HandlerFunc.ServeHTTP(0xc8202c0620, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700)
+        /usr/local/go/src/net/http/server.go:1618 +0x3a
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc820443590, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700)
+        /go/src/github.com/docker/docker/vendor/src/github.com/gorilla/mux/mux.go:98 +0x29e
+github.com/docker/docker/api/server.(*routerSwapper).ServeHTTP(0xc820b19350, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700)
+        /go/src/github.com/docker/docker/api/server/router_swapper.go:29 +0x72
+net/http.serverHandler.ServeHTTP(0xc8203dfa80, 0x7fd7c0079430, 0xc8211d6f70, 0xc82113c700)
+        /usr/local/go/src/net/http/server.go:2081 +0x19e
+net/http.(*conn).serve(0xc8210c5880)
+        /usr/local/go/src/net/http/server.go:1472 +0xf2e
+created by net/http.(*Server).Serve
+        /usr/local/go/src/net/http/server.go:2137 +0x44e
+time="2016-08-09T13:38:30.681388755Z" level=debug msg="Getting volume reference for name: 116815c3134c4b5ea07c0fcf0f693d6ece33865a6f70cf7da579ebd571b13769"
+time="2016-08-09T13:38:30.681426669Z" level=debug msg="Probing all drivers for volume with name: 116815c3134c4b5ea07c0fcf0f693d6ece33865a6f70cf7da579ebd571b13769"
+time="2016-08-09T13:38:30.681489630Z" level=debug msg="Registering new volume reference: driver \"local\", name \"116815c3134c4b5ea07c0fcf0f693d6ece33865a6f70cf7da579ebd571b13769\""
+2016-08-09 13:38:30.685845 I | http: panic serving 192.168.99.1:55306: page 9 already freed
+goroutine 196 [running]:
+net/http.(*conn).serve.func1(0xc820c65b00)
+        /usr/local/go/src/net/http/server.go:1389 +0xc1
+panic(0x177d400, 0xc820b18310)
+        /usr/local/go/src/runtime/panic.go:443 +0x4e9
+github.com/boltdb/bolt.(*freelist).free(0xc82043d9b0, 0xae, 0x7fd7c013e000)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/freelist.go:117 +0x37b
+github.com/boltdb/bolt.(*node).spill(0xc820ad3030, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/node.go:358 +0x2ca
+github.com/boltdb/bolt.(*Bucket).spill(0xc821178b40, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/bucket.go:541 +0x1cf
+github.com/boltdb/bolt.(*Bucket).spill(0xc8210e0718, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/bucket.go:508 +0xbc2
+github.com/boltdb/bolt.(*Tx).Commit(0xc8210e0700, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/tx.go:163 +0x1d4
+github.com/boltdb/bolt.(*DB).Update(0xc8203ec000, 0xc820e7cc00, 0x0, 0x0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/boltdb/bolt/db.go:602 +0x11d
+github.com/docker/docker/volume/store.(*VolumeStore).create(0xc82043d860, 0xc8211b1c40, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/volume/store/store.go:304 +0xa67
+github.com/docker/docker/volume/store.(*VolumeStore).CreateWithRef(0xc82043d860, 0xc8211b1c40, 0x40, 0x0, 0x0, 0xc8211b0680, 0x40, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/volume/store/store.go:222 +0x147
+github.com/docker/docker/daemon.(*Daemon).createContainerPlatformSpecificSettings(0xc82042a1a0, 0xc8210972c0, 0xc821186a00, 0xc821183c00, 0x0, 0x0)
+        /go/src/github.com/docker/docker/daemon/create_unix.go:48 +0x5be
+github.com/docker/docker/daemon.(*Daemon).create(0xc82042a1a0, 0xc8211798e3, 0x12, 0xc821186a00, 0xc821183c00, 0xc820023de8, 0x0, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/daemon/create.go:129 +0x653
+github.com/docker/docker/daemon.(*Daemon).containerCreate(0xc82042a1a0, 0xc8211798e3, 0x12, 0xc821186a00, 0xc821183c00, 0xc820023de8, 0xc82119f100, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/daemon/create.go:55 +0x4c3
+github.com/docker/docker/daemon.(*Daemon).ContainerCreate(0xc82042a1a0, 0xc8211798e3, 0x12, 0xc821186a00, 0xc821183c00, 0xc820023de8, 0x0, 0x0, 0x0, 0x0, ...)
+        /go/src/github.com/docker/docker/daemon/create.go:29 +0xc2
+github.com/docker/docker/api/server/router/container.(*containerRouter).postContainersCreate(0xc820147400, 0x7fd7c195aa98, 0xc82117bd40, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0, 0xc82117b860, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/router/container/container_routes.go:364 +0x3a4
+github.com/docker/docker/api/server/router/container.(*containerRouter).(github.com/docker/docker/api/server/router/container.postContainersCreate)-fm(0x7fd7c195aa98, 0xc82117bd40, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0, 0xc82117b860, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/router/container/container.go:55 +0x74
+github.com/docker/docker/api/server/middleware.VersionMiddleware.WrapHandler.func1(0x7fd7c195aa98, 0xc82117bd40, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0, 0xc82117b860, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/middleware/version.go:56 +0x9aa
+github.com/docker/docker/api/server/middleware.UserAgentMiddleware.WrapHandler.func1(0x7fd7c195aa98, 0xc82117bd10, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0, 0xc82117b860, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/middleware/user_agent.go:45 +0x68e
+github.com/docker/docker/api/server/middleware.DebugRequestMiddleware.func1(0x7fd7c194c940, 0xc82000e698, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0, 0xc82117b860, 0x0, 0x0)
+        /go/src/github.com/docker/docker/api/server/middleware/debug.go:53 +0x884
+github.com/docker/docker/api/server.(*Server).makeHTTPHandler.func1(0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0)
+        /go/src/github.com/docker/docker/api/server/server.go:139 +0x138
+net/http.HandlerFunc.ServeHTTP(0xc8202c0620, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0)
+        /usr/local/go/src/net/http/server.go:1618 +0x3a
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc820443590, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0)
+        /go/src/github.com/docker/docker/vendor/src/github.com/gorilla/mux/mux.go:98 +0x29e
+github.com/docker/docker/api/server.(*routerSwapper).ServeHTTP(0xc820b19350, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0)
+        /go/src/github.com/docker/docker/api/server/router_swapper.go:29 +0x72
+net/http.serverHandler.ServeHTTP(0xc8203dfa80, 0x7fd7c0079430, 0xc821147c70, 0xc8210e00e0)
+        /usr/local/go/src/net/http/server.go:2081 +0x19e
+net/http.(*conn).serve(0xc820c65b00)
+        /usr/local/go/src/net/http/server.go:1472 +0xf2e
+created by net/http.(*Server).Serve
+        /usr/local/go/src/net/http/server.go:2137 +0x44e

@@ -1,0 +1,31 @@
+iamjoshd commented on 10 May 2016
+version: '2'
+
+services:
+  base_service:
+    image: service
+    build: ../../service
+
+  service_flavorA:
+    extends: base_service
+    environment:
+      - OPTS='my awesome service opts'
+
+  service_flavorB:
+    extends: base_service
+    environment:
+      - OPTS='these opts are so different from flavorA, it's crazy.'
+When i run a docker-compose build it builds the base image service twice. I would expect it to only build it once. It does the same thing with the following:
+version: '2'
+
+services:
+  service_flavorA:
+    build: ../../service
+    environment:
+      - OPTS='my awesome service opts'
+
+  service_flavorB:
+    build: ../../service
+    environment:
+      - OPTS='these opts are so different from flavorA, it's crazy.'
+4

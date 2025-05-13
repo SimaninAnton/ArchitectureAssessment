@@ -1,0 +1,1 @@
+Dynamic Binding: Extending or Contracting an Application's Cooperative Network of Containers

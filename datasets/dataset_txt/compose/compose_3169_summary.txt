@@ -1,0 +1,1 @@
+`docker-compose ps` breaks when using `docker-compose --project-name :name up`

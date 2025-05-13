@@ -1,0 +1,25 @@
+sirlatrom commented on 31 May 2017 •
+edited
+Example docker-compose.yml with short-form port mapping:
+version: '3.2'
+services:
+  jenkins:
+    image: jenkins
+    ports:
+    - "8080:8080"
+Result of docker-compose config:
+$ docker-compose config
+networks: {}
+secrets: {}
+services:
+  jenkins:
+    image: jenkins
+    ports:
+    - published: '8080'
+      target: '8080'
+version: '3.2'
+volumes: {}
+When using the resulting configuration, an error occurs:
+$ docker-compose config | docker-compose -f - up
+ERROR: The Compose file is invalid because:
+services.jenkins.ports.published contains "8080", which is an invalid type, it should be an integer

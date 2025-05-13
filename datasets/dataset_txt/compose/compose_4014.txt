@@ -1,0 +1,3 @@
+olalonde commented on 5 Jan 2015
+When running fig build web, I am not getting any logs from docker even with the --verbose flag.
+The expected behaviour would be to see the normal output of docker build.

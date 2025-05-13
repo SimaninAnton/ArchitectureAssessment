@@ -1,0 +1,7 @@
+brandondrew commented on 23 Oct 2014
+At the very end of the the results of fig run web rails new . --force --database=postgresql --skip-bundle from the directions for getting started with Rails, I get Invalid repository name (Fig_web), only [a-z0-9-_.] are allowed.
+I followed the directions within a directory named "Fig" , and I am guessing the cause of the problem is that
+the repository name is based on the directory name; and
+a check was written to ensure names that would not cause any problems; but
+no one noticed that they were only allowing lower-case letters.
+(Perhaps there really is some reason to disallow upper-case letters. If so, it would be most helpful to check for this before running through the whole (long) process. As a temporary measure, it could be noted in the "Getting Started..." guide that a purely lower-case directory name is required.)

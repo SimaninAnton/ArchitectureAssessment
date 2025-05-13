@@ -1,0 +1,3 @@
+brycereynolds commented on 26 Mar 2014
+It doesn't look like passing additional run commands (in line with options passed using docker run) is supported by fig. I've searched high and low and this is likely the incorrect place to post a question like this but I'd like to know 1) if they are supported and 2) if they plan to be supported.
+I have sshd running on most of my containers and need to pass the tty argument (-t) when running them. In my case using the 'command' option doesn't work b/c I am using supervisord and a run.sh command in my containers.

@@ -1,0 +1,19 @@
+Contributor
+dnephin commented on 9 Oct 2015
+Motivation for this proposal
+moby/moby#15182 will be in 1.9.0 allow for build args
+new users are often confused when the environment section isn't applied during the build phase
+Proposal
+Move all build related configuration into a build: section in the service. Example
+web:
+  build:
+    context: .
+    dockerfile: Dockerfile.name
+    args:
+       key: value
+  ...
+This should help clarify the fields that are related to the build phase (and the fields that are not).
+Backwards compatibility
+On the first release both build and dockerfile would still be allowed at the top level of the service definition. A dockerfile at the top level would print a deprecation warning.
+On the following release dockerfile at the top level of the service definition would be removed, and it must be under the build section. For trivial cases, a config of build: path/to/context would still be supported.
+Related #2111

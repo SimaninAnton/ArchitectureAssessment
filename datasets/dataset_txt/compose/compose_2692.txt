@@ -1,0 +1,10 @@
+anentropic commented on 29 Feb 2016
+So I've been going round and round trying to get my swarm working
+Thought I was getting close but now when I docker-compose up I get the following error:
+... lots of --verbose logging ...
+compose.service._containers_have_diverged: oceania_nginx-conf_1 has diverged: e986cd8a43c1825f73d62af8ac5fd0c467d185f8e06d1cd89394ff11fcad86ed != e48efc42c1e29a8ba5d862593cd23da42004d996959411d34bcc106629144c09
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'oceania_oceania')
+compose.network.ensure: Creating network "oceania_oceania" with driver "overlay"
+compose.cli.verbose_proxy.proxy_callable: docker create_network <- (ipam=None, driver='overlay', options=None, name=u'oceania_oceania')
+ERROR: compose.cli.main.main: 500 Internal Server Error: pool configuration failed because of Unexpected response code: 413 (Value exceeds 524288 byte limit)
+seems to be in the step to create the overlay network

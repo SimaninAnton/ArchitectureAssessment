@@ -1,0 +1,9 @@
+utkuzih commented on 25 Jan 2017
+Issue
+Currently we can support multiple compose files using -f switch in the following way:
+docker-compose -f docker-compose.stack1.yml -f docker-compose.stack2.yml <command>
+In case a service requires many other stacks, each command may get very long.
+Suggestion
+Instead of accepting a single filename per -f switch, allow passing multiple filenames. This will allow us to use * matches. Example:
+docker-compose -f docker-compose.*.yml <command>
+2

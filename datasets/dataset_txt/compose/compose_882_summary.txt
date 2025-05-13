@@ -1,0 +1,1 @@
+Why does docker-compose up-d now change scale number?

@@ -1,0 +1,22 @@
+rockers007 commented on 2 Mar 2017
+I have install Docker version 1.13.1 and also upgrade docker-compose
+When I have run this command " docker-compose up -d nginx mysql redis beanstalkd "
+Error :
+Traceback (most recent call last):
+File "/usr/local/bin/docker-compose", line 9, in
+load_entry_point('docker-compose==1.8.1', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 542, in load_entry_point
+return get_distribution(dist).load_entry_point(group, name)
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 2569, in load_entry_point
+return ep.load()
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 2229, in load
+return self.resolve()
+File "/usr/lib/python2.7/dist-packages/pkg_resources/init.py", line 2235, in resolve
+module = import(self.module_name, fromlist=['name'], level=0)
+File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 17, in
+from ..bundle import get_image_digests
+File "/usr/local/lib/python2.7/dist-packages/compose/bundle.py", line 14, in
+from .service import format_environment
+File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 13, in
+from docker.utils import LogConfig
+ImportError: cannot import name LogConfig

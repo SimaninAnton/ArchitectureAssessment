@@ -1,0 +1,4 @@
+linlinlinlin commented on 23 Oct 2015
+For the compatible with docker-py. I hope it can upgrade reqeusts to 2.8.1.
+Because in docker-py 1.5 is requests >= 2.5.2 It will install the latest version of requests(2.8.1).
+3

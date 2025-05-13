@@ -1,0 +1,1 @@
+docker-compose build on Windows fails with stacktrace if API version < 1.24

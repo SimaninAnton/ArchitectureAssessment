@@ -1,0 +1,2 @@
+japrescott commented on 8 Jul 2014
+I noticed in the docker spec, that there are -m and -c flags to set when starting a container. -m adjusts the max-memory and -c sets the relative cpu-cycles. It would be great to be able to configure this. Maybe in a combination with the scale command. Sorry if I have overseen this functionality in fig..

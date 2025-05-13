@@ -1,0 +1,12 @@
+lcheng61 commented on 30 May 2014
+Hi,
+I installed fig on my centos6.5. Looks the installation is OK because it can print version. But when I run fig, it always returns "None". Can someone give me some hint ?
+[root@localhost django]# cat fig.yml
+redis:
+image: dockerfile/redis
+ports:
+- "6379:6379"
+[root@localhost django]# fig --version
+fig 0.4.1
+[root@localhost django]# fig up -d
+None

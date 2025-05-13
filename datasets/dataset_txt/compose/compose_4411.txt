@@ -1,0 +1,5 @@
+Contributor
+bfirsh commented on 6 Feb 2014
+build .deb packages
+create a PPA
+installation docs

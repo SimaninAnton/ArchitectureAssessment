@@ -1,0 +1,1 @@
+Error when 'docker-compose down' where 2 service has the same image.

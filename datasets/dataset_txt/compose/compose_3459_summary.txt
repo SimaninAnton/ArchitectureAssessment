@@ -1,0 +1,1 @@
+A manual page for docker compose

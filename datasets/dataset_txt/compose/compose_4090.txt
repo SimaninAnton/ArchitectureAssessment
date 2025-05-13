@@ -1,0 +1,10 @@
+Dridi commented on 21 Nov 2014
+I'm just starting with fig so it may just be a case of not reading properly the docs, but I haven't found out how to just build an image with fig. I'm trying to replace a make-based approach after someone told me a couple months ago that I was basically doing what fig does. I was also waiting for fig 1.0 to land in Fedora, which is almost there.
+But I have a base image, which is basically based on centos:centos6, installs and enables EPEL, and a private YUM repository. I use this image as a base for all the containers, and incidentally benefit from caching and DRY.
+Conceptually, it looks a bit like this:
+find . -name Dockerfile
+./base/Dockerfile
+./db/Dockerfile
+./front/Dockerfile
+Now I can create and run db and front containers, and link them together, but I have built the base image separately. There is no base container.
+Did I miss something?

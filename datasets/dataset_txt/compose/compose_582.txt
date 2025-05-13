@@ -1,0 +1,8 @@
+steinybot commented on 11 Jul 2018
+Feature request
+It seems that informational messages are printed to stderr by design based on this comment:
+docker-compose prints informational messages to stderr, and container output to the same stream as it was written to in the container (stdout or stderr).
+I can see why this is the case as it separates informational messages from other output that could conceivably be piped to other commands. Including informational messages in stdout in this case would break the input-output flow.
+I would like to be able to add a flag to get informational messages (log level INFO and below) to go to stdout instead so that I can leave stderr for warnings and errors only. I do not want to redirect all of stderr to stdout and I do not want to set the log level to WARNING and miss out on the informational messages.
+The specific use case I have is when running docker-compose from within sbt, sbt will redirect the output from the docker-compose process to its logs (and output) and anything that comes from stderr will be prefixed with [error] (in red). I still want to see the informational messages but just not have them treated as errors.
+10

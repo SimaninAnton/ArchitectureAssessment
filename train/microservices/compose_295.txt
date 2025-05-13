@@ -1,0 +1,5 @@
+Contributor
+chris-crone commented on 5 Feb 2019 •
+edited
+Python 3.6.8 will be the last release of Python 3.6. As such, we should update to use Python 3.7 for builds.
+1

@@ -1,0 +1,26 @@
+artdevgame commented on 6 Feb 2017
+Running sudo docker.compose -f docker-compose.yml up fails with the following error:
+ERROR: .IOError: [Errno 13] Permission denied: u'./docker-compose.yml'
+I've seen a similar problem raised in #3305 but I'm unsure if it's connected.
+I'm a little unsure if I'm doing something unexpected.
+docker version:
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.6.2
+ Git commit:   v1.11.2-snap-38fd0d3
+ Built:        Tue Nov 15 13:39:13 2016
+ OS/Arch:      linux/arm
+
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.6.2
+ Git commit:   v1.11.2-snap-38fd0d3
+ Built:        Tue Nov 15 13:39:13 2016
+ OS/Arch:      linux/arm
+docker.compose version
+docker-compose version 1.7.1, build unknown
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016

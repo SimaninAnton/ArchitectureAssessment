@@ -1,0 +1,1 @@
+Some of docker-compose output is sent neither on stdout nor on stderr

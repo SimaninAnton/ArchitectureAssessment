@@ -1,0 +1,4 @@
+Wilfred commented on 7 Sep 2017 •
+edited
+It would be nice if docker-compose create supported the --remove-orphans argument.
+Currently, it doesn't seem to be possible to create containers without starting, whilst also removing orphans. I can't see a command (or combination of commands) that do this.

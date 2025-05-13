@@ -1,0 +1,25 @@
+agordeev commented on 4 Oct 2016 •
+edited
+$ docker-compose version
+docker-compose version 1.8.1, build 878cff1
+docker-py version: 1.10.3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Here's how my docker-compose.yml file looks like:
+parse-server:
+  image: 94fc5293168d
+  restart: always
+  env_file: config.env
+  ports:
+    - "1337:1337"
+  environment:
+    PORT: 1337
+    DATABASE_URI: $DATABASE_URI
+    APP_ID: $APP_ID
+    MASTER_KEY: $MASTER_KEY
+ ......
+However, when I run docker-compose up -d, Compose doesn't expose variables from config.env to environment variables.
+Curious, when I remove env_file: config.env and rename config.env to .env, everything works just fine.
+PS: env_file: ./config.env doesn't work either.
+23
+3

@@ -1,0 +1,1 @@
+Docker produces invalid configuration when using 'config' CLI

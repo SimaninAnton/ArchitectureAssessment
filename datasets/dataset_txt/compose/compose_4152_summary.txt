@@ -1,0 +1,1 @@
+Running a shell and allowing it to idle makes shell unresponsive

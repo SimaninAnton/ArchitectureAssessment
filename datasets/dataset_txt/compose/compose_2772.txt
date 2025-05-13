@@ -1,0 +1,7 @@
+Contributor
+kojiromike commented on 14 Feb 2016
+https://docs.docker.com/compose/compose-file/#volume-configuration-reference says
+> See the docker volume subcommand documentation for more information.
+The link https://docs.docker.com/engine/reference/commandline/volume/ is incorrect. In fact, there is no single "volume" command to reference, so I'm not sure what to suggest.
+https://docs.docker.com/engine/reference/commandline/volume_create/
+https://docs.docker.com/engine/userguide/containers/dockervolumes/ ?

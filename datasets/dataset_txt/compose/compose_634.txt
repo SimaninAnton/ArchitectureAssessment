@@ -1,0 +1,68 @@
+DRAKUN commented on 6 Jun 2018
+Description of the issue
+MySQL Connection Error: (2002) Connection refused
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.2, build a133471
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:20:16 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:23:58 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+services:
+  adminer:
+    image: adminer
+    ports:
+    - published: 8080
+      target: 8080
+    restart: always
+  db:
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_PASSWORD: wordpresstx
+      MYSQL_ROOT_PASSWORD: drakuntx
+      MYSQL_USER: wordpress
+    image: mysql:5.7
+    restart: always
+    volumes:
+    - db_data2:/var/lib/mysql:rw
+  wordpress:
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_PASSWORD: wordpresstx
+      WORDPRESS_DB_USER: wordpress
+    image: wordpress:latest
+    links:
+    - db
+    ports:
+    - published: 8081
+      target: 80
+    restart: always
+    volumes:
+    - /home/user/tawfex/plugins:/var/www/html/wp-content/plugins:rw
+version: '3.3'
+volumes:
+  db_data2: {}
+Steps to reproduce the issue
+Observed result
+Expected result
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

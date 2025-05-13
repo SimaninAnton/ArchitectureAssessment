@@ -1,0 +1,1 @@
+docker-compose up -d doesn't expose ports when defined with build directive

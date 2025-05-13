@@ -1,0 +1,3 @@
+nhooey commented on 13 Oct 2015
+The environment variables in docker-compose.yml are not set during the build phase of a container's life, but only during the "run phase" (that might be the wrong name for it).
+Until this is possible, the docker-compose.yml documentation about the environment should be updated to be unambiguous by stating that the environment will only get set during the run phase.

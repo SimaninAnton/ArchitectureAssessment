@@ -1,0 +1,1 @@
+Extends parameter does not work after 1.15.0 update

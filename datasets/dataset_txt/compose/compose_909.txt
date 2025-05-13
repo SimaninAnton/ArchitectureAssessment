@@ -1,0 +1,10 @@
+mitsos1os commented on 29 Jan 2018
+Using the anchor utility of YAML, we cannot use some common defined anchors (such as extension fields, x-*), to declare common configuration in the base compose file and then use them in the extra compose overrides. Docker compose throws error found undefined alias
+To reproduce create fragment in docker-compose.yml:
+x-function: &json-logging
+  driver: "json-file"
+  options:
+    max-size: "100m"
+And use this anchor in a point in a docker-compose.prod.yml:
+logging: *json-logging
+Running docker-compose -f docker-compose.yml -f docker-compose.prod.yml config will get the error mentioned. Only solution is to duplicate information across all compose files

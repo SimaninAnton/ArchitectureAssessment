@@ -1,0 +1,1 @@
+Compose does not support 'configs' configuration with v3.3

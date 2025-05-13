@@ -1,0 +1,20 @@
+chiefy commented on 14 Jan 2016
+I'm not really sure when this happened, but I just noticed it on some of our prod boxes. When you run docker compose and one of your containers uses an alternate log format (in our case "gelf"), logs still get pushed to stdout.
+❯ docker --version
+Docker version 1.9.1, build a34a1d5
+❯ docker-compose --version
+docker-compose version 1.5.2, build unknown
+...
+web:
+  image: nginx
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: udp://172.0.1.2:12201
+    gelf-tag: "test"
+  links:
+    - "logstash"
+  ports:
+    - "80:80"
+logstash_1 | {:timestamp=>"2016-01-13T21:11:36.707000+0000", :message=>"Starting gelf listener", :address=>"0.0.0.0:12201", :level=>:info, :file=>"logstash/inputs/gelf.rb", :line=>"87", :method=>"udp_listener"}
+web_1      | 192.168.99.1 - - [13/Jan/2016:21:11:41 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36" "-"
+logstash_1 | {:timestamp=>"2016-01-13T21:11:41.575000+0000", :message=>"output received", :event=>{"version"=>"1.1", "host"=>"docker-host", "short_message"=>"192.168.99.1 - - [13/Jan/2016:21:11:41 +0000] \"GET / HTTP/1.1\" 304 0 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36\" \"-\"", "level"=>6, "facility"=>"", "@version"=>"1", "@timestamp"=>"2016-01-13T21:11:41.000Z", "source_host"=>"172.17.0.1", "message"=>"", "command"=>"nginx -g daemon off;", "container_id"=>"91dd9e798b5138573d603618efad8c4cfbcf27097300b214da91927eb179b622", "container_name"=>"dclogtest_web_1", "created"=>"2016-01-13T21:11:25.232913722Z", "image_id"=>"407195ab8b072ce8b237f664b8d032704e8047b8e64139cc2e017163f7161647", "image_name"=>"nginx", "tag"=>"test", "type"=>"docker-log"}, :level=>:debug, :file=>"(eval)", :line=>"21", :method=>"output_func"}

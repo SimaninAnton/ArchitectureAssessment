@@ -1,0 +1,129 @@
+KristofMorva commented on 12 Jun 2017
+Up until now I had my health-check commands in the yml file (on both Windows and Linux). I have just came across with healthcheck/mysql and some similar images, which have these checks already written. I have tried it out, it works perfectly on Windows. On Linux however, I've got the following error: "ERROR: for php Service db is missing a healthcheck configuration". I even tried re-defining CMD HEALTHCHECK in the Dockerfile, but the error persists.
+May be related to docker/for-mac#1341, it's the same for OSX.
+docker-compose.yml
+version: "2.1"
+
+services:
+    web:
+        restart: always
+        build:
+            context: ./docker/web
+        ports:
+            - "${APP_EXTERNAL_PORT-80}:80"
+        volumes:
+            - ./:/var/www/html
+            - ./storage/docker/logs/nginx:/var/log/nginx
+        depends_on:
+            php:
+                condition: service_healthy
+    php:
+        restart: always
+        build:
+            context: ./docker/php
+        volumes:
+            - .:/var/www/html
+            - ./docker/php/${APP_ENV}:/usr/local/etc/php
+            - ./storage/docker/logs/supervisor:/var/log/supervisor
+            - ~/.npm:/root/.npm
+            - ~/.composer:/root/.composer
+        healthcheck:
+            test: pidof php-fpm
+            interval: 1s
+            timeout: 1s
+            retries: 60
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+    redis:
+        restart: always
+        build:
+            context: ./docker/redis
+        volumes:
+            - ./storage/docker/logs/redis:/var/log/redis
+    db:
+        restart: always
+        build:
+            context: ./docker/db
+        ports:
+            - "${DB_EXTERNAL_PORT-3306}:3306"
+        volumes:
+            - ./storage/docker/db:/var/lib/mysql
+            - ./storage/docker/logs/mysql:/var/log/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+            - MYSQL_DATABASE=${DB_DATABASE}
+./docker/db/Dockerfile
+FROM healthcheck/mysql
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x entrypoint.sh
+
+COPY mysqld.cnf /etc/mysql/mysql.conf.d/
+
+CMD ["mysqld"]
+docker version
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Mon Mar 27 17:14:09 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Mon Mar 27 17:14:09 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+docker info
+Containers: 2
+ Running: 2
+ Paused: 0
+ Stopped: 0
+Images: 56
+Server Version: 17.03.1-ce
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 72
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 4ab9917febca54791c5f071a9d1f404867857fcc
+runc version: 54296cf40ad8143b62dbcaa1d90e520a2136ddfe
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.4.0-79-generic
+Operating System: Ubuntu 16.04.2 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 3.859 GiB
+Name: rapax
+ID: UH3Z:227A:YCJL:ANY4:2ASK:S45A:JJEH:7WKQ:KOCD:L2Y3:XX2K:OOVV
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+Sorry if just I'm missing something obvious.

@@ -1,0 +1,6 @@
+wojas commented on 12 Jan 2017
+I am running Docker for Mac 1.13.0-rc5-beta35 (14875) with the shipped docker-compose version 1.10.0-rc1, build ecff6f1.
+When I am building images with this version, every image seems to be rebuilt from scratch instead of reusing cached layers, significantly slowing down builds.
+Judging from docker build --help, the latest docker has switched to remove intermediate images by default during builds and allows disabling this behavior with --rm=false.
+docker-compose build does not support this option yet.
+docker-compose should either use the old default, or provide an option like --rm=false to revert to the old behavior.

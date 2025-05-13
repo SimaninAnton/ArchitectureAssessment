@@ -1,0 +1,1 @@
+feature : add global spec for all services

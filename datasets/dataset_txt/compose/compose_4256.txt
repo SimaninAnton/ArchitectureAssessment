@@ -1,0 +1,8 @@
+Contributor
+bfirsh commented on 29 Jul 2014
+redis = Redis(
+    host=os.environ.get('REDIS_1_PORT_6379_TCP_ADDR'),
+    port=int(os.environ.get('REDIS_1_PORT_6379_TCP_PORT'))
+)
+This is bonkers. We should do this instead:
+redis = Redis(host="redis-1", port="6379")

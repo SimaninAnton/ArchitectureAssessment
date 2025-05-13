@@ -1,0 +1,35 @@
+dm-wyncode commented on 31 Jul 2016 •
+edited
+I was just going through the quickstart guide and discovered that the example Dockerfile threw errors.
+line 30 of rails.md
+I had to change line 30 to cd /myapp && bundle install
+And then I had more errors.
+I am happy to make a pull request. I wanted to file this before I lost track of it whilst doing the tutorial.
+This analogous Dockerfile example fixed the issue:
+FROM ruby:2.3.0
+
+VOLUME ["/widget_app"]
+WORKDIR /widget_app
+EXPOSE 3000
+
+RUN apt-get update -qq &&\
+    apt-get install -y \
+        build-essential \
+        libpq-dev \
+        nodejs
+ADD ./widget_app/Gemfile /widget_app/Gemfile
+ADD ./widget_app/Gemfile.lock /widget_app/Gemfile.lock
+RUN bundle install
+version: '2'
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - ./widget_app:/widget_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db

@@ -1,0 +1,30 @@
+srinivasankrish commented on 7 Jan 2018 •
+edited
+Docker version
+Client:
+Version:      1.11.0
+API version:  1.23
+Go version:   go1.5.4
+Git commit:   4dc5990
+Built:        Wed Apr 13 18:34:23 2016
+OS/Arch:      linux/amd64
+Server:
+Version:      1.11.0
+API version:  1.23
+Go version:   go1.5.4
+Git commit:   4dc5990
+Built:        Wed Apr 13 18:34:23 2016
+OS/Arch:      linux/amd64
+Docker Compose Version
+docker-compose version 1.17.0, build ac53b73
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+I have tried setting
+DOCKER_API_VERSION=1.23
+I use the command
+docker-compose pull --parallel
+I use version 3 in compose.yaml
+I get the error
+client is newer than server (client API version: 1.25, server API version: 1.23).
+The docker compose pull command does not give any way to set the client version internally. Also setting the DOCKER_API_VERSION environment variable is not helping. Can anybody please help?

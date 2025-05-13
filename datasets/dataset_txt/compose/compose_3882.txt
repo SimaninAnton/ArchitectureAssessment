@@ -1,0 +1,5 @@
+sourav82 commented on 2 Mar 2015
+I've private docker registry hosted on a HTTP endpoint. While trying to pull image from the registry, it gives below errors -
+docker.errors.DockerException: HTTPS endpoint unresponsive and insecure mode isn't enabled
+Is there any way to specify insecure registry for docker-compose?
+I've set --isecure-registry in docker conf and docker CLI works well with the registry URL.

@@ -1,0 +1,34 @@
+vidarl commented on 14 Oct 2014
+It seems like fig will process services containing "image" before "build".
+This is not what you want... I expect the services to be processed in the same order they are listed in fig.yml. First, you want to make sure your images are created, before you actually try to create the containers.
+I have the following fig.yml:
+ubuntu:
+  build: dockerfiles/ubuntu
+dbvol:
+  image: projectname_ubuntu
+  volumes:
+   - volumes/mysql:/var/lib/mysql
+The ubuntu service should to be created first ( since project name is projectname, the image name should be "projectname_ubuntu"
+However, this is not what happens:
+$ fig up -d
+Creating projectname_dbvol_1...
+Pulling image projectname_ubuntu...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 30, in main
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 31, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 50, in perform_command
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 340, in up
+  File "/code/build/fig/out00-PYZ.pyz/fig.project", line 170, in up
+  File "/code/build/fig/out00-PYZ.pyz/fig.service", line 166, in recreate_containers
+  File "/code/build/fig/out00-PYZ.pyz/fig.service", line 153, in create_container
+  File "/code/build/fig/out00-PYZ.pyz/fig.progress_stream", line 35, in stream_output
+  File "/code/build/fig/out00-PYZ.pyz/fig.progress_stream", line 48, in print_output_event
+fig.progress_stream.StreamOutputError: HTTP code: 404
+As you can see, fig tries to create the dbvol service before ubuntu. It fails because it can't find the projectname_ubuntu image
+fyi :
+$ fig --version
+fig 0.5.2

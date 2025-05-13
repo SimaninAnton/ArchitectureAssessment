@@ -1,0 +1,71 @@
+kelly001 commented on 18 Jan 2018
+Hi!
+I'm trying to set up a project with docker. Win 7 64 bit
+I've installed docker toolbox and started docker-machine succesfuly http://joxi.ru/v29OBPKUGgR78r
+But when I'm trying to build project it Crashed with error windows named pipe error code 2
+http://joxi.ru/KAgYao3cgyNokm
+my docker-compose.yaml
+`version: "2"
+services:
+web:
+    build: etc/web/
+    container_name: poembook_web
+    links:
+        - mysql:mysql
+        - memcached:memcached
+        - redis:redis
+        - elasticsearch:elasticsearch
+    volumes:
+        - ./:/wamp64/www/poembook 
+
+nginx:
+    build: etc/nginx/
+    container_name: poembook_nginx
+    restart: always
+    image: nginx
+    ports:
+        - "80:80"
+    volumes_from:
+        - web
+    links:
+        - web:web
+
+mysql:
+    container_name: poembook_mysql
+    restart: always
+    image: mysql
+    ports:
+        - "3306:3306"
+    environment:
+        - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:
+        - ./app/cache/database:/var/lib/mysql
+        - ./etc/mysql/my.cnf:/etc/my.cnf
+
+memcached:
+    container_name: poembook_memcached
+    restart: always
+    image: memcached
+    ports:
+        - "11211:11211"
+
+redis:
+    container_name: poembook_redis
+    restart: always
+    image: redis
+    ports:
+        - "6379:6379"
+
+elasticsearch:
+    container_name: poembook_elasticsearch
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.3.1
+    mem_limit: 256m
+    environment:
+          - xpack.security.enabled=false
+          - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ports:
+        - "9200:9200"
+`
+Should I make a file "Dockerfile"? Or anything else to fix this?
+1

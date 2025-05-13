@@ -1,0 +1,1 @@
+Docker-compose not accepting 'extends' option in docker-compose.yml file

@@ -1,0 +1,9 @@
+egee-irl commented on 8 Dec 2017 •
+edited
+According to the Docker-Compose documentation listed here, using pre-existing networks is super simple:
+networks:
+default:
+external:
+name: my-pre-existing-network
+^ think of this in YAML formatting
+But in my version (1.16.1 on Fedora 27), this syntax does not work. I get this error:services.my_container.networks.default contains unsupported option: 'external' Either the documentation is incorrect/misleading, or the version of Docker-Compose I am running is broken.

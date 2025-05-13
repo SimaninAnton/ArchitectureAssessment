@@ -1,0 +1,123 @@
+skarpushin commented on 29 Apr 2018
+Description of the issue
+I have 2 virtual machines:
+• One is based on Mint 18.2 Mate
+• Other is based on Mint 18.3 Mate
+I'm invoking docker-compose up
+On 18.2 mapping for docker-entrypoint-initdb.d gets picked up and sql scripts are executed. But on 18.3 it doesn't happen and it's not even saying that file is ignored -- just nothing.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.8.0, build unknown
+Output of "docker version"
+Docker version 17.05.0-ce, build 89658be
+Output of "docker-compose config"
+networks: {}
+services:
+  mariadb:
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    environment:
+      MYSQL_DATABASE: summerb_tests
+      MYSQL_ROOT_PASSWORD: pwd1
+    image: mariadb:10.0.33
+    ports:
+    - 3308:3306
+    restart: always
+    volumes:
+    - /home/sergeyk/_prj/summerb-master/src/summerb/summerb_tests_db/sql_init_scripts:/docker-entrypoint-initdb.d:rw
+version: '2.0'
+volumes: {}
+Steps to reproduce the issue
+Clone repo https://github.com/skarpushin/summerb/tree/master/src/summerb/summerb_tests_db on Mint 18.3 Mate
+Do docker-compose up
+(error) sql scripts are not executed
+Observed result
+On 18.2 this section of log looks like: (this is expected)
+mariadb_1  | 180428 17:20:21 [Warning] 'proxies_priv' entry '@% root@bb430dbcf809' ignored in --skip-name-resolve mode.
+mariadb_1  | 
+mariadb_1  | /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/s01_user-service.sql
+mariadb_1  | 
+mariadb_1  | 
+mariadb_1  | /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/s02_property-service.sql
+mariadb_1  | 
+mariadb_1  | 
+mariadb_1  | /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/s03_article-service.sql
+mariadb_1  | 
+mariadb_1  | 
+mariadb_1  | 180428 17:20:22 [Note] mysqld: Normal shutdown
+On 18.3 this section of log looks like: (this is UNEXPECTED)
+mariadb_1  | 180428 18:01:59 [Warning] 'proxies_priv' entry '@% root@71df66b47bf2' ignored in --skip-name-resolve mode.
+mariadb_1  | 
+mariadb_1  | 180428 18:01:59 [Note] mysqld: Normal shutdown
+Expected result
+I expected behavior on 18.3 will be the same as on 18.2
+Stacktrace / full error message
+N/A
+Additional information
+Mint 18.2 OS version
+# cat /etc/issue
+Linux Mint 18.2 Sonya \n \l
+
+# cat /etc/linuxmint/info
+RELEASE=18.2
+CODENAME=sonya
+EDITION="MATE 64-bit"
+DESCRIPTION="Linux Mint 18.2 Sonya"
+DESKTOP=MATE
+TOOLKIT=GTK
+NEW_FEATURES_URL=http://www.linuxmint.com/rel_sonya_mate_whatsnew.php
+RELEASE_NOTES_URL=http://www.linuxmint.com/rel_sonya_mate.php
+USER_GUIDE_URL=help:linuxmint
+GRUB_TITLE=Linux Mint 18.2 MATE 64-bit
+
+# cat /etc/os-release
+NAME="Linux Mint"
+VERSION="18.1 (Sonya)"
+ID=linuxmint
+ID_LIKE=ubuntu
+PRETTY_NAME="Linux Mint 18.2"
+VERSION_ID="18.2"
+HOME_URL="http://www.linuxmint.com/"
+SUPPORT_URL="http://forums.linuxmint.com/"
+BUG_REPORT_URL="http://bugs.launchpad.net/linuxmint/"
+VERSION_CODENAME=sonya
+UBUNTU_CODENAME=xenial
+Mint 18.3 OS version
+# cat /etc/issue
+Linux Mint 18.3 Sylvia \n \l
+
+# cat /etc/linuxmint/info
+RELEASE=18.3
+CODENAME=sylvia
+EDITION="MATE 64-bit"
+DESCRIPTION="Linux Mint 18.3 Sylvia"
+DESKTOP=MATE
+TOOLKIT=GTK
+NEW_FEATURES_URL=http://www.linuxmint.com/rel_sylvia_mate_whatsnew.php
+RELEASE_NOTES_URL=http://www.linuxmint.com/rel_sylvia_mate.php
+USER_GUIDE_URL=help:linuxmint
+GRUB_TITLE=Linux Mint 18.3 MATE 64-bit
+
+# cat /etc/os-release
+NAME="Linux Mint"
+VERSION="18.3 (Sylvia)"
+ID=linuxmint
+ID_LIKE=ubuntu
+PRETTY_NAME="Linux Mint 18.3"
+VERSION_ID="18.3"
+HOME_URL="http://www.linuxmint.com/"
+SUPPORT_URL="http://forums.linuxmint.com/"
+BUG_REPORT_URL="http://bugs.launchpad.net/linuxmint/"
+VERSION_CODENAME=sylvia
+UBUNTU_CODENAME=xenial
+docker-compose install method
+On both machines I've executed same series of commands:
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 \
+      --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+apt update
+
+apt install linux-image-generic linux-image-extra-virtual
+reboot
+
+sudo apt install docker-engine
+sudo apt install docker-compose

@@ -1,0 +1,52 @@
+systemmonkey42 commented on 19 Jun 2017
+In docker-compose 1.8.1 the following combination works;
+docker-compose.yml
+version: '2'
+
+services:
+  test:
+    extends:
+      file: test.yml
+      service: test
+    ports:
+      - 1000:1000/tcp
+      - 1000:1000/udp
+test.yml
+version: '2'
+
+services:
+  test:
+    image: ubuntu
+    entrypoint: sleep 3600
+docker-compose version 1.8.1, build 878cff1
+docker-py version: 1.10.3
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+docker-compose config
+networks: {}
+services:
+  test:
+    entrypoint: sleep 3600
+    image: ubuntu
+    ports:
+    - 1000:1000/tcp
+    - 1000:1000/udp
+version: '2.0'
+volumes: {}
+Note both UDP and TCP ports are forwarded.
+With later versions of docker-compose...
+docker-compose version 1.14.0-rc2, build 24dae73
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t 3 May 2016
+services:
+  test:
+    entrypoint: sleep 3600
+    image: ubuntu
+    ports:
+    - 1000:1000/udp
+version: '2.0'
+Note the missing TCP port mapping.
+Doing the same thing without the 'extends' keyword work. Unfortunately all our deployments are templated this way.
+Thanks
+David

@@ -1,0 +1,35 @@
+rduivenvoorde commented on 20 Nov 2015
+On Debian Testing here.
+$ docker -v
+Docker version 1.8.3, build f4bf5c7
+apt-cache show docker-compose
+Package: docker-compose
+Version: 1.5.1-1
+Trying to run docker-compose (was running fine some time ago):
+docker-compose
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in 
+    load_entry_point('docker-compose==1.5.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 558, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2682, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2355, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2361, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 16, in 
+    from ..config import ConfigurationError
+  File "/usr/lib/python2.7/dist-packages/compose/config/__init__.py", line 2, in 
+    from .config import ConfigurationError
+  File "/usr/lib/python2.7/dist-packages/compose/config/config.py", line 14, in 
+    from .validation import validate_against_fields_schema
+  File "/usr/lib/python2.7/dist-packages/compose/config/validation.py", line 7, in 
+    from docker.utils.ports import split_port
+ImportError: No module named ports
+Is docker.utils.ports supposed to be provided by python-docker?
+apt-cache show python-docker
+Package: python-docker
+Version: 1.5.0-1
+Does not look like I'm running old stuff is it?
+Any ideas?

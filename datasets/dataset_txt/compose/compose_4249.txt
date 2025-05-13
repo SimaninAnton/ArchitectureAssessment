@@ -1,0 +1,42 @@
+patrick91 commented on 1 Aug 2014
+Hi, I'm having some troubles with fig and npm and sorry for the bad title.
+I'm trying to install some npm deps (plus bower) but I cannot see the folder I copy using fig ls.
+this is the fig.yml that I'm using:
+db:
+  image: orchardup/postgresql
+web:
+  build: .
+  command: python manage.py runserver  0.0.0.0:8000
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
+  links:
+    - db
+  environment:
+    - DJANGO_SETTINGS_MODULE=settings.fig
+and this is the Dockerfile
+FROM orchardup/python:2.7
+ENV PYTHONUNBUFFERED 1
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update -qq && apt-get install -y nodejs python-psycopg2 git-core
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN apt-get install -y npm
+RUN apt-get install -y rubygems1.9.1
+RUN gem install compass
+RUN npm install -g grunt grunt-cli bower
+ADD package.json /tmp/package.json
+WORKDIR /tmp
+RUN npm install
+RUN mkdir -p /code && cp -a /tmp/node_modules /code
+
+WORKDIR /code
+ADD bower.json /code/
+RUN bower install --allow-root
+ADD requirements.txt /code/
+RUN pip install -r requirements.txt
+ADD . /code/
+when I run fig build everything seems to work fine. But if I run fig run web ls
+I don't get the node_modules directory. But I if I run docker -i image_name ls
+I can see the node_modules directory.
+Is this a fig bug or it's just me doing something wrong?

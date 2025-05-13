@@ -1,0 +1,69 @@
+lucastheisen commented on 17 May 2018
+Description of the issue
+Running docker-compose build results in:
+ERROR: Cannot locate specified Dockerfile: .dockerfile\test\Dockerfile
+Context information (for bug reports)
+docker-compose version 1.21.2, build a1334711
+Client:
+ Version:      18.05.0-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   f150324
+ Built:        Wed May  9 22:12:05 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.05.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.10.1
+  Git commit:   f150324
+  Built:        Wed May  9 22:20:16 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+services:
+  test:
+    build:
+      context: C:\Users\ltheisen\git\lucastheisen-docker-compose-fail
+      dockerfile: ./.dockerfile/test/Dockerfile
+version: '3.0'
+Steps to reproduce the issue
+Clone this repo
+Run docker-compose build
+Observed result
+ERROR: Cannot locate specified Dockerfile: .dockerfile\test\Dockerfile
+Expected result
+Successful build
+Stacktrace / full error message
+PS C:\Users\ltheisen\git\lucastheisen-docker-compose-fail> docker-compose --verbose build
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.utils.config.find_config_file: Trying paths: ['C:\\Users\\ltheisen\\.docker\\config.json', 'C:\\Users\\ltheisen\\.dockercfg']
+docker.utils.config.find_config_file: Found file at path: C:\Users\ltheisen\.docker\config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Auth data for https://index.docker.io/v1/ is absent. Client might be using a credentials store instead.
+docker.auth.load_config: Found 'credsStore' section
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.25/version HTTP/1.1" 200 568
+compose.cli.command.get_client: docker-compose version 1.21.2, build a1334711
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+compose.cli.command.get_client: Docker base_url: http+docker://localnpipe
+compose.cli.command.get_client: Docker version: Platform={'Name': ''}, Components=[{'Name': 'Engine', 'Version': '18.05.0-ce', 'Details': {'ApiVersion': '1.37', 'Arch': 'amd64', 'BuildTime': '2018-05-09T22:20:16.000000000+00:00', 'Experimental': 'true', 'GitCommit': 'f150324', 'GoVersion': 'go1.10.1', 'KernelVersion': '4.9.87-linuxkit-aufs', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.05.0-ce, ApiVersion=1.37, MinAPIVersion=1.12, GitCommit=f150324, GoVersion=go1.10.1, Os=linux, Arch=amd64, KernelVersion=4.9.87-linuxkit-aufs, Experimental=True, BuildTime=2018-05-09T22:20:16.000000000+00:00
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- ('lucastheisendockercomposefail_default')
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.25/networks/lucastheisendockercomposefail_default HTTP/1.1" 404 70
+compose.service.build: Building test
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='C:\\Users\\ltheisen\\git\\lucastheisen-docker-compose-fail', tag='lucastheisen-docker-compose-fail_test', rm=True, forcerm=False, pull=False, nocache=False, dockerfile='./.dockerfile/test/Dockerfile', cache_from=None, labels=None, buildargs={}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.auth.resolve_authconfig: Using credentials store "wincred"
+docker.auth._resolve_authconfig_credstore: Looking for auth entry for 'https://index.docker.io/v1/'
+docker.api.build._set_auth_headers: Sending auth config ('https://index.docker.io/v1/')
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.25/build?t=lucastheisen-docker-compose-fail_test&q=False&nocache=False&rm=True&forcerm=False&pull=False&dockerfile=.dockerfile%5Ctest%5CDockerfile HTTP/1.1" 500 80
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object APIClient._stream_helper at 0x000001AAA1D7D1A8>
+ERROR: compose.cli.errors.log_api_error: Cannot locate specified Dockerfile: .dockerfile\test\Dockerfile
+Additional information
+OS version / distribution, docker-compose install method, etc.
+OS: Windows 1709
+Install method: choco install docker-for-windows
+7

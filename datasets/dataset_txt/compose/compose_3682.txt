@@ -1,0 +1,30 @@
+turtlemonvh commented on 25 Apr 2015
+Reproducing the Error
+Create 2 files.
+# compose_base.yml
+sleeper:
+  build: /tmp/doesnotexist
+
+# compose_local.yml
+sleeper:
+  extends:
+    file: compose_base.yml
+    service: sleeper
+  image: ubuntu:12.04
+  command: sleep 1000
+Run
+docker-compose -f compose_local.yml up -d
+You will get the error:
+build path /tmp/doesnotexist either does not exist or is not accessible.
+According to the docs
+In the case of build and image, using one in the local service causes Compose to discard the other, if it was defined in the original service.
+Since that section is replaced, a reference to an invalid path should not result in an error.
+Diagnosis
+The root of the problem is that other_loader.make_service_dict is called before the configurations are merged. Part of make_service_dict is a call to process_container_options which does a check on existence of the build directory.
+I realize this is done this way to make recursive loading of parent configs easy, but I think that those checks are not necessary if the configuration being built is a configuration that is being extended from and that part of the configuration is being overwritten.
+Why its a problem
+If I want to build an image on one machine, then just run the image I build on another machine (in production), I'd like to be able to use the same base config file in both environments.
+With the current bug / implementation we have 2 options:
+Create another compose.yml file just for building that inherits from base and defines build directories for each section. The base compose file would then have to define an image section because one or the other is required.
+Create empty directories on the machine where docker-compose expects to find build directories
+Both of these are pretty silly options.

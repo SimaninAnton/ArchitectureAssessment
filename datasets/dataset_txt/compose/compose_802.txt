@@ -1,0 +1,3 @@
+reypm commented on 14 Mar 2018
+I am working in a stack using Docker Compose and it defines like 6 web services where I need to specify a lot of extra_hosts on each of them. This hosts are the same. It's possible to have a file for this that can be re-used in all the services definition? Otherwise the file will have a lot of lines to repeat the same thing per service.
+What do you think about this?

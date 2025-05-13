@@ -1,0 +1,32 @@
+caolan commented on 19 Feb 2015
+Given this Dockerfile:
+FROM debian:wheezy
+ENV DEBIAN_FRONTEND noninteractive
+
+# The password is root
+RUN \
+  echo "root:root" | chpasswd && \
+  mkdir /var/run/sshd
+
+# Install OpenSSH server
+RUN \
+  apt-get update && \
+  apt-get install -y openssh-server && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
+
+EXPOSE 22
+
+ENTRYPOINT ["/usr/sbin/sshd"]
+CMD ["-D"]
+I can build and run using docker:
+docker build -t openssh .
+docker run -p 2222:22 openssh
+But using fig with the following fig.yml file (and the above docker file in ./sshd directory)...
+sshd:
+    build: ./sshd
+    ports:
+        - 2222:22
+...and doing fig up, I get the following error:
+Recreating example_sshd_1...
+Cannot start container 1c8b4c14a5ab70eeb5841808c5e4f0d673659d4e690ff1c8d4728c034dbbd06b:  (exit status 2)
+So, why is this likely to be different for fig?

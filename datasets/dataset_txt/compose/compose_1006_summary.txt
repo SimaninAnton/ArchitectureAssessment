@@ -1,0 +1,1 @@
+Compose isn't supposed to support 'credential_spec' key in V3.3

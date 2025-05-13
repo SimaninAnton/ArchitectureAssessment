@@ -1,0 +1,43 @@
+Contributor
+twhiteman commented on 27 May 2015
+When running docker-compose up I ran into this division by zero exception:
+Creating t_couchbase_1...
+Pulling image couchbase/server:latest...
+latest: Pulling from couchbase/server (16257616-a6fb-454c-81ec-f50b5dea4c90)
+65b80bc70845: Pulling dependent layers
+b9aeeaeb5e17: Pulling fs layer
+871e008e5a3d: Pulling fs layer
+8fa053ae1529: Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 208, in up
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 214, in recreate_containers
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.service", line 199, in create_container
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 37, in stream_output
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 78, in print_output_event
+ZeroDivisionError: float division by zero
+Here are some of the payload outputs I've seen:
+      "payload": {
+        "id": "e6a720bcaa84",
+        "status": "Downloading",
+        "progressDetail": {
+          "current": 0,
+          "total": 0,
+          "start": 1432666958
+        }
+      },
+
+      "payload": {
+        "id": "b9aeeaeb5e17",
+        "status": "Downloading",
+        "progressDetail": {
+          "current": 12966256,
+          "total": null,
+          "start": 1432666954
+        }
+      },

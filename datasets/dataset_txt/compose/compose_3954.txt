@@ -1,0 +1,10 @@
+Contributor
+alunduil commented on 3 Feb 2015
+When using the etcd image from the CoreOS guys: quay.io/coreos/etcd, I get the following error from docker-compose:
+Cannot start container a6da0c7e877b1075696d64802f7e159b7660e5cd395064b891ab5712c74bc266: exec: "/bin/echo": stat /bin/echo: no such file or directory
+This is when starting the following datastore service from docker-compose.yml:
+datastore:
+  image: quay.io/coreos/etcd:latest
+  ports:
+   - "4001:4001"
+I found https://github.com/docker/fig/blob/fd30920aac060b03d6e67ec5c3170f670a73d00e/compose/service.py#L288, which indicates that this assumption is hard coded and containers must provide /bin/echo in order to be usable by docker-compose. Is there any way we can remove this assumption so a greater number of containers are usable?

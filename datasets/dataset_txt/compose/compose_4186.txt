@@ -1,0 +1,11 @@
+techniq commented on 19 Sep 2014
+Using docker build I can pull and build an image directly from Github, for example:
+docker build -t java https://github.com/StrictlyBusiness/docker-java8.git
+When I try to do the same using fig build and the following fig.yml:
+webapp:
+  build: https://github.com/StrictlyBusiness/docker-java8.git
+it shows Building webapp... then after ~40 seconds, it shows just a single closing bracket ). For example:
+$ fig build
+Building webapp...
+)
+I haven't found a way to get any more details on what's happening behind the scenes in fig to know why it's failing.

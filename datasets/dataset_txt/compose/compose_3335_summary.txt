@@ -1,0 +1,1 @@
+TTY support for up command

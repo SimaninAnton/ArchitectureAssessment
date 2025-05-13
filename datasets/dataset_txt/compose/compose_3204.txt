@@ -1,0 +1,25 @@
+eyakcn commented on 16 Oct 2015
+docker-compose: 1.2.0
+Creating staging_nginx_1...
+Building nginx...
+Traceback (most recent call last):
+File "", line 3, in
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 208, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 214, in recreate_containers
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 187, in create_container
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 475, in build
+File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 300, in build
+File "/code/build/docker-compose/out00-PYZ.pyz/docker.utils.utils", line 73, in tar
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 284, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/posixpath", line 80, in join
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe8 in position 11: ordinal not in range(128)

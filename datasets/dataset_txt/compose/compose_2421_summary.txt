@@ -1,0 +1,1 @@
+pip install of docker-compose 1.7.1 fails

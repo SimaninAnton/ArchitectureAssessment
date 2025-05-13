@@ -1,0 +1,1 @@
+"http: Hijack is incompatible with use of CloseNotifier in same ServeHTTP call" errors

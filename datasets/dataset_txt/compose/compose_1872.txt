@@ -1,0 +1,18 @@
+creynders commented on 6 Dec 2016
+I'm trying to use ENV variables declared in a .env file in my docker-compose file (I.e. I don't want to use the .env file in a container, just in the build process).
+I have the following:
+# file: build/docker-compose.development.yml
+
+...
+foo:
+    volumes:
+        - "${PROJECT_SRC}/foo.txt:/app/foo.txt"
+# file: .env
+PROJECT_SRC=../src
+Then I run docker-compose:
+$ docker-compose -f build/docker-compose.development.yml build
+But no matter where I put the .env file (i.e. next to or inside the build directory) docker always throws:
+WARNING: The PROJECT_SRC variable is not set. Defaulting to a blank string.
+Am I doing something wrong? Or doesn't it work with the -f flag? Or?
+23
+4

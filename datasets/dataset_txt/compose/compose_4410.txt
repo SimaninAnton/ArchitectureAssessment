@@ -1,0 +1,4 @@
+kballenegger commented on 6 Feb 2014
+The list of supported run arguments does not support the expose argument. Why is that?
+https://github.com/orchardup/fig/blob/d52f73b29a300d646f8aa749732aefd9a1681629/fig/service.py#L13
+Note that expose is not the same thing as ports, as the latter implies opening up a port on the host system, whereas expose is useful when having the port accessible only through a link between two containers.

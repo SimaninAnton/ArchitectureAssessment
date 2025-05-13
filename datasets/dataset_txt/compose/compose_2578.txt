@@ -1,0 +1,24 @@
+BrnoPCmaniak commented on 25 Mar 2016
+I proceed step-by-step https://docs.docker.com/compose/django/ and when I run
+docker-compose run web django-admin.py startproject composeexample .
+Message Unsupported config option for services service: 'web' appears.
+Config when validated fine and docker up and running.
+Linux minos 4.4.4-200.fc22.x86_64 #1 SMP Fri Mar 4 20:06:29 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+sudo docker version
+Client:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 15:45:58 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 15:45:58 2016
+ OS/Arch:      linux/amd64
+docker-compose --version docker-compose 1.2.0
+PS: rewriting docker-compose.yml to version '1' works fine

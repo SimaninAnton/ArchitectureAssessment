@@ -1,0 +1,1 @@
+How to tell nginx to look up a container's IP dynamically so it can be restarted without needing to also restart nginx container?

@@ -1,0 +1,97 @@
+lukerohde commented on 11 May 2018 •
+edited
+Description of the issue
+On an ubuntu 14.04 host, mounting a cifs share works via docker-compose exec and fails when run viadocker-compose run. It works okay on docker for mac. To be clear, I'm talking about using the mount command from cifs-utils inside linux, not the cifs driver in the compose file.
+I've got a repo that reproduces the problem - git clone https://github.com/lukerohde/debug-cifs-on-docker-compose.git && cd debug-cifs-on-docker-compose && ./run-test
+I get permission denied when using docker-compose run www ./myscript or when I set the command option in docker-compose.yml to ./myscript. The specific cifs error is;
+mount error(13): Permission denied
+Refer to the mount.cifs(8) manual page (e.g. man mount.cifs)
+But the mount works when I docker-compose up -d www && docker-compose exec www ./myscript
+The problem exists with windows shares and shares from the dperson/samba docker image
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b
+Docker version 18.03.0-ce, build 0520e24
+My docker-compose.yml looks like
+version: "3"
+services:
+  samba:
+    image: dperson/samba
+    volumes:
+      - ./myshare:/mount
+    environment:
+      - USER=user;password
+      - SHARE=share;/mount
+  www:
+    build: . 
+    environment:
+      - USER=user
+      - PASS=password
+      - SHARE=//samba/share
+    volumes:
+      - .:/app
+    links:
+      - samba
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
+    tty: true
+    stdin_open: true
+    command: tail -f /dev/null
+My dockerfile looks like
+FROM ubuntu
+RUN apt-get update -qq && apt install -y cifs-utils
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
+myscript looks like
+#!/bin/bash
+mkdir -p /mnt/data
+mount -t cifs -o username=$USER,password=$PASS,vers=3\.0 "$SHARE" /mnt/data
+ls /mnt/data
+Steps to reproduce the issue
+git clone https://github.com/lukerohde/debug-cifs-on-docker-compose.git && cd debug-cifs-on-docker-compose && ./run-test
+Run docker-compose run www ./myscript and observe permission denied
+Run docker-compose up -d www && docker-compose exec www ./myscript and observe success
+Observed result
+You only see THE_SHARE_MOUNTS! when running docker-compose exec
+Expected result
+You see THE_SHARE_MOUNTS! when running bothdocker-compose run and docker-compose exec
+Additional information
+Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-144-generic x86_64)
+Docker and docker-compose were installed using the following script
+#!/bin/bash
+# https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
+apt-get update
+
+if [ "$(lsb_release -cs)" = "trusty" ]
+then 
+ echo Installing Docker dependencies for trusty 14.04
+ apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
+fi
+
+apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+apt-key fingerprint 0EBFCD88
+
+read -p "Check if the key is 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 then press enter to continue"
+
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+apt-get update
+apt-get install -y docker-ce
+
+sudo curl -L https://github.com/docker/compose/releases/download/1.20.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.20.1/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose

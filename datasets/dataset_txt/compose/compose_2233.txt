@@ -1,0 +1,18 @@
+yakhyadabo commented on 12 Jul 2016 •
+edited
+Hello,
+Here's a typical docker-compose file. I use is it both for building image (docker-compose build) and to run my tests (docker-compose run test ).
+     version: '2'
+     services:
+
+       test : 
+         links: 
+           - web 
+
+         cmd : "mvn clean verify"
+
+      web: 
+         image: my_repo/my_image:tag
+         build: .
+When I use the run command docker-compose try to build the image before running the test.
+Is there anyway to force it to pull existing image instead of trying to build new one ?

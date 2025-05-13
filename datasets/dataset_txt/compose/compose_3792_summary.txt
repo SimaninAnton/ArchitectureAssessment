@@ -1,0 +1,1 @@
+RUnit does not stop docker-compose's containers

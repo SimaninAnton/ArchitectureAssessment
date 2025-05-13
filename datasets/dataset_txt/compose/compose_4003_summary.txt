@@ -1,0 +1,1 @@
+Fig breaks if there's an empty folder / file in the Dockerfile

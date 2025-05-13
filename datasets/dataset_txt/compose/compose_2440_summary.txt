@@ -1,0 +1,1 @@
+Docker compose ignores.env file when working directory is not where yml file resides

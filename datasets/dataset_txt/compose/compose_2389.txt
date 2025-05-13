@@ -1,0 +1,28 @@
+stania1 commented on 18 May 2016 •
+edited
+Hi,
+Versions:
+docker-compose version 1.5.2, build 7240ff3
+Docker version 1.9.1, build a34a1d5
+I have a docker-compose file that starts up nginx after mounting nginx.conf.
+Suppose this is original-docker-compose.yml:
+nginx:
+  image: <custom nginx image>
+  net: "host"
+  ports:
+    - "80"
+  volumes:
+     - ./nginx.conf:/opt/openresty/nginx/conf/custom/nginx.conf
+The nginx config needs to be overriden in certain cases:
+docker-compose -f original-docker-compose.yml -f overriding-docker-compose.yml up -d
+overriding-docker-compose.yml file:
+nginx:
+  volumes:
+    - ./environment-specific.conf:/opt/openresty/nginx/conf/custom/nginx.conf
+When running docker-compose up with this override, nginx crashes immediately because what gets mounted is somehow an empty directory instead of the file `environment-specific.conf'.
+nginx: [crit] pread() "/opt/openresty/nginx/conf/custom/nginx.conf" failed (21: Is a directory)
+tail: cannot open '/opt/openresty/nginx/logs/access.log' for reading: No such file or directory
+tail: no files remaining
+This looks like a bug, but I could be missing something. Any help / insight / workaround is appreciated.
+Thanks.
+4

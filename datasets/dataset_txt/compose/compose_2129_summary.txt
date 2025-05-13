@@ -1,0 +1,1 @@
+Support for new Docker swarm mode?

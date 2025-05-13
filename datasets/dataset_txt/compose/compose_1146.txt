@@ -1,0 +1,57 @@
+albrow commented on 14 Oct 2017
+If you have duplicate keys in your docker-compose.yaml file, Docker Compose will silently overwrite the value of the first key. It might seem silly, but it is not hard to accidentally include duplicate keys when working with large files with many configuration options. (I just personally spent a long time debugging an issue which ultimately came down to duplicate volumes keys in my docker-compose.yaml file which caused Elasticsearch config to not load correctly). It would be great if Docker Compose could catch problems like this early.
+After perusing the code a little, it seems that this overwriting behavior comes from PyYAML, and there is a related issue there. I still think it's a good idea to create an issue here for discussion.
+One solution is to make a change in PyYAML, but there are other possible solutions. My Python knowledge is limited, but one user appears to have created a Gist which can address this issue by modifying the main PyYAML class to raise an exception for duplicate keys. Alternatively, someone on StackOverflow suggested a different Python package called ruamel.yaml which raises an exception for duplicate keys by default.
+Steps to Reproduce
+I'll use the hashicorp/http-echo image as the basis for a reproducible example.
+Create a new directory and add a docker-compose.yaml file with the following contents:
+version: '3'
+services:
+  echo:
+    image: hashicorp/http-echo
+    ports: 
+      - "5678:5678"
+    command: "-text='Hello, world!'"
+Start the service by running:
+docker-compose up -d
+Then send a request to the service through the exposed port:
+curl http://localhost:5678
+> Hello, world!
+This works as expected. In order to see the failure case, modify docker-compose.yaml to include a duplicate key for ports:
+version: '3'
+services:
+  echo:
+    image: hashicorp/http-echo
+    ports: 
+      - "5678:5678"
+    command: "-text='Hello, world!'"
+    ports:
+      - "6789:6789"
+If you try to send another request it will not work because port 5678 is no longer exposed:
+curl http://localhost:5678
+> curl: (7) Failed to connect to localhost port 5678: Connection refused
+The first ports key in docker-compose.yaml was silently overwritten by the second.
+OS/Platform Information
+As far as I can tell this affects all versions of Docker Compose on all platforms, but I'll include my OS/Platform information just in case. I'm running on MacOS version 10.12.6. I'm using Docker for Mac, which I installed on this page.
+Output of docker-compose version:
+docker-compose version 1.16.1, build 6d1ac21
+docker-py version: 2.5.1
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+Output of docker version:
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:09 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:45:38 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

@@ -1,0 +1,1 @@
+docker-compose up –abort-on-container-exit does not work with tty: true

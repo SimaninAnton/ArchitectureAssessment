@@ -1,0 +1,26 @@
+talneder commented on 16 Jun 2015
+Hiya,
+I'm trying to set up a new registry container with an S3 storage backend.
+I went by the guidance at
+https://github.com/docker/distribution/blob/master/docs/deploying.md
+and
+https://github.com/docker/distribution/blob/master/docs/configuration.md
+But I get
+Unsupported config option for storage service: 's3'
+Here's my docker-compose.yml:
+registry:
+  restart: always
+  image: registry:2
+  ports:
+    - 5000:5000
+storage:
+    s3:
+        accesskey: awsaccesskey
+        secretkey: secretkey
+        region: region
+        bucket: bucket
+        encrypt: true
+        secure: true
+        v4auth: true
+        chunksize: 5242880
+        rootdirectory: /s3/object/name/prefix

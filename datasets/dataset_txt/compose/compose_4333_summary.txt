@@ -1,0 +1,1 @@
+UnicodeError when building with npm install

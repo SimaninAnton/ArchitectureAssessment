@@ -1,0 +1,1 @@
+Add parameter to docker-compose.yml to require a minimum version

@@ -1,0 +1,4 @@
+longieirl commented on 31 Oct 2014
+Great experience on a mac running boot2docker and fig, managing my project docker containers! Experience on windows hasn't been great...can load boot2docker, run the different docker containers individually but havent found a solution to getting fig installed! Our project supports different OS and it would be nice to a nice windows experience for developers.
+Any links or custom ISO's with fig installed would be great.
+J

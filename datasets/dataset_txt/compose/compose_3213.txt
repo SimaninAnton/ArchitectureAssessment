@@ -1,0 +1,9 @@
+EvHaus commented on 13 Oct 2015
+I'm very confused about how docker-compose is supposed to work on my Mac. Here are the steps I took:
+Installed Docker Toolbox (Docker version 1.8.2)
+Tried to run docker-compose up but got Illegal instruction: 4 error as per #1885
+To fix the issue, I installed docker-compose with pip via sudo pip install -U docker-compose
+Now when I run docker-compose up I get Couldn't connect to Docker daemon - you might need to runboot2docker up.
+Which is very confusing because all the documentation says that boot2docker is deprecated. And trying to install boot2docker isn't working for me either.
+I'm not sure what else to try. Currently have docker-compose v1.4.2 installed.
+5

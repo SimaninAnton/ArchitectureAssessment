@@ -1,0 +1,15 @@
+aemonfly commented on 28 Jul 2014
+write two services for examle: web and db as following:
+db:
+    image: dbimage
+
+web:
+     image: webimage
+    links:
+        - db
+run fig up -d
+run docker ps you will find it is correct. its output is:
+webimage  /run.sh     80/tcp              ttt_web_1                                    
+dbimage   /run.sh     3306/tcp            ttt_db_1,ttt_web_1/db_1,ttt_web_1/ttt_db_1 
+which is conflict with the docker official document here.
+https://docs.docker.com/userguide/dockerlinks/#container-linking

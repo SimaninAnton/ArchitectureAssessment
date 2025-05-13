@@ -1,0 +1,6 @@
+petercv commented on 17 Nov 2014
+See this Docker issue:
+moby/moby#8801
+Might be a Fig issue, because plain docker doesn't seem to have this issue.
+A test-case can be found here:
+https://github.com/felixdv/docker-fig-symlink-testcase

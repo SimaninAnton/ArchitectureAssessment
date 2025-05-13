@@ -1,0 +1,61 @@
+JoyceBabu commented on 31 Mar 2017
+I am unable to specify mem_limit for my containers. When I used resources > limits > memory, docker-compose up fails with message
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services.elasticsearch: 'resources'
+If I use mem_limit: 8g, it fails with message
+Unsupported config option for services.elasticsearch: 'mem_limit'
+I tried upgrading to 1.12.0-rc2 and docker-compose format version 3.2. But docker-compose is not accepting 3.2 and aborts with message
+ERROR: Version in "./docker-compose.yml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify a supported version ("2.0", "2.1", "3.0", "3.1") and place your service definitions under the services key, or omit the version key and place your service definitions at the root of the file to use version 1.
+version: "3.1"
+services:
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:5.3.0
+        restart: always
+        container_name: elasticsearch
+        networks:
+            - default
+            - net-external
+        volumes:
+            - ./conf/elasticsearch:/usr/share/elasticsearch/config
+            - elasticsearch:/usr/share/elasticsearch/data
+
+        environment:
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms2g -Xmx8g"
+        ports:
+            - "9200:9200"
+            # - "9300:9300"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+          nofile:
+            soft: 65536
+            hard: 65536
+        resources:
+          limits:
+              memory: 8g
+        cap_add:
+            - IPC_LOCK
+$ docker-compose version
+docker-compose version 1.12.0-rc2, build 08dc2a4
+docker-py version: 2.1.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+$ docker version
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:45:26 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Fri Mar 24 00:45:26 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

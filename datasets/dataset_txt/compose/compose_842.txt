@@ -1,0 +1,29 @@
+Bit-Doctor commented on 27 Feb 2018 •
+edited
+I've been using the multi-stage builds in order to reduce the number of Dockerfile in my project as well as having the leanest possible images for production.
+My current set-up is a main Dockerfile.prod for production that essentially ends up in a FROM scratch running a binary.
+I also have another Dockerfile.dev for development that have dev tools and package like linter, test suite, etc.. It also have a CMD that rebuild on change. This Dockerfile.dev is pretty much the same as the build stage of Dockerfile.prod.
+While trying to find a way to get rid of Dockerfile.dev I found stop-at-a-specific-build-stage option for docker build cmd.
+Unfortunately it looks like that compose doesn't support it yet.
+This option would help me reduce again the number of docker related file per project.
+It would be possible for me to have a:
+docker-compose.yml for prod
+version: "3.4"
+services:
+
+  app:
+    image: app:prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+docker-compose.override.yml for dev
+version: "3.4"
+services:
+
+  app:
+    image: app:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build-stage      
+1

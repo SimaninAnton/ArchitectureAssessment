@@ -1,0 +1,13 @@
+120011676 commented on 23 Dec 2019
+Please post on our forums: https://forums.docker.com for questions about using docker-compose.
+Posts that are not a bug report or a feature/enhancement request will not be addressed on this issue tracker.
+···curl
+[fl@iZlycizhj476idZ ~]$ sudo curl -L https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-`uname -s-uname -m` -o /usr/local/bin/docker-compose
+[sudo] password for fl:
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+100 617 0 617 0 0 621 0 --:--:-- --:--:-- --:--:-- 620
+42 16.2M 42 7037k 0 0 8387 0 0:33:51 0:14:19 0:19:32 0
+curl: (56) TCP connection reset by peer
+···
+region: china

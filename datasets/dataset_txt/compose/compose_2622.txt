@@ -1,0 +1,23 @@
+mericano1 commented on 16 Mar 2016
+Hi, I am following the example on https://docs.docker.com/compose/startup-order/ to make sure the database is running before I start the application.
+My Dockerfile contains the command
+CMD ["/usr/bin/java", "-jar", "/usr/lib/gumtree/api-server/server/api-server.war"]
+and in my docker-compose.yml I have
+entrypoint: ["/usr/bin/wait-for-it.sh", "postgres001:5432", "-t", "120", "--"]
+but after the postgres database starts the service container just exits straight away.
+api_1        | wait-for-it.sh: postgres001:5432 is available after 42 seconds
+postgres001_1 | LOG:  database system is ready to accept connections
+api_api_1 exited with code 0
+Looking inside the running container I can see the entrypoint does not have the command appended
+docker exec b456a362e587 ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.2  0.0  21816  3200 ?        Ss   22:12   0:00 bash /usr/bin/wait-for-it.sh postgres001:5432 -t 120 --
+If both command and entrypoint are in the same place (either in the Dockerfile or in the docker-compose.yml) the application starts up properly.
+› docker exec 6cafdb9fdcf2 ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.2  0.0  21816  3208 ?        Ss   22:10   0:00 bash /usr/bin/wait-for-it.sh postgres001:5432 -t 120 -- java -jar /usr/lib/gumtree/api-server/server/api-server.war
+Any idea is this is a bug or I am doing something wrong?
+Thanks
+51
+2
+5

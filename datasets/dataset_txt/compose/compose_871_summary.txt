@@ -1,0 +1,1 @@
+UnicodeDecodeError on `docker-compose up` (Docker for Mac)

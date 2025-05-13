@@ -1,0 +1,1 @@
+external network doesn't work when network name is not same as external name

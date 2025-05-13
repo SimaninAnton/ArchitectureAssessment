@@ -1,0 +1,107 @@
+hanscees commented on 30 Sep 2017 •
+edited by shin-
+Am using docker-compose to run nextcloud.
+When I use multiple named volumes building containers works fine.
+When I use local direcotries as volumes it does not.
+Perhaps a bug? I am lost here.
+daemon.log says
+Sep 29 20:37:09 core fb9700267752[569]: apache2: Could not open configuration file /etc/apache2/apache2.conf: No such file or directory
+thats right, it did not create the volume. The data volume went fine. The other two dont
+Here are the volumes on the docker host:
+root@core updatedir/hcnextcl# ls -all /root/dockvolumes/
+total 28
+drwxr-xr-x  7      999 docker 4096 Sep 29 19:50 .
+drwx------  7 root     root   4096 Sep 29 13:49 ..
+drwxr-xr-x  5      999 docker 4096 Sep 29 20:33 db_data
+drwxr-xr-x  2 root     root   4096 Sep 29 19:49 nextcloud_conf
+drwxr-xr-x 15 www-data root   4096 Sep 29 19:53 nextcloud_data
+drwxr-xr-x  2 root     root   4096 Sep 29 19:50 nextcloud_log
+drwxr-xr-x  2      999 docker 4096 Sep 29 14:02 ntp_conf
+working docker-compose.yml is this:
+############ this works fine, named volunmes are created and filled
+version: '2'
+
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    container_name: db
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - isolated_nw
+
+  app:
+    build: .
+    container_name: nextcloud
+    ports:
+      - 8080:80
+    links:
+      - db
+    volumes:
+      - nextcloud_data:/var/www/html/
+      - nextcloud_conf:/etc/apache2/
+      - nextcloud_log:/var/log/apache2/
+    restart: always
+    networks:
+      - isolated_nw
+
+volumes:
+  db_data:
+  nextcloud_data:
+  nextcloud_conf:
+  nextcloud_log:
+
+networks:
+   isolated_nw:
+     driver: bridge
+###############this does not work: volumes aren't filled: why?
+version: '2'
+
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    container_name: db2017-09-29
+    volumes:
+      - /root/dockvolumes/db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - isolated_nw
+
+  app:
+    build: .
+    container_name: nextcloud2017-09-29
+    ports:
+      - 8080:80
+    links:
+      - db
+    volumes:
+      - "/root/dockvolumes/nextcloud_data:/var/www/html/"
+      - "/root/dockvolumes/nextcloud_log:/var/log/apache2/"
+      - "/root/dockvolumes/nextcloud_conf:/etc/apache2/"
+    restart: always
+    networks:
+      - isolated_nw
+
+networks:
+   isolated_nw:
+     driver: bridge
+#################### dockerfile
+#base image
+FROM nextcloud
+
+#install smbclient
+RUN apt-get update && apt-get install -y \
+smbclient

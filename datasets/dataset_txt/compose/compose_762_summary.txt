@@ -1,0 +1,1 @@
+docker-compose build fails copy from previous stage but docker build succeeds

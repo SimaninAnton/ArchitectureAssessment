@@ -1,0 +1,1 @@
+Allow interactive mode on Windows

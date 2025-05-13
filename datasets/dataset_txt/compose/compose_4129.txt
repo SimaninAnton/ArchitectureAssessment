@@ -1,0 +1,4 @@
+ihrwein commented on 1 Nov 2014
+Docker's kill parameter cand send a SIGHUP signal to a container, which should reload most programs.
+It'd be nice to have a fig reload <service> command or extend it's kill parameter with -s --signal <SIGNAL> options.
+I would use it after a fig scale to reload an nginx reverse proxy.

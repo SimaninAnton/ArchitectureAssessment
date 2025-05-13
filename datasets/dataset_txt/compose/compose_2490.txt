@@ -1,0 +1,148 @@
+a1exus commented on 14 Apr 2016
+I'm trying to follow docker-birthday-3/tutorial.md and I'm getting following error:
+$ docker-compose up -d
+ERROR: In file './docker-compose.yml' service 'version' doesn't have any configuration options. All top level keys in your docker-compose.yml must map to a dictionary of configuration options.
+$ cat docker-compose.yml 
+version: "2"
+
+services:
+  voting-app:
+    build: ./voting-app/.
+    volumes:
+     - ./voting-app:/app
+    ports:
+      - "5000:80"
+    networks:
+      - front-tier
+      - back-tier
+
+  result-app:
+    build: ./result-app/.
+    volumes:
+      - ./result-app:/app
+    ports:
+      - "5001:80"
+    networks:
+      - front-tier
+      - back-tier
+
+  worker:
+    image: manomarks/worker
+    networks:
+      - back-tier
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports: ["6379"]
+    networks:
+      - back-tier
+
+  db:
+    image: postgres:9.4
+    container_name: db
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    networks:
+      - back-tier
+
+volumes:
+  db-data:
+
+networks:
+  front-tier:
+  back-tier:
+$ git status | grep docker-compose.yml 
+$ 
+docker version:
+$ docker version
+Client:
+ Version:         1.9.1
+ API version:     1.21
+ Package version: docker-1.9.1-25.el7.centos.x86_64
+ Go version:      go1.4.2
+ Git commit:      78ee77d/1.9.1
+ Built:           
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.9.1
+ API version:     1.21
+ Package version: docker-1.9.1-25.el7.centos.x86_64
+ Go version:      go1.4.2
+ Git commit:      78ee77d/1.9.1
+ Built:           
+ OS/Arch:         linux/amd64
+$ 
+docker info:
+$ docker info
+Containers: 0
+Images: 52
+Server Version: 1.9.1
+Storage Driver: devicemapper
+ Pool Name: docker-253:1-4161645-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: 
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 1.495 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 105.9 GB
+ Metadata Space Used: 2.826 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.145 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107-RHEL7 (2015-12-01)
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.10.0-327.13.1.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+CPUs: 8
+Total Memory: 15.43 GiB
+Name: X
+ID: L6S7:FZCO:YA5M:KSZP:VOKX:CD5H:HHDD:AXGO:XHTS:MF3E:IGKZ:KQ4O
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled
+$ 
+more:
+I update docker-compose (from 1.5.2 to 1.7.0) and original error went away, yet another error appeared:
+$ docker-compose version
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+$ docker-compose up -d
+ERROR: The Docker Engine version is less than the minimum required by Compose. Your current project requires a Docker Engine of version 1.10.0 or greater.
+$ docker version
+Client:
+ Version:         1.9.1
+ API version:     1.21
+ Package version: docker-1.9.1-25.el7.centos.x86_64
+ Go version:      go1.4.2
+ Git commit:      78ee77d/1.9.1
+ Built:           
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.9.1
+ API version:     1.21
+ Package version: docker-1.9.1-25.el7.centos.x86_64
+ Go version:      go1.4.2
+ Git commit:      78ee77d/1.9.1
+ Built:           
+ OS/Arch:         linux/amd64
+$ cat /etc/redhat-release 
+CentOS Linux release 7.2.1511 (Core) 
+$ uname -a
+Linux X 3.10.0-327.13.1.el7.x86_64 #1 SMP Thu Mar 31 16:04:38 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+$ rpm -q docker
+docker-1.9.1-25.el7.centos.x86_64
+$ 
+Please advise. Thank You!
+I'm CC: @aanand (per @vdemeester - moby/moby#22045 (comment)).

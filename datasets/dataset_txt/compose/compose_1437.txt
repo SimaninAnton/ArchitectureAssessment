@@ -1,0 +1,95 @@
+dovar21 commented on 23 May 2017
+Hi all!
+I'm trying to run an application on the VS Community 2017 Version 15.2(26430.4) and it gives an error.
+Driver is shared in C. Docker Version 17.03.1.ce-win12(12058)
+1>------ Build started: Project: docker-compose, Configuration: Debug Any CPU ------
+1>docker-compose -f "D:\Projects\My\WebApplication2\docker-compose.yml" -f "D:\Projects\My\WebApplication2\docker-compose.override.yml" -f "D:\Projects\My\WebApplication2\docker-compose.vs.debug.yml" -p dockercompose3241502577 config
+1>networks: {}
+1>services:
+1> webapplication2:
+1> build:
+1> args:
+1> source: obj/Docker/empty/
+1> context: D:\Projects\My\WebApplication2\WebApplication2
+1> dockerfile: Dockerfile
+1> entrypoint: tail -f /dev/null
+1> environment:
+1> ASPNETCORE_ENVIRONMENT: Development
+1> DOTNET_USE_POLLING_FILE_WATCHER: '1'
+1> image: webapplication2:dev
+1> labels:
+1> com.microsoft.visualstudio.targetoperatingsystem: linux
+1> ports:
+1> - '80'
+1> volumes:
+1> - D:\Projects\My\WebApplication2\WebApplication2:/app:rw
+1> - C:\Users\Administrator\clrdbg:/clrdbg:ro
+1> - C:\Users\Administrator.nuget\packages:/root/.nuget/packages:ro
+1>version: '2.0'
+1>volumes: {}
+1>docker ps --filter "status=running" --filter "name=dockercompose3241502577_webapplication2_" --format {{.ID}} -n 1
+1>WebApplication2 -> D:\Projects\My\WebApplication2\WebApplication2\bin\Debug\netcoreapp1.1\WebApplication2.dll
+1>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -NoProfile -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File "C:\Users\Administrator\AppData\Local\Temp\GetVsDbg.ps1" -Version vs2017u1 -RuntimeID debian.8-x64 -InstallPath "C:\Users\Administrator\clrdbg\vsdbg"
+1>Info: Using vsdbg version '15.1.10502.1'
+1>Info: Using Runtime ID 'debian.8-x64'
+1>Info: Latest version of VsDbg is present. Skipping downloads
+1>docker-compose -f "D:\Projects\My\WebApplication2\docker-compose.yml" -f "D:\Projects\My\WebApplication2\docker-compose.override.yml" -f "D:\Projects\My\WebApplication2\docker-compose.vs.release.yml" -p dockercompose3241502577 kill
+1>docker-compose -f "D:\Projects\My\WebApplication2\docker-compose.yml" -f "D:\Projects\My\WebApplication2\docker-compose.override.yml" -f "D:\Projects\My\WebApplication2\docker-compose.vs.release.yml" -p dockercompose3241502577 down --rmi local --remove-orphans
+1>Removing network dockercompose3241502577_default
+1>docker-compose -f "D:\Projects\My\WebApplication2\docker-compose.yml" -f "D:\Projects\My\WebApplication2\docker-compose.override.yml" -f "D:\Projects\My\WebApplication2\docker-compose.vs.debug.yml" -p dockercompose3241502577 kill
+1>docker-compose -f "D:\Projects\My\WebApplication2\docker-compose.yml" -f "D:\Projects\My\WebApplication2\docker-compose.override.yml" -f "D:\Projects\My\WebApplication2\docker-compose.vs.debug.yml" -p dockercompose3241502577 down --rmi local --remove-orphans
+1>Removing network dockercompose3241502577_default
+1>Network dockercompose3241502577_default not found.
+1>docker-compose -f "D:\Projects\My\WebApplication2\docker-compose.yml" -f "D:\Projects\My\WebApplication2\docker-compose.override.yml" -f "D:\Projects\My\WebApplication2\docker-compose.vs.debug.yml" -p dockercompose3241502577 up -d --build
+1>Creating network "dockercompose3241502577_default" with the default driver
+1>Building webapplication2
+1>Step 1/6 : FROM microsoft/aspnetcore:1.1
+1> ---> c7e840e2b257
+1>Step 2/6 : ARG source
+1> ---> Using cache
+1> ---> 1f8aaf970ff5
+1>Step 3/6 : WORKDIR /app
+1> ---> Using cache
+1> ---> 9f9046688448
+1>Step 4/6 : EXPOSE 80
+1> ---> Using cache
+1> ---> bc76124bc5af
+1>Step 5/6 : COPY ${source:-obj/Docker/publish} .
+1> ---> Using cache
+1> ---> 1cefc6e90076
+1>Step 6/6 : ENTRYPOINT dotnet WebApplication2.dll
+1> ---> Using cache
+1> ---> 3ef04f425cad
+1>Successfully built 3ef04f425cad
+1>Creating dockercompose3241502577_webapplication2_1
+1>ERROR: for webapplication2 Cannot create container for service webapplication2: D: drive is not shared. Please share it in Docker for Windows Settings
+1>Encountered errors while bringing up the project.
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: The "PrepareForLaunch" task failed unexpectedly.
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: Microsoft.DotNet.Docker.CommandLineClientException: Creating network "dockercompose3241502577_default" with the default driver
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: Building webapplication2
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: Creating dockercompose3241502577_webapplication2_1
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: ERROR: for webapplication2 Cannot create container for service webapplication2: D: drive is not shared. Please share it in Docker for Windows Settings
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: Encountered errors while bringing up the project..
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018:
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: For more troubleshooting information, go to http://aka.ms/DockerToolsTroubleshooting ---> Microsoft.DotNet.Docker.CommandLineClientException: Creating network "dockercompose3241502577_default" with the default driver
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: Building webapplication2
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: Creating dockercompose3241502577_webapplication2_1
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: ERROR: for webapplication2 Cannot create container for service webapplication2: D: drive is not shared. Please share it in Docker for Windows Settings
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: Encountered errors while bringing up the project.
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at Microsoft.DotNet.Docker.DockerComposeClient.d__18.MoveNext()
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: --- End of inner exception stack trace ---
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at Microsoft.DotNet.Docker.DockerComposeClient.d__18.MoveNext()
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: --- End of stack trace from previous location where exception was thrown ---
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at Microsoft.DotNet.Docker.DockerWorkspace.d__14.MoveNext()
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: --- End of stack trace from previous location where exception was thrown ---
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at Microsoft.DotNet.Docker.BuildTasks.DockerBaseTask.Execute()
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute()
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\Docker\Microsoft.VisualStudio.Docker.Compose.targets(192,5): error MSB4018: at Microsoft.Build.BackEnd.TaskBuilder.d__26.MoveNext()
+1>Done building project "docker-compose.dcproj" -- FAILED.
+========== Build: 0 succeeded or up-to-date, 1 failed, 0 skipped ==========

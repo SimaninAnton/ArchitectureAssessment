@@ -1,0 +1,1 @@
+Support for pid:service in version3 of compose file

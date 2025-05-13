@@ -1,0 +1,1 @@
+pulls fails with docker-compose on swarm overlay networked cluster - yet works with docker

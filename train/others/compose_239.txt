@@ -1,0 +1,16 @@
+carlmjohnson commented on 29 Mar 2019 •
+edited
+Description of the issue
+Running pip install docker-compose==1.23.2 succeeds but pip install docker-compose fails.
+Context information (for bug reports)
+Error output is: /usr/bin/python2 -m pip install --ignore-installed --no-user --prefix /tmp/pip-build-env-Jeq6Db --no-warn-script-location --no-binary :none: --only-binary :none: -i https://pypi.org/simple -- setuptools wheel "cffi>=1.1; python_implementation != 'PyPy'"" failed with error code 1 in None
+Steps to reproduce the issue
+Against docker:stable image run apk add --quiet --no-cache bash py-pip && pip install --quiet docker-compose==1.24.0
+Observed result
+/usr/bin/python2 -m pip install --ignore-installed --no-user --prefix /tmp/pip-build-env-Jeq6Db --no-warn-script-location --no-binary :none: --only-binary :none: -i https://pypi.org/simple -- setuptools wheel "cffi>=1.1; python_implementation != 'PyPy'"" failed with error code 1 in None`
+Expected result
+Successful install.
+Additional information
+Running Docker-in-Docker for Gitlab test runner. Probably not relevant?
+67
+1

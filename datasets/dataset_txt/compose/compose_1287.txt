@@ -1,0 +1,4 @@
+chaouiy commented on 31 Jul 2017 •
+edited
+Errors should never pass silently.
+I have spent hours to figure out that the problem was the fact that permissions are missed to mount the file. If I have had an error explaining that I would correct the problem in secondes

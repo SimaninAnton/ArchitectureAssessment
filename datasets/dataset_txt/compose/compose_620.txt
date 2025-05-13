@@ -1,0 +1,107 @@
+xdmiodz commented on 21 Jun 2018 •
+edited
+volume binds don't propagate fs events to containers
+Context information (for bug reports)
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+$ docker info
+Containers: 8
+ Running: 8
+ Paused: 0
+ Stopped: 0
+Images: 33
+Server Version: 18.03.1-ce
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 110
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 773c489c9c1b21a6d78b5c538cd395416ec50f88
+runc version: 4fc53a81fb7c994640722ac585fa9ca548971871
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.4.0-1061-aws
+Operating System: Ubuntu 16.04.4 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 16
+Total Memory: 29.44GiB
+Name: ip-172-31-1-37
+ID: 2XCS:TSOW:6V4K:AJSG:TTMV:C436:LVWJ:OWKH:NTRF:4XPA:L75K:A7RE
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Username: xdmiodz
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+WARNING: No swap limit support
+Steps to reproduce the issue
+Use the following docker file for demo image
+cat >> Dockerfile_python << EOF
+FROM python:3.6
+RUN pip install watchdog
+EOF
+build it
+docker build -f Dockerfile_python . -t fsdemo:3.6
+Use this compose for reproduction:
+cat >> fsdemo.yaml << EOF
+version: '3'
+services:
+  fsdemo:
+    image: fsdemo:3.6
+    command: watchmedo log -R /fsdemo
+    volumes:
+      - $HOME/fsdemo:/fsdemo
+
+EOF
+Make the fsdemo directory:
+mkdir -p $HOME/fsdemo
+Up the service:
+docker-compose -f fsdemo.yaml up fsdemo
+Expected result
+Log in fsdemo service shows that file system events on creation of files are detected
+Additional information
+If you run the service, instead up, file system events are propagated as expected:
+docker-compose -f fsdemo.yaml run  fsdemo
+echo '1' >> ~/fsdemo/me
+The resulting log is:
+on_modified(self=<watchdog.tricks.LoggerTrick object at 0x7fc4625cc198>, event=<FileModifiedEvent: src_path='/fsdemo/me'>)

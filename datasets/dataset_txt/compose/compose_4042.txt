@@ -1,0 +1,19 @@
+kytwb commented on 17 Dec 2014
+Since Docker 1.4.1
+$ fig restart loremipsum
+Cannot restart container 744b793908b05ca6228fb23e0fde71e6e0e59d80068773a69c97bd8ce5e4bf22: Container 3e9b310d4596b03894cde6bc1e80c98a3f3cf9afcfe848d7746f08c1d26698f8 not found. Impossible to mount its volumes
+$ docker restart loremipsum
+Error response from daemon: Cannot restart container CRM_storefront_1: Container cdb322fe4b729b26aa0741433c07ecbedf6877a939cb0d3b13e3271b58039688 not found. Impossible to mount its volumes
+FATA[0000] Error: failed to restart one or more containers 
+$ docker version
+Client version: 1.4.1
+Client API version: 1.16
+Go version (client): go1.3.3
+Git commit (client): 5bc2ff8
+OS/Arch (client): linux/amd64
+Server version: 1.4.1
+Server API version: 1.16
+Go version (server): go1.3.3
+Git commit (server): 5bc2ff8
+$ fig --version
+fig 1.0.0

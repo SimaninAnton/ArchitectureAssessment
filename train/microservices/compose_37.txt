@@ -1,0 +1,94 @@
+jacobcabantomski-ct commented on 17 Dec 2019
+Description of the issue
+When running docker-compose run inside of a script that is being executed via piping to bash (curl -sSL https://www.script-kiddies.com/run.sh | bash or cat run.sh | bash), no subsequent lines after the run will be executed. This occurs on both my own machine (OSX) and a Travis CI builder (Ubuntu). I have tried various permutations of adding the -T flag and adding tty: true and stdin_open: true to the service definition.
+Context information (for bug reports)
+Output of docker-compose version
+OSX
+docker-compose version 1.24.1, build 4667896b
+Ubuntu
+docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+OSX
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea
+ Built:             Wed Nov 13 07:22:34 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea
+  Built:            Wed Nov 13 07:29:19 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Ubuntu
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:11:02 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:09:05 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  ubuntu:
+    environment:
+      FOO: bar
+    image: ubuntu:latest
+version: '3.0'
+Steps to reproduce the issue
+With
+dc-run.sh
+#!/usr/bin/env bash
+set -e
+
+echo "Running test"
+
+docker-compose run ubuntu printenv | grep FOO
+
+echo "This output will be skipped"
+cat dc-run.sh | bash
+Observed result
+Running test
+FOO=bar
+Expected result
+Running test
+FOO=bar
+This output will be skipped
+Workaround
+If you prepend the run command with unbuffer (https://linux.die.net/man/1/unbuffer) in the script it works as expected. From #1092 (comment)
+unbuffer docker-compose run ubuntu printenv | grep FOO
+Stacktrace / full error message
+None
+Additional information
+OSX: 10.15.1
+Ubunutu: Ubuntu 16.04.6 LTS

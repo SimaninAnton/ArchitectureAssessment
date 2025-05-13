@@ -1,0 +1,1 @@
+[logs] Piped commands are not colored anymore

@@ -1,0 +1,7 @@
+robert-bo-davis commented on 30 Apr 2016 •
+edited
+I bring up two containers called master and slave where slave depends_on master. I destroy master. I then run docker-compose up and both slave and master are recreated even though nothing has changed about slave.
+/ $ docker-compose -v
+docker-compose version 1.7.0, build 0d7bf73
+/ $ docker -v
+Docker version 1.11.1, build 5604cbe

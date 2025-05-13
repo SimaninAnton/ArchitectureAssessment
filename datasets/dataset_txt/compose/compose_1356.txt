@@ -1,0 +1,91 @@
+rajeshyogeshwar commented on 28 Jun 2017
+I have a somewhat peculiar scenario. I tend to execute command docker-compose -f dev.yml up --build to get the containers up and work. Here, dev.yml is development version of docker-compose.yml. Till this very morning every thing was working fine, and all of the sudden, I started getting error regarding failure to connect to docker-daemon.
+Now, this problem only occurs when I have --build included in the command. If I only execute docker-compose -f dev.yml up it works fine. If I include --build into the command and execute it using sudo it works fine again.
+OS: Ubuntu 16.04 LTS
+Docker Engine: 17.03 CE
+Docker-Compose: 1.11.2
+Here is the dev.yml
+version: '2'
+
+volumes:
+  postgres_data_dev: {}
+  postgres_backup_dev: {}
+
+services:
+  postgres:
+    build: ./compose/postgres
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+      - postgres_backup_dev:/backups
+    environment:
+      - POSTGRES_USER=rocky
+
+
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/django/development/Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_USER=rhombus
+      - USE_DOCKER=yes
+    volumes:
+      - .:/app
+      - /tmp/
+    links:
+      - postgres
+      - redis
+    expose:
+      - "8000"
+    env_file:
+      - ./dev.env
+
+
+  nginx:
+    build: 
+      context: .
+      dockerfile: ./compose/nginx/development/Dockerfile
+    depends_on:
+      - django
+    ports:
+      - "0.0.0.0:80:80"
+    links:
+      - django
+    volumes_from:
+      - django
+
+
+  redis:
+    image: redis:latest
+    hostname: redis
+
+
+  celeryworker:
+    build:
+      context: .
+      dockerfile: ./compose/django/development/Dockerfile
+    env_file: ./dev.env
+    depends_on:
+      - django
+      - redis
+      - postgres
+    volumes_from:
+      - django
+    command: celery -A rhombus.taskapp worker
+
+
+  celerybeat:
+    build:
+      context: .
+      dockerfile: ./compose/django/development/Dockerfile
+    env_file: ./dev.env
+    depends_on:
+      - django
+      - redis
+      - postgres
+      - celeryworker
+    volumes_from:
+      - django
+    command: celery -A rocky.taskapp beat
+I am just caught unaware as to what might have caused for such a sudden failure to build containers? I do not wish to use sudo everytime.

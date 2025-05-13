@@ -1,0 +1,43 @@
+skrassiev commented on 5 Jun 2015
+Private registry is exposed over HTTPS with a Comodo-issued certificate, which is validated by openssl clients just fine.
+Updating to docker-compose 1.2 broke pulling the private registry, see the log below. Docker itself pulls the registry after the login just fine.
+I tried to login with various URI combinations (foobar.me:8080, https://foobar.me:8080, https://foobar.me:8080/v1, + with/without tailing slash) and also changed HTTPS port to standard 443 with no avail.
+ubuntu@ip-10-39-52-221:~/docker/compose/g2m$ docker -v
+Docker version 1.5.0, build a8a31ef
+ubuntu@ip-10-39-52-221:~/docker/compose/g2m$ sudo docker login https://foobar.me:8080
+Username: osdeng
+Password: 
+Email: 
+Login Succeeded
+ubuntu@ip-10-39-52-221:~/docker/compose/g2m$ sudo docker-compose --verbose pull 
+Compose version 1.2.0
+Docker base_url: http+unix://var/run/docker.sock
+Docker version: KernelVersion=3.13.0-44-generic, Arch=amd64, ApiVersion=1.17, Version=1.5.0, GitCommit=a8a31ef, Os=linux, GoVersion=go1.4.1
+Pulling storagemgmtsvced1 (foobar.me:8080/skrassiev/storagemgmtsvc:latest)...
+docker pull <- (u'foobar.me:8080/skrassiev/storagemgmtsvc:latest', insecure_registry=False)
+docker pull -> u'{"status":"Pulling repository foobar.me:8080/skrassiev/storagemgmtsvc"}\r\n{"errorDetail":{"message":"Authentication is required."},"error":"Authentication is required."}\r\n'
+Pulling mockmeetingsvced1 (foobar.me:8080/skrassiev/mockmeetingsvc:latest)...
+docker pull <- (u'foobar.me:8080/skrassiev/mockmeetingsvc:latest', insecure_registry=False)
+docker pull -> u'{"status":"Pulling repository foobar.me:8080/skrassiev/mockmeetingsvc"}\r\n{"errorDetail":{"message":"Authentication is required."},"error":"Authentication is required."}\r\n'
+ubuntu@ip-10-39-52-221:~/docker/compose/g2m$ docker-compose --version
+docker-compose 1.2.0
+Below is an excerpt from docker log: first piece is for docker pull command, the second is for docker-compose pull
+INFO[0159] POST /v1.18/images/create?fromImage=foobar.me%3A8080%2Fskrassiev%2Fstoragemgmtsvc%3Alatest 
+INFO[0159] +job pull(foobar.me:8080/skrassiev/storagemgmtsvc, latest) 
+INFO[0159] +job resolve_repository(foobar.me:8080/skrassiev/storagemgmtsvc) 
+INFO[0159] -job resolve_repository(foobar.me:8080/skrassiev/storagemgmtsvc) = OK (0) 
+INFO[0161] +job log(pull, foobar.me:8080/skrassiev/storagemgmtsvc:latest, ) 
+INFO[0161] -job log(pull, foobar.me:8080/skrassiev/storagemgmtsvc:latest, ) = OK (0) 
+INFO[0161] -job pull(foobar.me:8080/skrassiev/storagemgmtsvc, latest) = OK (0
+
+
+
+INFO[0179] GET /v1.15/version                           
+INFO[0179] +job version()                               
+INFO[0179] -job version() = OK (0)                      
+INFO[0179] POST /v1.15/images/create?tag=latest&fromImage=foobar.me%3A8080%2Fskrassiev%2Fstoragemgmtsvc 
+INFO[0179] +job pull(foobar.me:8080/skrassiev/storagemgmtsvc, latest) 
+INFO[0179] +job resolve_repository(foobar.me:8080/skrassiev/storagemgmtsvc) 
+INFO[0179] -job resolve_repository(foobar.me:8080/skrassiev/storagemgmtsvc) = OK (0) 
+Authentication is required.
+INFO[0179] -job pull(foobar.me:8080/skrassiev/storagemgmtsvc, latest) = ERR (1) 

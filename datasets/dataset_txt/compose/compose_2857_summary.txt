@@ -1,0 +1,1 @@
+1.6.0rc2 can't find local images

@@ -1,0 +1,3 @@
+andrewrothstein commented 9 days ago
+curl -sSL https://github.com/docker/compose/releases/download/v1.25.2/docker-compose-Windows-x86_64.exe.sha256
+produces some non printable characters which throws off the terminal.

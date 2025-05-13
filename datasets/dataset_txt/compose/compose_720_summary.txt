@@ -1,0 +1,1 @@
+COMPOSE_PROJECT_NAME behavior change in docker-compose 1.21.0 ?

@@ -1,0 +1,79 @@
+dinakar29 commented on 6 Apr 2018
+Description of the issue
+The image version/distro from the docker-compose file, which is in the form of an argument, is not getting recognized in the Dockerfile.
+Although something like this is possible, it would be better if the argument from the compose file can be passed down to the Dockerfile prior to building the image.
+Context information
+docker-compose.yml:
+version: '3'
+services:
+  python:
+    container_name: python-docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - PY_VERSION="3.6.5-alpine3.7"
+Dockerfile:
+FROM python:${PY_VERSION}
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2n  7 Dec 2017
+Output of "docker version"
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:06:22 2018
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:14:32 2018
+  OS/Arch: linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+services:
+  python:
+    build:
+      args:
+        PY_VERSION: "3.6.5-alpine3.7"
+      context: /Users/dinakar29/Desktop
+      dockerfile: Dockerfile
+    container_name: python-docker
+version: '3.0'
+Steps to reproduce the issue
+docker-compose up
+Observed result
+Creating network "desktop_default" with the default driver
+Building python
+Step 1/2 : FROM python:${PY_VERSION}
+ERROR: Service 'python' failed to build: invalid reference format
+Expected result
+Building python
+Step 1/1 : FROM python:3.6.5-alpine3.7
+3.6.5-alpine3.7: Pulling from library/python
+ff3a5c916c92: Pull complete
+471170bb1257: Pull complete
+a92899abaf42: Pull complete
+2699438859de: Pull complete
+0e21b9e20e00: Pull complete
+Digest: sha256:f2010f87d3b43af452ff558f2177a05edb8c43317665afd890769674ccf7345c
+Status: Downloaded newer image for python:3.6.5-alpine3.7
+ ---> 677488a21fab
+[Warning] One or more build-args [PY_VERSION] were not consumed
+Successfully built 677488a21fab
+Successfully tagged desktop_python:latest
+WARNING: Image for service python was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+Creating python-docker ... done
+Attaching to python-docker
+Additional information
+OS: MacOS Sierra 10.12.6 (16G1212)

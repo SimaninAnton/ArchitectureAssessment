@@ -1,0 +1,1 @@
+Memory limit and CPU for the whole docker compisition

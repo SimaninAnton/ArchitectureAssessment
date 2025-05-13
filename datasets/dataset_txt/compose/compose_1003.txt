@@ -1,0 +1,29 @@
+dmc2015 commented on 19 Dec 2017
+I am aliasing a service that worked. I named it es.dev. However because of decisions made by Google it isn't a good idea.
+https://iyware.com/dont-use-dev-for-development/
+https://tech.slashdot.org/story/17/09/18/192227/chrome-to-force-domains-ending-with-dev-and-foo-to-https-via-preloaded-hsts
+basecamp/pow#545
+The issue is that the alias won't change now from es.dev now.
+I tried re-pulling the image, that didn't seem to work and it didn't look like it really got rid of all the images. Regardless I think it should still be able to pick up the new information in the composition file.
+http://es.devx:9200 should load, but doesn't.
+http://es.dev:9200 still loads (I am now testing it in Firefox), I also changed the cluster_name to see if that would update.
+It didn't.
+es:
+    container_name: es
+    hostname: es.devx
+    networks:
+      new_net:
+        aliases:
+          - es.devx
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
+    environment:
+      - cluster.name=docker-clusterx
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    command: elasticsearch
+    ports:
+      - "9200:9200"

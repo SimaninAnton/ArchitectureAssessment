@@ -1,0 +1,4 @@
+Contributor
+dnephin commented on 26 Aug 2015
+In #1766 we missed adding pause and unpause to the compose/cli/main.py:TopLevelCommand docstring, so it's missing from completion (and help text).
+cc @funkyfuture since you worked on the original issue

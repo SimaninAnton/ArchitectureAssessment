@@ -1,0 +1,15 @@
+msjingli commented on 28 Sep 2017 •
+edited
+When I run "docker-compose" via remote powershell, it always throws below exception. It's not a powershell exception. When I run the "docker-compose" on local machine powershell, it works fine.
+docker-compose : Building web
++ CategoryInfo : NotSpecified: (Building web:String) [], RemoteException
++ FullyQualifiedErrorId : NativeCommandError
+My environment is a Windows physical host, then create a VM on top of it, on the VM install "docker-compose". From physical host, I use remote powershell "Enter-PSSession -VMname )get-vm).Name -Credential administrator" to connect to the VM. Then I tried "docker-compose -f docker-compose.yml build" or just "docker-compose", the exception thrown. My docker-compose.yml is a very simple one and it works fine on local powershell.
+My simple docker-compose.yml is as below:
+version: '3'
+services:
+web:
+build: .
+as of Dockerfile:
+FROM windowsservercore
+RUN cmd.exe /c echo test > c:/test.txt

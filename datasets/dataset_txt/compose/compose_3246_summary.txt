@@ -1,0 +1,1 @@
+`command: true` gives `json: cannot unmarshal bool into Go value of type string`

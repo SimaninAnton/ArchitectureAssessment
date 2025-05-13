@@ -1,0 +1,89 @@
+humphries40 commented on 7 Aug 2014
+So, I'm just getting into this and was setting up a development environment to play around in and I noticed a few things with the directions and the test file.
+Directions about running the test file are incomplete, it just says run "script/test" which I assumed was from outside the docker container and because of that it didn't do anything. So once I opened the container and ran the test suite from in there it worked!
+Next issue, all I've done is follow directions and when I run this test suite for the first time it already returns 3 errors. I'm just getting into all of this so I really have no idea what's happening and I thought I'd provide this feedback.
+======================================================================
+ERROR: test suite for <class 'tests.integration.cli_test.CLITestCase'>
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 208, in run
+    self.setUp()
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 291, in setUp
+    self.setupContext(ancestor)
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 314, in setupContext
+    try_run(context, names)
+  File "/usr/local/lib/python2.7/dist-packages/nose/util.py", line 469, in try_run
+    return func()
+  File "/code/tests/integration/testcases.py", line 13, in setUpClass
+    cls.client.pull('busybox', tag='latest')
+  File "/code/fig/packages/docker/client.py", line 691, in pull
+    headers=headers, stream=stream, timeout=None)
+  File "/code/fig/packages/docker/client.py", line 66, in _post
+    return self.post(url, **self._set_request_timeout(kwargs))
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 425, in post
+    return self.request('POST', url, data=data, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 383, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 486, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+ConnectionError: UnixHTTPConnectionPool(host='localhost', port=None): Max retries exceeded with url: /run/docker.sock/v1.12/images/create?tag=latest&fromImage=busybox (Caused by <class 'socket.error'>: [Errno 2] No such file or directory)
+
+======================================================================
+ERROR: test suite for <class 'tests.integration.project_test.ProjectTest'>
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 208, in run
+    self.setUp()
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 291, in setUp
+    self.setupContext(ancestor)
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 314, in setupContext
+    try_run(context, names)
+  File "/usr/local/lib/python2.7/dist-packages/nose/util.py", line 469, in try_run
+    return func()
+  File "/code/tests/integration/testcases.py", line 13, in setUpClass
+    cls.client.pull('busybox', tag='latest')
+  File "/code/fig/packages/docker/client.py", line 691, in pull
+    headers=headers, stream=stream, timeout=None)
+  File "/code/fig/packages/docker/client.py", line 66, in _post
+    return self.post(url, **self._set_request_timeout(kwargs))
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 425, in post
+    return self.request('POST', url, data=data, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 383, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 486, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+ConnectionError: UnixHTTPConnectionPool(host='localhost', port=None): Max retries exceeded with url: /run/docker.sock/v1.12/images/create?tag=latest&fromImage=busybox (Caused by <class 'socket.error'>: [Errno 2] No such file or directory)
+
+======================================================================
+ERROR: test suite for <class 'tests.integration.service_test.ServiceTest'>
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 208, in run
+    self.setUp()
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 291, in setUp
+    self.setupContext(ancestor)
+  File "/usr/local/lib/python2.7/dist-packages/nose/suite.py", line 314, in setupContext
+    try_run(context, names)
+  File "/usr/local/lib/python2.7/dist-packages/nose/util.py", line 469, in try_run
+    return func()
+  File "/code/tests/integration/testcases.py", line 13, in setUpClass
+    cls.client.pull('busybox', tag='latest')
+  File "/code/fig/packages/docker/client.py", line 691, in pull
+    headers=headers, stream=stream, timeout=None)
+  File "/code/fig/packages/docker/client.py", line 66, in _post
+    return self.post(url, **self._set_request_timeout(kwargs))
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 425, in post
+    return self.request('POST', url, data=data, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 383, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 486, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+ConnectionError: UnixHTTPConnectionPool(host='localhost', port=None): Max retries exceeded with url: /run/docker.sock/v1.12/images/create?tag=latest&fromImage=busybox (Caused by <class 'socket.error'>: [Errno 2] No such file or directory)
+
+----------------------------------------------------------------------

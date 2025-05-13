@@ -1,0 +1,30 @@
+Contributor
+saulshanabrook commented on 25 Jul 2014
+I am not sure if this is possible, but I am wondering if it would be possible to mount only, say, *.py files with the volumes part of the fig.yml.
+I am trying to mount a directory that has a python package in it. My Dockefile looks like this:
+FROM python:3
+
+ADD . /code/
+WORKDIR /code
+RUN pip install -r requirements-testing.txt -e .
+
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+The problem is that when I have a fig.yml like this:
+python:
+  build: .
+  volumes:
+    - .:/code/
+And then run try to run the CLI installed with my Python app, it doesn't work, because pip install -e . creates some directories with the built python package under /code/. Then when I mount my local source code directory over that directory, it removes those build directory and the command fails.
+$ fig run python dc-campaign-finance-scraper
+Traceback (most recent call last):
+  File "/usr/local/bin/dc-campaign-finance-scraper", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/usr/local/lib/python3.4/site-packages/pkg_resources.py", line 2697, in <module>
+    working_set.require(__requires__)
+  File "/usr/local/lib/python3.4/site-packages/pkg_resources.py", line 669, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/usr/local/lib/python3.4/site-packages/pkg_resources.py", line 572, in resolve
+    raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: dc-campaign-finance-scraper==0.5.1
+So if I could only mount .py files, it wouldn't overwrite all that other stuff. I am not sure if this is remotely possible, and if not, whether you have any tips using fig for python package development/

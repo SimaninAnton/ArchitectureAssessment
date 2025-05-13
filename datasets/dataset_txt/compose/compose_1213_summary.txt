@@ -1,0 +1,1 @@
+Allow mapping of Windows named pipe into Windows container

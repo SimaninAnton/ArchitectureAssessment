@@ -1,0 +1,4 @@
+codekitchen commented on 24 May 2016
+It'd be nice to have an equivalent of docker-compose ps -q but for images, not containers. We can synthesize the image name: "${COMPOSE_PROJECT_NAME}_servicename", but that's somewhat error-prone.
+The more general solution is probably to add a whole docker-compose images command, equivalent to docker images for just that compose project.
+Our primary use case here is to tag the compose-built image with another tag, and push it up to a "caching" private docker repo, so that subsequent CI builds can pull down the image and get their docker-compose build steps cached.

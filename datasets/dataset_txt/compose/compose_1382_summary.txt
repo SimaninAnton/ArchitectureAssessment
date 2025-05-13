@@ -1,0 +1,1 @@
+Use sensible versioning system for Compose file format

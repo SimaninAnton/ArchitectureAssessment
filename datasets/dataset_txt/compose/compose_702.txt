@@ -1,0 +1,137 @@
+wyntau commented on 2 May 2018 •
+edited
+Description of the issue
+when docker-compose up -d, the host can't ping success, and outer browser can't access to the host.
+my docker-compose.yml is below
+version: "2"
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    networks:
+      - demo
+    volumes:
+      - ./nginx-conf.d:/etc/nginx/conf.d
+networks:
+  demo:
+    driver: bridge
+and my nginx-conf.d only has a conf
+server {
+  listen 80;
+  location / {
+    return 404;
+  }
+}
+if the docker-compose didn't up, I can ping the host success from my own computer
+➜  ~ ping 10.4.242.195
+PING 10.4.242.195 (10.4.242.195): 56 data bytes
+64 bytes from 10.4.242.195: icmp_seq=0 ttl=56 time=3.882 ms
+64 bytes from 10.4.242.195: icmp_seq=1 ttl=56 time=3.369 ms
+^C
+--- 10.4.242.195 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 3.369/3.626/3.882/0.256 ms
+but If the docker-compose up, I cannot ping again from my own computer
+➜  ~ ping 10.4.242.195
+PING 10.4.242.195 (10.4.242.195): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+Request timeout for icmp_seq 2
+Request timeout for icmp_seq 3
+^C
+--- 10.4.242.195 ping statistics ---
+5 packets transmitted, 0 packets received, 100.0% packet loss
+If I use the host's own curl to get contet, the result is correct.
+➜  demo curl -I http://localhost:80
+HTTP/1.1 404 Not Found
+Server: nginx/1.12.2
+Date: Wed, 02 May 2018 08:18:37 GMT
+Content-Type: text/html
+Content-Length: 169
+Connection: keep-alive
+
+➜  demo curl -I http://127.0.0.1:80
+HTTP/1.1 404 Not Found
+Server: nginx/1.12.2
+Date: Wed, 02 May 2018 08:18:48 GMT
+Content-Type: text/html
+Content-Length: 169
+Connection: keep-alive
+
+➜  demo curl -I http://10.4.242.195:80
+HTTP/1.1 404 Not Found
+Server: nginx/1.12.2
+Date: Wed, 02 May 2018 08:18:56 GMT
+Content-Type: text/html
+Content-Length: 169
+Connection: keep-alive
+Here is my docker-compose ps
+➜  demo docker-compose ps
+Name          Command          State         Ports
+--------------------------------------------------------- 
+nginx   nginx -g daemon off;   Up      0.0.0.0:80->80/tcp
+If I do not use docker-compose, just run
+docker run --rm --name nginx -p 80:80 -v /data/demo/nginx-conf.d:/etc/nginx/conf.d nginx:stable-alpine
+the host self and outer browser can access nginx both. (172.18.118.91 is my own computer IP)
+➜  demo docker run --rm --name nginx -p 80:80 -v /data/demo/nginx-conf.d:/etc/nginx/conf.d nginx:stable-alpine
+172.18.118.91 - - [02/May/2018:08:25:27 +0000] "GET / HTTP/1.1" 404 571 "-" "Mozilla/5.0(Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" "-"
+172.17.0.1 - - [02/May/2018:08:25:41 +0000] "HEAD / HTTP/1.1" 404 0 "-" "curl/7.47.0" "-"
+Can anyone help me?
+Context information (for bug reports)
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+networks:
+  demo:
+    driver: bridge
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:stable-alpine
+    networks:
+      demo: null
+    ports:
+    - 80:80/tcp
+    volumes:
+    - /data/demo/nginx-conf.d:/etc/nginx/conf.d:rw
+version: '2.0'
+Steps to reproduce the issue
+Observed result
+browser cant access to the host
+Expected result
+browser can access to the host
+Stacktrace / full error message
+(if applicable)
+Additional information
+➜  demo uname -a
+Linux team-calendar 4.4.0-121-generic #145-Ubuntu SMP Fri Apr 13 13:47:23 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+➜  demo cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=16.04
+DISTRIB_CODENAME=xenial
+DISTRIB_DESCRIPTION="Ubuntu 16.04 LTS"
+docker-compose installed via
+sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+1

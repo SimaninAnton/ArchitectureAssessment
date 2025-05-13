@@ -1,0 +1,11 @@
+jberkus commented on 31 Oct 2015
+josh@test:$ docker-compose --version
+docker-compose version: 1.4.2
+josh@test:$ docker --version
+Docker version 1.8.2, build 0a8c2e3
+Steps to reproduce:
+start a docker-compose up -d which runs 3 containers
+tail the logs using docker-compose logs
+in another terminal, use docker stop to shut down one of the containers
+docker-compose logs will exit, even though 2 containers are still running
+A minor annoyance, to be sure, but worth fixing when someone gets around to it.

@@ -1,0 +1,43 @@
+jpetazzo commented on 29 May 2016
+What I do:
+I have the following docker-compose.yml file:
+www:
+  image: nginx
+  ports:
+  - 80:80
+I cp docker-compose.yml docker-compose.override.yml. Then, I try to docker-compose up.
+What I expect:
+The www service is started and bound to port 80.
+What I see instead:
+Creating overrides_www_1
+
+ERROR: for www  driver failed programming external connectivity on endpoint overrides_www_1 (90938cb33f7d7ae618e9cd143a5aa8085ba9e2392b3e7a4faf2e83c3feac85a5): Bind for 0.0.0.0:80 failed: port is already allocated
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 63, in main
+AttributeError: 'ProjectError' object has no attribute 'msg'
+docker-compose returned -1
+Versions and other details:
+$ docker-compose -v
+ddocker-compose version 1.7.1, build 0a9ab35
+[ip-172-31-16-181] (local) docker@52.34.74.230 /tmp/overrides
+$ docker version
+Client:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:38:55 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   5604cbe
+ Built:        Tue Apr 26 23:38:55 2016
+ OS/Arch:      linux/amd64
+If I run docker-compose -f docker-compose.yml up or docker-compose -f docker-compose.override.yml up, it works.
+If I run docker-compose -f docker-compose.yml -f docker-compose.yml up (yup, twice!) I get the same error.
+Why oh why am I even trying to do that:
+I have a Compose file with build statements, and I'm overriding it with a new Compose file with image statements. I keep every other parameter as-is (and end up with the port mapping issue).

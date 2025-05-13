@@ -1,0 +1,2 @@
+garystafford commented on 5 Jul 2015
+Adding support for log-driver in docker-compose is great. But, how about --log-opt? With log-driver syslog, I want to be able to use --log-opt address=[tcp|udp]://host:port.

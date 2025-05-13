@@ -1,0 +1,4 @@
+ghost commented on 17 Nov 2015
+The other day I expend some hours trying to investigate why my docker container was not exposing some ports. And understanding that was a docker problem, and not an app problem.
+In dockerfile there is expose to say the ports, but ports in docker-compose. Ok, there is a change.
+But why cannot say that "warning, expose syntax is not valid in docker-compose, you meant ports?" or something like this?

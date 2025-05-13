@@ -1,0 +1,1 @@
+[Mac] docker-compose won't run due to "Couldn't connect to Docker daemon" error

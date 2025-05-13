@@ -1,0 +1,4 @@
+devinrsmith commented on 12 Nov 2015
+Would be good to support docker run property --memory-swappiness https://docs.docker.com/engine/reference/run/#swappiness-constraint. Is there any way to give docker-compose a raw string to be passed to the given docker run command in the meantime?
+7
+1

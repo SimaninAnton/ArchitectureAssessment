@@ -1,0 +1,54 @@
+smolamarcin commented on 15 Aug 2018
+Description of the issue
+Hello. The problem occured on osx. Docker-compuse build run perfectly. When I'm trying to run contaienrs (docker-compose up) the process exit with status code 1.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:05:26 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:13:46 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+
+Output of "docker-compose config"
+ervices:
+  db:
+    environment:
+      MYSQL_DATABSE: family_db
+      MYSQL_PASSWORD: family
+      MYSQL_ROOT_PASSWORD: p4$$W0rd
+      MYSQL_USER: family_user
+    image: mysql:5.7
+    ports:
+    - 9999:3306/tcp
+  web:
+    build:
+      context: /Users/marcin/Docker-exercises/Family
+    depends_on:
+    - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: family_db
+      DATABASE_PASSWORD: family
+      DATABASE_PORT: '9999'
+      DATABASE_USER: family_user
+    ports:
+    - 8080:8080/tcp
+version: '3.0'

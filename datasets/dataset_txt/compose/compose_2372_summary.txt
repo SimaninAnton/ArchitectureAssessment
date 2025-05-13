@@ -1,0 +1,1 @@
+After restart, existing volumes report "invalid characters" error

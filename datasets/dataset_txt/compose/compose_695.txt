@@ -1,0 +1,94 @@
+alex-codefresh commented on 3 May 2018 •
+edited
+Description of the issue
+I need to run docker-compose from inside a Windows container and make it connect to the docker daemon on the host which runs this container via a named pipe mount (like docker run -v //./pipe/docker_engine://./pipe/docker_engine ...).
+But the problem is that docker-compose uses the WinAPI call WaitNamedPipe in the module npipesocket.py, which seems is not supposed to work from inside a container and throws the error:
+pywintypes.error: (2, 'WaitNamedPipe', 'The system cannot find the file specified.')
+I have carefully checked that the named pipe is mounted correctly and available via the expected name. And I am able to work with the docker daemon on the same mounted named pipe using the docker-cli from inside the container, which indicates the issue is specific to docker-compose.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.2, build a1334711
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:      17.10.0-ee-preview-3
+ API version:  1.33
+ Go version:   go1.8.4
+ Git commit:   1649af8
+ Built:        Fri Oct  6 17:52:28 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.10.0-ee-preview-3
+ API version:  1.34 (minimum version 1.24)
+ Go version:   go1.8.4
+ Git commit:   b8571fd
+ Built:        Fri Oct  6 18:01:48 2017
+ OS/Arch:      windows/amd64
+ Experimental: false
+Output of "docker-compose config"
+{
+        "auths": {
+                "https://index.docker.io/v1/": {
+                        "auth": "*"
+                },
+        },
+        "HttpHeaders": {
+                "User-Agent": "Docker-Client/17.10.0-ee-preview-3 (windows)"
+        }
+}
+Steps to reproduce the issue
+Install docker-ee (17.10.0-ee-preview-3) on a Windows Server (version 1709) host
+Build an image using the following Dockerfile:
+FROM microsoft/windowsservercore:1709
+
+SHELL ["powershell", "-Command"]
+
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+    Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Windows-x86_64.exe" \
+    -UseBasicParsing -OutFile 'C:\Program Files\docker-compose.exe'
+
+ENTRYPOINT ["C:/Program Files/docker-compose.exe"]
+Copy any docker-compose.yaml into an arbitrary folder on the host (for example C:\temp)
+Run the built image with the following command:
+docker run --rm -v C:/temp:C:/temp -v //./pipe/docker_engine://./pipe/docker_engine built/imagename --verbose -f C:\temp\docker-compose.yaml up
+Observed result
+docker-compose throws the error on any command (except for docker-compose version):
+pywintypes.error: (2, 'WaitNamedPipe', 'The system cannot find the file specified.')
+Expected result
+docker-compose is able to work with the docker daemon on the host via a named pipe mounted as a volume
+Stacktrace / full error message
+compose.config.config.find: Using configuration files: .\cf-generated-docker-compose.yaml
+docker.utils.config.find_config_file: Trying paths: ['C:\\Users\\ContainerAdministrator\\.docker\\config.json', 'C:\\Users\\ContainerAdministrator\\.dockercfg']
+docker.utils.config.find_config_file: Found file at path: C:\Users\ContainerAdministrator\.docker\config.json
+docker.auth.load_config: Found 'auths' section
+docker.auth.parse_auth: Found entry (registry='https://index.docker.io/v1/', username='*')
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 124, in perform_command
+  File "compose\cli\command.py", line 41, in project_from_options
+  File "compose\cli\command.py", line 121, in get_project
+  File "compose\cli\command.py", line 95, in get_client
+  File "site-packages\docker\api\daemon.py", line 179, in version
+  File "site-packages\docker\utils\decorators.py", line 46, in inner
+  File "site-packages\docker\api\client.py", line 194, in _get
+  File "site-packages\requests\sessions.py", line 521, in get
+  File "site-packages\requests\sessions.py", line 508, in request
+  File "site-packages\requests\sessions.py", line 618, in send
+  File "site-packages\requests\adapters.py", line 440, in send
+  File "site-packages\urllib3\connectionpool.py", line 600, in urlopen
+  File "site-packages\urllib3\connectionpool.py", line 356, in _make_request
+  File "http\client.py", line 1239, in request
+  File "http\client.py", line 1285, in _send_request
+  File "http\client.py", line 1234, in endheaders
+  File "http\client.py", line 1026, in _send_output
+  File "http\client.py", line 964, in send
+  File "site-packages\docker\transport\npipeconn.py", line 31, in connect
+  File "site-packages\docker\transport\npipesocket.py", line 22, in wrapped
+  File "site-packages\docker\transport\npipesocket.py", line 50, in connect
+pywintypes.error: (2, 'WaitNamedPipe', 'The system cannot find the file specified.')
+[16140] Failed to execute script docker-compose
+4

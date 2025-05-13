@@ -1,0 +1,3 @@
+pcfreak30 commented on 10 Jul 2015
+It seems if I try to run docker-compose up with a yml that uses build: . and the image does not already exist, it acts like --no-build is passed.
+This is on version 1.3.1

@@ -1,0 +1,24 @@
+rept commented on 30 Mar 2015
+I tried everything in this thread: #88
+Still no luck.
+rept@temponia:~/passenger$ netstat -ant  |grep 4243
+tcp        0      0 127.0.0.1:4243          0.0.0.0:*               LISTEN     
+rept@temponia:~/passenger$ echo $DOCKER_HOST
+tcp://localhost:4243
+rept@temponia:~/passenger$ sudo docker-compose build db uses an image, skipping
+Building web...
+Couldn't connect to Docker daemon at http+unix://var/run/docker.sock - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+This is the version:
+rept@temponia:~/passenger$ sudo docker version
+Client version: 1.0.1
+Client API version: 1.12
+Go version (client): go1.2.1
+Git commit (client): 990021a
+Server version: 1.0.1
+Server API version: 1.12
+Go version (server): go1.2.1
+Git commit (server): 990021a
+Any ideas? I also tried installing fig which works right away without any problem...
+13

@@ -1,0 +1,3 @@
+siliconcow commented on 1 Feb 2015
+Allow users to encrypt environmental variables in their yaml configuration so they can still feel comfortable keeping them in version control. Would decrypt values transparently with a chosen environmental variable (like FIG_CRYPT_KEY) and provide users a helper command to generate encrypted values.
+Only downside is you have to add pycrypto as a dependency.

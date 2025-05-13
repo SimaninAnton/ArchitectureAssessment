@@ -1,0 +1,15 @@
+corrieb commented on 20 Jul 2017
+I've been struggling with an issue while trying to document Compose support for a three tier app using two networks in vSphere Integrated Containers. Our documentation really needed improving and as part of that work, I'm putting together guidelines on how to get the best out of both technologies.
+The issue I have is that for a container that uses multiple networks, the order in which they're brought up matters. For example, when using a docker client, I would do the following:
+docker network create internal
+docker create -d --name web --net external -p 80 myImage
+docker network connect internal web
+docker start web
+In the above example, I'm asking for port 80 to be exposed on the external network. If I flip it around, instead I get a port mapping on the bridge network.
+docker network create internal
+docker create -d --name web --net internal -p 80 myImage
+docker network connect external web
+docker start web
+docker-compose seems to always use the same order, regardless of how the compose file is written - creating the container with the internal network and then adding the external network before starting it.
+My question is: Is there any way to influence this ordering? The current compose file format leave it somewhat ambiguous - it allows you to expose ports and specify multiple networks, but there's no way to determine which ports are exposed on which networks.
+Any help in resolving this would be appreciated. Thanks!

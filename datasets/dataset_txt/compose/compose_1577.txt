@@ -1,0 +1,47 @@
+luckydonald commented on 22 Mar 2017 •
+edited
+Mac OS 10.12.3 (16D32)
+Docker version 17.03.0-ce, build 60ccb22
+docker-compose version 1.11.2, build dfed245
+A : in the path breaks functionality.
+with:
+$ cd ~ && mkdir -p tmp && cd tmp
+$ git clone https://github.com/devigner/docker-compose-php devigner:docker-compose-php
+$ cd devigner\:docker-compose-php/
+$ docker-compose up
+Creating devignerdockercomposephp_db_1
+
+ERROR: for db  Cannot create container for service db: invalid volume spec "docker-compose-php/log/mysql": invalid volume specification: 'docker-compose-php/log/mysql': invalid mount config for type "volume": invalid mount path: 'docker-compose-php/log/mysql' mount path must be absolute
+ERROR: Encountered errors while bringing up the project.
+without
+$ cd ~ && mkdir -p tmp && cd tmp
+$ git clone https://github.com/devigner/docker-compose-php devigner_docker-compose-php
+$ cd devigner_docker-compose-php/
+$ docker-compose up
+Creating devignerdockercomposephp_db_1
+Recreating devignerdockercomposephp_phpfpm_1
+Recreating devignerdockercomposephp_nginx_1
+Attaching to devignerdockercomposephp_db_1, devignerdockercomposephp_phpfpm_1, devignerdockercomposephp_nginx_1
+db_1      | Initializing database
+db_1      | 2017-03-22T14:13:28.438343Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+db_1      | 2017-03-22T14:13:28.452256Z 0 [Warning] Setting lower_case_table_names=2 because file system for /var/lib/mysql/ is case insensitive
+db_1      | 2017-03-22T14:13:29.844260Z 0 [Warning] InnoDB: New log files created, LSN=45790
+db_1      | 2017-03-22T14:13:30.110629Z 0 [Warning] InnoDB: Creating foreign key constraint system tables.
+db_1      | 2017-03-22T14:13:30.221921Z 0 [Warning] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: b9ab3a06-0f09-11e7-8116-0242ac110002.
+db_1      | 2017-03-22T14:13:30.227214Z 0 [Warning] Gtid table is not ready to be used. Table 'mysql.gtid_executed' cannot be opened.
+db_1      | 2017-03-22T14:13:30.230923Z 1 [Warning] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping devignerdockercomposephp_nginx_1 ... done
+Stopping devignerdockercomposephp_phpfpm_1 ... done
+Stopping devignerdockercomposephp_db_1 ... done
+diff
+index aa803df..3fb90e0 100644
+--- a/A.txt
++++ b/B.txt
+@@ -1,4 +1,4 @@
+ $ cd ~ && mkdir -p tmp && cd tmp
+-$ git clone https://github.com/devigner/docker-compose-php devigner:docker-compose-php
++$ git clone https://github.com/devigner/docker-compose-php devigner_docker-compose-php
+-$ cd devigner\:docker-compose-php/
++$ cd devigner_docker-compose-php/
+ $ docker-compose up

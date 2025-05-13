@@ -1,0 +1,62 @@
+sixcorners commented on 14 Feb 2019 •
+edited
+Description of the issue
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+docker-py version: 3.7.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:33:12 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:41:49 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+ERROR: 
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml
+Steps to reproduce the issue
+Open Docker for Mac preferences
+docker-compose up
+Observed result
+traceback
+Expected result
+containers start running
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1085, in up
+  File "compose/cli/main.py", line 1081, in up
+  File "compose/project.py", line 527, in up
+  File "compose/service.py", line 344, in ensure_image_exists
+  File "compose/service.py", line 1084, in build
+  File "site-packages/docker/api/build.py", line 260, in build
+  File "site-packages/docker/api/build.py", line 307, in _set_auth_headers
+  File "site-packages/docker/auth.py", line 301, in get_all_credentials
+  File "site-packages/docker/auth.py", line 287, in _get_store_instance
+  File "site-packages/dockerpycreds/store.py", line 25, in __init__
+dockerpycreds.errors.InitializationError: docker-credential-osxkeychain not installed or not available in PATH
+[63650] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.
+8

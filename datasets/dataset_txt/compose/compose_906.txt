@@ -1,0 +1,24 @@
+achekulaev commented on 30 Jan 2018
+When COMPOSE_FILE directive is being used, docker-compose uses wrong relative path/build context for build instructions.
+Demonstration.
+Directory /Users/alexei.chekulaev/tmp/bug_demo
+Structure:
+bug_demo/
+  conf/
+    docker-compose.yml
+  build/
+    Dockerfile
+docker-compose.yml contents:
+version: "2.1"
+
+services:
+  test:
+    build: build
+Actual result when building in /Users/alexei.chekulaev/tmp/bug_demo:
+$ pwd
+/Users/alexei.chekulaev/tmp/bug_demo
+
+$ COMPOSE_FILE="conf/docker-compose.yml" docker-compose config
+ERROR: build path /Users/alexei.chekulaev/tmp/bug_demo/conf/build either does not exist, is not accessible, or is not a valid URL.
+So docker-compose was looking for build dir in /Users/alexei.chekulaev/tmp/bug_demo/conf which is wrong.
+Expected result: docker-compose should use CWD as current path, not the path where first config file was found.

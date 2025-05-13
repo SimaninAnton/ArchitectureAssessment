@@ -1,0 +1,5 @@
+nazar-pc commented on 19 Aug 2015
+Would be nice to have two more commands:
+docker-compose self-upgrade
+docker-compose self-remove
+For instance, PHP packages manager Composer has composer self-upgrade and it is way more convenient that going to documentation and copy-pasting installation command or doing something else manually.

@@ -1,0 +1,7 @@
+wernight commented on 28 Jan 2015
+foo:
+  volumes:
+   - 111:a
+   - 222:a
+In this example it should report that two source volumes are tried to be mapped to the same target file/directory.
+Note: Not sure if this should be a Docker issue.

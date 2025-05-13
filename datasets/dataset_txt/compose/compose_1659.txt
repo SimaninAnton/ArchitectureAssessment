@@ -1,0 +1,8 @@
+Contributor
+kinghuang commented on 21 Feb 2017
+I'm having a strange problem running docker-compose config on a project. I use the config command to combine multiple Compose files together for deployment using docker stack deploy --compose-file …. For some reason, when I run config on this project, Docker Compose is dropping the deploy options on the services.
+monitoring.zip
+The monitoring project consists of three Compose files, specified in .env. Running docker-compose config in this directory produces a config with the deploy options missing.
+I'm using Docker Compose 1.11.1.
+→  monitoring git:(monitoring-stack) ✗ docker-compose --version
+docker-compose version 1.11.1, build 7c5d5e4

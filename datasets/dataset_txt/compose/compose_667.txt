@@ -1,0 +1,107 @@
+kaibara commented on 17 May 2018
+Description of the issue
+I got the Error when docker-compose up on powershell
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.2, build a1334711
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:48 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 332, in config
+  File "compose\cli\command.py", line 68, in get_config_from_options
+  File "compose\config\config.py", line 402, in load
+  File "compose\config\config.py", line 502, in load_services
+  File "compose\config\config.py", line 481, in build_services
+  File "compose\config\config.py", line 481, in <listcomp>
+  File "compose\config\config.py", line 473, in build_service
+  File "compose\config\config.py", line 846, in finalize_service
+  File "compose\config\config.py", line 658, in resolve_environment
+  File "compose\config\environment.py", line 36, in env_vars_from_file
+  File "c:\projects\compose\venv\lib\codecs.py", line 713, in __next__
+  File "c:\projects\compose\venv\lib\codecs.py", line 644, in __next__
+  File "c:\projects\compose\venv\lib\codecs.py", line 557, in readline
+  File "c:\projects\compose\venv\lib\codecs.py", line 503, in read
+  File "c:\projects\compose\venv\lib\encodings\utf_8_sig.py", line 117, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+[10840] Failed to execute script docker-compose
+Steps to reproduce the issue
+1.Job File install to local
+2.move installed directory on powershell
+3.docker-compose up
+Observed result
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 124, in perform_command
+  File "compose\cli\command.py", line 41, in project_from_options
+  File "compose\cli\command.py", line 113, in get_project
+  File "compose\config\config.py", line 402, in load
+  File "compose\config\config.py", line 502, in load_services
+  File "compose\config\config.py", line 481, in build_services
+  File "compose\config\config.py", line 481, in <listcomp>
+  File "compose\config\config.py", line 473, in build_service
+  File "compose\config\config.py", line 846, in finalize_service
+  File "compose\config\config.py", line 658, in resolve_environment
+  File "compose\config\environment.py", line 36, in env_vars_from_file
+  File "c:\projects\compose\venv\lib\codecs.py", line 713, in __next__
+  File "c:\projects\compose\venv\lib\codecs.py", line 644, in __next__
+  File "c:\projects\compose\venv\lib\codecs.py", line 557, in readline
+  File "c:\projects\compose\venv\lib\codecs.py", line 503, in read
+  File "c:\projects\compose\venv\lib\encodings\utf_8_sig.py", line 117, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+[1772] Failed to execute script docker-compose
+Expected result
+docker-compose up finished
+Stacktrace / full error message
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 124, in perform_command
+  File "compose\cli\command.py", line 41, in project_from_options
+  File "compose\cli\command.py", line 113, in get_project
+  File "compose\config\config.py", line 402, in load
+  File "compose\config\config.py", line 502, in load_services
+  File "compose\config\config.py", line 481, in build_services
+  File "compose\config\config.py", line 481, in <listcomp>
+  File "compose\config\config.py", line 473, in build_service
+  File "compose\config\config.py", line 846, in finalize_service
+  File "compose\config\config.py", line 658, in resolve_environment
+  File "compose\config\environment.py", line 36, in env_vars_from_file
+  File "c:\projects\compose\venv\lib\codecs.py", line 713, in __next__
+  File "c:\projects\compose\venv\lib\codecs.py", line 644, in __next__
+  File "c:\projects\compose\venv\lib\codecs.py", line 557, in readline
+  File "c:\projects\compose\venv\lib\codecs.py", line 503, in read
+  File "c:\projects\compose\venv\lib\encodings\utf_8_sig.py", line 117, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+[1772] Failed to execute script docker-compose
+Additional information
+OS version:
+Windows 10 Pro
+docker-compose install method:
+Binary from (github release page)[https://github.com/docker/compose/releases]
+and docker ce for windows installer (stable channel) from (docker store)[https://store.docker.com/editions/community/docker-ce-desktop-windows]
+2

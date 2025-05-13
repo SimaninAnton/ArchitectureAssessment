@@ -1,0 +1,9 @@
+devotox commented on 22 Feb 2016
+        volumes:
+            - /usr/local/bin/docker:/bin/docker
+            - /var/run/docker.sock:/var/run/docker.sock
+This is possible and works very well but this below is not and creates an empty folder
+        volumes:
+            - /usr/local/bin/docker:/bin/docker
+            - /usr/local/bin/docker-compose:/bin/docker-compose
+            - /var/run/docker.sock:/var/run/docker.sock

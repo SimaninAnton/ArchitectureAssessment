@@ -1,0 +1,3 @@
+ChenQi1989 commented on 18 Nov 2019
+Currently docker-compose has maximum version requirement for several python libraries such jsonschema, requests, PyYAML, etc.
+Is it possible for docker-compose to be compatible with the latest versions of these libraries? Why do docker-compose have such requirement?

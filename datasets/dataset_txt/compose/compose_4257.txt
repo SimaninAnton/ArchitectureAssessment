@@ -1,0 +1,12 @@
+rightaway commented on 28 Jul 2014
+I have launched a Django web application from within fig and commonly use import ipdb; ipdb.set_trace() (or the more common pdb instead of ipdb) which is a common way of debugging apps. What's supposed to happen is when the code hits that part an interactive debugger appears on the console where the app has been running allowing you to type commands to see the state of the application.
+When it's run from fig though, it appears on the console but since you can't type anything in it the debugging app quits with an error. Here's what happens on the console.
+web_1     | > /something.py(126)method()
+web_1     |     127 
+web_1     | --> 128     line_to_debug()
+web_1     |     129       # More code...
+web_1     | 
+web_1     | ipdb> 
+web_1     |
+web_1     |  ... back to application output since nothing could be entered at ipdb> prompt above ...
+There should be a way to allow for interactive debugging which is a very common use case in development. Something like specifying that one of the services in the fig configuration can accept input.

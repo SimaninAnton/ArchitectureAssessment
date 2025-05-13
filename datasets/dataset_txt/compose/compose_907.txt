@@ -1,0 +1,9 @@
+blaggacao commented on 29 Jan 2018 •
+edited
+I think #4994 needs to be reopened.
+Not having feature parity for sensible data does basically break prod-dev parity paradigm.
+The only work around I can think about is accepting world-read permissions in dev and do a hacky entry script for file copying and permissions modifications.
+It is clear that it always can only be a mock implementation, but it should be a genuine one, then.
+Some examples, which do indeed check and complain about file permissions:
+ssh
+pgpass

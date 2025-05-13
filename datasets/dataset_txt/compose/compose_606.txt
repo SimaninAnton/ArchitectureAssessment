@@ -1,0 +1,56 @@
+cowsrule commented on 26 Jun 2018
+Description of the issue
+We previously were storing credentials for registries in the ~/.dockercfg file. After updating to the latest version of compose however this has stopped working. Pulls from private repos fail due to authorization.
+Context information (for bug reports)
+Highland update 1.15.0 -> 1.21.1
+Output of "docker-compose version"
+docker-compose version 1.20.0-rc2, build 8c4af54
+docker-py version: 3.1.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2n  7 Dec 2017
+Output of "docker version"
+Client:
+ Version: 18.03.0-ce-rc3
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: e730959
+ Built: Thu Mar  8 20:12:09 2018
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce-rc3
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: e730959
+  Built: Thu Mar  8 20:20:22 2018
+  OS/Arch: linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+Unable to share.
+Steps to reproduce the issue
+Create a docker-compose.yml which contains a reference to an image hosted in a private repo.
+Put valid credentials to this repo in the ~/.dockercfg file.
+Ensure that ~/.docker/config.json does not exist.
+Run docker-compose --verbose pull.
+Note that while credentials are found in the config, they are not correctly used to pull from private repo.
+Run docker login with the same credentials.
+Re-run docker-compose --verbose pull command and see success for pulling from the private repo.
+Observed result
+ERROR: compose.cli.errors.log_api_error: pull access denied for , repository does not exist or may require 'docker login'
+Expected result
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object APIClient._stream_helper at 0x10b3e0d00>
+latest: Pulling from
+3d67ce4481b1: Already exists
+4f7a779d83f5: Pull complete
+8c1d272f25d5: Pull complete
+...
+Digest: sha256:21f9a7708924f89cc9221e067af731af1091acbf84f4fb15c9aae9912f7ba377
+Status: Downloaded newer image for :latest
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Additional information available at https://github.com/docker/store-product/issues/2154

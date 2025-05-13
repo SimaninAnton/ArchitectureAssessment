@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 13 Jan 2017
+https://github.com/google/grumpy
+Or, at least experiment to see if it'd work. If it does, this would rid Compose of all PyInstaller weirdness. It'd speed up boot times too, as a bonus.

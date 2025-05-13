@@ -1,0 +1,130 @@
+natonnelier commented on 29 Oct 2018 •
+edited
+Description of the issue
+Project is set with docker-compose. Was working fine until rebuilt of the web container. Now whenever I want to start it using docker-compose up it just exits without an Error message:
+web_1        | => Booting Unicorn
+web_1        | => Rails 3.2.22.5 application starting in development on http://0.0.0.0:3000
+web_1        | => Call with -d to detach
+web_1        | => Ctrl-C to shutdown server
+web_1        | Exiting
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.19.0, build 9e633ef
+Output of docker version
+Docker version 18.06.1-ce, build e68fc7a
+docker-compose.yml
+version: '3'
+services:
+  memcached:
+    image: memcached:1.5.2-alpine
+    restart: always
+    ports:
+      - "11211:11211"
+
+  postgres:
+    image: postgres:9.4-alpine
+    restart: always
+    volumes:
+      - ~/.engine-data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=development
+      - POSTGRES_USER=default
+      - POSTGRES_PASSWORD=secret
+
+  redis:
+    image: redis:3.2.0-alpine
+    restart: always
+    volumes:
+      - ~/.engine-data/redis:/data
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: .
+      dockerfile: "Dockerfile-dev"
+    command: ./wait-for-it.sh redis:6379 -- ./wait-for-it.sh postgres:5432 -- bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/opt/apps/engine
+    depends_on:
+      - memcached
+      - redis
+      - postgres
+    ports:
+      - "80:3000"
+    env_file:
+      - .env
+    extra_hosts:
+     - "api.cld:127.0.0.1"
+     - "api.getcloudapp:127.0.0.1"
+     - "my.cl:127.0.0.1"
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: "Dockerfile-dev"
+    command: ./wait-for-it.sh redis:6379 -- ./wait-for-it.sh postgres:5432 -- bundle exec sidekiq
+    volumes:
+      - .:/opt/apps/engine
+    depends_on:
+      - web
+      - postgres
+      - redis
+    env_file:
+      - .env
+
+  elastic:
+    image: elasticsearch:1.5
+    volumes:
+      - ~/.engine-data/elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+Dockerfile-dev
+FROM ruby:2.3.7-slim
+
+RUN apt-get update
+
+RUN apt-get -y install software-properties-common libpq-dev build-essential python-setuptools \
+    python-dev python-pip wget curl git-core postgresql-client \
+    --fix-missing --no-install-recommends
+
+RUN pip install --upgrade awscli
+
+# Set install path for reference later.
+ENV INSTALL_PATH /opt/apps/engine
+RUN mkdir -p $INSTALL_PATH
+RUN gem install bundler
+WORKDIR $INSTALL_PATH
+
+ADD Gemfile $INSTALL_PATH
+ADD Gemfile.lock $INSTALL_PATH
+RUN bundle install
+
+RUN find /tmp -type f -atime +10 -delete
+
+ADD . $INSTALL_PATH
+RUN cp config/database.docker-dev.yml config/database.yml
+
+CMD [ "bundle", "exec", "rails", "s", "-p", "3000", "-b" "0.0.0.0" ]
+Observed result
+Server exits.
+Expected result
+Server should be running.
+Stacktrace / full error message
+docker-compose -verbose up throws the following:
+web_1        | => Booting Unicorn
+web_1        | => Rails 3.2.22.5 application starting in development on http://0.0.0.0:3000
+web_1        | => Call with -d to detach
+web_1        | => Ctrl-C to shutdown server
+web_1        | Exiting
+compose.cli.verbose_proxy.proxy_callable: docker wait <- (u'4a68b5db0617f7dd3bcf5b249cc1a02232d1565bd3c60ab1abf12664889b40f9')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'4a68b5db0617f7dd3bcf5b249cc1a02232d1565bd3c60ab1abf12664889b40f9')
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.25/containers/4a68b5db0617f7dd3bcf5b249cc1a02232d1565bd3c60ab1abf12664889b40f9/wait HTTP/1.1" 200 30
+compose.cli.verbose_proxy.proxy_callable: docker wait -> 1
+urllib3.connectionpool._make_request: http://localhost:None "GET /v1.25/containers/4a68b5db0617f7dd3bcf5b249cc1a02232d1565bd3c60ab1abf12664889b40f9/json HTTP/1.1" 200 None
+engine_web_1 exited with code 1
+Additional information
+OS Ubuntu 16.4.

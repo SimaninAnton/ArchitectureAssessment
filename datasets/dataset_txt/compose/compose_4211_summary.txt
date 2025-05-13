@@ -1,0 +1,1 @@
+Is it possible to setup static IP address for container using Fig?

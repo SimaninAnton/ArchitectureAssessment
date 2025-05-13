@@ -1,0 +1,30 @@
+ihucos commented on 1 Mar 2017
+This works with docker:
+$ diff <(docker run -i busybox echo A) <(docker run -i busybox echo B)
+1c1
+< A
+---
+> B
+On docker-compose:
+$ diff <(docker-compose run web sh -c "echo A")  <(docker-compose run web sh -c "echo B")
+ERROR: Cannot create container for service web: Conflict. The container name "/r_web_run_4" is already in use by container b68344642f06c1035dba53416d6f504f84173223aa2e145638ab07ad0b81806d. You have to remove (or rename) that container to be able to reuse that name.
+1d0
+< A
+Pressing some enters after the command execution:
+$ diff <(docker-compose run web sh -c "echo A")  <(docker-compose run web sh -c "echo B")
+ERROR: Cannot create container for service web: Conflict. The container name "/r_web_run_5" is already in use by container 54317da69a9f7953cc058d1c72e80d3c2dcf922247b2566b5765262f9881a263. You have to remove (or rename) that container to be able to reuse that name.
+
+
+
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 88, in main
+  File "compose/cli/main.py", line 140, in perform_command
+  File "compose/cli/main.py", line 736, in run
+  File "compose/cli/main.py", line 1055, in run_one_off_container
+  File "site-packages/dockerpty/pty.py", line 334, in start
+  File "site-packages/dockerpty/pty.py", line 373, in _hijack_tty
+  File "site-packages/dockerpty/io.py", line 378, in flush
+OSError: [Errno 5] Input/output error
+Failed to execute script docker-compose
+1

@@ -1,0 +1,8 @@
+psychok7 commented on 18 Apr 2016
+Hi, I am using Ubuntu 14.04 and i have been getting this error sometimes ERROR: Couldn't connect to Docker daemon - you might need to run docker-machine start default. since i upgraded compose to version 1.7.0 .
+I have no idea why but since i am not using docker-machine (only compose).
+when i run docker-machine ls i get but i am using directly my ubuntu host for compose:
+NAME   ACTIVE   DRIVER       STATE   URL   SWARM   DOCKER    ERRORS
+yyy   -        virtualbox   Error                 Unknown   machine does not exist
+Should i just remove docker-machine vm since i don't use it? Can't they coexist?
+I reported in docker machine github but they told me to come here docker/machine#3324

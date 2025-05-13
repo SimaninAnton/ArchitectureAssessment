@@ -1,0 +1,15 @@
+ramonberrutti commented on 17 Oct 2017
+Hi I want to set the max-size to unlimited in docker compose, I have 2 yml files and I overwrite one with other, so in one I have max-size: "5m" and in the other I want to be unlimited, reading the docker guide of loggin i see that with -1 the log size will be unlimited but they return that can't be -1.
+Is there another way to set the log to unlimited?
+In 1.yml
+    logging:
+      options:
+        max-size: "5m"
+in 2.yml
+    logging:
+      options:
+        max-size: "-1"
+my start command
+docker-compose -f 1.yml -f 2.yml up
+and the error is:
+ERROR: for microserivces Cannot start service microserivces: failed to initialize logging driver: invalid size: '-1'

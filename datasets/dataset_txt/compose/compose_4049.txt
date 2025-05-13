@@ -1,0 +1,5 @@
+gkulik commented on 12 Dec 2014
+this:
+Usage: logs [options] [SERVICE...]
+should look like this:
+Usage: logs [options] [SERVICE...|NAME...]

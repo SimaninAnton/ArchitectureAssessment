@@ -1,0 +1,3 @@
+bitliner commented on 7 Jan 2015
+It would be nice a TODO in README, in order to understand supported and no supported features.
+I would like to start to use fig.sh, but I want to avoid the situation in which I cannot use it because my architecture needs a feature that is no supported yet. This would mean to spend time in order to setup my actual setup alternative to fig.sh's yaml file.

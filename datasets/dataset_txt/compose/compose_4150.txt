@@ -1,0 +1,10 @@
+bargenson commented on 21 Oct 2014
+Hi everyone,
+I have 4 different hosts, each of them running between 3 and 10 containers based on the same image. Each container is an agent for a Continuous Integration solution we use. That solution identify each agent to his hostname.
+In order to troubleshoot easily when an issue occur, I want to define the domain name of my containers as bellow:
+bambooAgent:
+    domainname: ${HOSTNAME}
+in order to have as final hostname something like:
+c49d4b74cf30.mtl-myhost-vm1.
+That way, I might be able to easily figure out on which host is running the guilty container and go inspect it.
+Is there currently any way that I missed to use an host variable inside fig.yml?

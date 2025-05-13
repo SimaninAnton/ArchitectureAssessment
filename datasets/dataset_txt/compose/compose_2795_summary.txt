@@ -1,0 +1,1 @@
+docker-compose up ignoring container_name

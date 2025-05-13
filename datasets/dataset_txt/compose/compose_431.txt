@@ -1,0 +1,59 @@
+BAZINGAyi commented on 26 Oct 2018 •
+edited
+Description of the issue
+I ran the official image of centos7 and installed ssh service with my every node for the cluster。
+Below is part of the docker-compose file:
+version: '3'
+services:
+  Master:
+    image: gus/spark
+    ports:
+    ........
+  Slave1:
+    image: gus/spark
+    ports:
+    .....
+  Slave2:
+    image: gus/spark
+    ports:
+    .....
+when I used ping Slave1 commend in Master container, I can get the normal IP. But when I use ssh Slave1, I can’t get the IP. It displays ssh: Could not resolve hostname Slave2: Name or service not known.
+Even more strange is I add Mapping for 1.1.1.1 Slave2 In hosts file of my host machine. Then I use ssh Slave2 in Master container, The IP that got is 1.1.1.1. why the Master container don't use own hosts file？
+Then I changed service name to Lowercase letter，look like this：
+services:
+  master:
+    image: gus/spark
+    ports:
+     ........
+    image: gus/spark
+    ports:
+    ..........
+  slave2:
+    image: gus/spark
+    ports:
+    ........
+Everything is ok.
+Context information (for bug reports)
+Output of docker-compose version
+version: 3
+Output of docker version
+Release: Ubuntu 18.04
+
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:51 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:15 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false

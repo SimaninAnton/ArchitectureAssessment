@@ -1,0 +1,122 @@
+jpca999 commented on 8 Nov 2016 •
+edited
+when i do the following :
+± docker-compose up
+Starting ltg_db_1
+ERROR: for db Cannot start service db: driver failed programming external connectivity on endpoint ltg_db_1 (ecc3bf3036508fade24ffa4d6bc3e5fee0180073c5351667c471922a10fad60f): Error starting userland proxy: Bind for 0.0.0.0:27017 failed: port is already allocated
+ERROR: Encountered errors while bringing up the project.
+± sudo docker inspect mongo
+[
+{
+"Id": "sha256:135883d5d0b960b498e4c6c2009444b243b322d3fcb8fc4aa0cc741542dd6528",
+"RepoTags": [
+"mongo:latest"
+],
+"RepoDigests": [
+"mongo@sha256:89ad0ed6321f48107356db1e11984e56614bdee64c3ad8a05484187f276ff705"
+],
+"Parent": "",
+"Comment": "",
+"Created": "2016-11-01T23:31:04.120003872Z",
+"Container": "3e20e01de569b06a9cb43787870428254c585a56c2497835db2a616871db6f09",
+"ContainerConfig": {
+"Hostname": "397f80c505a4",
+"Domainname": "",
+"User": "",
+"AttachStdin": false,
+"AttachStdout": false,
+"AttachStderr": false,
+"ExposedPorts": {
+"27017/tcp": {}
+},
+"Tty": false,
+"OpenStdin": false,
+"StdinOnce": false,
+"Env": [
+"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+"GOSU_VERSION=1.7",
+"GPG_KEYS=DFFA3DCF326E302C4787673A01C4E7FAAAB2461C \t42F3E95A2C4F08279C4960ADD68FA50FEA312927",
+"MONGO_MAJOR=3.2",
+"MONGO_VERSION=3.2.10",
+"MONGO_PACKAGE=mongodb-org"
+],
+"Cmd": [
+"/bin/sh",
+"-c",
+"#(nop) ",
+"CMD ["mongod"]"
+],
+"ArgsEscaped": true,
+"Image": "sha256:389bcb7270fe1b576cabbf8c087b3400c5cde2f3da89be0620a42d9a5ab977fe",
+"Volumes": {
+"/data/configdb": {},
+"/data/db": {}
+},
+"WorkingDir": "",
+"Entrypoint": [
+"/entrypoint.sh"
+],
+"OnBuild": [],
+"Labels": {}
+},
+"DockerVersion": "1.12.2",
+"Author": "",
+"Config": {
+"Hostname": "397f80c505a4",
+"Domainname": "",
+"User": "",
+"AttachStdin": false,
+"AttachStdout": false,
+"AttachStderr": false,
+"ExposedPorts": {
+"27017/tcp": {}
+},
+"Tty": false,
+"OpenStdin": false,
+"StdinOnce": false,
+"Env": [
+"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+"GOSU_VERSION=1.7",
+"GPG_KEYS=DFFA3DCF326E302C4787673A01C4E7FAAAB2461C \t42F3E95A2C4F08279C4960ADD68FA50FEA312927",
+"MONGO_MAJOR=3.2",
+"MONGO_VERSION=3.2.10",
+"MONGO_PACKAGE=mongodb-org"
+],
+"Cmd": [
+"mongod"
+],
+"ArgsEscaped": true,
+"Image": "sha256:389bcb7270fe1b576cabbf8c087b3400c5cde2f3da89be0620a42d9a5ab977fe",
+"Volumes": {
+"/data/configdb": {},
+"/data/db": {}
+},
+"WorkingDir": "",
+"Entrypoint": [
+"/entrypoint.sh"
+],
+"OnBuild": [],
+"Labels": {}
+},
+"Architecture": "amd64",
+"Os": "linux",
+"Size": 342458197,
+"VirtualSize": 342458197,
+"GraphDriver": {
+"Name": "aufs",
+"Data": null
+},
+"RootFS": {
+"Type": "layers",
+"Layers": [
+"sha256:f96222d75c5563900bc4dd852179b720a0885de8f7a0619ba0ac76e92542bbc8",
+"sha256:38e11f990b2e156924ac65dca751984df46e2ee08e910f3d5022b2cf719347ca",
+"sha256:eafeecfceabdb3a4e1ca1102187836933e3ccc961739491a09e0363cf70b2f2e",
+"sha256:70c36fdd993b7f4a91e6917b321c20511b12df2e0bf83942ff462a5f0a28a466",
+"sha256:a03828149464bad8b594b6a08afb1f7203dc06da0b455cb12c50edd46ef668a5",
+"sha256:b54cfe80c0ff24ce4144c7d4b902020c582a261f214349093b8f19bd9a5d8673",
+"sha256:ec498496ec5310d8dec1e7d350da6d915b9f1cb27509892e6e6f18b7855303c0",
+"sha256:5031b34889a540514acc2cf9182cda58fef892f359086cb7d05004da033a53c8",
+"sha256:bde90abdc1c007d780ce1b34a692f9305b908cc7c0de3511d1d53f536e535570"
+]
+}

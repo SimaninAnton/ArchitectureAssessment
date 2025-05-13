@@ -1,0 +1,49 @@
+c-desmarais commented on 9 Nov 2017 •
+edited
+Hi there,
+I am new to docker and I've had some issues with docker-compose and I was hoping to get a bit of help.
+I am running ubuntu 16.04.
+When I type the following command :
+docker-compose build
+I get the following error : ERROR: Version in "./docker-compose.yml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify a version of "2" (or "2.0") and place your service definitions under the services key, or omit the version key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+My docker-compose.yml file :
+  version : '3'
+
+  services:
+    nginx:
+      build: nginx
+      ports:
+          - 49160:80
+When I run : docker-compose --version
+I get :
+docker-compose version 1.8.0, build unknown
+When I run : docker --version
+I get :
+Docker version 17.09.0-ce, build afdb6d4
+Now, I've looked around a bit for the problem...
+Found this : https://stackoverflow.com/questions/42139982/version-in-docker-compose-yml-is-unsupported-you-might-be-seeing-this-error
+Saw that the problem might be related to the fact that my docker-compose version was 1.8.0. So I've tried the solution suggested.
+I removed the docker-compose
+rm /usr/local/bin/docker-compose
+Then, curled again for the installation of docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+But when I curl to install a previous version (let's say 1.16.1 as suggested in the comments in Stack overflow), when I type docker-compose --version, I still get :
+docker-compose version 1.8.0
+It seems that removing the file under /usr/local/bin/docker-compose doesn't really remove version 1.8 of docker-compose... which is what I want to do before reinstalling a new version
+I told myself it was because docker-compose did not get removed properly so I've tried :
+sudo apt-get remove docker-compose
+Which i think successfully removed docker-compose, since after I tested by running docker-compose --version, and nothing could be found.
+But then... when i curled again to reinstall... i see that there is a docker-compose file under /usr/local/bin
+but when i run , docker-compose --version, i just get : bash : /usr/bin/docker-compose : no such file or directory, which is weird because i see the file in the file system...
+So then, checked my $PATH:
+/home/cdesmarais/bin:/home/cdesmarais/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin: No such file or directory
+In which I see have usr/local/bin
+So that was confusing....
+Ive tried again to install it like :
+sudo apt-get install docker-compose
+(which installs it, but installs the latest version which is not what I want)
+I am not sure how to input the version number in the previous command.
+I am just not sure what to do anymore... Note : I am able to run the hello world app with docker.
+Thanks a lot for your time. Much appreciated

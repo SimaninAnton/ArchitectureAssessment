@@ -1,0 +1,34 @@
+anentropic commented on 3 Mar 2017
+I just upgraded Docker For Mac to 17.03.0-ce-mac1
+$ ⮀docker-compose up -d
+ERROR: Dependency conflict: an older version of the 'docker-py' package is polluting the namespace. Run the following command to remedy the issue:
+pip uninstall docker docker-py; pip install docker
+$ ⮀pip uninstall docker docker-py; pip install docker
+Cannot uninstall requirement docker, not installed
+Collecting docker
+  Downloading docker-2.1.0-py2.py3-none-any.whl (105kB)
+    100% |████████████████████████████████| 112kB 3.6MB/s
+Requirement already satisfied: six>=1.4.0 in ./VENV/lib/python2.7/site-packages (from docker)
+Collecting backports.ssl-match-hostname>=3.5; python_version < "3.5" (from docker)
+  Downloading backports.ssl_match_hostname-3.5.0.1.tar.gz
+Requirement already satisfied: ipaddress>=1.0.16; python_version < "3.3" in ./VENV/lib/python2.7/site-packages (from docker)
+Collecting websocket-client>=0.32.0 (from docker)
+  Downloading websocket_client-0.40.0.tar.gz (196kB)
+    100% |████████████████████████████████| 204kB 3.6MB/s
+Collecting docker-pycreds>=0.2.1 (from docker)
+  Downloading docker_pycreds-0.2.1-py2.py3-none-any.whl
+Requirement already satisfied: requests!=2.11.0,!=2.12.2,>=2.5.2 in ./VENV/lib/python2.7/site-packages (from docker)
+Building wheels for collected packages: backports.ssl-match-hostname, websocket-client
+  Running setup.py bdist_wheel for backports.ssl-match-hostname ... done
+  Stored in directory: /Users/anentropic/Library/Caches/pip/wheels/5d/72/36/b2a31507b613967b728edc33378a5ff2ada0f62855b93c5ae1
+  Running setup.py bdist_wheel for websocket-client ... done
+  Stored in directory: /Users/anentropic/Library/Caches/pip/wheels/d1/5e/dd/93da015a0ecc8375278b05ad7f0452eff574a044bcea2a95d2
+Successfully built backports.ssl-match-hostname websocket-client
+Installing collected packages: backports.ssl-match-hostname, websocket-client, docker-pycreds, docker
+  Found existing installation: websocket-client 0.11.0
+    Uninstalling websocket-client-0.11.0:
+      Successfully uninstalled websocket-client-0.11.0
+Successfully installed backports.ssl-match-hostname-3.5.0.1 docker-2.1.0 docker-pycreds-0.2.1 websocket-client-0.40.0
+$ ⮀docker-compose up -d
+ERROR: Dependency conflict: an older version of the 'docker-py' package is polluting the namespace. Run the following command to remedy the issue:
+pip uninstall docker docker-py; pip install docker

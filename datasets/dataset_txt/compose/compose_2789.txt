@@ -1,0 +1,4 @@
+omercnet commented on 12 Feb 2016
+When running docker-compose up for the first time it creates custom networks
+When running docker-compose rm containers are removed but custom networks remain
+app specific images are also left behind but that may be a separate issue

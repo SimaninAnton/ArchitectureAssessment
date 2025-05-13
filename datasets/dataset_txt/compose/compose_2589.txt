@@ -1,0 +1,4 @@
+iamKurt commented on 23 Mar 2016
+So, I've read the best practices approach for linking containers and agree with this recommendation. However, am wondering what the recommendation would be to upgrade a dependent container. For example, let's say that I need to upgrade my Postgres database. Better yet, I need to update the schema on a running database container, then update the dependent app A all while the app is still available. My current thinking is that I can bring up a new database container, run some upgrade scripts against the schema, then startup a new dependent app A'. However, if the database data is a mounted volume, then that will affect both A and A'
+I'm pretty sure that this has already been solved so I'm curious to hear how and/or any recommendations on how to handle these scenarios.
+Thanks!

@@ -1,0 +1,8 @@
+aemino commented on 31 Mar 2017 •
+edited
+I'm trying to set up a Docker Compose network for Sentry, but despite trying for a few days, I've been largely unsuccessful. The containers seem to fail to link.
+When doing docker-compose up I get this error from Sentry:
+Taking a look at my syslog, this is appearing:
+So, apparently Compose can't find the network, even though it exists.
+This is my Compose config file:
+Currently using Ubuntu 16.04.2, linux kernel v4.8.0-41-generic. I've tried many different kernel versions without much success.

@@ -1,0 +1,13 @@
+dkapanidis commented on 24 Sep 2014
+Is it possible to configure a fig.yml in such way that you can pass on execution time variables instead of hard-wiring them inside the fig.yml?
+I think a generic variable injection during execution would be quite useful for various use cases.
+e.g:
+jenkins:
+  image: aespinosa/jenkins:latest
+  ports:
+    - "8080"
+  hostname: ${HOSTNAME}
+HOSTNAME=ci fig up
+That could inject the variable HOSTNAME inside the fig.yml during execution and execute a docker run with hostname ci.
+ps. This is different than passing environment variables inside docker which is already supported (http://www.fig.sh/yml.html#environment)
+3

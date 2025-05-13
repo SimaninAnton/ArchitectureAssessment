@@ -1,0 +1,21 @@
+jvitor83 commented on 21 Sep 2018
+Make env_file and secrets file compatible
+Then we can use something like:
+version: "3.5"
+
+services:
+
+  helloworld:
+    image: tutum/hello-world
+    ports:
+      - 80:80
+    env_file:
+     - /run/secrets/my_secret
+    secrets:
+      - my_secret
+
+secrets:
+  my_secret:
+    file: ./my_secret.txt
+and get the environment variable like my_secret=secret_value
+Or maybe something like env_secret: (just like env_file:)?

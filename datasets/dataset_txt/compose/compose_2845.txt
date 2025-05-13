@@ -1,0 +1,68 @@
+leowmjw commented on 3 Feb 2016
+As per manual, I am expecting that docker-compose.override.yml is ignored when specifying multiple compose files; however this is not what I observe:
+To deploy with this production Compose file you can run
+
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+This deploys all three services using the configuration in docker-compose.yml and docker-compose.prod.yml (but not the dev configuration in docker-compose.override.yml).
+Relevant docker-compose.yml segment
+popit_ng:
+  extends: 
+    service: common
+  build: .
+  hostname: popit
+  domainname: localdomain
+  ports:
+    - "8000:8000"
+  links:
+    - postgres:postgres
+    - elastic:elastic
+  command: ./manage.py runserver 0.0.0.0:8000
+and the app's (popit_ng) Dockerfile:
+from django:python2
+
+# Just make sure pip latest version so it does not complain
+RUN pip install --upgrade pip 
+
+RUN mkdir -p /usr/src/app
+
+WORKDIR /usr/src/app
+
+# Copy all code over for production deployment
+# Dev will use override to VOLUME mount local code 
+COPY . /usr/src/app/
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Any other extra software; put it here ...
+# Below are some standard sysadmin tools I use
+# Might want to add so can use ps auxwwf and less
+RUN apt-get update && apt-get install -y \
+        vim \
+        htop \
+        sysstat \
+    --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+EXPOSE 8000 
+
+VOLUME "/usr/src/app"
+My override files:
+bash-3.2$ cat docker-compose.override.yml 
+popit_ng:
+#  volumes_from:
+#    - data
+  volumes:
+    - .:/usr/src/app
+
+bash-3.2$ cat docker-popit-test.yml 
+postgres:
+  environment:
+    - POSTGRES_PASSWORD=123456
+bash-3.2$ docker-compose -f docker-compose.yml -f docker-popit-test.yml up -d
+bash-3.2$ docker-compose run popit_ng /bin/bash
+Observe the file created from within the container is seen in the host. This is contrary to the supposed behavior.
+Docker + Compose Info:
+bash-3.2$ docker --version
+Docker version 1.9.1, build a34a1d5
+bash-3.2$ docker-compose --version
+docker-compose version 1.5.2, build 7240ff3
+2

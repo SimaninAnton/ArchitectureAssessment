@@ -1,0 +1,9 @@
+coventry commented on 15 Jan 2018
+I'd like to make a docker-compose.yml containing something like this:
+services:
+  desktop:
+    security_opt:
+      - seccomp:"./chrome.json"
+This would correspond to the docker run option --security-opt seccomp:./chrome.json, where chrome.json is this seccomp profile.
+Is there any way to give the seccomp key an arbitrary JSON string?
+2

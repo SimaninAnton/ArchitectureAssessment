@@ -1,0 +1,20 @@
+kvramana commented on 14 Mar 2016
+# My Environment:
+Mac OS X 10.11.3,
+Docker version 1.10.3, build 20f81dd
+docker-compose version 1.6.2, build 4d72027
+Problem Description:
+The docker-compose linking does not work whereas the command-line equivalent works.
+Reproducible Testcase:
+I am producing a reproducible test case using linuxconfig/apache image that acts as a docker daemon or as a simple "web" container service listening on port 5000. This "web" service is fronted or linked into from a "haproxy" container service listening on port 80. I start both images through a docker-compose-hello.yml file, and the linking does not work. Whereas, if I start each docker image separately on command-line, then, the container linking works as expected. I'd rather use a compose YML file than go back to docker command line at this stage. Please fix.
+Steps to reproduce:
+Run attached docker-compose-hello.yml file after copying index.html file. (please use attachments index.html and docker-compose-hello.yml files).
+Access the image from http://192.168.99.100/ and it does not work.
+Down the services.
+Now run, from command-line:
+docker run --name web -d -p 5000:5000 -v $PWD/html:/var/www/html/ linuxconfig/apache
+docker run --name haproxy -d -p 80:80 --link web tutum/haproxy
+Access the image from http://192.168.99.100/ and it works !!
+Expectation:
+The docker-compose started services should have worked as their command-line equivalents.
+testcase.zip

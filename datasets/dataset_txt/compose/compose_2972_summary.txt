@@ -1,0 +1,1 @@
+docker-compose rm container after docker-compose run

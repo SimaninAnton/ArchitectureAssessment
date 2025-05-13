@@ -1,0 +1,8 @@
+jianbin-wei commented on 12 Feb 2016
+Without running up first, the network does not exist. Then the scale fails.
+Any reason that the network should not created within scale command?
+docker-compose -f kafka-cluster.yml scale zookeeper=2                                                                                                                        
+Creating and starting 1 ... error
+Creating and starting 2 ... error
+ERROR: for 1  network docker_default not found
+ERROR: for 2  network docker_default not found

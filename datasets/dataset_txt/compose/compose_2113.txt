@@ -1,0 +1,12 @@
+cjerdonek commented on 29 Aug 2016
+Docker compose doesn't seem to respect the "last-line" precedence of .dockerignore files. This is described here in the .dockerignore docs.
+For example, even the simple example provided in the doc section above doesn't seem to work when using Docker compose:
+ *.md
+!README*.md
+README-secret.md
+The file README-secret.md gets included -- not excluded.
+I'm using the following:
+docker-compose version 1.8.0, build 94f7016
+Docker version 1.11.1, build 5604cbe
+Mac OS X 10.11.6
+1

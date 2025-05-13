@@ -1,0 +1,2 @@
+coderlol commented on 8 Aug 2015
+Could we add a flag that compose checks to see if a container exists in docker-compose? I have containers in multiple docker-compose and would like to check where a container is defined.

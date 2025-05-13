@@ -1,0 +1,43 @@
+SUJER commented on 17 Mar 2017 •
+edited by shin-
+when running the docker-compose up, i am getting this issue when running first time
+$ docker-compose up
+Starting dockerapp_dockerapp_1
+Starting dockerapp_redis_1
+Attaching to dockerapp_redis_1, dockerapp_dockerapp_1
+redis_1      |                 _._
+redis_1      |            _.-``__ ''-._
+redis_1      |       _.-``    `.  `_.  ''-._           Redis 3.2.0 (00000000/0) 64 bit
+redis_1      |   .-`` .-```.  ```\/    _.,_ ''-._
+redis_1      |  (    '      ,       .-`  | `,    )     Running in standalone mode
+redis_1      |  |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+redis_1      |  |    `-._   `._    /     _.-'    |     PID: 1
+redis_1      |   `-._    `-._  `-./  _.-'    _.-'
+redis_1      |  |`-._`-._    `-.__.-'    _.-'_.-'|
+redis_1      |  |    `-._`-._        _.-'_.-'    |           http://redis.io
+redis_1      |   `-._    `-._`-.__.-'_.-'    _.-'
+redis_1      |  |`-._`-._    `-.__.-'    _.-'_.-'|
+redis_1      |  |    `-._`-._        _.-'_.-'    |
+redis_1      |   `-._    `-._`-.__.-'_.-'    _.-'
+redis_1      |       `-._    `-.__.-'    _.-'
+redis_1      |           `-._        _.-'
+redis_1      |               `-.__.-'
+redis_1      |
+redis_1      | 1:M 17 Mar 01:03:12.821 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+dockerapp_1  | Traceback (most recent call last):
+dockerapp_1  |   File "app.py", line 5, in <module>
+dockerapp_1  |     cache = redis.strictRedis(host='redis', port=6379, db=0)
+dockerapp_1  | AttributeError: module 'redis' has no attribute 'strictRedis'
+dockerapp_dockerapp_1 exited with code 1
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping dockerapp_redis_1 ... done
+when running second time i am getting this issue.
+$ docker-compose up
+Starting dockerapp_dockerapp_1
+Starting dockerapp_redis_1
+Attaching to dockerapp_redis_1, dockerapp_dockerapp_1
+dockerapp_1  | Traceback (most recent call last):
+dockerapp_1  |   File "app.py", line 5, in <module>
+dockerapp_1  |     cache = redis.strictRedis(host='redis', port=6379, db=0)
+dockerapp_1  | AttributeError: module 'redis' has no attribute 'strictRedis'
+dockerapp_dockerapp_1 exited with code 1

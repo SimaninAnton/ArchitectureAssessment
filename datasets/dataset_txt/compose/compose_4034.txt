@@ -1,0 +1,13 @@
+ferrouswheel commented on 23 Dec 2014
+I might be missing something obvious, but sometimes I want to be able to extract files from a container being run using docker cp.
+But to do this I need to know the container ID or name. There is fig ps which gives this output:
+$ fig ps
+Name         Command       State    Ports
+-------------------------------------------
+api_api_1   ./run_tests.sh   Exit 0
+There is also
+$ fig ps -q
+919df97040951615bc2c3f1e0835a1ab46dad764c84f20e4dd9ca6ba1abe60fe
+The latter would be useful, but if there are multiple containers there is no way to differentiate between the ids.
+The problem with the former is that that name api_api_1 will change container id when fig runs.
+Is there a way to just get a mapping from service name to container id? I imagine one could extract this if the ordering of IDs in fig ps -q matches fig ps but I don't like having to rely on non-atomic operations where state could change in between calls, and there is no documentation to suggest the ordering is consistent.

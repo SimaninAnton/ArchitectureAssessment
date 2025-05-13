@@ -1,0 +1,38 @@
+itaylor commented on 4 Feb 2016
+I've got a reasonably complex docker-compose file that I'm running in boot2docker: 10 services, all based off different container images, with dependencies between many of the images. I'm trying to converting to use the new v2 syntax to use the new networking support.
+I get seemingly random failures: ERROR: failed to add interface veth3df028b to sandbox: failed in prefunc: failed to set namespace on link "veth3df028b": invalid argument. These error are non-deterministic, and seem to correlate with the amount of time the containers take to start. Removing a few services from my compose file almost always causes the error to disappear, adding them back usually (but not always) causes the error to appear again.
+My efforts to create a clean reproduction case with images that I could share for debugging have failed despite a fair bit of time spent trying. Running docker-compose rm then docker-compose up sometimes fixes it the error, other times not. I traced the error though the code from:
+https://github.com/docker/libnetwork/blob/d1d60f9d687594a696420de309079740564f04c6/osl/interface_linux.go#L247 to https://github.com/vishvananda/netlink/blob/1281ba6af59148ac2cbf66b03a0af538785711ba/link_linux.go#L212
+My guess is that there is a race condition that causes the file descriptor passed in there to be closed by some other thread/process/timeout, thus producing the 'invalid argument' error.
+Here are the versions of things that I'm running.
+docker-compose version 1.6.0rc2, build 695c692
+Docker version 1.10.0-rc3, build 08c24cc
+Boot2Docker version 1.10.0-rc3, build master : b1ddf2c - Tue Feb  2 23:17:07 UTC 2016
+Virtualbox Version 5.0.14 r105127 
+Here are the logs from /var/log/docker.log with the actual error on the last line for the error I'm seeing:
+time="2016-02-03T22:19:30.258475201Z" level=debug msg="Releasing addresses for endpoint mercury_nginx_1's interface on network mercury_main" 
+time="2016-02-03T22:19:30.258529356Z" level=debug msg="ReleaseAddress(LocalDefault/172.21.0.0/16, 172.21.0.3)" 
+time="2016-02-03T22:19:30.263259873Z" level=debug msg="Calling POST /v1.22/networks/mercury_main/connect" 
+time="2016-02-03T22:19:30.263290670Z" level=debug msg="POST /v1.22/networks/mercury_main/connect" 
+time="2016-02-03T22:19:30.263375493Z" level=debug msg="form data: {\"Container\":\"c9a2edae123df2122b6ecda33fde0a4bab68daed7aac544890d28e6a05890714\",\"EndpointConfig\":{\"Aliases\":[\"nginx\",\"c9a2edae12\"],\"Links\":null}}" 
+time="2016-02-03T22:19:30.263558881Z" level=debug msg="Assigning addresses for endpoint mercury_nginx_1's interface on network mercury_main" 
+time="2016-02-03T22:19:30.263578868Z" level=debug msg="RequestAddress(LocalDefault/172.21.0.0/16, <nil>, map[])" 
+time="2016-02-03T22:19:30.265861418Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -A DOCKER -p tcp -d 0/0 --dport 443 -j DNAT --to-destination 172.21.0.3:443 ! -i br-c316fdbb71d3]" 
+time="2016-02-03T22:19:30.276046466Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t filter -A DOCKER ! -i br-c316fdbb71d3 -o br-c316fdbb71d3 -p tcp -d 172.21.0.3 --dport 443 -j ACCEPT]" 
+time="2016-02-03T22:19:30.278870438Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -A POSTROUTING -p tcp -s 172.21.0.3 -d 172.21.0.3 --dport 443 -j MASQUERADE]" 
+time="2016-02-03T22:19:30.328575352Z" level=debug msg="attach: stdout: end" 
+time="2016-02-03T22:19:30.328621904Z" level=debug msg="attach: stderr: end" 
+time="2016-02-03T22:19:30.342266726Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -A DOCKER -p tcp -d 0/0 --dport 80 -j DNAT --to-destination 172.21.0.3:80 ! -i br-c316fdbb71d3]" 
+time="2016-02-03T22:19:30.350794042Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t filter -A DOCKER ! -i br-c316fdbb71d3 -o br-c316fdbb71d3 -p tcp -d 172.21.0.3 --dport 80 -j ACCEPT]" 
+time="2016-02-03T22:19:30.361945016Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -A POSTROUTING -p tcp -s 172.21.0.3 -d 172.21.0.3 --dport 80 -j MASQUERADE]" 
+time="2016-02-03T22:19:30.440393849Z" level=debug msg="Assigning addresses for endpoint mercury_nginx_1's interface on network mercury_main" 
+time="2016-02-03T22:19:30.445505673Z" level=info msg="Skipping update of resolv.conf file with ipv6Enabled: false because file was touched by user" 
+time="2016-02-03T22:19:30.453829373Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -D DOCKER -p tcp -d 0/0 --dport 443 -j DNAT --to-destination 172.21.0.3:443 ! -i br-c316fdbb71d3]" 
+time="2016-02-03T22:19:30.460949347Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t filter -D DOCKER ! -i br-c316fdbb71d3 -o br-c316fdbb71d3 -p tcp -d 172.21.0.3 --dport 443 -j ACCEPT]" 
+time="2016-02-03T22:19:30.464248928Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -D POSTROUTING -p tcp -s 172.21.0.3 -d 172.21.0.3 --dport 443 -j MASQUERADE]" 
+time="2016-02-03T22:19:30.470220775Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -D DOCKER -p tcp -d 0/0 --dport 80 -j DNAT --to-destination 172.21.0.3:80 ! -i br-c316fdbb71d3]" 
+time="2016-02-03T22:19:30.473930328Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t filter -D DOCKER ! -i br-c316fdbb71d3 -o br-c316fdbb71d3 -p tcp -d 172.21.0.3 --dport 80 -j ACCEPT]" 
+time="2016-02-03T22:19:30.476286621Z" level=debug msg="/usr/local/sbin/iptables, [--wait -t nat -D POSTROUTING -p tcp -s 172.21.0.3 -d 172.21.0.3 --dport 80 -j MASQUERADE]" 
+time="2016-02-03T22:19:30.517797405Z" level=debug msg="Releasing addresses for endpoint mercury_nginx_1's interface on network mercury_main" 
+time="2016-02-03T22:19:30.517861591Z" level=debug msg="ReleaseAddress(LocalDefault/172.21.0.0/16, 172.21.0.3)" 
+time="2016-02-03T22:19:30.519134046Z" level=error msg="Handler for POST /v1.22/networks/mercury_main/connect returned error: failed to add interface vethf5af3a9 to sandbox: failed in prefunc: failed to set namespace on link \"vethf5af3a9\": invalid argument" 

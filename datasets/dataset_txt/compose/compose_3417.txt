@@ -1,0 +1,3 @@
+sunadm commented on 1 Aug 2015
+in New coming version 1.8.0 of Docker, it support new log driver "fluentd"
+Can compose support it in 1.4.0 version?

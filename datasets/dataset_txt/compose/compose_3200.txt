@@ -1,0 +1,3 @@
+blaggacao commented on 19 Oct 2015
+error code: R6034
+"An application has made the attempt to load a C runtime library incorrectly."

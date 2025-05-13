@@ -1,0 +1,57 @@
+zombiQWERTY commented on 24 Oct 2016
+Description:
+I am setting up docker-compose: I provide different Dockerfiles (different directories). When docker-compose up dev start up then it throws me error:
+ERROR: Cannot locate specified Dockerfile: Dockerfile
+Here is full configs:
+https://gist.github.com/zombiQWERTY/5cd9c8d0430fe5cd2fae2a28044ebc2d
+Steps to reproduce the issue:
+docker-compose up dev with my configs and folder tree
+Describe the results you received:
+ERROR: Cannot locate specified Dockerfile: Dockerfile
+Describe the results you expected:
+Normal behaviour
+Output of docker version:
+Docker version 1.12.1, build 6f9534c
+Output of docker info:
+docker info
+Containers: 20
+ Running: 0
+ Paused: 0
+ Stopped: 20
+Images: 159
+Server Version: 1.12.1
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 171
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: null bridge host overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.20-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 993.1 MiB
+Name: moby
+ID: PMLU:XKDQ:EJBW:LN5E:LEPU:QSF5:DOW3:DIW3:PCBI:QFSK:VQ6N:TKG6
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 16
+ Goroutines: 28
+ System Time: 2016-10-23T20:22:56.07710922Z
+ EventsListeners: 1
+No Proxy: *.local, 169.254/16
+Registry: https://index.docker.io/v1/
+Insecure Registries:
+ 127.0.0.0/8
+Additional environment details (AWS, VirtualBox, physical, etc.):
+OSX Sierra

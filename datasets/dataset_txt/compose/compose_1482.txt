@@ -1,0 +1,24 @@
+garagatyi commented on 5 May 2017
+PR adds support of init config for container.
+But I can't use it since docker-compose fails on validation.
+My compose file:
+che:                                                                                                                                                                                                          
+  image: eclipse/che-server:nightly                                                                                                                                                                           
+  env_file:                                                                                                                                                                                                   
+    - '/data/instance/config/che.env'                                                                                                                                                                         
+  volumes:                                                                                                                                                                                                    
+    - '/var/run/docker.sock:/var/run/docker.sock'                                                                                                                                                             
+    - '/home/gaal/workspace/.che/instance/data:/data'                                                                                                                                                         
+    - '/home/gaal/workspace/.che/instance/logs:/logs'                                                                                                                                                         
+    - '/home/gaal/workspace/.che/instance/config:/conf'                                                                                                                                                       
+    - '/home/gaal/workspace/.che/instance/dev/che-tomcat:/assembly'                                                                                                                                           
+  ports:                                                                                                                                                                                                      
+    - '8080:8080'                                                                                                                                                                                             
+  restart: always                                                                                                                                                                                             
+  init: true                                                                                                                                                                                                  
+  container_name: che
+docker-compose version returns:
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.2.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016

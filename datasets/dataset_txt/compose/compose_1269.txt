@@ -1,0 +1,100 @@
+Stono commented on 7 Aug 2017
+Hey,
+I'm experiencing some strange behaviour.
+See the following docker build:
+$ docker build -t eu.gcr.io/peopledata-product-team/td.gateway . --cache-from eu.gcr.io/peopledata-product-team/td.gateway:latest
+Sending build context to Docker daemon  208.9kB
+Step 1/9 : FROM eu.gcr.io/peopledata-product-team/td.nodejs:latest
+ ---> f102e68fb27d
+Step 2/9 : ENV APP_ENV docker
+ ---> Using cache
+ ---> ab50400417cc
+Step 3/9 : EXPOSE 9000
+ ---> Using cache
+ ---> d0fd739c96e2
+Step 4/9 : COPY package.json /app/
+ ---> Using cache
+ ---> d6d0c39b1fcf
+Step 5/9 : RUN npm install
+ ---> Using cache
+ ---> 3e48638935cd
+Step 6/9 : COPY . /app/
+ ---> Using cache
+ ---> ed4d8b4a0aa2
+Step 7/9 : RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown nodejs:nodejs {} \;
+ ---> Using cache
+ ---> 8ebef246e2df
+Step 8/9 : USER nodejs
+ ---> Using cache
+ ---> bc1a6683aabd
+Step 9/9 : VOLUME /app
+ ---> Using cache
+ ---> ecb0dabe1bac
+Successfully built ecb0dabe1bac
+Successfully tagged eu.gcr.io/peopledata-product-team/td.gateway:latest
+As you can see, nicely cached.
+However trying to do the same thing with compose I get cache invalidations. I find it interesting it does seem to cache up until the point of a file based copy (the env/expose are fine).
+$ docker-compose build
+hawkeye uses an image, skipping
+redis uses an image, skipping
+rabbitmq uses an image, skipping
+Building app
+Step 1/9 : FROM eu.gcr.io/peopledata-product-team/td.nodejs:latest
+ ---> f102e68fb27d
+Step 2/9 : ENV APP_ENV docker
+ ---> Using cache
+ ---> ab50400417cc
+Step 3/9 : EXPOSE 9000
+ ---> Using cache
+ ---> d0fd739c96e2
+Step 4/9 : COPY package.json /app/
+ ---> 73dbfff2fd48
+Removing intermediate container dbbebf72e114
+Step 5/9 : RUN npm install
+ ---> Running in b59db8bf397c
+my docker-compose.yml looks like this:
+$ cat docker-compose.yml
+version: '3.2'
+
+volumes:
+  code:
+
+services:
+  app:
+    image: eu.gcr.io/peopledata-product-team/td.gateway
+    restart: always
+    links:
+      - redis
+      - rabbitmq
+and my docker-compose.override.yml looks like this:
+$ cat docker-compose.override.yml
+version: '3.2'
+
+services:
+  app:
+    build:
+      context: .
+      cache_from:
+        - eu.gcr.io/peopledata-product-team/td.gateway:latest
+docker versions:
+$ docker version
+Client:
+ Version:      17.06.0-ce
+ API version:  1.30
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:20:36 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.06.0-ce
+ API version:  1.30 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:51:55 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+docker-compose versions:
+$ docker-compose --version
+docker-compose version 1.15.0-rc1, build 2188098
+3

@@ -1,0 +1,1 @@
+Drop support for `fig.yml` and FIG_PROJECT_NAME

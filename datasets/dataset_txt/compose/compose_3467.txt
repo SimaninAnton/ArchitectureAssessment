@@ -1,0 +1,6 @@
+gdm85 commented on 16 Jul 2015
+Let's say I want to run a few containers in parallel, from same image:
+$ for arg in a b; do echo "docker-compose run --rm services bash -c 'echo $arg'"; done | parallel
+Conflict. The name "services_services_run_5" is already in use by container 950d1205df0d. You have to delete (or rename) that container to be able to reuse that name.
+Conflict. The name "services_services_run_5" is already in use by container 950d1205df0d. You have to delete (or rename) that container to be able to reuse that name.
+Can't we have compose use the randomly-generated name by Docker instead? I find it somehow ironic that I can't parallelise my containers usage.. :)

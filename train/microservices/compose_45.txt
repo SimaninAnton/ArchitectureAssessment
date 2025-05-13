@@ -1,0 +1,30 @@
+murphce commented on 22 Nov 2019
+Hi,
+I have a docker-compose which is resposible for running my application's UI, API and DB. My UI is built on React and I have mounted a volume so that I continue to develop the application. However, the UI does not update when I change any files (not even if I manually reload the page), I have used docker exec to verify that the files are being changed in the container.
+The following is my docker-compose file:
+version: '3'
+
+services:
+  ui:
+    build: ./docker.dses-ui/
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    volumes:
+      - ./docker.dses-ui/dses-ui/src:/usr/src/app
+
+  api:
+    build: ./docker.dses-api/dses-api/.
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+
+  db:
+    build: ./docker.dses-db/postgres/.
+    ports:
+      - '5432:5432'
+    expose: 
+      - '5432'
+Any help would be greatly appreciated.

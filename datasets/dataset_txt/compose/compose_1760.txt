@@ -1,0 +1,36 @@
+nkonev commented on 24 Jan 2017 •
+edited
+[root@nkonev-pc ~]# docker-compose --version
+docker-compose version 1.10.0, build 4bd6f1a
+[root@nkonev-pc ~]# docker --version
+Docker version 1.12.3, build 6b644ec
+Expected: serviceWeb is never starts because serviceDatabase is noth healthy.
+Actual: serviceWeb ignores serviceDatabase healthy status and starts.
+If i use extends statement then serviceWeb container won't wait serviceDatabase,
+but if I remove extends statement, then all works as expected.
+docker-compose.yml
+version: '2.1'
+services:
+  serviceWeb:
+    image: debian
+    entrypoint: ["tail", "-f", "/dev/null"] # emulate that servise works %)
+    # Comment these lines for expected behaviour
+    extends:
+      file: common-service.yml
+      service: dummy-service
+    depends_on:
+      serviceDatabase:
+        condition: service_healthy
+  serviceDatabase:
+    image: debian
+    entrypoint: ["tail", "-f", "/dev/null"] # emulate that servise works %)
+    healthcheck:
+      test: /bin/false
+      interval: 30s
+      timeout: 10s
+      retries: 10
+common-service.yml
+version: '2.1'
+
+services:
+  dummy-service:

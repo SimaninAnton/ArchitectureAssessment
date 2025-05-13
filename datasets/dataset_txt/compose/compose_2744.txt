@@ -1,0 +1,3 @@
+khimaros commented on 19 Feb 2016
+Thanks to moby/moby#13587 the --tmpfs flag is now available in Docker.
+It would be awesome to have this in Compose as well.

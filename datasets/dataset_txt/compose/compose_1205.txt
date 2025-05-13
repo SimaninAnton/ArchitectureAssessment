@@ -1,0 +1,8 @@
+KathiresanRamkumar95 commented on 15 Sep 2017
+I am using Linux.
+I am trying to add data to Redis from my web application running on Tomcat container.
+But I can't store any more data to Redis.When I restart Redis container, the temporarily added data lost.
+I configure the docker from using docker-compose.yml
+Redis-bitnami/redis:latest
+Please update ASAP.
+Thanks

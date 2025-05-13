@@ -1,0 +1,32 @@
+ghost commented on 11 Jun 2018
+I'm trying docker-compose for the first time on my asp.net core 2.1 project.
+RIght off the bat I get this error:
+Status: Downloaded newer image for microsoft/aspnetcore-build:2.0
+---> f5f1d9a332af
+Step 5/17 : WORKDIR /src
+Removing intermediate container 62977905bab6
+---> cc29452d7b87
+Step 6/17 : COPY MyProject.sln ./
+---> e16ca0f93254
+Step 7/17 : COPY ../MyProject/MyProject.csproj ../MyProject/
+ERROR: Service 'autofaqrestapi' failed to build: COPY failed: Forbidden path outside the build context: ..\MyProject\MyProject.csproj ()
+INFO:
+docker version
+Client:
+Version: 18.03.1-ce
+API version: 1.37
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:12:48 2018
+OS/Arch: windows/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.03.1-ce
+API version: 1.37 (minimum version 1.24)
+Go version: go1.9.5
+Git commit: 9ee9f40
+Built: Thu Apr 26 07:21:42 2018
+OS/Arch: windows/amd64
+Experimental: false

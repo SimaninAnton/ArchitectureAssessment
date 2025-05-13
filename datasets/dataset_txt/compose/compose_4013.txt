@@ -1,0 +1,5 @@
+skolodyazhnyy commented on 5 Jan 2015
+Hi,
+Is it possible to allow some word separator in service names? For example I have a service, it's database and database volume containers. These services have names: service, servicedatabase and servicedatabasedata. You can easily identify that servicedatabase belongs to service, as it has prefix. But because neither '_' nor '-' are allowed these names are super hard to read quickly. So, it will be great if you will allow underscores, so my containers will become: service, service_database and service_database_data
+If underscores will be allowed you still will be able to split joined name back to project-name, service-name and instance-number. You can forbid underscore in project name and last part is always an integer, so to split it back you need to cut part before first _ and after last _, these will be project name and instance number the rest is service name.
+Thanks a lot!

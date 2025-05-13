@@ -1,0 +1,5 @@
+elbaschid commented on 21 Jun 2014
+First of all, thanks for a great tool. It has helped streamlining our development process
+Now to my problem. I am currently using fig in a few environments where requests and PyYAML are both newer than the versions you have in requirements.txt. Unfortunately, your use of pkg_resources enforces the version numbers in the requirements and fails. The only way to get it to work is to downgrade requests and PyYAML.
+Is there a particular reason for enforcing these specific version numbers? Would it be possible to loosen the constraints to something like: requests>=2.2.1? Compatibility with newer version should be relatively easy to verify through the Travis build matrix.
+I'm happy to provide a PR for both but would like your stand on this first. Thanks!

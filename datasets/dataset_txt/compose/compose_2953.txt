@@ -1,0 +1,16 @@
+dsifford commented on 3 Jan 2016
+Hello,
+I've looked everywhere for no less than the last two hours and I just cannot find an answer for what I would assume is a completely rudimentary issue I am having.
+Here's the issue I am facing...
+I am working on a development / production pipeline that is entirely encapsulated in docker. Simply put, I want to access my production database from my development container and have it read-only (in the sense that it cannot write back to the data container), but writable locally.
+In this way, I will have the most updated version of the applications database while developing, and, in the event that I break something during the course of development, all I have to do to restore it to its current state is just restart the container.
+Here's what I have tried so far.
+Attempt 1: Link (using volumes_from with the :ro tag) to my data volume container in my production container.
+Result: Fail. The drive is totally non-writable locally.
+Attempt 2: Create a backup copy on build and symlink over the linked, read-only directory.
+Result: Fail.
+Attempt 3: Leave the data volume rw, copy it recursively to another path on build, change the data directory for the database (in this case, being mongodb -- yea, I know.... ), and then change the ownership of the copied directory.
+Result: Fail. The one-liner command override was too much. This would probably work, but I'd have to write a dockerfile for it from scratch.
+Can somebody help me out here? Please tell me there is an easier way of going about this.
+Thanks in advance for the help.
+1

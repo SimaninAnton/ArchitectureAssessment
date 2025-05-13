@@ -1,0 +1,11 @@
+mundimduy2506 commented on 5 Aug 2017
+I have a service call HealthCheck to verify database connection.
+I use docker-compose up (with docker-compose.yml housing all environments variables) vs docker run (I must manually pass env variables in the command) to bring up the docker container but there is an observation:
+If I hit this call
+http://my-ip:8081/api/v1/HealthCheck
+Service brought by docker-compose up: it takes around 2257 ms to return very call
+while another with docker run: it takes < 1 second to give me the result
+Docker-compose version: 1.8
+Docker-engine version: 1.12.3
+The time to start container seems similar in both ways
+Any ideas why there is the slowness with docker-compose?

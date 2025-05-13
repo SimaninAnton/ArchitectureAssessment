@@ -1,0 +1,1 @@
+docker-compose $(docker-machine config default) up Fails.

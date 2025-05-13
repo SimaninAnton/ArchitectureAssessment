@@ -1,0 +1,6 @@
+thomas-riccardi commented on 25 Feb 2016
+extends doc explains specific merge rules that apply to image and build:
+In the case of build and image, using one in the local service causes Compose to discard the other, if it was defined in the original service.
+Since compose 1.6.0 and Compose File format v2 this limitation is not needed anymore because both image and build may be defined at the same time.
+After testing it appears that extends has already relaxed this and merges with usual rules.
+The documentation should be updated to reflect this.

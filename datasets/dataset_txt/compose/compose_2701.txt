@@ -1,0 +1,13 @@
+niko commented on 26 Feb 2016
+I would like to define services which are not started automatically by docker-compose up when called without further arguments. I propose to introduce an "inactive" flag for a single service. I propose to make this flag configurable via environment variable. Perhaps "inactive" should be true whenever the value is not an empty string.
+Explicitly starting an "inactive" service via docker-compose up redis should still be possible.
+Example:
+version: '2'
+
+services:
+    redis:
+        inactive: ${8GB_RAM}${16GB_RAM} # as opposed to $32_GB_RAM
+…
+    streaming_server:
+        inactive: ${1GB_ETH} # as opposed to $10GB_ETH
+This way a compose file could be tailored to the capabilities of the different servers. We have for example machines with 10GB optical ethernet for the streaming servers, servers with loads of RAM as Redis hosts, servers with 15TB disk space for the file servers. Using the same docker-compose.yml file on all hosts would be terribly convenient.

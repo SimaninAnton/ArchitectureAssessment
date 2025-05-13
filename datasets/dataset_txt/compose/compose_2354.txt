@@ -1,0 +1,4 @@
+michaelarnauts commented on 27 May 2016
+I'm using docker-compose 1.7.0 in a CI environment (Gitlab CI) with a shared docker socket. Therefore, all containers from all running tests are siblings.
+I've separated the containers by setting the container_name in the docker-compose.yml to a unique name per job by using container_name: testproject_$CI_BUILD_ID.
+The problem is that when I run multiple tests at the same time docker-compose is reusing the containers from a different test even though the name is different. When a second job is executed, and the first job is still running, the second job recreates the container of the first job (since the image is changed). It should however just create a new container with the specified container_name instead of killing the first job's containers.

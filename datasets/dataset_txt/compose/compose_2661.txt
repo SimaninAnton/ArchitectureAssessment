@@ -1,0 +1,162 @@
+the-nw1-group commented on 7 Mar 2016
+Output of docker-compose version:
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+Output of docker version :
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 16:16:33 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 16:16:33 2016
+ OS/Arch:      linux/amd64
+Output of docker info :
+Containers: 7
+ Running: 7
+ Paused: 0
+ Stopped: 0
+Images: 7
+Server Version: 1.10.2
+Storage Driver: devicemapper
+ Pool Name: docker-253:1-69602623-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 107.4 GB
+ Backing Filesystem: ext4
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 5.215 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 16.93 GB
+ Metadata Space Used: 8.606 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.139 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107-RHEL7 (2015-12-01)
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: bridge null host
+Kernel Version: 3.10.0-123.13.2.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 14.53 GiB
+Name: vm-nds-dev01
+ID: YGKS:SQHV:RS6U:26F5:FU3O:A5A5:YDYG:NUGF:K7CC:7SJ5:RYXC:MSKV
+Debug mode (server): true
+ File Descriptors: 73
+ Goroutines: 93
+ System Time: 2016-03-07T14:50:34.967173027Z
+ EventsListeners: 0
+ Init SHA1: cecb6c4a8539debd39a00b92490604d3339ef5e6
+ Init Path: /usr/libexec/docker/dockerinit
+ Docker Root Dir: /var/lib/docker
+Provide additional environment details (AWS, VirtualBox, physical, etc.):
+Virtualbox - hosted by our IT services
+Linux vm-nds-dev01 3.10.0-123.13.2.el7.x86_64 #1 SMP Thu Dec 18 14:09:13 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+List the steps to reproduce the issue:
+Have the following docker-compose.yml file:
+version: '2'
+services:
+  httpd:
+    image: httpd
+    hostname: ui
+    networks:
+      - test
+    ports:
+      - "10080:80"
+    container_name: httpd
+
+networks:
+  test:
+    driver: bridge
+run
+docker-compose --project-name test-httpd up -d
+curl -v localhost:10080
+Describe the results you received:
+curl either hangs (times out), or returns:
+* About to connect() to localhost port 10080 (#0)
+*   Trying ::1...
+* Connected to localhost (::1) port 10080 (#0)
+> GET / HTTP/1.1
+> User-Agent: curl/7.29.0
+> Host: localhost:10080
+> Accept: */*
+>
+* Recv failure: Connection reset by peer
+* Closing connection 0
+curl: (56) Recv failure: Connection reset by peer
+Describe the results you expected:
+Should be able to connect to exposed port, and receive the apache httpd default home page
+Provide additional info you think is important:
+Output from docker network inspect testhttpd_test:
+[
+    {
+        "Name": "testhttpd_test",
+        "Id": "a938e101bdfbcce139428e153ccfc90e4e1da528edf5a728a578b45cd8e432ca",
+        "Scope": "local",
+        "Driver": "bridge",
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.20.0.0/16",
+                    "Gateway": "172.20.0.1/16"
+                }
+            ]
+        },
+        "Containers": {
+            "84ccabac3bd97364efe8746e5cf91018fa8dfb167e6f5b27daaa612300780a7b": {
+                "Name": "httpd",
+                "EndpointID": "8b30a2d033fe02816b842ffc62e71abf9bd7d4051ad0fe5344885d72b9b33b5c",
+                "MacAddress": "02:42:ac:14:00:02",
+                "IPv4Address": "172.20.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {}
+    }
+]
+Also if I curl to the network's IP address:
+curl -v 172.20.0.2:10080
+again it either hangs, or I get:
+curl: (7) Failed connect to 172.20.0.2:10080; No route to host
+ifconfig output:
+br-a938e101bdfb: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        ether 02:42:94:86:b9:48  txqueuelen 0  (Ethernet)
+        RX packets 20  bytes 3555 (3.4 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 77  bytes 5238 (5.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+docker0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 0.0.0.0
+        inet6 fe80::42:faff:fe65:f35  prefixlen 64  scopeid 0x20<link>
+        ether 02:42:fa:65:0f:35  txqueuelen 0  (Ethernet)
+        RX packets 3370973  bytes 7263901611 (6.7 GiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2397122  bytes 1199442850 (1.1 GiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+If I shell into the container, I'm able to connect to port 80.
+This is just an example test case, our application has 5 composed services, which exhibits the same behaviour, we're unable to connect to any of the exposed ports, but the containers are able to "talk" to each other.
+This used to work on this server, and we have another server where this does work.
+1

@@ -1,0 +1,7 @@
+suan commented on 24 Aug 2014
+I understand this issue is probably 1) not a fig bug and 2) very complex and has a lot of environmental factors, but would appreciate if someone could point to to the right direction.
+When I use any text editor via fig, e.g. fig run vim <foo>, I get the following issues:
+The first time, the cursor is missing, and hitting direction keys does nothing.
+After I :q and fig run vim <foo> again, the cursor is present and responsive, but the screen is cutoff, like so:
+After continually paging down, then slowly scrolling up, then screen does finally get filled.
+Is the complexities of interactive file editing just too much for fig+Docker+boot2docker to handle, and best left to NFS-mount-local-editing-type solutions? (I have tried both vim-box, vim-gtk, and nano)

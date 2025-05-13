@@ -1,0 +1,1 @@
+Version "2" `docker-compose down` crashes when network doesn't exist

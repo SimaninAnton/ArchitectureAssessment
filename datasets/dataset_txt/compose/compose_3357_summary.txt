@@ -1,0 +1,1 @@
+Environment variables from "env_file" directive are not available during build

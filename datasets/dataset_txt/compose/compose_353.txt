@@ -1,0 +1,37 @@
+benileo commented on 20 Dec 2018
+Description of the issue
+docker-compose is not creating the user defined network present in a file which another service inherits from. In my example I create a service base-service which is supposed to attach to a user defined network called my_net. When this base service is inherited from, docker-compose does not create the user-defined network.
+Base file (docker-compose-base.yml)
+version: '2.1'
+networks:
+  my_net:
+
+services:
+  base-service:
+    networks:
+      - my_net
+Service file (docker-compose-main.yml):
+version: '2.1'
+services:
+  test:
+    image: ubuntu
+    entrypoint: sleep 3600
+    extends:
+      file: docker-compose-base.yml
+      service: base-service
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880f
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+$ docker-compose -f docker-compose-main.yml config
+services:
+  test:
+    entrypoint: sleep 3600
+    image: ubuntu
+    networks:
+      my_net: null
+version: '2.1'
+** Error message **
+$ docker-compose -f docker-compose-main.yml up -d
+ERROR: Service "test" uses an undefined network "my_net"
+I'm guessing my_net: null is most likely an indication of an issue/bug

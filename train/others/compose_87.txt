@@ -1,0 +1,13 @@
+OrangeDog commented on 8 Oct 2019
+Description of the issue
+It appears that currently it's not possible to install the latest version of docker-compose with pip due to unsatisfiable dependencies. I don't know if there's anything you can do about it?
+$ pip install docker-compose
+Collecting docker-compose
+  Using cached https://files.pythonhosted.org/packages/dd/e6/1521d1dfd9c0da1d1863b18e592d91c3df222e55f258b9876fa1e59bc4b5/docker_compose-1.24.1-py2.py3-none-any.whl
+...
+Collecting idna<2.8,>=2.5 (from requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1->docker-compose)
+  Could not find a version that satisfies the requirement idna<2.8,>=2.5 (from requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1->docker-compose) (from versions: )
+No matching distribution found for idna<2.8,>=2.5 (from requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1->docker-compose)
+Additional information
+Python 2.7.5
+pip 9.0.1 from .pyenv-python/lib/python2.7/site-packages (python 2.7)

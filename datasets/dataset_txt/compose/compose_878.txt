@@ -1,0 +1,113 @@
+GrimSmiler commented on 9 Feb 2018
+Hi!
+After the machine has installed windows updates yesterday (do not know if this is relevant) on running a command
+docker-compose -f docker-compose.yml -f docker-compose.staging.yml -p MyServer up -d --force-recreate
+I get the following error
+ERROR: for myserver_service_1  Cannot start service service: container b81585a7f0aa6e6919ddda9687067986dc02b7ecc984f056afe8f284b1661327 encountered an error during CreateContainer: hcsshim: timeout waiting for notification extra info: {
+ SystemType":"Container",
+ "Name":"b81585a7f0aa6e6919ddda9687067986dc02b7ecc984f056afe8f284b1661327",
+ "Owner":"docker",
+ "IgnoreFlushesDuringBoot":true,
+ "LayerFolderPath":"C:\\ProgramData\\Docker\\windowsfilter\\b81585a7f0aa6e6919ddda9687067986dc02b7ecc984f056afe8f284b1661327",
+ "Layers":[
+  {
+   "ID":"99be92cd-e890-5726-a395-8670e277090e",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\fc9f8203488fd72e04782a4486cbaf85dc06a4db60c170a12d4361290d545782"
+  },
+  {
+   "ID":"832bea00-86f1-578d-a8d4-09aa4cc6391b",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\999f6765af2d448aa198fc508ba560a82088de1fcab9acb64e203b899cea45bc"
+  },
+  {
+   "ID":"6f9b82b0-27f7-54f9-84a7-3414feee9ace",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\0c88f99ce1692b2f394dd9803ae732dbe9ff25e0df50cb970c3187a743477d76"
+  },
+  {
+   "ID":"b4f377d7-8569-591b-833a-a274daa30cd3",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\74679b51e0e6176cf915ce583075871f720b5893bee2e53b1b286390d02b5a18"
+  },
+  {
+   "ID":"6b8a4048-634c-56e6-8d31-204d2f36586d",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\059d14c06ed88640b77e789bcbc274a5018f44a200314b4225c9f199cd7260e2"
+  },
+  {
+   "ID":"cf1ecc69-385c-532d-9ebb-d5d52a0659ea",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\22627e899233f3bd57f25e741a27481c3f2161618bd5fac7e21245441fc25a58"
+  },
+  {
+   "ID":"52f9a61f-0859-5a0d-9a8c-365202d277b7",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\a151117042eb95db8cb525403075f7a8e860a17e789e0786e7fbd3078fc5dc22"
+  },
+  {
+   "ID":"e1adc3b2-fc82-55b8-a541-d6ba977f9088",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\fe5922a249807e4d477aa2962817f60797dfd01e338fd7b856976e99dd465f3b"
+  },
+  {
+   "ID":"c6621fae-e91d-5dcc-8e67-b837611c291e",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\b200a07fdbf3af3290eb821cd93a4ca754028e698620ca450d8ba3b887c41c07"
+  },
+  {
+   "ID":"b8bac097-1600-5a2d-8434-9c608b09bfa5",
+   "Path":"C:\\ProgramData\\Docker\\windowsfilter\\22e63a4e996763a0ee561ae872a62bd531770baa2bdd327812c2a0de6c265d36"
+  }
+ ],
+ "HostName":"b81585a7f0aa",
+ "MappedDirectories":
+ [
+  {
+   "HostPath":"c:\\myserver\\logs",
+   "ContainerPath":"c:\\logs",
+   "ReadOnly":false,
+   "BandwidthMaximum":0,
+   "IOPSMaximum":0,
+   "CreateInUtilityVM":false
+  },
+  {
+   "HostPath":"c:\\myserver\\server\\storage",
+   "ContainerPath":"c:\\app\\storage",
+   "ReadOnly":false,
+   "BandwidthMaximum":0,
+   "IOPSMaximum":0,
+   "CreateInUtilityVM":false
+  }
+ ],
+ "HvPartition":true,
+ "EndpointList":["54b89ab6-2787-400f-a596-36cf5299ba95"],
+ "HvRuntime":
+ {
+  "ImagePath":"C:\\ProgramData\\Docker\\windowsfilter\\b200a07fdbf3af3290eb821cd93a4ca754028e698620ca450d8ba3b887c41c07\\UtilityVM"
+ },
+ "AllowUnqualifiedDNSQuery":true
+}
+docker info =>
+Server Version: 17.12.0-ce
+Storage Driver: windowsfilter
+ Windows:
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: ics l2bridge l2tunnel nat null overlay transparent
+ Log: awslogs etwlogs fluentd gelf json-file logentries splunk syslog
+Swarm: inactive
+Default Isolation: hyperv
+Kernel Version: 10.0 16299 (16299.15.amd64fre.rs3_release.170928-1534)
+Operating System: Windows 10 Enterprise
+OSType: windows
+Architecture: x86_64
+CPUs: 8
+Total Memory: 12GiB
+ID: P3WF:SOM2:P37N:5VJS:PZEU:4M2F:KZHD:MWVQ:VP4P:WH63:AEHH:LU4X
+Docker Root Dir: C:\ProgramData\Docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: -1
+ Goroutines: 39
+ System Time: 2018-02-09T11:58:12.8099172+01:00
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+Any idea what is the cause?

@@ -1,0 +1,12 @@
+nottrobin commented on 24 May 2016 •
+edited
+When specifying a config file outside the current directory, docker-compose treats the directory containing the config file as the workdir, rather than the directory you're in:
+$ tree
+├── Dockerfile  # Contents: "CMD echo 'local'"
+└── nested
+    └── docker-compose.yml  # Contents: "echoer: {build: .}"
+    └── Dockerfile  # Contents: "CMD echo 'nested'"
+$ docker-compose -f nested/docker-compose.yml run echoer
+nested  # I expected "local"
+I think this is unintuitive and probably unintended behaviour. The location from which you're running docker-compose is almost certainly the intended work directory, rather than the directory containing the config file (it certainly is in my case).
+1

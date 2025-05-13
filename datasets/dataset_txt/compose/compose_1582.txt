@@ -1,0 +1,20 @@
+earthquakesan commented on 21 Mar 2017
+Hello everyone! This is a call for a discussion regarding healthchecks. We are using them in BigDataEurope project to control start-up sequence of complex applications, consisting of microservices (packed into Docker).
+At the moment, healthchecks defined inside a Dockerfile will be fired every N seconds during the whole duration of life of a container.
+Sometimes it is not desirable as a lot of healthchecks can produce unnecessary requests on running container.
+So the problem is that the configuration for healthchecks after container become healthy (i.e. monitoring) and healthchecks occuring from starting to healthy or unhealthy (i.e. initialization) cannot be specified independently.
+Setting long monitoring intervals may be appropriate to avoid a lot of checks on the running container. However, this causes a long delay for the first healthcheck after container start and slows down the start up of dependent containers.
+For initialization, a container should be marked as healthy as soon as possible.
+Thus a short interval is useful; many retries may be specified, in order to handle occasional long initialization.
+But the short interval causes a high frequency of healthchecks at monitoring.
+Would it be appropriate to separate initialization and monitoring stages of healthchecks? The following options (with example values) may provide an idea we have inside one of our project running on Docker.
+init_delay: 3s
+specifies the time to wait after container start until the first healthcheck is executed.
+success: the container status changes to healthy
+failure: the container remains in state starting
+init_retries: 3
+success: the container status changes to healthy
+failure: the container remains in state starting
+but if all retries failed, the status is set to unhealthy
+There should be possibility to disable init healthchecks the same way as for normal healthchecks.
+@ksylla @madnificent

@@ -1,0 +1,66 @@
+bipinvaylu commented on 1 Aug 2017
+I am using Heroku Java Docker Image and docker-compose to run dropwizard java based web service locally.
+When I run docker-compose build web command to build code, It goes to download few dependencies each time. So build process turnaround time increased.
+Build logs
+[INFO] ------------------------------------------------------------------------
+[INFO] Building generator-app-server 0.0.2-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.pom (4 KB at 0.7 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/22/maven-plugins-22.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/22/maven-plugins-22.pom (13 KB at 9.0 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.jar
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.jar (25 KB at 14.7 KB/sec)
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ generator-app-server ---
+Downloading: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.pom (4 KB at 5.4 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/sonatype/spice/spice-parent/16/spice-parent-16.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/sonatype/spice/spice-parent/16/spice-parent-16.pom (9 KB at 4.9 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/sonatype/forge/forge-parent/5/forge-parent-5.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/sonatype/forge/forge-parent/5/forge-parent-5.pom (9 KB at 5.0 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.jar
+Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.jar (221 KB at 20.0 KB/sec)
+[INFO] Deleting /app/user/target
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ generator-app-server ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 7 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ generator-app-server ---
+Downloading: https://repo.maven.apache.org/maven2/org/mapstruct/mapstruct-processor/1.1.0.Final/mapstruct-processor-1.1.0.Final.jar
+Downloaded: https://repo.maven.apache.org/maven2/org/mapstruct/mapstruct-processor/1.1.0.Final/mapstruct-processor-1.1.0.Final.jar (1502 KB at 24.5 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/mapstruct/mapstruct-processor/1.1.0.Final/mapstruct-processor-1.1.0.Final.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/mapstruct/mapstruct-processor/1.1.0.Final/mapstruct-processor-1.1.0.Final.pom (12 KB at 4.9 KB/sec)
+Dockerfile
+FROM heroku/java
+docker-compose.yml
+web:
+  build: .
+  command: 'bash -c ''java $JAVA_OPTS -jar target/app-server-0.0.2-SNAPSHOT.jar db migrate config.yml && java $JAVA_OPTS -Ddw.server.connector.port=$PORT -jar target/app-server-0.0.2-SNAPSHOT.jar server config.yml'''
+  working_dir: /app/user
+  environment:
+    PORT: 8080
+    DATABASE_URL: 'postgres://postgres:@herokuPostgresql:5432/postgres'
+  ports:
+    - '8080:8080'
+  links:
+    - herokuPostgresql
+shell:
+  build: .
+  command: bash
+  working_dir: /app/user
+  environment:
+    PORT: 8080
+    DATABASE_URL: 'postgres://postgres:@herokuPostgresql:5432/postgres'
+  ports:
+    - '8080:8080'
+  links:
+    - herokuPostgresql
+  volumes:
+    - '.:/app/user'
+herokuPostgresql:
+  image: postgres
+docker-compose build not using cached dependencies for above libs. How to forcefully use cached dependencies?
+Googled a lot but no luck. It's taking too much time due to download dependencies again and again.
+Please help me fix it.

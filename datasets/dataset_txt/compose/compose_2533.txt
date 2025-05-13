@@ -1,0 +1,56 @@
+nschoe commented on 5 Apr 2016
+It's about named volumes (so no "data volume container", no "volumes-from") and docker-compose.yml.
+The goal here is to use docker-compose to manage two services 'appserver' and 'server-postgresql' in two separate containers and use the "volumes:" docker-compose.yml feature to make data from service 'server-postgresql' persistent.
+The Dockerfile for 'server-postgresql' looks like this:
+FROM        ubuntu:14.04
+MAINTAINER xxx
+
+RUN apt-get update && apt-get install -y [pgsql-needed things here]
+USER        postgres
+RUN         /etc/init.d/postgresql start && \
+            psql --command "CREATE USER myUser PASSWORD 'myPassword';" && \
+            createdb -O diya diya
+RUN         echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+RUN         echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+CMD         ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
+Adn the docker-compose.yml looks like this:
+version: '2'
+services:
+    appserver:
+        build: appserver
+        depends_on:
+            - server-postgresql
+        links:
+            - "server-postgresql:serverPostgreSQL"
+        ports:
+            - "1234"
+            - "1235"
+        restart: on-failure:10
+    server-postgresql:
+        build: serverPostgreSQL
+        ports:
+            - "5432"
+        volumes:
+            - db-data:/volume_data
+        restart: on-failure:10
+volumes:
+    db-data:
+        driver: local
+Then I start everything with docker-compose up -d, I enter my server-postgresql container with docker-compose exec server-postgresql bash, a quick ls does reveal /volume_data, I then cd into it and try touch testFile and got "permission denied. Which is normal because a quick ls -l show that volume_data is owned by root:root.
+Now what I think is happening is that since I have USER postgres in the Dockerfile, when I run docker-compose exec I am logged in as user 'postgres' (and the postgresql daemon runs as user 'postgres' as well, so it won't be able to write to /volume_data).
+This is confirmed because when I run this instead: docker-compose exec --user root server-postgresql bash and retry to cd /volume_data and touch testFile, it does work (it's not a permission error between the host and the container, as it is somtimes the case when the container mounts a host folder, this is a typical unix permission error because /volume_data is mounted as 'root:root' while user 'postgres' is trying to write).
+So there should be a way in docker-compose.yml to mount namedvolumes as specific user, smth like:
+version: '2'
+services:
+    appserver:
+        [...]
+    server-postgresql:
+        [...]
+        volumes:
+            - db-data:/volume_data:myUser:myGroup
+        [...]
+volumes:
+    db-data:
+        driver: local
+The only dirty workaround that I can think of is remove the USER posgres directive from the Dockerfile, and change the ENTRYPOINT so that it points to a custom "init_script.sh" (wihch would be run as 'root' since I removed USER postgres), this script would change permissions of /volume_data so that 'postgres' can write on it, then su postgres and execute the postgresql daemon (in foreground). But this is actually very dirty, because it links the Dockerfile and docker-compose.yml in a non standard way (runtime ENTRYPOINT would rely on the fact that a mounted volume is made available by docker-compose.yml).
+166

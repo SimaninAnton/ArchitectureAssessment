@@ -1,0 +1,3 @@
+nicgrayson commented on 2 Jul 2014
+I'm a little confused why this project doesn't release new versions very frequently.
+Also why is the development version not bumped while it's in progress?

@@ -1,0 +1,1 @@
+For some docker-compose.yml services, docker-compose takes way too long before building

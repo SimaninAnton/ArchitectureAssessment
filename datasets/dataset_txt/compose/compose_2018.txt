@@ -1,0 +1,15 @@
+zeilush commented on 6 Oct 2016
+my compose v2 file looks like this:
+version: '2'
+services:
+ postgres:
+  image: xxxx/postgres:9.4
+  container_name: postgres_fullstack
+  volumes:
+   - ${POSTGRES_DATA_VOLUME}:/var/lib/postgresql/data
+volumes:
+  ${POSTGRES_DATA_VOLUME}:
+When executing compose up, i get the error below:
+The Compose file '.\docker-compose.yml' is invalid because:
+volumes value Additional properties are not allowed ('${POSTGRES_DATA_VOLUME}' was unexpected)
+What am i doing wrong? Is variable substitution in top level volumes not supported yet?

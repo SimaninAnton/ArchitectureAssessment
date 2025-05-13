@@ -1,0 +1,5 @@
+vncoelho commented on 29 Oct 2018
+In several Linux distributions we are having this problem with Docker-compose.
+We create several containers and use down and up -d many times.
+The containers are all connected between them, no network is used.
+The only solution is to use service docker restart in order to reestabilish normal communication between the swarm.

@@ -1,0 +1,49 @@
+rmelick commented on 31 May 2016
+Hi All,
+I would like to connect a container to both the host network and a custom overlay network.
+Background
+We have a cluster of custom services that appears to the outside world as a single functional unit. I deploy these with docker-compose, and have successfully used an overlay network to make it easy to configure the communication between these services.
+One of these services (call it api-node) also needs to register itself with a different service that is not deployed using docker. That external service needs to communicate with the api-node, so the api-node gives the external service its ip address during registration.
+Currently, all of these services are deployed within AWS, and there is only 1 docker container running per AWS instance.
+Problem
+Since the api-node is not part of the "host" network, the only ip addresses it has are within the docker network. It does not have access to the AWS hosts ip. Thus, the external service cannot call back to the api-node, since it is not part of the docker network.
+Any ideas?
+I would like to have the api-node join both the docker overlay network we created and the host network. But I don't think this is supported by docker-compose.
+When I tried configuration like this in my service
+networks:
+  - kiwinet
+network_mode: "host"
+I got an error like this
+ERROR: 'network_mode' and 'networks' cannot be combined
+When I tried configuration like this
+...
+  networks:
+    - kiwinet
+    - hostnetwork
+...
+
+networks:
+  kiwinet:
+    driver: overlay
+    ipam:
+      driver: default
+      config:
+        - subnet: 11.0.0.0/16
+  hostnetwork:
+    driver: host
+I got an error like this
+ERROR: Error response from daemon: only one instance of "host" network is allowed
+When I tried configuration like this
+networks:
+  kiwinet:
+    driver: overlay
+    ipam:
+      driver: default
+      config:
+        - subnet: 11.0.0.0/16
+  hostnetwork:
+    external:
+      name: host
+I got this error
+ERROR: Network host declared as external, but could not be found. Please create the network manually using `docker network create host` and try again.
+43

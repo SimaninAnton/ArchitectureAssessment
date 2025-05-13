@@ -1,0 +1,1 @@
+DNS name resolution by service name fails arbitrarily

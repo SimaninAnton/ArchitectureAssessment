@@ -1,0 +1,5 @@
+Contributor
+dnephin commented on 7 Jan 2016
+In API version 1.22 the events structure was updated to include labels and better names for fields.
+We should update to the new field names, and use labels directly from the event, instead of having to query for them with inspect.
+Ref: moby/moby#18888

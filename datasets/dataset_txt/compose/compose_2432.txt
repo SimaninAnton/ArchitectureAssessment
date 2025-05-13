@@ -1,0 +1,25 @@
+dtu-compute commented on 4 May 2016
+Docker version 1.11.0, build 4dc5990
+docker-compose version 1.6.2, build 4d72027
+Fedora 23
+With the below docker-compose-revproxy.yml and Dockerfile adding or removing COPY from Dockerfile isn't noticed by docker-compose -f docker-compose-revproxy.yml build. One have to docker-compose -f docker-compose-revproxy.yml build --no-cache.
+version: '2'
+networks:
+  nettest:
+    external: true
+services:
+  proxy:
+    build: /docker/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - nettest
+FROM fedora:23
+
+RUN dnf -y update && dnf -y install git nginx && dnf clean all
+RUN git clone https://github.com/letsencrypt/letsencrypt && cd letsencrypt && ./letsencrypt-auto --help
+
+COPY nginx.conf   /etc/nginx/
+
+CMD ["nginx", "-g", "daemon off;"]

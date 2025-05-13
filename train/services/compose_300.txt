@@ -1,0 +1,83 @@
+hason commented on 4 Feb 2019 •
+edited
+Description of the issue
+Dot char in volumes section doesn't respect directory of each compose file (docker-compose -f … -f … -f …). The first docker-compose.yml sets the directory for dot char to everyone else.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build unknown
+docker-py version: 3.7.0
+CPython version: 3.7.2
+OpenSSL version: OpenSSL 1.1.1a  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.1-ce
+ API version:       1.39
+ Go version:        go1.11.4
+ Git commit:        4c52b901c6
+ Built:             Thu Jan 10 06:51:04 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.1-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.11.4
+  Git commit:       4c52b901c6
+  Built:            Thu Jan 10 06:50:46 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  client:
+    image: node:alpine
+    volumes:
+    - /var/www/dctest/client:/app:rw
+  server:
+    image: php:alpine
+    volumes:
+    - /var/www/dctest/client:/app:rw
+version: '3.4'
+Steps to reproduce the issue
+Create /var/www/dctest/client/docker-compose.yml with content:
+version: '3.4'
+
+services:
+  client:
+    image: node:alpine
+    volumes:
+    - .:/app
+Create /var/www/dctest/server/docker-compose.yml with content:
+version: '3.4'
+
+services:
+  server:
+    image: php:alpine
+    volumes:
+    - .:/app
+Run docker-compose -f /var/www/dctest/client/docker-compose.yml -f /var/www/dctest/server/docker-compose.yml config
+Observed result
+services:
+  client:
+    image: node:alpine
+    volumes:
+    - /var/www/dctest/client:/app:rw
+  server:
+    image: php:alpine
+    volumes:
+    - /var/www/dctest/client:/app:rw
+version: '3.4'
+Expected result
+services:
+  client:
+    image: node:alpine
+    volumes:
+    - /var/www/dctest/client:/app:rw
+  server:
+    image: php:alpine
+    volumes:
+    - /var/www/dctest/server:/app:rw
+version: '3.4'
+Additional information
+Arch linux

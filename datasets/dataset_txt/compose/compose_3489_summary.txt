@@ -1,0 +1,1 @@
+Build image from dockerfile whithin docker-compose

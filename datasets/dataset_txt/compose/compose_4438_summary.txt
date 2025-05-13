@@ -1,0 +1,1 @@
+Compose and build output should display in same format as container output

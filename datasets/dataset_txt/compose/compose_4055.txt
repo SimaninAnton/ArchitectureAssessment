@@ -1,0 +1,2 @@
+david-guenault commented on 6 Dec 2014
+The Recent docker announce about docker-compose at dockercon make me think that there is redundancy between fig and docker compose. So should i continue with fig or just drop ?

@@ -1,0 +1,46 @@
+soundsgoodsofar commented on 18 Apr 2018
+Description of the issue
+We're running docker-compose on CentOS. The pip version when installed with --upgrade changed to 10.0.0 in the last couple days and our docker install (pip install docker-compose) began failing with the following message. It appears that pip 10.0.0 has increased the version dependency of package requests to 2.6.0, which is incompatible with the default docker-compose installation.
+Context information (for bug reports)
+Output of "docker-compose version"
+N/A
+Output of "docker version"
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:09:15 2018
+ OS/Arch: linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:13:03 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+N/A
+Steps to reproduce the issue
+Install CentOS 7
+yum install -y epel-release
+yum install -y python-pip
+pip install --upgrade pip
+pip install docker-compose
+Observed result
+Install fails
+Expected result
+Install succeeds
+Stacktrace / full error message
+$ pip install docker-compose
+...
+  Found existing installation: requests 2.6.0
+Cannot uninstall 'requests'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.
+Additional information
+OS version / distribution, docker-compose install method, etc.
+7

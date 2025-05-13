@@ -1,0 +1,52 @@
+AidanDelaney commented on 21 Oct 2015
+Using docker-compose version 1.4.2 the execution of the build command fails if the underlying directory name contains non-ascii characters. In the example below I use the u-umlaut character, which is in extended ascii and is common in several European languages.
+A minimal working example is below:
+$ mkdir Füü
+$ cd Füü/
+$ touch docker-compose.yml
+$ $ cat << EOF > docker-compose.yml
+web:
+  build: .
+  ports:
+    - "8080:8080"
+
+EOF
+$ touch Dockerfile
+$ docker-compose build
+Building web...
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.4.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 135, in build
+    project.build(service_names=options['SERVICE'], no_cache=no_cache)
+  File "/usr/lib/python2.7/site-packages/compose/project.py", line 242, in build
+    service.build(no_cache)
+  File "/usr/lib/python2.7/site-packages/compose/service.py", line 683, in build
+    path = six.binary_type(self.options['build'])
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 17-18: ordinal not in range(128)
+For information, my system has the following locale settings
+$ locale
+LANG=en_GB.UTF-8
+LC_CTYPE="en_GB.UTF-8"
+LC_NUMERIC="en_GB.UTF-8"
+LC_TIME="en_GB.UTF-8"
+LC_COLLATE="en_GB.UTF-8"
+LC_MONETARY="en_GB.UTF-8"
+LC_MESSAGES="en_GB.UTF-8"
+LC_PAPER="en_GB.UTF-8"
+LC_NAME="en_GB.UTF-8"
+LC_ADDRESS="en_GB.UTF-8"
+LC_TELEPHONE="en_GB.UTF-8"
+LC_MEASUREMENT="en_GB.UTF-8"
+LC_IDENTIFICATION="en_GB.UTF-8"
+LC_ALL=

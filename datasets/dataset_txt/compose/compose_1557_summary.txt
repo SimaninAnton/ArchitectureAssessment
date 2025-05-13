@@ -1,0 +1,1 @@
+docker-compose rm fails when containers are paused

@@ -1,0 +1,47 @@
+JustinTBrown commented on 31 Jan 2018
+Hi, I'm having an issue orchestrating containers. I am unable to remotely access the database service from the web service. It seems that using the web container name for the remote user's host name does not correctly resolve to the appropriate IP.
+If I create a mysql user with an explicit IP (eg. 172.18.0.3) as the host name, then the database service allows connections from that user. If I do the same thing but with the container name (eg. web) as the host name, then the database service does not allow connections from that user.
+This is the error: [Warning] mysqli::real_connect(): (HY000/1045): Access denied for user 'ss_user'@'172.18.0.3' (using password: NO)
+Here is my docker-compose.yml:
+version: '3'
+services:
+  web:
+    image: brettt89/silverstripe-web
+    container_name: web
+    working_dir: /var/www
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www/html
+
+  database:
+    image: mysql
+    container_name: database
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=database
+    restart: always
+    ports:
+      - 8081:80
+    volumes:
+      - /sessions
+
+volumes:
+  db-data:
+If it helps, this is a Silverstripe CMS project. The needed db credentials are provided by a .env file:
+# Environment
+SS_ENVIRONMENT_TYPE="dev"
+
+# DB credentials
+SS_DATABASE_SERVER="database"
+SS_DATABASE_USERNAME="ss_user"
+SS_DATABASE_PASSWORD=""
+SS_DATABASE_NAME="ss_database"

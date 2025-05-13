@@ -1,0 +1,1 @@
+Setting a new env variable using the previous one

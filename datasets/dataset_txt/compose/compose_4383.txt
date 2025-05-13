@@ -1,0 +1,13 @@
+Contributor
+kvz commented on 3 Mar 2014
+From my docker container I would like to mount a network share. I've tried samba, afs, and nfs, but I keep getting Operation not permitted.
+Googling has led me to believe that my container would need to run in privileged mode (http://www.gluster.org/2014/02/running-glusterfs-inside-docker-container/)
+With Docker one can do --privileged=true but I don't think I can pass this along from my fig.yml via a:
+sabnzbd:
+  build: ./sabnzbd
+  command: /syzygy/run.sh
+  privileged: true
+As that throws a Unsupported config option for sabnzbd service: 'privileged'. It also isn't documented in the fig documentation. Any way to go around this? I would be happy with any solution that allows me to mount a network drive, right now I just think that requires priviledged but I might be wrong.
+Might be worth mentioning that I'm using the 0.8.0 boot2docker osx install.
+1
+1

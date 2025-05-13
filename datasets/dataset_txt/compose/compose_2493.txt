@@ -1,0 +1,4 @@
+Contributor
+ndeloof commented on 14 Apr 2016
+For container to access host docker daemon, I use to bind mount /var/run/docker.sock and docker executable. But then I also need to add docker group to the container user so it can access the socket. For this purpose I use docker run --group-add option, but can't find how to do the same with docker-compose.
+29

@@ -1,0 +1,1 @@
+MacOS Homebrew installation won't display build for --version

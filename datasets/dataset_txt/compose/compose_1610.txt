@@ -1,0 +1,158 @@
+bscheshirwork commented on 10 Mar 2017 •
+edited
+Like #3241 and #872 some composition don't (re)start correctly after reboot.
+docker-compose.yml (1)
+version: '2'
+services:
+  php:
+    image: bscheshir/php:7.1.2-fpm-4yii2-xdebug
+    restart: always
+    volumes:
+      - ../php-code:/var/www/html #php-code
+    depends_on:
+      - db
+    environment:
+      TZ: Europe/Moscow
+      XDEBUG_CONFIG: "remote_host=192.168.0.83 remote_port=9001 var_display_max_data=1024 var_display_max_depth=5"
+      PHP_IDE_CONFIG: "serverName=yii2"
+  nginx:
+    image: bscheshir/nginx:alpine
+    restart: always
+    ports:
+      - "8081:80"
+      - "8082:8080"
+      - "8083:8088"
+    depends_on:
+      - php
+    volumes_from:
+      - php
+    volumes:
+      - ../nginx-conf:/etc/nginx/conf.d #nginx-conf
+      - ../nginx-logs:/var/log/nginx #nginx-logs
+    environment:
+      TZ: Europe/Moscow
+  mysql:
+    image: mysql:8.0.0
+    restart: always
+    expose:
+      - "3306" #for service mysql-proxy
+    ports:
+      - "3307:3306" #for external connection
+    volumes:
+      - ../mysql-data/db:/var/lib/mysql #mysql-data
+    environment:
+      TZ: Europe/Moscow
+      MYSQL_ROOT_PASSWORD: yii2
+      MYSQL_DATABASE: yii2
+      MYSQL_USER: yii2
+      MYSQL_PASSWORD: yii2
+  db: #mysql-proxy
+    image: bscheshir/mysql-proxy:0.8.5
+    expose:
+      - "3306" #for service php
+    ports:
+      - "3308:3306" #for external connection
+    restart: always
+    volumes:
+      - ../mysql-proxy/log.lua:/opt/log.lua
+      - ../mysql-proxy/mysql.log:/opt/mysql-proxy/mysql.log
+    environment:
+      TZ: Europe/Moscow
+      PROXY_DB_PORT: 3306
+      REMOTE_DB_HOST: mysql
+      REMOTE_DB_PORT: 3306
+      PROXY_LUA_SCRIPT: "/opt/log.lua"
+    depends_on:
+      - mysql
+In the docker ps list STATUS is "Up 5 minutes"
+docker inspect -f "{{ .HostConfig.RestartPolicy }}" <container> return always for all container
+But service does not work correctly
+http access to web server 0.0.0.0:8081 0.0.0.0:8082 0.0.0.0:8083 (Connection was dropped),
+connect to db 3307 (Some strange: I can connect, but I can see the information schema only)
+(php not tested)
+Same situation with (2)
+version: '2'
+services:
+  php:
+    image: bscheshir/php:7.1.2-fpm-4yii2-xdebug
+    restart: always
+    volumes:
+      - ./php-code:/var/www/html #php-code
+    depends_on:
+      - db
+    environment:
+      TZ: Europe/Moscow
+      XDEBUG_CONFIG: "remote_enable=Off remote_autostart=Off"
+  nginx:
+    image: nginx:1.11.10-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "8088:8088"
+    depends_on:
+      - php
+    volumes_from:
+      - php
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d #nginx-conf
+      - ./nginx-logs:/var/log/nginx #nginx-logs
+  db:
+    image: mysql:8.0.0
+    restart: always
+    volumes:
+      - ./mysql-data/db:/var/lib/mysql #mysql-data
+    environment:
+      TZ: Europe/Moscow
+      MYSQL_ROOT_PASSWORD: yii2
+      MYSQL_DATABASE: yii2
+      MYSQL_USER: yii2
+      MYSQL_PASSWORD: yii2
+And other composition is running correctly at same time: sameersbn/gitlab
+The another composition for same config (env difference) may up correctly after reboot
+https://github.com/bscheshirwork/docker-yii2-app-advanced-rbac/blob/master/docker-compose.yml (3)
+version: '2'
+services:
+  php:
+    image: bscheshir/php:7.1.2-fpm-4yii2-xdebug
+    restart: always
+    volumes:
+      - ./php-code:/var/www/html #php-code
+    depends_on:
+      - db
+    environment:
+      TZ: Europe/Moscow
+      XDEBUG_CONFIG: "remote_enable=Off remote_autostart=Off"
+  nginx:
+    image: nginx:1.11.10-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "8080:8080"
+    depends_on:
+      - php
+    volumes_from:
+      - php
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d #nginx-conf
+      - ./nginx-logs:/var/log/nginx #nginx-logs
+  db:
+    image: mysql:8.0.0
+    restart: always
+    volumes:
+      - ./mysql-data/db:/var/lib/mysql #mysql-data
+    environment:
+      TZ: Europe/Moscow
+      MYSQL_ROOT_PASSWORD: yii2advanced
+      MYSQL_DATABASE: yii2advanced
+      MYSQL_USER: yii2advanced
+      MYSQL_PASSWORD: yii2advanced
+And if I up then together ( (2) and (3) ) - all of it is fails after reboot
+docker -v
+Docker version 17.03.0-ce, build 60ccb22
+docker-compose -v
+docker-compose version 1.9.0, build 2585387
+After run docker-compose restart manually
+/usr/local/bin/docker-compose -f /home/dev/projects/project/docker-compose.yml restart
+services is run correctly
+Any ideas?

@@ -1,0 +1,54 @@
+zachgersh commented on 16 Nov 2015
+Hey All,
+Looking for some guidance now that I am attempting to remove links.
+Trying to use compose to start both consul and vault. I am guessing the problem is my network configuration in the vault.hcl?
+I am guessing I can get to consul with the address of vault_resource_consul_1:8500. Is that wrong?
+My project is located in the vault_resource directory
+Here's my compose file:
+resource:
+  build: .
+  command: echo "foo"
+  volumes:
+    - .:/source
+vault:
+  build: ./vault
+  ports:
+    - 8200:8200
+  volumes:
+    - ./vault/config.hcl:/tmp/vault.hcl
+  volumes_from:
+    - consul
+  command: "server -dev -config=/tmp/vault.hcl"
+consul:
+  image: voxxit/consul:latest
+  ports:
+    - 80:8500
+  volumes:
+    - ./consul/config.json:/tmp/consul.json
+  command: "agent -config-file=/tmp/consul.json"
+Dockerfile for vault:
+FROM gliderlabs/alpine:3.2
+
+ENV version 0.3.1
+
+RUN apk --update add ca-certificates
+RUN wget -P /tmp https://releases.hashicorp.com/vault/${version}/vault_${version}_linux_amd64.zip
+RUN cd /usr/local/bin && \
+unzip /tmp/vault_${version}_linux_amd64.zip && \
+chmod +x vault
+
+EXPOSE 8200
+
+ENTRYPOINT ["vault"]
+CMD ["server", "-dev"]
+config file for vault
+backend "consul" {
+  address = "vault_resource_consul_1:8500"
+  advertise_addr = "http://vault_resource_consul_1:8300"
+  scheme = "http"
+}
+
+listener "tcp" {
+  address = "0.0.0.0:8200"
+  tls_disable = 1
+}

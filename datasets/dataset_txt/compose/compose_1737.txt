@@ -1,0 +1,24 @@
+suhirotaka commented on 1 Feb 2017
+I have following images on local:
+$ docker images
+REPOSITORY                     TAG                 IMAGE ID               CREATED             SIZE
+my_image_1                     latest              1c0884e42164           6 days ago          1.71 GB
+my_image_2                     latest              6cec1ff6d070           3 weeks ago         914 MB
+And docker-compose.yml as below:
+back:
+  image: 1c0884e42164
+# ...
+front:
+  image: 6cec1ff6d070
+# ...
+After I run docker-compose bundle, compose failed to use the images saying the images are missing digests.
+$ docker-compose bundle
+ERROR: Some images are missing digests.
+
+The following images need to be pulled:
+
+    back
+    front
+
+Use `docker-compose pull back front` to pull them.
+The problem occurs only with locally built images.

@@ -1,0 +1,3 @@
+toolmantim commented on 31 Aug 2014
+In the installation instructions for fig-buildbox-agent I need to have a fig.sample.yml that users copy and edit so that they can pass in their Buildbox agent token to the inner container.
+It'd be nice if there were some way to specify this via an environment variable or command line option.

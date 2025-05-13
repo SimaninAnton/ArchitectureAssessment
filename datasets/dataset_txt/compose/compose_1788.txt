@@ -1,0 +1,25 @@
+james-turner commented on 18 Jan 2017 •
+edited
+mac OSX 10.11.6 + docker for mac, running a variety of containers (python django + scala jvm + databases - mongo,postgres,elasticsearch)
+# DOCKER for MAC
+Version 1.12.6 (14937)
+Channel: Stable
+a3b0f11292
+# docker-compose version
+docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+docker-compose up
+followed by
+CTRL^C in current terminal or docker stop <container name> in separate shell
+Exception in thread Thread-41:
+Traceback (most recent call last):
+  File "threading.py", line 801, in __bootstrap_inner
+  File "threading.py", line 754, in run
+  File "compose/cli/log_printer.py", line 197, in watch_events
+  File "compose/project.py", line 343, in events
+  File "site-packages/docker/client.py", line 261, in _stream_helper
+  File "json/__init__.py", line 339, in loads
+  File "json/decoder.py", line 367, in decode
+ValueError: Extra data: line 2 column 1 - line 2 column 740 (char 736 - 1475)

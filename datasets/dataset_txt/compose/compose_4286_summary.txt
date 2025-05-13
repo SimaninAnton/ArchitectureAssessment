@@ -1,0 +1,1 @@
+`fig rm --force` is semantically different to `docker rm -f`

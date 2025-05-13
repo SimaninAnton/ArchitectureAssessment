@@ -1,0 +1,4 @@
+psychowico commented on 11 Feb 2015
+why --rm is not default for fig run? I find containers created by run often useless. Maybe it could be some 'no-rm' flag instead of --rm ?
+People who I presents fig are confused by this flag.
+2

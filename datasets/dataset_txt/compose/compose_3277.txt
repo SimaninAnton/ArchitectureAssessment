@@ -1,0 +1,37 @@
+mackeyja92 commented on 19 Sep 2015
+Greetings,
+I just recently installed docker-compose with pip and when running docker-compose --version I get ImportError: No module named 'Queue'
+Here is the full Traceback
+07:08:55 ~$ docker-compose -v
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.4.1', 'console_scripts', 'docker-compose')()
+  File "/usr/local/lib/python3.5/site-packages/pkg_resources/__init__.py", line 558, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/local/lib/python3.5/site-packages/pkg_resources/__init__.py", line 2682, in load_entry_point
+    return ep.load()
+  File "/usr/local/lib/python3.5/site-packages/pkg_resources/__init__.py", line 2355, in load
+    return self.resolve()
+  File "/usr/local/lib/python3.5/site-packages/pkg_resources/__init__.py", line 2361, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/local/lib/python3.5/site-packages/compose/cli/main.py", line 16, in <module>
+    from ..project import NoSuchService, ConfigurationError
+  File "/usr/local/lib/python3.5/site-packages/compose/project.py", line 12, in <module>
+    from .service import ContainerNet
+  File "/usr/local/lib/python3.5/site-packages/compose/service.py", line 28, in <module>
+    from .utils import json_hash, parallel_execute
+  File "/usr/local/lib/python3.5/site-packages/compose/utils.py", line 8, in <module>
+    from Queue import Queue, Empty
+ImportError: No module named 'Queue'
+Here I am able to import Queue but it is from queue import Queue
+07:09:08 ~$ python3
+Python 3.5.0 (default, Sep 15 2015, 19:17:15) 
+[GCC 4.9.2] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from queue import Queue
+>>> Queue()
+<queue.Queue object at 0x7f379ae25e80>
+>>> 
+I went and manually edited /usr/local/lib/python3.5/site-packages/compose/utils.py and changed the import from from Queue import Queue, Empty to from queue import Queue, Empty and that seems to be working for now.
+Best regards,
+Jared.

@@ -1,0 +1,68 @@
+madkote commented on 21 Nov 2019
+Description of the issue
+the pull command ignores services in the "docker-compose.yaml" file.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0, build b42d419
+docker-py version: 3.7.2
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea838
+ Built:             Wed Nov 13 07:50:12 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea838
+  Built:            Wed Nov 13 07:48:43 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  service_alpine:
+    build:
+      context: /home/roman/repos/service
+      dockerfile: Dockerfile.alpine
+    image: docker.myrepo.com/internal/service:alpine
+  service_ubuntu:
+    build:
+      context: /home/roman/repos/service
+      dockerfile: Dockerfile.ubuntu
+    image: docker.myrepo.com/internal/service:ubuntu
+version: '3.0'```
+
+
+## Steps to reproduce the issue
+
+1. pip install -U docker-compose
+2. docker-compose pull
+
+### Observed result
+Service with section `build` are ignored. whereby other services (e.g. redis, etc) which are used unmodified, are pulled. This is new in version 1.25.0
+
+### Expected result
+`docker-compose pull` should also pull custom services. as it was in version 1.24.*
+
+## Additional information
+
+OS version / distribution, `docker-compose` install method, etc.
+Ubuntu 16, pip install in VENV

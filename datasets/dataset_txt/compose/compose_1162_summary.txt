@@ -1,0 +1,1 @@
+docker-compose start or up -d seems to reset the /etc directory

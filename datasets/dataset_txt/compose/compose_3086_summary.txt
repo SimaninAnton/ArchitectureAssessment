@@ -1,0 +1,1 @@
+Wrong counting in scale command

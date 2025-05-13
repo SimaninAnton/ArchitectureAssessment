@@ -1,0 +1,1 @@
+Show a better error when a service doesn't have `build` or `image` set

@@ -1,0 +1,1 @@
+enable_ipv6 option is not supported in docker-compose files v 3.x

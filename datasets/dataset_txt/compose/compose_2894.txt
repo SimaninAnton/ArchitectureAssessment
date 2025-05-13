@@ -1,0 +1,133 @@
+DJviolin commented on 20 Jan 2016
+docker version:
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   9894698
+ Built:
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   9894698
+ Built:
+ OS/Arch:      linux/amd64
+docker info:
+Containers: 0
+Images: 0
+Server Version: 1.9.1
+Storage Driver: overlay
+ Backing Filesystem: extfs
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 4.4.0-coreos
+Operating System: CoreOS 928.0.0
+CPUs: 1
+Total Memory: 997.3 MiB
+Name: core-1
+ID: VTHP:4CUA:LQKE:NWGW:ZEHY:VLTS:ZHLD:YLI2:OOD6:3LAI:DEFA:X4GL
+uname -a:
+Linux core-1 4.4.0-coreos #2 SMP Fri Jan 15 03:58:19 UTC 2016 x86_64 Intel(R) Core(TM) i7-2630QM CPU @ 2.00GHz GenuineIntel GNU/Linux
+docker-compose -v:
+docker-compose version 1.6.0dev, build c47aea9
+I'm trying to build a lemp service with the restructured version 2 docker-compose.yml file:
+version: 2
+
+services:
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: lemp_cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:rw"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+  base:
+    build:
+      context: ./base
+      args:
+        buildno: 1
+    container_name: lemp_base
+  www:
+    image: lemp_base
+    container_name: lemp_www
+    volumes:
+      - /home/core/server-lemp/www:/var/www:rw
+  phpmyadmin:
+    build:
+      context: ./phpmyadmin
+      args:
+        buildno: 2
+    container_name: lemp_phpmyadmin
+    volumes:
+      - /var/www/phpmyadmin
+      - ./phpmyadmin/var/www/phpmyadmin/config.inc.php:/var/www/phpmyadmin/config.inc.php:rw
+  ffmpeg:
+    build:
+      context: ./ffmpeg
+      args:
+        buildno: 3
+    container_name: lemp_ffmpeg
+    volumes:
+      - ffmpeg_dir:/usr/ffmpeg
+  mariadb:
+    build:
+      context: ./mariadb
+      args:
+        buildno: 4
+    container_name: lemp_mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - /var/run/mysqld
+      - /home/core/server-lemp/mariadb:/var/lib/mysql:rw
+      - ./mariadb/etc/mysql/my.cnf:/etc/mysql/my.cnf:ro
+  php:
+    build:
+      context: ./php
+      args:
+        buildno: 5
+    container_name: lemp_php
+    volumes_from:
+      - www
+      - phpmyadmin
+      - mariadb
+    volumes:
+      - ffmpeg_dir
+      - /var/run/php-fpm
+      - ./php/usr/local/php7/etc/php-fpm.conf:/usr/local/php7/etc/php-fpm.conf:ro
+      - ./php/usr/local/php7/etc/php.ini:/usr/local/php7/etc/php.ini:ro
+      - ./php/usr/local/php7/etc/php-fpm.d/www.conf:/usr/local/php7/etc/php-fpm.d/www.conf:ro
+      - ./php/etc/cron.d:/etc/cron.d:ro
+  nginx:
+    build:
+      context: ./nginx
+      args:
+        buildno: 6
+    container_name: lemp_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes_from:
+      - php
+    volumes:
+      - /var/cache/nginx
+      - ./nginx/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  ffmpeg_dir:
+    driver: default
+
+# Changing the settings of the app-wide default network
+#networks:
+#  default:
+    # Use the overlay driver for multi-host communication
+#    driver: overlay
+But I got the following error message:
+ERROR: client is newer than server (client API version: 1.22, server API version: 1.21)
+What am I doing wrong? Also, the first image that has to be built is base, not phpmyadmin. Or buildno is not working the way I thought it should work?

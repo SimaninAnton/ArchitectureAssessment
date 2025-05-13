@@ -1,0 +1,33 @@
+titpetric commented on 23 Apr 2019
+Is your feature request related to a problem? Please describe.
+I want to separate dev/prod/etc environments by specifying a custom set of DNS resolvers. While in prod we have 3 DNS servers, the development environment has only 1. There is no way to configure this with the environment variables, as shown below:
+Describe the solution you'd like
+Ideally I would like to define:
+dns: ${DNS}
+or
+dns:
+  - ${DNS1}
+  - ${DNS2}
+  - ${DNS3}
+The first option fails, as there is no way to define an array from an environment variable.
+DNS=[172.25.0.1]
+DNS=[10.15.15.71 10.15.15.72 10.15.15.73]
+DNS=10.15.15.71 10.15.15.72 10.15.15.73
+DNS=['10.15.15.71', '10.15.15.72', '10.15.15.73']
+All of these options are invalid (the container starts, but the dns setting is just a string, and not an array). Docker inspect gives us:
+"Dns": [
+    "['172.25.0.1']"
+],
+I would at least expect that the variable interpolated here would be interpreted as yaml at some point. It's obvious from docker-compose config that it's not.
+dns:
+- '[''10.55.8.73'',''10.55.8.74'',''10.55.8.75'']'
+With the second option, setting the following:
+DNS1=172.25.0.1
+DNS2=172.25.0.1
+DNS2=172.25.0.1
+Fails with error contains non-unique items, please remove duplicates from [...]. A duplicate DNS entry shouldn't be an error, I'm not even sure it should be a warning. If we consider the behaviour of docker run, it's valid to perform the following:
+# docker run -it --rm --dns 172.25.0.1 --dns 172.25.0.1 debian:stretch
+root@df5ff66655cd:/# cat /etc/resolv.conf
+nameserver 172.25.0.1
+nameserver 172.25.0.1
+There are no errors or warnings issued for any duplicate dns entry argument, nor should there be. At least reasonably fixing the behaviour in this point would be possible without breaking changes.

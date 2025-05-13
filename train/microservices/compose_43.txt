@@ -1,0 +1,44 @@
+lmerlas commented on 30 Nov 2019 •
+edited
+Description of the issue
+After upgrading to 1.25.0 docker-compose fail to bring up the containers.
+Context information (for bug reports)
+I have just installed the new docker-compose on my Ubuntu 18.0 machine and noticed that I cannot start the containers anymore
+The compose file looks:
+version: '3.5'
+services:
+go-client:
+image:
+build:
+context: ./go-client
+tty: true
+working_dir:
+environment:
+- bamboo_buildNumber=${bamboo_buildNumber:-999}
+volumes:
+- "${PWD}:"
+container_name: go-client
+hostname: go-client
+domainname: wsop.com
+networks:
+wsop-test:
+# keep fixed IP addresses so we can debug if we really wanted
+ipv4_address: 192.168.81.4
+networks:
+wsop-test:
+name: wsop.com
+driver: bridge
+ipam:
+config:
+# the network must not clash with any other
+- subnet: 192.168.81.0/24
+Output of "docker-compose version"
+Output of "docker version"
+Output of "docker-compose config"
+Steps to reproduce the issue
+Observed result
+Expected result
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

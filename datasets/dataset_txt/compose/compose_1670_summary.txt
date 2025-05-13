@@ -1,0 +1,1 @@
+running docker-compose up and docker-compose down from different folders

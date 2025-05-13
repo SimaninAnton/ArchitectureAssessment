@@ -1,0 +1,117 @@
+DexterHD commented on 11 Aug 2016 •
+edited
+Sometimes when I try to stop a container via docker-compose a have an error:
+Stopping ... ... 
+compose.cli.verbose_proxy.proxy_callable: docker stop <- (u'2eced5ffc6972dfca3b29ebe953903a649bff08c4e744444e747816f80723819')
+compose.cli.verbose_proxy.proxy_callable: docker stop <- (u'a0ff2f52a7acc364aecf7965fb117c6f3f6e5a33fbec8d701f050cc688a71c41')
+ERROR: for ...  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70) 
+compose.cli.main.main: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+After in docker ps, docker stop, and other commands don't work.
+But docker it seems to be working, all my applications in containers also works.
+$ docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:40:59 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:40:59 2016
+ OS/Arch:      linux/amd64
+$ docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:40:59 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:40:59 2016
+ OS/Arch:      linux/amd64
+dexter@hightech:~$ docker info
+Containers: 10
+ Running: 9
+ Paused: 0
+ Stopped: 1
+Images: 151
+Server Version: 1.12.0
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 201
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge null host overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options:
+Kernel Version: 3.16.0-4-amd64
+Operating System: Debian GNU/Linux 8 (jessie)
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 62.88 GiB
+Name: hightech.fm
+ID: RDIP:EYXU:63II:XI5I:WXRD:BD6Z:CFTV:QQKG:HHTI:DXHO:O6TB:KVG7
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No memory limit support
+WARNING: No swap limit support
+WARNING: No kernel memory limit support
+WARNING: No oom kill disable support
+WARNING: No cpu cfs quota support
+WARNING: No cpu cfs period support
+Insecure Registries:
+ 127.0.0.0/8
+$ sudo service docker status
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/lib/systemd/system/docker.service; enabled)
+   Active: active (running) since Чт 2016-08-11 10:24:22 CEST; 14min ago
+     Docs: https://docs.docker.com
+ Main PID: 6160 (dockerd)
+   CGroup: /system.slice/docker.service
+           ├─ 6160 /usr/bin/dockerd -H fd://
+           ├─ 6166 docker-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --shim docker-containerd-shim --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --runtime docker-runc
+           ├─ 6657 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 5000 -container-ip 172.18.0.2 -container-port 5000
+           ├─ 6673 /usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 33060 -container-ip 172.20.0.6 -container-port 3306
+           ├─ 6739 docker-containerd-shim e94ec577fd107a70a98bebfcb9fec228a1add3444c06585ce26f6fd29a49bc28 /var/run/docker/libcontainerd/e94ec577fd107a70a98bebfcb9fec228a1add3444c06585ce26f6fd29a49bc28 docker-runc
+           ├─ 6786 docker-containerd-shim 41af860a55e58c34499275c4acaa2b25ca2ca18ccbc75d2d4c8666fc91e27766 /var/run/docker/libcontainerd/41af860a55e58c34499275c4acaa2b25ca2ca18ccbc75d2d4c8666fc91e27766 docker-runc
+           ├─ 9078 docker-containerd-shim 4991ae3bb537cb63cebeb3998e39701160f14f9875d8b1138556884f43f77515 /var/run/docker/libcontainerd/4991ae3bb537cb63cebeb3998e39701160f14f9875d8b1138556884f43f77515 docker-runc
+           ├─ 9158 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 8890 -container-ip 172.20.0.8 -container-port 80
+           ├─ 9164 docker-containerd-shim 8657b2849fb3ce5bd458d586b76399348ea2db7b029015154db1d98430186a24 /var/run/docker/libcontainerd/8657b2849fb3ce5bd458d586b76399348ea2db7b029015154db1d98430186a24 docker-runc
+           ├─ 9835 docker-containerd-shim a0ff2f52a7acc364aecf7965fb117c6f3f6e5a33fbec8d701f050cc688a71c41 /var/run/docker/libcontainerd/a0ff2f52a7acc364aecf7965fb117c6f3f6e5a33fbec8d701f050cc688a71c41 docker-runc
+           ├─ 9923 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 8888 -container-ip 172.20.0.4 -container-port 80
+           ├─ 9928 docker-containerd-shim 2eced5ffc6972dfca3b29ebe953903a649bff08c4e744444e747816f80723819 /var/run/docker/libcontainerd/2eced5ffc6972dfca3b29ebe953903a649bff08c4e744444e747816f80723819 docker-runc
+           ├─10024 docker-containerd-shim 6c0a4dad7cd0cf3296addd8e0e04be1cc64589f2b373ad7da1c9b46b6f3dcb6a /var/run/docker/libcontainerd/6c0a4dad7cd0cf3296addd8e0e04be1cc64589f2b373ad7da1c9b46b6f3dcb6a docker-runc
+           ├─10126 docker-containerd-shim 285a609cd016cc0de2983594ca3d7b09d649354d7eb572cf98742439484f7237 /var/run/docker/libcontainerd/285a609cd016cc0de2983594ca3d7b09d649354d7eb572cf98742439484f7237 docker-runc
+           └─10260 docker-containerd-shim a0ff2f52a7acc364aecf7965fb117c6f3f6e5a33fbec8d701f050cc688a71c41 /var/run/docker/libcontainerd/a0ff2f52a7acc364aecf7965fb117c6f3f6e5a33fbec8d701f050cc688a71c41 docker-runc
+
+авг 11 10:33:49  dockerd[6160]: time="2016-08-11T10:33:49+02:00" level=info msg="Firewalld running: false"
+авг 11 10:33:49  dockerd[6160]: time="2016-08-11T10:33:49.626945979+02:00" level=error msg="containerd: notify OOM events" error="cgroup path for memory not found"
+авг 11 10:33:50  dockerd[6160]: time="2016-08-11T10:33:50+02:00" level=info msg="Firewalld running: false"
+авг 11 10:33:50  dockerd[6160]: time="2016-08-11T10:33:50.191326085+02:00" level=error msg="containerd: notify OOM events" error="cgroup path for memory not found"
+авг 11 10:33:50  dockerd[6160]: time="2016-08-11T10:33:50.314704987+02:00" level=warning msg="libcontainerd: container 6c0a4dad7cd0cf3296addd8e0e04be1cc64589f2b373ad7da1c9b46b6f3dcb6a restart canceled"
+авг 11 10:33:50  dockerd[6160]: time="2016-08-11T10:33:50+02:00" level=info msg="Firewalld running: false"
+авг 11 10:33:50  dockerd[6160]: time="2016-08-11T10:33:50.91302429+02:00" level=error msg="containerd: notify OOM events" error="cgroup path for memory not found"
+авг 11 10:33:51  dockerd[6160]: time="2016-08-11T10:33:51.100671667+02:00" level=warning msg="libcontainerd: container 285a609cd016cc0de2983594ca3d7b09d649354d7eb572cf98742439484f7237 restart canceled"
+авг 11 10:33:51  dockerd[6160]: time="2016-08-11T10:33:51+02:00" level=info msg="Firewalld running: false"
+авг 11 10:33:51  dockerd[6160]: time="2016-08-11T10:33:51.686944925+02:00" level=error msg="containerd: notify OOM events" error="cgroup path for memory not found"

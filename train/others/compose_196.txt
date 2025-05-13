@@ -1,0 +1,11 @@
+aminancelot commented on 29 Apr 2019 •
+edited
+Please fix this error message, it seems to be for every possible error with compose.
+Daemon not running?
+Error in compose file?
+Access rights problems to socket?
+All the same message.
+Some examples amongst others.
+https://medium.com/@ibrahimgunduz34/if-you-faced-an-issue-like-couldnt-connect-to-docker-daemon-at-http-docker-localunixsocket-is-27b35f17d09d
+#4181 (comment)
+8

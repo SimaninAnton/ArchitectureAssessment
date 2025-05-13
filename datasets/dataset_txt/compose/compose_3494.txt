@@ -1,0 +1,10 @@
+jmmills commented on 7 Jul 2015
+As a user of compose (formally fig), I would like to be able to specify the number of nodes started for any given definition (a.k.a scale) from inside the manifest (yaml configuration file), so that I can ship my cluster definition with my service orchestration.
+E.g. syntax:
+worker:
+    build: rqworker
+    scale: 5
+    links:
+       - redis
+    command: rqworker -u tcp://redis 
+176

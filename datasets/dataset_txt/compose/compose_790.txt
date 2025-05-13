@@ -1,0 +1,9 @@
+Mijathi commented on 19 Mar 2018
+Hello,
+I'm trying to limit memory usage of a service. According to the documentation the 'deploy' key is only taken in consideration when in swarm mode. An alternative is presented:
+Looking for options to set resources on non swarm mode containers?
+The options described here are specific to the deploy key and swarm mode. If you want to set ?>resource constraints on non swarm deployments, use Compose file format version 2 CPU, memory, >and other resource options. If you have further questions, refer to the discussion on the GitHub issue >docker/compose/4513.
+So I switched to using mem_limit. But when running the compose I get an error:
+Unsupported config option for services.documentmetadatastore: 'mem_limit'
+My configuration:
+documentmetadatastore: mem_limit: 50M container_name: documentmetadatastore image: "dockerhub.hailforge.com/redis:alpine" command: ["redis-server", "--appendonly", "yes"] ports: - "6379:6379" volumes: - /data/documentstore/redis:/data

@@ -1,0 +1,52 @@
+asirinelli commented on 25 Jun 2017
+It is not possible to have the enable_ipv6 directive in the composer file if version is 3.0 or higher. This is not consistent with the documentation (https://docs.docker.com/compose/compose-file/).
+To be more precise, here is the docker-compose.yml file I am trying to run:
+version: '2.2'
+
+services:
+  app:
+    image: busybox
+    command: ifconfig
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.10
+        ipv6_address: fc00::10
+
+networks:
+  app_net:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+      - subnet: fc00::/64
+It runs very well with docker-compose up and the ipv6 address is affected to the container.
+If I change the compose file to version 3.0, 3.1, 3.2 or 3.3, receive the following error:
+$ docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+networks.app_net value Additional properties are not allowed ('enable_ipv6' was unexpected)
+Is this an error in the documentation or in docker-compose?
+For information:
+$ docker-compose version
+docker-compose version 1.14.0, build c7bdf9e
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+$ docker version
+Client:
+ Version:      17.03.1-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Mon Mar 27 17:14:03 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.1-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   c6d412e
+ Built:        Mon Mar 27 17:14:03 2017
+ OS/Arch:      linux/amd64
+ Experimental: false

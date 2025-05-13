@@ -1,0 +1,7 @@
+bpinto commented on 23 Jan 2014
+command: source /.profile; source ~/.bashrc; bundle exec rackup -p 3000
+➜ cliniko git:(fig) ✗ fig up web
+Recreating cliniko_web_1...
+Attaching to cliniko_web_1
+cliniko_web_1 | 2014/01/23 02:08:07 Unable to locate source
+I'm booting a centos 6.4 machine. I'm trying to overwrite the same command that is specified on Dockerfile. If I don't overwrite it, everything works as expected.

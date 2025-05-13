@@ -1,0 +1,19 @@
+ghost commented on 29 Sep 2015
+Hi,
+I have the following docker-compose.yml:
+web:
+  build: .
+  volumes:
+   - app:/web/app
+which fails with
+Running "compass:dist" (compass) task
+directory dist/css
+    write dist/css/auth.css (1.791s)
+    error app/client/sass/not-supported.scss (Line 2: No files were found in the load path matching "notsupp/*.png". Your current load paths are: /web/./app/client/assets/img)
+Sass::SyntaxError on line ["2"] of /web/./app/client/sass/not-supported.scss: No files were found in the load path matching "notsupp/*.png". Your current load paths are: /web/./app/client/assets/img
+Run with --trace to see the full backtrace
+Warning: ↑ Use --force to continue.
+
+Aborted due to warnings.
+Service 'web' failed to build: The command '/bin/sh -c grunt build' returned a non-zero code: 6
+The normal build, i.e.: docker build -t ihr/web . doesn't fail.

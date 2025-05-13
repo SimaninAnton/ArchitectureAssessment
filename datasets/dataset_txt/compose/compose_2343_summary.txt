@@ -1,0 +1,1 @@
+Docker-compose not able to get into bash if using entrypoint

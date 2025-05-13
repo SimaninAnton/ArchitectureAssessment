@@ -1,0 +1,1 @@
+Uppercase letters in service names result in Docker API errors

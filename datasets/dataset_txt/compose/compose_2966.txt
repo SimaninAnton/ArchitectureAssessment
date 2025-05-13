@@ -1,0 +1,61 @@
+dmp1ce commented on 25 Dec 2015
+By starting the following docker-compose.yml configuration with docker-compose up I get a UnicodeEncodeError. docker logs do not have this problem.
+[plex@soda plex]$ cat docker-compose.yml
+plex:
+  image: linuxserver/plex
+  environment:
+    - VERSION=plexpass
+    - PUID=1001
+    - PGID=1002
+  volumes:
+    - /transcode
+    - /mnt/data/plex/config:/config
+    - /mnt/data/plex/homevideos:/data/homevideos
+  net: "host"
+  log_driver: journald
+[plex@soda plex]$ docker-compose logs
+Attaching to plex_plex_1
+plex_1 | *** Running /etc/my_init.d/00_regen_ssh_host_keys.sh...
+plex_1 | *** Running /etc/my_init.d/10_add_user_abc.sh...
+plex_1 | -----------------------------------
+plex_1 |           _     _ _
+plex_1 |          | |___| (_) ___
+plex_1 |          | / __| | |/ _ \
+plex_1 |          | \__ \ | | (_) |
+plex_1 |          |_|___/ |_|\___/
+plex_1 |                |_|
+plex_1 | Brought to you by linuxserver.io
+plex_1 | -----------------------------------
+plex_1 | GID/UID
+plex_1 | -----------------------------------
+plex_1 | User uid:    1001
+plex_1 | User gid:    1002
+plex_1 | -----------------------------------
+plex_1 | *** Running /etc/my_init.d/10_dbus.sh...
+plex_1 | *** Running /etc/my_init.d/15_fix_for_transcode.sh...
+plex_1 | *** Running /etc/my_init.d/20_apt_update.sh...
+plex_1 | *** Running /etc/my_init.d/30_update_plex.sh...
+plex_1 | Using version: 0.9.15.0.1621-344f193 from Plexpass latest
+plex_1 | Upgrading from version: 0.9.12.19.1537-f38ac80 to version: 0.9.15.0.1621-344f193
+plex_1 | --2015-12-24 22:21:54--  https://downloads.plex.tv/plex-media-server/0.9.15.0.1621-344f193/plexmediaserver_0.9.15.0.1621-344f193_amd64.deb
+plex_1 | Resolving downloads.plex.tv (downloads.plex.tv)... 2400:cb00:2048:1::6814:709, 2400:cb00:2048:1::6814:609, 104.20.7.9, ...
+plex_1 | Connecting to downloads.plex.tv (downloads.plex.tv)|2400:cb00:2048:1::6814:709|:443... connected.
+plex_1 | HTTP request sent, awaiting response... 200 OK
+plex_1 | Length: 128037122 (122M) [application/octet-stream]
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.5.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 54, in main
+    command.sys_dispatch()
+  File "/usr/lib/python3.5/site-packages/compose/cli/docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python3.5/site-packages/compose/cli/docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 171, in perform_command
+    handler(project, command_options)
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 230, in logs
+    LogPrinter(containers, monochrome=monochrome).run()
+  File "/usr/lib/python3.5/site-packages/compose/cli/log_printer.py", line 28, in run
+    self.output.write(line)
+UnicodeEncodeError: 'ascii' codec can't encode character '\u2018' in position 29: ordinal not in range(128)
+1

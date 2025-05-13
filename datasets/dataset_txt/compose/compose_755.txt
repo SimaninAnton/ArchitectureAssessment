@@ -1,0 +1,46 @@
+lieryan-ha commented on 6 Apr 2018
+Description of the issue
+When running docker-compose pull --parallel with a compose file version 2.1 or higher, docker-compose will fail with error message TypeError: sequence item 0: expected a bytes-like object, str found.
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:       17.12.1-ce
+ API version:   1.35
+ Go version:    go1.9.4
+ Git commit:    7390fc6
+ Built: Tue Feb 27 22:15:20 2018
+ OS/Arch:       linux/amd64
+
+Server:
+ Engine:
+  Version:      17.12.1-ce
+  API version:  1.35 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   7390fc6
+  Built:        Tue Feb 27 22:17:54 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+version: '2.1'
+services:
+  test:
+    image: alpine:does-not-exist
+Steps to reproduce the issue
+Copy the above docker-compose.yaml file
+Run docker-compose pull --parallel
+Observed result
+Exception with string-operations-related traceback.
+Expected result
+No misleading exception, just clean error message.
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 716, in pull
+  File "compose/project.py", line 558, in pull
+TypeError: sequence item 0: expected a bytes-like object, str found
+Additional information
+RedHat, docker-compose installed by downloading https://github.com/docker/compose/releases/download/1.20.1/docker-compose-Linux-x86_64.

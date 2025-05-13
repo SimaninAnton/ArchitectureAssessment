@@ -1,0 +1,43 @@
+cescoferraro commented on 7 Jan 2016
+Hi guys,
+I have been using the -link option without any problems, until I got the time to carefully read the docs and realized that this a deprecated solution. So a decided to update one of my apps to the new networking system. My compose file contains 1 nginx and 2 webapp containers (alfa and beta that I use to deploy with minimum downtime using Ansible).
+alfa:
+  build: .
+  net: "portifoliocesco"
+  volumes:
+    - ${PWD}/webapp:/srv/app
+    - ${PWD}/supervisor/:/etc/supervisor/
+
+beta:
+  build: .
+  net: "portifoliocesco"
+  volumes:
+    - ${PWD}/webapp:/srv/app
+    - ${PWD}/supervisor/:/etc/supervisor/
+
+
+nginx:
+  image: nginx
+  container_name: portifoliocesco_nginx
+  net: "portifoliocesco"
+  ports:
+    - "9000:80"
+  volumes:
+    - ${PWD}/nginx/:/etc/nginx/
+    - ${PWD}/webapp/app/static/:/var/www/static/
+  environment:
+    - VIRTUAL_HOST=www.cescoferraro.xyz
+But when I run docker-compose up, NGINX thorows:
+nginx_1 | 2016/01/06 22:53:48 [emerg] 1#1: host not found in upstream "portifoliocesco_alfa_1:9999" in /etc/nginx/nginx.conf:21
+nginx_1 | nginx: [emerg] host not found in upstream "portifoliocesco_alfa_1:9999" in /etc/nginx/nginx.conf:21
+But if I run afterwards
+docker run -it --rm --net=portifoliocesco busybox wget -qO- http://portifoliocesco_alfa_1:9999  
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+....
+</html>
+and I can also up the NGINX container separately later too
+docker-compose up nginx                          
+Starting portifoliocesco_nginx
+Attaching to portifoliocesco_nginx
+nginx_1 | 192.168.99.1 - - [06/Jan/2016:22:57:10 +0000]  "GET / HTTP/1.1" 200 1438 

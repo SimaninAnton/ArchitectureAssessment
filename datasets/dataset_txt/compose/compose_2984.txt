@@ -1,0 +1,26 @@
+rca commented on 15 Dec 2015
+I have a utility container for a Vulcan that runs against a running server. The vulcanctl command connects to the server and runs commands against it. For example: vulcanctl --vulcan http://vulcand:8182 host ls
+Ideally, I would be able to define my utility container in docker-compose.yml like this:
+vc:
+  image: mailgun/vulcand:latest
+  command: vulcanctl --vulcan http://vulcand:8182
+  links:
+    - vulcand
+And be able to add to the defined command, such as: docker-compose run vc host ls, which would result in the command: vulcanctl --vulcan http://vulcand:8182 host ls.
+As a workaround I've been defining a $VC environment variable :
+vc:
+  image: mailgun/vulcand:latest
+  environment:
+    - VC=vulcanctl --vulcan http://vulcand:8182
+  links:
+    - vulcand
+And running commands with: docker-compose run vc /bin/bash -c '$VC host ls'. Not as clean, but works.
+For completeness, vulcand is defined as:
+vulcand:
+  image: mailgun/vulcand:latest
+  command: vulcand -apiInterface=0.0.0.0 -interface=0.0.0.0 -etcd=http://etcd:4001
+  links:
+    - etcd
+  ports:
+    - "8181:8181"
+    - "8182:8182"

@@ -1,0 +1,1 @@
+Error starting docker-compose for mongo router (port is already allocated)

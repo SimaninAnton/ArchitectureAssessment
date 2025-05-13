@@ -1,0 +1,22 @@
+jalberto commented on 2 Nov 2016 •
+edited
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/pip/basecommand.py", line 209, in main
+    status = self.run(options, args)
+  File "/usr/lib/python2.7/dist-packages/pip/commands/install.py", line 328, in run
+    wb.build(autobuilding=True)
+  File "/usr/lib/python2.7/dist-packages/pip/wheel.py", line 748, in build
+    self.requirement_set.prepare_files(self.finder)
+  File "/usr/lib/python2.7/dist-packages/pip/req/req_set.py", line 360, in prepare_files
+    ignore_dependencies=self.ignore_dependencies))
+  File "/usr/lib/python2.7/dist-packages/pip/req/req_set.py", line 448, in _prepare_file
+    req_to_install, finder)
+  File "/usr/lib/python2.7/dist-packages/pip/req/req_set.py", line 387, in _check_skip_installed
+    req_to_install.check_if_exists()
+  File "/usr/lib/python2.7/dist-packages/pip/req/req_install.py", line 1011, in check_if_exists
+    self.req.project_name
+AttributeError: 'Requirement' object has no attribute 'project_name'
+Seems related to: pypa/pip#3687
+it does works with pip 8.1.2, but docker documentation says pip 1.6.0 and up are supported.
+pip 8.1.1 is default version in ubuntu 16.04 LTS

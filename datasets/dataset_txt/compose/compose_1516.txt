@@ -1,0 +1,3 @@
+rivaros commented on 19 Apr 2017
+Let's say I would like to update one of the external services during compose build.
+For example map one more volume to rsync container. Is it possible to restart external adding some options to it?

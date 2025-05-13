@@ -1,0 +1,9 @@
+Globegitter commented on 8 Oct 2014
+I am just trying to get fig to work with coreos-vagrant on my Mac. I managed to get most things to work, share folders run a command, even start the server.
+Only problem now, when I try to access the server on localhost:1337 (the default port it starts up) I can't access it. I only get 'No data received'.
+I have set coreos in the Vagrant file to forward port 1337 from the VM to my host, but I think the problem is that CoreOS is not forwarding the port 1337 from the container to the VM (if I understand everything correcntly that is)
+On the CoreOS documentation it says, to allow a port in a container run docker run -t -i -p 8080:80 ubuntu /bin/bash. I couldn't really find much how fig handles the ports when you define:
+  ports:
+   - "1337:1337"
+Does this seem to be more likely an issue with fig or my CoreOS setup?
+I also managed to get everything to work with boot2docker before, just getting things to play nicely with CoreOS would be very useful.

@@ -1,0 +1,2 @@
+Pankajdtrainer commented on 16 Nov 2019
+Hi there - Can you please share an example(with sample code) where a container consumes external services and execute that via web?

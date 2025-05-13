@@ -1,0 +1,45 @@
+uu1t commented on 19 Mar 2019
+Description of the issue
+Image sizes in docker images output are formatted as decimal (KB, MB, GB). But image sizes in docker-compose images output are formatted as binary (KiB, MiB, GiB).
+source where formatting sizes in docker images:
+https://github.com/docker/go-units/blob/2fb04c6466a548a03cb009c5569ee1ab1e35398e/size.go#L59-L61
+source where formatting sizes in docker-compose images:
+compose/compose/cli/utils.py
+Lines 141 to 143 in 8f86789
+ def human_readable_file_size(size): 
+     suffixes = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', ] 
+     order = int(math.log(size, 2) / 10) if size else 0 
+I'm not sure this issue is for docker/compose or docker/cli but output image sizes should be consistent.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Steps to reproduce the issue
+Run docker images
+Run docker-compose images
+Observed result
+Output image sizes are different in format (decimal and binary).
+Expected result
+Output image sizes are consistent.
+1

@@ -1,0 +1,4 @@
+josh-devops-center commented on 21 Aug 2014
+Hi,
+Would it be possible to support variables in the fig.yml ? For example, I would like to define the name of the volume paths at runtime when I start fig.
+Thanks

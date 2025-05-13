@@ -1,0 +1,1 @@
+Automatic image naming is weird, change it or provide explicit naming option

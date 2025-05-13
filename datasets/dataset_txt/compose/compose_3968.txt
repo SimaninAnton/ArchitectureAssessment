@@ -1,0 +1,13 @@
+gkostyanikov commented on 28 Jan 2015
+Got this error on both machines almost at the same time with docker-compose and lately with fig after rollback. A few search results points to python/openssl issue but i simple can't figure out where to dig to. Python/openssl comes from homebrew.
+Boot2Docker-cli version: v1.4.1
+Git commit: 43241cb
+Client version: 1.4.1
+Client API version: 1.16
+Go version (client): go1.4
+Git commit (client): 5bc2ff8
+OS/Arch (client): darwin/amd64
+Server version: 1.4.1
+Server API version: 1.16
+Go version (server): go1.3.3
+Git commit (server): 5bc2ff8

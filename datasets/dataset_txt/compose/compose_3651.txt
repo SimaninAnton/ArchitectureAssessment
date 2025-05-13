@@ -1,0 +1,23 @@
+AlexZeitler commented on 14 May 2015
+I'm using the following Dockerfile
+FROM microsoft/aspnet
+ADD . /app
+WORKDIR /app
+RUN ["dnu", "restore"]
+
+EXPOSE 5004
+And this docker-compose.yml with Docker 1.6.0 and docker-compose 1.2.0
+web:
+  build: .
+  command: dnx . kestrel
+  ports:
+   - "80:5004"
+When running docker-compose up -d I get the following output:
+Recreating aspnet5_web_1...
+As said, the container is started but also stopped immediately.
+docker ps -a results in
+CONTAINER ID        IMAGE                       COMMAND                CREATED              STATUS                          PORTS               NAMES
+16f2c49a9871        aspnet5_web:latest   "dnx . kestrel"        About a minute ago   Exited (0) About a minute ago                       aspnet5_web_1   
+docker logs 16f2 shows normal output without errors.
+As said, the container works fine running it using plain Docker.
+On the other hand, the official MongoDb image also works fine with docker-compose and running a container based on it, it doesn't stop.

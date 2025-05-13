@@ -1,0 +1,28 @@
+InfoSec812 commented on 8 Oct 2015
+I am running the pre-release of Ubuntu 15.10 and docker-compose does not work with the distribution. I get the following errors attempting to start a container using compose:
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.1.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 558, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2682, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2355, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2361, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/local/lib/python2.7/dist-packages/compose/__init__.py", line 2, in <module>
+    from .service import Service  # noqa:flake8
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 10, in <module>
+    from docker.errors import APIError
+  File "/usr/local/lib/python2.7/dist-packages/docker/__init__.py", line 20, in <module>
+    from .client import Client # flake8: noqa
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 22, in <module>
+    import requests
+  File "/usr/local/lib/python2.7/dist-packages/requests/__init__.py", line 53, in <module>
+    from .packages.urllib3.contrib import pyopenssl
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/contrib/pyopenssl.py", line 73, in <module>
+    ssl.PROTOCOL_SSLv3: OpenSSL.SSL.SSLv3_METHOD,
+AttributeError: 'module' object has no attribute 'PROTOCOL_SSLv3'
+It appears to be explained by this StackOverflow post: http://stackoverflow.com/a/29081240/780998
+1

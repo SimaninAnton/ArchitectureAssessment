@@ -1,0 +1,5 @@
+etc0de commented on 9 Mar 2017 •
+edited
+After taking a quick initial look at docker stack, it seemed to me that docker stack deploy no longer allows to easily start/stop individual services in a docker-compose.yml easily but just the group as a whole. If that is true, it seems that would naturally make it a bad match for various environments (and a good for others, but the point is that not everyone is going to be able to easily use it in their workflow instead of up -d/down on individual services as before).
+However, for some reason v3 seems to abandon people relying on the old, more flexible model who still need memory and/or cpu limits entirely. Is that intentional or an oversight?
+6

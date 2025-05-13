@@ -1,0 +1,2 @@
+liamzebedee commented on 6 Aug 2014
+The Dockerfile in the Rails tutorial uses the docker-ruby image binaryphile/ruby:2.0.0-p247 which is vulnerable to Heartbleed. A patched version has been released binaryphile/ruby:2.0.0-p247-hb, we should update the docs accordingly.

@@ -1,0 +1,1 @@
+networking behaviour of compose changed in latest update

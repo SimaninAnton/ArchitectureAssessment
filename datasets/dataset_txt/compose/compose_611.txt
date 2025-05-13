@@ -1,0 +1,17 @@
+caub commented on 23 Jun 2018 •
+edited
+Similarly to
+docker build -t foobar -f-<<EOF
+FROM some-image
+EOF
+or
+echo 'FROM some-image' | docker build -t foobar -f-
+I'd like to be able to do in a docker-compose.yml:
+version: '3.1'
+services:
+  foobar:
+    build:
+      context: ../foobar
+      dockerfile: /dev/stdin
+and run
+echo 'FROM some-image' | docker-compose -f config/docker-compose.yml up --build -

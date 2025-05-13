@@ -1,0 +1,68 @@
+das-rob3rt commented on 24 Oct 2018
+Description of the issue
+Pulling oj-redis     ...
+Pulling oj-postgres  ...
+Pulling judge-server ...
+Pulling oj-backend   ...
+
+ERROR: for judge-server  __init__() got an unexpected keyword argument 'environment'
+
+ERROR: for oj-redis  __init__() got an unexpected keyword argument 'environment'
+
+ERROR: for oj-postgres  __init__() got an unexpected keyword argument 'environment'
+
+ERROR: for oj-backend  __init__() got an unexpected keyword argument 'environment'
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.21.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3/dist-packages/compose/cli/main.py", line 71, in main
+    command()
+  File "/usr/lib/python3/dist-packages/compose/cli/main.py", line 127, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3/dist-packages/compose/cli/main.py", line 729, in pull
+    include_deps=options.get('--include-deps'),
+  File "/usr/lib/python3/dist-packages/compose/project.py", line 556, in pull
+    limit=5,
+  File "/usr/lib/python3/dist-packages/compose/parallel.py", line 105, in parallel_execute
+    raise error_to_reraise
+  File "/usr/lib/python3/dist-packages/compose/parallel.py", line 203, in producer
+    result = func(obj)
+  File "/usr/lib/python3/dist-packages/compose/project.py", line 549, in pull_service
+    service.pull(ignore_pull_failures, True)
+  File "/usr/lib/python3/dist-packages/compose/service.py", line 1142, in pull
+    output = self.client.pull(repo, **kwargs)
+  File "/usr/lib/python3/dist-packages/docker/api/image.py", line 380, in pull
+    header = auth.get_config_header(self, registry)
+  File "/usr/lib/python3/dist-packages/docker/auth.py", line 48, in get_config_header
+    client._auth_configs, registry, credstore_env=client.credstore_env
+  File "/usr/lib/python3/dist-packages/docker/auth.py", line 96, in resolve_authconfig
+    authconfig, registry, store_name, env=credstore_env
+  File "/usr/lib/python3/dist-packages/docker/auth.py", line 127, in _resolve_authconfig_credstore
+    store = dockerpycreds.Store(credstore_name, environment=env)
+TypeError: __init__() got an unexpected keyword argument 'environment'
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.21.0, build unknown
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Sun, 16 Sep 2018 13:21:33 +1000
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Sun Sep 16 03:21:33 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+3

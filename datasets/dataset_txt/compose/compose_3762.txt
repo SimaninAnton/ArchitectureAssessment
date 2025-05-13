@@ -1,0 +1,3 @@
+mmartinson commented on 2 Apr 2015
+I'm just looking into fig/compose for a newish project that I'm hoping will be reaching early production fairly soon. Would it be recommended to start by using fig despite it being deprecated or does this project seem to be reaching maturity quickly?
+I appreciate any feedback, I'm new to using docker.

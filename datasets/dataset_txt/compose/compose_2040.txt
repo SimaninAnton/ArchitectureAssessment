@@ -1,0 +1,25 @@
+Krijger commented on 26 Sep 2016 •
+edited
+Edit
+The following 4 entries in this issue are discussion about the essence of this issue.
+The question then becomes: Should Compose perform a "rollback" when encountering that situation and remove the unstartable container immediately? And how do we detect / differentiate failing containers due to configuration errors versus containers failing for other reasons inherent to the application they are running?
+Former title and description:
+Failing to scale a service up results in stop/start actions failing
+Given a simple compose file, with port forwarding, such as
+version: '2'
+services:
+  app:
+    image: qkrijger/hello-world-wiremock-server:0.1.0-SNAPSHOT
+    ports:
+      - 80:80
+The port forwarding prohibits us from scaling the container.
+We now have a happy flow:
+docker-compose up -d
+docker-compose stop
+docker-compose start
+But if we have tried to scale, this fails:
+docker-compose up -d
+docker-compose scale app=2 fails, as expected
+docker-compose stop
+docker-compose start fails, which is a bug
+1

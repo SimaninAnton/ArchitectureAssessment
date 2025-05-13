@@ -1,0 +1,3 @@
+larsnystrom commented on 4 Jun 2017
+Creating docker networks is not a thread safe operation, so running docker-compose up twice in parallell will create two networks with the same name, which leads to the services being partitioned in different networks. See moby/moby#20648
+Since creating services in parallell is a pretty big performance gain it would be awesome if it was possible to create the default network manually, before running docker-compose up.

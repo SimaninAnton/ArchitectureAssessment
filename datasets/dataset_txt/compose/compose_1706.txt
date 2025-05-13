@@ -1,0 +1,80 @@
+hypatiahub commented on 10 Feb 2017
+We are installing a product on a VM that has VCPU:4, RAM:8GB, Root Disk:80GB
+Many docker containers are created during the installation process.
+We see this error:
+TASK [proxy : Pulling haproxy Docker images]
+Wednesday 08 February 2017 20:58:15 +0000 (0:00:00.050) 0:30:19.435
+TASK [proxy : Starting haproxy container on proxy node]
+Wednesday 08 February 2017 20:58:15 +0000 (0:00:00.040) 0:30:19.475
+fatal: [192.168.0.158] => Error creating container: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
+Increased the timeout time by running this command export COMPOSE_HTTP_TIMEOUT=500, but this did not help. Any suggestions on how to fix this?
+docker version
+Client:
+Version: 1.12.0
+API version: 1.24
+Go version: go1.6.3
+Git commit: 5507242
+Built: Fri Sep 2 21:31:29 2016
+OS/Arch: linux/ppc64le
+Server:
+Version: 1.12.0
+API version: 1.24
+Go version: go1.6.3
+Git commit: 5507242
+Built: Fri Sep 2 21:31:29 2016
+OS/Arch: linux/ppc64le
+docker info
+Containers: 41
+Running: 28
+Paused: 0
+Stopped: 13
+Images: 15
+Server Version: 1.12.0
+Storage Driver: devicemapper
+Pool Name: docker-253:1-255591-pool
+Pool Blocksize: 65.54 kB
+Base Device Size: 10.74 GB
+Backing Filesystem: xfs
+Data file: /dev/loop0
+Metadata file: /dev/loop1
+Data Space Used: 4.241 GB
+Data Space Total: 107.4 GB
+Data Space Available: 77.26 GB
+Metadata Space Used: 8.139 MB
+Metadata Space Total: 2.147 GB
+Metadata Space Available: 2.139 GB
+Thin Pool Minimum Free Space: 10.74 GB
+Udev Sync Supported: true
+Deferred Removal Enabled: false
+Deferred Deletion Enabled: false
+Deferred Deleted Device Count: 0
+Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+WARNING: Usage of loopback devices is strongly discouraged for production use.
+Use --storage-opt dm.thinpooldev to specify a custom block storage device.
+Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+Library Version: 1.02.110 (2015-10-30)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: host bridge null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: apparmor seccomp
+Kernel Version: 4.4.0-47-generic
+Operating System: Ubuntu 16.04.1 LTS
+OSType: linux
+Architecture: ppc64le
+CPUs: 4
+Total Memory: 7.972 GiB
+Name: cluster-1486585024522-master
+ID: J2JZ:6R22:DSDJ:WIFQ:S6XX:J4OL:4XIC:OIMH:YB7W:6GYT:GKJR:ZZ7H
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Insecure Registries:
+127.0.0.0/8
+5

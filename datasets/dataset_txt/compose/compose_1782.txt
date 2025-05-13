@@ -1,0 +1,50 @@
+sudo-bmitch commented on 19 Jan 2017
+This is the same as #3429 but for volumes instead of networks.
+My input yml:
+version: '3'
+
+networks:
+  backend:
+    external:
+      name: backend
+
+volumes:
+  test-data:
+    external:
+      name: test-data
+
+services:
+  test:
+    image: busybox
+    command: tail -f /dev/null
+    deploy:
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - test-data:/data
+    networks:
+      - backend
+Result of docker-compose config:
+networks:
+  backend:
+    external:
+      name: backend
+services:
+  test:
+    command: tail -f /dev/null
+    deploy:
+      restart_policy:
+        condition: on-failure
+    image: busybox
+    networks:
+      backend: null
+    volumes:
+    - test-data:/data:rw
+version: '3.0'
+volumes:
+  test-data:
+    external:
+      name: test-data
+    external_name: test-data
+The external_name included with the volume is considered invalid by docker stack deploy and should not be included in the output.
+Background: I'm planning to use docker-compose to parse the yml files we use, merge multiple compose files together and expand variables, which can't be done by the docker stack deploy yml processor.

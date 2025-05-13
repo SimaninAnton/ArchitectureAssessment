@@ -1,0 +1,1 @@
+Allow custom naming for volumes in version 2 files

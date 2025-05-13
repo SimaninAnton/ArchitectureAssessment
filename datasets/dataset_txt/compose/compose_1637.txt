@@ -1,0 +1,39 @@
+adawolfs commented on 2 Mar 2017
+I'm creating a swam services but when I attach them to a network it's not displaying the attached services
+Command to create network
+sudo docker network create --driver overlay --subnet 10.0.9.0/24 --attachable myNetwork
+Command to create service
+sudo docker service create --replicas 1 --name percona --env-file percona.env --network myNetwork percona
+sudo docker network inspect myNetwork
+[
+    {
+        "Name": "myNetwork",
+        "Id": "rfmxdr4nuufren6uyag3gc7ir",
+        "Created": "0001-01-01T00:00:00Z",
+        "Scope": "swarm",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "10.0.9.0/24",
+                    "Gateway": "10.0.9.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Containers": null,    **<===== Not in list**
+        "Options": {
+            "com.docker.network.driver.overlay.vxlanid_list": "4097"
+        },
+        "Labels": null
+    }
+]
+But when I execute the inspect command over the service
+sudo docker service inspect --format='{{json .Endpoint.VirtualIPs}}' percona
+[{"NetworkID":"rfmxdr4nuufren6uyag3gc7ir","Addr":"10.0.9.4/24"}]
+I'm following this documentation
+Attach services to an overlay network

@@ -1,0 +1,19 @@
+Contributor
+vdemeester commented on 24 Jun 2016
+Something changed on the 1.12 engine where a container connected on a custom network, always have itself (the shortid it seems) as aliases. But two tests – test_run_detached_connects_to_network and test_run_interactive_connects_to_network — are asserting that the container created by compose have no aliases (assert not config['Aliases']), so they fail.
+λ py.test -vs -tb=short -k network test/acceptance
+# […]
+_______________________________________________ CLITestCase.test_run_detached_connects_to_network _______________________________________________
+tests/integration/testcases.py:50: in wrapper
+    return f(self, *args, **kwargs)
+tests/acceptance/cli_test.py:1155: in test_run_detached_connects_to_network
+    assert not config['Aliases']
+E   AssertionError: assert not ['dd597a597012']
+_____________________________________________ CLITestCase.test_run_interactive_connects_to_network ______________________________________________
+tests/integration/testcases.py:50: in wrapper
+    return f(self, *args, **kwargs)
+tests/acceptance/cli_test.py:1138: in test_run_interactive_connects_to_network
+    assert not config['Aliases']
+E   AssertionError: assert not ['f66515801541']
+It's on master (and 1.8.0-rc1).
+/cc @aanand @dnephin

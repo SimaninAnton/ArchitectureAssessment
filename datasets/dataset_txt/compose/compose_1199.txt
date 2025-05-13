@@ -1,0 +1,42 @@
+alb-i986 commented on 19 Sep 2017
+In my docker-compose file I have specified a bunch of services, some of which are optional, i.e. which I don't need to spin up all the time.
+One example is a container with Jenkins, which I use only when I need to make a change in the job config, so as to test it before editing the job on the "production" Jenkins server.
+As an example, consider the following docker compose file:
+version: '3'
+
+services:
+
+  web:
+    image: nginx
+    depends_on:
+     - db
+
+  db:
+    image: mysql
+    environment:
+     - MYSQL_ROOT_PASSWORD=password
+
+  jenkins:
+    image: jenkins
+Thanks to the depends_on, with just docker-compose up web I can have both nginx and mysql spin up.
+But when I tear it down with CTRL+C, only nginx is stopped, mysql is not stopped.
+$ docker-compose up web 
+Creating network "dockercomposeissuestop_default" with the default driver
+Creating dockercomposeissuestop_db_1 ... 
+Creating dockercomposeissuestop_db_1 ... done
+Creating dockercomposeissuestop_web_1 ... 
+Creating dockercomposeissuestop_web_1 ... done
+Attaching to dockercomposeissuestop_web_1
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping dockercomposeissuestop_web_1 ... done
+
+$ docker-compose ps
+            Name                         Command             State     Ports   
+------------------------------------------------------------------------------
+dockercomposeissuestop_db_1    docker-entrypoint.sh mysqld   Up       3306/tcp 
+dockercomposeissuestop_web_1   nginx -g daemon off;          Exit 0
+Summarizing, the steps are:
+docker-compose up web (no detach mode)
+CTRL-C
+In case this is expected, I think the behavior should be documented in here.
+Related to #3524.

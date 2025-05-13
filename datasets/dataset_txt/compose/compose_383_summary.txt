@@ -1,0 +1,1 @@
+`>&2` and `exit 1` might be missing here. What do you think?

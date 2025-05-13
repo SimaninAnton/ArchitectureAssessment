@@ -1,0 +1,1 @@
+docker-compose pull doesn't work with mixure of official and local images

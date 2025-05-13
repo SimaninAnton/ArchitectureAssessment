@@ -1,0 +1,31 @@
+miganga commented on 19 Feb 2016
+using docker on Mac OS
+using docker-compose up with the file below.
+version: '2'
+services:
+  redis:
+    build:
+      context: redis
+      dockerfile: Dockerfile-redis
+    volumes:
+      - ./redis:/srv
+    command: sh /srv/post-run.sh
+    network_mode: service:kingkong
+  mongo:
+    build:
+      context: mongo
+      dockerfile: Dockerfile-mongo
+    volumes:
+      - ./mongo:/srv
+    command: sh /srv/post-run.sh
+    network_mode: service:kingkong
+  kingkong:
+    build:
+      context: kingkong
+      dockerfile: DockerFile
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./kingkong:/srv
+    command: sh /srv/post-run.sh
+when i do this, script run through command attributes are not executed all the way every time. sometimes it works, and sometimes only a few executes even though I don't touch the file.

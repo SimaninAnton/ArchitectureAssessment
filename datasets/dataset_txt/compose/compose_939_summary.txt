@@ -1,0 +1,1 @@
+docker-compose up for running containers gives error 'NoneType' object has no attribute 'get'

@@ -1,0 +1,54 @@
+JamJar00 commented on 12 May 2019
+Description of the issue
+When running docker-compose up over an SSH connection, i.e. DOCKER_HOST is set to ssh://user@my-site.com, any relative volume mounts to the filesystem will not synchronize content.
+For example when using the compose file
+version: '2'
+services:
+  web:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Can't use ~/static-serve despite being ci user as this doesn't work with docker-compose over SSH
+      - /home/ci/static-serve:/var/www/
+there is content in the /var/www folder in the container but changing the volume mount to ~/static-serve:/var/www/ results in the /var/www directory in the container being empty. In the DOCKER_HOST variable I am connecting as the ci user.
+When not operating over SSH this all works fine.
+Context information (for bug reports)
+Output of docker-compose version
+Using image docker/compose:1.24.0 on CI server.
+Output of docker version
+Client:
+ Version:           18.09.6
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        481bc77
+ Built:             Sat May  4 02:35:57 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.6
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       481bc77
+  Built:            Sat May  4 01:59:36 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+As this is on a CI server I can't get this easily I'm afraid.
+Steps to reproduce the issue
+Create a simple docker-compose file with a volume mount in the format ~/some-host-folder:/some-container-folder
+Add a file to ~/some-host-folder
+Run docker-compose up on the file over an SSH connection to a remote server.
+Exec into the container and examine the contents (or lack thereof!) /some-container-folder
+Repeat but change the path from ~/some-host-folder to /home/your-ssh-username/some-host-folder and the file will be present.
+Observed result
+The /some-container-folder folder in the container contains the file only when the path is absolute (i.e. /home/your-ssh-username/some-host-folder but not ~/some-host-folder).
+Expected result
+The /some-container-folder folder in the container contains the file when using either path.

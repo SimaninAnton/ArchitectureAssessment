@@ -1,0 +1,9 @@
+linlinlinlin commented on 23 Oct 2015
+EX: docker-compose up -var POSTGRES_VERSION=9.3
+Because many people using docker-compose to setup many applications at the same server.
+If there are two applications I have to using the same image with different tag. But variable only can read from shell environment. I cannot set POSTGRES_VERSION=9.3 and POSTGRES_VERSION=9.4 at the same time. If it can read from stdin will be more flexible.
+Variable priority:
+From stdin
+From shell environment
+Default value inside yaml file.
+Default empty string value (empty string)

@@ -1,0 +1,13 @@
+italomaia commented on 30 May 2017 •
+edited
+This doesn't work:
+version: '3'
+volumes:
+  - ux-data:/home/user/volumes/ux-data
+Nor this:
+version: '3.2'
+volumes:
+  common_code:
+    - type: volume
+    - source: /tmp/path
+The error message is the same in both cases: must be a mapping not an array

@@ -1,0 +1,32 @@
+vidarl commented on 28 Apr 2015
+Looks like compose will make a timeout error instantiating a container from a large ( 700Mb ) image
+Creating swarm_mysite_1...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 464, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 214, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 288, in start_or_create_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 190, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.container", line 36, in create
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 425, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 432, in create_container_from_config
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 119, in _post_json
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 79, in _post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 425, in post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 387, in send
+requests.exceptions.Timeout: HTTPConnectionPool(host='swarm1', port=8888): Read timed out. (read timeout=60)
+$ docker images
+swarm               latest              96b8c18d1208        11 days ago
+
+$ docker --version
+Docker version 1.6.0, build 4749651
+
+$ docker-compose --version
+docker-compose 1.2.0

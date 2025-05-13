@@ -1,0 +1,1 @@
+Restore support for other log drivers

@@ -1,0 +1,4 @@
+squeaky-pl commented on 20 Apr 2016
+Docker 1.11 has landed new feature to disable user namespaces per container when the daemon is running with global user namespace enabled.
+moby/moby#20111
+9

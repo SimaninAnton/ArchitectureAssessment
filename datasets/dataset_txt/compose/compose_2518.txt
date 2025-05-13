@@ -1,0 +1,21 @@
+Morpheu5 commented on 8 Apr 2016
+I was checking my config, when I noticed that my service
+  sftp:
+    container_name: sftp
+    build: ./compose/sftp
+    image: mp5/sftp
+    ports:
+      - 2122:22
+    volumes:
+      - af_www_htdocs:/htdocs/af_www
+turns into
+  sftp:
+    build:
+      context: /home/user/server/compose/sftp
+    container_name: sftp
+    image: mp5/sftp
+    ports:
+    - 127342
+    volumes:
+    - af_www_htdocs:/htdocs/af_www:rw
+when going through docker-compose config. This is the only publishing that maps two different ports on host and container, and all the others (say, 22:22, 80:80, 443:443) go through unchanged. Am I missing something?

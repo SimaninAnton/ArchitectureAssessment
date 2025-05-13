@@ -1,0 +1,282 @@
+rfay commented on 4 Nov 2019
+Description of the issue
+docker-compose (macOS) fails with rc4 (Docker Desktop Mac Edge 2.1.5.0). It looks like there's a syntax error or something.
+$ docker-compose -f badcompose.yaml  up
+Creating ddev-d8composer-db ... done
+Creating ddev-d8composer-dba ...
+Creating ddev-d8composer-web ...
+Creating ddev-d8composer-dba ... done
+ERROR: for ddev-d8composer-web  a bytes-like object is required, not 'str'
+
+ERROR: for web  a bytes-like object is required, not 'str'
+Traceback (most recent call last):
+  File "site-packages/docker/api/client.py", line 261, in _raise_for_status
+  File "site-packages/requests/models.py", line 940, in raise_for_status
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http+docker://localhost/v1.36/containers/5154c7d2e17e152a31a3513dad4e4354a4a57ba514b83382faff45eec9bb85d1/start
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "compose/service.py", line 625, in start_container
+  File "compose/container.py", line 241, in start
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/container.py", line 1095, in start
+  File "site-packages/docker/api/client.py", line 263, in _raise_for_status
+  File "site-packages/docker/errors.py", line 31, in create_api_error_from_http_exception
+docker.errors.APIError: 500 Server Error: Internal Server Error ("b'Ports are not available: /forwards/expose/port returned unexpected status: 500'")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1106, in up
+  File "compose/cli/main.py", line 1102, in up
+  File "compose/project.py", line 570, in up
+  File "compose/parallel.py", line 112, in parallel_execute
+  File "compose/parallel.py", line 210, in producer
+  File "compose/project.py", line 556, in do
+  File "compose/service.py", line 546, in execute_convergence_plan
+  File "compose/service.py", line 467, in _execute_convergence_create
+  File "compose/parallel.py", line 112, in parallel_execute
+  File "compose/parallel.py", line 210, in producer
+  File "compose/service.py", line 465, in <lambda>
+  File "compose/service.py", line 457, in create_and_start
+  File "compose/service.py", line 627, in start_container
+TypeError: a bytes-like object is required, not 'str'
+[87400] Failed to execute script docker-compose
+Context information (for bug reports)
+macOS Docker Desktop 2.1.5.0 - on macOS Catalina
+Output of docker-compose version
+docker-compose version 1.25.0-rc4, build 8f3c9c58
+docker-py version: 4.1.0
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.1c  28 May 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.4
+ API version:       1.40
+ Go version:        go1.12.10
+ Git commit:        9013bf5
+ Built:             Thu Oct 17 23:44:48 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      true
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.4
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.10
+  Git commit:       9013bf5
+  Built:            Thu Oct 17 23:50:38 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+No extra config
+Steps to reproduce the issue
+docker-compose -f badcompose.yaml up
+Observed result
+Expected result
+Stacktrace / full error message
+ERROR: for ddev-d8composer-web  a bytes-like object is required, not 'str'
+
+ERROR: for web  a bytes-like object is required, not 'str'
+Traceback (most recent call last):
+  File "site-packages/docker/api/client.py", line 261, in _raise_for_status
+  File "site-packages/requests/models.py", line 940, in raise_for_status
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http+docker://localhost/v1.36/containers/5154c7d2e17e152a31a3513dad4e4354a4a57ba514b83382faff45eec9bb85d1/start
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "compose/service.py", line 625, in start_container
+  File "compose/container.py", line 241, in start
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/container.py", line 1095, in start
+  File "site-packages/docker/api/client.py", line 263, in _raise_for_status
+  File "site-packages/docker/errors.py", line 31, in create_api_error_from_http_exception
+docker.errors.APIError: 500 Server Error: Internal Server Error ("b'Ports are not available: /forwards/expose/port returned unexpected status: 500'")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1106, in up
+  File "compose/cli/main.py", line 1102, in up
+  File "compose/project.py", line 570, in up
+  File "compose/parallel.py", line 112, in parallel_execute
+  File "compose/parallel.py", line 210, in producer
+  File "compose/project.py", line 556, in do
+  File "compose/service.py", line 546, in execute_convergence_plan
+  File "compose/service.py", line 467, in _execute_convergence_create
+  File "compose/parallel.py", line 112, in parallel_execute
+  File "compose/parallel.py", line 210, in producer
+  File "compose/service.py", line 465, in <lambda>
+  File "compose/service.py", line 457, in create_and_start
+  File "compose/service.py", line 627, in start_container
+TypeError: a bytes-like object is required, not 'str'
+[87400] Failed to execute script docker-compose
+Additional information
+Here's the contents of badcompose.yaml. This exact style of yaml has been working for at least 2 years with various versions of docker and docker-compose.
+networks:
+  default:
+    external: true
+    name: ddev_default
+services:
+  db:
+    build:
+      args:
+        BASE_IMAGE: drud/ddev-dbserver-mariadb-10.2:20191007_many_mariadb
+        gid: '20'
+        uid: '501'
+        username: rfay
+      context: /Users/rfay/workspace/d8composer/.ddev/.dbimageBuild
+    command: ''
+    container_name: ddev-d8composer-db
+    environment:
+      COLUMNS: '117'
+      DDEV_PROJECT: d8composer
+      LINES: '25'
+      TZ: ''
+    healthcheck:
+      interval: 1s
+      retries: 30
+      start_period: 20s
+      timeout: 2m
+    hostname: d8composer-db
+    image: drud/ddev-dbserver-mariadb-10.2:20191007_many_mariadb-built
+    labels:
+      com.ddev.app-type: drupal8
+      com.ddev.approot: /Users/rfay/workspace/d8composer
+      com.ddev.platform: ddev
+      com.ddev.site-name: d8composer
+    ports:
+    - 127.0.0.1:32768:3306/tcp
+    restart: "no"
+    stop_grace_period: 60s
+    user: '501:20'
+    volumes:
+    - source: mariadb-database
+      target: /var/lib/mysql
+      type: volume
+      volume:
+        nocopy: true
+    - source: /Users/rfay/workspace/d8composer/.ddev
+      target: /mnt/ddev_config
+      type: bind
+    - ddev-global-cache:/mnt/ddev-global-cache:rw
+  dba:
+    container_name: ddev-d8composer-dba
+    environment:
+      HTTP_EXPOSE: 8036:8036
+      PMA_PASSWORD: db
+      PMA_USER: db
+      TZ: ''
+      VIRTUAL_HOST: d8composer.ddev.site,sub1.ddev.site,sub2.ddev.site
+    healthcheck:
+      interval: 2m
+      retries: 1
+      timeout: 2s
+    hostname: d8composer-dba
+    image: drud/phpmyadmin:v1.11.0
+    labels:
+      com.ddev.app-type: drupal8
+      com.ddev.approot: /Users/rfay/workspace/d8composer
+      com.ddev.platform: ddev
+      com.ddev.site-name: d8composer
+    links:
+    - db:db
+    ports:
+    - target: 80
+    restart: "no"
+  web:
+    build:
+      args:
+        BASE_IMAGE: drud/ddev-webserver:20191025_mkcert_creation
+        gid: '20'
+        uid: '501'
+        username: rfay
+      context: /Users/rfay/workspace/d8composer/.ddev/.webimageBuild
+    cap_add:
+    - SYS_PTRACE
+    container_name: ddev-d8composer-web
+    environment:
+      COLUMNS: '117'
+      DDEV_PHP_VERSION: '7.2'
+      DDEV_PROJECT: d8composer
+      DDEV_PROJECT_TYPE: drupal8
+      DDEV_ROUTER_HTTPS_PORT: '443'
+      DDEV_ROUTER_HTTP_PORT: '80'
+      DDEV_WEBSERVER_TYPE: nginx-fpm
+      DDEV_XDEBUG_ENABLED: "false"
+      DEPLOY_NAME: local
+      DOCKER_IP: 127.0.0.1
+      DOCROOT: web
+      HOST_DOCKER_INTERNAL_IP: ''
+      HTTPS_EXPOSE: 443:80
+      HTTP_EXPOSE: 80:80,8025:8025
+      LINES: '25'
+      SSH_AUTH_SOCK: /home/.ssh-agent/socket
+      TZ: ''
+      VIRTUAL_HOST: d8composer.ddev.site,sub1.ddev.site,sub2.ddev.site
+    external_links:
+    - ddev-router:d8composer.ddev.site
+    - ddev-router:sub1.ddev.site
+    - ddev-router:sub2.ddev.site
+    healthcheck:
+      interval: 1s
+      retries: 10
+      start_period: 10s
+      timeout: 2m
+    hostname: d8composer-web
+    image: drud/ddev-webserver:20191025_mkcert_creation-built
+    labels:
+      com.ddev.app-type: drupal8
+      com.ddev.approot: /Users/rfay/workspace/d8composer
+      com.ddev.platform: ddev
+      com.ddev.site-name: d8composer
+    links:
+    - db:db
+    ports:
+    - 127.0.0.1::80/tcp
+    - 127.0.0.1::443/tcp
+    restart: "no"
+    user: '501:20'
+    volumes:
+    - source: nfsmount
+      target: /var/www/html
+      type: volume
+      volume:
+        nocopy: true
+    - /Users/rfay/workspace/d8composer/.ddev:/mnt/ddev_config:ro
+    - ddev-global-cache:/mnt/ddev-global-cache:rw
+    - ddev-ssh-agent_socket_dir:/home/.ssh-agent:rw
+version: '3.6'
+volumes:
+  ddev-global-cache:
+    name: ddev-global-cache
+  ddev-ssh-agent_socket_dir:
+    external: true
+    name: ddev-ssh-agent_socket_dir
+  mariadb-database:
+    name: d8composer-mariadb
+  nfsmount:
+    driver: local
+    driver_opts:
+      device: :/System/Volumes/Data/Users/rfay/workspace/d8composer
+      o: addr=host.docker.internal,hard,nolock,rw
+      type: nfs
+5

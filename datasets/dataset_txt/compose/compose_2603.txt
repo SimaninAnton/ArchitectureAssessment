@@ -1,0 +1,2 @@
+iamKurt commented on 18 Mar 2016
+Is there a way to enforce the container and app startup sequence using compose? Specifically, I want to ensure that an app is completely started prior to another app trying to consume it. The depends_on attribute seems to enforce container sequence but doesn't wait for the app to complete its startup.

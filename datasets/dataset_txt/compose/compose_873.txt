@@ -1,0 +1,20 @@
+florianeichin commented on 13 Feb 2018
+I try to build docker compose for development with
+sudo python setup.py develop
+But get the following error log:
+Installed /home/florian/compose
+Processing dependencies for docker-compose==1.17.0.dev0
+Searching for requests!=2.11.0,<2.12,>=2.6.1
+Reading https://pypi.python.org/simple/requests/
+Downloading https://pypi.python.org/packages/2e/ad/e627446492cc374c284e82381215dcd9a0a87c4f6e90e9789afefe6da0ad/requests-2.11.1.tar.gz#md5=ad5f9c47b5c5dfdb28363ad7546b0763
+Best match: requests 2.11.1
+Processing requests-2.11.1.tar.gz
+Writing /tmp/easy_install-ngysfe/requests-2.11.1/setup.cfg
+Running requests-2.11.1/setup.py -q bdist_egg --dist-dir /tmp/easy_install-ngysfe/requests-2.11.1/egg-dist-tmp-0qlqbp
+warning: no files found matching 'test_requests.py'
+creating /usr/local/lib/python2.7/dist-packages/requests-2.11.1-py2.7.egg
+Extracting requests-2.11.1-py2.7.egg to /usr/local/lib/python2.7/dist-packages
+Adding requests 2.11.1 to easy-install.pth file
+
+Installed /usr/local/lib/python2.7/dist-packages/requests-2.11.1-py2.7.egg
+error: requests 2.11.1 is installed but requests!=2.18.0,>=2.14.2 is required by set(['docker'])

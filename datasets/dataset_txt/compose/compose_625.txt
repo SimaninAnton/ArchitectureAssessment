@@ -1,0 +1,118 @@
+yi-huan commented on 17 Jun 2018
+Description of the issue
+I use "docker-compose up" to run the php-nginx cannot obtain the client IP, the display is the gateway IP.
+I've searched a lot of options, but I can't solve them.
+Original ip is not passed to containers
+Unable to retrieve user's IP address in docker swarm mode
+Real remote IP adress
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 7641a569
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:48 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+networks:
+  lns-network:
+    driver: bridge
+services:
+  nginx:
+    image: nginx:1-alpine
+    networks:
+      lns-network: null
+    ports:
+    - published: 9000
+      target: 80
+    volumes:
+    - E:\testip\web:/usr/share/nginx/html:rw
+    - E:\testip\nginx.vh.default.conf:/etc/nginx/conf.d/default.conf:ro
+  php:
+    image: php:7-fpm
+    networks:
+      lns-network: null
+    volumes:
+    - E:\testip\web:/usr/share/nginx/html:rw
+version: '3.6'
+Steps to reproduce the issue
+------------------------------------------ files S ------------------------------------------
+file: ./docker-compose.yml
+version: '3.6'
+
+services:
+  php:
+    image: php:7-fpm
+    volumes:
+      - ./web:/usr/share/nginx/html
+    networks:
+      - lns-network
+  nginx:
+    image: nginx:1-alpine
+    ports:
+      - "9000:80"
+    volumes:
+      - ./web:/usr/share/nginx/html
+      - ./nginx.vh.default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - lns-network
+networks:
+  lns-network:
+    driver: bridge
+file: ./nginx.vh.default.conf
+server {
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.php index.html index.htm;
+    }
+    
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location ~* \.php$ {
+        root            /usr/share/nginx/html;
+        fastcgi_index   index.php;
+        fastcgi_pass    php:9000;
+        include         fastcgi_params;
+        fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param   SCRIPT_NAME        $fastcgi_script_name;
+    }
+}
+file: ./web/index.php
+<?php
+  phpinfo();
+------------------------------------------ files E ------------------------------------------
+Image are official.
+Operating conditions:
+
+This is a local access and mobile Access.But client IP is always gateway IP.
+This is the network details:
+Observed result
+Get gateway IP
+Expected result
+Get Client IP
+Additional information
+Windows 10 1803（17134.112）

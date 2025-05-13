@@ -1,0 +1,1 @@
+`pull --ignore-pull-failures` does not ignore failures since docker 1.13

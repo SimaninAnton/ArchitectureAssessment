@@ -1,0 +1,4 @@
+CWSpear commented on 29 Jan 2016
+Is there a way to build an image based on another service, i.e. extend their Dockerfile?
+For example, I have a PHP app that installs a bunch of deps on build and starts php-fpm on up called php, then a I have a separate container that runs migrations and clears caches, etc, called app. The thought is I can re-run app and keep php running to minimize downtime when I need to redeploy.
+Currently, both images need all those deps, so I have to make sure those RUN directives in their Dockerfiles are mirrored, but ideally, I could build app on top of php and not have to do that. Is that currently possible or anything that others have interest in?

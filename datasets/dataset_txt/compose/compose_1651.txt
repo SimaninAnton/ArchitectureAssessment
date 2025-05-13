@@ -1,0 +1,232 @@
+lanmingle commented on 23 Feb 2017
+编排集群模式，发现几点不能使用。
+如果使用复制模式，这个编排的挂载文件不复制，机器 A 存在某些文件，机器 B 反而不会复制。
+如果使用全局模式，这个编排的网络不能自定义编排IP，如：ipv4_address: '192.255.0.10' 。
+Cluster pattern, found some can't use.
+If using replication mode, the arrangement of mounting the file is not copied, machine A certain file, the machine B won't copy instead.
+If using a global model, the network can't custom choices IP, such as: ipv4_address: '192.255.0.10'
+docker daemon
+DOCKER_NETWORK=" --ip-masq=true --ip-forward=true --ip=0.0.0.0 --fixed-cidr=172.255.0.0/24 --bip=172.255.0.1/24 --dns=8.8.8.8 --dns=114.114.114.114 "
+docker network - local for bridge - docker_gwbridge
+docker network create \
+--attachable="false" \
+--driver="bridge" \
+--internal="false" \
+--ipam-driver="default" \
+--ipv6="false" \
+--gateway="182.255.0.1" \
+--ip-range="182.255.0.0/24" \
+--subnet="182.255.0.1/24" \
+--opt="com.docker.network.bridge.default_bridge=false" \
+--opt="com.docker.network.bridge.enable_icc=true" \
+--opt="com.docker.network.bridge.enable_ip_masquerade=true" \
+--opt="com.docker.network.bridge.host_binding_ipv4=0.0.0.0" \
+--opt="com.docker.network.bridge.name=docker_gwbridge" \
+--opt="com.docker.network.driver.mtu=1500" \
+--label="com.bestci.network.name=docker_gwbridge" \
+--label="com.bestci.network.description=docker swarm for gateway bridge network" \
+docker_gwbridge
+docker network - swarm for overlay - docker_overlay
+docker network create \
+--attachable="false" \
+--driver="overlay" \
+--internal="false" \
+--ipam-driver="default" \
+--ipv6="false" \
+--gateway="192.255.0.1" \
+--ip-range="192.255.0.0/24" \
+--subnet="192.255.0.1/24" \
+--opt="encrypted=true" \
+--label="com.bestci.network.name=docker_overlay" \
+--label="com.bestci.network.description=docker swarm for gateway overlay network" \
+docker_overlay
+docker-compose.yml
+# https://docs.docker.com/compose/compose-file
+
+version: "3"
+
+services:
+    nginx:
+        #build:
+             #context: .
+             #dockerfile: Dockerfile
+             #args:
+                #arg: param
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #cap_add:
+            #- ALL
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #cap_drop:
+            #- NET_ADMIN
+            #- SYS_ADMIN
+        #command:
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #cgroup_parent:
+        # 集群部署模式将会错误【不建议在版本 3 中使用】
+        #container_name: 'master_nginx_service'
+        # 集群部署模式将会生效
+        deploy:
+            # 全局: global 限制于独立一个节点，复制: replicated 复制容器之各个节点，这个是默认
+            #mode: 'replicated'
+            mode: 'global'
+            # 复制数量，只限制于复制模式
+            #replicas: 3
+            #placement:
+                #constraints:
+                    #- node.role == manager
+            update_config:
+                parallelism: 3
+                delay: 5s
+                monitor: 5s
+                max_failure_ratio: 3
+            # 容器资源约束
+            resources:
+                # 限制
+                limits:
+                    cpus: '0.5'
+                    memory: 512M
+                # 保留
+                reservations:
+                    cpus: '0.01'
+                    memory: 256M
+            restart_policy:
+                # 条件: none | on-failure | any
+                condition: any
+                delay: 5s
+                max_attempts: 3
+                window: 10s
+            labels:
+                com.bestci.compose.deploy.url: ''
+                com.bestci.compose.deploy.name: 'Compose Deploy Nginx'
+                com.bestci.compose.deploy.group: 'com.bestci.compose.deploy.nginx'
+                com.bestci.compose.deploy.artifact: 'compose-deploy-nginx'
+                com.bestci.compose.deploy.version: '1.0.0.LBT-SNAPSHOT'
+                com.bestci.compose.deploy.packaging: 'replicated'
+                com.bestci.compose.deploy.description: 'Compose Replicate Mode Nginx Deploy'
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #devices:
+        #depends_on:
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #dns:
+            #- 192.168.1.254
+            #- 8.8.8.8
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #dns_search:
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #tmpfs:
+            #- /tmp
+        #entrypoint:
+        #env_file:
+            #- ./common.env
+        #environment:
+            #- name: value
+        #expose:
+            #- 80
+            #- 443
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #external_links:
+            #- container:name
+        extra_hosts:
+            - 'master.nginx.vbt-bestci.com:127.0.0.1'
+            #- 'master.nginx.vbt-bestci.com:172.18.0.10'
+            #- 'master.artifactory.vbt-bestci.com:172.18.0.11'
+            #- 'master.jenkins.vbt-bestci.com:172.18.0.12'
+            #- 'master.teamcity.vbt-bestci.com:172.18.0.13'
+            #- 'master.elasticsearch.vbt-bestci.com:172.18.0.14'
+            #- 'master.logstash.vbt-bestci.com:172.18.0.15'
+            #- 'master.kibana.vbt-bestci.com:172.18.0.16'
+        #group_add:
+        healthcheck:
+            test: ["CMD","curl","-k","-L","-f","https://master.nginx.vbt-bestci.com"]
+            interval: 3s
+            timeout: 3s
+            retries: 3
+            disable: false
+        image: 'bestci/nginx:1.11.10'
+        #isolation:
+        labels:
+            com.bestci.compose.service.url: ''
+            com.bestci.compose.service.name: 'Compose Service Nginx'
+            com.bestci.compose.service.group: 'com.bestci.compose.service.nginx'
+            com.bestci.compose.service.artifact: 'compose-service-nginx'
+            com.bestci.compose.service.version: '1.0.0.LBT-SNAPSHOT'
+            com.bestci.compose.service.packaging: 'single'
+            com.bestci.compose.service.description: 'Compose Replicate Mode Nginx Service'
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #links:
+        #logging:
+            #driver: syslog
+            #options:
+            #syslog-address: "tcp://192.168.1.254:1080"
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #network_mode: 'bridge'
+        networks:
+            #- docker_overlay
+            docker_overlay:
+                #aliases:
+                    #- aliases1
+                ipv4_address: '192.255.0.10'
+                #ipv6_address:: ''
+                #link_local_ips:
+                    #- 172.19.0.1
+        #pid: 'host'
+        # https://docs.docker.com/compose/compose-file/#/ports
+        ports:
+            - '80:80'
+            - '443:443'
+        # https://docs.docker.com/compose/compose-file/#/secrets
+        #secrets:
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #security_opt:
+            #- label:user:USER
+            #- label:role:ROLE
+        #stop_grace_period:1m30s
+        #stop_signal: SIGUSR-NGINX
+        #sysctls:
+            #net.core.somaxconn: 1024
+            #net.ipv4.tcp_syncookies: 0
+        ulimits:
+            nproc: 65535
+            nofile:
+                soft: 65536
+                hard: 65536
+            #memlock:
+                #soft: -1
+                #hard: -1
+        # 集群部署模式将会忽略【不建议在版本 3 中使用】
+        #userns_mode: 'host'
+        volumes:
+            - '/srv/lib/docker/containers/nginx/conf/:/srv/lib/docker/containers/nginx/conf/'
+            - '/srv/lib/docker/containers/nginx/logs/:/srv/lib/docker/containers/nginx/logs/'
+            - '/srv/lib/docker/composes/nginx/webapps/:/srv/lib/docker/containers/nginx/webapps/'
+            - '/srv/lib/docker/composes/nginx/nginx.conf:/srv/lib/docker/containers/nginx/conf/nginx.conf'
+            - '/srv/lib/docker/composes/nginx/conf.d/:/srv/lib/docker/containers/nginx/conf/conf.d/'
+            - '/etc/ssl/tls/:/etc/ssl/tls/'
+
+# https://docs.docker.com/compose/compose-file/#/secrets-configuration-reference
+#secrets:
+    #name:
+        #file:./secret
+
+#volumes:
+    #volume_driver:
+    #driver:
+    #driver_opts:
+    #labels:
+
+networks:
+    docker_overlay:
+        external: true
+    #docker_overlay:
+        #driver: overlay
+        #driver_opts:
+        #enable_ipv6: false
+        #ipam:
+            #driver: default
+            #config:
+                #- subnet: 10.255.100.0/16
+        #internal: true
+        #labels:
+            #com.vbt-bestci.composes.network.name: 'master nginx network'
+            #com.vbt-bestci.composes.network.description: 'network nginx compose for master vbt bestci'
+        #external: true

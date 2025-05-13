@@ -1,0 +1,1 @@
+Mac /usr/local/bin/docker-compose: line 39: realpath: command not found

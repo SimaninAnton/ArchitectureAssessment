@@ -1,0 +1,1 @@
+`routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed` on CentOS with docker 1.5.0 client and server

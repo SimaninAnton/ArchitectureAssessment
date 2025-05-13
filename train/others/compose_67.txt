@@ -1,0 +1,8 @@
+bhemeswararao commented on 4 Nov 2019
+Please post on our forums: https://forums.docker.com for questions about using docker-compose.
+Posts that are not a bug report or a feature/enhancement request will not be addressed on this issue tracker.
+bp_network2$ ./start.sh
+don't rewrite paths for Windows Git Bash users
+export MSYS_NO_PATHCONV=1
+docker-compose -f docker-compose.yml down
+ERROR: Duplicate mount points: [/home/sowedane/HLPOC/bp_network2/crypto-config/peerOrganizations/org1.blockprovenance.net/ca:/etc/hyperledger/fabric-ca-server-config:rw, /home/sowedane/HLPOC/bp_network2/crypto-config/peerOrganizations/org2.blockprovenance.net/ca:/etc/hyperledger/fabric-ca-server-config:rw]

@@ -1,0 +1,9 @@
+qiulang commented on 3 Nov 2017
+I installed docker-compose at /usr/local/bin/docker-compose (according to https://github.com/docker/compose/releases)
+But when I tried to run it I got error "-bash: /usr/bin/docker-compose: No such file or directory" and I believe the path was set correctly. So how do I fix it ?
+root@iZ2zeecbyds24gwmuvqekgZ:/usr# /usr/local/bin/docker-compose --version
+docker-compose version 1.17.0, build ac53b73
+root@iZ2zeecbyds24gwmuvqekgZ:/usr# docker-compose --version
+-bash: /usr/bin/docker-compose: No such file or directory
+root@iZ2zeecbyds24gwmuvqekgZ:/usr# echo  $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games

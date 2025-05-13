@@ -1,0 +1,1 @@
+pip installed docker-compose cannot start up the docker containers

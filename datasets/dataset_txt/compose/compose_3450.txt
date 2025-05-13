@@ -1,0 +1,7 @@
+iandyh commented on 21 Jul 2015
+Hi
+I am using docker-compose web mvn test to run the tests. To avoid downloading dependencies multiple times, I've added /root/.m2/repository as data volume.
+However, after the first docker-compose web mvn test, the data in /root/.m2/repository was not persisted therefore the next run will need to download all the dependencies again.
+On the other hand, docker-compose up is able to persist all the data after restarting the containers.
+I am using Boot2docker on a MacBook. The boot2docker version is v1.7.0 while Docker client and server version is v1.7.0 as well.
+Thanks for your help.

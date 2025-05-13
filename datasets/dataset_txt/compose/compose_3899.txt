@@ -1,0 +1,35 @@
+Yajo commented on 23 Feb 2015
+Try this:
+virtualenv pyenv
+source pyenv/bin/activate
+pip install docker-compose==1.1.0-rc2
+docker-compose up
+You will get this:
+Traceback (most recent call last):
+  File "./pyenv/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "./pyenv/lib/python2.7/site-packages/pkg_resources.py", line 2829, in <module>
+    working_set = WorkingSet._build_master()
+  File "./pyenv/lib/python2.7/site-packages/pkg_resources.py", line 451, in _build_master
+    return cls._build_from_requirements(__requires__)
+  File "./pyenv/lib/python2.7/site-packages/pkg_resources.py", line 464, in _build_from_requirements
+    dists = ws.resolve(reqs, Environment())
+  File "./pyenv/lib/python2.7/site-packages/pkg_resources.py", line 643, in resolve
+    raise VersionConflict(dist, req) # XXX put more info here
+pkg_resources.VersionConflict: (requests 2.5.1 (./pyenv/lib/python2.7/site-packages), Requirement.parse('requests>=2.2.1,<2.5.0'))
+pip list, in case it matters:
+backports.ssl-match-hostname (3.4.0.2)
+docker-compose (1.1.0-rc2)
+docker-py (0.7.2)
+dockerpty (0.3.2)
+docopt (0.6.2)
+pip (1.5.6)
+PyYAML (3.11)
+requests (2.5.1)
+setuptools (3.6)
+six (1.9.0)
+texttable (0.8.2)
+websocket-client (0.25.0)
+wsgiref (0.1.2)
+Workaround:
+pip install requests<2.5.0

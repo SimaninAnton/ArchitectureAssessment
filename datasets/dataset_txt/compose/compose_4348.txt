@@ -1,0 +1,18 @@
+hunterloftis commented on 13 Apr 2014
+I get this intermittently (sometimes it does shutdown gracefully):
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping dailylead_db_1...
+Stopping dailylead_queue_1...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 39, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 30, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 47, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 316, in up
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.log_printer", line 20, in run
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.multiplexer", line 20, in loop
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/Queue", line 182, in get
+thread.error: release unlocked lock

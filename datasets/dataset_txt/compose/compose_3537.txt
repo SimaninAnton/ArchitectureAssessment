@@ -1,0 +1,34 @@
+parabuzzle commented on 25 Jun 2015
+We have extends which is awesome, but I would like to flip it the other way around with an includes operator. Would it be possible to do something like this:
+# web-common.yml
+web: 
+  image: nginx
+  ports: 
+    - "80:80"
+# db-common.yml
+db:
+  image: postgres
+  ports: 
+    - "5432:5432"
+# redis-common.yml
+db:
+  image: redis
+  ports: 
+    - "6379:6379"
+# production-compose.yml
+includes:
+  - db-common.yml
+  - redis-common.yml
+  - web-common.yml
+# development-compose.yml
+includes:
+  - db-common.yml
+  - redis-common.yml
+
+web: 
+  extends:
+    file: web-common.yml
+    service: web
+  command: bundle exec rails s -p 80 -b 0.0.0.0 thin
+I may have missed this in the docs, but I don't see anything in the docs that explains how to do something like this, and I think it would be super useful and would reduce the amount of repeated config in projects.
+1

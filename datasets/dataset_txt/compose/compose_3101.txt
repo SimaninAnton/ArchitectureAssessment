@@ -1,0 +1,78 @@
+Yajo commented on 12 Nov 2015
+Description of problem:
+No way to read container logs.
+docker version:
+Client:
+ Version:      1.8.2-fc23
+ API version:  1.20
+ Package Version: docker-1.8.2-10.git28c300f.fc23.x86_64
+ Go version:   go1.5.1
+ Git commit:   cc2d489-dirty
+ Built:        Tue Nov  3 06:41:23 UTC 2015
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.8.2-fc23
+ API version:  1.20
+ Package Version: 
+ Go version:   go1.5.1
+ Git commit:   cc2d489-dirty
+ Built:        Tue Nov  3 06:41:23 UTC 2015
+ OS/Arch:      linux/amd64
+docker-compose version:
+docker-compose version: 1.5.0
+docker-py version: 1.5.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 1.0.2d-fips 9 Jul 2015
+docker info:
+Containers: 10
+Images: 359
+Storage Driver: devicemapper
+ Pool Name: docker-253:1-2622453-pool
+ Pool Blocksize: 65.54 kB
+ Backing Filesystem: extfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 29.59 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 77.79 GB
+ Metadata Space Used: 26.79 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.121 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107 (2015-09-05)
+Execution Driver: native-0.2
+Logging Driver: journald
+Kernel Version: 4.2.5-300.fc23.x86_64
+Operating System: Fedora 23 (Workstation Edition)
+CPUs: 2
+Total Memory: 7.681 GiB
+Name: hpjairo.stage7.com
+ID: 5MPC:7SJQ:5HS4:ZZFB:E2W2:FTBX:NIAV:5NSN:TZ32:TAIU:XRUO:LBVY
+uname -a:
+Linux hpjairo.stage7.com 4.2.5-300.fc23.x86_64 #1 SMP Tue Oct 27 04:29:56 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+Environment details (AWS, VirtualBox, physical, etc.):
+Physical, Fedora 22.
+Steps to Reproduce:
+docker-compose up
+Actual Results:
+odoo_wdb_1 is up-to-date
+odoo_sass_1 is up-to-date
+Starting odoo_appdata_1
+Starting odoo_dbdata_1
+odoo_db_1 is up-to-date
+odoo_app_1 is up-to-date
+Attaching to odoo_wdb_1, odoo_sass_1, odoo_appdata_1, odoo_dbdata_1, odoo_db_1, odoo_app_1
+wdb_1     | taching: configured logging reader does not support reading
+db_1      | taching: configured logging reader does not support reading
+sass_1    | taching: configured logging reader does not support reading
+app_1     | taching: configured logging reader does not support reading
+odoo_appdata_1 exited with code 0
+odoo_dbdata_1 exited with code 0
+Expected Results:
+Being able to read logs.
+Additional info:
+Used to work with docker-compose 1.4.0.

@@ -1,0 +1,14 @@
+bsideup commented on 8 Apr 2019
+Description of the issue
+Usually, every resource created by Docker Compose contains com.docker.compose.project label. But when compose creates a network, it is not labeled.
+Context information (for bug reports)
+Testcontainers' users report a lot of unused, prunnable networks:
+testcontainers/testcontainers-java#955
+Steps to reproduce the issue
+Create a Docker Compose file with a network
+Start it
+Inspect the created network, see "Labels": {}
+Observed result
+Networks are not labeled
+Expected result
+Networks (as well as any other Docker resource created by Docker Compose) should have a consistent com.docker.compose.project label set

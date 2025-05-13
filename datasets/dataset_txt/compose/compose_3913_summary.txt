@@ -1,0 +1,1 @@
+volume mapping does not work properly when host path is the same

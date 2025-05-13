@@ -1,0 +1,12 @@
+nathanleclaire commented on 11 Aug 2014
+[Not urgent]
+When adding values to the Service struct for unmarshalling from the fig.yml file, I'm noticing that there is some flexibility to the current implementation that may not be possible in a Go rewrite due to Python's dynamic nature (feel free to chime in if you have ideas how to work around this with reflection tricks or something though- just don't want to modify the existing YAML parser).
+For instance, environment variables right now can be defined in two formats:
+environment:
+  RACK_ENV: development
+  SESSION_SECRET:
+
+environment:
+  - RACK_ENV=development
+  - SESSION_SECRET
+I have a hard time envisioning how to do this in Go, since one would have a type of []string and the other would have a type of map[string] string. What do you guys think? Less flexibility in fig.yml may not necessarily be a bad thing, since it encourages consistency and readability, but it is definitely bad for backwards compatibility.

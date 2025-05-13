@@ -1,0 +1,6 @@
+gustavopaes commented on 19 Oct 2017 •
+edited
+There is no documentation about the new "scale" parameter at compose file doc page:
+https://docs.docker.com/compose/compose-file/compose-file-v2/
+And the link to "scale" parameter at changelog is broken:
+https://docs.docker.com/compose/compose-file/compose-versioning/#version-22

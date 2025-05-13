@@ -1,0 +1,7 @@
+Contributor
+jgsqware commented on 20 Nov 2015
+Hello,
+with the docker 1.9 version, we can create volume like that docker volume create --name myvolume
+There is a way to manage that in the docker-compose.yml?
+I know we can use the named volume directly in the docker-compose file, but i would like to create it also.
+Thanks in advance

@@ -1,0 +1,8 @@
+conradkleinespel commented on 23 Feb 2016
+Hello,
+With the recent Docker Compose release (1.6 I think), dependencies between services are defined with the depends_on configuration option. This is great !
+However, in 1.5, you could docker-compose run <service> and all dependencies (links) would be started. This seems like it is no longer the case. Now I have to to docker-compose up and then docker-compose run <service> so that all dependencies are started properly for <service>.
+The use case is to have one service that starts a shell with access to all other running services, without putting an SSH server into each separate service. Then I run docker-compose run shell and I instantly have a shell with access to all services.
+Is there a specific reason for this? Am I doing something wrong?
+Thanks for taking the time to read this.
+Best regards, Conrad

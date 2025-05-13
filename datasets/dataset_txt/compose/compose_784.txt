@@ -1,0 +1,61 @@
+JohnMaguire commented on 22 Mar 2018
+Version Information:
+-> % docker version
+Client:
+ Version: 17.12.1-ce
+ API version: 1.35
+ Go version: go1.9.4
+ Git commit: 7390fc6
+ Built: Tue Feb 27 22:13:43 2018
+ OS/Arch: linux/amd64
+
+Server:
+ Engine:
+  Version: 17.12.1-ce
+  API version: 1.35 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 7390fc6
+  Built: Tue Feb 27 22:20:43 2018
+  OS/Arch: linux/amd64
+  Experimental: false
+-> % docker-compose -v
+docker-compose version 1.20.0, build unknown
+Context directory:
+jmaguire@scorpion [04:05:09 PM] [~/src/docker-poc] 
+-> % tree
+.
+├── docker-compose.yml
+├── Dockerfile
+└── tree
+    ├── a
+    │   └── b -> ../b
+    └── b
+        └── foo
+
+4 directories, 3 files
+Dockerfile
+FROM scratch
+
+CMD ["/bin/true"]
+docker-compose.yml
+version: '3'
+services:
+  foo:
+    build:
+      dockerfile: Dockerfile
+      context: .
+Output of docker-compose build
+jmaguire@scorpion [04:07:04 PM] [~/src/docker-poc] 
+-> % docker-compose build
+Building foo
+ERROR: Error processing tar file(exit status 1): open /tree/a/b/foo: no such file or directory
+Output of docker build .
+jmaguire@scorpion [04:05:16 PM] [~/src/docker-poc] 
+-> % docker build .
+Sending build context to Docker daemon  5.632kB
+Step 1/2 : FROM scratch
+ ---> 
+Step 2/2 : CMD ["/bin/true"]
+ ---> Using cache
+ ---> ba10cb9a9cad
+Successfully built ba10cb9a9cad

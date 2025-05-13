@@ -1,0 +1,20 @@
+paolomainardi commented on 20 May 2016
+As in the subject, we have some git custom hooks based on "docker exec" which are executed by git to perform some operations, like checking coding standard.
+Today i tried to use the exec command of docker-compose, but i have just this error stracktrace:
+➜  www git:(dev) ✗ git commit -am "fix docker binaries as the starterkit"
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 57, in main
+  File "compose/cli/main.py", line 108, in perform_command
+  File "compose/cli/main.py", line 353, in exec_command
+  File "site-packages/dockerpty/pty.py", line 338, in start
+  File "site-packages/dockerpty/io.py", line 32, in set_blocking
+  File "site-packages/dockerpty/io.py", line 351, in fileno
+  File "site-packages/dockerpty/io.py", line 103, in fileno
+  File "socket.py", line 224, in meth
+  File "socket.py", line 170, in _dummy
+socket.error: [Errno 9] Bad file descriptor
+docker-compose returned -1
+The command which get executed:
+#!/usr/bin/env bash
+docker-compose exec php ls

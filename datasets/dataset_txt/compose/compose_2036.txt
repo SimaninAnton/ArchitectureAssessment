@@ -1,0 +1,78 @@
+5f6b3fb8 commented on 27 Sep 2016 •
+edited
+I'm seeing issues when when recreating a project in docker-compose 1.8.x.
+The first deploy is successful - network, volume, containers are created. If I run the same command again I would expect to see "up-to-date".
+Instead, I'm getting this:
+Recreating 6d014264613b_jenkinsdev_web_1
+
+ERROR: for web  open /var/lib/docker/containers/6d014264613bbc148f2a549f2629596df36a7154ce1c725492449feeb6681b12/.tmp-config.v2.json464797388: no such file or directory
+Encountered errors while bringing up the project.
+When I run docker-compose I'm passing "-p jenkinsdev", but for whatever the reason, it's prepending part of the container ID to the project name.
+If I try to re-run this yet again, it prepends another ID to the project name, like Recreating 6d014264613b_6d014264613b_jenkinsdev_web_1
+I've reverted back to docker-compose 1.7.1 and it works as expected. What could be the issue in 1.8?
+Server Version: 1.12.1
+Storage Driver: devicemapper
+Pool Name: docker-pool
+Pool Blocksize: 65.54 kB
+Base Device Size: 53.69 GB
+Backing Filesystem: xfs
+Data file:
+Metadata file:
+Data Space Used: 2.031 GB
+Data Space Total: 96.63 GB
+Data Space Available: 94.6 GB
+Metadata Space Used: 4.678 MB
+Metadata Space Total: 5.365 GB
+Metadata Space Available: 5.36 GB
+Thin Pool Minimum Free Space: 9.663 GB
+Udev Sync Supported: true
+Deferred Removal Enabled: false
+Deferred Deletion Enabled: false
+Deferred Deleted Device Count: 0
+Library Version: 1.02.107-RHEL7 (2015-12-01)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: null host bridge overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.1.12-37.5.1.el7uek.x86_64
+Operating System: Oracle Linux Server 7.2
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 7.795 GiB
+Name: dock01
+ID: AFBR:JHEB:PRM7:K3JU:DJ4V:2SW5:3SAC:2ZLB:BZ3G:UNJQ:MRXZ:FQ5N
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+docker-compose.dev.yaml
+version: '2'
+services:
+  web:
+    extends:
+      file: common.yaml
+      service: web
+    environment:
+      JAVA_OPTS: -server -Xms2048m -Xmx2048m
+    ports:
+      - "8080:8080"
+      - "49187:49187"
+
+volumes:
+  home:
+common.yaml
+version: '2'
+services:
+  web:
+    environment:
+      JENKINS_SLAVE_AGENT_PORT: 49187
+    image: private-repo/jenkins-master:${CI_BUILD_REF_NAME}
+    restart: always
+    volumes:
+      - home:/var/jenkins_home

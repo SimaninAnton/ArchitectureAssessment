@@ -1,0 +1,25 @@
+Retired commented on 19 Feb 2016
+Using the following docker-compose.yml:
+version: '2'
+services:
+    sandy:
+        image: ubuntu:15.10
+Executing docker-compose run sandy drops you into the container with the /bin/bash command (presumably).
+However, trying to detach from the container with Ctrl-p Ctrl-q causes the following panic.
+root@b60ebb50c65e:/# Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/compose/cli/main.py", line 55, in main
+  File "/compose/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/compose/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/compose/compose/cli/main.py", line 174, in perform_command
+  File "/compose/compose/cli/main.py", line 507, in run
+  File "/compose/compose/cli/main.py", line 724, in run_one_off_container
+  File "/compose/venv/lib/python2.7/site-packages/dockerpty/pty.py", line 334, in start
+  File "/compose/venv/lib/python2.7/site-packages/dockerpty/pty.py", line 373, in _hijack_tty
+  File "/compose/venv/lib/python2.7/site-packages/dockerpty/io.py", line 375, in flush
+  File "/compose/venv/lib/python2.7/site-packages/dockerpty/io.py", line 138, in write
+  File "/compose/venv/lib/python2.7/site-packages/dockerpty/io.py", line 164, in do_write
+socket.error: [Errno 32] Broken pipe
+docker-compose returned -1
+On a related note, running docker run -it --rm ubuntu:15.10 then trying to detach with Ctrl-p Ctrl-q consistently causes the terminal to lock up. A panic isn't even thrown. Detaching works fine without the --rm flag though.
+I installed docker-compose via the Docker Toolbox for Mac OS X (version 1.10.1).

@@ -1,0 +1,12 @@
+prochnowc commented on 3 Mar 2017 •
+edited
+When i use relative path for context and dockerfile in the docker-compose.yml file the build command fails:
+context: ..\..\Services
+dockerfile: ..\..\Services\AuditTrail\Dockerfile.windows
+ERROR: Forbidden path outside the build context: ..\..\Services\AuditTrail\Dockerfile.windows ()
+If i change path to absolute build works fine.
+PS C:\dev\Source\DevTools\Docker> docker-compose version
+docker-compose version 1.11.2, build f963d76f
+docker-py version: 2.1.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016

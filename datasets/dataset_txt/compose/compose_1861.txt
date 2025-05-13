@@ -1,0 +1,16 @@
+marascha commented on 11 Dec 2016
+With Docker 1.13-rc-3 it's now possible to deploy stacks directly from compose-files written in version 3.0.
+docker stack deploy --compose-file compose.yml mystack
+Unfortunately docker-compose does not support version 3.0 and it's new features like deploy-definitions.
+compose.yml:
+version: '3.0'
+    services:
+      service1:
+         deploy:
+            replicas: 2
+As a result I'm not able to run a docker-compose pull before deploying the stack defined in my V3 compose-file. Changing the version to 2.1 will not help as deploy being not supported in V2.1 leads to another error:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services.service1: 'deploy'
+It would be great if the support for V3 could be add to compose soon.
+I'm using compose in version 1.9.0, build 2585387.
+1

@@ -1,0 +1,4 @@
+caulagi commented on 2 Dec 2018
+Description of the issue
+The fish-shell completion for docker-compose in contrib/completion/fish/docker-compose.fish is incomplete. It doesn't complete the name of containers for subcommands like kill, exec, etc. A more complete fish-shell completion is here - https://github.com/barnybug-archive/docker-fish-completion/blob/33e5b1a05d8222db46ed70ee8a36141e7460e87f/docker-compose.fish
+1

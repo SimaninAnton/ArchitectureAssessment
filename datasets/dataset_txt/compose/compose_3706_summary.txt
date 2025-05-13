@@ -1,0 +1,1 @@
+SSL error running docker-compose on OSX

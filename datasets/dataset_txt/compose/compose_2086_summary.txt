@@ -1,0 +1,1 @@
+container host bound port not accessible when running shorewall

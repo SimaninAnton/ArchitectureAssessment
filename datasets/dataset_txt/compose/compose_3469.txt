@@ -1,0 +1,5 @@
+pchico83 commented on 15 Jul 2015
+This configuration setting would be used to resolve relative paths in the "volumes" property. Our use case is:
+Container is running a build after git clone a repository.
+This container is mounting /var/run/docker.sock to make use of docker cache between builds.
+The build container does docker-compose up, but relative paths don't work as containers are created by the host docker daemon (it would have work in a docker-in-docker environment).

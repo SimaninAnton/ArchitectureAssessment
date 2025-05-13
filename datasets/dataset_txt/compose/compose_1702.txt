@@ -1,0 +1,16 @@
+daviddyball commented on 10 Feb 2017
+Briefly describe the problem you are having in a few paragraphs.
+docker-compose is very particular about the ordering of arguments and parameters. It would be nicer if it was more flexible, like most *NIX commands are.
+Steps to reproduce the issue:
+Run any command against a service that takes arguments (e.g. tailing logs), but place the arguments after the service name
+docker-compose logs mycontainer -f
+Describe the results you received:
+> docker-compose logs mycontainer -f
+ERROR: No such service: -f
+Describe the results you expected:
+Argument position should be irrelevant to running a command. In the example above, I would expect compose to tail/follow the logs for the container mycontainer.
+Output of docker-compose version:
+docker-compose version 1.11.0, build 6de1806
+docker-py version: 2.0.2
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017

@@ -1,0 +1,1 @@
+Add ability to resolve image digests without pulling entire images

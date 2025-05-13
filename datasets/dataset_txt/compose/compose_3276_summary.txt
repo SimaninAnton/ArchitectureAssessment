@@ -1,0 +1,1 @@
+UnicodeEncodeError while building in a directory with a path containing non-ascii characters

@@ -1,0 +1,38 @@
+thewilli commented on 15 Jul 2016
+According to the documentation docker-compose allows to extend a configuration by using multiple configuration files.
+This has become pretty handy for me. Unfortunately it does not work for all properties as expected, the extra_hosts property gets replaced instead of extended.
+Please see the following MWE:
+# conf1.yml
+version: "2"
+services:
+    test:
+        image: ubuntu:14.04
+        expose:
+            - "80"
+        extra_hosts:
+            - "foo:1.2.3.4"
+
+# conf2.yml
+version: "2"
+services:
+    test:
+        expose:
+            - "443"
+        extra_hosts:
+            - "bar:5.6.7.8"
+$ docker-compose --version
+docker-compose version 1.7.1, build 6c29830
+$ docker-compose -f conf1.yml -f conf2.yml config
+networks: {}
+services:
+  test:
+    expose:
+    - '80'
+    - '443'
+    extra_hosts:
+      bar: 5.6.7.8
+    image: ubuntu:14.04
+version: '2.0'
+volumes: {}
+The foo entry gets removed in the extra_hosts list, but I would have expected the list to contain both hosts, foo and bar, just as it worked with expose.
+Can you please check if you can modify docker-compose so it behaves the same for expose and extra_hosts and extend instead of replace the entries?

@@ -1,0 +1,1 @@
+Docker stack deploy does not support systemd containers (cap_add, tmpfs)

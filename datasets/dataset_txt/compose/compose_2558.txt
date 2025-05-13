@@ -1,0 +1,8 @@
+cookandy commented on 31 Mar 2016
+Hello,
+I am using Docker Compose 1.5.2 on CoreOS stable (835.13.0), and I notice that if I have restart: always in my docker-compose.yml file, the containers don't start automatically upon reboot.
+However, as soon as I login and issue a docker command (such as docker ps or even docker version) the containers start up as expected. It's like I have to call docker once before compose kicks in.
+I installed compose by using this method:
+curl -L https://github.com/docker/compose/releases/download/1.5.2/run.sh > /opt/bin/docker-compose
+chmod +x /opt/bin/docker-compose
+It sounds similar to this issue, but not exactly the same. Any ideas?

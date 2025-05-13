@@ -1,0 +1,6 @@
+vochicong commented on 30 Sep 2017
+docker-compose build
+does not follow the order in which the services are specified.
+docker-compose build base prod dev
+will actually try to build in the order base, dev and prod,
+which is alphabetical order and not the order specified on the command line.

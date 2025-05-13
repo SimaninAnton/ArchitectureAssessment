@@ -1,0 +1,25 @@
+winggundamth commented on 22 Jul 2015
+My yaml file
+app:
+    image: httpd
+    volumes:
+        - /var/log
+data:
+    image: tianon/true
+    volumes_from:
+        - app
+When I run with docker-compose
+$ docker-compose -f app.yml up
+Creating compose_app_1...
+Creating compose_data_1...
+Attaching to compose_app_1, compose_data_1
+app_1  | AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.19. Set the 'ServerName' directive globally to suppress this message
+app_1  | AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.19. Set the 'ServerName' directive globally to suppress this message
+app_1  | [Wed Jul 22 06:38:22.368277 2015] [mpm_event:notice] [pid 1:tid 140181165893504] AH00489: Apache/2.4.16 (Unix) configured -- resuming normal operations
+app_1  | [Wed Jul 22 06:38:22.368385 2015] [core:notice] [pid 1:tid 140181165893504] AH00094: Command line: 'httpd -D FOREGROUND'
+compose_data_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping compose_app_1...
+Exception in thread Thread-1 (most likely raised during interpreter shutdown):
+Traceback (most recent call last):
+What exactly docker-compose suggested how to run data-only container?

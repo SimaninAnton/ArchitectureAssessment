@@ -1,0 +1,1 @@
+I am trying to scale a selenium/node-chrome-debug using the docker-compose. How do I expose host ports for the containers on the fly or some way to expose the host ports?

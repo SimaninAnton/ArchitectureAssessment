@@ -1,0 +1,1 @@
+Losing all data in data volume when container is restarted with Docker Compose.

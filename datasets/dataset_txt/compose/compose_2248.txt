@@ -1,0 +1,37 @@
+mrapczynski commented on 7 Jul 2016
+Take for example the following Compose YAML:
+version: '2'
+
+volumes:
+    docker.plugin-test:
+        driver: ceph-rbd
+
+services:
+    plugin-test:
+        environment:
+            - constraint:environment==test
+            - reschedule:on-node-failure
+        image: busybox
+        volume_driver: ceph-rbd
+        volumes:
+            - docker.plugin-test:/plugin-test
+The problem I have is Compose decides to prefix the project directory name onto the volume name. So if I have a directory of YML files named compose, then instead of setting up my volume with the declared name docker.plugin-test, it tries to mount a non-existent volume named compose_docker.plugin-test. Overriding the project name to be blank such as with -p "" does not seem to work.
+This is proving to be really annoying because it is inconsistent with the other ways volumes are mounted onto a container through a plugin. docker volume create ... allows me to specify the exact name I want. Compose v1 or docker run --volume-drive=ceph-rbd -v docker.plugin-test:/data also respect the name I provide.
+I don't want Compose or my plugin to always be expected to create and manage an external volume. Most often I create and format the block device outside of Docker for testing before mounting it onto a container. So I expect the name I already chose to be honored.
+So as to not break existing behavior for developers who may already be used to this, can we allow volumes with custom drivers to override the name that Compose would choose? For example:
+version: '2'
+
+volumes:
+    docker.plugin-test:
+        driver: ceph-rbd
+        name: docker.plugin-test
+
+services:
+    plugin-test:
+        environment:
+            - constraint:environment==test
+            - reschedule:on-node-failure
+        image: busybox
+        volume_driver: ceph-rbd
+        volumes:
+            - docker.plugin-test:/plugin-test

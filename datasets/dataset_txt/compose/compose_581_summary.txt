@@ -1,0 +1,1 @@
+Docker internal domains (i.e. nginx server_name) can't be curl'd from different services

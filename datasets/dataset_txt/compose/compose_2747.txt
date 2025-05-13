@@ -1,0 +1,53 @@
+echupriyanov commented on 19 Feb 2016
+I’m having trouble running simple compose task on Swarm:
+version: "2"
+services:
+  elastic-01:
+    image: elasticsearch:2
+    environment:
+      SERVICE_NAME: elastic
+    ports:
+      - 9200:9200
+    volume_driver: flocker
+    volumes:
+      - 'data_01:/usr/share/elasticsearch/data'
+
+  elastic-02:
+    image: elasticsearch:2
+    ports:
+      - 9201:9200
+    volume_driver: flocker
+    volumes:
+      - 'data_02:/usr/share/elasticsearch/data'
+    command: elasticsearch --discovery.zen.ping.unicast.hosts=elastic-01
+
+volumes:
+  data_01:
+    external:
+      name: "es_data_01"
+
+  data_02:
+    external:
+      name: "es_data_02»
+Running docker-compose up I receiving following error:
+eric@iMac-Eric /V/D/W/s/a/elk-swarm> docker-compose up
+ERROR: Volume es_data_01 declared as external, but could not be found. Please create the volume manually using `docker volume create --name=es_data_01` and try again.
+eric@iMac-Eric /V/D/W/s/a/elk-swarm> 
+At the same time time, docker command works ok:
+eric@iMac-Eric /V/D/W/s/a/elk-swarm> docker run -it --rm --volume-driver flocker -v es_data_01:/data ubuntu
+root@96b0c807c46f:/# ls /data
+elasticsearch  test1
+root@96b0c807c46f:/# exit
+eric@iMac-Eric /V/D/W/s/a/elk-swarm> 
+Also, here is output from volume list:
+eric@iMac-Eric /V/D/W/s/a/elk-swarm> docker volume ls
+DRIVER              VOLUME NAME
+local               swarm-node-05a.cybertonica.aws/3f7c3fb82a73f539f318e14b3f260b3cc32d50836b544d5db4572d202366d16c
+flocker             es_data_02
+flocker             es_data_01
+local               swarm-node-06a.cybertonica.aws/a5a94eb763e09f6cf49a2b95dddbd7351a1e1074a690b3553311690120a4dc18
+flocker             es_data_01
+flocker             es_data_02
+eric@iMac-Eric /V/D/W/s/a/elk-swarm> 
+If I run docker-compose against any single docker node, everything works ok too.
+What am I doing wrong here?

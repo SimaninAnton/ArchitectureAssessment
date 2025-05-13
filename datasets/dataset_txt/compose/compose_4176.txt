@@ -1,0 +1,3 @@
+unhashable commented on 2 Oct 2014
+How would I clear a volume for a particular image? Think we ought to add that to fig or does docker already support that?
+Thanks!

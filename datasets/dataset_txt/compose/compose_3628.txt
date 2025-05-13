@@ -1,0 +1,45 @@
+slashdevsda commented on 22 May 2015
+Hi,
+Naming a file using UTF-8 characters, even when it's unrelated to any build process, leads to python's "UnicodeDecodeError". It's not a major issue, but the error message (traceback) is not really relevant.
+$ ls
+nginx/    api/   database/  docker-compose.yml
+
+$ touch nginx/é
+$ docker-compose -f docker-compose.yml build 
+Building database...
+Step 0 : FROM debian:wheezy
+ ---> b96d1548a24e
+
+[...]
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.utils.utils", line 73, in tar
+  File "/code/build/docker-compose/out00-PYZ.pyz/os", line 284, in walk
+  File "/code/build/docker-compose/out00-PYZ.pyz/posixpath", line 80, in join
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 1: ordinal not in range(128)
+Version :
+$ docker-compose --version
+docker-compose 1.2.
+Docker-compose.yml :
+$ cat docker-compose.yml 
+
+database:
+  build: database/
+
+  expose:
+    - "5432"
+api:
+
+  build: api/
+  links:
+    - database
+  #ports:
+  #  - "5000:5000"
+  expose:
+    - "5000"
+
+nginx:
+  build: nginx/
+  links:
+    - api
+  ports:
+    - "80:80"
+    - "443:443"

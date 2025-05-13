@@ -1,0 +1,4 @@
+matschaffer commented on 29 May 2015
+Apologies if this is covered somewhere, but I wasn't able to find anything.
+The new --x-smart-recreate is working really nicely for changes to running containers and new containers, but if I remove a container from container from the YAML definition it just stays running.
+It'd be fantastic to support automatic removal if that's at all possible.

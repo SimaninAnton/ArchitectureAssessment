@@ -1,0 +1,9 @@
+lezwon commented on 13 Aug 2017
+Hello,
+I've recently installed the latest docker, and wanted to fire up docker-compose up on docker-compose.yml. I started dockerd with admin rights and another powershell interface to run docker-compose up on the .yml file. Note that I'm using Windows 10. When i run the compose command, i get an error saying:
+ERROR: client version 1.22 is too old. Minimum supported API version is 1.25, please upgrade your client to a newer version.
+I have the latest docker. When i run docker version in non-admin prompt i get the following:
+Client: Version: 17.06.0-ce API version: 1.31 Go version: go1.8.3 Git commit: 02c1d87 Built: Fri Jun 23 21:30:30 2017 OS/Arch: windows/amd64 error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.31/version: open //./pipe/docker_engine: Access is denied. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
+Note that the api level is 1.31 here. However when I the same command in admin mode, i get:
+Client: Version: 17.06.0-ce API version: 1.24 (downgraded from 1.31) Go version: go1.8.3 Git commit: 02c1d87 Built: Fri Jun 23 21:30:30 2017 OS/Arch: windows/amd64 Error response from daemon: client version 1.24 is too old. Minimum supported API version is 1.25, please upgrade your client to a newer version
+The api version gets downgraded, and I feel this is the reason i cannot execute my docker-compose command. If anyone could help me resolve this issue, it'd be very helpful. I need to set up my docker environment immediately. How do i run docker with api level of 1.31 in admin mode?

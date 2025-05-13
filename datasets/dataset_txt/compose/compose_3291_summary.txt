@@ -1,0 +1,1 @@
+Adding new link does not update /etc/hosts with name specified in docker-compose.yml

@@ -1,0 +1,5 @@
+Contributor
+bfirsh commented on 22 Apr 2015
+https://docs.docker.com/reference/run/#pid-settings-pid
+This would make it possible to run mesos-slave with Compose: http://mail-archives.apache.org/mod_mbox/mesos-user/201504.mbox/%3CA0B336D2-387E-4E86-BB7B-7B7B3E5FC10C@adobe.com%3E
+Ref #754

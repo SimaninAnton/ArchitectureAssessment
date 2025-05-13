@@ -1,0 +1,4 @@
+isuftin commented on 24 Jul 2017
+Currently when issuing docker-compose build, there is no way to specify via -c or --compose-file to have Docker use a specific configuration to build the image. It always uses docker-compose.yml
+It would be very nice if we were able to use an alternate compose configuration to perform the build.
+1

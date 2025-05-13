@@ -1,0 +1,36 @@
+smarschner commented on 10 Jan 2018
+We use docker-compose to run an app consisting of several services for testing and development. The mount setup we have been using for some time involves a bind mount to bring source code into the container, with tmpfs mounts over certain subdirectories of that mount to bring in files from the docker build process that should not be shared with the host or persist across builds (for example node_modules and complied executables).
+When we upgraded to Docker 17.12 and docker-compose 1.18, this started failing with the error The path [...] is not shared from OS X and is not known to Docker. naming the path to the tmpfs mount in the container's filesystem. This seems wrong and disagrees with Docker's behavior.
+A minimal reproduction is:
+$ cat docker-compose.yml 
+version: "3.2"
+services:
+  tmpfstest:
+    image: ubuntu:latest
+    volumes:
+    - type: tmpfs
+      target: /foo/bar
+    command: sleep 600
+which fails with these errors:
+[~/tmp] $ docker-compose up
+Creating tmp_tmpfstest_1 ... error
+
+ERROR: for tmp_tmpfstest_1  Cannot start service tmpfstest: Mounts denied: 
+The path /foo/bar
+is not shared from OS X and is not known to Docker.
+You can configure shared paths from Docker -> Preferences... -> File Sharing.
+See https://docs.docker.com/docker-for-mac/osxfs/#namespaces for more info.
+.
+
+ERROR: for tmpfstest  Cannot start service tmpfstest: Mounts denied: 
+The path /foo/bar
+is not shared from OS X and is not known to Docker.
+You can configure shared paths from Docker -> Preferences... -> File Sharing.
+See https://docs.docker.com/docker-for-mac/osxfs/#namespaces for more info.
+.
+ERROR: Encountered errors while bringing up the project.
+The Docker invocation
+docker run -it --rm --mount type=tmpfs,target=/foo/bar ubuntu bash
+works as expected (inside the container you can see /foo/bar and write into it but the contents do not appear in the host filesystem).
+A workaround is to actually create the directory /foo on the host and add it to the whitelist using the Docker Preferences UI, but this is clunky and has to become part of the procedure for all developers to get the system up an running on a fresh Docker installation.
+Version info attached.

@@ -1,0 +1,32 @@
+zh99998 commented on 29 Aug 2017 •
+edited
+docker-compose -v
+docker-compose version 1.15.0, build e12f3b9
+
+docker -v
+Docker version 1.13.1, build 092cba3
+version: '2.2'
+services:
+  thc:
+    restart: always
+    image: diy
+    cpu_shares: 512
+    mem_limit: 1000000000
+    ports:
+      - '6662:22'
+      - '666:7911'
+      - '6661:7922'
+    volumes:
+      - thc:/root
+      - ./ygopro/motd:/etc/motd:ro
+volumes:
+  thc:
+docker inspect diy_thc_1 | grep Memory
+            "Memory": 0,
+            "KernelMemory": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": -1,
+            "MemorySwappiness": -1,
+docker stats diy_thc_1
+CONTAINER           CPU %               MEM USAGE / LIMIT   MEM %               NET I/O             BLOCK I/O           PIDS
+diy_thc_1           0.00%               0 B / 0 B           0.00%               0 B / 648 B         0 B / 0 B           0

@@ -1,0 +1,5 @@
+velvetcat commented on 25 Jul 2016
+and override the appropriate service/command clause in the docker-compose.yml
+Usage:
+up [options] [SERVICE [COMMAND [ARGS...]]]
+This will allow reusing services in a more flexible way.

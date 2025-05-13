@@ -1,0 +1,4 @@
+smoebody commented on 14 Aug 2017
+I have an issue with the container-naming in docker-compose. We have a multi-user scenario where multiple developers are working on one docker-enabled host, each of them in their own home-dir, on their own clone (branch) of the project. The developers are using a docker-container to test their implementation.
+The problem is that - as long as they do not clone the project to different folder-names - the container names are identical and therefore conflicting each other. It would be nice if the container-name would be hashed from the absolute filesystem path or a prefix could be defined.
+Any suggestion how to circumvent this issue?

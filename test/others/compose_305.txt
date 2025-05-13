@@ -1,0 +1,18 @@
+symonsoft commented on 30 Jan 2019
+Description of the issue
+images command skips additional compose files set with -f option.
+Context information (for bug reports)
+Output of docker-compose version
+$ docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Steps to reproduce the issue
+Create several compose files docker-compose-first.yml and docker-compose-second.yml with respectively defined services first and second.
+Run command docker-compose -f docker-compose-first.yml -f docker-compose-second.yml build
+After build complete run command docker-compose -f docker-compose-first.yml -f docker-compose-second.yml images
+Observed result
+The images command lists only first image.
+Expected result
+The images command must list both first and second images.

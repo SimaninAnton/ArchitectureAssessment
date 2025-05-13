@@ -1,0 +1,13 @@
+clinta commented on 26 Aug 2016
+version: "2"
+
+services:
+  foo:
+    image: busybox
+    command: sleep 50
+    environment:
+    - FOOBAR: '{"foo": "bar"}'
+# docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.foo.environment contains {"FOOBAR": "{\"foo\": \"bar\"}"}, which is an invalid type, it should be a string
+I've tried several different methods of escaping or quoting {"foo": "bar"} but compose won't pass through the string.

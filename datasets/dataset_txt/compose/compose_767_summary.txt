@@ -1,0 +1,1 @@
+PowerShell incorrectly reports failure when running docker-compose in a remote session

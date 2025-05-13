@@ -1,0 +1,29 @@
+dmaumenee commented on 6 Feb 2016
+Compose 1.6 silently ignore the "networks" option when the service extends from another one.
+This version 2 docker file :
+version: '2'
+services:
+  foo:
+    image: busybox
+    command: echo foo
+  bar:
+   extends: foo
+   command: echo bar
+   networks:
+      - mynetwork
+networks:
+  mynetwork:
+Results in the following resolved config after loading:
+networks:
+  mynetwork: {}
+services:
+  bar:
+    command: echo bar
+    image: busybox
+  foo:
+    command: echo foo
+    image: busybox
+version: '2.0'
+volumes: {}
+The "bar" container is not attach to "mynetwork".
+1

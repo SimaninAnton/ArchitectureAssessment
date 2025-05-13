@@ -1,0 +1,28 @@
+alvinr commented on 21 Jan 2016
+Problem
+It appears that the extends syntax in Ver2 format is not working and gives the following message
+ERROR: Cannot extend service 'bar' in test-base.yml: Service not found
+Reproduce
+test-base.yml
+version: 2
+
+services:
+    bar:
+        image: python:2.7
+test-extends.ml
+version: 2
+
+services:
+    foo:
+        extends:
+            file: test-base.yml
+            service: bar
+Run with docker-compose
+$ docker-compose -f test-extends.yml up
+ERROR: Cannot extend service 'bar' in test-base.yml: Service not found
+Environment
+$ docker-compose --version
+docker-compose version 1.6.0rc1, build d2556a1
+$ uname -a
+Darwin vero-3.local 15.3.0 Darwin Kernel Version 15.3.0: Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64
+vero-3:~/prod-app$ 

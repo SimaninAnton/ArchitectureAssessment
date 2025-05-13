@@ -1,0 +1,26 @@
+CrimsonGlory commented on 3 May 2018
+From the release notes:
+Binary name | SHA-256 sum
+-- | --
+docker-compose-Darwin-x86_64 | a0c5058632d97afc06a8f652102fb1596052a937f63a4576b4b761504bc75a51
+docker-compose-Linux-x86_64 | 9be993f578828dc4257135b0c8ba94d6077167440710a8423d8aaf68f82ad0c1
+docker-compose-Windows-x86_64.exe | e22746289e9e700723b38f6b94cc164cbb04e416213eb751edc853786d84b91f
+$ wget https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64 -O test_compose2
+--2018-05-03 15:24:17--  https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
+Resolving github.com (github.com)... 192.30.253.112, 192.30.253.113
+Connecting to github.com (github.com)|192.30.253.112|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://github-production-release-asset-2e65be.s3.amazonaws.com/15045751/8a3718b2-4dff-11e8-955b-ffbe3d3e42a3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180503%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180503T152420Z&X-Amz-Expires=300&X-Amz-Signature=c90bd71edd91bcbf6f35bd46768e2abd9a5e88786646c3520c3bea1fc27ef86d&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment%3B%20filename%3Ddocker-compose-Linux-x86_64&response-content-type=application%2Foctet-stream [following]
+--2018-05-03 15:24:18--  https://github-production-release-asset-2e65be.s3.amazonaws.com/15045751/8a3718b2-4dff-11e8-955b-ffbe3d3e42a3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180503%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180503T152420Z&X-Amz-Expires=300&X-Amz-Signature=c90bd71edd91bcbf6f35bd46768e2abd9a5e88786646c3520c3bea1fc27ef86d&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment%3B%20filename%3Ddocker-compose-Linux-x86_64&response-content-type=application%2Foctet-stream
+Resolving github-production-release-asset-2e65be.s3.amazonaws.com (github-production-release-asset-2e65be.s3.amazonaws.com)... 52.216.97.227
+Connecting to github-production-release-asset-2e65be.s3.amazonaws.com (github-production-release-asset-2e65be.s3.amazonaws.com)|52.216.97.227|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 10858808 (10M) [application/octet-stream]
+Saving to: 'test_compose2'
+
+100%[=============================================================================================================>] 10,858,808   593KB/s   in 25s
+
+2018-05-03 15:24:43 (429 KB/s) - 'test_compose2' saved [10858808/10858808]
+
+$ sha256sum test_compose2
+8a11713e11ed73abcb3feb88cd8b5674b3320ba33b22b2ba37915b4ecffdf042  test_compose2

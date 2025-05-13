@@ -1,0 +1,11 @@
+Govinda-Fichtner commented on 31 Jul 2016
+Currently it is not possible to build Docker-Compose for ARM (e.g. Raspberry Pi) with the standard Dockerfile and scripts in scripts/build/linux and scripts/build/linux-entrypoint.
+This is mainly due to the fact that pyinstaller does not come with a bootloader that supports ARM out of the box.
+How to add ARM support
+This repository and PR demonstrates what needs to be done to build Docker-Compose for ARM.
+I would like to help and prepare a PR that adds support for building Compose for ARM.
+Before I start I would like to get some feedback and some direction on how to go about this.
+One way to implement this would be to add some detection for the OS and the architecture similar to how it is done in the docker/docker repo.
+Based on the result one could either install standard pyinstaller or the version patched for ARM support. This switch could be implemented in scripts/build/linux-entrypoint.
+What do you think?
+17

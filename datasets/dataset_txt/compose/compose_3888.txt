@@ -1,0 +1,4 @@
+bitliner commented on 27 Feb 2015
+I want to use fig.sh on production servers.
+Do you have any more information about downtime?
+Does fig up have a builtin mechanism to avoid downtime?

@@ -1,0 +1,61 @@
+rmelick commented on 12 May 2016
+This is basically the same issue as #2866 (which was fixed in #2894). I was hoping that using volumes_from would allow the container to be successfully recreated, but that seems to not be the case.
+What I Have
+Full project is available on github: https://github.com/rmelick/docker-compose-up
+Docker Versions
+Docker version 1.11.1, build 5604cbe
+docker-machine version 0.6.0, build e27fb87
+docker-compose version 1.6.2, build 4d72027
+Swarm Cluster
+3 nodes in aws (1 running consul, 1 master, 1 node for deploying the app).
+Created using docker-machine (swarm/swarm.sh create)
+Docker images
+I have two example images.
+The data-container, which contains a volume that will be mounted by the app container using volumes_from
+FROM alpine:3.3
+RUN rm -f "/environment-conf"
+RUN mkdir "/environment-conf"
+COPY . /environment-conf
+VOLUME ["/environment-conf"]
+CMD ["tail", "-f", "/dev/null"]
+The app-container
+FROM alpine:3.3
+ENV cacheBust 2
+CMD ["tail", "-f", "/dev/null"]
+What I Do
+With the following docker-compose file (also available at https://github.com/rmelick/docker-compose-up/blob/master/docker-compose.yml)
+version: '2'
+services:
+  app:
+    image: rmelick/docker-compose-up-app-container:latest
+    hostname: app
+    container_name: app
+    ports:
+     - "10080:10080"
+    volumes_from:
+      - appConfig:ro
+    environment:
+      - "constraint:node==docker-compose-up-node"
+  appConfig:
+    image: rmelick/docker-compose-up-data-container:latest
+    environment:
+      - "constraint:node==docker-compose-up-node"
+I run the following
+eval $(docker-machine env --swarm docker-compose-up-master)
+docker-compose up -d
+docker-compose up -d --force-recreate
+What I Expected
+I expected the app container to be recreated successfully
+What Happened Instead
+I saw the following error
+rmelick@rmelick-ld:~/src/other/docker-compose-up$ docker-compose up -d --force-recreate
+Recreating dockercomposeup_appConfig_1
+Recreating app
+ERROR: Unable to find a node that satisfies the following conditions 
+[port 10080 (Bridge mode)]
+[available container slots]
+[--volumes-from=c1819375f073a25a6056ef208b081e697111dd9d0e53953fd6af99ec65044275:ro]
+The full log from a different run with --verbose is attached: docker-compose-log.txt
+Question
+The comments in #2866 and #2894 implied this failure would happen if my app container had volumes that needed to be copied over to its replacement instance during the --force-recreate. But, the only volume it's using is the read only volume supplied by the data container. It would be totally ok to recreate my app container without copying any volumes, right?
+1

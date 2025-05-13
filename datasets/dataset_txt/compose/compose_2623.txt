@@ -1,0 +1,27 @@
+Contributor
+schmunk42 commented on 16 Mar 2016
+In advance, sorry if this topic is already discussed somewhere else, I remember some comments here and there.
+When I run docker-compose pull on against a swarm all images are pulled on all nodes - also if you have defined constraints.
+It would be really helpful, if docker-compose would pull only on those node(s), which match the constraints, eg app==1.
+docker version
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 22:37:33 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.1.0
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   a0fd82b
+ Built:        Thu Feb  4 08:55:18 UTC 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+3

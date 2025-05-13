@@ -1,0 +1,5 @@
+artisticcheese commented on 16 Aug 2018
+Description of the issue
+Docker compose format needs to suppport -isolation parameter for build option
+Context information (for bug reports)
+As per documentation (https://docs.docker.com/compose/compose-file/#build) there is no supported version like that.

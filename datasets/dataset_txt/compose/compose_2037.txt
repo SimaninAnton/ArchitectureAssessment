@@ -1,0 +1,29 @@
+F21 commented on 27 Sep 2016 •
+edited
+I am using compose 1.8.1 and docker 1.12.0, build 8eab29e.
+My docker-compose.yml looks like this:
+version: '2'
+
+services:
+  phoenix:
+    image: boostport/hbase-phoenix-all-in-one:1.2.3-4.8.0
+    ports:
+      - "8765:8765"
+
+  app:
+    image: golang:1.7.1-alpine
+    environment:
+      AVATICA_HOST: http://phoenix:8765
+      COVERALLS_TOKEN:
+    command: /bin/sh
+    volumes:
+      - .:/source
+I brought up the container using docker-compose up -d:
+Status: Downloaded newer image for boostport/hbase-phoenix-all-in-one:1.2.3-4.8.0
+
+Creating avatica_app_1
+Creating avatica_phoenix_1
+When I try to run exec, the container name is wrong, so it fails:
+$ docker-compose exec app /source/.travis.setup.sh
+ERROR: No container found for app_1
+Compose creates the container as avatica_app_1, but is attempting to call exec on app_1.

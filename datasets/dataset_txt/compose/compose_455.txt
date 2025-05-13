@@ -1,0 +1,2 @@
+nurrazamanjoy commented on 12 Oct 2018
+I was trying to install setup docker-compose 2.0 version but fail ubuntu 16.04 LTS 64 bit. is any one help to solve my problem?

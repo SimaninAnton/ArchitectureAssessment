@@ -1,0 +1,1 @@
+Returning the string "None" when an environment variable doesn't exist on the Host

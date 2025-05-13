@@ -1,0 +1,3 @@
+rickshawhobo commented on 1 Apr 2017
+According to the documentation docker-compose exec -d should run in detached mode, but after running with -d the control of the terminal is not returned. Am I missing something?
+1

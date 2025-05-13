@@ -1,0 +1,4 @@
+msingleton commented on 28 Nov 2016
+It would be great to support the "--force-recreate" option from the CLI to the compose file. Right now it's something that we mostly have to remind people to use, including it in the compose file (mostly for dev environments) would be nice.
+Happy to put together a PR but wanted to gauge interest first
+1

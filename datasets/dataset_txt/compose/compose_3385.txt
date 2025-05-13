@@ -1,0 +1,3 @@
+yanndinendal commented on 12 Aug 2015
+docker-compose up lb wsgi now also logs other containers, not just those explicitly passed in argument ("lb" and "wsgi" in this example).
+So instead of having just the logs I'm interested in like before, I'm now flooded with logs of verbose containers like varnish.

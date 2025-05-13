@@ -1,0 +1,6 @@
+leebenson commented on 15 Aug 2016
+The -f flag is missing from build. This prevents secondary configurations having images rebuilt on change.
+A use case is having a separate config for development or test runners, like I'm doing here:
+docker-compose -f docker-compose.test.yml run test_runner
+In this case, docker build just re-builds the images in docker-compose.yml and not docker-compose.test.yml.
+Would be nice to have a -f to share behaviour with up and run.

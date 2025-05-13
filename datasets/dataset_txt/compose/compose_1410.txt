@@ -1,0 +1,28 @@
+mahmoud commented on 6 Jun 2017
+Hi there! Ran into a bit of an issue with docker-compose 1.13.0, build 1719ceb. In my test the issue goes back to at least 1.11.0.
+A script I'm running does docker-compose down, which results in an uncaught exception that ends with the line: "requests.exceptions.InvalidSchema: Missing dependencies for SOCKS support.":
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 118, in perform_command
+  File "compose/cli/main.py", line 358, in down
+  File "compose/project.py", line 286, in down
+  File "compose/project.py", line 252, in stop
+  File "compose/project.py", line 498, in containers
+  File "compose/project.py", line 489, in _labeled_containers
+  File "site-packages/docker/api/container.py", line 189, in containers
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/api/client.py", line 183, in _get
+  File "site-packages/requests/sessions.py", line 488, in get
+  File "site-packages/requests/sessions.py", line 475, in request
+  File "site-packages/requests/sessions.py", line 596, in send
+  File "site-packages/requests/adapters.py", line 390, in send
+  File "site-packages/docker/transport/ssladapter.py", line 56, in get_connection
+  File "site-packages/requests/adapters.py", line 290, in get_connection
+  File "site-packages/requests/adapters.py", line 184, in proxy_manager_for
+  File "site-packages/requests/adapters.py", line 43, in SOCKSProxyManager
+requests.exceptions.InvalidSchema: Missing dependencies for SOCKS support.
+I'm running through docker machine and nothing in the docker compose yaml even mentions socks.
+The script that wraps the docker-compose does set ALL_PROXY, which I think may be causing requests or some other library to eagerly load socks support.
+My recommendation would be to add requests[socks] to the setup.py and call it good.
+4

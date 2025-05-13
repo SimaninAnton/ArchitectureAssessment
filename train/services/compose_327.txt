@@ -1,0 +1,57 @@
+obahareth commented on 14 Jan 2019
+Description of the issue
+In the past it was possible to do something like this:
+volumes:
+   - './:/opt/app'
+   - /opt/app/node_modules/
+to ensure that I can mount my_app but without mounting my_app/node_modules since my container already has installed node_modules inside of it. This approach used to work to achieve an effect of "ignoring" a subdirectory but no longer does (this approach is also actually the first result you get when searching for how to ignore subdirectories).
+Even though during my build-process in the Dockerfile I created that directory and installed files into it, after running with docker-compose up I still see the directory on my host machine. I remember seeing an issue here that mentioned the possibility of adding a .volumeignore file (but for Docker itself, not Compose). I am not sure if this is a Docker issue or a Compose issue.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:43 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  app:
+    build:
+      context: /Users/obahareth/Development/github/obahareth/docker-compose-issue-ignoring-subdirectory
+    volumes:
+    - /Users/obahareth/Development/github/obahareth/docker-compose-issue-ignoring-subdirectory:/opt/app:cached
+    - /opt/opp/node_modules
+version: '3.0'
+Steps to reproduce the issue
+Clone the example repository reproducing the issue.
+Navigate to the directory in your terminal.
+Run docker-compose build
+Run docker-compose run app ls, you will observe that the node_modules folder is there, also run ls on your host machine and you will observe that it is also there.
+Delete the node_modules folder from your host machine using rm -r ./node-modules.
+Run docker-compose run app ls again, you will observe that the node_modules folder is gone from the container.
+Observed result
+The node_modules folder exists but is shared between my host machine and the container. If I delete the folder on my machine, it is deleted in the container.
+Expected result
+That I would see the node_modules folder within the container (that I created when building using my Dockerfile), and not have it tied to the node_modules on my machine. If I delete node_modules in my machine, it should not delete it in my container. They should be completely separate.
+Additional information
+OS version / distribution, docker-compose install method, etc.
+OS: macOS Mojave 10.14
+My docker-compose is installed through Docker Desktop for Mac Version 2.0.0.0-mac81 (29211)

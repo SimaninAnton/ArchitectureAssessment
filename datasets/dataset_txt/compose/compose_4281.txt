@@ -1,0 +1,2 @@
+dmitrig01 commented on 9 Jul 2014
+If I try to mount something relative to my home folder, instead it creates a folder called "~" inside the current folder, and uses that.

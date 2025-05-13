@@ -1,0 +1,16 @@
+SerialVelocity commented on 27 Sep 2018
+I'm unable to start containers because of the error:
+'docker-compose ps -q The CIRCLECI variable is not set. Defaulting to a blank string.' returned exit code 1
+            The output was:
+            The CIRCLECI variable is not set. Defaulting to a blank string.
+            No such service: The CIRCLECI variable is not set. Defaulting to a blank string.
+Here's a log line which may also help debug the problem:
+23:57:56.116 [pool-4-thread-1] INFO com.palantir.docker.compose.logging.FileLogCollector - Writing logs for container 'The CIRCLECI variable is not set. Defaulting to a blank string.' to '<path-to-project>/build/dockerLogs/<class-name>/The CIRCLECI variable is not set. Defaulting to a blank string..log'
+docker-compose.yml:
+version: "3"
+services:
+  postgres:
+    build:
+      context: ../../../../project-folder
+      args:
+        - CIRCLECI=${CIRCLECI}

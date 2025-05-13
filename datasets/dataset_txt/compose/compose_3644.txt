@@ -1,0 +1,32 @@
+mir commented on 16 May 2015
+docker build runs without errors. However, I got the following errors trying to build with docker-compose:
+Traceback (most recent call last):
+File "", line 3, in
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 119, in build
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 191, in build
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 475, in build
+File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 300, in build
+File "/code/build/docker-compose/out00-PYZ.pyz/docker.utils.utils", line 73, in tar
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 294, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/os", line 284, in walk
+File "/code/build/docker-compose/out00-PYZ.pyz/posixpath", line 80, in join
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xd1 in position 5: ordinal not in range(128)
+When I remove content from attached volume - no errors. Unfortunately volume content is private, I can't share it.

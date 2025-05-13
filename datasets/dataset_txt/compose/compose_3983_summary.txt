@@ -1,0 +1,1 @@
+Stack trace and unfriendly error when an env file doesn't exist

@@ -1,0 +1,5 @@
+pbecotte commented on 18 Jan 2018
+docker-compose run --entrypoint='' blah
+The above command should allow you to unset the entrypoint for the container, but has no effect. The corresponding behavior was added to the docker client in
+moby/moby#23718
+3

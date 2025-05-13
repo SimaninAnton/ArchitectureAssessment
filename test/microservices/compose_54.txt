@@ -1,0 +1,54 @@
+uuf6429 commented on 17 Nov 2019 •
+edited
+Description of the issue
+Environment variables do not seem to be applied correctly.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+Output of docker version
+Docker version 18.06.3-ce, build d7080c1
+Output of docker-compose config
+WARNING: The COMMIT_REF variable is not set. Defaulting to a blank string.
+networks:
+  internal:
+    external: false
+  web:
+    external: true
+services:
+  drupal:
+    container_name: <redacted>
+    image: <redacted>-
+    networks:
+      internal: null
+      web: null
+    restart: always
+version: '3.3'
+Steps to reproduce the issue
+Using the following docker-compose.yml:
+version: '3.1'
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+services:
+  web:
+    image: registry.gitlab.com/<redacted>:backend-${COMMIT_REF}
+When I try to use pull or up, I get:
+sudo COMMIT_REF=xxx docker-compose --file docker-compose.yml pull
+WARNING: The COMMIT_REF variable is not set. Defaulting to a blank string.
+Pulling <redacted>   ... error
+ERROR: for <redacted>  manifest for registry.gitlab.com/<redacted>- not found
+ERROR: manifest for registry.gitlab.com/<redacted>- not found
+I thought it might be related to the use of sudo, so I tried sudo A=B env, but A still showed up in the output, so I'm fairly certain the env var is being set.
+Observed result
+Docker-compose thinks that $COMMIT_REF env var does not exist and thus defaults to an empty string.
+Expected result
+Docker-compose should have pulled the image ending with $COMMIT_REF.
+Additional information
+Linux <redacted> 4.19.78-coreos #1 SMP Wed Nov 6 20:58:31 -00 2019 x86_64 Intel Xeon Processor (Skylake) GenuineIntel GNU/Linux
+docker-compose is installed with:
+      #!/usr/bin/env bash
+      sudo mkdir -p /opt/bin/
+      sudo curl -L --fail 'https://raw.githubusercontent.com/docker/compose/master/script/run/run.sh' -o '/opt/bin/docker-compose'
+      sudo chmod +x '/opt/bin/docker-compose'

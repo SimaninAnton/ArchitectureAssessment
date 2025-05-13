@@ -1,0 +1,13 @@
+abhi0017 commented on 5 Oct 2018
+Description of the issue
+Context information (for bug reports)
+Output of "docker-compose version"
+Output of "docker version"
+Output of "docker-compose config"
+Steps to reproduce the issue
+Observed result
+Expected result
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

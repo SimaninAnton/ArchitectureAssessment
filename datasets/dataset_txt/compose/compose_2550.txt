@@ -1,0 +1,6 @@
+Contributor
+bfirsh commented on 1 Apr 2016
+If you scale a service in Docker 1.11, the service name will resolve to all of the containers in that service with DNS round robin, so you can do rudimentary load balancing.
+i think this is really cool and it should probably be documented so other people can also think this is really cool.
+More detail: docker/libnetwork#974
+1

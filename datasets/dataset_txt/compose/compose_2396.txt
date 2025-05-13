@@ -1,0 +1,6 @@
+Contributor
+andrerom commented on 13 May 2016 •
+edited
+Given COMPOSE_FILE can be defined in .evn file which people would distrobute with applications, it should be supported to use a separator that works across all platforms.
+Right now both 1.7.0 release notes and online doc says it supports : on nix, and ; on Windows, it implies neither is supported on the opposite platforms, meaning you won't be able to distrobute your application with .env and doc instructions that works the same across all.
+Suggestion: Add support for : on Windows. Find something that works on both, at least in .env

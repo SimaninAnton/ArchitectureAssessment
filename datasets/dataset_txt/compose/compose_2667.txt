@@ -1,0 +1,25 @@
+derkork commented on 4 Mar 2016
+I have a docker swarm with two nodes named "alpha" and "epsilon". Epsilon is the swarm master. When I try to start containers or scale them up on the swarm, I'm getting this error message:
+root@epsilon:/home/vagrant# docker-compose -f /opt/compose/backend.yml scale backend=1
+Creating and starting 1 ... error
+
+ERROR: for 1  No such network: compose_default 
+If i repeat the same command again, it miraculously works:
+root@epsilon:/home/vagrant# docker-compose -f /opt/compose/backend.yml scale backend=1
+Starting compose_backend_1 ... done
+Now I try to scale it up to three nodes - same problem:
+root@epsilon:/home/vagrant# docker-compose -f /opt/compose/backend.yml scale backend=3
+Creating and starting 2 ... error
+Creating and starting 3 ... error
+
+ERROR: for 2  No such network: compose_default 
+ERROR: for 3  No such network: compose_default 
+Again, when I repeat the command, it works:
+root@epsilon:/home/vagrant# docker-compose -f /opt/compose/backend.yml scale backend=3
+Starting compose_backend_2 ... done
+Starting compose_backend_3 ... done
+A look at docker ps shows that the instances are spawned on both nodes, so I think it it isn't an issue with a single node:
+26050b6bc9e5        theta:443/backend        "/start_backend.sh"      9 seconds ago       Up 6 seconds        22/tcp, 10.224.6.105:32771->29819/tcp   epsilon/compose_backend_4
+cb8f31d0a630        theta:443/backend        "/start_backend.sh"      49 seconds ago      Up 3 seconds        22/tcp, 10.224.6.101:32778->29819/tcp   alpha/compose_backend_3
+552d236de7a7        theta:443/backend        "/start_backend.sh"      49 seconds ago      Up 3 seconds        22/tcp, 10.224.6.101:32777->29819/tcp   alpha/compose_backend_2
+009039bf120a        theta:443/backend        "/start_backend.sh"      2 minutes ago       Up About a minute   22/tcp, 10.224.6.101:32776->29819/tcp   alpha/compose_backend_1

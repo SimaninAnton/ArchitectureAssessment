@@ -1,0 +1,5 @@
+Contributor
+marksteve commented on 19 Mar 2014
+Maybe it could work like this:
+links:
+  - :existing_container_name

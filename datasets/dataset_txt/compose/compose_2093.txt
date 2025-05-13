@@ -1,0 +1,4 @@
+Contributor
+schmunk42 commented on 6 Sep 2016
+Is there a way to tell docker-compose not to create any networks for a stack?
+Basically handle networking like in v1. What's about network aliases then?

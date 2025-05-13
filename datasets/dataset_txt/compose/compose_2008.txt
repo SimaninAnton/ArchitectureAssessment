@@ -1,0 +1,44 @@
+reypm commented on 12 Oct 2016
+I am playing with Docker Compose and volumes
+version: '2'
+services:
+    php-apache:
+        env_file:
+          - dev_variables.env
+        image: reypm/php55-dev
+        build:
+            context: .
+            args:
+                - PUID=1000
+                - PGID=1000
+        expose:
+            - "80"
+            - "9001"
+        extra_hosts:
+            # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
+            - "dockerhost:xxx.xxx.xxx.xxx"
+        volumes_from:
+            - volumes_source
+    volumes_source:
+        image: tianon/true
+        volumes:
+            - ../:/var/www
+    volumes_data:
+        image: tianon/true
+        volumes:
+            - ./data/sessions:/sessions
+Let's take the following facts:
+I have a directory under the host at: ~/var/www
+The data in such directory should persist regarding container status.
+The container should write the data from the host under /var/www
+I have read docs here but is not clear to me how to deal with data volumes and host data.
+I want to share the data on the host with the container but I don't even know if the docker-compose.yml file above is right or what needs to be changed in order to achieve what I need. I know how to do it using docker run alone but doesn't have a clue for Docker Compose?
+Can any help me to get this working?
+Update: playing with this
+I have added this lines to the docker-compose.yml file:
+    volumes_from:
+        - volumes_source
+And I run the docker-compose up once again but this is the result:
+php55devwork_volumes_data_1 exited with code 0
+php55devwork_volumes_source_1 exited with code 0
+I am not sure what is happening or why I am getting the error, any?

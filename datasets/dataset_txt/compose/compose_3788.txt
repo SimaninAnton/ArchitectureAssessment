@@ -1,0 +1,12 @@
+Prevole commented on 26 Mar 2015
+Hi there,
+I recently installed the version 1.2.0rc1. I have a nodejs application that will poll an API every five minutes.
+The docker-compose.yml is the following
+publibike:
+  image: softengheigvd/iflux-publibike-event-source:v0.1.0
+  env_file: ./.env
+This is something really light and working well with 1.1.0.
+But with the version 1.2.0rc1, I was not able to make the network working. I mean the polling process cannot reach the Internet from the container. I tried to run my image manually with Docker and it works. I tried to use net: bridge in the docker-compose file without effect.
+Then I also tried to use net: host, with this config, it worked.
+Do I miss something in the configuration somewhere ? At the moment, I reinstalled Compose version 1.1.0 and it works like a charm for what I need.
+Thanks

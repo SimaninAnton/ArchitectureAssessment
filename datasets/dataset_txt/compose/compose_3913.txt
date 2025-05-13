@@ -1,0 +1,20 @@
+ghost commented on 18 Feb 2015
+when i try to create a container with a volume mapping that uses the same host path, its not working
+docker run --rm -ti --name test1 -v /var/run/docker.sock:/var/run/docker.sock -v /var/run/docker.sock:/tmp/sock -v /usr/bin/docker:/usr/bin/docker busybox /usr/bin/docker inspect --format='{{.Volumes}}' test1
+gives me
+map[/tmp/sock:/run/docker.sock /usr/bin/docker:/usr/bin/docker /var/run/docker.sock:/run/docker.sock]
+when i run this fig.yml via fig -p fig up:
+test2:
+  image: busybox
+  volumes:
+    - /var/run/docker.sock:/tmp/sock
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /usr/bin/docker:/usr/bin/docker
+  command: /usr/bin/docker inspect --format={{.Volumes}} fig_test2_1
+i get the following
+Creating fig_test2_1...
+Attaching to fig_test2_1
+test2_1 | map[/tmp/sock:/var/lib/docker/vfs/dir/20b2479134a353d63b754900fd9363fc704bdba3dd436dba70b96052457e7618 /usr/bin/docker:/usr/bin/docker /var/run/docker.sock:/run/docker.sock]
+fig_test2_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+As you can see the first mapping with /var/run/docker.sock is ignored and only the latter is mapped.

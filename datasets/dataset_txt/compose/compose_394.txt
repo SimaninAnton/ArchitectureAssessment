@@ -1,0 +1,3 @@
+nlapshin commented on 20 Nov 2018
+There is an option 'add-host' in docker, it allows to add hostname exactly during container assembly. Is there an implementation of this option for docker-compose?
+I've seen the this question was discussed in issue #5282 But it is closed and there is no practical sample that works.

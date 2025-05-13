@@ -1,0 +1,1 @@
+Permit external secret name customization via env var

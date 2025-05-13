@@ -1,0 +1,1 @@
+HNS failes with error on Windows 10 : Unspecified Error and Published ports are not visible/ accessible from machines on same network.

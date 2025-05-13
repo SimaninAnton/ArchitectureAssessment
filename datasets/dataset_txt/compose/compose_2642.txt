@@ -1,0 +1,2 @@
+ashirley commented on 12 Mar 2016
+AFAICT, this works fine on windows with docker toolbox (1.9.1h, in my case) but the docs in install.md state that it doesn't.

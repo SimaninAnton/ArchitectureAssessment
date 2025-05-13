@@ -1,0 +1,18 @@
+ThomasSteinbach commented on 27 Oct 2014
+during a build process I've got following error:
+Step 3 : ADD http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.1%20GA2/liferay-portal-tomcat-6.2-ce-ga2-20140319114139101.zip /tmp/
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 51, in perform_command
+  File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 416, in up
+  File "/code/build/fig/out00-PYZ.pyz/fig.project", line 175, in up
+  File "/code/build/fig/out00-PYZ.pyz/fig.service", line 196, in recreate_containers
+  File "/code/build/fig/out00-PYZ.pyz/fig.service", line 176, in create_container
+  File "/code/build/fig/out00-PYZ.pyz/fig.service", line 372, in _get_container_create_options
+  File "/code/build/fig/out00-PYZ.pyz/fig.service", line 394, in build
+  File "/code/build/fig/out00-PYZ.pyz/fig.progress_stream", line 22, in stream_output
+KeyError: 'id'

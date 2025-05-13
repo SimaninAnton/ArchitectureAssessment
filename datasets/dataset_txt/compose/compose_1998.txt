@@ -1,0 +1,32 @@
+veqryn commented on 20 Oct 2016
+Context is not being passed, or is not being respected, by a service that extends another service.
+Example directory structure of a simplified example project:
+.
+./shared/docker-compose.yml
+./main/docker-compose.yml
+./containerdefs/blarg/Dockerfile
+./data
+./docker-compose-shared.yml (symlinked to ./shared/docker-compose.yml)
+./docker-compose-main.yml (symlinked to ./main/docker-compose.yml)
+Contents of ./shared/docker-compose.yml:
+version: '2'
+services:
+  blarg:
+    build:
+      context: .
+      dockerfile: ./containerdefs/blarg/Dockerfile
+    command: ls /project
+    volumes:
+      - .:/project
+Contents of ./main/docker-compose.yml:
+version: '2'
+services:
+  blarg:
+    extends:
+      file: ./shared/docker-compose.yml
+      service: blarg
+    build:
+      context: .
+If I run docker-compose --file ./docker-compose-shared.yml up, the blarg container will successfully mount the whole project directory and output its contents with ls.
+If I run docker-compose --file ./docker-compose-main.yml up, the blarg container will not mount the project directory, and will instead mount the contents of the ./shared/ directory.
+This is despite purposefully setting the build context on my extended container in the main version.

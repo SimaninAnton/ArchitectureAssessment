@@ -1,0 +1,6 @@
+luxferresum commented on 23 Mar 2018
+Hello
+I'm not 100% sure that this is an issue. However I just tried to use compose 1.20 (inside docker with the run.sh script) on rancher os which leads to this error:
+libgcc_s.so.1 must be installed for pthread_cancel to work
+Everything works fine with compose 1.19.
+1

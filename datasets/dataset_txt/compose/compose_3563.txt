@@ -1,0 +1,4 @@
+Yajo commented on 16 Jun 2015
+It's common for me to get these messages when stopping (not killing) and restarting containers with --no-recreate, but I cannot know what triggers those:
+Cannot start container ef50748801ad83e9fb9f013c08cb81b03a600ff636118c8e7f8cb648952b5455: [8] System error: Unit docker-ef50748801ad83e9fb9f013c08cb81b03a600ff636118c8e7f8cb648952b5455.scope already exists.
+Usually running up without --no-recreate fixes that until some later occasion.

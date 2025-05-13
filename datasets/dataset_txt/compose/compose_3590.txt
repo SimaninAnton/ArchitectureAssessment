@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 4 Jun 2015
+There have been a few requests for supporting some form of "hooks" system within compose (#74, #1341).
+A feature which runs commands on the host would add a lot of complexity to compose and the compose configuration. Another option is to support these features by providing a way for external tools to run the command triggered by an event.
+docker events provides an event stream of all docker events, but would still require filtering.
+docker-compose events could provide a similar interface by filtering the events returned by /events and return a stream of only the events related to the active compose project. The event stream could also include a new field "service": <service_name> in addition to the fields already provided by /events
+22
+2

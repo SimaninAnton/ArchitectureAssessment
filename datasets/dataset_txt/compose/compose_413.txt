@@ -1,0 +1,80 @@
+shoffmeister commented on 7 Nov 2018 •
+edited by shin-
+Description of the issue
+On latest Fedora kernels (Fedora 28, Fedora 29), one or more services randomly complain about "Connection refused" on startup, trying to connect to some other internal . These services have retry mechanisms, but these retries never succeed. All the time is up and running.
+docker-compose restart <target service>
+resolves that.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:25:02 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:26:30 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+... is a bit too much; fundamentally (sketch!), we have
+"some service" which has another service "some service cohost" on exactly the same network by way of network_mode: service: - these communicate well, always.
+We have three instances of "some service", A, B, C, which communicate with each other as cluster instances, using Scala's Akka, over TCP 2551. DNS works perfectly.
+Sometimes, though, one of these services is not reachable after a docker-compose --force-recreate; service A and B would then complain that service C: .NettyTransport - Remote connection to [null] failed with org.jboss.netty.channel.ConnectTimeoutException: connection timed out: service-c/172.21.0.11:2551 - and service C complains a.c.JoinSeedNodeProcess - Couldn't join seed nodes after [98] attempts, will try again. seed-nodes=[akka.tcp://service@service-a:2551, akka.tcp://service@service-b:2551]
+version: "2.4"
+networks:
+  data_center:
+    name: data_center
+
+  service-a:
+    container_name: local-service-a
+    image: ...
+    hostname: service-a
+    sysctls:
+        - net.ipv6.conf.all.disable_ipv6=1
+    expose:
+      - "2551"
+      - "8080"
+    networks:
+      data_center:
+        aliases:
+          - service-a
+  service-a-cohost:
+    container_name: local-service-a-cohost
+    image: ...
+    sysctls:
+        - net.ipv6.conf.all.disable_ipv6=1
+    depends_on: 
+      - service-a
+    network_mode: service:service-a
+On top, service-c depends on service-b, service-b depends on service-a.
+Steps to reproduce the issue
+docker-compose up --force-recreate the full (more complex) version of the stack.
+Observed result
+No complaints about connection refused from any service.
+This happens randomly - sometimes everything comes up clean, sometimes one service is "not there", sometimes two services.
+Expected result
+Connection refused from one or more services.
+Stacktrace / full error message
+No diagnostics seen anywhere from docker / docker-compose.
+Additional information
+cat /etc/redhat-release 
+Fedora release 29 (Twenty Nine)
+
+uname -srvmp
+Linux 4.18.16-300.fc29.x86_64 #1 SMP Sat Oct 20 23:24:08 UTC 2018 x86_64 x86_64
+This happened with Fedora 28, too, recently; this might be tied to kernel updates?
+Previously, this stack seems to have worked fine - even with lots fewer depends between services.

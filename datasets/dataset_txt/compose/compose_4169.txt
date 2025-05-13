@@ -1,0 +1,18 @@
+yangtao309 commented on 14 Oct 2014
+[root@gitserver ~]# curl -L https://github.com/docker/fig/releases/download/0.5.2/linux > /usr/local/bin/fig
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 5004k  100 5004k    0     0  93835      0  0:00:54  0:00:54 --:--:-- 57611
+[root@gitserver ~]# fig
+fig: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /tmp/_MEIKvgjiE/libz.so.1)
+can you help me~ what happend.
+my linux system core info:
+[root@gitserver ~]# lsb_release -a
+LSB Version:    :base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch:graphics-4.0-amd64:graphics-4.0-noarch:printing-4.0-amd64:printing-4.0-noarch
+Distributor ID: CentOS
+Description:    CentOS release 6.5 (Final)
+Release:        6.5
+Codename:       Final
+[root@gitserver ~]# uname -a
+Linux gitserver 2.6.32-431.11.2.el6.x86_64 #1 SMP Tue Mar 25 19:59:55 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+[root@gitserver ~]# 

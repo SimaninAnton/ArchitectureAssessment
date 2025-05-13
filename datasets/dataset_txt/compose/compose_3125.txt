@@ -1,0 +1,18 @@
+anthonygreen commented on 7 Nov 2015
+Running docker-compose in OSX 10.9.5
+throws the following error
+/usr/local/Cellar/docker-compose/1.5.0/libexec/vendor/lib/python2.7/site-packages/requests/packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+Starting compose_maven_1
+/usr/local/Cellar/docker-compose/1.5.0/libexec/vendor/lib/python2.7/site-packages/requests/packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+Starting compose_ssh_1
+/usr/local/Cellar/docker-compose/1.5.0/libexec/vendor/lib/python2.7/site-packages/requests/packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+Attaching to compose_maven_1, compose_ssh_1
+packages:
+Python 2.7.10
+docker-machine version 0.5.0 
+docker-compose version: 1.5.0
+openssl 1.0.2d_1
+all installed via Homebrew

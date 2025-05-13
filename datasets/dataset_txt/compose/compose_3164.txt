@@ -1,0 +1,2 @@
+justinabrahms commented on 29 Oct 2015
+I ran docker-compose up to start my instance. It'd be nice (and a consistent API) if I could also use docker-compose down to turn it off. It could even be a silent alias for the relevant command.

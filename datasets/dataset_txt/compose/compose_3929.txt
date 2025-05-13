@@ -1,0 +1,8 @@
+rudimk commented on 12 Feb 2015
+Is there a way I can use Fig as a library from Python code? I'm looking at something along these lines:
+import fig
+
+os.chdir('test/dockerfiles/')
+fig.build()
+# returns a container ID, maybe?
+Thanks!

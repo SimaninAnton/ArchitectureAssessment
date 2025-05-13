@@ -1,0 +1,9 @@
+Contributor
+simonvanderveldt commented on 16 Jan 2019 •
+edited
+We have a container running which is not started with compose which uses/defines several volumes.
+With compose v2 we are able to easily use these volumes without knowing (or duplicating) information about these volumes every time by using:
+volumes_from:
+    container: <name of container>
+It seems like this use-case is no longer possible with the compose v3 format.
+Was this a deliberate choice? Or could support for this use-case be added to the compose v3 format.

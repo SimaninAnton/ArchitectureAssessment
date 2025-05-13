@@ -1,0 +1,2 @@
+Remember2018 commented on 5 Aug 2019
+Hi, the used docker version is Docker version 18.06.2-ce, build 6d37f41, and the system is ubuntu 18.04. When I'm using the apt install docker-compose, the software manager will update the docker to docker 19.03 version. But to use the kubernetes, the Docker of 18.06.2-ce is needed. Could you please give some advice on how to install a matched version of docker-compose with docker 18.06.2-ce? If convenient, could you please provide a list of these matching relations between them? Thanks.

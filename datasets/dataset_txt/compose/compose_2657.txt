@@ -1,0 +1,36 @@
+jaycyb commented on 8 Mar 2016
+To reproduce it:
+1- install docker-compose as a container
+2- create this docker-compose.yml
+version: "2"
+
+services:
+  server: 
+    image: phusion/baseimage:0.9.18
+    environment:
+      - "SSH_AUTH_SOCK=/ssh-agent"
+    volumes:
+      - "${SSH_AUTH_SOCK}:/ssh-agent"
+    command: ssh-add -l
+3- set the env variable
+$ eval `ssh-agent -s`
+Agent pid 20065
+$ echo $SSH_AUTH_SOCK
+/tmp/ssh-wP1px8LhMut/agent.20064
+4- Start the container
+$ docker-compose up
+WARNING: The SSH_AUTH_SOCK variable is not set. Defaulting to a blank string.
+Recreating tmp_server_1
+ERROR: create .: volume name invalid: "." includes invalid characters for a local volume name, only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed
+Hacked solution:
+1- Explicitly add the variable to the compose wrapping script...
+$ vi `which docker-compose`
+Right before the last line exec docker run ... , add this
+DOCKER_ADDR="${DOCKER_ADDR} -e SSH_AUTH_SOCK"
+2- Run again
+$ docker-compose up
+Starting 656a5e2528ad_tmp_server_1
+Attaching to 656a5e2528ad_tmp_server_1
+656a5e2528ad_tmp_server_1 | The agent has no identities.
+656a5e2528ad_tmp_server_1 exited with code 1
+I don't know what the proper solution should be but this proves that variable expansion is broken with this installation method.

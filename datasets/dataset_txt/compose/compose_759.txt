@@ -1,0 +1,82 @@
+tejksat commented on 3 Apr 2018
+Description of the issue
+"OSError: [Errno 9] Bad file descriptor" exception is raised when running docker-compose up command for Docker for Win while using the TCP connection to the Docker daemon.
+This scenario, however unusual, though required for the Docker Compose integration in IntelliJ products 2018.1. Please see https://youtrack.jetbrains.com/issue/PY-29185.
+Context information
+C:\>docker-compose version
+docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+C:\>docker version
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Wed Mar 21 23:06:28 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:14:32 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+C:\Users\user\project>docker-compose config
+services:
+  app:
+    image: python:3
+version: '3.0'
+Steps to reproduce the issue
+In Docker Settings on General tab select Expose daemon on tcp://localhost:2375 without TLS checkbox.
+Run set DOCKER_HOST=tcp://localhost:2375 in a Command Prompt.
+Run docker-compose up in the Command Prompt for the specified docker-compose configuration file.
+Observed result
+Starting dockercompose_app_1 ... done
+Attaching to dockercompose_app_1
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 1065, in up
+  File "compose\cli\log_printer.py", line 87, in run
+  File "compose\cli\log_printer.py", line 245, in consume_queue
+  File "compose\cli\log_printer.py", line 160, in tail_container_logs
+  File "compose\utils.py", line 61, in split_buffer
+  File "compose\utils.py", line 37, in stream_as_text
+  File "site-packages\docker\utils\socket.py", line 73, in frames_iter
+  File "site-packages\docker\utils\socket.py", line 60, in next_frame_size
+  File "site-packages\docker\utils\socket.py", line 45, in read_exactly
+  File "site-packages\docker\utils\socket.py", line 32, in read
+OSError: [Errno 9] Bad file descriptor
+[11820] Failed to execute script docker-compose
+Expected result
+Successful execution.
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 1065, in up
+  File "compose\cli\log_printer.py", line 87, in run
+  File "compose\cli\log_printer.py", line 245, in consume_queue
+  File "compose\cli\log_printer.py", line 160, in tail_container_logs
+  File "compose\utils.py", line 61, in split_buffer
+  File "compose\utils.py", line 37, in stream_as_text
+  File "site-packages\docker\utils\socket.py", line 73, in frames_iter
+  File "site-packages\docker\utils\socket.py", line 60, in next_frame_size
+  File "site-packages\docker\utils\socket.py", line 45, in read_exactly
+  File "site-packages\docker\utils\socket.py", line 32, in read
+OSError: [Errno 9] Bad file descriptor
+[11820] Failed to execute script docker-compose
+Additional information
+C:\>ver
+
+Microsoft Windows [Version 10.0.16299.309]
+18

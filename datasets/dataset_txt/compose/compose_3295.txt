@@ -1,0 +1,23 @@
+facenord-sud commented on 11 Sep 2015
+I have a Ruby on Rails application which I try to run it from docker with the help of docker-compose.
+I can run docker-compose build and then docker-compose up which work fine.
+In my settings of my app I configured the access to postgres with the env variables APP_DB_1_PORT_5432_TCP_ADDR and APP_DB_1_PORT_5432_TCP_PORT
+However my app is unable to connect to postgres. The error:
+could not connect to server: No route to host
+Is the server running on host "postgres" (172.17.0.32) and accepting TCP/IP connections on port 5432?
+From the host machine, I'm able to acces to postgres
+Here my docker-compose.yml:
+db:
+  image: postgres:9.4.4
+  ports:
+    - "5432:5432"
+web:
+  build: .
+  command: bin/rails server --port 3000 --binding 0.0.0.0
+  ports:
+    - "3000:3000"
+  links:
+    - db:postgres
+  volumes:
+    - .:/myapp:z
+Note: I'm running on Fedora 22

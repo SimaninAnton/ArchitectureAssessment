@@ -1,0 +1,18 @@
+bradleyg commented on 2 May 2014
+After running my app and syncing the database all works fine, however after fig stop and then fig up the data is lost. This was working before the update. Any ideas?
+web:
+  build: .
+  volumes:
+    - .:/code
+  links:
+   - db
+   - redis
+  ports:
+   - 5000:5000
+  command: python manage.py runserver 0.0.0.0:5000
+
+db:
+  image: orchardup/postgresql
+
+redis:
+  image: orchardup/redis

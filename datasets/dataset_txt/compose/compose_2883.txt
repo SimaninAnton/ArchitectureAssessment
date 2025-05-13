@@ -1,0 +1,10 @@
+Yajo commented on 25 Jan 2016
+Say you have a docker-compose.yml like:
+one:
+  image: python
+two:
+  build: .
+And a Dockerfile like:
+FROM ruby
+...
+I'd expect docker-compose pull to pull both python and ruby images. Only python is currently pulled.

@@ -1,0 +1,12 @@
+blackandred commented on 16 Mar 2018 •
+edited
+Hello, I can still reproduce the issue: #4761
+When I have this appended to a service:
+    shm_size: 1G
+    tmpfs: /dev/shm:rw,nosuid,nodev,noexec,relatime,size=1G
+Docker-compose syntax version: 2
+When I scale up the container, then an error appears.
+At least two different Linux setups are affected.
+On other twos it does not appear.
+One of problematic setup: docker-compose version 1.17.0, build ac53b73, Ubuntu 16.04
+Thanks for your time.

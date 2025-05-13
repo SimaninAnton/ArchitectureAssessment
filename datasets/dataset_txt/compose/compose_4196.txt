@@ -1,0 +1,2 @@
+phuongnd08 commented on 2 Sep 2014
+During development we may need to open a shell and run some thing inside the container. So tty and interactive should be supported.

@@ -1,0 +1,7 @@
+atrauzzi commented on 9 Mar 2016
+Take a look here:
+compose/compose/cli/main.py
+Line 550 in 1655be6
+ if IS_WINDOWS_PLATFORM and not detach: 
+Is there any chance the check performed here could be refined so that if the user is running via cmder/conemu or another Windows terminal, interactive mode run isn't blocked?
+I'm actually calling docker-compose from an msys2 bash terminal run via cmder. Perhaps that's enough to satisfy what's needed for interactive mode?

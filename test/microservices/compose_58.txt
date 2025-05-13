@@ -1,0 +1,127 @@
+true-mccrew commented on 12 Nov 2019
+Description of the issue
+Network access failure during docker-compose build
+Context information (for bug reports)
+Output of docker-compose version
+$ docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+$ docker version
+Client: Docker Engine - Community
+ Version:           19.03.4
+ API version:       1.40
+ Go version:        go1.12.10
+ Git commit:        9013bf583a
+ Built:             Fri Oct 18 15:54:09 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.4
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.10
+  Git commit:       9013bf583a
+  Built:            Fri Oct 18 15:52:40 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+$  docker-compose -f myproject.yaml config
+networks:
+  testnet:
+    ipam:
+      config:
+      - subnet: 10.3.1.0/24
+services:
+  test-client:
+    build:
+      context: /home/someuser/src/xmm/test/isolated/functional/xmm_xo
+      dockerfile: Dockerfile.test
+    cap_add:
+    - NET_ADMIN
+    environment:
+      TAO_OPEN_IP_START: 10.3.1.50
+      TAO_TIME_OUT: '40'
+      X_SELFIP: 10.3.1.10
+      X_VLAN_NAME: vlan1
+    networks:
+      testnet: null
+  xmm:
+    build:
+      args:
+        xmm_img: artifactory.company.com/test/xmm-img:v0.24.0-someuser-devel.999639
+      context: /home/someuser/src/xmm/test/isolated/functional
+      dockerfile: Dockerfile
+    cap_add:
+    - IPC_LOCK
+    - SYS_PTRACE
+    depends_on:
+    - test-client
+    environment:
+      CONFIG_SUBJECT: internal-config
+      MSG_BUS_ADDR: test-client
+      MSG_BUS_PASS: insecure_password_xmm
+      MSG_BUS_PORT: '4222'
+      MSG_BUS_USER: xmm
+      PROCESS_NAME: XMM
+      PUBLISH_SUBJECT: dataplane-client
+      XMM_QUERY_INTERVAL_SECS: '120'
+    image: functional_xmm
+    networks:
+      testnet:
+        ipv4_address: 10.3.1.10
+    privileged: true
+version: '3.6'
+Steps to reproduce the issue
+Note that network IS available
+$ ping -c 2 192.168.183.13
+PING 192.168.183.13 (192.168.183.13) 56(84) bytes of data.
+64 bytes from 192.168.183.13: icmp_seq=1 ttl=128 time=3.35 ms
+64 bytes from 192.168.183.13: icmp_seq=2 ttl=128 time=4.97 ms
+
+--- 192.168.183.13 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 3.356/4.165/4.975/0.812 ms
+Have Dockerfile containing RUN directives that require network access (e.g. wget, curl)
+docker-compose
+Observe various network access failures - "no route to host", DNS resolution failure, etc
+Observed result
+RUN directives that require network access fail, examples:
+ RUN wget https://artifactory.company.com/path/to/resource
+
+Resolving artifactory.company.com (artifactory.company.com)... failed: Temporary failure in   name resolution.
+wget: unable to resolve host address ‘artifactory.company.com’
+
+# Taking DNS completely out of the situation by using IP address directly 
+# shows it's a general networking failure, not just DNS:
+RUN wget https://192.168.183.13/path/to/resource
+
+--2019-11-11 18:20:24--  https://192.168.183.13/path/to/resource
+Connecting to 192.168.183.13:443... failed:  No route to host.
+Expected result
+Docker-compose to complete normally, allowing network access to the commands specified in the Dockerfile RUN directirves
+Stacktrace / full error message
+N/A
+Additional information
+Docker-compose is running inside VMWare Fusion virtual machine, in an Ubuntu 18.x environment.
+OS version / distribution, docker-compose install method, etc.
+Hardware Mac Pro OS X Mojave
+VMWare Fusion 11.0.3 running Ubuntu 18.04.3 LTS guest
+I did try to debug the internal networking environment internal to docker-compose by adding directives like:
+RUN /sbin/ifconfig
+and
+RUN /sbin/route -n
+but those commands don't seem to be available inside that environment.

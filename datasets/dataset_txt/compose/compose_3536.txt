@@ -1,0 +1,16 @@
+lox commented on 26 Jun 2015
+Given a container like this:
+auth:
+  image: 99designs/auth
+  links:
+    - memcached
+Then started: docker-compose up -d auth
+If I then add external_links:
+auth:
+  image: 99designs/auth
+  links:
+    - memcached
+  external_links:
+    - mysql-5.6:mysql_auth
+    - mysql-5.6:mysql_userlogin
+and then run docker-compose up -d auth, I'd expect it to be rebuilt to add the new links. This doesn't appear to happen.

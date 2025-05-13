@@ -1,0 +1,1 @@
+Losing gateway connection while pulling image irreversibly pauses download

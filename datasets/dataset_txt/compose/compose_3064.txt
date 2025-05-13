@@ -1,0 +1,9 @@
+aramalipoor commented on 21 Nov 2015 •
+edited
+As first proposed in #1377 I think it would be very useful to have a way to set a variable as required, and also set some default value.
+web:
+   image: org/app:${VERSION?} # Required
+Or
+web:
+   image: org/app:${VERSION:latest} # Default Value
+59

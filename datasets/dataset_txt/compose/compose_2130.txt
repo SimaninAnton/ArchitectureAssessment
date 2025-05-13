@@ -1,0 +1,6 @@
+pzrinscak commented on 22 Aug 2016 •
+edited
+I need to set shm_size during image build to build official Oracle database image.
+With docker it would be like this
+docker build --shm-size=1G
+7

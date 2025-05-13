@@ -1,0 +1,1 @@
+Allow to install and enable Docker plugins via compose file

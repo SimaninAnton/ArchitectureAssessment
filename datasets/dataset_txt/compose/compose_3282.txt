@@ -1,0 +1,29 @@
+rosskevin commented on 16 Sep 2015
+I'm looking for some pointers/docs/references to understand a bit more about how to setup docker-compose so that the container doesn't write files on the host owned by root.
+Dockerfile
+FROM atlashealth/ruby:2.2.2
+...
+COPY . /project
+WORKDIR /project
+My compose container runs a rails test suite, which writes files to the target directory. On the ubuntu host, these appear as owned by root, though the container was executed as a non-privileged apps user:
+# On the host
+$ ls -la target/test-reports/
+total 8
+drwxr-xr-x 2 root root 4096 Sep 15 17:44 .
+drwxr-xr-x 3 root root 4096 Sep 15 17:44 ..
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec2.xml
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec3.xml
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec4.xml
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec5.xml
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec6.xml
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec7.xml
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec8.xml
+-rw-r--r-- 1 root root    0 Sep 15 17:44 rspec.xml
+Everything within the mounted dir and above are owned by apps:
+drwxr-xr-x 17 apps apps  4096 Sep 16 06:00 .
+drwxr-xr-x  9 apps apps  4096 Aug 24 15:24 ..
+drwxr-xr-x 16 apps apps  4096 Aug 27 06:00 app
+drwxr-xr-x  5 apps apps  4096 Sep 12 06:00 config
+drwxr-xr-x  6 apps apps  4096 Sep  9 20:14 db
+drwxr-xr-x  3 root root  4096 Sep 15 17:44 target
+Since I am running as the host user apps, I wouldn't expect files to materialize as root. What do I need to read to get a better understanding?

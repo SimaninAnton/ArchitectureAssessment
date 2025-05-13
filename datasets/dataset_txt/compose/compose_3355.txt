@@ -1,0 +1,38 @@
+iMerica commented on 22 Aug 2015
+I'm seeing this while doing stop.
+michael@computer $ docker-compose stop
+Stopping my_foo_1... 
+Stopping my_foo_1... done
+Stopping my_bar_1... 
+Stopping my_nginx_1... 
+Stopping my_bar_1... done
+Stopping my_bax_1... 
+Stopping my_api_1... 
+Stopping my_authserver_1... done
+Stopping my_content_1... 
+Stopping my_nginx_1... done
+Stopping my_bax_1... done
+Stopping my_admin_1... 
+Stopping my_mongo_1... 
+Stopping my_search_1... 
+Stopping my_cassandra_1... 
+Stopping my_content_1... done
+Stopping my_postgres_1... 
+
+
+Stopping my_qux_1... done
+
+
+
+Stopping my_dynamo_1... done
+Stopping my_search_1... done
+Stopping my_postgres_1... done
+Stopping my_cassandra_1... done
+Stopping my_mongo_1... done
+
+Stopping my_redisconsolidated_1... done
+
+michael@computer $  
+Docker's output that displays while downloading an image in parallel is pretty awesome. Maybe we can do something like that?
+Best,
+Michael

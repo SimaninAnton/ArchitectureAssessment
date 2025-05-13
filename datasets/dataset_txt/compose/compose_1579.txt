@@ -1,0 +1,13 @@
+ekkis commented on 22 Mar 2017
+I've read through #942 but I think that thread primarily focuses on the automatic running of a container. I think there are more states, actually, and for my use case, being able to build an image without creating and/or running a container would be very useful.
+I think what makes the most sense is to have 3 flags (defaulted to true):
+build: true
+create: true
+start: true
+or perhaps an array of options could open up the choices for later distinctions:
+process:
+  - build
+  - create
+  - start
+as context, I want to be able to build an image along with all my other stuff, but the creation of containers is delegated to a user-driven process and thus docker-compose should not create the container for me
+1

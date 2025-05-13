@@ -1,0 +1,10 @@
+dorianamouroux commented on 7 Jun 2016
+Hi !
+I'm using docker compose for my project.
+All my api keys are stored in a local file (ignored by git) and I inject it into my project with env_file in my docker-compose.yml.
+Most of those variables are only for production, you can run the project with the file empty.
+The problem is, I can't start my container if the file doesn't exist.
+It could be a good idea to add a parameter to env_file to make it optional.
+Cheers !
+Dorian
+37

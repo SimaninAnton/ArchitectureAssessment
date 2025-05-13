@@ -1,0 +1,5 @@
+posterboyamazon commented on 14 Aug 2018
+I am following the steps outlined at:
+https://docs.gravitee.io/am/2.x/am_installguide_docker.html#running_am_manually
+There are 3 config file that need to be edited docker-compose.yml, constants.json and nginx.conf
+What are the minimal changes that have to be made for the setup to run correctly.

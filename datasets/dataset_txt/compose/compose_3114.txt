@@ -1,0 +1,26 @@
+pirelenito commented on 10 Nov 2015
+If you want to use the value of an environment variable that is available in the host you can:
+$ HOST_ENV=value docker run -e HOST_ENV ubuntu:14.04 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=acb280b6edd9
+HOST_ENV=value
+HOME=/root
+But, if the variable is not defined in the host, then it also doesn't get created in the container:
+$ docker run -e HOST_ENV ubuntu:14.04 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=29a464f43ecb
+HOME=/root
+But, given the following docker-compose.yml:
+banana:
+  image: ubuntu:14.04
+  command: env
+  environment:
+    HOST_ENV:
+We get an empty variable:
+$ docker-compose run banana
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=9841adaf229b
+TERM=xterm
+HOST_ENV=
+HOME=/root
+Should this be considered a bug? I would expect the same behavior from both tools.

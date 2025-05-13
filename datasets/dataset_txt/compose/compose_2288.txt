@@ -1,0 +1,12 @@
+m-radzikowski commented on 22 Jun 2016
+I've Docker Compose with few services. Firstly I start them all in first console with docker-compose up (so I can see logs). Some of the containers do their job and exits. So far so good, I can see logs properly, also with docker-compose logs -t --tail=50 in second console.
+Then I run docker-compose up --no-deps -d service1. In result in first console all logs from this service from the begining (first build) all displayed again. Not as expected, I've to trace the point from where new logs come. When I run logs tail in second console logs are not in order, like:
+service1 | 2016-06-22T17:29:59.691610494Z correct log
+service2 | 2016-06-22T17:19:47.665644286Z correct log
+service3 | 2016-06-22T16:48:01.831296926Z old log, what it does here?
+service2 | 2016-06-22T17:19:47.939020242Z correct log
+Those logs from service3 are from initial up half an hour ago. In first console there were not repeated, only in tail.
+When I run docker-compose run service1:
+in first console new logs from service1 don't show,
+they are shown in logs --tail, but again with old service3 logs between them.
+docker-compose version 1.7.1, build 0a9ab35

@@ -1,0 +1,65 @@
+pierreozoux commented on 1 Jun 2016 •
+edited
+I create a lot of compose file that I hope are useful for the community.
+I'd like to find a way for docker to officially ship these compose files.
+There is one issue that IMHO is blocking us of doing so, is the ability to ship a file in docker-compose.
+Indeed, what distinguish a piwik from an ownCloud from a WordPress compose file is only the nginx configuration.
+There are 3 way that I know to ship this configuration:
+The first option: a file on the host:
+  volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf:ro
+The second option: the current inline way:
+web:
+  image: nginx
+  volumes:
+    - ./data:/var/www/html
+  command: |
+    bash -c 'bash -s <<EOF
+      cat > /etc/nginx/nginx.conf <<EON
+        daemon off;
+        user www-data;
+        events {
+          worker_connections 768;
+        }
+        http {
+          gzip on;
+          gzip_disable "msie6";
+          include /etc/nginx/mime.types;
+          server {
+            listen 80;
+            root /var/www/html;
+            index index.html;
+          }
+        }
+    EON
+    nginx
+    EOF'
+A bit dirty
+The 3rd way: inline file
+web:
+  image: nginx
+  volumes:
+    - ./data:/var/www/html
+  files:
+    -   owner: root:root
+        path: /etc/nginx/nginx.conf
+        permissions: '0644'
+        content: |
+         user www-data;
+          events {
+            worker_connections 768;
+          }
+          http {
+            gzip on;
+            gzip_disable "msie6";
+            include /etc/nginx/mime.types;
+            server {
+              listen 80;
+              root /var/www/html;
+              index index.html;
+            }
+          }
+And so, I'm sure you see the value to have a proper way to add inline file.
+The syntax could be similar to what cloudinit does.
+With this, it would become easier to ship one compose file with everything included to get started an app!
+38

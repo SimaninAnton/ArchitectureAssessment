@@ -1,0 +1,23 @@
+tobyhede commented on 30 Dec 2014
+I keep seeing an invalid argument error running variations on the theme of fig up and fig run
+fig output with --verbose
+docker create_container <- (tty=True, stdin_open=True, command=['ls', '/'], name=u'website_web_run_12', image=u'website_web')
+invalid argument
+fig.yml:
+db:  
+  image: "postgres:9.3"
+  ports:
+    - 5432
+  volumes:
+    - ./data:/var/lib/postgresql/data/
+
+web:  
+  build: .
+  volumes:
+    - .:/usr/src/app/
+  ports:
+    - "3000:3000"
+  command: bundle exec thin -p 3000
+  links:
+    - db
+Image itself is building ok (both from fig and a manual docker build)

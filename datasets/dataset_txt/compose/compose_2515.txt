@@ -1,0 +1,14 @@
+jonasschneider commented on 10 Apr 2016
+It seems like there is a race condition in docker-compose run when trying to pipe input into the container. For example, this sequence of shell commands can be observed:
+$ echo hi | docker-compose run app cat
+$ echo hi | docker-compose run app cat
+hi
+I.e. The first invocation does not work, but the second invocation works. This seems to be non-deterministic. A test case for reproducing is in this Gist:
+https://gist.github.com/jonasschneider/4d0dd8228145f599071fa0a9206173e6
+This is using the following versions on OS X (not the Docker for Mac Beta):
+$  docker-compose --version
+docker-compose version 1.7.0rc1, build 1ad8866
+$  docker-machine --version
+docker-machine version 0.7.0-rc2, build 60dbecb
+$  docker --version
+Docker version 1.11.0-rc3, build eabf97a

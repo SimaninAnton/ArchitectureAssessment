@@ -1,0 +1,8 @@
+coldib commented on 29 Sep 2015
+Hi,
+I just discovered, that the URL stated in many installation instructions (https://github.com/docker/compose/releases/download/) is not available, a 404 Page not Found Error is returned.
+This URL is mentioned on the following pages:
+https://docs.docker.com/compose/install/
+https://github.com/docker/compose/releases
+Regards
+coldib

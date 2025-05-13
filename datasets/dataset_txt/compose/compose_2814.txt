@@ -1,0 +1,6 @@
+kanzure commented on 9 Feb 2016
+Since "links" are deprecated, seems prudent to mention overlay network in the SWARM.md file?
+Alternatively perhaps these links could be mentioned:
+https://docs.docker.com/compose/networking/
+https://docs.docker.com/engine/userguide/networking/get-started-overlay/
+The current SWARM.md file is: https://github.com/docker/compose/blob/28e652daec11aca600c1e26251c42565fe9f5fa2/SWARM.md

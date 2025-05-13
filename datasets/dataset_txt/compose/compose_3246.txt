@@ -1,0 +1,10 @@
+amitsaha commented on 1 Oct 2015
+Consider the compose file:
+web:
+   image: fedora
+   command: true
+Now:
+# docker-compose up
+Creating root_web_1...
+json: cannot unmarshal bool into Go value of type string
+I am not sure if this is an issue with jsonschema or in the compose code itself? If I can get any helpful pointer, I can try to fix it. Thanks.

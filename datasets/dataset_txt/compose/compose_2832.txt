@@ -1,0 +1,2 @@
+timothysu commented on 6 Feb 2016
+When an app has a link to db, app cannot reach db via the "db" hostname. ping db fails from the app container, while ping foldername_db_1 works.

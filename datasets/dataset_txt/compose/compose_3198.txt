@@ -1,0 +1,14 @@
+Ozzyboshi commented on 19 Oct 2015
+In my opinion it would be great to enable docker-compose to send some container information to an etcd store like forrest does (https://github.com/avgp/forrest).
+This is a docker-compose.yml example file:
+web:
+build: ./webapp
+etcd-hosts:
+- 10.0.0.1
+- 10.0.0.2
+In this case when docker-compose creates and run new containers, they must register the container name, ip and ports in the etcd store at 10.0.0.1 and 10.0.0.2.
+When the containers are destroyed or stopped, docker-compose must erase their entry in the etcd store.
+I this way, with the help of confd I can instruct my haproxy (by a manual configuration file reload) where the web containers are located within my swarm cluster and achieve a quite automated balancing process.
+Maybe there are other useful situations where the etcd registrations come in handy.
+I don't know if this is the right place to ask, maybe this feature should be built within docker itself.
+What do you think?

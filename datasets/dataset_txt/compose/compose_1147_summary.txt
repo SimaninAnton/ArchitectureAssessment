@@ -1,0 +1,1 @@
+Translate docker-compose to equivalent list of docker commands

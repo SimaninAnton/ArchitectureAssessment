@@ -1,0 +1,2 @@
+whitecolor commented on 25 Jul 2017
+When executing docker-compose up for some already running services docker-compose displays all stdout that was produced by running services from start time. I think it would be useful to add flag that that doesn't show previous output or limits its tail.

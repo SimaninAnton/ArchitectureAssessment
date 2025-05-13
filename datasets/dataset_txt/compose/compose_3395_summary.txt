@@ -1,0 +1,1 @@
+Environment variables are not applied on container build

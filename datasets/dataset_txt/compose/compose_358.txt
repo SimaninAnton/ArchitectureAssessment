@@ -1,0 +1,83 @@
+aryzing commented on 12 Dec 2018
+Description of the issue
+When specifying my username in the user: field of a service in a docker compose config file, the user is not recognized and compose fails with the error
+ERROR: for api-server  Cannot start service api-server: linux spec user: unable to find user [my_username]: no matching entries in passwd file
+However, when I use docker run, it works just fine when I specify my username, and files created by the container are owned by myself:
+docker run -u [my_username] ...rest
+For compose to work as expected, I must actually type in my user UID, 1000 in my case, in the config file:
+user: 1000
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+Output of docker version
+Docker version 18.09.0, build 4d60db4
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  anccre-network:
+    name: anccre-network
+services:
+  api-server:
+    build:
+      context: /home/aryzing/workspace/anccre-server
+      dockerfile: config/docker/Dockerfile-dev
+    command: npm run dev-host
+    container_name: api-server
+    image: anccre-server:latest
+    networks:
+      anccre-network: null
+    ports:
+    - published: 3000
+      target: 3000
+    user: aryzing
+    volumes:
+    - /home/aryzing/workspace/anccre-server:/usr/src/app:rw
+  dgraph-ratel:
+    command: dgraph-ratel --addr=dgraph-server:8080
+    container_name: dgraph-ratel
+    image: dgraph/dgraph:latest
+    networks:
+      anccre-network: null
+    ports:
+    - published: 8000
+      target: 8000
+  dgraph-server:
+    command: dgraph server --lru_mb 1024 --my=dgraph-server:7080 --zero=dgraph-zero:5080
+    container_name: dgraph-server
+    image: dgraph/dgraph:latest
+    networks:
+      anccre-network: null
+    ports:
+    - published: 8080
+      target: 8080
+    - published: 9080
+      target: 9080
+    restart: on-failure
+    volumes:
+    - /home/aryzing/dgraph:/dgraph:rw
+  dgraph-zero:
+    command: dgraph zero --my=dgraph-zero:5080
+    container_name: dgraph-zero
+    image: dgraph/dgraph:latest
+    networks:
+      anccre-network: null
+    ports:
+    - published: 5080
+      target: 5080
+    - published: 6080
+      target: 6080
+    restart: on-failure
+    volumes:
+    - /home/aryzing/dgraph:/dgraph:rw
+version: '3.7
+Steps to reproduce the issue
+Run docker compose with a config file containing user: [my_username] for a service, where my_username exists on the host.
+Observed result
+Error, username is not recognized
+Expected result
+Should work as docker run -u [my_username] does, and find the username on the host system.
+Stacktrace / full error message
+ERROR: for api-server  Cannot start service api-server: linux spec user: unable to find user aryzing: no matching entries in passwd file
+ERROR: Encountered errors while bringing up the project.
+Additional information
+Ubuntu 18.04

@@ -1,0 +1,13 @@
+robert-mygind commented on 9 Feb 2015
+Hi All
+I have a problem when trying to mount a folder with fig vs. with docker. When using docker direct it works.
+docker run -p 80:80 -v /Users/name/someproject/:/var/www/ -d eboraas/apache-php --name test1
+works fine ...
+when doing the same in fig.yml
+volumes:
+- /Users/name/someproject/:/var/www/
+it do not mount and the folder /var/www still have the original index.html "it works" from apache.
+fig --version
+fig 1.0.1
+docker --version
+Docker version 1.4.1, build 5bc2ff8

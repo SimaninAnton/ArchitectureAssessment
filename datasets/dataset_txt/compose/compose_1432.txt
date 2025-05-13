@@ -1,0 +1,5 @@
+gasparch commented on 26 May 2017
+Documentation of Docker Compose about ulimits section is very terse. In other hand turns out Docker-Compose/Docker pass any option specified in that section to setrlimit and any of RLIMIT_* options can be used.
+Please include at least two use case examples which are commonly asked on stackoverflow or similar sites:
+maximum number of open file descriptors per process (nofile)
+maximum limit on memory used by single process inside container (as)

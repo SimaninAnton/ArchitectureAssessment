@@ -1,0 +1,8 @@
+fanux commented on 26 May 2017
+When I want to run a container on one node in my cluster when cluster doesn't have the image, compose tell swarm to create image result in all nodes to pull image. Using docker run command don't have this problem.
+DEBU[1561] HTTP request received                         method=GET uri=/v1.22/containers/json?all=0&limit=-1&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dtest%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&trunc_cmd=0&size=0
+DEBU[1561] HTTP request received                         method=GET uri=/v1.22/containers/json?all=1&limit=-1&filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dtest%22%2C+%22com.docker.compose.service%3Dservice_iat%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&trunc_cmd=0&size=0
+DEBU[1561] HTTP request received                         method=GET uri=/v1.22/images/dev.reg.iflytek.com/test/signal:latest/json
+ERRO[1561] HTTP error: No such image: dev.reg.iflytek.com/test/signal:latest  status=404
+DEBU[1561] HTTP request received                         method=POST uri=/v1.22/images/create?tag=latest&fromImage=dev.reg.iflytek.com%2Ftest%2Fsignal
+1

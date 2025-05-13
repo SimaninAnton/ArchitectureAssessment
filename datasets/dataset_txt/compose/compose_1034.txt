@@ -1,0 +1,33 @@
+AmrElmasry commented on 6 Dec 2017 •
+edited
+when running docker-compose up
+This error happens:
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 121, in perform_command
+  File "contextlib.py", line 35, in __exit__
+  File "compose/cli/errors.py", line 53, in handle_connection_errors
+  File "compose/cli/errors.py", line 118, in get_conn_error_message
+  File "distutils/spawn.py", line 220, in find_executable
+  File "posixpath.py", line 73, in join
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+Failed to execute script docker-compose
+Versions :
+docker-compose version 1.17.1, build 6d101fb
+Docker version 17.09.0-ce, build afdb6d4
+On Ubuntu 16.04.3
+locale
+LANGUAGE=
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC=en_US.UTF-8
+LC_TIME=en_US.UTF-8
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY=en_US.UTF-8
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER=en_US.UTF-8
+LC_NAME=en_US.UTF-8
+LC_ADDRESS=en_US.UTF-8
+LC_TELEPHONE=en_US.UTF-8
+LC_MEASUREMENT=en_US.UTF-8
+LC_IDENTIFICATION=en_US.UTF-8
+LC_ALL=

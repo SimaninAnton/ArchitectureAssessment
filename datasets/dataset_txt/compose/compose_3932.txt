@@ -1,0 +1,13 @@
+mallorydxw commented on 11 Feb 2015
+Like with git, I would like to be able to run docker-compose from within a subdirectory so I don't need to repeatedly change directories when working on a project.
+Current behaviour:
+$ cd myproject
+$ docker-compose up -d
+Creating myproject_abc_1...
+Creating myproject_xyz_1...
+$ cd another/directory
+$ docker-compose logs xyz
+Can't find a suitable configuration file. Are you in the right directory?
+
+Supported filenames: docker-compose.yml, docker-compose.yaml, fig.yml, fig.yaml
+docker-compose could simply look in all ancestor directories for the .yml/.yaml files until it finds one, change working directory, and continue as normal.

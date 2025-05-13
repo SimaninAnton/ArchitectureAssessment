@@ -1,0 +1,1 @@
+expose no longer accepts port range in yaml config file

@@ -1,0 +1,1 @@
+build with context and dockerfile fails due to cannot locate specified dockerfile for version 1.21.2

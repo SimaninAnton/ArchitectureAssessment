@@ -1,0 +1,9 @@
+glenbot commented on 24 Nov 2015
+The environment variable system is return the string "None" when an environment variable is not set on the host. Example config file:
+my_container:
+  command: some_command
+  environment:
+    A_SIMPLE_ENV_VAR:
+My host does not set A_SIMPLE_ENV_VAR and if I fig run my_container bash and then env | grep -i simple you will see that A_SIMPLE_ENV_VAR=None. That doesn't see correct to me because when you run os.environ.get('A_SIMPLE_ENV_VAR') in Python you get back the string None instead of blank. Setting it to a blank string here seems more reasonable because if/then statements work correctly.
+docker-compose version: 1.5.1
+Docker version 1.9.0, build 76d6bc9

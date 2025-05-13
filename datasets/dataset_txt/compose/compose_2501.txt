@@ -1,0 +1,74 @@
+jamshid commented on 13 Apr 2016
+I just set up a two-node docker swarm and get the below error when running "docker-compose up" on the below test.yml (it just verifies some services are available to docker).
+Those url's are fine and curl's succeed. I don't know why docker-compose is reporting KeyError.
+verbose.txt
+...
+Exception in thread Thread-3:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 190, in watch_events
+  File "compose/project.py", line 344, in events
+KeyError: u'status'
+
+buildenv_test_1 exited with code 0
+version: '2'
+
+services:
+  test:
+    image: centos
+    command: bash -e -c "set -o pipefail ; cat /etc/resolv.conf ;
+              for url in
+                  http://${DOCKER_BUILD_CACHE_HOST}:3142/acng-report.html
+                  http://${DOCKER_BUILD_CACHE_HOST}:8181/starwars
+                  http://${DOCKER_BUILD_CACHE_HOST}:8123
+                  http://${DOCKER_BUILD_CACHE_HOST}:8081
+                  http://${DOCKER_BUILD_CACHE_HOST}:8181
+                  https://bitbucket.org
+                  https://google.com
+                  ; do
+                  echo Verfiying $${url} ;
+                  curl -I -fsS $${url} | grep -i -E 'HTTP/|Server:' | sed 's/^/^   /g' ||
+                       { echo FAILED ; exit 1 ; } ;
+              done ;
+              echo 'Verifying curl dl.fedoraproject.org' ;
+              curl -I -fsSL http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm | grep -i -E 'HTTP/|Server:' | sed 's/^/^   /g' || { echo FAILED ; exit 1 ; } ;
+              echo 'Verifying curl -x dl.fedoraproject.org' ;
+              curl -I -fsSL -x 'http://${DOCKER_BUILD_CACHE_HOST}:8123' -H Cache-control:no-cache http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm | grep -i -E 'HTTP/|Server:' | sed 's/^/^   /g' || { echo FAILED ; exit 1 ; } ;
+              echo SUCCESS"
+$ docker info
+Containers: 32
+ Running: 13
+ Paused: 0
+ Stopped: 19
+Images: 120
+Server Version: swarm/1.1.3
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 2
+ 61: 192.168.2.61:2375
+  └ Status: Healthy
+  └ Containers: 16
+  └ Reserved CPUs: 0 / 4
+  └ Reserved Memory: 0 B / 16.42 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=generic, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-04-13T04:26:21Z
+ 62: 192.168.2.62:2375
+  └ Status: Healthy
+  └ Containers: 16
+  └ Reserved CPUs: 0 / 4
+  └ Reserved Memory: 0 B / 16.37 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), provider=generic, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-04-13T04:26:04Z
+Plugins: 
+ Volume: 
+ Network: 
+Kernel Version: 3.16.0-4-amd64
+Operating System: linux
+Architecture: amd64
+CPUs: 8
+Total Memory: 32.79 GiB
+Name: 34bfb34eec2a

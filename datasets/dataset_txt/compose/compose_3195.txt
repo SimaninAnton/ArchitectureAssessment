@@ -1,0 +1,18 @@
+pckhoi commented on 19 Oct 2015
+I'm trying to run a riak cluster using docker-compose. docker-compose scale riak=5 will bring up 5 nodes in 5 containers but the containers don't link to each other. This is a deal breaker and if we will have this feature in the future I suggest an intuitive syntax like this in docker-compose.yml:
+web:
+    build: .
+    volumes:
+        - .:/usr/src/app
+    links:
+        - riak
+riak:
+    build: ./riak
+    links:
+        - riak
+Doing this currently just bring up this error message:
+A service can not link to itself: riak
+Docker version: 1.8.3
+Docker compose version: 1.4.2
+I'm sorry if doing this is already possible. Please let me know what you think.
+Thanks

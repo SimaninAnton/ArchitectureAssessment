@@ -1,0 +1,16 @@
+bobrik commented on 7 Feb 2016
+$ docker-compose --version
+docker-compose version 1.6.0, build unknown
+version: "2"
+
+networks:
+  default:
+    external:
+      name: host
+
+services:
+  huh:
+    image: alpine:3.3
+    command: sleep 3600
+ERROR: Container cannot be disconnected from host network or connected to host network
+I can't find how to make it work with the new version. If there is no way, then there should be one. If there is a way, it should be documented.

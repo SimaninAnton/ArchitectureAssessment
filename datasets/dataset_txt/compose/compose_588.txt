@@ -1,0 +1,22 @@
+peter-kehl commented on 8 Jul 2018
+When installed 1.22.0-rc1 and 1.22.0-rc2, running docker-compose on openSUSE outputs:
+/bin/sh: /tmp/_MEIq20nH3/libreadline.so.7: no version information available (required by /bin/sh)
+It's either a warning, or a benign error, because it processes docker-compose.yml OK.
+The warning/error didn't exist with 1.21.2, neither with at least a few previous releases.
+ENVIRONMENT
+Current openSUSE x64. Docker (but not docker-compose) installed from openSUSE package as per https://en.opensuse.org/SDB:Docker.
+docker --version
+Docker version 17.09.1-ce, build f4ffd2511ce9
+STEPS
+https://docs.docker.com/compose/install/#install-compose
+sudo curl -L https://github.com/docker/compose/releases/download/1.22.0-rc2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+OR
+sudo curl -L https://github.com/docker/compose/releases/download/1.22.0-rc1/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod a+x /usr/local/bin/docker-compose
+cd docker-compose-based-project (I used a clone of docker.github.io repo)
+sudo docker-compose up
+---> /bin/sh: /tmp/_MEIq20nH3/libreadline.so.7: no version information available (required by /bin/sh)
+the rest of output and operation was healthy
+Side note:
+I'd gladly narrow this down to a git commit that causes the error/warning. However, I can't find clear instruction on how to build/install docker-compose from source. I've tried python setup.py develop. Files under script/build are not obvious to use either. If you'd like me to assist, please list command(s) to build/install.
+#docker user dxtr reported a similar issue, too: https://botbot.me/freenode/docker/2018-04-06/?msg=98680114&page=3

@@ -1,0 +1,44 @@
+glensc commented on 12 Feb 2018
+with given .dockerignore:
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+/*
+!/bootstrap.php
+!/composer.*
+!/src
+!/vendor
+!/web
+you can see that docker cli procesess normally while docker-compose does not:
+$ docker --version
+Docker version 17.12.0-ce, build c97c6d6
+
+$ docker build .
+Sending build context to Docker daemon  18.01MB
+Step 1/12 : FROM composer:1.6 AS build
+ ---> 2f3f191337e9
+Step 2/12 : COPY . /app
+ ---> 51e70e31d7b7
+Step 3/12 : WORKDIR /app
+Removing intermediate container 195eb1157938
+ ---> dbf19d487c8a
+Step 4/12 : RUN composer install --no-dev -a
+ ---> Running in 35df8ef9860a
+Loading composer repositories with package information
+...
+$ docker-compose --version
+docker-compose version 1.18.0, build 8dd22a9
+
+$ docker-compose build
+Building app
+Step 1/12 : FROM composer:1.6 AS build
+ ---> 2f3f191337e9
+Step 2/12 : COPY . /app
+ ---> Using cache
+ ---> e4a4db6fbad5
+Step 3/12 : WORKDIR /app
+ ---> Using cache
+ ---> 736fd5af09ae
+Step 4/12 : RUN composer install --no-dev -a
+ ---> Running in 197839d9f942
+Composer could not find a composer.json file in /app
+To initialize a project, please create a composer.json file as described in the https://getcomposer.org/ "Getting Started" section
+ERROR: Service 'app' failed to build: The command '/bin/sh -c composer install --no-dev -a' returned a non-zero code: 1

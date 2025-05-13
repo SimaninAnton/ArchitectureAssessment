@@ -1,0 +1,19 @@
+navinSing commented on 12 Feb 2016
+have a multiple docker compose files; start with docker-compose -f a.yml -f b.yml up -d
+network is specified in first file a.yml with
+networks:
+  nwfront:
+    driver: overlay
+how do i use this network in services of b.yml
+... # some service
+   image : abc   
+   networks:
+      - nwfront
+gives ...
+ERROR: 500 Internal Server Error: subnet sandbox join failed for "10.0.0.0/24": bridge creation in sandbox failed for subnet "10.0.0.0/24": invalid argument
+also see .. but that's within default, what if i want to include multiple externals
+networks:
+  default:
+    external:
+      name: nwfront
+// docker-compose v1.6.0

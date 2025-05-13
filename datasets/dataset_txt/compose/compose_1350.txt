@@ -1,0 +1,6 @@
+deviantony commented on 30 Jun 2017
+It'd be interesting to have the project labels added to the networks, volumes & secrets objects created via compose.
+I'm talking about the following labels here:
+com.docker.compose.project
+com.docker.stack.namespace
+Somehow similar to #1066

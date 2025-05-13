@@ -1,0 +1,14 @@
+ToniIltanen commented on 1 Dec 2017 •
+edited
+When running docker-compose -f [filename] config, the following error is returned:
+ERROR: Version in "./composefile.yml" is unsupported. You might be seeing this error because you're using the wrong Compose file version. Either specify a version of "2" (or "2.0") and place your service definitions under the `services` key, or omit the `version` key and place your service definitions at the root of the file to use version 1.
+For more on the Compose file format versions, see https://docs.docker.com/compose/compose-file/
+Version is set on the compose file by
+Version: "3.2"
+Also tried '3.2', but the error remains the same.
+docker-compose -version
+* docker-compose version 1.8.0, build unknown
+docker -v
+* Docker version 17.09.0-ce, build afdb6d4
+When deploying the swarm, all services are created normally.
+docker stack deploy --compose-file composefile.yml --with-registry-auth my-swarm

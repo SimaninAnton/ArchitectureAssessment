@@ -1,0 +1,1 @@
+Interpolate variables in environment variables definition with docker-compose.yml

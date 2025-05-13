@@ -1,0 +1,18 @@
+spooky commented on 23 Jun 2015
+I get the following error when running docker-compose on an environment with python 3 set as the default python:
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 9, in
+load_entry_point('docker-compose==1.3.1', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python3.4/site-packages/compose/cli/main.py", line 31, in main
+command.sys_dispatch()
+File "/usr/lib/python3.4/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+self.dispatch(sys.argv[1:], None)
+File "/usr/lib/python3.4/site-packages/compose/cli/command.py", line 34, in dispatch
+super(Command, self).dispatch(_args, *_kwargs)
+File "/usr/lib/python3.4/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+self.perform_command(*self.parse(argv, global_options))
+File "/usr/lib/python3.4/site-packages/compose/cli/command.py", line 66, in perform_command
+handler(project, command_options)
+File "/usr/lib/python3.4/site-packages/compose/cli/main.py", line 195, in ps
+project.containers(service_names=options['SERVICE'], one_off=True),
+TypeError: unsupported operand type(s) for +: 'filter' and 'filter'

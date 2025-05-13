@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 27 Jan 2016
+It doesn't make sense for version to be a number: we likely want the next update to the file format to be 2.1, not 3, and we definitely don't want it to be a float.

@@ -1,0 +1,19 @@
+egee-irl commented on 4 Jan 2018
+https://docs.docker.com/compose/compose-file/compose-file-v2/#long-syntax
+Before anybody says that the long-syntax only works with 3.2, the documentation also clearly states:
+Added in version 2.3 file format.
+I am using the 2.3 file format because I need to control the resource usage without deploying via Swarm (which is not possible with 3.x).
+This example does not work with Compose 2.3:
+version: "2.3"
+services:
+web:
+image: nginx:alpine
+ports:
+- "80:80"
+volumes:
+- type: volume
+source: mydata
+target: /data
+The following error is returned
+services.web.volumes contains an invalid type, it should be a string
+If the long syntax does not work with 2.3, the documentation should be updated to reflect this.

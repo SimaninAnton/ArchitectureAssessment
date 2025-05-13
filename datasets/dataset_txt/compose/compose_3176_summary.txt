@@ -1,0 +1,1 @@
+docker-compose build leaves dangling containers on fail

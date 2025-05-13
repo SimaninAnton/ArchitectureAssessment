@@ -1,0 +1,1 @@
+Server start/restart using nodemon takes too long(3mins) using v1.2.0

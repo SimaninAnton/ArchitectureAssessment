@@ -1,0 +1,331 @@
+mikehaertl commented on 20 Feb 2015
+I have created a dockerized Yii2 template that works fine with fig on Linux and Mac OS X:
+https://github.com/codemix/yii2-dockerized
+Now I try to run this exact same app on Windows 8.1 under boot2docker. As there's no fig available there, I've used the dockerzided fig from dduportal/fig as explained here. When I try to start my container with fig up I get an error about a non-existant directory, even though the directory exists:
+web_1 | AH00526: Syntax error on line 38 of /etc/apache2/apache2.conf:
+web_1 | DocumentRoot must be a directory
+yii2_web_1 exited with code 1
+Now if I use a raw docker command to start the exact same image, that was built by fig up, there's no error and the container runs just fine:
+docker run -p 80:80 yii2_web
+Any idea what could cause this issue?
+The fig.yml used is:
+web:
+    build: ./
+    ports:
+        - "8080:80"
+    volumes:
+        - ./:/var/www/html
+    expose:
+        - "80"
+Here some more debug output:
+$ fig --verbose up
+Fig version 1.0.1
+Docker base_url: http+unix://var/run/docker.sock
+Docker version: KernelVersion=3.18.5-tinycore64, Arch=amd64, ApiVersion=1.17, Version=1.5.0, GitCommit=a8a31ef, Os=linux, GoVersion=go1.4.1
+docker containers <- (all=True)
+docker containers -> (list with 4 items)
+Recreating yii2_web_1...
+docker stop <- (u'bdba1dd5e0b3cd4f4e4d94837580cb830ee39848a7eb46f365a4e1444f9c44f6')
+docker stop -> None
+docker create_container <- (entrypoint=[u'/bin/echo'], image=u'yii2_web:latest', command=[])
+docker create_container -> {u'Id': u'8be1effcc2ce58481eedcd15bab88c547ac11095717b48967ae1e50c6bb4382f',
+ u'Warnings': None}
+docker inspect_container <- (u'8be1effcc2ce58481eedcd15bab88c547ac11095717b48967ae1e50c6bb4382f')
+docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': True,
+             u'AttachStdin': False,
+             u'AttachStdout': True,
+             u'Cmd': [],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+             u'Entrypoint': [u'/bin/echo'],
+...
+docker start <- (u'8be1effcc2ce58481eedcd15bab88c547ac11095717b48967ae1e50c6bb4382f', volumes_from=u'bdba1dd5e0b3cd4f4e4d94837580cb830ee39848a7eb46f365a4e1444f9c44f6')
+docker start -> None
+docker wait <- (u'8be1effcc2ce58481eedcd15bab88c547ac11095717b48967ae1e50c6bb4382f')
+docker wait -> 0
+docker remove_container <- (u'bdba1dd5e0b3cd4f4e4d94837580cb830ee39848a7eb46f365a4e1444f9c44f6')
+docker remove_container -> None
+docker containers <- (all=True)
+docker containers -> (list with 4 items)
+docker images <- (name=u'yii2_web')
+docker images -> (list with 1 items)
+docker create_container <- (image=u'yii2_web', ports=[u'80', '80'], name=u'yii2_web_1')
+docker create_container -> {u'Id': u'5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06',
+ u'Warnings': None}
+docker inspect_container <- (u'5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06')
+docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [],
+ u'Config': {u'AttachStderr': True,
+             u'AttachStdin': False,
+             u'AttachStdout': True,
+             u'Cmd': [u'apache2-foreground'],
+             u'CpuShares': 0,
+             u'Cpuset': u'',
+             u'Domainname': u'',
+             u'Entrypoint': None,
+...
+docker start <- (u'5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06', links=[], network_mode=u'bridge', binds={}, dns=None, volumes_from=[u'8be1effcc2ce58481eedcd15bab88c547ac11095717b48967ae1e50c6bb4382f'], port_bindings={u'80': u'8080'}, privileged=False)
+docker start -> None
+docker remove_container <- (u'8be1effcc2ce58481eedcd15bab88c547ac11095717b48967ae1e50c6bb4382f')
+docker remove_container -> None
+docker containers <- (all=False)
+docker containers -> (list with 3 items)
+Attaching to yii2_web_1
+docker attach <- (u'5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06', stderr=1, logs=1, stream=1, stdout=1)
+docker attach -> <generator object _multiplexed_socket_stream_helper at 0x2f02f00>
+web_1 | AH00526: Syntax error on line 38 of /etc/apache2/apache2.conf:
+web_1 | DocumentRoot must be a directory
+docker wait <- (u'5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06')
+docker wait -> 1
+yii2_web_1 exited with code 1
+Gracefully stopping... (press Ctrl+C again to force)
+docker containers <- (all=False)
+docker containers -> (list with 2 items)
+The docker inspect output of the container created from fig up, which throws the error:
+$ docker inspect 5244
+[{
+    "AppArmorProfile": "",
+    "Args": [],
+    "Config": {
+        "AttachStderr": true,
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "Cmd": [
+            "apache2-foreground"
+        ],
+        "CpuShares": 0,
+        "Cpuset": "",
+        "Domainname": "",
+        "Entrypoint": null,
+        "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "PHP_INI_DIR=/usr/local/etc/php",
+            "PHP_EXTRA_BUILD_DEPS=apache2-dev",
+            "PHP_EXTRA_CONFIGURE_ARGS=--with-apxs2",
+            "PHP_VERSION=5.6.5"
+        ],
+        "ExposedPorts": {
+            "80/tcp": {}
+        },
+        "Hostname": "5244045adfa4",
+        "Image": "yii2_web",
+        "MacAddress": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "NetworkDisabled": false,
+        "OnBuild": null,
+        "OpenStdin": false,
+        "PortSpecs": null,
+        "StdinOnce": false,
+        "Tty": false,
+        "User": "",
+        "Volumes": null,
+        "WorkingDir": "/var/www/html"
+    },
+    "Created": "2015-02-19T22:24:17.202510505Z",
+    "Driver": "aufs",
+    "ExecDriver": "native-0.2",
+    "ExecIDs": null,
+    "HostConfig": {
+        "Binds": null,
+        "CapAdd": null,
+        "CapDrop": null,
+        "ContainerIDFile": "",
+        "Devices": null,
+        "Dns": null,
+        "DnsSearch": null,
+        "ExtraHosts": null,
+        "IpcMode": "",
+        "Links": null,
+        "LxcConf": null,
+        "NetworkMode": "bridge",
+        "PidMode": "",
+        "PortBindings": {
+            "80/tcp": [
+                {
+                    "HostIp": "",
+                    "HostPort": "8080"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "RestartPolicy": {
+            "MaximumRetryCount": 0,
+            "Name": ""
+        },
+        "SecurityOpt": null,
+        "VolumesFrom": [
+            "8be1effcc2ce58481eedcd15bab88c547ac11095717b48967ae1e50c6bb4382f"
+        ]
+    },
+    "HostnamePath": "/mnt/sda1/var/lib/docker/containers/5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06/hostname",
+    "HostsPath": "/mnt/sda1/var/lib/docker/containers/5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06/hosts",
+    "Id": "5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06",
+    "Image": "9f9753ff9535b5ea4736a1411acb26b271b848ebeb174617dba1d75ef2f68a65",
+    "MountLabel": "",
+    "Name": "/yii2_web_1",
+    "NetworkSettings": {
+        "Bridge": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "MacAddress": "",
+        "PortMapping": null,
+        "Ports": null
+    },
+    "Path": "apache2-foreground",
+    "ProcessLabel": "",
+    "ResolvConfPath": "/mnt/sda1/var/lib/docker/containers/5244045adfa4d1037f0fd90096eedb2be8c48a53ce614ace068e68d28085ba06/resolv.conf",
+    "RestartCount": 0,
+    "State": {
+        "Error": "",
+        "ExitCode": 1,
+        "FinishedAt": "2015-02-19T22:24:17.988896422Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2015-02-19T22:24:17.797202297Z"
+    },
+    "Volumes": {
+        "/var/www/html": "/app"
+    },
+    "VolumesRW": {
+        "/var/www/html": true
+    }
+}
+]
+The inspect output of the container created by docker run -p 80:80 yii2_web is:
+$ docker inspect a67e
+[{
+    "AppArmorProfile": "",
+    "Args": [],
+    "Config": {
+        "AttachStderr": true,
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "Cmd": [
+            "apache2-foreground"
+        ],
+        "CpuShares": 0,
+        "Cpuset": "",
+        "Domainname": "",
+        "Entrypoint": null,
+        "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "PHP_INI_DIR=/usr/local/etc/php",
+            "PHP_EXTRA_BUILD_DEPS=apache2-dev",
+            "PHP_EXTRA_CONFIGURE_ARGS=--with-apxs2",
+            "PHP_VERSION=5.6.5"
+        ],
+        "ExposedPorts": {
+            "80/tcp": {}
+        },
+        "Hostname": "a67e2162c60a",
+        "Image": "yii2_web",
+        "MacAddress": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "NetworkDisabled": false,
+        "OnBuild": null,
+        "OpenStdin": false,
+        "PortSpecs": null,
+        "StdinOnce": false,
+        "Tty": false,
+        "User": "",
+        "Volumes": null,
+        "WorkingDir": "/var/www/html"
+    },
+    "Created": "2015-02-19T22:14:35.64968687Z",
+    "Driver": "aufs",
+    "ExecDriver": "native-0.2",
+    "ExecIDs": null,
+    "HostConfig": {
+        "Binds": null,
+        "CapAdd": null,
+        "CapDrop": null,
+        "ContainerIDFile": "",
+        "Devices": [],
+        "Dns": null,
+        "DnsSearch": null,
+        "ExtraHosts": null,
+        "IpcMode": "",
+        "Links": null,
+        "LxcConf": [],
+        "NetworkMode": "bridge",
+        "PidMode": "",
+        "PortBindings": {
+            "80/tcp": [
+                {
+                    "HostIp": "",
+                    "HostPort": "80"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "RestartPolicy": {
+            "MaximumRetryCount": 0,
+            "Name": ""
+        },
+        "SecurityOpt": null,
+        "VolumesFrom": null
+    },
+    "HostnamePath": "/mnt/sda1/var/lib/docker/containers/a67e2162c60a76d33b5b1fc093154087618cd52104196853e7dd644ee5a9d7a1/hostname",
+    "HostsPath": "/mnt/sda1/var/lib/docker/containers/a67e2162c60a76d33b5b1fc093154087618cd52104196853e7dd644ee5a9d7a1/hosts",
+    "Id": "a67e2162c60a76d33b5b1fc093154087618cd52104196853e7dd644ee5a9d7a1",
+    "Image": "9f9753ff9535b5ea4736a1411acb26b271b848ebeb174617dba1d75ef2f68a65",
+    "MountLabel": "",
+    "Name": "/focused_davinci",
+    "NetworkSettings": {
+        "Bridge": "docker0",
+        "Gateway": "172.17.42.1",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "172.17.0.52",
+        "IPPrefixLen": 16,
+        "IPv6Gateway": "",
+        "LinkLocalIPv6Address": "fe80::42:acff:fe11:34",
+        "LinkLocalIPv6PrefixLen": 64,
+        "MacAddress": "02:42:ac:11:00:34",
+        "PortMapping": null,
+        "Ports": {
+            "80/tcp": [
+                {
+                    "HostIp": "0.0.0.0",
+                    "HostPort": "80"
+                }
+            ]
+        }
+    },
+    "Path": "apache2-foreground",
+    "ProcessLabel": "",
+    "ResolvConfPath": "/mnt/sda1/var/lib/docker/containers/a67e2162c60a76d33b5b1fc093154087618cd52104196853e7dd644ee5a9d7a1/resolv.conf",
+    "RestartCount": 0,
+    "State": {
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2015-02-19T22:14:40.68469059Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 2487,
+        "Restarting": false,
+        "Running": true,
+        "StartedAt": "2015-02-19T22:14:49.578644381Z"
+    },
+    "Volumes": {},
+    "VolumesRW": {}
+}
+]

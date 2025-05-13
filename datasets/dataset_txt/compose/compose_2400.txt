@@ -1,0 +1,20 @@
+nicolaka commented on 12 May 2016
+When I use docker-compose run, it seems that container_name paramter doesn't get used. Is this by design or a bug?
+# cat docker-compose.yml
+version: "2"
+
+services:
+  ubuntu:
+    image: ubuntu
+    command: /bin/bash
+    container_name: c1
+# docker-compose up -d
+Creating network "docker_default" with the default driver
+Creating c1
+# docker-compose down
+Removing c1 ... done
+Removing network docker_default
+# docker-compose run ubuntu
+Creating network "docker_default" with the default driver
+root@8cefeea1924b:/# exit
+exit

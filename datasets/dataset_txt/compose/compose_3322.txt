@@ -1,0 +1,38 @@
+norfair00 commented on 4 Sep 2015
+Hello,
+I have an error with docker-compose on debian 8
+my docker-compose error
+client and server don't have same version (client : 1.19, server: 1.18)
+My docker-compose.yml
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=cachet
+    - MYSQL_DATABASE=cachet
+    - MYSQL_USER=cachet
+    - MYSQL_PASSWORD=cachet
+cachet:
+  image: cachethq/docker
+  ports:
+    - 1000:8000
+  environment:
+    - DB_HOST=mysql
+    - DB_DATABASE=cachet
+    - DB_USERNAME=cachet
+    - DB_PASSWORD=cachet
+My docker version
+Client version: 1.6.2
+Client API version: 1.18
+Go version (client): go1.3.3
+Git commit (client): 7c8fca2
+OS/Arch (client): linux/amd64
+Server version: 1.6.2
+Server API version: 1.18
+Go version (server): go1.3.3
+Git commit (server): 7c8fca2
+OS/Arch (server): linux/amd64
+My docker-compose version
+docker-compose version: 1.4.0
+docker-py version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

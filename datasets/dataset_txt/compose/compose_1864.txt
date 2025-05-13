@@ -1,0 +1,4 @@
+tusharmakkar08 commented on 8 Dec 2016
+Currently, docker-compose doesn't support cpu_period.
+I can help with the implementation part but it would be great if someone can point me to the source code.
+Thanks.

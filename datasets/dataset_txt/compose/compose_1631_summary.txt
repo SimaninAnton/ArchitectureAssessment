@@ -1,0 +1,1 @@
+Restarting containers cannot be removed by docker-compose kill, rm, stop

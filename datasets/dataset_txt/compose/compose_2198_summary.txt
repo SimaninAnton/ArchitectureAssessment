@@ -1,0 +1,1 @@
+Stack trace instead of error message when daemon isn't reachable

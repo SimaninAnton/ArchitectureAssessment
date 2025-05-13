@@ -1,0 +1,69 @@
+dmabtrg commented on 16 Nov 2015
+After updating to docker-compose 1.5.1 (latest from Debian Unstable), trying to build the following image with docker-compose throws an error. The same yml file with docker-compose 1.4.0 builds the image without errors.
+$ docker-compose -f pep-wilma.yml build pepwilma
+Building pepwilma
+Step 0 : FROM node:0.10-slim
+ ---> 04e511e59c2e
+[...]
+Step 16 : ADD https://raw.githubusercontent.com/Bitergia/docker/master/utils/entrypoint-common.sh /
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.5.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 54, in main
+    command.sys_dispatch()
+  File "/usr/lib/python2.7/dist-packages/compose/cli/docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python2.7/dist-packages/compose/cli/docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 171, in perform_command
+    handler(project, command_options)
+  File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 192, in build
+    force_rm=bool(options.get('--force-rm', False)))
+  File "/usr/lib/python2.7/dist-packages/compose/project.py", line 284, in build
+    service.build(no_cache, pull, force_rm)
+  File "/usr/lib/python2.7/dist-packages/compose/service.py", line 727, in build
+    all_events = stream_output(build_output, sys.stdout)
+  File "/usr/lib/python2.7/dist-packages/compose/progress_stream.py", line 15, in stream_output
+    for event in utils.json_stream(output):
+  File "/usr/lib/python2.7/dist-packages/compose/utils.py", line 131, in split_buffer
+    yield decoder(buffered)
+  File "/usr/lib/python2.7/json/decoder.py", line 367, in decode
+    raise ValueError(errmsg("Extra data", s, end, len(s)))
+ValueError: Extra data: line 2 column 1 - line 15 column 1 (char 4 - 544)
+The original yml can be found here: pep-wilma.yml
+To build the image, we've just replaced the image line with build:
+diff --git a/compose/pep-wilma.yml b/compose/pep-wilma.yml
+index f91f349..3a46b13 100644
+--- a/compose/pep-wilma.yml
++++ b/compose/pep-wilma.yml
+@@ -43,7 +43,7 @@ idm:
+         - "5000"
+
+ pepwilma:
+-    image: bitergia/pep-wilma:4.3.0
++    build: ../images/pep-wilma/4.3.0
+     hostname: pepwilma
+     links:
+         - orion
+Replacing the ADD line from the Dockerfile with a local file or COPY works as expected, as building the image directly with docker.
+$ docker-compose version
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.10+
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+$ docker version
+Client:
+ Version:      1.8.3
+ API version:  1.20
+ Go version:   go1.5.1
+ Git commit:   f4bf5c7
+ Built:        
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.8.3
+ API version:  1.20
+ Go version:   go1.5.1
+ Git commit:   f4bf5c7
+ Built:        
+ OS/Arch:      linux/amd64

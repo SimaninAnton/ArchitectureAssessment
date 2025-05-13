@@ -1,0 +1,42 @@
+intellix commented on 21 Feb 2016
+As a developer, I have a million different projects and now they're all using docker with compose. I have a project structure like:
+/flatscanner
+    /www
+        index.html
+    /api
+        index.php
+    /docker
+        docker-compose.yml
+
+
+/konoro
+    /www
+        index.html
+    /api
+        index.php
+    /docker
+        docker-compose.yml
+To bring up all the services for a service, I go to it's docker directory and up -d, but the prefix is based on the folder, so is always docker_ and I'm getting conflicts as they use similar services: nginx, mysql, redis etc.
+In order to keep them unique, I need to create another folder inside /docker with the project name so the containers are prefixed with the project name instead:
+/flatscanner
+    /www
+    /api
+    /docker
+        /flatscanner
+            docker-compose.yml
+
+
+/konoro
+    /www
+    /api
+    /docker
+        /konoro
+            docker-compose.yml
+I feel like the folder prefix should be configurable, so I can have a YML file like:
+version: '2',
+prefix: 'flatscanner'
+services:
+    nginx
+        image: 'nginx'
+Then I'll have containers like: flatscanner_nginx_1 and konoro_nginx_1 instead a conflicting service called docker_nginx_1
+9

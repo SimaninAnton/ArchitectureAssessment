@@ -1,0 +1,33 @@
+a1exus commented on 15 Sep 2016 •
+edited
+My environment:
+# docker --version
+Docker version 1.12.0, build 8eab29e
+# docker-compose --version
+docker-compose version 1.8.0, build f3628c7
+# 
+I'm trying to use external_links (Compose File Reference) like following:
+# cat docker-compose.yaml 
+version: '2'
+services:
+  nginx:
+    image: nginx:latest
+    external_links:
+     - mariadb
+# 
+and even though external_links works as expected... there is no host entry:
+# docker exec -it nginx_nginx_1 cat /etc/hosts
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.22.0.2  10377b7b236e
+# 
+How do I use extra_hosts as IP address of container is dynamic?:
+# docker inspect mariadb_mariadb_1 | grep \"IPAddress
+            "IPAddress": "",
+                    "IPAddress": "172.21.0.2",
+# 
+Please advise.

@@ -1,0 +1,14 @@
+pavel64-sutyrin commented on 3 Mar 2016
+:~/test$ docker-compose config
+networks: {}
+services:
+  web:
+    image: nginx
+version: '2.0'
+volumes: {}
+
+:~/test$ docker-compose create
+Creating test_web_1
+ERROR: network test_default not found
+Mustn't create create network as well?
+I see this command as "create everything (including networks, especially handy default), but not start yet"

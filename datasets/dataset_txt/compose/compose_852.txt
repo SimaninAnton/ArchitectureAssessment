@@ -1,0 +1,10 @@
+HariSekhon commented on 23 Feb 2018
+The docker-compose shell wrapper from 'run as a container' installation does not work on Mac as it is looking for the realpath command:
+https://docs.docker.com/compose/install/#install-compose
+sudo curl -L --fail https://github.com/docker/compose/releases/download/1.19.0/run.sh -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+COMPOSE_FILE=docker/rancher-docker-compose.yml /usr/local/bin/docker-compose up
+Docker for Mac's native binary version of docker-compose works normally.
+1
+1

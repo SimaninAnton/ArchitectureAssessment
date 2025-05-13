@@ -1,0 +1,1 @@
+variable substitution in docker-compose.yml: empty default value is not supported

@@ -1,0 +1,28 @@
+jamescun commented on 4 Mar 2014
+I have a basic fig file with:
+redis:
+  image: dockerfile/redis
+  ports:
+    - "6379:6379"
+and starting fig with fig up -d succeeds, however trying to list processes running throws the following error:
+vagrant@docker:~$ fig ps
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+load_entry_point('fig==0.3.0', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 39, in main
+command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 30, in dispatch
+super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in dispatch
+self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 47, in perform_command
+return super(Command, self).perform_command(options, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 27, in perform_command
+handler(command_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 158, in ps
+command = container.human_readable_command
+  File "/usr/local/lib/python2.7/dist-packages/fig/container.py", line 89, in human_readable_command
+    return ' '.join(self.dictionary['Config']['Cmd'])
+TypeError

@@ -1,0 +1,12 @@
+ferdynice commented on 13 Aug 2015
+Version 1.4.0.
+The docker-compose 'run' command wrongly uses old ports for linked containers when the yaml configuration file has changed between runs.
+How to reproduce:
+Define a yaml with a service (i.e. web) and a linked service (i.e. db) and expose db port on host.
+Start the web service using 'run' (so that the linked db instance is created because it runs for the first time). It does not matter if you use the 'service-ports' option, because this only affects the service you are actually starting, not linked services.
+Stop the web service if it's still active. (Hit Ctrl-C or use docker-compose command if you ran it in bg).
+Kill the db service.
+Change the db port mapping in the yaml. (So it uses another host port).
+Now, when you start the web service again using 'run', it does not use the new port but still the old port configuration.
+It think this is a bug, because docker-compose 'up' command actually does use the new ports defined in the yaml.
+Should the 'run' command not do the same?

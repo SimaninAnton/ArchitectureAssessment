@@ -1,0 +1,1 @@
+Containers are incorrectly considered part of project on Swarm

@@ -1,0 +1,62 @@
+mhfrantz commented on 20 Feb 2016
+I don't think this is specific to AWS, but this is where I was able to repro. Of the following scenarios, only "Two v1 config files" fails to generate the AWS logs output. It does, however, run the command and produce no error messages.
+The fact that it works with the "v2" config files means that it is probably either user error on my part or a Docker Compose bug.
+Feature: Docker Compose awslogs driver
+
+Background:
+Given Docker v1.10.1
+And Docker Compose v1.6.0
+And the Docker daemon is configured correctly for the `awslogs` driver
+And config file "a-v1.yml" like so:
+"""
+a:
+  image: alpine
+  log_driver: awslogs
+  log_opt:
+    awslogs-region: us-west-2
+    awslogs-group: docker
+  command: date
+"""
+And config file "b-v1.yml" like so:
+"""
+b:
+  image: alpine
+  command: date
+"""
+And config file "a-v2.yml" like so:
+"""
+version: '2'
+services:
+  a:
+    image: alpine
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-2
+        awslogs-group: docker
+    command: date
+"""
+And config file "b-v2.yml" like so:
+"""
+version: '2'
+services:
+  b:
+    image: alpine
+    command: date
+"""
+
+Scenario: Single v1 config file
+  When I run `docker-compose -f a-v1.yml run --rm a`
+  Then I see the output in the AWS logs
+
+Scenario: Two v1 config files
+  When I run `docker-compose -f a-v1.yml -f b-v1.yml run --rm a`
+  Then I see the output in the AWS logs
+
+Scenario: Single v2 config file
+  When I run `docker-compose -f a-v2.yml run --rm a`
+  Then I see the output in the AWS logs
+
+Scenario: Two v2 config files
+  When I run `docker-compose -f a-v2.yml -f b-v2.yml run --rm a`
+  Then I see the output in the AWS logs

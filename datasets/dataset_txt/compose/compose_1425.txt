@@ -1,0 +1,13 @@
+mmi-rperez commented on 30 May 2017
+I've installed the latest version of Docker CE and Compose and them shows as follow:
+# docker --version
+Docker version 17.05.0-ce, build 89658be
+
+# docker-compose --version
+docker-compose version 1.13.0, build 1719ceb
+Each time I try to run docker-compose up I end with the following error:
+$ docker-compose up
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+I've read and apply everything as in here. This is completely new and just happen to me in this new installation however I am not sure why.
+Can I get some help?

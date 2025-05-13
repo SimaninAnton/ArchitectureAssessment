@@ -1,0 +1,2 @@
+olalonde commented on 12 Mar 2015
+If the volumes option is specified in the docker-compose.yml, will the VOLUMES directive from the Dockerfile be ignored are or they both going to take effect?

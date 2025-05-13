@@ -1,0 +1,142 @@
+sikanwa commented on 14 Mar 2016
+I installed Docker Engine on a fresh Debian server and secured it with TLS as explained in documentation - Protect the Docker daemon socket.
+$ uname -a
+Linux my_prod_server 3.14.32-xxxx-grs-ipv6-64 #7 SMP Wed Jan 27 18:05:09 CET 2016 x86_64 GNU/Linux
+Then, I installed Docker Compose as a container - Install as a container.
+On my local development laptop, I installed Docker Engine then Docker Machine and Docker Compose.
+$ uname -a
+Linux my_dev_host 3.19.0-21-generic #21~14.04.1-Ubuntu SMP Sun Jun 14 18:45:42 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+$ docker version
+Client:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 15:54:52 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 15:54:52 2016
+ OS/Arch:      linux/amd64
+$ docker images
+REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                           trusty              e17b56e5200a        2 weeks ago         188 MB
+docker/compose                   1.6.2               d2d56dd5ed11        2 weeks ago         57.96 MB
+debian                           jessie              c648cd6a7396        9 weeks ago         125.1 MB
+$ docker-machine version
+docker-machine version 0.6.0, build e27fb87
+I created a machine with the "none" driver, and doing so, I'm able to control the remote engine locally.
+$ docker-machine ls
+NAME                  ACTIVE   DRIVER   STATE     URL                              SWARM   DOCKER    ERRORS
+prod                  *        none     Running   tcp://<REMOTE_HOST>:2376                v1.10.3
+$ eval $(docker-machine env prod)
+$ docker version
+Client:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 15:54:52 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.3
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   20f81dd
+ Built:        Thu Mar 10 15:38:58 2016
+ OS/Arch:      linux/amd64
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker/compose      1.6.2               d2d56dd5ed11        2 weeks ago         57.96 MB
+$ docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+03f4658f8b78: Pull complete 
+a3ed95caeb02: Pull complete 
+Digest: sha256:8be990ef2aeb16dbcb9271ddfe2610fa6658d13f6dfb8bc72074cc1ca36966a7
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker/compose      1.6.2               d2d56dd5ed11        2 weeks ago         57.96 MB
+hello-world         latest              690ed74de00f        5 months ago        960 B
+However, I am totally unable to use Docker Compose, since it throws errors.
+$ docker-compose ps
+ERROR: Couldn't connect to Docker daemon. You might need to install Docker:
+
+https://docs.docker.com/engine/installation/
+$ docker-compose --verbose ps
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.6.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 56, in main
+    command.sys_dispatch()
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 189, in perform_command
+    project = project_from_options(self.base_dir, options)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 52, in project_from_options
+    verbose=options.get('--verbose'),
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 85, in get_project
+    client = get_client(verbose=verbose, version=api_version)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 68, in get_client
+    version_info = six.iteritems(client.version())
+  File "/usr/lib/python2.7/site-packages/docker/api/daemon.py", line 78, in version
+    return self._result(self._get(url), json=True)
+  File "/usr/lib/python2.7/site-packages/docker/utils/decorators.py", line 47, in inner
+    return f(self, *args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/docker/client.py", line 112, in _get
+    return self.get(url, **self._set_request_timeout(kwargs))
+  File "/usr/lib/python2.7/site-packages/requests/sessions.py", line 477, in get
+    return self.request('GET', url, **kwargs)
+  File "/usr/lib/python2.7/site-packages/requests/sessions.py", line 465, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/site-packages/requests/adapters.py", line 415, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', gaierror(-2, 'Name does not resolve'))
+Like I previously said, Docker Engine works with settings created by Machine.
+Here are the environment variables:
+$ env | grep DOCKER
+DOCKER_HOST=tcp://<REMOTE_HOST>:2376
+DOCKER_MACHINE_NAME=prod
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/home/knw/.docker/machine/machines/prod
+And here's the content of my docker-compose.yml:
+$ cat docker-compose.yml
+version: '2'
+services:
+  hello:
+    image: hello-world
+Sorry for my very long message but I've been looking for a solution for a week now.
+I even reinstalled everything and read lots of similar issues but none solved my problem.
+Do you know how I could find a way ?

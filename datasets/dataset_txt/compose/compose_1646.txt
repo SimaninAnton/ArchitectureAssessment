@@ -1,0 +1,9 @@
+pdonorio commented on 28 Feb 2017
+Hi there,
+I've been looking quite a lot for this and can't find any answer neither in the documentation nor anywhere else, so I'm opening an issue to see ask for directions.
+I need to write a good python script as helper to get start in my framework which is heavily based on docker containers. I am looking into docker-py that is quite great since it integrates also with the swarm mode.
+That said, the problem starts when using docker-compose yaml files inside the framework and allowing the developer to add and customize theirs.
+So docker-py doesn't read any YAML and it doesn't help in validating or getting pieces in a standard way or as docker specify.
+The idea that came to mind was to use docker-compose library functions to do what I need. I wrote some code a few months ago based on the above, and kinda worked. Shouldn't there exist some guidelines/examples for those interested in wrapping, extending or using docker-compose python functions inside their python code?
+Thanks for your great work and any support.
+9

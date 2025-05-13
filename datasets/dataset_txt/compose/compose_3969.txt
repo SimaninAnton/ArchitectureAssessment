@@ -1,0 +1,6 @@
+Contributor
+funkyfuture commented on 27 Jan 2015
+I often forget to run flake8 before committing.
+Furthermore I'm experiencing very different test-results depending on what tool is used (py.test, tox, script/test, wercker-build).
+I'd appreciate a guideline on suggested testing before commiting.
+It may also include an advice on what to do when a wercker-build fails though it's obviously not caused by the commits.

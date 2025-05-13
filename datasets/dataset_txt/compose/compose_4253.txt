@@ -1,0 +1,16 @@
+squeaky-pl commented on 29 Jul 2014
+requirements.txt with == operator is meant to be used when you need completely limit the versions of package. fig uses requirements.txt input in setup.py to fill install_requires. If any package installed after fig requires other version or updates the dependency things will break.
+fig up -d
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2749, in <module>
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 446, in _build_master
+    return cls._build_from_requirements(__requires__)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 459, in _build_from_requirements
+    dists = ws.resolve(reqs, Environment())
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 628, in resolve
+    raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: requests==2.2.1
+The latest version of requests package available is 2.3.0 (which was installed in this case) and it's of course backward compatibile. You should either stop relaying on reading requirements.txt or start using >= operator.

@@ -1,0 +1,34 @@
+Contributor
+jonaseck2 commented on 14 Dec 2015
+Building a git url from a private repo using key based authentication (from ~/.ssh) works just fine:
+>docker build git@github.com:<private org>/<private repo>.git
+Sending build context to Docker daemon 48.64 kB
+Step 1 : FROM mysql
+ ---> b01706fbc5a4
+...
+Successfully built d8768b883931
+Using the same url in docker-compose as a build argument fails due to hostname verification failure:
+>docker-compose --verbose build mysql
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.6.0dev, build unknown
+docker-py version: 1.7.0-dev
+CPython version: 2.7.6
+OpenSSL version: OpenSSL 1.0.1f 6 Jan 2014
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=3.16.0-55-generic, Os=linux, BuildTime=Fri Nov 20 13:12:04 UTC 2015, ApiVersion=1.21, Version=1.9.1, GitCommit=a34a1d5, Arch=amd64, GoVersion=go1.4.2
+compose.service.build: Building mysql
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, nocache=False, stream=True, tag=u'builddeploy_mysql', forcerm=False, rm=True, path='git@github.com:<private org>/<private repo>.git', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.auth.load_config: File doesn't exist
+docker.api.build._set_auth_headers: No auth config found
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x7f84cfff9be0>
+ERROR: compose.cli.main.main: Error trying to use git: exit status 128 (Cloning into '/var/lib/docker/tmp/docker-build-git329598200'...
+Host key verification failed.
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+)
+Is this a compose, docker-py or remote api configuration issue? I'm using latest development versions of compose and docker-py.

@@ -1,0 +1,10 @@
+Contributor
+dnephin commented on 13 Jan 2016 •
+edited by shin-
+Issues with Compose pointing at an Engine running on Windows (i.e. Windows containers) are collected under the group/windows-server label. The Compose client could be running on either Linux or Windows.
+This is a list of things we want to deliver for Compose 1.8 related to Windows Engine.
+Networking doesn't work with Windows containers due to disconnecting containers from networks #3252
+Windows volume paths don't work #2487 (we can look at how docker-cli does it)
+Support npipe for docker host #3170
+See also
+Issues with Compose client running on Windows

@@ -1,0 +1,9 @@
+felixhummel commented on 21 Sep 2017
+This is similar to #3267, but for exec.
+When you exec something, both STDOUT and STDERR are on STDOUT.
+I created an example repository to reproduce this.
+My use case is quite simple:
+I have a Mysql instance and want to run a database dump, piping its output to the host, e.g.
+docker-compose exec mysql mysqldump -ufoo -pbar baz > /var/backups/foo.sql
+Having its warning messages (from STDERR) inside the dump file is a problem.
+PS: Fun fact: On Postgres, I did not stumble upon this problem, because pg_dump rocks! ;)

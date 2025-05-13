@@ -1,0 +1,1 @@
+Handle booleans in environment/labels/extra_hosts

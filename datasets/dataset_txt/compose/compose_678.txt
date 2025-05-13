@@ -1,0 +1,15 @@
+FractalMind commented on 11 May 2018
+For our app we try to restart the nginx-gen with docker-compose so it can reload a .envfile into the container. We can easily do that in the host with
+#docker-compose up -d nginx-gen
+nginx-gen is up-to-date
+When I share docker.sock I can docker-compose ps with no problem
+BUT I cannot reload nginx-gen FROM inside my other container where my code is.
+root@796fbb6c59ce:/mnt/Docker# docker-compose up -d nginx-gen
+Creating nginx-gen ... error
+
+ERROR: for nginx-gen  Cannot create container for service nginx-gen: Conflict. The container name "/nginx-gen" is already in use by container "0459ac04cad31e2fe6e4e6266608ee74d0f02b172e5fb12e260a00a0bcc27a27". You have to remove (or rename) that container to be able to reuse that name.
+
+ERROR: for nginx-gen  Cannot create container for service nginx-gen: Conflict. The container name "/nginx-gen" is already in use by container "0459ac04cad31e2fe6e4e6266608ee74d0f02b172e5fb12e260a00a0bcc27a27". You have to remove (or rename) that container to be able to reuse that name.
+ERROR: Encountered errors while bringing up the project.
+How can I reload the config of nginx-gen from my other container!?
+Thank you for your time :)

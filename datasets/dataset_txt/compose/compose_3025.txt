@@ -1,0 +1,7 @@
+paulwellnerbou commented on 2 Dec 2015
+Hi,
+with docker I can build images directly from any git url (e.g. docker build -t wellnerbou/tomcat7 git://github.com/paulwellnerbou/docker-tomcat.git).
+I tried to to this with docker-compose as well, without success until now.
+Is this possible?
+Thanks and Regards
+Paul.

@@ -1,0 +1,3 @@
+agate commented on 14 Nov 2017
+Hi Docker Compose Team,
+I have a docker-compose.yml file which contains multiple services in it. And each service has env_file section. But when I run docker-compose build service-a I found it will tell me the service-b, service-c, ... is missing their env files. Which I think it's not making sense.

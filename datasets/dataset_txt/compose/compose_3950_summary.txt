@@ -1,0 +1,1 @@
+Setting environment variable on CLI raises exception when service has environment definition

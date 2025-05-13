@@ -1,0 +1,21 @@
+bcattle commented on 28 Dec 2017
+This is a distillation of #4181. When running docker-compose build if the underlying build command fails with an error, that error is not printed and instead the following completely unrelated error is:
+$ docker-compose build web
+Building web
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+Is docker running?
+$ docker info
+Containers: 15
+Running: 0
+Paused: 0
+Stopped: 15
+Images: 72
+Server Version: 17.09.0-ce
+It is.
+Can we build the container using docker build?
+$ docker build --no-cache -t api_web_1 ../../ -f web/Dockerfile
+error checking context: 'no permission to read from '/home/ubuntu/koowalla-backend/deploy/letsencrypt/keys/0001_key-certbot.pem''.
+A ha! We have a file permissions issue.
+docker-compose should not display a misleading error message. It should (a) display no message at all, or more ideally (b) pass through the underlying error message from the docker build command.
+If someone can give me a little guidance to where in the code this error originates I can take a crack at a PR for this.
+1

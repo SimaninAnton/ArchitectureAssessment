@@ -1,0 +1,13 @@
+2XL commented on 4 Feb 2019
+is ther a way to add a custom script entrypoint that can perform custom status or health checks, its run periodically to check container status, for instance mysql is up and running, mainly for during startup, instead of using restart:always or restart on fail...
+web:
+  depends_on:
+     db:
+       status: running # <- boolean, 
+
+db:
+ health_check:
+  - running:
+        entrypoint: script_to_check_if_db_is_running.sh
+        interval: 1 # seconds
+  

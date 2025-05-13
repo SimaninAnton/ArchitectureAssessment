@@ -1,0 +1,1 @@
+Building Docker docs fails due to missing extends.md configuration

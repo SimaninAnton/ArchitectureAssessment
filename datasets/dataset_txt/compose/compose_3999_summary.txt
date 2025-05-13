@@ -1,0 +1,1 @@
+Add short option flag for verbose

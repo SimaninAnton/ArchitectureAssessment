@@ -1,0 +1,25 @@
+bradleyg commented on 4 Apr 2014
+Using this Dockerfile:
+FROM ubuntu
+RUN apt-get update
+RUN apt-get -y install python-software-properties
+RUN add-apt-repository -y ppa:chris-lea/node.js
+RUN apt-get update -y
+RUN apt-get install -y nodejs
+RUN npm install grunt
+I get this error.
+/usr/bin/grunt -> /usr/lib/node_modules/grunt-cli/bin/grunt
+grunt-cli@0.1.13 /usr/lib/node_modules/grunt-cli
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 39, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 30, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 47, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 104, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.project", line 136, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 287, in build
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-2: ordinal not in range(128)
+However if I build with docker directly everything is fine.

@@ -1,0 +1,1 @@
+Docker compose format shall support `-isolation` parameter for `build` option

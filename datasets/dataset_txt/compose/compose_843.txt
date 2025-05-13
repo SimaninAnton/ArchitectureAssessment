@@ -1,0 +1,9 @@
+ghost commented on 27 Feb 2018 •
+edited by ghost
+Hello!
+I have a nextcloud installation, and I notice that once the size of your volumes gets big (20GB) updating the container images using
+docker-compose build --pull
+becomes very slow (tens of minutes) on linux. Is that normal behaviour?
+My volumes are mapped to host directories.
+I can fix the issue by temporarily moving the volumes folders before running the command, but ideally, I wouldn't have to do that.
+Cheers!

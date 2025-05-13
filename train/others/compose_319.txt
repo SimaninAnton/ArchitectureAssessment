@@ -1,0 +1,3 @@
+lukepighetti commented on 17 Jan 2019 •
+edited
+apt-get install docker-compose is installing v1.8 on Ubuntu 16.04. My experience with dev tools is that they are always up to date on the ubuntu repos. If this issue belongs somewhere else please help me understand where it belongs. Thanks!

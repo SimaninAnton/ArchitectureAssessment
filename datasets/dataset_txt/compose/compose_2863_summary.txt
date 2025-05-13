@@ -1,0 +1,1 @@
+Compose reports Error Aborting when exit code of container is 0

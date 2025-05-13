@@ -1,0 +1,28 @@
+avidan-efody commented on 1 May 2017
+using the following compose file:
+---
+version: '2'
+services:
+  aaa:
+    image: ubuntu:16.10
+running the following:
+docker-compose -f compose.yml pull
+I get:
+Pulling aaa (ubuntu:16.10)...
+16.10: Pulling from library/ubuntu
+30179d74c3a2: Pulling fs layer
+29eedd999b59: Download complete
+155740d76144: Download complete
+ec1b1466d64c: Waiting
+01af7eecc784: Waiting
+However, running the following:
+docker-compose -f compose.yml pull > pull.stdout 2> pull.stderr
+And then looking at stdout or stderr, I don't see any of the "pulling"/"download complete" parts. Where are they hiding?
+~$ cat pull.stdout 
+16.10: Pulling from library/ubuntu
+~$ cat pull.stderr
+Pulling aaa (ubuntu:16.10)...
+Aborting.
+Is that behaviour documented/expected? What stream is used for the messages that don't show up?
+Many thanks,
+Avidan

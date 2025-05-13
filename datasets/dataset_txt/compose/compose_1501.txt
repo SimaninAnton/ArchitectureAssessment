@@ -1,0 +1,17 @@
+dunklesToast commented on 26 Apr 2017
+hey,
+i want to install mailcow-dockerized on my debian jessie machine and after docker pull I need to run docker-compose up -d but it throws following error:
+Traceback (most recent call last):
+  File "bin/docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 118, in perform_command
+  File "compose/cli/main.py", line 924, in up
+  File "compose/project.py", line 389, in up
+  File "compose/project.py", line 437, in initialize
+  File "compose/network.py", line 252, in initialize
+  File "compose/network.py", line 60, in ensure
+  File "compose/network.py", line 180, in check_remote_network_config
+  File "compose/network.py", line 163, in check_remote_ipam_config
+AttributeError: 'NoneType' object has no attribute 'keys'
+Failed to execute script docker-compose
+since I dont know python I dont know wheres the problem.

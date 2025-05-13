@@ -1,0 +1,1 @@
+docker-machine ssh worker /home/docker - Permission denied

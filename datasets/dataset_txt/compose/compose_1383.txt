@@ -1,0 +1,6 @@
+Contributor
+shin- commented on 16 Jun 2017
+This would add a feature similar to network_mode: service:svc_name for the pid field of a service configuration.
+This feature would be supported for the following formats when using docker-compose: 2.1, 2.2, 3.0-3.3
+Support for this feature when using docker stack is out of scope of this proposal.
+Override: #4643

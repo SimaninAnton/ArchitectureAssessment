@@ -1,0 +1,3 @@
+Contributor
+summergirl21 commented on 5 Dec 2017
+As mentioned in #5310, --timeout on docker-compose is meant to be used for interactive mode so it doesn't make sense to use in combination with -d. If a user provides both options it should result in an error.

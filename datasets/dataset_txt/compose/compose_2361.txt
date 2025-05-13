@@ -1,0 +1,27 @@
+railnet commented on 25 May 2016
+Hi,
+my goal is to have a container that has two static IP addresses:
+one static IP address assigned in the "backend" network defined in the compose file itself (easy to do with compose 1.7.0);
+another static IP address, assigned in the same yml file but belonging to the same subnet of the host (and then belonging to a "network" not defined in the compose file).
+in example (here below the solution for point 1):
+services:
+    forwarder_public:
+        container_name: cforwarder_public
+        hostname: Forwarder_public
+        image: ubuntu
+        tty: true
+        privileged: true
+        networks:
+            1back:
+                ipv4_address: 170.20.0.1
+networks:
+    1back:
+        driver: bridge
+        ipam:
+          driver: default
+          config:
+          - subnet: 170.20.0.0/24
+            gateway: 170.20.0.254
+then now, in order to solve point 2, I'd like to assign a new IP interface of that service (ref. "forwarder_public") and assign a specific static and public IP address to it. That static and public IP address belongs to the same subnet of the host ip addresses (static in this case too).
+Many Thanks in advance for your precious support.
+1

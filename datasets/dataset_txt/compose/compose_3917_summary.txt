@@ -1,0 +1,1 @@
+Catch 22 with `external_links` mutual dependency

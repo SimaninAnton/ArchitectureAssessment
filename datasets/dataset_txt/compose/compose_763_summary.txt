@@ -1,0 +1,1 @@
+docker-compose should reflect changes to source code

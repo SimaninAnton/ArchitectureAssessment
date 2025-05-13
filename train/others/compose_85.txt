@@ -1,0 +1,19 @@
+jontro commented on 8 Oct 2019
+I have tried with the latest version of my channel (Stable)
+I have uploaded Diagnostics
+Diagnostics ID: 892F50CB-B58A-4113-B9A0-71C20EE9B0FE/20191008162149
+Expected behavior
+No warning when launching docker-compose
+Actual behavior
+Launching docker-compose gives the following warning
+docker-compose
+WARNING: Executing a script that is loading libcrypto in an unsafe way. This will fail in a future version of macOS. Set the LIBRESSL_REDIRECT_STUB_ABORT=1 in the environment to force this into an error.
+Information
+macOS Version: 10.15
+Diagnostic logs
+Docker for Mac: version...
+➜  ~ docker-compose --version
+WARNING: Executing a script that is loading libcrypto in an unsafe way. This will fail in a future version of macOS. Set the LIBRESSL_REDIRECT_STUB_ABORT=1 in the environment to force this into an error.
+docker-compose version 1.21.2, build a133471
+Steps to reproduce the behavior
+Type docker-compose in a terminal window

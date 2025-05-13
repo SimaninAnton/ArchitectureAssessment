@@ -1,0 +1,1 @@
+On docker1.12,How to use compose on swarm mode,without docker-machine

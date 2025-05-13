@@ -1,0 +1,59 @@
+nathanleclaire commented on 11 Nov 2015
+Consider this docker-compose.yml:
+leader:
+  container_name: rethinkleader
+  image: rethinkdb
+  labels:
+    - "com.nathanleclaire.rethinkcluster=true"
+  environment:
+    - "affinity:com.nathanleclaire.rethinkcluster!=true"
+  ports:
+    - "8080:8080"
+  restart: always
+follower:
+  image: rethinkdb
+  labels:
+    - "com.nathanleclaire.rethinkcluster=true"
+  environment:
+    - "affinity:com.nathanleclaire.rethinkcluster!=true"
+  command: rethinkdb --join rethinkleader
+  restart: always
+When I docker-compose --x-networking up -d against a vanilla Docker daemon and inspect, I seem to have correct values in container's .Config.Env:
+$ docker $(docker-machine config default) inspect --format '{{json .Config.Env}}' rethinkleader | jq .
+[
+  "affinity:com.nathanleclaire.rethinkcluster!=true",
+  "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+  "RETHINKDB_PACKAGE_VERSION=2.1.5+2~0jessie"
+]
+Likewise, the container label seems to have been set correctly:
+$ docker $(docker-machine config default) inspect --format '{{json .Config.Labels}}' rethinkleader | jq .
+{
+  "com.docker.compose.config-hash": "35094906d1296ed245c433093554144327aaa148205306bbec8940f9f515808e",
+  "com.docker.compose.container-number": "1",
+  "com.docker.compose.oneoff": "False",
+  "com.docker.compose.project": "rethinkdb",
+  "com.docker.compose.service": "leader",
+  "com.docker.compose.version": "1.5.0",
+  "com.nathanleclaire.rethinkcluster": "true"
+}
+That looks right to me. Swarm should schedule that properly based on the affinity tag, right?
+Well, when I docker-compose --x-networking up -d pointed towards my Swarm master, the environment variables seems not to be set at all:
+$ docker $(docker-machine config --swarm queenbee-nathanleclaire-11-09-2015) inspect --format '{{json .Config.Env}}' rethinkleader | jq .
+[
+  "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+  "RETHINKDB_PACKAGE_VERSION=2.1.5+2~0jessie"
+]
+The label doesn't arrive on the daemon side quite right either. Check out that com.docker.swarm.affinities key:
+$ docker $(docker-machine config --swarm queenbee-nathanleclaire-11-09-2015) inspect --format '{{json .Config.Labels}}' rethinkleader | jq .
+{
+  "com.docker.compose.config-hash": "35094906d1296ed245c433093554144327aaa148205306bbec8940f9f515808e",
+  "com.docker.compose.container-number": "1",
+  "com.docker.compose.oneoff": "False",
+  "com.docker.compose.project": "rethinkdb",
+  "com.docker.compose.service": "leader",
+  "com.docker.compose.version": "1.5.0",
+  "com.docker.swarm.affinities": "[\"com.nathanleclaire.rethinkcluster!=true\"]",
+  "com.docker.swarm.id": "d6ee9658c6e24ce7cf7a047c981c885f5374c8136185e8e567c1807f0db26cbf",
+  "com.nathanleclaire.rethinkcluster": "true"
+}
+Based on the slightly off keys above, I suspect the issue might be on the Compose side. cc @aanand @mnowster @dnephin thx

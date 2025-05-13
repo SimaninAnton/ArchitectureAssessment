@@ -1,0 +1,8 @@
+YouriT commented on 8 Nov 2016
+I was not getting any colorized output as you can see here:
+So as per #2231 I tried using tty: true in service configuration, which did the trick and gave me colors but not like when using run -t ... as you can see I've some char encoding issues;
+What could be the issue about the encoding of the chars as docker run -t... gives me the correct output?
+Kinda improvement on version update
+1.8.0 => 1.8.1, build 878cff1
+So I updated to 1.8.1 as this might solve the issue and now I'm getting utf8 chars with a messy output (not using tty: true makes it non-messy but not colorized)
+Any ideas, hints? I've the feeling there is a small bug behind this.

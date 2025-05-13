@@ -1,0 +1,182 @@
+KiraResari commented on 19 Dec 2018
+Description of the issue
+According to the docker-compose CLI documentation, it should be possible to set the name of a docker-compose Project using the -p flag.
+  -p, --project-name NAME     Specify an alternate project name
+                              (default: directory name)
+However, whenever I try that, the only thing that happens is that the docker-compose on-screen reference is displayed, indicating that my command was not understood by the parser.
+For example running docker-compose up -d -p Test for a docker-compos.yml File that normally works returns returns the following:
+Builds, (re)creates, starts, and attaches to containers for a service.
+
+Unless they are already running, this command also starts any linked services.
+
+The `docker-compose up` command aggregates the output of each container. When
+the command exits, all containers are stopped. Running `docker-compose up -d`
+starts the containers in the background and leaves them running.
+
+If there are existing containers for a service, and the service's configuration
+or image was changed after the container's creation, `docker-compose up` picks
+up the changes by stopping and recreating the containers (preserving mounted
+volumes). To prevent Compose from picking up changes, use the `--no-recreate`
+flag.
+
+If you want to force Compose to stop and recreate all containers, use the
+`--force-recreate` flag.
+
+Usage: up [options] [--scale SERVICE=NUM...] [SERVICE...]
+
+Options:
+    -d, --detach               Detached mode: Run containers in the background,
+                               print new container names. Incompatible with
+                               --abort-on-container-exit.
+    --no-color                 Produce monochrome output.
+    --quiet-pull               Pull without printing progress information
+    --no-deps                  Don't start linked services.
+    --force-recreate           Recreate containers even if their configuration
+                               and image haven't changed.
+    --always-recreate-deps     Recreate dependent containers.
+                               Incompatible with --no-recreate.
+    --no-recreate              If containers already exist, don't recreate
+                               them. Incompatible with --force-recreate and -V.
+    --no-build                 Don't build an image, even if it's missing.
+    --no-start                 Don't start the services after creating them.
+    --build                    Build images before starting containers.
+    --abort-on-container-exit  Stops all containers if any container was
+                               stopped. Incompatible with -d.
+    -t, --timeout TIMEOUT      Use this timeout in seconds for container
+                               shutdown when attached or when containers are
+                               already running. (default: 10)
+    -V, --renew-anon-volumes   Recreate anonymous volumes instead of retrieving
+                               data from the previous containers.
+    --remove-orphans           Remove containers for services not defined
+                               in the Compose file.
+    --exit-code-from SERVICE   Return the exit code of the selected service
+                               container. Implies --abort-on-container-exit.
+    --scale SERVICE=NUM        Scale SERVICE to NUM instances. Overrides the
+                               `scale` setting in the Compose file if present.
+Said docker-compose.yml file looks like this:
+version: "3.2"
+services:
+    foobar-database_1453:
+        build:
+            context: ./database
+            dockerfile: Dockerfile
+        ports:
+            - "1453:1433"
+        container_name: foobar-database_container_1453
+        environment:
+            - ACCEPT_EULA=Y
+            - sa_password=Secret
+
+networks:
+    default:
+        external:
+            name: nat
+The background behind this is that we want to use Docker to deploy "clones" of our application with different settings to different ports on the same server (so we have for example a foobar-database_container_1443, a foobar-database_container_1453 and so on...) . Doing that without defining a project name to docker-compose results in the following warning:
+Found orphan containers (foobar-database_container_1443) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
+Recreating foobar-database_container_1453 ...  
+I have also tried setting the project name as an environment variable in the relevant docker-compose.yml files like this:
+        environment:
+            - ACCEPT_EULA=Y
+            - sa_password=Secret
+            - COMPOSE_PROJECT_NAME=foobar-database_1443
+...but that did not have any effect.
+So, long story made short: The -p flag as written in the Documentation is not working for me, the alternative of setting the project name as an environment variable is not working either, and I thus have no idea how I am supposed to set the project name for docker-compose to get rid of the false detection of "orphan containers".
+Context information (for bug reports)
+Output of docker-compose version
+(paste here)
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:51 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.24)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:56:41 2018
+  OS/Arch:          windows/amd64
+  Experimental:     false
+Output of docker-compose config
+networks:
+  default:
+    external: true
+    name: nat
+services:
+  foobar-database_1443:
+    build:
+      context: C:\Octopus\Deployments\Docker-Foobar-Default\Docker-Foobar-Database\database
+      dockerfile: Dockerfile
+    container_name: foobar-database_container_1443
+    environment:
+      ACCEPT_EULA: "Y"
+      COMPOSE_PROJECT_NAME: foobar-database_1443
+      sa_password: Secret
+    ports:
+    - published: 1443
+      target: 1433
+version: '3.7'
+Steps to reproduce the issue
+Prepare a valid docker-compose.yml to mirror the above one
+Try to run it using docker-compose up -d -p Test
+Observed result
+On-screen explanation of some of the functionalities of docker-compose is displayed on screen, which implies that the command was not understood, see above.
+Expected result
+The project should be built as defined in the docker-compose.yml and given the project name as defined in the -p flag
+Stacktrace / full error message
+Builds, (re)creates, starts, and attaches to containers for a service.
+
+Unless they are already running, this command also starts any linked services.
+
+The `docker-compose up` command aggregates the output of each container. When
+the command exits, all containers are stopped. Running `docker-compose up -d`
+starts the containers in the background and leaves them running.
+
+If there are existing containers for a service, and the service's configuration
+or image was changed after the container's creation, `docker-compose up` picks
+up the changes by stopping and recreating the containers (preserving mounted
+volumes). To prevent Compose from picking up changes, use the `--no-recreate`
+flag.
+
+If you want to force Compose to stop and recreate all containers, use the
+`--force-recreate` flag.
+
+Usage: up [options] [--scale SERVICE=NUM...] [SERVICE...]
+
+Options:
+    -d, --detach               Detached mode: Run containers in the background,
+                               print new container names. Incompatible with
+                               --abort-on-container-exit.
+    --no-color                 Produce monochrome output.
+    --quiet-pull               Pull without printing progress information
+    --no-deps                  Don't start linked services.
+    --force-recreate           Recreate containers even if their configuration
+                               and image haven't changed.
+    --always-recreate-deps     Recreate dependent containers.
+                               Incompatible with --no-recreate.
+    --no-recreate              If containers already exist, don't recreate
+                               them. Incompatible with --force-recreate and -V.
+    --no-build                 Don't build an image, even if it's missing.
+    --no-start                 Don't start the services after creating them.
+    --build                    Build images before starting containers.
+    --abort-on-container-exit  Stops all containers if any container was
+                               stopped. Incompatible with -d.
+    -t, --timeout TIMEOUT      Use this timeout in seconds for container
+                               shutdown when attached or when containers are
+                               already running. (default: 10)
+    -V, --renew-anon-volumes   Recreate anonymous volumes instead of retrieving
+                               data from the previous containers.
+    --remove-orphans           Remove containers for services not defined
+                               in the Compose file.
+    --exit-code-from SERVICE   Return the exit code of the selected service
+                               container. Implies --abort-on-container-exit.
+    --scale SERVICE=NUM        Scale SERVICE to NUM instances. Overrides the
+                               `scale` setting in the Compose file if present.
+Additional information
+Using Docker for Windows to deploy Windows Containers.

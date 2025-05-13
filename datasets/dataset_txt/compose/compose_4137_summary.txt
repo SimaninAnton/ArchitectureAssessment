@@ -1,0 +1,1 @@
+fig exits with foreground java/scala/sbt app

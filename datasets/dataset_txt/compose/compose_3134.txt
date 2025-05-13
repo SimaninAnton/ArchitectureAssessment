@@ -1,0 +1,4 @@
+vieux commented on 5 Nov 2015
+Using the new networking features, when you start a container.
+The name is correctly <folder>_<service>_1 but the hostname is <service>
+It's impossible the scale the containers in some case because all the containers get the same hostname.

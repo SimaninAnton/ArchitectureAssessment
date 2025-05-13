@@ -1,0 +1,1 @@
+Feature Request: option to disable reading from .env

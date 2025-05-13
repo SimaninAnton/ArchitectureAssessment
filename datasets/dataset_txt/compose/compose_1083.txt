@@ -1,0 +1,65 @@
+lox commented on 13 Nov 2017
+I've been working with https://github.com/StefanScherer/windows-docker-machine to be able to run windows docker containers from macOS. I'm having trouble mapping paths through. This works:
+docker run --rm -it -v C:\\Users\\lachlan\\.ssh:C:\\ssh -w C:\\ssh microsoft/windowsservercore powershell
+When I try and translate that to docker-compose.yml, e.g:
+version: "3.2"
+
+services:
+  test:
+    image: microsoft/windowsservercore
+    volumes:
+      - C:\\Users\\lachlan\\.ssh:C:\\ssh
+And I get this error:
+ERROR: Volume C:\\Users\\lachlan\\.ssh:C:\\ssh has incorrect format, should be external:internal[:mode]
+Any ideas?
+I'm running:
+docker-compose version 1.16.1, build 6d1ac21 (macOS 10.12)
+docker version:
+Client:
+ Version:      17.09.0-ce
+ API version:  1.30 (downgraded from 1.32)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:09 2017
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      17.06.2-ee-5
+ API version:  1.30 (minimum version 1.24)
+ Go version:   go1.8.3
+ Git commit:   508bb92
+ Built:        Thu Nov  2 00:54:07 2017
+ OS/Arch:      windows/amd64
+ Experimental: false
+docker-info:
+Containers: 9
+ Running: 0
+ Paused: 0
+ Stopped: 9
+Images: 17
+Server Version: 17.06.2-ee-5
+Storage Driver: windowsfilter
+ Windows:
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: l2bridge l2tunnel nat null overlay transparent
+ Log: awslogs etwlogs fluentd json-file logentries splunk syslog
+Swarm: inactive
+Default Isolation: process
+Kernel Version: 10.0 14393 (14393.1770.amd64fre.rs1_release.170917-1700)
+Operating System: Windows Server 2016 Standard Evaluation
+OSType: windows
+Architecture: x86_64
+CPUs: 2
+Total Memory: 2GiB
+Name: vagrant-2016
+ID: XJMU:DGZW:RZSC:CU2Q:YKGQ:5BUM:P726:2TTA:TQN3:EWHD:DNXB:5PMU
+Docker Root Dir: C:\ProgramData\docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

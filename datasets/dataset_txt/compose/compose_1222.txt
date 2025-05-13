@@ -1,0 +1,41 @@
+danieldram commented on 5 Sep 2017
+I am not sure how to solve this issue.. I tried for an hour.
+I uninstalled previous versions of Docker and docker-compose, I reinstalled the new docker for macosx.
+The dir structure ha both the docker-compose.yml and Dockerfile in the same directory, here are the files:
+#Dockerfile
+FROM node:latest
+MAINTAINER Daniel Ram
+COPY . /var/www
+WORKDIR /var/www
+
+RUN npm install
+EXPOSE 3000
+CMD ["npm", "start"]
+#docker-compose.yml
+version: '2'
+services:
+  playthis_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "1000m"
+          max-file: "10"
+    ports:
+        # - "80:3000"
+        - "3003:3003"
+    restart: "always"
+    networks:
+        - app
+networks:
+  app:
+    driver: bridge
+After running this command, it fails to build:
+$docker-compose up -d
+
+Building playthis_server
+ERROR: the Dockerfile (Dockerfile) cannot be empty
+daniels-MacBook-Pro:creators danielram$ 
+Any ideas on how to solve this issue?

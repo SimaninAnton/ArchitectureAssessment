@@ -1,0 +1,19 @@
+bafoed commented on 18 May 2017
+For example I have following file structure:
+docker-configs/
+|-- compose.base.yml
+
+projects/
+|-- project1/
+|------ .env
+|------ overrides.yml
+|-- project2/
+|------ .env
+|------ overrides.yml
+When my working directory is project1/, I can run compose with docker-compose -f ../../docker-configs/compose.base.yml -f overrides.yml to substitute variables in compose.base.yml using parameters from .env file. The situation changes when I want to automate some compose-related tasks, e.g. stop selected project. If I replace all relative paths with absolute ones, this will not be enough, because for some unknown reason docker-compose is able to read .env files only from the current working directory.
+According to the documentation (https://docs.docker.com/compose/env-file/), this behavior can not be changed. Maybe it's worth to add some additional argument, such as --cli-env-file which could take full paths for purposes like mine? Or maybe there are other ways for this?
+I wanted to send a pull request, but, unfortunately, there are a lot of mentions of various "environments" in the code and I could not figure out where cwd is hardcoded. I think this is a very simple feature that does not even cause any problems in backward compatibility - there is no need to change the default behavior, just add a new argument. Any hardcoded things get better when they can be changed.
+This idea was already offered six months ago, but unfortunately it remained without attention: #3381 (comment).
+And thank you very much for such a great work that has already been done.
+43
+4

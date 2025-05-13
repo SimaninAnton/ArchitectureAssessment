@@ -1,0 +1,8 @@
+fdellabetta commented on 28 Jun 2017
+Feature request:
+Is it possible to embed docker-compose tool into the docker CLI ?
+E.g.
+Could it be
+$ docker compose [-f <arg>...] [options] [COMMAND] [ARGS...]
+instead of
+$ docker-compose  [-f <arg>...] [options] [COMMAND] [ARGS...]

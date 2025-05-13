@@ -1,0 +1,77 @@
+Contributor
+aanand commented on 1 Dec 2015
+Related issues: #2470, #2476
+Users should be able to specify networks in the Compose file, other than the default network, which are created on-demand. This would be useful for specifying drivers and parameters, as well as for creating multiple networks to lock down reachability between services, e.g. for security reasons.
+This necessitates new Compose file syntax in the form of a new top-level key for specifying networks, and a new service-level key for specifying multiple networks to join. I propose networks and publish:
+networks:
+  front:
+    driver: my-custom-driver
+    options: # driver-specific options
+      foo: "a"
+      bar: "b"
+  back:
+    driver: my-custom-driver
+
+services:
+  nginx:
+    image: username/nginx
+    publish:
+      - front
+
+  web:
+    image: username/web
+    publish:
+      - front
+      - back
+
+  db:
+    image: username/db
+    publish:
+      - back
+This creates a 2-network, 3-service app where nginx can talk to web and web to db, but nginx cannot talk directly to db.
+Discussion topics
+networks: mapping or list?
+If networks are specified as a mapping, it works really well in the case where you're specifying a driver/options. But in the (probably common) case where you just want a network and the default driver, it'd be kind of a pain to have to specify anything more than the name. Trouble is, specifying just the name is kind of weird/awkward with a mapping.
+Let's suppose the back network in the example above doesn't need to specify a driver or options:
+networks:
+  front:
+    driver: my-custom-driver
+    options:
+      foo: "a"
+      bar: "b"
+
+  back: {}
+
+  # Or allow nulls?
+  back:
+Conversely, we could use a list instead:
+networks:
+  - name: front
+    driver: my-custom-driver
+    options:
+      foo: "a"
+      bar: "b"
+
+  - name: back
+
+  # Or allow just a string?
+  - back
+We now need to check for duplicate names, but perhaps that's OK.
+Default network
+If the user explicitly defines networks, should we still create a default network?
+If a service specifies networks to connect to with publish, should it also connect to the default network?
+Could we somehow support changing the name of the default network with this syntax, as requested in #2470?
+Aliases
+Networking plans to support aliases under which a container can join a network (docker/libnetwork#737), so Compose should support those. Perhaps via colon syntax:
+web:
+  publish:
+    - front:web-app
+    - back
+Or we could use mapping syntax, but then we run into a similar problem with the "no alias" case as described previously with the networks key:
+web:
+  publish:
+    front: web-app
+    back:
+Arguably this isn't so bad, since we already permit something similar with entries in environment.
+Overriding with multiple Compose files
+If docker-compose.yml and docker-compose.override.yml both specify networks, how should we handle networks that are defined in both files? Should a latterly-defined network completely replace the configuration for a previously-defined network with the same name, or should we do some level of merging of keys? If so, how deeply should we merge it - should we descend into sub-keys of options, for example?

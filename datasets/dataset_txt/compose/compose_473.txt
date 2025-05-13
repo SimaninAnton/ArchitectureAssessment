@@ -1,0 +1,87 @@
+bazzilio commented on 28 Sep 2018 •
+edited
+Description of the issue
+docker-compose build hangs
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of "docker version"
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:09:54 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:07:56 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"
+# docker-compose -f docker-compose-develop.yml config
+services:
+  nginx:
+    build:
+      args:
+        API_URL: https://dev.exponline.beta.example.com/v1/
+        NODE_ENV: production
+      context: /home/deploy/apps/exponline-registration-frontend-dev
+    container_name: exponline_frontend_nginx_develop
+    environment:
+      LETSENCRYPT_EMAIL: lev@example.com
+      LETSENCRYPT_HOST: dev.reg.exponline.beta.example.com,dev.reg-form.exponline.beta.example.com,dev.staff.exponline.beta.example.com
+      NGINX_PORT: '80'
+      REGISTRATION_HOST: dev.reg.exponline.beta.example.com
+      REGISTRATOR_HOST: dev.staff.exponline.beta.example.com
+      REG_FORM_HOST: dev.reg-form.exponline.beta.example.com
+      VIRTUAL_HOST: dev.reg.exponline.beta.example.com,dev.reg-form.exponline.beta.example.com,dev.staff.exponline.beta.example.com
+    expose:
+    - '80'
+    image: exponline_frontend_nginx_develop:latest
+    network_mode: bridge
+    restart: on-failure
+version: '3.0'
+Steps to reproduce the issue
+run docker-compose build
+take an error
+Observed result
+Container build finished successful
+Expected result
+Container build sometimes failed
+Stacktrace / full error message
+err: compose.config.config.find: Using configuration files: ./docker-compose-develop.yml
+err: docker.utils.config.find_config_file: Trying paths: ['/home/deploy/.docker/config.json', '/home/deploy/.dockercfg']
+err: docker.utils.config.find_config_file: No config file found
+err: docker.utils.config.find_config_file: Trying paths: ['/home/deploy/.docker/config.json', '/home/deploy/.dockercfg']
+err: docker.utils.config.find_config_file: No config file found
+err: urllib3.connectionpool._make_request: http://localhost:None "GET /v1.25/version HTTP/1.1" 200 543
+err: compose.cli.command.get_client: docker-compose version 1.22.0, build f46880fe
+err: docker-py version: 3.4.1
+err: CPython version: 3.6.6
+err: OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+err: compose.cli.command.get_client: Docker base_url: http+docker://localhost
+err: compose.cli.command.get_client: Docker version: Platform={'Name': ''}, Components=[{'Name': 'Engine', 'Version': '18.06.0-ce', 'Details': {'ApiVersion': '1.38', 'Arch': 'amd64', 'BuildTime': '2018-07-18T19:07:56.000000000+00:00', 'Experimental': 'false', 'GitCommit': '0ffa825', 'GoVersion': 'go1.10.3', 'KernelVersion': '4.15.0-33-generic', 'MinAPIVersion': '1.12', 'Os': 'linux'}}], Version=18.06.0-ce, ApiVersion=1.38, MinAPIVersion=1.12, GitCommit=0ffa825, GoVersion=go1.10.3, Os=linux, Arch=amd64, KernelVersion=4.15.0-33-generic, BuildTime=2018-07-18T19:07:56.000000000+00:00
+err: compose.service.build: Building nginx
+err: compose.cli.verbose_proxy.proxy_callable: docker build <- (path='/home/deploy/apps/exponline-registration-frontend-dev', tag='exponline_frontend_nginx_develop:latest', rm=True, forcerm=False, pull=False, nocache=True, dockerfile=None, cache_from=None, labels=None, buildargs={'NODE_ENV': 'production', 'API_URL': 'https://dev.exponline.beta.example.com/v1/'}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)
+err: docker.api.build._set_auth_headers: Looking for auth config
+err: docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+err: docker.utils.config.find_config_file: Trying paths: ['/home/deploy/.docker/config.json', '/home/deploy/.dockercfg']
+err: docker.utils.config.find_config_file: No config file found
+err: docker.api.build._set_auth_headers: No auth config found
+err: urllib3.connectionpool._make_request: http://localhost:None "POST /v1.25/build?t=exponline_frontend_nginx_develop%3Alatest&q=False&nocache=True&rm=True&forcerm=False&pull=False&buildargs=%7B%22NODE_ENV%22%3A+%22production%22%2C+%22API_URL%22%3A+%22https%3A%2F%2Fdev.exponline.beta.example.com%2Fv1%2F%22%7D HTTP/1.1" 200 None
+err: compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object APIClient._stream_helper at 0x7fb4e85550f8>
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Ubuntu 18.04.1 LTS
+Docker-compose downloaded from the docker-site.
+Similar bug - #6219

@@ -1,0 +1,7 @@
+darkermatter commented on 8 Feb 2016
+Hi,
+I have an OpenVPN container and would like to use the connection with other containers. The command line below works fine but I can't figure out how to configure it in a v2 compose file:
+docker run --rm -it --net container:openvpn_hotel_1 sander85/rpi-busybox
+Docker: 1.10
+Compose: 1.6.0
+Thanks!

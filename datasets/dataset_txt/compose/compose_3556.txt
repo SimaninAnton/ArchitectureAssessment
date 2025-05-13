@@ -1,0 +1,5 @@
+lazypower commented on 19 Jun 2015
+no matter what I run, LogConfig cannot be imported. This affects the 1.3.0 release coming from pypi.
+I've confirmed this on multiple Ubuntu 14.04 hosts
+ImportError: cannot import name LogConfig
+The known fix was to downgrade back to the 1.2.x series, eg: pip install docker-compose==1.2.0

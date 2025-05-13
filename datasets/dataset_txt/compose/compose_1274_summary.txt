@@ -1,0 +1,1 @@
+Service brought up by docker-compose seems to have slower response time than docker run

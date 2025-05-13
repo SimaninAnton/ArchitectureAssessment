@@ -1,0 +1,42 @@
+phawxby commented on 18 Oct 2018
+Description of the issue
+https://docs.docker.com/compose/compose-file/#init
+"Either set a boolean value to use the default init, or specify a path to a custom one."
+Either the docs are wrong and custom paths aren't supported on init is not fully implemented. I'm guessing the latter?
+# docker-compose.yml
+version: '3.7'
+
+services:
+  web:
+    image: alpine:latest
+    init: /usr/libexec/docker-init
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:34 2018
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+docker-compose config
+ERROR: The Compose file '.\docker-compose.yaml' is invalid because:
+services.web.init contains an invalid type, it should be a boolean

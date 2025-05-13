@@ -1,0 +1,2 @@
+pierreozoux commented on 22 Feb 2018
+As docker will support kubernetes, will there be support in compose too?

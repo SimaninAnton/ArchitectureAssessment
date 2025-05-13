@@ -1,0 +1,2 @@
+kennu commented on 27 Aug 2014
+Currently the fig command writes unnecessary informational output (e.g. "Stopping container..." and "Recreating container..." to stderr. This makes it difficult to redirect output so that errors in e.g. cron jobs would be noticed and unnecessary output would be discarded to /dev/null.

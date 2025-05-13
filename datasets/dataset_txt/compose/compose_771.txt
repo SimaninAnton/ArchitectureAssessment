@@ -1,0 +1,27 @@
+SatishD1 commented on 27 Mar 2018
+Docker Compose file to Create a container with multiple Images
+I need to build a container using the following images.
+Python
+NoSQL
+MongoDB
+DotNetCore 2.0
+I have created a docker-compose.yml file as below. Am trying to create one container for each image and do linking between the containers. But its failing can you please correct me the compose file.
+Also after the container is created how can i check what are the images inside the container.
+....................................................................................
+version: "2"
+services:
+phython:
+image: python
+mongo:
+image: mongo
+links:
+- phython:hub
+nosql:
+image: oracle/nosql
+links:
+- phython:hub
+dotnetcore:
+image: microsoft/aspnetcore:2.0
+links:
+- phython:hub
+............................................................................................................

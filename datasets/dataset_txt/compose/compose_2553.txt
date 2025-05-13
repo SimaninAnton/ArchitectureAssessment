@@ -1,0 +1,24 @@
+ebuildy commented on 31 Mar 2016
+Using:
+Docker version 1.10.3, build 20f81dd
+docker-compose version 1.6.2, build 4d72027
+With the following docker-compose.yml:
+version: '2'
+services:
+  api:
+    image: kinoulink/api-${K_ENV}
+    expose:
+      - 80
+    volumes:
+    - cdn:/var/kinoulink/upload:rw
+volumes:
+  cdn:
+    driver: azurefile
+    driver_opts:
+      accountname: kinoulink
+      accountkey: "${K_CONFIG_AZURE_STORAGE_KEY}"
+      container: uploads
+Up'ing it:
+Create a volume with "local" driver, instead of using "azurefile". This is working fine with Docker CLI:
+docker volume create --name public_cdn -d azurefile -o share=uploads
+Then when I up'ing service again, compose tries to re-create the existing public_cdn volume (but Azure plugin complains ERROR: VolumeDriver.Mount: mount failed: exit status 32 which is normal).

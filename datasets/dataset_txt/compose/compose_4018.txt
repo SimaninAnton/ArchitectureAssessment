@@ -1,0 +1,14 @@
+dyatlov commented on 4 Jan 2015
+Don't know whom to ask - please read the question here: boot2docker/boot2docker#685
+Rails server is up and running
+bash-3.2$ fig up
+Recreating dock_db_1...
+Recreating dock_web_1...
+Attaching to dock_db_1, dock_web_1
+db_1 | LOG: database system was shut down at 2015-01-03 18:47:10 UTC
+db_1 | LOG: database system is ready to accept connections
+db_1 | LOG: autovacuum launcher started
+web_1 | [2015-01-03 18:47:18] INFO WEBrick 1.3.1
+web_1 | [2015-01-03 18:47:18] INFO ruby 2.2.0 (2014-12-25) [x86_64-linux]
+web_1 | [2015-01-03 18:47:18] INFO WEBrick::HTTPServer#start: pid=1 port=3000
+but I can't access it from my browser

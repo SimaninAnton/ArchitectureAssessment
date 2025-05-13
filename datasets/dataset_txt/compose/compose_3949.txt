@@ -1,0 +1,16 @@
+wernight commented on 6 Feb 2015
+Could at least the basics be a bit better covered? The example given is a toy example, not a production example. Problems I find with this example are:
+Should use uWSGI to deploy in production so that multiple processes are used for example (or PHP-FPM for PHP, etc.) and link to an Nginx frontend for static files etc (also in a Docker).
+Should allow simple development, which I found is simple if you mount the code in the volume.
+Should allow building/testing without disrupting the deployed container on the same machine (see #734) and preferably in an environment with custom environment variables so the code can do special things while in dev.
+Should auto-start and restart in prod once deployed (see #872).
+May require some of #846 config format changes
+So I'd really wish there could be couple of standard examples for standard simple websites:
+Nginx + PHP-FPM (using Composer and may be some PHP framework) + MySQL
+Nginx + uWSGI + Django (using PIP requirements.txt) + PostgreSQL
+Nginx + NodeJS + MongoDB
+Those example should allow simple development (edit file and reload page), build (run tests), deploy for production (restart services, multiple processes, safe...), and backup DB.
+Note: I've done that for the first two cases by mounting volumes as it's a lot faster to develop (and deploy) than using ADD . /code, however I agree that it's less clean and my solution makes it hard to have development build and run tests without impacting deployed Dockers using the same fig.yml.
+Related to this is a thread on single vs multi-docker, which means often either building like a VM (usually using phusion's buntu or often supervisor which has PID 1 problem) or using Docker like executable that run on your mounted volumes.
+My hopes are that Docker Compose (moby/moby#9694 and moby/moby#9459) starts off people with the right foot.
+1

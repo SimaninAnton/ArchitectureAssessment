@@ -1,0 +1,19 @@
+andreivasiletruta commented on 5 Mar 2015
+Have a docker-compose installation
+Have a docker-compose.yml file in path /A/B/
+CD to /A
+Trigger: docker-compose -f /A/B/docker-compose.yml build
+Result:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 119, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 167, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 480, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 429, in build
+TypeError: You must specify a directory to build in path
+1

@@ -1,0 +1,4 @@
+frank-dspeed commented on 10 Jan 2015
+ports:
+host.box:10090:80
+don't works because docker only accepts ips fig could dns request ports befor that and then supply the dns result to docker that would enable the users to deploy one fig.yml that will always bind to the right ip on the host.

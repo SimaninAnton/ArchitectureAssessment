@@ -1,0 +1,1 @@
+Compose should not remove stopped containers on scaling up

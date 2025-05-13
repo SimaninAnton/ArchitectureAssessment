@@ -1,0 +1,26 @@
+jpetazzo commented on 8 Jun 2015
+What I do
+docker-compose up with the following docker-compose.yml file, against a 4-nodes Swarm cluster:
+hasher:
+  image: jpetazzo/dockercoins_hasher:1433781053
+  ports: ['8002:80']
+redis: {image: redis}
+rng:
+  image: jpetazzo/dockercoins_rng:1433781053
+  ports: ['8001:80']
+webui:
+  image: jpetazzo/dockercoins_webui:1433781053
+  links: [redis]
+  ports: ['8000:80']
+  volumes: ['webui/files/:/files/']
+worker:
+  image: jpetazzo/dockercoins_worker:1433781053
+  links: [rng, hasher, redis]
+What I expect
+The app comes up (with all containers on the same node, since redis, rng, and hasher are all dependencies of worker).
+What I see
+Swarm places redis, rng, and hasher on random nodes. If at least two containers end up on different nodes, I get the following error:
+Unable to find a node fulfilling all dependencies: --link=dockercoins_hasher_1:dockercoins_hasher_1 --link=dockercoins_hasher_1:hasher --link=dockercoins_hasher_1:hasher_1 --link=dockercoins_redis_1:dockercoins_redis_1 --link=dockercoins_redis_1:redis --link=dockercoins_redis_1:redis_1 --link=dockercoins_rng_1:dockercoins_rng_1 --link=dockercoins_rng_1:rng --link=dockercoins_rng_1:rng_1
+Possible resolutions
+run a full dependency resolution and submit appropriate placement constraints to Swarm
+say that it's Not Our Problem, By Design©

@@ -1,0 +1,1 @@
+Specifying figfile with -f doesn't carry the path forward into build steps

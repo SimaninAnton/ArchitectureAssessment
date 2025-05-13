@@ -1,0 +1,12 @@
+YoChecho commented 11 days ago
+Traceback (most recent call last):
+File "docker-compose", line 6, in
+File "compose\cli\main.py", line 71, in main
+File "compose\cli\main.py", line 124, in perform_command
+File "compose\cli\command.py", line 39, in project_from_options
+File "compose\cli\docker_client.py", line 84, in tls_config_from_options
+File "site-packages\docker\tls.py", line 81, in init
+docker.errors.TLSParameterError: Path to a certificate and key files must be provided through the client_config param. TLS configurations should map the Docke
+r CLI client configurations. See https://docs.docker.com/engine/articles/https/ for API details.
+[11504] Failed to execute script docker-compose
+2

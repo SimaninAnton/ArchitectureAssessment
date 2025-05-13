@@ -1,0 +1,18 @@
+danihodovic commented on 22 Oct 2016 •
+edited
+docker-compose does not check for an invalid restart policies while docker does. I'm not sure if this is intentional, but it's not consistent with the docker run behavior.
+The following docker-compose.yml seems to be valid.
+$ cat docker-compose.yml
+version: '2'
+
+services:
+  ubuntu:
+    image: ubuntu:16.04
+    entrypoint: bash -c 'echo hello world && exit 1'
+    restart: invalid
+while docker run detects an invalid restart policy.
+$ docker run -d --restart invalid:3 ubuntu bash -c 'sleep 5 && echo exiting && exit 1'
+Alias tip: drun -d --restart invalid:3 ubuntu bash -c 'sleep 5 && echo exiting && exit 1'
+docker: invalid restart policy invalid.
+See 'docker run --help'.
+If this is not the intended behavior I'd be willing to submit a PR to get it fixed.

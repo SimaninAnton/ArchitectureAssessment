@@ -1,0 +1,36 @@
+VinceBarresi commented on 17 Jul 2015
+I'm trying to compose a multi container web application by running the command docker-compose up -d. I keep seeing the following error:
+docker-compose up -d
+Recreating 99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_cscdadockerfiles_memcached_1...
+Service 'memcached' needs to be built, but --no-build was passed.
+I'm unsure how to resolve this issue as nothing that I've tried seems to work. Here is my docker-compose.yml file:
+memcached:
+  build: ../cs_cda_dockerFiles/memcached
+  ports:
+    - "11211:11211"
+
+postgres:
+  image: postgres:9.3
+  environment:
+    POSTGRES_USER: "#####"
+    POSTGRES_PASSWORD: "#####"
+    POSTGRES_DB: "#####"
+  volumes:
+    - "../dockerFiles/db_dump/data.sql:/temp/data.sql"
+
+curriculumservices:
+  build: ../cs_cda_dockerFiles/curriculum_services
+  links: 
+    - memcached
+  ports:
+    - "8080:8080"
+
+web:
+  build: ../cs_cda_dockerFiles/web
+  links: 
+    - curriculumservices
+  ports:
+    - "8090:8080"
+On running docker-compose up --no-recreate, I get the following output:
+Starting 99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_99894449ed_cscdadockerfiles_memcached_1...
+Cannot start container 99894449ed0229c6a2d4d0358162f145899f31bfc609abb7bb14b6d9eb0ed820: Error getting container 99894449ed0229c6a2d4d0358162f145899f31bfc609abb7bb14b6d9eb0ed820 from driver aufs: error creating aufs mount to /mnt/sda1/var/lib/docker/aufs/mnt/99894449ed0229c6a2d4d0358162f145899f31bfc609abb7bb14b6d9eb0ed820: invalid argument

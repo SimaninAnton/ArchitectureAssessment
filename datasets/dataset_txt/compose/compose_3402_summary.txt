@@ -1,0 +1,1 @@
+Bug in Docker Compose 1.3.3 crashes Docker daemon, trashes /var/lib/docker and won't restart

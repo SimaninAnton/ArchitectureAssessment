@@ -1,0 +1,7 @@
+jonathanlaf commented on 16 Feb 2018 •
+edited
+OS: Windows 10 Pro Version 1709 Build 16299.248
+Problem:
+docker-compose up can't mount host fs if the password is changed after initial docker configuration.
+It should normally just ask for that password again since it can't mount host fs.
+N.B: I'm a little bit concerned about that problem. It means that instead of asking every time for access to mount my volumes, docker store my password somewhere to provided it to host when needed?

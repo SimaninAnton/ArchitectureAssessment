@@ -1,0 +1,7 @@
+brettgoulder commented on 17 Jun 2016
+Hey,
+It seems these two articles are duplicated:
+https://docs.docker.com/compose/compose-file/
+https://docs.docker.com/v1.8/compose/yml/
+One thing I noticed is that the compose-file docs have documentation around depends_on, while the yml file does not.
+Should we just redirect to the compose-file docs and keep that as the canonical reference for what goes into docker-compose.yml?

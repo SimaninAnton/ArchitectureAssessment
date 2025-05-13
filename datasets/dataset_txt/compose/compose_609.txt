@@ -1,0 +1,30 @@
+jamshid commented on 24 Jun 2018 •
+edited
+Description of the issue
+I run docker-compose run myservice long-running-job.sh to start a container for my service. I would like to use tini (https://github.com/krallin/tini/) as pid 1 to avoid zombie problems.
+That now has built-in support in docker run with the --init option.
+https://docs.docker.com/engine/reference/run/#specify-an-init-process
+Compose should also support this feature (and all other "docker run" options like --volume please).
+# Run a subprocess reaper as pid 1 that starts long-running-jobs.sh
+docker-compose run --init myservice long-running-job.sh
+Context information (for bug reports)
+docker-compose version 1.21.1, build 5a3f1a3
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.04.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   3d479c0
+  Built:        Tue Apr 10 18:18:40 2018
+  OS/Arch:      linux/amd64
+  Experimental: false

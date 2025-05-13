@@ -1,0 +1,22 @@
+rcio commented on 23 Sep 2016 •
+edited
+In our projects, we need structure configuration format(eg json) more than flatten(env), but edit a compose file to include json string in environment is painful: quotes, comma, script indention...
+Since yaml format can simply convert to json, why not just do it automated.
+When use this compose file:
+  apline:
+    image: "alpine"
+    entrypoint:
+      - "/bin/sh"
+      - "-c"
+      - "export"
+    environment:
+        service_config:
+          name: "name"
+          node: "node"
+docker-compose just gives me an error:
+ERROR: Validation failed in file './apline.yaml', reason(s):
+apline.environment.service_config contains {"node": "node", "name": "name"}, which is an invalid type, it should be a string, number, boolean, or a null
+An environment item's value must be a string, number, boolean, or a null, so can we convert the value to json string when it is a map or array?
+Is there any problem I didn't see? Anyone think this is useful?
+If it's permitted, I'll make the changes and PR.
+Thanks.

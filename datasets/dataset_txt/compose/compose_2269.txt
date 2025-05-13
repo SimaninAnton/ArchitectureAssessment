@@ -1,0 +1,17 @@
+pramodhkp commented on 29 Jun 2016
+docker-compose doesn't remove the mount points inside the container when you remove it in docker-compose file and recreate the container.
+For example,
+Inital config:
+kibana:
+  image: registry.ops.directi.com/slant/arcus-kibana
+  ports:
+    - 172.17.40.59:19200:80
+ volumes:
+    - ./kibana/default.conf:/etc/nginx/conf.d/default.conf
+Start the container, and the volume is mounted.
+Edited config:
+kibana:
+  image: registry.ops.directi.com/slant/arcus-kibana
+  ports:
+    - 172.17.40.59:19200:80
+Recreating the container should remove the volume, but it still exists. Removing the container and creating it back works.

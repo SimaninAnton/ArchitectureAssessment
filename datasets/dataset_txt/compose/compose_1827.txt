@@ -1,0 +1,32 @@
+tn-osimis commented on 29 Dec 2016 •
+edited
+Proposal
+docker-compose run --recreate-deps: Recreates containers for service dependencies (services specified with depends_on or links) for which the image changed.
+Cannot be used with --no-deps.
+Scenario
+version: "2"
+services:
+        foo-x:
+                build: foo-x
+        bar-x:
+                build: bar-x
+        foo-y:
+                build: foo-y
+                depends_on: ["foo-x"]
+        bar-y:
+                build: bar-y
+                depends_on: ["bar-x"]
+        foo-z:
+                image: foo-z
+                depends_on: ["foo-y"]
+        bar-z:
+                image: bar-z
+                depends_on: ["bar-y"]
+        test-runner:
+                build: test-runner
+                depends_on: ["foo-z", "bar-z"]
+(Where "test-runner" is a service that runs integration tests against the other services then stops.)
+docker-compose build && docker-compose run --recreate-deps test-runner would then consistently work out-of-the-box as the sources for the various services are edited.
+Nice-to-have: run --rebuild-deps so that only the necessary dependencies are rebuilt, which can save a lot of time in certain scenarios.
+Currently it is necessary to use docker-compose up -d foo-x bar-x foo-y bar-y foo-z bar-z (everything except the test-runner) after the build and before the run. The services specified must be kept in sync as they change in the docker-compose file. To help with that, one can move the test-runner service to a second docker-compose file and specify both for the run command, but only the base one for the up command. This is still rather cumbersome and the up step is still necessary.
+Of course this should be useful for many other scenarios, but running tests in this way is quite common.

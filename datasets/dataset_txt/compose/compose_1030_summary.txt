@@ -1,0 +1,1 @@
+Compose "build.network" config does not incorporate project name

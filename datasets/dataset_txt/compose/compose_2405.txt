@@ -1,0 +1,7 @@
+nhooey commented on 12 May 2016
+docker-compose up --help outputs:
+    --no-build                 Don't build an image, even if it's missing.
+    --build                    Build images before starting containers.
+But these options are missing from docker-compose run --help.
+As of docker-compose version 1.7.1, build unknown from Pip.
+3

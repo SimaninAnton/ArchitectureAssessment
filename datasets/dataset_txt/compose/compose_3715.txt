@@ -1,0 +1,15 @@
+MrMMorris commented on 17 Apr 2015
+version 1.2.0
+docker-compose run blah
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "build/bdist.linux-x86_64/egg/pkg_resources.py", line 2749, in <module>
+
+  File "build/bdist.linux-x86_64/egg/pkg_resources.py", line 446, in _build_master
+    equal ``sys.path``.)
+  File "build/bdist.linux-x86_64/egg/pkg_resources.py", line 459, in _build_from_requirements
+
+  File "build/bdist.linux-x86_64/egg/pkg_resources.py", line 632, in resolve
+    error_info = {}
+pkg_resources.VersionConflict: (requests 2.2.1 (/usr/lib/python2.7/dist-packages), Requirement.parse('requests>=2.5.2'))

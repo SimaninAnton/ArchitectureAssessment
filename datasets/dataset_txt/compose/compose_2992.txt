@@ -1,0 +1,28 @@
+dngferreira commented on 11 Dec 2015
+I'm seeing a strange behaviour in my docker compose up command.
+.env
+ES_HEAP_SIZE=512m
+MAX_LOCKED_MEMORY=unlimited
+ES_INDEX_SHARDS=3
+ES_NODE_NAME=dev_node_2
+ES_CLUSTER_NAME=dev_cluster_1
+docker-cluster.yml
+elastic_1:
+  image: elasticsearch
+  container_name: elastic_1
+  command: elasticsearch -Des.network.host=_non_loopback_ -Des.multicast.enabled=false  -Des.discovery.zen.minimum_master_nodes=2 --default.path.conf=/etc/elasticsearch/
+  net: elastic
+  environment:
+    - ES_HEAP_SIZE=300m
+    - MAX_LOCKED_MEMORY=unlimited
+    - ES_INDEX_SHARDS=2
+    - ES_NODE_NAME=elasticsearch_node_1
+    - ES_CLUSTER_NAME=elasticsearch_cluster_1
+
+elastic_2:
+  image: elasticsearch
+  container_name: elastic_2
+  command: elasticsearch -Des.network.host=_non_loopback_ -Des.multicast.enabled=false -Des.discovery.zen.ping.unicast.hosts=elastic_1 -Des.discovery.zen.minimum_master_nodes=2 --default.path.conf=/etc/elasticsearch/
+  net: elastic
+  env_file: .env
+if I run docker-compose.exe -f docker-cluster.yml --x-networking --x-network-driver overlay up the variables from .env file are not loaded into the container elastic_2. If I use environment config like in elastic_1 it works as expected.

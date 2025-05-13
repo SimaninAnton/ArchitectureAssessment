@@ -1,0 +1,31 @@
+caervs commented on 14 Feb 2017
+I have a docker-compose.yml and docker-compose.override.yml both using the 3.1 compose format. Adding secrets to the first yml seems to break the yaml interpolation so any attempt to bring up the stack or check the config results in a stack trace
+$ docker-compose config
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 88, in main
+    command()
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 134, in perform_command
+    handler(command, options, command_options)
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/main.py", line 330, in config
+    compose_config = get_config_from_options(self.project_dir, config_options)
+  File "/usr/local/lib/python2.7/site-packages/compose/cli/command.py", line 46, in get_config_from_options
+    config.find(base_dir, config_path, environment)
+  File "/usr/local/lib/python2.7/site-packages/compose/config/config.py", line 333, in load
+    service_dicts = load_services(config_details, main_file)
+  File "/usr/local/lib/python2.7/site-packages/compose/config/config.py", line 455, in load_services
+    service_config = merge_services(service_config, next_config)
+  File "/usr/local/lib/python2.7/site-packages/compose/config/config.py", line 446, in merge_services
+    for name in all_service_names
+  File "/usr/local/lib/python2.7/site-packages/compose/config/config.py", line 446, in <dictcomp>
+    for name in all_service_names
+  File "/usr/local/lib/python2.7/site-packages/compose/config/config.py", line 797, in merge_service_dicts_from_files
+    new_service = merge_service_dicts(base, override, version)
+  File "/usr/local/lib/python2.7/site-packages/compose/config/config.py", line 856, in merge_service_dicts
+    md.merge_sequence('secrets', types.ServiceSecret.parse)
+  File "/usr/local/lib/python2.7/site-packages/compose/config/config.py", line 839, in merge_sequence
+    self[field] = [item.repr() for item in sorted(merged.values())]
+AttributeError: 'ServiceSecret' object has no attribute 'repr'
+$ 
+I am running docker-compose version 1.11.1, build 7c5d5e4

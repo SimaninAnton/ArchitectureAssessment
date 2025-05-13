@@ -1,0 +1,81 @@
+sandeepgupta2k4 commented on 16 Feb 2019
+Description of the issue
+Lets say we have below docker compose file:
+version: '2.1'
+services:
+main:
+image: sandeepgupta2k4/main:latest
+depends_on:
+container1:
+condition: service_healthy
+container1:
+image: sandeepgupta2k4/container1:latest
+healthcheck:
+test: "test -f /dummyfile.txt"
+Dockerfile - container 1 and main
+FROM alpine:latest
+ADD start.sh /
+CMD ["/bin/sh", "start.sh"]
+start.sh - container1
+echo "Inside container 1"
+sleep 20
+echo "dummy data" > /dummyfile.txt
+sleep 60
+start.sh - main
+echo "Inside main container"
+Full code can be found here : https://github.com/sandeepgupta2k4/experiment
+Now when we do "docker-compose up"
+It will wait till startup for the main container gets triggered before displaying any logs on the console. Ideally logs should start showing up as soon as startup for container1 is triggered.
+Due to this problem, in case there is any issue in start up of container1, we get error like below:
+ERROR: for main Container "f7d0e1fe8282" is unhealthy.
+ERROR: Encountered errors while bringing up the project.
+With this we cannot really figure out what really went wrong with container1, Also in case of many containers, we may not even know which container actually failed.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:33:12 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:41:49 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  container1:
+    healthcheck:
+      test: test -f /dummyfile.txt
+    image: sandeepgupta2k4/container1:latest
+  main:
+    depends_on:
+      container1:
+        condition: service_healthy
+    image: sandeepgupta2k4/main:latest
+version: '2.1'
+Steps to reproduce the issue
+1.docker-compose up
+2."Inside container 1" should appear on console as soon as start up of container1 is triggered but it actually waits till startup of main container gets triggerd.
+Observed result
+No logs are published util startup of main container is triggered
+Expected result
+"Inside container 1" should appear on console as soon as start up of container1 is triggered
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.

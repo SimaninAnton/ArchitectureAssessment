@@ -1,0 +1,82 @@
+sauljabin commented on 26 Dec 2018
+Description of the issue
+Hello community, I'm trying to connect through ssh to a remote server, but docker-compose shows a dependency error.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  adminer:
+    image: adminer
+    ports:
+    - 8080:8080/tcp
+  db:
+    environment:
+      POSTGRES_PASSWORD: postgres
+    image: postgres
+    volumes:
+    - db:/var/lib/postgresql/data:rw
+version: '3.1'
+volumes:
+  db: {}
+Steps to reproduce the issue
+Configure ssh agent (all right)
+Install the new docker-compose, following this https://github.com/docker/compose/releases
+Install paramiko, following this https://github.com/paramiko/paramiko
+Run docker-compose with -H parameter
+Observed result
+With the commands:
+DOCKER_HOST='ssh://user@server' docker-compose up
+and
+docker-compose -H 'ssh://user@server' up
+docker-compose needs paramiko dependency even when installed.
+Docker runs fine:
+docker -H ssh://user@server ps
+Expected result
+A success connection through ssh to a remote server.
+Stacktrace / full error message
+$ docker-compose -H 'ssh://user@server' up
+Traceback (most recent call last):
+  File "site-packages/docker/api/client.py", line 151, in __init__
+NameError: name 'SSHAdapter' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 42, in project_from_options
+  File "compose/cli/command.py", line 123, in get_project
+  File "compose/cli/command.py", line 94, in get_client
+  File "compose/cli/docker_client.py", line 127, in docker_client
+  File "site-packages/docker/api/client.py", line 156, in __init__
+docker.errors.DockerException: Install paramiko package to enable ssh:// support
+[6888] Failed to execute script docker-compose
+Additional information
+Ubuntu 18.04.1 LTS
+pip list ...paramiko (2.4.2) ...
+4

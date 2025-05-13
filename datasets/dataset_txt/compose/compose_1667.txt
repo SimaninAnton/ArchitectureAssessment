@@ -1,0 +1,3 @@
+atomi commented on 18 Feb 2017
+Docker machine started doing these (https://github.com/docker/machine/releases/download/v0.9.0/docker-machine-Linux-armhf)
+And they're super helpful.

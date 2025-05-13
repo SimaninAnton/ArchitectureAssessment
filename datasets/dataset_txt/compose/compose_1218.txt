@@ -1,0 +1,8 @@
+PascalTurbo commented on 7 Sep 2017
+I've got an internal server which I can't access by dns, so I've created an entry in /etc/hosts.
+# /etc/hosts
+192.168.4.2 internal.server.name
+When executing docker build http://internal.server.name/git/my_repo.git#FEATURE/name everything works fine.
+But when adding build: http://internal.server.name/git/my_repo.git#FEATURE/name to my docker-compose.yml it ends up with
+ERROR: error fetching: fatal: unable to access ' http://internal.server.name/git/my_repo.git/': Could not resolve host: internal.server.name
+: exit status 128

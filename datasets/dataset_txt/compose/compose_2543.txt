@@ -1,0 +1,45 @@
+jpetazzo commented on 3 Apr 2016
+What I do
+View logs of a service with docker-compose logs --follow
+Scale up service (e.g. from 1 to 2)
+Scale down service (e.g. from 2 to 1)
+Scale up again (e.g. from 1 to 3)
+What I expect to see
+Compose streams logs of service instance 1
+... then instances 1+2
+... then instance 1 only (possibly with a message telling me that instance 2 is gone)
+... the instances 1+2+3
+What I see instead
+Compose streams logs of service instance 1
+... then instances 1+2
+... then, when scaling down, I get the following traceback:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 190, in watch_events
+  File "compose/project.py", line 355, in events
+  File "compose/container.py", line 71, in service
+  File "compose/container.py", line 108, in labels
+  File "compose/container.py", line 181, in get
+  File "compose/container.py", line 236, in inspect_if_not_inspected
+  File "compose/container.py", line 245, in inspect
+  File ".tox/py27/lib/python2.7/site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File ".tox/py27/lib/python2.7/site-packages/docker/api/container.py", line 182, in inspect_container
+  File ".tox/py27/lib/python2.7/site-packages/docker/client.py", line 158, in _result
+  File ".tox/py27/lib/python2.7/site-packages/docker/client.py", line 153, in _raise_for_status
+NotFound: 404 Client Error: Not Found ("No such container: 751d68c04b7bef09e6b4b2bbfd74b6733736491621a6b131ac68beba8751970a")
+Compose then only displays logs for instance 1 and doesn't display other instances, even if I scale back up
+Extra info
+$ docker-compose -v
+docker-compose version 1.7.0rc1, build 1ad8866
+To reproduce:
+git clone git://github.com/jpetazzo/orchestration-workshop
+cd orchestration-workshop/dockercoins
+docker-compose up -d
+docker-compose logs --tail 1 --follow worker
+# in another terminal ...
+docker-compose scale worker=2
+docker-compose scale worker=1
+docker-compose scale worker=3
+docker-compose down
+Related to: #3075 #2227

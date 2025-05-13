@@ -1,0 +1,1 @@
+VERY SLOW network connections to localhost container when not connected to Internet

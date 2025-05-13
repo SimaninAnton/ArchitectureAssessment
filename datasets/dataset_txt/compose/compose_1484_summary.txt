@@ -1,0 +1,1 @@
+docker-compose logs strip colors when outputting to a pipe

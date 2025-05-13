@@ -1,0 +1,9 @@
+rizowski commented on 9 Feb 2018 •
+edited
+Summary
+I am having issues trying to connect to a container that is sharing the the same IP as another container. I have an example project that can recreate the issue I am going to describe located here https://github.com/rizowski/docker-tunnel.
+Quick details
+I cannot reproduce this issue on a mac for some reason. It has to be done on a linux server. I am testing this with Ubuntu 16.04. I am also using docker-compose to construct the platform. @openam constructed the platform using regular docker commands and is able to replicate the issue as well. These tests are also performed externally of the host. The server that docker is running on does not have any custom iptable rules and should be vanilla. I have been able to hit any other container in the same docker network and externally. Just not any container sharing the same docker IP address as the tunneling container.
+The problem
+When I try to spin up the services and try to access the container exposing the 8080 port, I am able to hit the container just fine. Whereas if I try to connect to the container with the 9090 port exposed through the tunnel I am unable to make a connection.
+This seems like a bug since I am able to hit the containers if it is running on my mac but not when it is running on Ubuntu 16.04.

@@ -1,0 +1,2 @@
+zongdj001 commented on 15 Jun 2016
+I execute docker-compose up from docker quick start terminal, it throw a ssl error after a while said that "_ssl.c:574 the handshake operation timed out"

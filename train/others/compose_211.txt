@@ -1,0 +1,11 @@
+BerkhanBerkdemir commented on 22 Apr 2019
+Is your feature request related to a problem? Please describe.
+We use docker-compose with PostgreSQL and Elasticsearch containers during the development process. On our docker-compose.yml file has 3 services: postgres, elasticsearch and kibana. The application uses only PostgreSQL and Elasticsearch. Kibana is used for debugging purpose and we need to use
+docker-compose up -d postgres elasticsearch
+every time if we don't want to run Kibana.
+Describe the solution you'd like
+A key, which defines the container as optional in the docker-compose.yml, would be awesome.
+Describe alternatives you've considered
+Also, I didn't spend a great deal of time on this to search for a way to define optional containers; therefore, there is maybe a way to define it.
+Additional context
+Here is the docker-compose.yml file that we use.

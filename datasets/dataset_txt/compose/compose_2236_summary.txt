@@ -1,0 +1,1 @@
+docker-compose bundle --fetch-digests isn't a communicative name

@@ -1,0 +1,77 @@
+ghost commented on 27 Dec 2016
+Expected behavior
+docker-compose build will build my images
+Actual behavior
+docker-compose build causes a Traceback error. This only happens when built from compose. If i do docker build directly, my dockerfiles build correctly. I can then use docker-compose up to run them. They just cannot be built using compose
+a 92kb file called NUL is created in the directory with the Dockerfile and compose file
+Information
+Diagnostic ID from "Diagnose & Feedback" in the menu.
+A diagnostic was uploaded with id: FB72625D-5AB5-4834-92F1-04A31716F015/2016-12-27_00-21-47
+a reproducible case if this is a bug, Dockerfiles FTW
+this happens with any dockerfile. My current test one is simply
+Dockerfile
+FROM hello-world
+docker-compose.yml
+version: '2'
+services:
+  apiserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dev_apiserver
+    ports:
+      - "3000:3000"
+host distribution and version (Windows version, build number, etc)
+Using Windows 10 Enterprise
+ docker version
+Client:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+docker-compose --verbose build
+E:\Server\onny\DL\Onny
+
+> docker-compose --verbose build
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.auth.find_config_file: Trying paths: ['C:\\Users\\imarotte\\.docker\\config.json', 'C:\\Users\\imarotte\\.dockercfg']
+docker.auth.auth.find_config_file: No config file found
+compose.cli.command.get_client: docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localnpipe
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.39-moby, Os=linux, BuildTime=2016-12-16T06:14:34.536244887+00:00, ApiVersion=1.24, Version=1.12.5, GitCommit=7392c3b, Arch=amd64, GoVersion=go1.6.4
+compose.service.build: Building apiserver
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag='dev_apiserver', buildargs=None, rm=True, forcerm=False, path='E:\\Server\\onny\\DL\\Onny', dockerfile='Dockerfile')
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 65, in main
+  File "compose\cli\main.py", line 117, in perform_command
+  File "compose\cli\main.py", line 223, in build
+  File "compose\project.py", line 300, in build
+  File "compose\service.py", line 742, in build
+  File "compose\cli\verbose_proxy.py", line 55, in proxy_callable
+  File "site-packages\docker\api\build.py", line 55, in build
+  File "site-packages\docker\utils\utils.py", line 95, in tar
+  File "tarfile.py", line 2007, in add
+  File "tarfile.py", line 1879, in gettarinfo
+WindowsError: [Error 87] The parameter is incorrect: 'E:\\Server\\onny\\DL\\Onny\\NUL'
+docker-compose returned -1
+Steps to reproduce the behavior
+docker-compose build

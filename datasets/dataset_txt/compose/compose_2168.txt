@@ -1,0 +1,27 @@
+pahaz commented on 7 Aug 2016 •
+edited
+Sometimes I see an annoying problem with processing multiple json objects, for example:
+Exception in thread Thread-27:
+Traceback (most recent call last):
+  File "/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/threading.py", line 914, in _bootstrap_inner
+    self.run()
+  File "/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/threading.py", line 862, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/pahaz/.virtualenvs/xxx/lib/python3.5/site-packages/compose/cli/log_printer.py", line 190, in watch_events
+    for event in event_stream:
+  File "/Users/pahaz/.virtualenvs/xxx/lib/python3.5/site-packages/compose/project.py", line 343, in events
+    decode=True
+  File "/Users/pahaz/.virtualenvs/xxx/lib/python3.5/site-packages/docker/client.py", line 253, in _stream_helper
+    data = json.loads(data)
+  File "/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/json/__init__.py", line 319, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/json/decoder.py", line 342, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 2 column 1 (char 655)
+This problem is related with wrong event stream processing in docker-py.
+More info here: docker/docker-py#1059 and docker/docker-py#1081
+I know that this is not a problem of compose. But first of all I try to find any mentions about it here. And I did not find any mentions in issues.
+If you also annoyed, you can use patch from there: docker/docker-py#1081
+What do you think about add event stream preprocessing in compose for patching this problem?
+I this than this is not so important if it will fixed in docker-py. But It may help now here and it may be helpful for people who freeze docker-py version.
+2

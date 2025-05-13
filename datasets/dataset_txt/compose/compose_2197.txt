@@ -1,0 +1,24 @@
+synotna commented on 28 Jul 2016
+According to https://docs.docker.com/compose/compose-file/#/context it should be possible to use URL to a git repository for build context, but I am having no luck
+docker-py version: 1.8.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+docker-compose.yml
+version: '2'
+services:
+  test:
+    build:
+      context: https://github.com/docker/compose.git
+docker-compose build
+Building test
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 58, in main
+  File "compose/cli/main.py", line 109, in perform_command
+  File "compose/cli/main.py", line 215, in build
+  File "compose/project.py", line 300, in build
+  File "compose/service.py", line 719, in build
+  File ".tox/py27/lib/python2.7/site-packages/docker/api/build.py", line 104, in build
+  File ".tox/py27/lib/python2.7/site-packages/docker/utils/decorators.py", line 46, in inner
+AttributeError: 'NoneType' object has no attribute 'update'
+docker-compose returned -1

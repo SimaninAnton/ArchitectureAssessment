@@ -1,0 +1,182 @@
+ghost commented on 13 Apr 2019
+Description of the issue
+When I leave docker-compose up detached, without doing a down, and then restart my computer, my network settings are all wonky and I can't get on the internet with WIFI. I then have to shut down compose and restart again as a workaround.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0-rc1, build 0f3d4dda
+docker-py version: 3.7.0
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.4
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        d14af54
+ Built:             Wed Mar 27 18:34:51 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.4
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       d14af54
+  Built:            Wed Mar 27 18:01:48 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  data_generator_detects:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./data_generator/Dockerfile.detects
+    depends_on:
+    - kafka
+    environment:
+      CLUE_SIM_SPEED: 5
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      LOG_LEVEL: INFO
+  data_generator_floats:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./data_generator/Dockerfile.floats
+    depends_on:
+    - kafka
+    - mongo
+    environment:
+      FLOAT_GEN_COUNT: 100
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      MONGODB_CONNECTION: mongo:27017
+  data_generator_trajectory:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./data_generator/Dockerfile.trajectory
+    depends_on:
+    - kafka
+    - mongo
+    environment:
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      LOG_LEVEL: INFO
+      MONGODB_CONNECTION: mongo:27017
+  float_prediction_kafka:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./float_prediction/Dockerfile.kafka
+    depends_on:
+    - kafka
+    - mongo
+    environment:
+      DOWNLOAD_DATA: "false"
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      MONGODB_CONNECTION: mongo:27017
+      RUN_SIMULATION: "false"
+      SIM_DATE: '2019-01-05 12:00:00+00:00'
+    volumes:
+    - /data1/clue/visualization/roms_data/CA3km-now-and-forecast:/roms_data:rw
+    - /data1/clue/visualization/noaa_data:/noaa_data:rw
+  float_prediction_web:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./float_prediction/Dockerfile.web
+    ports:
+    - 5001:80/tcp
+  kafka:
+    depends_on:
+    - zookeeper
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://192.168.1.243:9092
+      KAFKA_CREATE_TOPICS: float-reports:1:1,float-trajectories:1:1,detections:1:1,classified-data:1:1,float-data:1:1,ground-truth:1:1,tracks:1:1,class-producer:1:1,scuttle-commands:1:1
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    expose:
+    - '29092'
+    image: wurstmeister/kafka
+    ports:
+    - 9092:9092/tcp
+  kafka_db_subscribers_detects:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./kafka_db_subscribers/Dockerfile.detects
+    depends_on:
+    - kafka
+    - mongo
+    environment:
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      LOG_LEVEL: INFO
+      MONGODB_CONNECTION: mongo:27017
+  kafka_db_subscribers_tracks:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./kafka_db_subscribers/Dockerfile.tracks
+    depends_on:
+    - kafka
+    - mongo
+    environment:
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      LOG_LEVEL: INFO
+      MONGODB_CONNECTION: mongo:27017
+  mongo:
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: root
+    image: mongo
+    ports:
+    - 27017:27017/tcp
+    restart: always
+  tracker:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./tracker/Dockerfile
+    depends_on:
+    - kafka
+    environment:
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      LOG_LEVEL: INFO
+  wake_data_generator:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./wake_data_generator/Dockerfile
+    depends_on:
+    - kafka
+    environment:
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+  web_viz:
+    build:
+      context: /home/david/development/projects/clue
+      dockerfile: ./visualization/Dockerfile
+    depends_on:
+    - kafka
+    - mongo
+    environment:
+      GUNICORN_CMD_ARGS: --timeout 3000
+      KAFKA_CONNECTION: PLAINTEXT://kafka:29092/kafka
+      LOG_LEVEL: debug
+      MONGODB_CONNECTION: mongo:27017
+    ports:
+    - 80:80/tcp
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+    - 2181:2181/tcp
+    restart: always
+version: '2.0'
+Steps to reproduce the issue
+docker-compose up -d
+Reboot computer
+Try to access internet via WIFI
+Observed result
+WIFI adapter is not working, and there is a static default route messing up network access.
+Expected result
+Rebooting computer should stop all containers and not mess with my network settings on startup.
+Stacktrace / full error message
+If I open a terminal after reboot I will immediately see the following before the prompt.
+RTNETLINK answers: Network is unreachable
+Additional information
+OS version / distribution, docker-compose install method, etc.
+New Razer Blade 2017
+Ubuntu 16.04

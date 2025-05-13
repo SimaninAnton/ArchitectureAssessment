@@ -1,0 +1,10 @@
+thomasfaller commented on 26 Jan 2019
+Hey folks,
+I just installed docker-compose on my Elementary OS 5 machine (Ubuntu-based) and I'm getting the following output when typing docker-compose:
+zsh: exec format error: docker-compose
+If I type which docker-compose I do get the correct path I believe:
+/usr/local/bin/docker-compose
+And I simlinked that just in case to /usr/bin/docker-compose which is where docker is kept (as suggested by the docs).
+Strangely enough if I run sudo docker-compose I get
+/usr/local/bin/docker-compose: 1: /usr/local/bin/docker-compose: Syntax error: "(" unexpected
+Any thoughts on what could be happening ?

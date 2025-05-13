@@ -1,0 +1,27 @@
+kindritskyiMax commented on 3 Oct 2019 •
+edited
+Hi. The main idea of this feature request is the ability to specify a list of files on which image depends and rebuilds automatically.
+It can be really helpful to just declaratively tell a service, when I want it to rebuild
+How it can be used ?
+For example we have a simple nodejs service.
+webapp:
+    image: webapp-dev
+    build:
+      dockerfile: ./docker/Dockerfile.webapp-dev
+      context: .
+    working_dir: /work
+We can add something like hash or checksum or you name it.
+webapp:
+    image: webapp-dev
+    build:
+      dockerfile: ./docker/Dockerfile.webapp-dev
+      checksum:
+      - ./package.json
+      - ./package-lock.json
+      - ./docker/Dockerfile.webapp-dev
+      context: .
+    working_dir: /work
+And now when one of these files in checksum changes, docker-compose up webapp will automatically rebuild an image.
+This requires a place where docker-compose can store checksums for images and check those against newly calculated ones.
+Also, it is a good idea, IMHO, to new command called checksum which calculates and prints the same checksum as it will be used to make the decision to rebuild an image
+7

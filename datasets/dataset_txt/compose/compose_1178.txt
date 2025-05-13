@@ -1,0 +1,187 @@
+agrosjea commented on 28 Sep 2017
+Hello,
+On Windows using
+Docker version 17.09.0-ce-rc3, build 2357fb2
+docker-compose version 1.16.1, build 6d1ac21
+tested also with some stable docker.
+I get an infinite loop when i try to up my yml file.
+Thanks for your support
+YML file
+version: '2'
+services:
+  mongo:
+    image: 'mongo:3.5.7'
+    container_name: mongo
+    command:
+      - '-f'
+      - /data/configdb/mongod.conf
+      - '--bind_ip_all'
+    volumes:
+      - '${SOURCE_PATH}/mongo:/data/configdb'
+      - '${VOLUME1_PATH}/backup/mongo-db:/opt/backup'
+      - 'mongodata:/data/db'
+      - 'mongodata:/data/collections'
+      - 'mongodata:/data/log'
+    network_mode: ${DOCKER_NETWORK_MODE_ALL}
+    environment:
+      - TZ
+    ports:
+      - '27017:27017'
+    # required by mongodb (or warning at startup)
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
+    restart: ${RESTART_RULE}
+    
+volumes:
+  mongodata:
+.env file
+SOURCE_PATH=c/config
+VOLUME1_PATH=c/volume1
+
+TZ=Europe/Paris
+
+DOCKER_NETWORK_MODE_ALL=bridge
+DOCKER_NETWORK_MODE_SC_BACKEND=host
+
+RESTART_RULE=always
+Console output
+$ docker-compose --verbose up
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.find_config_file: Trying paths: ['C:\\Users\\arnaud\\.docker\\config.json', 'C:\\Users\\arnaud\\.dockercfg']
+docker.auth.find_config_file: Found file at path: C:\Users\arnaud\.docker\config.json
+docker.auth.load_config: Found 'credsStore' section
+compose.cli.command.get_client: docker-compose version 1.16.1, build 6d1ac219
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localnpipe
+compose.cli.command.get_client: Docker version: KernelVersion=4.9.49-moby, Arch=amd64, BuildTime=2017-09-21T02:36:52.000000000+00:00, ApiVersion=1.32, Version=17.09.0-ce-rc3, MinAPIVersion=1.12, GitCommit=2357fb2, Os=linux, Experimental=True, GoVersion=go1.8.3
+compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+compose.cli.verbose_proxy.proxy_callable: docker info -> {u'Architecture': u'x86_64',
+ u'BridgeNfIp6tables': True,
+ u'BridgeNfIptables': True,
+ u'CPUSet': True,
+ u'CPUShares': True,
+ u'CgroupDriver': u'cgroupfs',
+ u'ClusterAdvertise': u'',
+ u'ClusterStore': u'',
+ u'ContainerdCommit': {u'Expected': u'06b9cb35161009dcb7123345749fef02f7cea8e0',
+                       u'ID': u'06b9cb35161009dcb7123345749fef02f7cea8e0'},
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_volume <- (u'docker_mongodata')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_volume -> {u'CreatedAt': u'2017-09-28T14:52:07Z',
+ u'Driver': u'local',
+ u'Labels': None,
+ u'Mountpoint': u'/var/lib/docker/volumes/docker_mongodata/_data',
+ u'Name': u'docker_mongodata',
+ u'Options': {},
+ u'Scope': u'local'}
+compose.cli.verbose_proxy.proxy_callable: docker inspect_volume <- (u'docker_mongodata')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_volume -> {u'CreatedAt': u'2017-09-28T14:52:07Z',
+ u'Driver': u'local',
+ u'Labels': None,
+ u'Mountpoint': u'/var/lib/docker/volumes/docker_mongodata/_data',
+ u'Name': u'docker_mongodata',
+ u'Options': {},
+ u'Scope': u'local'}
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=docker', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=docker', u'com.docker.compose.service=mongo', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('mongo:3.5.7')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'mongod', u'--bind_ip_all'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-entrypoint.sh'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=docker', u'com.docker.compose.service=mongo', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.parallel.feed_queue: Pending: set([<Service: mongo>])
+compose.parallel.feed_queue: Starting producer thread for <Service: mongo>
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=docker', u'com.docker.compose.service=mongo', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+Creating mongo ...
+compose.parallel.feed_queue: Pending: set([1])
+compose.parallel.feed_queue: Starting producer thread for 1
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('mongo:3.5.7')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'mongod', u'--bind_ip_all'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-entrypoint.sh'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('mongo:3.5.7')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'mongod', u'--bind_ip_all'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-entrypoint.sh'],
+...
+compose.service.build_container_labels: Added config hash: da58a208bf23396c1a3d6ae5dae1b8d37bab386b42034868905d3a0b0be4d040
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config <- (device_read_iops=None, mem_swappiness=None, links=[], oom_score_adj=None, blkio_weight=None, cpu_count=None, cpuset_cpus=None, dns_search=None, pid_mode=None, init_path=None, log_config={'Type': u'', 'Config': {}}, cpu_quota=None, read_only=None, cpu_percent=None, device_read_bps=None, storage_opt=None, init=None, dns=None, volumes_from=[], ipc_mode=None, mem_reservation=None, security_opt=None, shm_size=None, device_write_iops=None, dns_opt=None, cgroup_parent=None, group_add=None, network_mode='bridge', blkio_weight_device=None, userns_mode=None, tmpfs=None, nano_cpus=None, port_bindings={'27017/tcp': ['27017']}, isolation=None, memswap_limit=None, restart_policy={u'MaximumRetryCount': 0, u'Name': u'no'}, volume_driver=None, devices=None, extra_hosts=None, binds=[u'C:\\Users\\arnaud\\Desktop\\SRC\\2016_a92_Arena92\\mongo:/data/configdb:rw', u'docker_mongodata:/data/db:rw', u'C:\\Users\\arnaud\\Desktop\\dockerVolume\\backup\\mongo-db:/opt/backup:rw', u'docker_mongodata:/data/log:rw', u'docker_mongodata:/data/collections:rw'], sysctls=None, pids_limit=None, device_write_bps=None, cap_add=None, mem_limit=None, cap_drop=None, privileged=False, ulimits=[{'hard': 40000, 'soft': 20000, u'name': 'nofile'}, {u'hard': 65535, u'soft': 65535, u'name': 'nproc'}], cpu_shares=None)
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': [u'C:\\Users\\arnaud\\Desktop\\SRC\\2016_a92_Arena92\\mongo:/data/configdb:rw',
+           u'docker_mongodata:/data/db:rw',
+           u'C:\\Users\\arnaud\\Desktop\\dockerVolume\\backup\\mongo-db:/opt/backup:rw',
+           u'docker_mongodata:/data/log:rw',
+           u'docker_mongodata:/data/collections:rw'],
+ 'Links': [],
+ 'LogConfig': {'Config': {}, 'Type': u''},
+ 'NetworkMode': 'bridge',
+ 'PortBindings': {'27017/tcp': [{'HostIp': '', 'HostPort': '27017'}]},
+ 'RestartPolicy': {u'MaximumRetryCount': 0, u'Name': u'no'},
+...
+compose.service.create_container: Creating mongo
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name='mongo', image='mongo:3.5.7', labels={u'com.docker.compose.service': u'mongo', u'com.docker.compose.project': u'docker', u'com.docker.compose.config-hash': 'da58a208bf23396c1a3d6ae5dae1b8d37bab386b42034868905d3a0b0be4d040', u'com.docker.compose.version': u'1.16.1', u'com.docker.compose.oneoff': u'False', u'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': 'bridge', 'Links': [], 'PortBindings': {'27017/tcp': [{'HostPort': '27017', 'HostIp': ''}]}, 'Binds': [u'C:\\Users\\arnaud\\Desktop\\SRC\\2016_a92_Arena92\\mongo:/data/configdb:rw', u'docker_mongodata:/data/db:rw', u'C:\\Users\\arnaud\\Desktop\\dockerVolume\\backup\\mongo-db:/opt/backup:rw', u'docker_mongodata:/data/log:rw', u'docker_mongodata:/data/collections:rw'], 'RestartPolicy': {u'MaximumRetryCount': 0, u'Name': u'no'}, 'Ulimits': [{'Hard': 40000, 'Soft': 20000, 'Name': 'nofile'}, {'Hard': 65535, 'Soft': 65535, 'Name': 'nproc'}], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment=[u'TZ=Europe/Paris'], command=['-f', '/data/configdb/mongod.conf', '--bind_ip_all'], volumes={u'/data/configdb': {}, u'/data/db': {}, u'/opt/backup': {}, u'/data/log': {}, u'/data/collections': {}}, detach=True, ports=[(u'27017', u'tcp')])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])

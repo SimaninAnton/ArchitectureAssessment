@@ -1,0 +1,5 @@
+ulope commented on 1 Apr 2017
+Commit 66f4a79 changed the way an existing left over installation of docker-py is detected by now no longer importing pip but rather executing it as a subcommand.
+In principle this is fine however the implementation assumes that the pip on the system PATH is the "correct" one. This might very well not be the case if docker-compose is installed inside a virtualenv.
+The fix is to use [sys.executable, '-m', 'pip', 'freeze'] instead of ['pip', 'freeze'] as the command to execute in compose/cli/__init__.py#L16.
+This will ensure that always the pip associated with the current environment will be used.

@@ -1,0 +1,22 @@
+aowie1 commented on 25 Oct 2017 •
+edited
+For some reason I have a leftover ghost network. At some point I created via docker-compose but I cannot get rid of it. Is there a location I can remove it from a file? As of now I can't bring down my compose without stopping all of the containers individually and manually removing the network.
+$ docker-compose down --remove_orphans
+Removing network xxx_default
+WARNING: Network xxx_default not found.
+
+$ docker inspect xxx_default
+[]
+
+$ docker network rm xxx_default
+Error response from daemon: No such network: xxx_default
+
+$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+af0ad52429f3        bridge              bridge              local
+2139f45e1828        host                host                local
+802fd961a99b        none                null                local
+docker prune will run but not remove it either
+I have a feeling the docker-compose --project-name flag might be a culprit here?
+on OSX 10.11.6
+Docker Version 17.09.0-ce-mac35 (19611)

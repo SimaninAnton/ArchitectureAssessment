@@ -1,0 +1,58 @@
+alubbock commented on 23 Apr 2019
+Description of the issue
+As per v18.09 docs on .env files, I'm trying to set Docker Machine environment variables automatically by specifying them in a .env file (specificially DOCKER_CERT_PATH, DOCKER_HOST, DOCKER_TLS_VERIFY).
+Some docker-compose commands work (up, down, ps, logs), but docker-compose run and docker-compose exec do not. Example:
+>>> docker-compose exec nginx pwd
+Error: No such container: a05e50bd3c2519b731c860e3c18176acd10feddfb7e48f795c4f065707c54501
+The above error also occurs with docker-compose run. docker-compose ps -q confirms that a container with the specified hash is indeed running. Setting the environment variables with eval $(docker-machine env mymachine) fixes the issue, so it appears that some docker-compose commands are not reading environment variables from the .env file.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  nginx:
+    image: nginx:mainline
+version: '2.1'
+Contents of .env file
+DOCKER_TLS_VERIFY=1
+DOCKER_HOST=tcp://<ip address>:2376
+DOCKER_CERT_PATH=/Users/alex/.docker/machine/machines/mymachine
+Steps to reproduce the issue
+Create a Docker Machine (I've only tested AWS - not sure if other platforms are affected):
+docker-machine create --driver amazonec2 --amazonec2-open-port 80 mymachine
+Create a new directory with the .env files and docker-compose.yml files as specified above, updating the .env file with the DOCKER_* environment variables with the values outputted by docker-machine env mymachine
+Run docker-compose run --rm --entrypoint pwd nginx
+Observed result
+Error: No such container: 7527e2716707fd058cf28622ee8229e0ca816454f43098ef49847857c02c0395
+(the hash changes every time)
+Expected result
+/
+(the output of running pwd inside the container)
+Stacktrace / full error message
+As shown above.
+Additional information
+MacOS 10.14.4, running Docker Desktop downloaded from docker.com
+1

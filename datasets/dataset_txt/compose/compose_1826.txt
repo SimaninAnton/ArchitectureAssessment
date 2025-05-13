@@ -1,0 +1,22 @@
+m-a-d-e commented on 29 Dec 2016 •
+edited
+Hello,
+Given docker-compose 1.9.0 and the following docker-compose.yml:
+version: '2'
+services:
+kafka:
+image: wurstmeister/kafka
+environment:
+KAFKA_ADVERTISED_HOST_NAME: ${HOSTNAME}
+When I execute the following command:
+ssh foo@bar.mydomain.com "docker-compose up -d
+Then the hostname environment variable is not recognized. I get the following message:
+The HOSTNAME variable is not set. Defaulting to a blank string.
+If I execute the same command on the host "bar" with the user "foo" I don't get the error. Same if I first connect with ssh, and then execute the command.
+This is a major issue for us. This workflow happens in our CI.
+The only workaround we found is to write the following script:
+#!/bin/bash
+export HOSTNAME=${HOSTNAME}
+docker-compose up -d
+And execute it through ssh.. Which is not handsome..
+2

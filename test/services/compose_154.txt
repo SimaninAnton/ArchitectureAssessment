@@ -1,0 +1,134 @@
+darkn3rd commented on 21 Jun 2019 •
+edited
+Description of the issue
+Installing docker-compose via pip disables pip in that environment. Afterward, both tools pip and docker-compose are not usable and create tracebacks.
+Context information (for bug reports)
+Output of docker-compose version
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 6, in <module>
+    from compose.cli.main import main
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 17, in <module>
+    import docker
+  File "/usr/local/lib/python2.7/dist-packages/docker/__init__.py", line 2, in <module>
+    from .api import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/__init__.py", line 2, in <module>
+    from .client import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 5, in <module>
+    import requests
+  File "/usr/lib/python2.7/dist-packages/requests/__init__.py", line 53, in <module>
+    from .packages.urllib3.contrib import pyopenssl
+  File "/usr/lib/python2.7/dist-packages/urllib3/contrib/pyopenssl.py", line 54, in <module>
+    import OpenSSL.SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/__init__.py", line 8, in <module>
+    from OpenSSL import rand, crypto, SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/SSL.py", line 118, in <module>
+    SSL_ST_INIT = _lib.SSL_ST_INIT
+AttributeError: 'module' object has no attribute 'SSL_ST_INIT'
+Output of docker version
+Client:
+ Version:           18.09.6
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        481bc77
+ Built:             Sat May  4 02:35:27 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.6
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       481bc77
+  Built:            Sat May  4 01:59:36 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 6, in <module>
+    from compose.cli.main import main
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 17, in <module>
+    import docker
+  File "/usr/local/lib/python2.7/dist-packages/docker/__init__.py", line 2, in <module>
+    from .api import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/__init__.py", line 2, in <module>
+    from .client import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 5, in <module>
+    import requests
+  File "/usr/lib/python2.7/dist-packages/requests/__init__.py", line 53, in <module>
+    from .packages.urllib3.contrib import pyopenssl
+  File "/usr/lib/python2.7/dist-packages/urllib3/contrib/pyopenssl.py", line 54, in <module>
+    import OpenSSL.SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/__init__.py", line 8, in <module>
+    from OpenSSL import rand, crypto, SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/SSL.py", line 118, in <module>
+    SSL_ST_INIT = _lib.SSL_ST_INIT
+AttributeError: 'module' object has no attribute 'SSL_ST_INIT'
+Steps to reproduce the issue
+sudo apt install -y python-pip
+sudo -H pip install --upgrade pip setuptools
+sudo -H pip install docker-compose
+pip --version or docker-compose version
+This reproduces on Ubuntu 16.04 from clean state, so re-installing python environment doesn't help, as this is deterministic form clean slate. You can use with with Vagrant + Virtualbox to reproduce:
+# Vagrantfile
+# vagrant up && vagrant ssh
+# run through above steps
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-16.04"
+end
+Observed result
+Traceback (most recent call last):
+  File "/usr/local/bin/pip", line 7, in <module>
+    from pip._internal import main
+  File "/usr/local/lib/python2.7/dist-packages/pip/_internal/__init__.py", line 40, in <module>
+    from pip._internal.cli.autocompletion import autocomplete
+  File "/usr/local/lib/python2.7/dist-packages/pip/_internal/cli/autocompletion.py", line 8, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "/usr/local/lib/python2.7/dist-packages/pip/_internal/cli/main_parser.py", line 12, in <module>
+    from pip._internal.commands import (
+  File "/usr/local/lib/python2.7/dist-packages/pip/_internal/commands/__init__.py", line 6, in <module>
+    from pip._internal.commands.completion import CompletionCommand
+  File "/usr/local/lib/python2.7/dist-packages/pip/_internal/commands/completion.py", line 6, in <module>
+    from pip._internal.cli.base_command import Command
+  File "/usr/local/lib/python2.7/dist-packages/pip/_internal/cli/base_command.py", line 20, in <module>
+    from pip._internal.download import PipSession
+  File "/usr/local/lib/python2.7/dist-packages/pip/_internal/download.py", line 15, in <module>
+    from pip._vendor import requests, six, urllib3
+  File "/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/__init__.py", line 97, in <module>
+    from pip._vendor.urllib3.contrib import pyopenssl
+  File "/usr/local/lib/python2.7/dist-packages/pip/_vendor/urllib3/contrib/pyopenssl.py", line 46, in <module>
+    import OpenSSL.SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/__init__.py", line 8, in <module>
+    from OpenSSL import rand, crypto, SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/SSL.py", line 118, in <module>
+    SSL_ST_INIT = _lib.SSL_ST_INIT
+AttributeError: 'module' object has no attribute 'SSL_ST_INIT'
+Expected result
+Not having a traceback
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 6, in <module>
+    from compose.cli.main import main
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 17, in <module>
+    import docker
+  File "/usr/local/lib/python2.7/dist-packages/docker/__init__.py", line 2, in <module>
+    from .api import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/__init__.py", line 2, in <module>
+    from .client import APIClient
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 5, in <module>
+    import requests
+  File "/usr/lib/python2.7/dist-packages/requests/__init__.py", line 53, in <module>
+    from .packages.urllib3.contrib import pyopenssl
+  File "/usr/lib/python2.7/dist-packages/urllib3/contrib/pyopenssl.py", line 54, in <module>
+    import OpenSSL.SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/__init__.py", line 8, in <module>
+    from OpenSSL import rand, crypto, SSL
+  File "/usr/lib/python2.7/dist-packages/OpenSSL/SSL.py", line 118, in <module>
+    SSL_ST_INIT = _lib.SSL_ST_INIT
+AttributeError: 'module' object has no attribute 'SSL_ST_INIT'
+Additional information
+Distributor ID: Ubuntu
+Description: Ubuntu 16.04.5 LTS
+Release: 16.04
+Codename: xenial

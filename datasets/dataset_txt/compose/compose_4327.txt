@@ -1,0 +1,2 @@
+marinho commented on 12 May 2014
+It should be possible to decide between one of available values for --net argument in run command (bridge, hoste, etc.)

@@ -1,0 +1,120 @@
+TimSoethout commented on 5 Mar 2015 •
+edited
+When trying to build my images using docker-compose, it does not work. Using docker build does work.
+This is the command I run.
+$ docker-compose --verbose build sonar
+Compose version 1.1.0
+Docker base_url: http://192.168.59.103:2375
+Docker version: KernelVersion=3.18.5-tinycore64, Arch=amd64, ApiVersion=1.17, Version=1.5.0, GitCommit=a8a31ef, Os=linux, GoVersion=go1.4.1
+Building sonar...
+docker build <- ('sonar', rm=True, tag=u'sonardocker_sonar', nocache=False, stream=True)
+docker build -> <generator object _stream_helper at 0x10534b190>
+Step 0 : FROM xxx.xxx:5000/base-java
+ ---> 82af2109b0f0
+Step 1 : MAINTAINER Tim Soethout
+Traceback (most recent call last):
+  File "/usr/local/Cellar/fig/1.1.0/libexec/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.1.0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/cli/command.py", line 59, in perform_command
+    handler(project, command_options)
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 119, in build
+    project.build(service_names=options['SERVICE'], no_cache=no_cache)
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/project.py", line 167, in build
+    service.build(no_cache)
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/service.py", line 484, in build
+    all_events = stream_output(build_output, sys.stdout)
+  File "/usr/local/Cellar/fig/1.1.0/libexec/lib/python2.7/site-packages/compose/progress_stream.py", line 18, in stream_output
+    event = json.loads(chunk)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/json/decoder.py", line 368, in decode
+    raise ValueError(errmsg("Extra data", s, end, len(s)))
+ValueError: Extra data: line 2 column 1 - line 4 column 1 (char 39 - 162)
+This last line suggest something in the parsing of the daemon response is not working as expected.
+On the docker daemon side (boot2docker) I have the following logs. It seems that the build works as expected, only docker-compose can't handle the json it gets back from the daemon.
+time="2015-03-04T19:31:36Z" level="debug" msg="Calling GET /version"
+time="2015-03-04T19:31:36Z" level="info" msg="GET /v1.14/version"
+time="2015-03-04T19:31:36Z" level="info" msg="+job version()"
+time="2015-03-04T19:31:36Z" level="info" msg="-job version() = OK (0)"
+time="2015-03-04T19:31:36Z" level="debug" msg="Calling POST /build"
+time="2015-03-04T19:31:36Z" level="info" msg="POST /v1.14/build?pull=True&nocache=False&q=False&t=sonardocker_sonar&forcerm=False&rm=True"
+time="2015-03-04T19:31:36Z" level="info" msg="+job build()"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Command to be executed: [/bin/sh -c apt-get update && apt-get install procps -y]"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Command to be executed: [/bin/sh -c apt-get update && apt-get install -y --force-yes sonar]"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Command to be executed: [/bin/sh -c chmod 755 /app/init]"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:36Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:37Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:31:37Z" level="info" msg="-job build() = OK (0)"
+What I notice is that docker-compose uses the v1.14 version of the api, while the "normal" docker build uses the v1.17 api:
+time="2015-03-04T19:42:51Z" level="debug" msg="Calling POST /build"
+time="2015-03-04T19:42:51Z" level="info" msg="POST /v1.17/build?dockerfile=Dockerfile&rm=1&t=sonar"
+time="2015-03-04T19:42:51Z" level="info" msg="+job build()"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Command to be executed: [/bin/sh -c apt-get update && apt-get install procps -y]"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Command to be executed: [/bin/sh -c apt-get update && apt-get install -y --force-yes sonar]"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Use cached version"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Cache miss"
+time="2015-03-04T19:42:51Z" level="debug" msg="CopyFileWithTar(/mnt/sda1/var/lib/docker/tmp/docker-build999836939/assets/init, /mnt/sda1/var/lib/docker/aufs/mnt/46a584cbc5150d0a3286716ad43f18817572ef84a990138185d5285d1ef163ee/app/init)"
+time="2015-03-04T19:42:51Z" level="debug" msg="Skipping excluded path: .wh..wh.aufs"
+time="2015-03-04T19:42:51Z" level="debug" msg="Skipping excluded path: .wh..wh.orph"
+time="2015-03-04T19:42:51Z" level="debug" msg="Skipping excluded path: .wh..wh.plnk"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Command to be executed: [/bin/sh -c chmod 755 /app/init]"
+time="2015-03-04T19:42:51Z" level="debug" msg="[BUILDER] Cache miss"
+time="2015-03-04T19:42:51Z" level="info" msg="+job allocate_interface(6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0)"
+time="2015-03-04T19:42:51Z" level="info" msg="-job allocate_interface(6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0) = OK (0)"
+time="2015-03-04T19:42:51Z" level="info" msg="+job log(start, 6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0, cfd71b715943)"
+time="2015-03-04T19:42:51Z" level="info" msg="-job log(start, 6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0, cfd71b715943) = OK (0)"
+time="2015-03-04T19:42:51Z" level="info" msg="+job logs(6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0)"
+time="2015-03-04T19:42:52Z" level="info" msg="+job log(die, 6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0, cfd71b715943)"
+time="2015-03-04T19:42:52Z" level="info" msg="-job log(die, 6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0, cfd71b715943) = OK (0)"
+time="2015-03-04T19:42:52Z" level="info" msg="+job release_interface(6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0)"
+time="2015-03-04T19:42:52Z" level="info" msg="-job release_interface(6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0) = OK (0)"
+time="2015-03-04T19:42:52Z" level="info" msg="-job logs(6814090adc83ba62ebe24f13ad889344216ec1434066a45980b52809ad8ff4c0) = OK (0)"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.aufs"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.orph"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.plnk"
+time="2015-03-04T19:42:52Z" level="debug" msg="[BUILDER] Cache miss"
+time="2015-03-04T19:42:52Z" level="debug" msg="Creating dest directory: /mnt/sda1/var/lib/docker/vfs/dir/5599661b259884f341f5506b4ede76ca2fe62e0b8974597f25adbf62fa3c2c07"
+time="2015-03-04T19:42:52Z" level="debug" msg="Calling TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/a5557c694ad9e0f870eb2f08c25111daae94611fda8366cbc40ac86bfc559433/opt/sonar/extensions, /mnt/sda1/var/lib/docker/vfs/dir/5599661b259884f341f5506b4ede76ca2fe62e0b8974597f25adbf62fa3c2c07)"
+time="2015-03-04T19:42:52Z" level="debug" msg="TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/a5557c694ad9e0f870eb2f08c25111daae94611fda8366cbc40ac86bfc559433/opt/sonar/extensions /mnt/sda1/var/lib/docker/vfs/dir/5599661b259884f341f5506b4ede76ca2fe62e0b8974597f25adbf62fa3c2c07)"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.aufs"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.orph"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.plnk"
+time="2015-03-04T19:42:52Z" level="debug" msg="[BUILDER] Cache miss"
+time="2015-03-04T19:42:52Z" level="debug" msg="Creating dest directory: /mnt/sda1/var/lib/docker/vfs/dir/8c569d91bc95aac5c308b2a3f9a23431a225ef4a7bb9b00641c61f89967b8a0d"
+time="2015-03-04T19:42:52Z" level="debug" msg="Calling TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/a9b31d20747c1cac990def5433cf8c829e9ecf920cbe250498fcbd776a5bf705/opt/sonar/extensions, /mnt/sda1/var/lib/docker/vfs/dir/8c569d91bc95aac5c308b2a3f9a23431a225ef4a7bb9b00641c61f89967b8a0d)"
+time="2015-03-04T19:42:52Z" level="debug" msg="TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/a9b31d20747c1cac990def5433cf8c829e9ecf920cbe250498fcbd776a5bf705/opt/sonar/extensions /mnt/sda1/var/lib/docker/vfs/dir/8c569d91bc95aac5c308b2a3f9a23431a225ef4a7bb9b00641c61f89967b8a0d)"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.aufs"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.orph"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.plnk"
+time="2015-03-04T19:42:52Z" level="debug" msg="[BUILDER] Cache miss"
+time="2015-03-04T19:42:52Z" level="debug" msg="Creating dest directory: /mnt/sda1/var/lib/docker/vfs/dir/b72ddfc443cb6b8632337bdd60a5b4ea62c33d274e2b540e846c3e13a1a0b7b5"
+time="2015-03-04T19:42:52Z" level="debug" msg="Calling TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/5da66e951afbee05bc863a68db8c7b3c788a97ed2e31b849b5d0b8356c8d243a/opt/sonar/extensions, /mnt/sda1/var/lib/docker/vfs/dir/b72ddfc443cb6b8632337bdd60a5b4ea62c33d274e2b540e846c3e13a1a0b7b5)"
+time="2015-03-04T19:42:52Z" level="debug" msg="TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/5da66e951afbee05bc863a68db8c7b3c788a97ed2e31b849b5d0b8356c8d243a/opt/sonar/extensions /mnt/sda1/var/lib/docker/vfs/dir/b72ddfc443cb6b8632337bdd60a5b4ea62c33d274e2b540e846c3e13a1a0b7b5)"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.aufs"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.orph"
+time="2015-03-04T19:42:52Z" level="debug" msg="Skipping excluded path: .wh..wh.plnk"
+time="2015-03-04T19:42:52Z" level="debug" msg="[BUILDER] Cache miss"
+time="2015-03-04T19:42:52Z" level="debug" msg="Creating dest directory: /mnt/sda1/var/lib/docker/vfs/dir/6288cf8325d559a91f4c75093c459ce4e53b2fe28dcae315a43c7835f98dfe47"
+time="2015-03-04T19:42:52Z" level="debug" msg="Calling TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/7bc83dd46e21b0a1da9cb77acc36470d0941df6c709d87f03bd9d3811bf36c00/opt/sonar/extensions, /mnt/sda1/var/lib/docker/vfs/dir/6288cf8325d559a91f4c75093c459ce4e53b2fe28dcae315a43c7835f98dfe47)"
+time="2015-03-04T19:42:52Z" level="debug" msg="TarUntar(/mnt/sda1/var/lib/docker/aufs/mnt/7bc83dd46e21b0a1da9cb77acc36470d0941df6c709d87f03bd9d3811bf36c00/opt/sonar/extensions /mnt/sda1/var/lib/docker/vfs/dir/6288cf8325d559a91f4c75093c459ce4e53b2fe28dcae315a43c7835f98dfe47)"
+time="2015-03-04T19:42:53Z" level="debug" msg="Skipping excluded path: .wh..wh.aufs"
+time="2015-03-04T19:42:53Z" level="debug" msg="Skipping excluded path: .wh..wh.orph"
+time="2015-03-04T19:42:53Z" level="debug" msg="Skipping excluded path: .wh..wh.plnk"
+time="2015-03-04T19:42:53Z" level="info" msg="-job build() = OK (0)"

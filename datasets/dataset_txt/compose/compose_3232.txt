@@ -1,0 +1,5 @@
+michaeljs1990 commented on 7 Oct 2015
+Possibly this is already done but I can't find anything about it. I tried running...
+pip install https://github.com/docker/compose/archive/master.zip
+But i get an odd error saying ImportError: No module named queue.
+Anyway since this project on a weekly basis is merging in PRs that make my life significantly easier such as the recent addition of allowing multiple files with the -f flag I feel like it would be worthwhile to have a nightly available.

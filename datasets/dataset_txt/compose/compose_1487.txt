@@ -1,0 +1,5 @@
+Member
+tonistiigi commented on 3 May 2017
+Compose should support specifying target stage in the build definition. moby/moby#32496
+@dnephin
+11

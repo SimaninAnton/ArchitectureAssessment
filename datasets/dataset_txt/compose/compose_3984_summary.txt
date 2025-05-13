@@ -1,0 +1,1 @@
+Support fig.yml and show a deprecation warning

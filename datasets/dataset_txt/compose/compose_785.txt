@@ -1,0 +1,23 @@
+downright770 commented on 21 Mar 2018
+Installing this on Atomic 7.4
+Docker version 1.13.1, build 774336d/1.13.1
+seLinux in permissive mode
+cmd's run
+curl -L --fail https://github.com/docker/compose/releases/download/1.19.0/run.sh -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+./docker-compose
+This shows
+./docker-compose
+Unable to find image 'docker/compose:1.19.0' locally
+Trying to pull repository registry.access.redhat.com/docker/compose ...
+Trying to pull repository docker.io/docker/compose ...
+1.19.0: Pulling from docker.io/docker/compose
+605ce1bd3f31: Pull complete
+ed764f565fce: Pull complete
+988404a576a5: Pull complete
+d69030722a7d: Pull complete
+2d6379878250: Pull complete
+d14800f53520: Pull complete
+Digest: sha256:97f49d34b6897df9cf023489075eb4dca15760c6e40b553313af8e760614a2e5
+Status: Downloaded newer image for docker.io/docker/compose:1.19.0
+/usr/local/bin/docker-compose: exec: line 57: docker: not found

@@ -1,0 +1,1 @@
+Compose breaks when using new client credentials store

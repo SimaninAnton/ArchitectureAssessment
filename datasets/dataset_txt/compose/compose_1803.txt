@@ -1,0 +1,10 @@
+whitecolor commented on 11 Jan 2017 •
+edited
+docker-compose version 1.10.0-rc1, build ecff6f1a
+While docker-compose up service recreating container:
+ERROR: for reader  open /var/lib/docker/containers/eefbc2ad246e1a50f67bc55bb87460117cd6611045bca33cf432018b58d77665/.t
+mp-config.v2.json002160588: no such file or directory                                                                 
+ERROR: Encountered errors while bringing up the project.                                                              
+error Command failed with exit code 1. 
+What can be the cause?
+After docker-compose rm, it worked.

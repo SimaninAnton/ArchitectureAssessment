@@ -1,0 +1,11 @@
+Contributor
+kevinsimper commented on 11 Jul 2015
+I run tests with docker-compose, but because it mounts the volume inside when you do it, I have to install dependencies again.
+What i do to run test locally:
+docker-compose run backend npm test
+But on CicleCi I build my containers first with docker-compose build and they are completly runable, but docker-compose makes it easier because it starts links at the same time.
+So on circleci i have to do
+`docker-compose run backend /bin/bash -c "npm installl && npm test"``
+which takes longer because i have to do npm install twice.
+I want to do
+docker-compose run --no-volumes backend npm test

@@ -1,0 +1,23 @@
+Member
+justincormack commented on 4 Jul 2016
+Using 1.8-rc1 and docker 1.12-rc3 with the following compose file:
+version: '2'
+services:
+  test:
+    build:
+      context: .
+and Dockerfile:
+FROM alpine
+If I do:
+whale:comprun justin$ docker-compose build test
+Building test
+Step 1 : FROM alpine
+ ---> f70c828098f5
+Successfully built f70c828098f5
+whale:comprun justin$ docker-compose run test ls
+http: Hijack is incompatible with use of CloseNotifier in same ServeHTTP call
+                                                                             http: Hijack is incompatible with use of CloseNotifier in same ServeHTTP call
+                                                                                                                                                          whale:comprun justin$ 
+Looks like a missed case in #1374
+cc @dnephin
+21

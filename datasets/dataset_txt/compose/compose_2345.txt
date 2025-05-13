@@ -1,0 +1,20 @@
+shadiakiki1986 commented on 29 May 2016 •
+edited
+This is close to issue 1012 and its likes.
+I tried the below docker-compose.yml file
+version: '2'
+services:
+  test_app:
+    build: .
+    depends_on:
+      - mongo
+
+  mong\o:
+    image: mongo
+in which I intentionally had a slash in the mongo service name.
+But the error message I got when I run docker-compose ps in the same directory was
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Invalid service name 'test_app' - only [a-zA-Z0-9\._\-] characters are allowed
+wrongly referencing test_app instead of mong\o
+My docker-compose version is: docker-compose version 1.7.1, build 0a9ab35
+2

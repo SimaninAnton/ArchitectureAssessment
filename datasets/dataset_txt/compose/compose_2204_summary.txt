@@ -1,0 +1,1 @@
+Running docker-compose with invalid argument exits with 0

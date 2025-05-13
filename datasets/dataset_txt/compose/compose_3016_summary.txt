@@ -1,0 +1,1 @@
+Proposal: Make `net` and `volumes_from`'s container/service support explicit

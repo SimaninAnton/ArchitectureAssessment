@@ -1,0 +1,17 @@
+Contributor
+jrbenito commented on 5 Sep 2018
+Description of the issue
+Dockerfile is now using python:3.6 as base image and Dockerfile.armhf still uses Debian as base image. Also, armhf version tries to build python what is not necessary since python official image has official support for ARM architecture.
+Context information (for bug reports)
+Not applicable
+Steps to reproduce the issue
+Just check Dockerfile and Dockerfile.armhf
+Check python:3.6 official image for ARM support
+Observed result
+Outdated Dockerfile.armhf that may lead to different results from regular Dockerfile.
+Expected result
+ARM and X86 (and hopefully other archs) shall produce similar (if not identical) results.
+Stacktrace / full error message
+not applicable
+Additional information
+Not applicable.

@@ -1,0 +1,164 @@
+FilipRy commented on 5 Dec 2018 •
+edited
+Description of the issue
+I cannot attach my docker compose services to an existing overlay network.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.2.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:51 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:15 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+networks:
+  byfn:
+    external: true
+services:
+  vehicle1:
+    command: start hypfab run-producer 1 100 rsu2_orderer
+    container_name: vehicle1
+    image: filipr/v2x_communication
+    networks:
+      byfn:
+        aliases:
+        - vehicle1.example.com
+    volumes:
+    - /home/filip/logs:/v2x_communication/log:rw
+    - /home/filip/hfc-key-store1:/v2x_communication/hfc-key-store1:rw
+  vehicle10:
+    command: start hypfab run-producer 10 100 rsu2_orderer
+    container_name: vehicle10
+    image: filipr/v2x_communication
+    networks:
+      byfn:
+        aliases:
+        - vehicle10.example.com
+    volumes:
+    - /home/filip/logs:/v2x_communication/log:rw
+    - /home/filip/hfc-key-store10:/v2x_communication/hfc-key-store10:rw
+...
+version: '2.0'
+volumes: {}
+Steps to reproduce the issue
+Machine A: Initialize docker swarm
+Machine B: Join docker swarm as a worker
+Machine A: Create overlay network for the swarm ( docker network create --attachable --driver overlay byfn )
+Machine A: docker compose up (this docker compose contains ca 10 services)
+Machine B: docker run nginx (because docker compose on worker cannot find swarm network, when it's not used yet. See this for more info. )
+Machine B: docker compose up (starting up ca 50 services, started successfully and attached to network byfn)
+After ca 15 mins, Machine B: docker compose up (again starting ca 50 services, but this time results in an error: Cannot start service XX: Could not attach to network byfn: context deadline exceeded, thus none of the services has been started.)
+When I execute docker node ls on Machine A (swarm manager) I see both are alive:
+docker node ls
+ID                            HOSTNAME              STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+rla1gnc2yps2s0ez22gjdnpe1 *   rsu2                  Ready               Active              Leader              18.06.1-ce
+t7q493cp7wianit5uinbjb4of     vehicle-fleet-big-1   Down                Active                                  18.09.0
+Inspecting both nodes returns active availability:
+docker node inspect --format {{.Spec.Availability}} rsu2 ---> active
+docker node inspect --format {{.Spec.Availability}} vehicle-fleet-big1 ---> active
+The docker network ls returns byfn network on both machines.
+zo9w41l4k8sf byfn overlay swarm
+The docker inspect byfn on Machine A:
+{
+        "Name": "byfn",
+        "Id": "zo9w41l4k8sf9nidysawar1v6",
+        "Created": "2018-12-05T12:11:30.793387089Z",
+        "Scope": "swarm",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "10.0.0.0/24",
+                    "Gateway": "10.0.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            ...
+        },
+        "Options": {
+            "com.docker.network.driver.overlay.vxlanid_list": "4097"
+        },
+        "Labels": {},
+        "Peers": [
+            {
+                "Name": "34ce378a98a2",
+                "IP": "10.132.0.4"
+            }
+        ]
+    }
+The docker inspect byfn on Machine B:
+[
+    {
+        "Name": "byfn",
+        "Id": "zo9w41l4k8sf9nidysawar1v6",
+        "Created": "2018-12-05T12:12:01.748336946Z",
+        "Scope": "swarm",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "10.0.0.0/24",
+                    "Gateway": "10.0.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            ...
+        },
+        "Options": {
+            "com.docker.network.driver.overlay.vxlanid_list": "4097"
+        },
+        "Labels": {},
+        "Peers": [
+            {
+                "Name": "4a6d792630ba",
+                "IP": "10.132.0.5"
+            }
+        ]
+    }
+]
+There is an inconsistency in the peers field, each Machine returns only itself as a peer. But after executing docker inspect byfn multiple times, sometimes there were two peers in the Peers fields visible. Really weird.
+My idea was to increase the timeout for the services to connect to the network, because I am starting many services, so they might need more time. Although none of the services was able to attach to the network.
+Observed result
+Expected result
+All docker services are running and attached to the network.
+Additional information
+Using Ubuntu 16.04 LTS

@@ -1,0 +1,5 @@
+mboussaa commented on 7 Jul 2015
+This is my issue:
+Conatainer_example:
+image: "Path to a directory containing a Dockerfile"
+I put the path but docker compose still search for an image from docker HUB instead of building the image from the dockerfile

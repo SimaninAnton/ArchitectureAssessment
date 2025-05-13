@@ -1,0 +1,11 @@
+joaquincasares commented on 6 Sep 2016
+I recently filed this ticket:
+https://issues.apache.org/jira/browse/KAFKA-4121
+which is a duplicate of this ticket:
+https://issues.apache.org/jira/browse/KAFKA-3017.
+The important part to note is:
+The Internet standards (Requests for Comments) for protocols mandate that component hostname labels may contain only the ASCII letters 'a' through 'z' (in a case-insensitive manner), the digits '0' through '9', and the hyphen ('-')
+https://en.wikipedia.org/wiki/Hostname#Restrictions_on_valid_host_names
+Could we make the Docker hostnames match the Internet Standards naming scheme?
+Thanks!
+8

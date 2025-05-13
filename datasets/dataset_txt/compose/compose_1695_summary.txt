@@ -1,0 +1,1 @@
+docker-compose network ipam config values are not allowed

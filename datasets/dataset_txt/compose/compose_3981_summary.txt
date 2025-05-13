@@ -1,0 +1,1 @@
+Support for container names containing dots or dash

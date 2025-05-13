@@ -1,0 +1,22 @@
+jleeothon commented on 3 Feb 2017
+When services > my service > healthcheck > test has a wrong format (i.e. not beginning with "CMD" or "CMD-SHELL" or "NONE", no warning is issued.
+Reproduce:
+Have a docker-compose file with a simple but wrong health check, as attached.
+Run docker-compose up.
+version: "2.1"
+
+services:
+
+  myalpine:
+    image: alpine
+    command: "tail -f /dev/null"
+    healthcheck:
+      test: ["exit 0"]
+      interval: "2s"
+      timeout: "1s"
+      retries: 5
+Expected result:
+Error or warning.
+Actual result:
+Normal execution.
+Also, docker ps does only show the status as "Up X minutes" without the (healthy) or (unhealthy), etc. remark.

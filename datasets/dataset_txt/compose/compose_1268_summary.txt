@@ -1,0 +1,1 @@
+Return non-zero exit code if --parallel pull fails

@@ -1,0 +1,1 @@
+docker-compose doesn't use docker cache for COPY command

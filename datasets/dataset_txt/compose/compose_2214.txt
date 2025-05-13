@@ -1,0 +1,6 @@
+dsifford commented on 20 Jul 2016
+Hi there.
+I vaguely recall reading that this is possible somewhere, but I can't seem to find it now that I'm looking for it again.
+The gist is: How do I prevent myself and others on my team from accidentally running docker-compose down? We use a cloud provider with Docker Machine and it's not uncommon for any of us to simply forget we're still connected to our production machine.
+Thanks in advance.
+1

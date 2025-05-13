@@ -1,0 +1,1 @@
+[MAC] ERROR: Couldn't connect to Docker daemon.

@@ -1,0 +1,11 @@
+kwisatz commented on 7 Aug 2014
+I've had some trouble getting a fig environment up and running and I wonder whether this is my not understanding some details of the set-up process or could actually be a feature request.
+If the first case applies and I just didn't understand how things tie together, maybe just a single sentence in the tutorial and/or docs on the fig website could help.
+So, my issue is that I just couldn't get two docker containers to work together using fig. Let's say I used the official wordpress and mysql images.
+Now, running this "manually" using docker, one would link these two together like this:
+docker run --name wp --link mysql:mysql wordpress
+Which would then make the MYSQL_PORT_3306_TCP environment variable available to the wordpress container.
+However, what fig does, even when not using the scale parameter, is to rename the containers using numbers (as explained here: http://www.fig.sh/env.html), so that actually the variable [HOST]_[ALIAS/SERVICE]1_PORT[EXPOSEDPORT]_TCP is created instead. Which makes whatever script is running inside the wordpress container complain that the environment variable is not set or maybe --link has been omitted.
+Which, in return, led me to the conclusion that stock docker images cannot be used with fig, if they have not been prepared for such an environment.
+Now, if this is true and not only my misunderstanding or overlooking something, then maybe fig could add what I would call a "compatibility mode" that would actually use the defined service names as link aliases and make the environment variables available as [ALIAS]PORT[EXPOSEDPORT]_TCP.
+Thanks for your feedback and comments.

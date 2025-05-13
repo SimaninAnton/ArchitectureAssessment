@@ -1,0 +1,26 @@
+fanzi2009 commented on 5 Jun 2017 •
+edited
+Here is a very simple docker compose file.
+version: '2.1'
+
+services:
+  ci-build:
+    image: microsoft/aspnetcore-build:1.0-1.1
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: /bin/bash -c "dotnet restore ./netcore-docker-example.sln && dotnet publish ./netcore-docker-example.sln -c Release -o ./obj/Docker/publish"
+Here is the .env in the same folder
+COMPOSE_CONVERT_WINDOWS_PATHS = 1
+Here is the error message
+docker-compose -f docker-compose.ci.build.yml up
+Creating network "netcoredockerexample_default" with the default driver
+Creating netcoredockerexample_ci-build_1
+
+ERROR: for ci-build  Cannot create container for service ci-build: invalid volume spec "/src": invalid volume specification: '\src'
+ERROR: Encountered errors while bringing up the project.
+Here is the docker version
+docker-compose --version
+docker-compose version 1.11.2, build f963d76f
+docker --version
+Docker version 17.03.1-ce, build c6d412e

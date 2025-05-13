@@ -1,0 +1,14 @@
+WillemMali commented on 22 Apr 2017
+I have a few setup scripts that output information like so:
+Setting up this thingy... done.
+Setting up that thingy... OK.
+Finalizing... ERROR! Everything is bad.
+Some of these steps can take a long time, but because docker-compose seems to buffer lines when calling docker-compose logs -f I only see the previous statement, and not what's currently happening because the line isn't finished.
+What I want to see:
+Setting up things... done.
+Setting up more things...
+What I see:
+Setting up things... done.
+<nothing here until the 'done' pops in and finishes the line>
+This would be more functional, and also less unexpected as it would follow the behavior of tail -f which many programmers are familiar with.
+2

@@ -1,0 +1,1 @@
+docker-compose overwrites LABEL statements in Dockerfiles for running containers

@@ -1,0 +1,11 @@
+vingrad commented on 17 Jun 2016 •
+edited
+I want to define a named volume in my compose-config, but I need to specify the constraint:node for this named volume.
+volumes:
+data-app:
+image: busybox:latest
+volumes:
+- /data:/var/www
+environment:
+- "constraint:node==node1"
+But this does not work. Why? How can I specify the destination node for a named volume?

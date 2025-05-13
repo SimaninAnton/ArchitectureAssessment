@@ -1,0 +1,1 @@
+Running a service before `up` with networking enabled fails

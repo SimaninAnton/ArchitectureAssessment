@@ -1,0 +1,1 @@
+Repeating CMD on docker-compose up

@@ -1,0 +1,2 @@
+rishavjaiswal commented on 27 May 2019
+i have docker-compose.yml file with 3 node kafka cluster.Now how to make an image of that

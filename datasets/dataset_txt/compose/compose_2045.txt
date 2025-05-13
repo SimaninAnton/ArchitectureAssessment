@@ -1,0 +1,14 @@
+bwnyasse commented on 23 Sep 2016
+Actually , we can use the instruction docker-compose build --no-cache to avoid using the cache.
+For instance , if we have the following docker-compose file
+version: '2'
+services:
+  service1:
+    build:
+      context: .
+    container_name: service1_cont_name
+  service2:
+    build:
+      context: .
+    container_name: service2_cont_name
+If we need to apply --no-cache only for service1 , it will be usefull to have an option in the build instruction to define this kind of action.

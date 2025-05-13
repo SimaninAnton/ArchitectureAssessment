@@ -1,0 +1,1 @@
+INFO and ERRO messages are keep on printing on Travis log console.

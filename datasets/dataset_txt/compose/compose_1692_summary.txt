@@ -1,0 +1,1 @@
+Docker compose hanging when using -f file option

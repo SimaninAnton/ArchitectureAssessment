@@ -1,0 +1,14 @@
+JohnMaguire commented on 7 Jun 2017
+We've been using a Git short hash as a label to identify builds, like so:
+    labels:
+      com.duo.access-gateway.builder.version: 336fb8d4
+      com.duo.access-gateway.code.version: v1.4.3
+      com.duo.access-gateway.built: Tue, 11 Apr 2017 13:02:06 -0000
+This has worked great, until today, when I tried to call docker-compose up on a file with the following labels:
+    labels:
+      com.duo.access-gateway.builder.version: 89526235
+      com.duo.access-gateway.code.version: v1.4.4-beta0
+      com.duo.access-gateway.built: Fri, 02 Jun 2017 14:38:41 -0000
+The following error was returned:
+ERROR: for access-gateway Cannot create container for service access-gateway: json: cannot unmarshal number into Go value of type string
+It took me a while to track this down, but it's due to com.duo.access-gateway.builder.version being all numbers. I'm going to quote our values now, but this doesn't seem like it should be an issue -- or if it should be an issue, perhaps a more helpful error message could be provided.

@@ -1,0 +1,1 @@
+Lagging logs after updating to v1.8.1

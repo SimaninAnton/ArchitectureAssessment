@@ -1,0 +1,1 @@
+Compose file 'build' option does not support Linux style absolute paths on Windows

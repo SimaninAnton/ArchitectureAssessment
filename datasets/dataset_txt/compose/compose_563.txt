@@ -1,0 +1,84 @@
+lundybernard commented on 24 Jul 2018
+Simple python flask app, works with v1.19.0 fails on 1.22.0
+Context information (for bug reports)
+Testing with the same repository, identical code, 1.19 successfully starts a simple flask server, while 1.22 exits immediately with demo_web_1 exited with code 0
+1.19.0:
+> docker-compose --version
+docker-compose version 1.19.0, build 9e633ef
+> docker --version
+Docker version 17.12.1-ce, build 7390fc6
+> docker-compose config
+services:
+  web:
+    build:
+      context: /home/lb/projects/pytorch_microservice_demo
+    ports:
+    - 5000:5000/tcp
+version: '3.0'
+1.22.0:
+> docker-compose --version
+docker-compose version 1.22.0, build f46880f
+> docker --version
+Docker version 17.12.1-ce, build 7390fc6
+> docker-compose config
+services:
+  web:
+    build:
+      context: /home/lb/projects/pytorch_microservice_demo
+    ports:
+    - 5000:5000/tcp
+version: '3.0'
+Steps to reproduce the issue
+Using a fresh conda virtual env for each test:
+pip install docker-compose==1.19.0
+docker-compose up
+pip install docker-compose==1.22.0
+docker-compose up
+Expected result (1.19.0)
+docker-compose up
+Starting pytorchmicroservicedemo_web_1 ... done
+Attaching to pytorchmicroservicedemo_web_1
+web_1 | * Serving Flask app "pytorch_server" (lazy loading)
+web_1 | * Environment: production
+web_1 | WARNING: Do not use the development server in a production environment.
+web_1 | Use a production WSGI server instead.
+web_1 | * Debug mode: on
+web_1 | * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+web_1 | * Restarting with stat
+web_1 | * Debugger is active!
+web_1 | * Debugger PIN: 260-924-998
+Observed result (1.22.0)
+docker-compose up
+Recreating pytorch_microservice_demo_web_1 ... done
+Attaching to pytorch_microservice_demo_web_1
+pytorch_microservice_demo_web_1 exited with code 0
+Stacktrace / full error message
+ERR_CONNECTION_REFUSED
+Additional information
+pytorch_server/pytorch_server.py:
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return 'Hello World!\n'
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=True)
+Dockerfile:
+FROM python:3.6-alpine
+ADD . /code
+WORKDIR /code
+RUN pip install -r requirements.txt
+CMD ["python", "pytorch_server/pytorch_server.py"]
+requirements.txt:
+flask
+dockercompose.yaml:
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+OS version / distribution, docker-compose install method, etc.

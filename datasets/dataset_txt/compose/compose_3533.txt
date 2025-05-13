@@ -1,0 +1,5 @@
+aidanlister commented on 26 Jun 2015
+We used to be able to run something like:
+docker-compose -p aesg run web python manage.py test --keepdb abas.apps.properties
+And whenever there was a import pdb; pdb.set_trace() it would drop to console .. now it doesn't.
+OSError: [Errno 32] Broken pipe

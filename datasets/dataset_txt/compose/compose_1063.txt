@@ -1,0 +1,29 @@
+blachawk commented on 23 Nov 2017 •
+edited
+Is it just me or is it confirmed that Docker compose version 3.1 (docker-compose.yml file), does not mount volumes with docker-compose up on Docker version 17.09.0-ce-win33 (13620)?
+This is what I am using to create a wordpress container with a volume...
+version: '3.1'
+
+services:
+  mysite:
+    image: mysql:5.7
+    volumes: 
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: wp
+
+
+  # I created myimageswp483 as a custom-base image that is wordpress + php archive with the help of dockerfie.  I can use this image for all wordpress 4.8.3 sites I create locally!
+  wordpress:
+    image: myimageswp483
+    ports:
+      - 8084:80
+    volumes:
+      - ./wp/html:/var/www/html/
+    links:
+      - mysite:mysql
+    environment:
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_TABLE_PREFIX: mysitedockerlocal01_
+This process was working for me in October. But as of November 22nd, it no longer mounts my volumes. Can anyone confirm that this process no longer works for Docker 17? If that is the case, how should I improve my docker compose file to allow mounting for Docker version 17.09.0-ce-win33 (13620)?
+Thanks

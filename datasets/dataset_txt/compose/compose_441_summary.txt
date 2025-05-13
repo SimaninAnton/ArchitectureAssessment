@@ -1,0 +1,1 @@
+docker-compose init does not conform to documentation

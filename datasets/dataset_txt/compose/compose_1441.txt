@@ -1,0 +1,21 @@
+markgarcia commented on 22 May 2017
+docker-compose.yml:
+version: '3'
+
+services:
+  service:
+    build:
+      context: .
+      args:
+        - SOME_PATH=/mnt/some/absolute/path
+        # or
+        # - SOME_PATH=${ENVIRONMENT_VARIABLE_CONTAINING_ABSOLUTE_PATH}
+        # or
+        # - ENVIRONMENT_VARIABLE_CONTAINING_ABSOLUTE_PATH
+Dockerfile:
+...
+ARG SOME_PATH
+COPY ${SOME_PATH:-./out}/app /app   # SOME_PATH somehow becomes a relative path (e.g. mnt/some/absolute/path)
+# Produces error: Service 'service' failed to build: lstat mnt/some/absolute/path/app: no such file or directory
+Docker compose version: 1.13.0, build 1719ceb
+Docker version: 17.03.1-ce, build c6d412e

@@ -1,0 +1,4 @@
+kennu commented on 11 May 2014
+I have a private Docker server protected by a TLS certificate. I use these options to connect:
+docker --tls --tlscert=$HOME/.docker/client.crt --tlskey=$HOME/.docker/client.key
+Is this possible with Fig? I couldn't find any option to do it.

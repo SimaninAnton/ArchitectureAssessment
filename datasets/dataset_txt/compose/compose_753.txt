@@ -1,0 +1,20 @@
+deas commented on 9 Apr 2018
+Description of the issue
+docker-compose build aborts when there is an external volume declared.
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b
+Docker version 18.03.0-ce, build 0520e24
+Steps to reproduce the issue
+Make sure to have an external volume such as
+volumes:
+  foo:
+    external: true
+    driver: rancher-nfs
+in docker-compose.yml.
+and run
+docker-compose build
+Observed result
+I end up:
+ERROR: Volume foo declared as external but specifies additional attributes (driver).
+Expected result
+The build should work, the external nature of the volume should not matter.

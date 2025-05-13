@@ -1,0 +1,6 @@
+Contributor
+dnephin commented on 19 Jan 2016
+Containers currently join networks using the container name (default), and with their service name.
+We'd like to change or deprecate the container name (#1516), so we should provide a second alias that allows a user to uniquely identify a container (when multiple containers have the same service name, when they are scaled).
+We could either use the short container id, or service-<short container id>.
+I think just container id might be better. It's already possible to query for this id from within the container ($(hostname)), but it's not possible to query for the service name.

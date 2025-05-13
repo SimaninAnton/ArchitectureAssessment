@@ -1,0 +1,19 @@
+sixeyed commented on 1 Jun 2017
+This is an issue if the value is a string 'Y', because the output Y is interpreted as a boolean. That fails validation in docker stack deploy.
+Take this (partial) source file:
+version: '3.2'
+services:
+  db:
+    image: microsoft/mssql-server-windows-express
+    environment: 
+      ACCEPT_EULA: 'Y'
+docker-compose config > docker-compose.stack.yml renders a new file with the quotes removed in the service definition:
+services:
+  db:
+    environment:
+      ACCEPT_EULA: Y
+    image: microsoft/mssql-server-windows-express
+version: '3.2'
+If you try to deploy the generated file, you'll get an error:
+services.db.environment.ACCEPT_EULA must be a string, number or null
+There's no workaround that I can find using >, | or !!str.

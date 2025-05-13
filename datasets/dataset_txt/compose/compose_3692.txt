@@ -1,0 +1,20 @@
+tpaz commented on 24 Apr 2015
+setting yml file with something like the following:
+dockerspy:
+image: iverberk/docker-spy
+ports:
+- "172.17.42.1:53:53"
+- "172.17.42.1:53/udp:53/udp"
+volumes:
+- "/var/run/docker.sock:/var/run/docker.sock"
+tty: true
+and then running:
+docker-compose up -d dockerspy
+results in (docker-compose ps output):
+prod_dockerspy_1 /bin/docker-spy Up 172.17.42.1:53->53/tcp, 172.17.42.1:49157->53/udp
+expected result (works fine with regular docker run or tools like Crane):
+prod_dockerspy_1 /bin/docker-spy Up 172.17.42.1:53->53/tcp, 172.17.42.1:53->53/udp
+It seems like docker-compose (fig?) ignores the udp public port assignment and assigns a high port (49157/udp in this example) instead of the desired 53/udp
+or maybe I used a wrong syntax for: "172.17.42.1:53/udp:53/udp" ??
+from examples in docs I could not see what's wrong with that.
+version: docker-compose 1.2.0

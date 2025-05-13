@@ -1,0 +1,34 @@
+Contributor
+aanand commented on 30 Apr 2015
+(I'm creating a fresh issue for this as the old one has accumulated rather a lot of baggage.)
+It should be possible to pass in environment variables to the value of any* configuration entry in docker-compose.yml. A lot of people want to do it, it's good for portability and I'm satisfied it's not going to cause chaos.
+I have some reckons.
+Required variables and optional defaults
+It's useful to be able to specify that a variable that must be present in the environment, i.e. that Compose will refuse to run if it isn't. However, this will be a pain when you've got lots of them, so it should either be something you explicitly enable, or it should be possible to specify a default value.
+The MVP implementation does not need to have either feature, but there should be a clear path to implementing both in a backwards-compatible way.
+Syntax
+There's a strong case for implementing an established standard, as long as it's not heavyweight - our requirements for functionality are minimal.
+POSIX parameter expansion is OK. It has a few too many features, but we could implement a subset of them:
+${VARIABLE} - outputs empty string if VARIABLE is unset
+${VARIABLE-default} - outputs default if VARIABLE is unset
+${VARIABLE?} - errors out if VARIABLE is unset
+#845 implemented a Bash-style ${VARIABLE:default} syntax, which is similar to POSIX parameter expansion but slightly different.
+Python's format syntax would be trivial to implement, but is tied to the Python language, and has rather too many features.
+Implementation
+Python's os.path.expandvars function implements the most basic case of POSIX parameter expansion:
+>>> from os.path import expandvars
+>>> expandvars('${HOME}')
+'/Users/aanand'
+However, it's got at least 2 problems:
+An unset variable doesn't expand to an empty string - instead, it results in no expansion:
+>>> expandvars('${UNSET}')
+'${UNSET}'
+Malformed syntax doesn't error out - instead, it also results in no expansion:
+>>> expandvars('${HOME')
+'${HOME'
+So far, #845 is the closest we've got, but I'm fundamentally wary of an implementation that relies on regular expressions. Templating is a non-trivial job, and people are going to put all kinds of broken stuff in, so we need something that's robust, strict and errors out with helpful messages. Two important requirements:
+If someone puts in something malformed, Compose will not run.
+It is possible to escape any of the special characters used in the template syntax.
+There may well be good Python implementations of Bash-like variable interpolation out there already - if not, creating something standalone would be far preferable to bloating the Compose codebase.
+*Actually, are there any configuration keys for which we shouldn't allow interpolation?
+26

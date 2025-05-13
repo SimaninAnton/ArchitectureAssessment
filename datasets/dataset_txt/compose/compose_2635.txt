@@ -1,0 +1,9 @@
+rameshthoomu commented on 14 Mar 2016
+I am using Travis CI using Docker as service. every time when i run my build, INFO and ERRO messages are printing on Travis console. This increasing my Log level. How to set log level to critical? Please help me.
+INFO[1314] DELETE /v1.19/containers/9d3e51e005f585b68cb11f5f0259ad10dc4f72573062893052576f33fcc33c72?link=False&force=False&v=False
+INFO[1314] DELETE /v1.19/containers/fda6e01038d5c2921df09e0c86d538d5d9fcc22bf3539a7a07e4431251ff18b2?link=False&force=False&v=False 
+INFO[1314] GET /v1.20/containers/json?all=1
+INFO[1314] DELETE /v1.20/containers/736802fee10b?force=1
+INFO[1314] DELETE /v1.20/containers/eea1475eabd9?force=1
+INFO[1314] DELETE /v1.20/containers/1ac6600c1101?force=1
+INFO[1314] DELETE /v1.20/containers/6c50dafbe457?force=1

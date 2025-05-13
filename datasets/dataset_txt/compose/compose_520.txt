@@ -1,0 +1,95 @@
+nqdrizzt commented on 27 Aug 2018
+Description of the issue
+The docker-compose binary can not be build with the released tar.gz source code package. This is due to missing '.git' directory in the released tar.gz file. The build is performed by calling the script/build/linux script
+In detail:
+script/build/linux script builds and runs the a docker-compose docker container
+script/build/linux-entrypoint script is executed as start script inside of the build container
+script/build/write-git-sha is executed to get SHA of HEAD via git command
+ERROR:
+./script/build/write-git-sha
+fatal: Not a git repository (or any of the parent directories): .git
+Tested with docker-compose version 1.22.0
+Steps to reproduce the issue
+Download source tar.gz from Releases page in GitHub
+Extract tar.gz
+cd into extracted directory
+Run ./script/build/linux
+Observed result
+./script/build/write-git-sha
+fatal: Not a git repository (or any of the parent directories): .git
+Expected result
+Build of binary finishes successfully
+Stacktrace / full error message
+cd docker-compose; \
+sudo docker build -t docker-compose .; \
+sudo docker run --rm --entrypoint="script/build/linux-entrypoint" -v /.git:/code/.git -v /build-results/pipeline-12345678:/build/pipeline docker-compose
+Sending build context to Docker daemon  1.744MB
+Step 1/18 : FROM python:3.6
+ ---> d49c41b6e6c4
+Step 2/18 : RUN set -ex;     apt-get update -qq;     apt-get install -y         locales         curl         python-dev         git
+ ---> Using cache
+ ---> d85475ce8593
+Step 3/18 : RUN curl -fsSL -o dockerbins.tgz "https://download.docker.com/linux/static/stable/x86_64/docker-17.12.0-ce.tgz" &&     SHA256=692e1c72937f6214b1038def84463018d8e320c8eaf8530546c84c2f8f9c767d;     echo "${SHA256}  dockerbins.tgz" | sha256sum -c - &&     tar xvf dockerbins.tgz docker/docker --strip-components 1 &&     mv docker /usr/local/bin/docker &&     chmod +x /usr/local/bin/docker &&     rm dockerbins.tgz
+ ---> Using cache
+ ---> 810266af82dc
+Step 4/18 : RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+ ---> Using cache
+ ---> 99fd89f43fe5
+Step 5/18 : ENV LANG en_US.UTF-8
+ ---> Using cache
+ ---> bef6bb4f8886
+Step 6/18 : RUN useradd -d /home/user -m -s /bin/bash user
+ ---> Using cache
+ ---> 8d5a2d093295
+Step 7/18 : WORKDIR /code/
+ ---> Using cache
+ ---> fc5d51de5569
+Step 8/18 : RUN pip install tox==2.1.1
+ ---> Using cache
+ ---> 40f94574511c
+Step 9/18 : ADD requirements.txt /code/
+ ---> Using cache
+ ---> 40be503c5262
+Step 10/18 : ADD requirements-dev.txt /code/
+ ---> Using cache
+ ---> 2f1b455e4459
+Step 11/18 : ADD .pre-commit-config.yaml /code/
+ ---> Using cache
+ ---> 84a98edc279f
+Step 12/18 : ADD setup.py /code/
+ ---> Using cache
+ ---> 22e7f64e832e
+Step 13/18 : ADD tox.ini /code/
+ ---> Using cache
+ ---> 829f265259ce
+Step 14/18 : ADD compose /code/compose/
+ ---> Using cache
+ ---> 6f5d511b82eb
+Step 15/18 : RUN tox --notest
+ ---> Using cache
+ ---> 3b6a2ac88dfb
+Step 16/18 : ADD . /code/
+ ---> Using cache
+ ---> 4b11e0422d8e
+Step 17/18 : RUN chown -R user /code/
+ ---> Using cache
+ ---> 28df056bc2af
+Step 18/18 : ENTRYPOINT ["/code/.tox/py36/bin/docker-compose"]
+ ---> Using cache
+ ---> c59fe7c84ad0
+Successfully built c59fe7c84ad0
+Successfully tagged docker-compose:latest
++ TARGET=/build/pipeline/docker-compose
++ VENV=/code/.tox/py36
+++ pwd
++ mkdir -p /code/dist
+++ pwd
++ chmod 777 /code/dist
++ /code/.tox/py36/bin/pip install  -q -r requirements-build.txt
++ ./script/build/write-git-sha
+fatal: Not a git repository (or any of the parent directories): .git
+Additional information
+Build system:
+Debian Linux 9.4 Stretch
+docker -v
+Docker version 18.03.1-ce, build 9ee9f40

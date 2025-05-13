@@ -1,0 +1,51 @@
+immae1 commented on 15 Feb 2017 •
+edited
+hi there i have a question:
+Dockerfile (This is my base image for production ready env):
+FROM ubuntu:trusty
+
+# install system packages
+RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install -qq -y gettext git libffi-dev libpq-dev \
+     python python-pip python-dev \
+...
+the resulted images must tagged as : web_base
+Dockerfile (this is my dev image which is interdependent with the first dockerfile - see the FROM Part):
+FROM web_base
+USER root
+# install system packages
+RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
+        && apt-get install -qq -y git openssh-server vim wget
+....
+My docker-compose_dev.yml:
+...
+web_base:
+    build: .
+    image: web_base
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    security_opt:
+      - apparmor=docker-default
+      - no-new-privileges
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - SETGID
+      - SETUID
+      - NET_BIND_SERVICE
+      - SYS_CHROOT
+      - AUDIT_WRITE
+    depends_on:
+      - db
+      - db_templates
+      - redis
+      - web_base
+if i run docker-compose -f docker-compose_dev.yml up --build
+the first dockerfile is builded. The seccond dockerfile which depends on the first dockerfile is builded and the web container starts. but also from the first dockerfile a container named "web_base" is created which stops.
+I want to build the 1. Dockerfile and then the 2. Dockerfile and create only 1 Container named web, how could this be reached?
+I know that i could run docker build . -t web_base and then run docker-compose without the "web_base" service.But than i have to execute 2 commands...
+thanks

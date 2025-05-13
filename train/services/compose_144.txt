@@ -1,0 +1,46 @@
+tarfeef101 commented on 2 Jul 2019
+Description of the issue
+At some point after working on a compose project a couple night ago, compose ceased to work for my non-root user. Prior to the issue, as my user (member of docker group on a debian 9 server), I could use docker-compose to my heart's content, and I was using down, up, build, etc without issue over and over. At some point that night (I don't recall what, if anything changed), I could no longer use docker-compose. Running the command, at all, with or without arguments returns
+_bisect.so could not be extracted!
+fopen: Permission denied
+Since then, I tried reloading the docker daemon, upgrading to the latest debian stable release for docker, and the latest docker-compose release as well. The issue has since persisted. However, as root, i can run and interact with docker-compose without issue (which is how I have the debug info requested below).
+I haven't really seen anyone else having this issue, and unfortunately I don't have a very clear log of the changes that happened when the issue showed up, so I am out of ideas.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.7
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        2d0083d
+ Built:             Thu Jun 27 17:57:09 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.7
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       2d0083d
+  Built:            Thu Jun 27 17:23:02 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Steps to reproduce the issue
+I guess install my versions of docker and compose, add a non-root used to the docker group, reload the daemon/reboot your machine
+Try to run docker-compose as the non-root user
+Sorry I can't be more specific about what I changed when things started working, if I knew it'd be here. Please feel free to ask for anything relevant.
+Observed result
+_bisect.so could not be extracted!
+fopen: Permission denied
+Expected result
+A docker-compose command would execute, depending on the parameters passed to it, naturally.
+Stacktrace / full error message
+_bisect.so could not be extracted!
+fopen: Permission denied
+Additional information
+Debian 9.9, docker installed through the docker apt repository, compose installed by curling the binary into /usr/local/bin/docker-compose, and making it readable/executable for all users

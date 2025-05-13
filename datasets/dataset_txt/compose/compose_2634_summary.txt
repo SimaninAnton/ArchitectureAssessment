@@ -1,0 +1,1 @@
+Updating aliases does not re-create container or update auto-discovery

@@ -1,0 +1,1 @@
+docker-compose config renders short-form target/published ports as strings in long-form

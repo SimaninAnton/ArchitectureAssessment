@@ -1,0 +1,10 @@
+tback commented on 7 Dec 2018
+Is your feature request related to a problem? Please describe.
+I use docker-compose to create setups that'll reproduce problems. Imagine I want to fiddle with nginx to explore a certain configuration.
+I usually create a directory, then I google 'docker-compose.yaml template' and copy paste it from the browser to get going. This seems overly complicated to me because docker-compose should know quite a bit about docker-compose files.
+Describe the solution you'd like
+I'd like a docker-compose command that helps with the creation of docker-compose.yaml files.
+maybe docker-compose init. This would create a minimal docker-compose.yaml in the current directory.
+Then I'd run docker-compose init nginx and docker-compose would create a service using the docker image with the same name.
+Describe alternatives you've considered
+The alternative is doing it manually. I am perfectly capable of creating and editing said files, but I don't want to remember/lookup everything.

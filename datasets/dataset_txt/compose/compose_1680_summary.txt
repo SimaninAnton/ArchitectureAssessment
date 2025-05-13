@@ -1,0 +1,1 @@
+Docker scp command - You must have a copy of the scp binary locally to use the scp feature

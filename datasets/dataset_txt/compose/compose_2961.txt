@@ -1,0 +1,2 @@
+patrick-bark commented on 28 Dec 2015
+I am trying to wrap my head around using Compose with containers that need to be routinely ran. In my application I have long running containers linked to routinely ran ones. There doesn't seem to be a simple way of doing this. I feel it would be very beneficial if Compose had a very minimal Cron-type scheduler for this purpose.

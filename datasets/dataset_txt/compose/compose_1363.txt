@@ -1,0 +1,9 @@
+Niondir commented on 27 Jun 2017 •
+edited
+I'm confused every time I do docker-compose up -d
+postgres is up-to-date
+nginx is up-to-date
+Recreating backend
+dashboard is up-to-date
+The container name is always in front, just for "recreating" it's at the end. I wish you could unify this to make spotting what was recreated and what is up-to-date a bit easier.
+3

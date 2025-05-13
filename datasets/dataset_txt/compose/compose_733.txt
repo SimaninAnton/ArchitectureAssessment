@@ -1,0 +1,35 @@
+Algedi13 commented on 18 Apr 2018 •
+edited
+Hello, I try to retranscribe the following command in the file compose without success.
+The working command :
+docker network create -d qnet --ipam-driver=qnet --ipam-opt=iface=eth0 \
+      --subnet=XX.XX.XX --gateway=XX.XX.XX qnet-static-eth0-XXXXXX
+networks:
+  qnet-static-eth0:
+    driver: qnet
+    driver_opts:
+      iface: "eth0"
+    ipam:
+      driver: qnet
+      config:
+      - subnet: XXX.XX.XX
+        gateway: XXX.XX.XX
+Error:
+Creating network "docker_qnet-static-eth0" with driver "qnet"
+ERROR: IpamDriver.RequestPool: 'NoneType' object has no attribute 'get'
+Client:
+ Version:      17.07.0-ce
+ API version:  1.31
+ Go version:   go1.8.3
+ Git commit:   fd7dc00
+ Built:        Thu Feb  8 15:57:38 2018
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.07.0-ce
+ API version:  1.31 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   fd7dc00
+ Built:        Thu Feb  8 15:57:38 2018
+ OS/Arch:      linux/amd64
+ Experimental: false

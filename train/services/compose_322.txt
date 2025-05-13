@@ -1,0 +1,113 @@
+divoxx commented on 17 Jan 2019 •
+edited
+Description of the issue
+The symptom of the problem is containers not being able to resolve internal DNS when specifying a network_mode and creating the container with --no-start. The root cause seems to be some discrepancy on how the network is setup.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.19.0, build 9e633ef
+docker-py version: 2.7.0
+CPython version: 2.7.15
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.11.2
+ Git commit:        e68fc7a
+ Built:             Wed Dec 12 18:03:23 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.11.2
+  Git commit:       e68fc7a
+  Built:            Wed Dec 12 18:02:57 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  app:
+    command: ping dependency
+    depends_on:
+    - dependency
+    image: alpine:latest
+    network_mode: service:network
+  dependency:
+    command: tail -f /dev/null
+    image: alpine:latest
+  network:
+    command: tail -f /dev/null
+    image: alpine:latest
+version: '3.0'
+Steps to reproduce the issue
+docker-compose up --no-start app
+docker-compose up app or docker-compose start app
+Observed result
+$ docker-compose up app
+Starting doxcomposebug_network_1 ...
+Starting doxcomposebug_network_1 ... done
+Starting doxcomposebug_app_1 ... done
+Attaching to doxcomposebug_app_1
+app_1         | ping: bad address 'dependency'
+doxcomposebug_app_1 exited with code 1
+Expected result
+$ docker-compose up app
+Creating doxcomposebug_dependency_1 ... done
+Creating doxcomposebug_network_1    ... done
+Creating doxcomposebug_dependency_1 ...
+Creating doxcomposebug_app_1        ... done
+Attaching to doxcomposebug_app_1
+app_1         | PING dependency (172.27.0.3): 56 data bytes
+app_1         | 64 bytes from 172.27.0.3: seq=0 ttl=64 time=0.055 ms
+app_1         | 64 bytes from 172.27.0.3: seq=1 ttl=64 time=0.046 ms
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping doxcomposebug_app_1 ... done
+Additional information
+Here is a relevant part of a diff between docker inspect for both containers, one created by up and another by up --no-start:
+--- app.json 2019-01-16 13:22:19.889049988 -0800
++++ app_no-start.json 2019-01-16 13:20:47.990382374 -0800
+@@ -166,12 +166,12 @@
+         },
+         "NetworkSettings": {
+             "Bridge": "",
+-            "SandboxID": "",
++            "SandboxID": "3608118588a4bc44c69bb780360ad5b2b2de453b3d17c0c16811583a87449c13",
+             "HairpinMode": false,
+             "LinkLocalIPv6Address": "",
+             "LinkLocalIPv6PrefixLen": 0,
+             "Ports": {},
+-            "SandboxKey": "",
++            "SandboxKey": "/var/run/docker/netns/3608118588a4",
+             "SecondaryIPAddresses": null,
+             "SecondaryIPv6Addresses": null,
+             "EndpointID": "",
+@@ -182,7 +182,23 @@
+             "IPPrefixLen": 0,
+             "IPv6Gateway": "",
+             "MacAddress": "",
+-            "Networks": {}
++            "Networks": {
++                "bridge": {
++                    "IPAMConfig": null,
++                    "Links": null,
++                    "Aliases": null,
++                    "NetworkID": "661243aef64a1477b4db60d545ac6037ad5393ed7e27d453a2b588564b4504bb",
++                    "EndpointID": "",
++                    "Gateway": "",
++                    "IPAddress": "",
++                    "IPPrefixLen": 0,
++                    "IPv6Gateway": "",
++                    "GlobalIPv6Address": "",
++                    "GlobalIPv6PrefixLen": 0,
++                    "MacAddress": "",
++                    "DriverOpts": null
++                }
++            }
+         }
+     }
+ ]
+EDIT: typo

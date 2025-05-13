@@ -1,0 +1,1 @@
+ipv6_routed_network_example.svg doesn't refer to a router

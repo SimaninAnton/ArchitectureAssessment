@@ -1,0 +1,1 @@
+Integer is invalid value for `logging.options.max-file`

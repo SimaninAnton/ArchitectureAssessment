@@ -1,0 +1,37 @@
+icy commented on 29 Jun 2015
+How to reproduce
+Start containers with docker-compose
+Restart docker daemon
+Docker-compose (up) will keep running, but all its containers exit
+Excpected behavior: docker-compose restart its containers
+Reference: #157 #1
+Tested on: Both verion 1.2.x and 1.3.1 have the same behavior.
+Sample error logs
+From docker-compose when docker daemon has been restarted
+wp_1 | 2015-06-29 0Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 810, in __bootstrap_inner
+    self.run()
+  File "/usr/lib/python2.7/threading.py", line 763, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/multiplexer.py", line 41, in _enqueue_output
+    for item in generator:
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/log_printer.py", line 62, in _make_log_generator
+    exit_code = container.wait()
+  File "/usr/local/lib/python2.7/dist-packages/compose/container.py", line 155, in wait
+    return self.client.wait(self.id)
+  File "/usr/local/lib/python2.7/dist-packages/docker/utils/decorators.py", line 15, in wrapped
+    return f(self, resource_id, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 1136, in wait
+    res = self._post(url, timeout=timeout)
+  File "/usr/local/lib/python2.7/dist-packages/docker/client.py", line 103, in _post
+    return self.post(url, **self._set_request_timeout(kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 508, in post
+    return self.request('POST', url, data=data, json=json, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 465, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 573, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/adapters.py", line 415, in send
+    raise ConnectionError(err, request=request)
+ConnectionError: ('Connection aborted.', error(2, 'No such file or directory

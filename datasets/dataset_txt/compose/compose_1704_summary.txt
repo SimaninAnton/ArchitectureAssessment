@@ -1,0 +1,1 @@
+Docker-compose build fails with nondescript message if a nested folder is not accessible

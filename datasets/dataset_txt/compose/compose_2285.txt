@@ -1,0 +1,16 @@
+laggingreflex commented on 24 Jun 2016
+I have a ./docker-compose.yml
+version: '2'
+services:
+  client:
+    build:
+      context: ./client
+    environment:
+      NODE_ENV: development
+and ./client/dockerfile
+FROM ...
+RUN echo $NODE_ENV
+the output of which is blank, meaning the environment variable set in compose yml file are being ignored in dockerfile while building container.
+Incidentally it works while actually running the container:
+CMD echo $NODE_ENV
+The problem is only during build

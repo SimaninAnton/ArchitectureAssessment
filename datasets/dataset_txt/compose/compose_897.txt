@@ -1,0 +1,10 @@
+harmon commented on 3 Feb 2018 •
+edited
+Hi,
+I'm trying to use the "docker/compose:1.19.0-rc3" docker image to run "docker-compose build":
+$ docker run -it --net=host -v $(pwd):/tmp/server -w /tmp/server docker/compose:1.19.0-rc3 build myapp
+Building myapp
+ERROR: Couldn't connect to Docker daemon. You might need to install Docker:
+
+https://docs.docker.com/engine/installation/
+I can run it locally, and the dockerd is definitely running. Any ideas? I'm not really sure how to use this docker image successfully, there aren't any guides that I've seen...

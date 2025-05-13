@@ -1,0 +1,7 @@
+emilebosch commented on 26 Jan 2016
+I am running currently 1.6rc. I'm happy with the added build and image feature. But to be honest
+its not of much because it doesn't fulfill the complete workflow with swarm.
+You can't push the images and therefore running them after building fails in a docker-swarm scenario. (they simply can't find the image) allowing a push would work.
+You have no control over on which server the images get build (i.e. one server can have much more ram for building than others).
+Is there anywhere a roadmap i can see?
+1

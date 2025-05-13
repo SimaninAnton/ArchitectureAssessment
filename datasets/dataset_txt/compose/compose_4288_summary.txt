@@ -1,0 +1,1 @@
+'fig logs' exits when a service is stopped

@@ -1,0 +1,16 @@
+ashb commented on 19 Oct 2015
+I #1765 caused a small regression in behaviour. My docker-compose.yml looks like this:
+postgres:
+  container_name: mailserverdocker_postgres
+  build: postgres
+  environment:
+    POSTGRES_PASSWORD:
+    PGDATA: /var/lib/postgresql/data/pgdata
+  volumes:
+    # This is not on the host but on the docker-machine. Cos VMHGFS permissions
+    # are fail. FULL OF FAIL AND PERMISSIONS ERRORS
+    - /docker-volumes/run/pg-data:/var/lib/postgresql/data
+On docker-compose 1.4.2 this would use the POSTGRES_PASSWORD env var from runtime at docker-compose up - now it gives this error:
+Service 'postgres' configuration key 'environment' 'POSTGRES_PASSWORD' contains None, which is an invalid type, it should be a stringnumber or a boolean
+I can fix it by changing to POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} -- I'm just not sure if this regression was intentional or not? It wasn't clear from the Changelog that this would break.
+(Maybe just a documentation change and a note in the changelog about this being a (small) breaking change is enough here?)

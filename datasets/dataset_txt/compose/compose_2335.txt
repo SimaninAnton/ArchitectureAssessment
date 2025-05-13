@@ -1,0 +1,151 @@
+tarunlalwani commented on 3 Jun 2016
+Docker compose currently fails to create DNS for a link service which uses base network of another service. Not sure if this is a docker issue or compose. Either compose is not configuring docker containers properly or docker has a bug in this use case
+Steps to Reproduce
+Take the below compose file
+version: '2'
+
+services:
+  base:
+    image: nginx
+  master:
+    image: centos:7.2.1511
+    command: top -b
+    network_mode: service:base
+  slave:
+    image: nginx
+  configurator:
+    image: busybox
+    links:
+      - master
+      - slave
+    command: sh -c "wget -qO - http://base && wget -qO - http://slave && wget -qO - http://master"
+Execute the below command
+[root@localhost compose-issue]# docker-compose up -d && docker-compose logs -f configurator
+composeissue_base_1 is up-to-date
+composeissue_slave_1 is up-to-date
+Recreating composeissue_master_1
+Recreating composeissue_configurator_1
+Attaching to composeissue_configurator_1
+configurator_1  | <!DOCTYPE html>
+configurator_1  | <html>
+configurator_1  | <head>
+configurator_1  | <title>Welcome to nginx!</title>
+configurator_1  | <style>
+configurator_1  |     body {
+configurator_1  |         width: 35em;
+configurator_1  |         margin: 0 auto;
+configurator_1  |         font-family: Tahoma, Verdana, Arial, sans-serif;
+configurator_1  |     }
+configurator_1  | </style>
+configurator_1  | </head>
+configurator_1  | <body>
+configurator_1  | <h1>Welcome to nginx!</h1>
+configurator_1  | <p>If you see this page, the nginx web server is successfully installed and
+configurator_1  | working. Further configuration is required.</p>
+configurator_1  |
+configurator_1  | <p>For online documentation and support please refer to
+configurator_1  | <a href="http://nginx.org/">nginx.org</a>.<br/>
+configurator_1  | Commercial support is available at
+configurator_1  | <a href="http://nginx.com/">nginx.com</a>.</p>
+configurator_1  |
+configurator_1  | <p><em>Thank you for using nginx.</em></p>
+configurator_1  | </body>
+configurator_1  | </html>
+configurator_1  | <!DOCTYPE html>
+configurator_1  | <html>
+configurator_1  | <head>
+configurator_1  | <title>Welcome to nginx!</title>
+configurator_1  | <style>
+configurator_1  |     body {
+configurator_1  |         width: 35em;
+configurator_1  |         margin: 0 auto;
+configurator_1  |         font-family: Tahoma, Verdana, Arial, sans-serif;
+configurator_1  |     }
+configurator_1  | </style>
+configurator_1  | </head>
+configurator_1  | <body>
+configurator_1  | <h1>Welcome to nginx!</h1>
+configurator_1  | <p>If you see this page, the nginx web server is successfully installed and
+configurator_1  | working. Further configuration is required.</p>
+configurator_1  |
+configurator_1  | <p>For online documentation and support please refer to
+configurator_1  | <a href="http://nginx.org/">nginx.org</a>.<br/>
+configurator_1  | Commercial support is available at
+configurator_1  | <a href="http://nginx.com/">nginx.com</a>.</p>
+configurator_1  |
+configurator_1  | <p><em>Thank you for using nginx.</em></p>
+configurator_1  | </body>
+configurator_1  | </html>
+configurator_1  | wget: bad address 'master'
+composeissue_configurator_1 exited with code 1
+Expected:
+master can be resolved inside the configurator service
+Actual:
+master cannot be resolved inside the configurator service
+Docker Info
+[root@localhost compose-issue]# docker info
+Containers: 51
+ Running: 9
+ Paused: 0
+ Stopped: 42
+Images: 171
+Server Version: 1.11.2
+Storage Driver: devicemapper
+ Pool Name: docker-253:2-402851423-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 12.2 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 66.7 GB
+ Metadata Space Used: 22.78 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.125 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107-RHEL7 (2015-12-01)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge null host
+Kernel Version: 3.10.0-327.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+OSType: linux
+Architecture: x86_64
+CPUs: 32
+Total Memory: 125.6 GiB
+Name: localhost.localdomain
+ID: FFLC:YWLS:3BJJ:MIUS:OUDN:Y6UE:RCLS:D7CX:ZKXE:RURN:A6I2:GHM3
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled
+docker version
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:11 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:11 2016
+ OS/Arch:      linux/amd64
+uname -a
+[root@localhost compose-issue]# uname -a
+Linux localhost.localdomain 3.10.0-327.el7.x86_64 #1 SMP Thu Nov 19 22:10:57 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux

@@ -1,0 +1,21 @@
+jansila commented on 21 Jun 2018
+Description of the issue
+I would love to be able to set an env variable with default containig $PWD call. I need to use the env var in the container later on, but I cant seem to get it to work.
+Example:
+
+    version: '2.3'
+    
+    services:
+    
+      extractor:
+        image:xxxxxxxx:0.0.15
+        environment:
+          - INPUT_PATH
+          - CRAWLER_PATH
+        depends_on:
+          - transformer
+        volumes:
+          - ${INPUT_PATH:-$PWD/test-data/}:${CRAWLER_PATH-/test-data/}
+        restart: always
+So if not INPUT_PATH is set, use the test-data in the current working directory. It works ok for th CRAWLER_PATH parameter, but not for INPUT_PATH. I tried to set it also in .env file but it would not evaluate either. Would that be possible somehow now, or later on, please?
+Thanks

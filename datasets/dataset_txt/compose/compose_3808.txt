@@ -1,0 +1,9 @@
+Member
+crosbymichael commented on 23 Mar 2015
+Problem
+Improve Docker Compose example documentation to talk about volumes
+Solution
+See #1039.
+Add a Troubleshooting section at the end of Docker Compose documentation to mention that the starting directory has to be in a shared volume. If the example is being run on a Mac with Boot2Docker, then only /Users directory is mounted - so the example has to be run from /Users/xyz and not from /tmp/ or /opt/.
+Way to reproduce this is to follow the basic Compose example in http://docs.docker.com/compose in /tmp/ directory on a Mac with Boot2Docker
+1

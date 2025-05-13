@@ -1,0 +1,18 @@
+taiidani commented on 8 May 2017 •
+edited
+Feature Proposal
+A COMPOSE_OVERRIDE_FILENAME CLI environment variable that allows customization of which file Compose looks for when searching for the docker-compose.override.yml file in the system.
+Specifying this would have the effect of force-enabling this functionality even when -f or COMPOSE_FILE is specified.
+Use case
+Great Docker Community Slack conversation here that describes multiple use cases: https://dockercommunity.slack.com/archives/C2X82D9PA/p1494171567481639
+To summarize -- our current implementation has a 2-tier YML setup where:
+docker-compose.yml == Developer environment
+[docker-compose.override.yml] == gitignored override
+We currently put "#STUB OUT" comments in the base file that we sed away to remove, making it into a production configuration. I would like to see a 3-tier YML setup where:
+docker-compose.yml == Production environment
+docker-compose.dev.yml == Developer environment
+[docker-compose.override.yml] == gitignored override
+So that we can rid ourselves of the custom sed line-stripping solution and start using that docker-compose.yml file as the base for our other .stage and .live YML files.
+The override file itself has numerous scenarios causing us to need to gitignore it. It is also not needed by all our developers so placing it in the COMPOSE_FILE env var would be an inconvenience (and a little hacky).
+Why not make it override all the time?
+The override file can't be applied by default when using -f/COMPOSE_FILE to preserve backwards compatible behavior and when using it with a .prod.yml file for production deployments. However if we added a new env var such as COMPOSE_OVERRIDE_FILENAME we could allow users to opt-in to that behavior, and get customization of which filename to look for at the same time.

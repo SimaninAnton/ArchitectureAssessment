@@ -1,0 +1,1 @@
+docker-compose up exits strangely when using data-only container

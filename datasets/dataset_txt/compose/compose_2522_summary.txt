@@ -1,0 +1,1 @@
+"up --build" does not use updated image if containers already exist

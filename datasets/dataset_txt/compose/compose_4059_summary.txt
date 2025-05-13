@@ -1,0 +1,1 @@
+"fig up" hangs, "fig run" does not, but lacks ports

@@ -1,0 +1,50 @@
+fundon commented on 3 Jan 2015
+marsoon
+Export fig.yml to Diagram Graph.
+Simple Demo
+http://dockerboard.github.io/marsoon/
+Quick Start
+fig.yml
+db:
+  image: postgres
+  ports:
+    - "5432"
+web:
+  build: .
+  command: bundle exec rackup -p 3000
+  volumes:
+    - .:/myapp
+  ports:
+    - "3000:3000"
+  links:
+    - db
+json data
+{
+  "db": {
+    "image": "postgres",
+    "ports": [
+      "5432"
+    ]
+  },
+  "web": {
+    "build": ".",
+    "command": "bundle exec rackup -p 3000",
+    "volumes": [
+      ".:/myapp"
+    ],
+    "ports": [
+      "3000:3000"
+    ],
+    "links": [
+      "db"
+    ]
+  }
+}
+Diagram Graph
+Mermaid Graph
+graph LR;
+  db[db];
+  style db fill:#484F40;
+  web[web];
+  style web fill:#484F40;
+  web-->db;

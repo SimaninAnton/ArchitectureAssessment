@@ -1,0 +1,5 @@
+etc0de commented on 14 Apr 2015
+On many systems, python2.7 and python3 are installed in parallel. Many already link /usr/bin/python to python3, e.g. fedora.
+However, the /usr/bin/docker-compose script starts out with: #!/usr/bin/python
+This is essentially quite a gamble, since it gets you randomly either python2.7 or python3 (it doesn't even necessarily match the python version used for pip, since people with python3 present and /usr/bin/python pointing to python3 can still use python2-pip to install all sorts of 2.7-only applications).
+The line should actually read: #!/usr/bin/env python2

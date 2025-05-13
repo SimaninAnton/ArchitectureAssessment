@@ -1,0 +1,16 @@
+lemats commented on 28 Nov 2016
+Hi,
+docker-compose run includes short and long option to run as specified user:
+-u, --user=""
+see: https://docs.docker.com/compose/reference/run/
+docker-compose exec knows only the long option to run the command as this user:
+--user
+see: https://docs.docker.com/compose/reference/exec/
+For consistency:
+Add short option
+-u
+to docker-compose exec.
+Besides: docker run and exec both have short AND long options:
+-u, --user
+https://docs.docker.com/engine/reference/commandline/exec/
+https://docs.docker.com/engine/reference/commandline/run/

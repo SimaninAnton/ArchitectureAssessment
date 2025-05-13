@@ -1,0 +1,7 @@
+Contributor
+charleswhchan commented on 2 Sep 2015
+I was going through the website and noticed the release notes section is outdated:
+https://docs.docker.com/compose/ - v1.2.0
+The latest release:
+https://github.com/docker/compose/releases - v1.4.0
+Should we remove the information from the website and link to the "releases" page on GitHub directly?

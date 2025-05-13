@@ -1,0 +1,15 @@
+jmkgreen commented on 30 Aug 2016
+Docker version 1.12, Compose version 1.8.
+See https://github.com/jmkgreen/docker-compose-test for simple test. Launch then exec into the running container.
+Observe:
+jamesg@virt-04:~/docker-compose-test$ docker exec -it dockercomposetest_debian_1 bash
+root@b5ff7abaf0fd:/# cat /etc/hosts
+127.0.0.1       localhost
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+192.168.0.2     bar
+172.23.0.2      b5ff7abaf0fd
+Notice how the host bar is added by the override file, however I expected to see both bar and foo as foo comes from the docker-compose.yml file. It appears that the override file for extra_hosts replaces the values already found at interpolation time rather than augments the values.

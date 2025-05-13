@@ -1,0 +1,1 @@
+Better support for bash aliases from fig run

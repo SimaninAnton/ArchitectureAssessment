@@ -1,0 +1,12 @@
+abitrolly commented on 8 Nov 2017
+This file should not pass docker-compose config check, but it does
+version: '3.2'
+services:
+  cs-btcd:
+    image: cybernode/bitcoin-btcd:temp
+    volumes:
+      - type: volume
+        source: /cyberdata
+        garbage:
+          and: typos
+docker-compose version 1.16.1, build 6d1ac21

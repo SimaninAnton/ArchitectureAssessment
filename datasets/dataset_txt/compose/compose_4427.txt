@@ -1,0 +1,25 @@
+Contributor
+cameronmaske commented on 23 Jan 2014
+Hello again,
+This is a really odd bug I came across. I'm still not sure what causes it but I think it's linked to the third services name (and possibly the length?!).
+Screencast of the bug happening.
+In summary, when I had a fig.yml file setup to boot 3 services, like so..
+web:                                                                                     
+    build: .                                                                             
+    links:                                                                               
+        - redis                                                                          
+redis:                                                                                   
+    image: orchardup/redis                                                               
+longNamedService:                                                                        
+    build: .
+I get an No such service: redis error when running fig up
+But if I change the third services name to be really short, such as..
+web:                                                                                     
+    build: .                                                                             
+    links:                                                                               
+        - redis                                                                          
+redis:                                                                                   
+    image: orchardup/redis                                                               
+l:                                                                                       
+    build: .  
+fig up works just fine! Really odd!

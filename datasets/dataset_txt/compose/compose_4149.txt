@@ -1,0 +1,3 @@
+xiaods commented on 21 Oct 2014
+i reproduce wordpress step based on fig.sh page, found the wordpress setup is not working.
+anyone can help reproduce it, it will help me confirm this is need improve part.

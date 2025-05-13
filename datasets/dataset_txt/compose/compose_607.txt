@@ -1,0 +1,87 @@
+AnthonyWC commented on 25 Jun 2018
+See: #5426 (issue originally reported in windows; re-produced on Linux/ubuntu)
+Empty image tag results in error message:
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+Main problem is that the error message is quite misleading.
+docker-compose build
+WARNING: The DOC_REPO variable is not set. Defaulting to a blank string.
+WARNING: The DOC_NAME variable is not set. Defaulting to a blank string.
+WARNING: The DOC_TAG variable is not set. Defaulting to a blank string.
+services:
+  default:
+    build:
+      context: /home/antho/git/serverless/dataeng-buildkite-test
+    image: '/:'
+    tty: true
+version: '3.0'
+
+WARNING: The DOC_TAG variable is not set. Defaulting to a blank string.
+Building default
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+↳ docker version                                                                                                                    
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+
+↳ docker info 
+Containers: 4
+ Running: 0
+ Paused: 0
+ Stopped: 4
+Images: 150
+Server Version: 18.03.1-ce
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 279
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 773c489c9c1b21a6d78b5c538cd395416ec50f88
+runc version: 4fc53a81fb7c994640722ac585fa9ca548971871
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.13.0-43-generic
+Operating System: Ubuntu 16.04.4 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 31.33GiB
+Name: noctil
+ID: ZBKP:OKCA:SL6G:BSVG:DW4C:FYWN:LA74:NQ4B:DXXT:BZOQ:K7HO:YLUY
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

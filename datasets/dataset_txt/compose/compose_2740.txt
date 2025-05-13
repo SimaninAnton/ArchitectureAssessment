@@ -1,0 +1,8 @@
+marceloamaral commented on 19 Feb 2016
+Hi, I am trying to create a load balancer where tutum/haproxy will configure a nginx to do load balancing over some flask servers.
+I am using multi-host network, thus instead of use links I need to define the environment variable by myself. Before, docker link was creating this env variable
+$SERVICENAME_PORT_$PORT_TCP=tcp://$CONTAINERIP
+So, basically I need to provide this variable with the IP of the container running the service to container that requires that.
+Via the example of multi-host cluster, they providing the service name to configure a webserver.
+However, many applications, as tutum/haproxy relies on ips and does not accept the server name.
+Does someone knows a easy solution for that?

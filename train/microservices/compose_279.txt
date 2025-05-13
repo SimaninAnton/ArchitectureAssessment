@@ -1,0 +1,102 @@
+loverg-c commented on 18 Feb 2019
+Hello !
+I tried to make some environment aware docker-compose.yml file and I try to run it with :
+env $(cat .docker/.env.docker.dev) docker-compose up -d
+It works well on linux and macOS, but not on windows (cf: Stacktrace),
+I have the following docker-compose.yml :
+version: '3.5'
+
+services:
+    apache:
+        build: .docker/apache
+        container_name: ${COMPOSE_PROJECT_NAME}_apache
+        ports:
+            -  ${APACHE_PORT_OUTSIDE_DOCKER}:80
+        volumes:
+            - .docker/config/vhosts:/etc/apache2/sites-enabled:cached
+            - ./:/home/wwwroot/sf4:cached
+        depends_on:
+            - php
+        networks:
+            - net_backend
+        environment:
+            COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+    postgis:
+        image: mdillon/postgis:9.6-alpine
+        container_name:  ${COMPOSE_PROJECT_NAME}_postgis
+        volumes:
+            - postgis_volume:/var/lib/postgresql:cached
+        ports:
+            - ${DB_PORT_OUTSIDE_DOCKER}:5432
+        restart: unless-stopped
+        networks:
+            - net_backend
+        environment:
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    php:
+        build: .docker/php
+        container_name:  ${COMPOSE_PROJECT_NAME}_php
+        volumes:
+            - ./:/home/wwwroot/sf4:cached
+        links:
+            - postgis:pgdb
+        depends_on:
+            - postgis
+        ports:
+            - ${PHP_PORT_OUTSIDE_DOCKER}:8000
+        networks:
+            - net_backend
+volumes:
+    postgis_volume:
+
+networks:
+    net_backend:
+        driver: bridge
+And the following .docker/.env.docker.dev :
+COMPOSE_PROJECT_NAME=my_awesome_project_dev
+DB_PORT_OUTSIDE_DOCKER=5430
+PHP_PORT_OUTSIDE_DOCKER=8000
+APACHE_PORT_OUTSIDE_DOCKER=8080
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+Version:           18.09.2
+API version:       1.39
+Go version:        go1.10.8
+Git commit:        6247962
+Built:             Sun Feb 10 04:12:31 2019
+OS/Arch:           windows/amd64
+Experimental:      false
+
+Server: Docker Engine - Community
+Engine:
+ Version:          18.09.2
+ API version:      1.39 (minimum version 1.12)
+ Go version:       go1.10.6
+ Git commit:       6247962
+ Built:            Sun Feb 10 04:13:06 2019
+ OS/Arch:          linux/amd64
+ Experimental:     false
+Output of env $(cat .docker/.env.docker.dev) docker-compose config
+The Compose file '.\docker-compose.yml' is invalid because:
+services.postgis.ports contains an invalid type, it should be a number, or an object
+services.apache.ports contains an invalid type, it should be a number, or an object
+services.php.ports contains an invalid type, it should be a number, or an object
+Stacktrace / full error message
+The Compose file '.\docker-compose.yml' is invalid because:
+services.postgis.ports contains an invalid type, it should be a number, or an object
+services.php.ports contains an invalid type, it should be a number, or an object
+services.apache.ports contains an invalid type, it should be a number, or an object
+Additional information
+Windows 10 pro 1803,
+Docker Desktop Community v2.0.0.3 (31259) build 8858db3,
+Engine 18.09.2,
+Compose 1.23.2,
+Machine 0.16.1
+Thank you in advance
+3

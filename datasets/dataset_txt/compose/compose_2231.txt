@@ -1,0 +1,7 @@
+Contributor
+bhuisgen commented on 13 Jul 2016
+I'm affected by this old bug #199 / #658 with the last version 1.7.1. My jenkins jobs are based on docker-compose run (to be exact: jenkins => ssh => docker-machine => docker-compose run => build container) and my logs are truncated and/or garbled.
+From console execution it's working fine so I was thinking about line buffering. The solution to append all run commands with stdbuf resolves it.
+stdbuf -i0 -e0 -o0 docker-compose run ...
+This bug is very boring. Can you disable line buffering for run commands ?
+7

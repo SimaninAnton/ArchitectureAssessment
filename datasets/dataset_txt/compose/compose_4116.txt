@@ -1,0 +1,14 @@
+jamshid commented on 7 Nov 2014
+When scaling a service (fig scale myserver=3) is there any way for each container to "know" which node it is?
+I have a service where each node writes to a file in a shared volume (eg, /var/mydata/file.dat), but I cannot figure out how to make each node use a unique filename.
+I could use $HOSTNAME (random container id), but that changes when container is rebuilt.
+myserver:   # starts a node that creates and uses /var/mydata/file.dat
+  volumes:
+    # "fig scale myserver=3" causes each node to see the same file.dat!
+    - /var/mydata/
+A related feature would be the ability to see the node "number" in a variable that can be used in the fig.yml. E.g., if I have a bank of drives attached to the docker server at /dev/USB_1, /dev/USB_2, etc. then I can make each node use a different drive with:
+myserver:   # starts a node that creates and uses /var/mydata/file.dat
+  volumes:
+    - /dev/USB_${FIG_NODE_NUMBER}:/var/mydata/
+I'm probably missing something, or this is an intentional restriction...
+3

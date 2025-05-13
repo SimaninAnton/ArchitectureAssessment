@@ -1,0 +1,6 @@
+alexandrev commented on 15 Sep 2015
+I'm using the docker-compose version 1.5.0 with the pull-request #1957. When I'm trying to start a group of containers which one of them has a relative path in the volume section like this:
+volumes:
+"./data:/var/run/docker.sock"
+I'm getting this error:
+b'invalid mode for volumes-from: /var/run/docker.sock'

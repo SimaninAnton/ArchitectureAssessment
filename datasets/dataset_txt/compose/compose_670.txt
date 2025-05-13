@@ -1,0 +1,48 @@
+bscheshirwork commented on 15 May 2018
+Description of the issue
+Context information (for bug reports)
+Output of "docker-compose version"
+ docker-compose version
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+Steps to reproduce the issue
+I can see it after update -> 1.21.2 and docker-ce update -> 18.03.1-ce
+any variant of docker-compose ps return empty list
+Observed result
+docker-compose -f /home/dev/projects/docker-yii2-app-advanced/docker-run/docker-compose.yml ps
+Name   Command   State   Ports
+------------------------------
+cd home/dev/projects/docker-yii2-app-advanced/docker-run/ && docker-compose ps
+Name   Command   State   Ports
+------------------------------
+previous run (in my console history) show correct list; docker -ps return list of running container with prefix on this folder name
+Expected result
+$ docker-compose -f /home/dev/projects/docker-yii2-app-advanced/docker-run/docker-compose.yml ps
+           Name                         Command               State                                                   Ports                                                 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+dockerrun_db_1              /entrypoint.sh --default-a ...   Up      0.0.0.0:3309->3306/tcp                                                                                
+...
+1

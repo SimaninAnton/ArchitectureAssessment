@@ -1,0 +1,42 @@
+stephenlautier commented on 2 Jun 2017 •
+edited
+I'm having an issue when composing 2 yml files and generate config, it's removing the deploy section.
+When using docker-compose config and it has a deploy section it's being removed
+e.g.
+# docker-compose.yml
+version: "3"
+
+services:
+  app:
+    image: redis:alpine
+    deploy:
+      replicas: 4
+      update_config:
+        parallelism: 2
+        delay: 10s
+
+# docker-compose.override.yml
+version: "3"
+
+services:
+  app:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOCKER=true
+# output - note deploy section is being removed
+networks: {}
+services:
+  app:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DOCKER: 'true'
+    image: redis:alpine
+version: '3.0'
+volumes: {}
+When I remove the override file or specify the config using -f it works, however when I add another file it will get removed as well.
+Is there a work around this?
+I'm using this in order to generate a stack file for swarm
+Platform: Windows 10
+Docker verision: 17.03.1-ce, build c6d412e
+docker-compose version: 1.11.2, build f963d76
+1

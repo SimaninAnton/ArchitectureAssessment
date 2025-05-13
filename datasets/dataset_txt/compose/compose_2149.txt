@@ -1,0 +1,36 @@
+jakajancar commented on 14 Aug 2016
+docker-compose.yml
+version: '2'
+services:
+  base:
+    command: exec echo "Fake service has nothing to do, exiting."
+    env_file: .env
+    read_only: true
+    tmpfs: /tmp
+    ulimits:
+      nofile: 131072
+      memlock: 82000
+
+  service-a:
+    extends: base
+    ...
+
+  service-b:
+    extends: base
+    ...
+
+  service-c:
+    extends: base
+    ...
+docker-compose.override.yml (used for development overrides)
+version: '2'
+services:
+  base:
+    environment:
+      - EXTRA_DEBUG=1
+      - CACHING=0
+    volumes:
+      - .:/app:ro
+      - ./build:/app/build
+The extra configuration for the "base" service in docker-compose.override.yml is applied to the phony "base" service itself, but not to services extending it.
+1

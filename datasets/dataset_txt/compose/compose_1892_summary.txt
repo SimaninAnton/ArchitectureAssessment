@@ -1,0 +1,1 @@
+Allow to take config file content from stdin

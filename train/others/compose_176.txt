@@ -1,0 +1,3 @@
+AsaBeavers commented on 17 May 2019
+Looking at docker-compose reference for roll-back config and update config (https://docs.docker.com/compose/compose-file/#rollback_config), there is an argument called "order" using which can decide whether to start new container first or stop old container first.
+Looking for a similar feature for RESTART POLICY (https://docs.docker.com/compose/compose-file/#restart_policy) so that a new container can start first before stopping/exiting the old container.

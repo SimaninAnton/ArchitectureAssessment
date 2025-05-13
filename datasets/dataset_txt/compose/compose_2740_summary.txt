@@ -1,0 +1,1 @@
+Some applications requires the container ip and the server name for (embedded DNS server) does not work

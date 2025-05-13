@@ -1,0 +1,1 @@
+Start multiple containers for service with docker-compose up

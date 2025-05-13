@@ -1,0 +1,49 @@
+rubenvdham commented on 28 Dec 2017
+I'm almost 100% confident it is my own stupidity causing this error. However, I would really like to fix this:)
+I'm currently using the docker-compose.yml in this attachment:
+docker-compose.txt
+(File extension on my server is still .yml, github doesn't support this fileformat)
+This is the DockerFilePython's contents:
+FROM python:3
+RUN mkdir /API
+WORKDIR /API
+#COPY ./storage/API /API
+RUN pip install -r ./Requirements/requirements.txt
+EXPOSE 8080
+The error message:
+Creating network "nginx_default" with the default driver
+Pulling letsencrypt (certbot/certbot:latest)...
+latest: Pulling from certbot/certbot
+ab7e51e37a18: Pull complete
+4a57a4e05b89: Pull complete
+de1aaf39fd2e: Pull complete
+275f7596216d: Pull complete
+26ff0951ada2: Pull complete
+720c12286e45: Pull complete
+75ea27beb351: Pull complete
+ba1ec6a72841: Pull complete
+ee94d63fa6ec: Pull complete
+f2b03ee42053: Pull complete
+Digest: sha256:f04d0f48088e9acd0231b06f9d551d4e86dc9932f74981860ad4ff23d049bb3a
+Status: Downloaded newer image for certbot/certbot:latest
+Pulling mysql (mysql/mysql-server:latest)...
+latest: Pulling from mysql/mysql-server
+2bf8c3d0d93d: Pull complete
+7f2eb0e72ab8: Pull complete
+3836cccaebc4: Pull complete
+dce39216b323: Pull complete
+Digest: sha256:6305a35c134c9ad0724f77883dfd30fc9e4a640ba0d62a1b92b348944369aa9d
+Status: Downloaded newer image for mysql/mysql-server:latest
+Building reinstrijder-api
+Traceback (most recent call last):
+File "bin/docker-compose", line 6, in
+File "compose/cli/main.py", line 71, in main
+File "compose/cli/main.py", line 124, in perform_command
+File "compose/cli/main.py", line 959, in up
+File "compose/project.py", line 452, in up
+File "compose/service.py", line 324, in ensure_image_exists
+File "compose/service.py", line 967, in build
+File "site-packages/docker/api/build.py", line 142, in build
+TypeError: You must specify a directory to build in path
+Failed to execute script docker-compose
+What am I doing wrong? Thanks in advance!

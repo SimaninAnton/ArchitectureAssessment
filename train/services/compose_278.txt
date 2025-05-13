@@ -1,0 +1,44 @@
+dmp1ce commented on 20 Feb 2019 •
+edited
+Description of the issue
+When running docker-compose -w /root test sh I get the error: ERROR: Setting workdir for exec is not supported in API < 1.35 (1.25) even though I think my client API is over 1.35.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build unknown
+docker-py version: 3.7.0
+CPython version: 3.7.2
+OpenSSL version: OpenSSL 1.1.1a  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.1-ce
+ API version:       1.39
+ Go version:        go1.11.5
+ Git commit:        4c52b901c6
+ Built:             Sun Feb 10 18:14:18 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.1-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.11.5
+  Git commit:       4c52b901c6
+  Built:            Sun Feb 10 18:11:52 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+services:
+  test:
+    command: watch date
+    image: alpine
+version: '3.0'
+Steps to reproduce the issue
+docker-compose up -d
+docker-compose exec -w /root test sh
+Observed result
+ERROR: Setting workdir for exec is not supported in API < 1.35 (1.25)
+Expected result
+sh should start shell in /root directory because of the working directory change option.
+Additional information
+Tested on Arch Linux downloaded through pacman official package manager.

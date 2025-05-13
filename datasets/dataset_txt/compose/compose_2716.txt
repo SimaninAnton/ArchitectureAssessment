@@ -1,0 +1,90 @@
+Contributor
+metal3d commented on 23 Feb 2016
+As see in #2968 - I think that we need to retrieve the Docker default behaviour.
+An example:
+$ docker run -d -it --name AAA --expose 8888 alpine sh
+$ docker run -d -it --name BBB --link AAA alpine sh
+$ docker exec -it BBB  env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=f5af80632ea4
+TERM=xterm
+AAA_PORT=tcp://172.17.0.2:8888
+AAA_PORT_8888_TCP=tcp://172.17.0.2:8888
+AAA_PORT_8888_TCP_ADDR=172.17.0.2
+AAA_PORT_8888_TCP_PORT=8888
+AAA_PORT_8888_TCP_PROTO=tcp
+AAA_NAME=/BBB/AAA
+HOME=/root
+I have many "AAA" env var that are very usefull.
+That's the default docker behaviour.
+Let's see with docker-compose version "1" file:
+AAA:
+    image: alpine:latest
+    command: sh
+    tty: true
+    expose:
+    - 8888
+BBB:
+    image: alpine:latest
+    command: sh
+    tty: true
+    links:
+    - AAA
+Then
+$ docker-compose up -d
+$ docker-compose run --rm BBB env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=6c45c89093d1
+TERM=xterm
+AAA_PORT=tcp://172.17.0.2:8888
+AAA_PORT_8888_TCP=tcp://172.17.0.2:8888
+AAA_PORT_8888_TCP_ADDR=172.17.0.2
+AAA_PORT_8888_TCP_PORT=8888
+AAA_PORT_8888_TCP_PROTO=tcp
+AAA_NAME=/test_BBB_run_1/AAA
+AAA_1_PORT=tcp://172.17.0.2:8888
+AAA_1_PORT_8888_TCP=tcp://172.17.0.2:8888
+AAA_1_PORT_8888_TCP_ADDR=172.17.0.2
+AAA_1_PORT_8888_TCP_PORT=8888
+AAA_1_PORT_8888_TCP_PROTO=tcp
+AAA_1_NAME=/test_BBB_run_1/AAA_1
+TEST_AAA_1_PORT=tcp://172.17.0.2:8888
+TEST_AAA_1_PORT_8888_TCP=tcp://172.17.0.2:8888
+TEST_AAA_1_PORT_8888_TCP_ADDR=172.17.0.2
+TEST_AAA_1_PORT_8888_TCP_PORT=8888
+TEST_AAA_1_PORT_8888_TCP_PROTO=tcp
+TEST_AAA_1_NAME=/test_BBB_run_1/test_AAA_1
+BBB_NAME=/test_BBB_run_1/BBB
+BBB_1_NAME=/test_BBB_run_1/BBB_1
+TEST_BBB_1_NAME=/test_BBB_run_1/test_BBB_1
+HOME=/root
+$ docker-compose stop
+$ docker-compose rm
+Now, with version "2":
+version: "2"
+services:
+    AAA:
+        image: alpine:latest
+        command: sh
+        tty: true
+        expose:
+        - 8888
+    BBB:
+        image: alpine:latest
+        command: sh
+        tty: true
+        links:
+        - AAA
+Let's try:
+$ docker-compose up
+$ docker-compose run --rm BBB env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=657d15edaf9b
+TERM=xterm
+HOME=/root
+$ docker-compose stop
+$ docker-compose rm
+There is no way to get exposed ports, and information as we can do with docker command or version 1 docker-compose file...
+Can you please help us to know how to be able to retrieve that information.
+Note that we need to use version "2" to be able to pass build-args on certain docker image compilation.
+Thanks a lot :)

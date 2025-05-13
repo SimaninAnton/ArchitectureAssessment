@@ -1,0 +1,13 @@
+joaquincasares commented on 12 Nov 2016
+Hello,
+I'm not sure if this task is something that compose can handle alone, or if I also need to create a ticket against the docker project, but I figured to start here.
+My use case is:
+I have ngnix, cassandra, and a web container running, via docker-compose up.
+I've updated an env_file used by the web container.
+Now, I'd wish to have my web container use the updated env_file.
+If I try:
+docker-compose [stop|kill] web
+docker-compose start web
+I still get my original envars that were in place at the time of docker-compose up.
+How can I reload my web container to consume the updated env_file without having to do a full shutdown via docker-compose down?
+Thanks for any help and guidance!

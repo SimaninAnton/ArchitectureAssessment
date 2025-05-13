@@ -1,0 +1,19 @@
+lucaszanella commented on 10 Nov 2018
+I installed docker at my raspberry pi zero w running the latest raspbian with
+curl -sSL https://get.docker.com | sh
+and docker-compose with
+sudo pip install docker-compose
+When I run docker-compose in my raspberry:
+    sudo docker-compose up
+    ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+    
+    If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+When I do sudo dockerd:
+    sudo dockerd
+    Segmentation fault
+It seems that the docker daemon is not working because of the Segmentation Fault. What should I do?
+sudo dockerd
+gives me
+Segmentation fault
+so my problem is that the docker daemon isn't running, but I don't know what I should do
+2

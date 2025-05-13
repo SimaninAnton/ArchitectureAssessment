@@ -1,0 +1,1 @@
+How the order of building images and starting containers is decided?

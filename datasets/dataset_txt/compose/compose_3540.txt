@@ -1,0 +1,8 @@
+neg3ntropy commented on 24 Jun 2015
+Hello,
+I have a data.yml that declares various data containers that should not be deleted in normal circumstances.
+In the main docker-compose.yml these containers are referenced by name in volumes_from.
+With this setup under 1.2 docker-compose rm deletes only containers from docker-compose.yml.
+Since 1.3 it tries to delete also the data containers, and this breaks my deploy.
+I think that the yml file should be used to restrict the containers found by the label lookup, unless some specific command line option is given.
+As a workaround, is there another way to prevent deletion of data containers?

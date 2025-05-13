@@ -1,0 +1,57 @@
+etienned commented on 15 Sep 2018
+Description of the issue
+I wish docker-compose push output a status (nothing was pushed or something was pushed) even when the command is run in non-interactive mode (no TTY). It's useful, when running this command in an automation system, to know if the push really pushed something or not. Currently there's useful output (in the progress) only in interactive mode. Example:
+The push refers to repository [192.168.33.12:5000/project_app]
+362e0645389f: Pushed
+0f11fc162618: Pushed
+.9kB/123kB0f: Layer already exists
+cc0a700d4a94: Layer already exists
+ad60e53a05f3: Layer already exists
+af42f63b4140: Layer already exists
+23a28904a940: Layer already exists
+1b813172f183: Layer already exists
+2ae0c221ec2c: Layer already exists
+9c46f426bcb7: Layer already exists
+latest: digest: sha256:0a79329904f944ae3cc24d78c451d786156460b49af8ea44eea8960e7b008f6b size: 2424
+An output similar the one of the pull command with the --no-parallel flag could be perfect.
+docker-compose version 1.22.0, build unknown
+docker-py version: 3.5.0
+CPython version: 2.7.15
+OpenSSL version: OpenSSL 1.0.2p  14 Aug 2018
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             unknown-buildtime
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:15 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+services:
+  app:
+    build:
+      context: /Users/the_user/Sites/project/app
+    image: 192.168.33.12:5000/project_app:latest
+    ports:
+    - 8088:8088/tcp
+    restart: always
+version: '2.1'
+Steps to reproduce the issue
+Run docker-compose push in non-interactive mode.
+Observed result
+Pushing app (192.168.33.12:5000/project_app:latest)...
+Expected result
+Pushing app (192.168.33.12:5000/project_app:latest)...
+Status: Uploaded newer image to 192.168.33.12:5000/project_app:latest
+or
+Pushing app (192.168.33.12:5000/project_app:latest)...
+Status: Image was up to date on 192.168.33.12:5000/project_app:latest

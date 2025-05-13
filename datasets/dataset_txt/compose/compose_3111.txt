@@ -1,0 +1,2 @@
+nathanleclaire commented on 11 Nov 2015
+docker ps returning from Swarm shows the name of the node in the "NAMES" column as part of the container name. It's really nice to quickly see where your containers have been scheduled. It would be really great to see the node names in docker-compose ps output as well.

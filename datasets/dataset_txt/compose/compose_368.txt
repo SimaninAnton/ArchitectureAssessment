@@ -1,0 +1,65 @@
+deiga commented on 6 Dec 2018
+Description of the issue
+I have a docker-compose file with 3 services:
+version: "2.3"
+services:
+  v:
+    ...
+  b:
+    ...
+  a:
+    ...
+b depends on v.
+When running docker-compose build on macOS the build order is v -> b -> a
+But when running on Ubuntu the build order is a -> b -> ERROR
+Context information (for bug reports)
+Output of docker-compose version
+macOS:
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Ubuntu:
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.7.0
+CPython version: 2.7.15rc1
+OpenSSL version: OpenSSL 1.1.0g  2 Nov 2017
+Output of docker version
+macOS:
+Client: Docker Engine - Community
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:47:43 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:55:00 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Ubuntu:
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:49:01 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false

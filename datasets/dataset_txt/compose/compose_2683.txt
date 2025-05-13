@@ -1,0 +1,53 @@
+ubi-US commented on 2 Mar 2016
+The new virtual networks in docker 1.10 and compose 1.6 are exciting. Yet, I stumbled across the following issue when exposing a port to the outside world:
+I have a composition of multiple services, where these services are attached to various networks. One of the services exposes a port to the outside world, so that the web service it offers can be access from other hosts. Let's say service A exposes a port, via the ports keyword, say "45000:80"; that is, the port 45000 should be accessible from any client.
+My setup is running on a single host, with the bridge network driver only (no overlay networks, no multi-host networks).
+In the simplest setting, , both services A and B are on the same network. Then, the exposed port 45000 is accessible both from localhost as well as over the internet.
+If I add another network, and have service A connect to one network and service B to another network, the exposed port 45000 of service A is still reachable both from localhost as well as over the internet.
+However, if I connect service A to both networks, its exposed port 45000 is no longer accessible over the internet, but it is still accessible from localhost. If I expose another port on service B - the service that is connected to a single network only - then this port is accessible from the internet.
+I am no networking expert, so here are my questions
+Is this a bug or intended behavior?
+Do i need to adjust my iptables in case I want to make the port on the multi-network service available externally?
+Here is my debugging info
+I am using docker machine to connect to a ubuntu box using the generic driver
+docker info
+Server Version: 1.10.2
+Storage Driver: overlay
+ Backing Filesystem: extfs
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins:
+ Volume: local
+ Network: null host bridge
+Kernel Version: 4.2.0-30-generic
+Operating System: Ubuntu 14.04.3 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 19.61 GiB
+Name: corehost
+ID: TD2T:D3R2:E6HT:GJYS:GEIH:FYM3:VUZC:755D:AB7X:RR7Q:UFNQ:CK3J
+WARNING: No swap limit support
+Labels:
+ provider=generic
+docker version
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 21:37:01 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 21:37:01 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

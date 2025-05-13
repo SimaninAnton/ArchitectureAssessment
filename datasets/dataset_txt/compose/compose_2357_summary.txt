@@ -1,0 +1,1 @@
+docker-compose does not work when client auth turned off

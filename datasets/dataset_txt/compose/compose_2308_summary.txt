@@ -1,0 +1,1 @@
+UnixHTTPConnectionPool(host='localhost', port=None): Pool is closed.

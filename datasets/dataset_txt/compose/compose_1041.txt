@@ -1,0 +1,3 @@
+AnthonyMastrean commented on 2 Dec 2017
+I've a manifest with a lot of services. They have various start up times. They have simple and health-conditional dependencies on one another. I'd like to watch the output of docker-compose ps (obviously, following an up -d) until they reach some steady state (like Up, Healthy, or Exited)?
+I can run the command in a loop or watch, but that's pretty nasty. Is there a process/template for a feature request?

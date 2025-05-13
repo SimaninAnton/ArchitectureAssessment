@@ -1,0 +1,8 @@
+giftig commented on 26 Apr 2016 •
+edited
+I'm trying to use docker-compose on Mac OSX (Mountain Lion) but I get an error I don't seem to be able to find any information about when I run the binary (with any arguments, or none)
+Error loading Python lib '/var/folders/3n/s02xvfqx03bf8hp21tp_tktr0000gp/T/_MEIoO5xBX/.Python': dlopen(/var/folders/3n/s02xvfqx03bf8hp21tp_tktr0000gp/T/_MEIoO5xBX/.Python, 10): Symbol not found: ___sincos_stret
+  Referenced from: /var/folders/3n/s02xvfqx03bf8hp21tp_tktr0000gp/T/_MEIoO5xBX/.Python
+  Expected in: /usr/lib/libSystem.B.dylib
+ in /var/folders/3n/s02xvfqx03bf8hp21tp_tktr0000gp/T/_MEIoO5xBX/.Python
+I'm guessing this is more a problem with my environment than with compose, but I'm not sure what's causing this lib issue as I couldn't find anything for ___sincos_stret related to docker on google.

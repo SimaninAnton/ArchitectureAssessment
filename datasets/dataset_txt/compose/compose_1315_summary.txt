@@ -1,0 +1,1 @@
+[Windows] Files are mounted as directories

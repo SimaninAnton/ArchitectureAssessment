@@ -1,0 +1,72 @@
+andriokha commented on 18 Nov 2018
+Description of the issue
+The --project-directory flag doesn't seem to work for me. I'm aware there's been some work on it in #6310 - I'm using version 1.23.1 and couldn't find an open issue.
+mkdir subdir && cat <<EOS > subdir/docker-compose.yml
+> version: '3'
+> services:
+>   alpine:
+>     image: alpine
+> EOS
+$ docker-compose --project-directory subdir run alpine date
+ERROR: build path /tmp/subdir/docker/images/php either does not exist, is not accessible, or is not a valid URL.
+$ docker-compose --project-directory "$(pwd)/subdir" run alpine date
+ERROR: build path /tmp/subdir/docker/images/php either does not exist, is not accessible, or is not a valid URL.
+$ cd subdir && docker-compose run alpine date
+Sun Nov 18 11:06:38 UTC 2018
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:48:57 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  alpine:
+    image: alpine
+version: '3.0'
+Steps to reproduce the issue
+mkdir subdir && cat <<EOS > subdir/docker-compose.yml
+version: '3'
+services:
+  alpine:
+    image: alpine
+EOS
+docker-compose --project-directory subdir run alpine date
+Observed result
+ERROR: build path /tmp/subdir/docker/images/php either does not exist, is not accessible, or is not a valid URL.
+Expected result
+Sun Nov 18 11:06:38 UTC 2018
+Additional information
+$ lsb_release -a && uname -a
+No LSB modules are available.
+Distributor ID: LinuxMint
+Description: Linux Mint 18.3 Sylvia
+Release: 18.3
+Codename: sylvia
+Linux andy-XPS-13 4.4.0-138-generic #164-Ubuntu SMP Tue Oct 2 17:16:02 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+apt-cache policy docker-ce
+docker-ce:
+  Installed: 5:18.09.0~3-0~ubuntu-xenial
+  Candidate: 5:18.09.0~3-0~ubuntu-xenial
+docker-compose was just downloaded directly from GitHub.
+Thanks for your time!

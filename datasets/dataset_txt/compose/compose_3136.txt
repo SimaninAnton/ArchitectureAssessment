@@ -1,0 +1,13 @@
+Contributor
+aanand commented on 4 Nov 2015
+Right now, validation errors don't include the filename, which will make problems hard to track down if you're using multiple files.
+Of course, we can't validate files in isolation because override files aren't required to be valid standalone Compose files, which makes this complicated.
+Perhaps we could do something like this (pseudocode):
+config = load_config(filenames[0])
+# on failure, will output an error message specifying the name of the first file
+validate_config(config, filenames[0])
+
+for filename in filenames[1:]:
+    config = merge_config(config, filename)
+    # on failure, will output an error message specifying the name of the current file
+    validate_config(config, filename)

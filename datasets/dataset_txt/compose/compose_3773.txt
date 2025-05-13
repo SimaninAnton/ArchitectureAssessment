@@ -1,0 +1,15 @@
+wernight commented on 30 Mar 2015
+Having a docker-compose.yml with restart: always is good for services started by docker up. However when executing commands during a build or during development via docker run --rm ... it'll also restart that container and this command will loop forever.
+Could allow specifying --restart never for docker run but that's edge.
+Should ignore restart: during docker-compose run ... commands, only use it for docker-compose start or docker-compose up
+Could restart linked containers even if they don't have restart: always. This would also fix the issue as one could do:
+service:
+  links:
+    - web
+  restart: always
+web:
+  image: nginx
+  links: php
+php:
+  image: php
+Then a docker-compose run --rm php ... would not restart this command, but a docker-compose up service would start and restart all linked services.

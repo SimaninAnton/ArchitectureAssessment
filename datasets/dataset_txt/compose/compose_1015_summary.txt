@@ -1,0 +1,1 @@
+Pull fails even if a service defines a build/context

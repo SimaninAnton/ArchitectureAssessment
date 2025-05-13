@@ -1,0 +1,33 @@
+joselcvarela commented on 19 Mar 2018 •
+edited
+Hello,
+After looking for hours about the error I still can't find any solution.
+I expected to can mount a CIFS volume from a network folder with special characters.
+But, I couldn't.
+The stack trace is the following:
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\command.py", line 40, in project_from_options
+  File "compose\cli\command.py", line 110, in get_project
+  File "compose\config\config.py", line 383, in load
+  File "compose\config\config.py", line 424, in load_mapping
+  File "compose\utils.py", line 130, in build_string_dict
+  File "compose\utils.py", line 130, in <genexpr>
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 55-56: ordinal not in range(128)
+Failed to execute script docker-compose
+and the volume is something like:
+volumes:
+  shared:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //192.168.1.222/Something/Folder_Instruções
+      o: username=${USERNAME},password=${PASSWORD},file_mode=0777,dir_mode=0777,iocharset=utf8
+Version
+docker-compose version 1.19.0, build 9e633ef
+I am running on windows host.
+Hope someone can help.
+EDIT:
+I also tried with version 1.18.0, but the problem persists

@@ -1,0 +1,1 @@
+shell script run as a command is not consistent

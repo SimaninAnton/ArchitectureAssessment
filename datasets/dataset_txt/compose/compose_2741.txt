@@ -1,0 +1,13 @@
+Contributor
+AvdN commented on 19 Feb 2016
+The difference between version 1 and version 2 is rather apparent for human readers, but a future version 3 might not be that easily recognised. Therefore the "version" key and its value should
+be on the first line. The documentation now only specifies that it is in the root of the document.
+The position can be checked with PyYAML by reading the first non-comment line of the file (assuming key and value are on the same line). With ruamel.yaml (PR 2959 you can use something like:
+data = config.load_yaml(.....)
+for k1 in data:
+    version = data['version']  if k1 == 'version' else 1
+    break  # only consider first data key-value pair
+if version != data.get('version', 1):
+    Warning('version specified but not on line 1')
+If you use ruamel.yaml and with a bit of extra code
+you can indicate where the version key was found instead of giving feedback that it is not there.

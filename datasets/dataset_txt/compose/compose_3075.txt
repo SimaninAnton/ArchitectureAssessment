@@ -1,0 +1,8 @@
+lucj commented on 19 Nov 2015
+Hi,
+I have an application composed of www / api / db parts in docker-compose.yml file.
+On a regular basis (once a day), I need to have an additional container that needs to run, perform a single task and then goes down.
+What about having some kind of configuration in the docker-compose file, like the following one to have a container based on myimage run (with -rm command) every day at 00:00 ?
+project:
+  image: myimage
+  crontab: 0 0 * * * 

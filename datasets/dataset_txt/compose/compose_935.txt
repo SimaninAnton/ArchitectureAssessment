@@ -1,0 +1,26 @@
+jsharpe commented on 15 Jan 2018
+With the following docker-compose file on docker for mac edge (Docker version 17.12.0-ce, build c97c6d6 - compose version 1.18.0) fails to come up when using docker-compose up but deploys fine if using docker stack deploy.
+version: "3.2"
+services:
+  app:
+    image: nginx:alpine
+    volumes:
+      - type: tmpfs
+        target: /code/node_modules
+I've seen two failure modes:
+ERROR: for app 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+File "docker-compose", line 6, in 
+File "compose/cli/main.py", line 71, in main
+File "compose/cli/main.py", line 124, in perform_command
+File "compose/cli/main.py", line 959, in up
+File "compose/project.py", line 479, in up
+File "compose/parallel.py", line 80, in parallel_execute
+AttributeError: 'NoneType' object has no attribute 'get'
+Failed to execute script docker-compose
+ERROR: for app Cannot start service app: Mounts denied:
+The paths /code/node_modules and /code/site-static and /code/bundles
+are not shared from OS X and are not known to Docker.
+You can configure shared paths from Docker -> Preferences... -> File Sharing.
+See https://docs.docker.com/docker-for-mac/osxfs/#namespaces for more info.
+see moby/moby#36017 for original discussion.

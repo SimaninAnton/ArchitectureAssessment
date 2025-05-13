@@ -1,0 +1,18 @@
+cedvan commented on 16 Mar 2015
+Step 1
+State containers on host : API is ready
+CONTAINER ID        IMAGE                                 COMMAND                CREATED             STATUS              PORTS                         NAMES         
+9b463eaae4a6        cedvan/nginx-php-fpm:1.4.6-5.5.9  "/bin/sh -c 'php5-fp   7 minutes ago       Up 7 minutes        80/tcp, 443/tcp              project_api_1  
+Step 2
+docker-compose.yml on back project :
+back:
+    image: huttopia/nginx-php-fpm:1.4.6-5.5.9
+    ...
+    links:
+        - project_api_1:api
+Step 3
+Result of fig up -d back :
+Service "back" has a link to service "project_api_1" which does not exist.
+Question
+Is it possible to add support external links in docker-compose.yml ?
+2

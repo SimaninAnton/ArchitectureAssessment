@@ -1,0 +1,10 @@
+rusllonrails commented on 26 Aug 2014
+Hey Guys,
+I have 2 apps api and frontend, each of them in separated docker container.
+Apps talk between each other using host names (api.my_app.com and frontend.my_app.com).
+Containers have an internal network and an IP address and I can setup it in /etc/hosts on local via:
+172.17.0.74 api.my_app.com
+172.17.0.75 frontend.my_app.com
+My problem is when the box restart (fig up --no-recreate) my container loses its IP, and i have to reset the url in /etc/hosts each time after fig up.
+Is it possible to setup static IP address for container?
+Thanks for any help.

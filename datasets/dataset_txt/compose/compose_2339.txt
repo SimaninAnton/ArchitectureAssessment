@@ -1,0 +1,2 @@
+Yajo commented on 1 Jun 2016
+It would be very nice to have an option in docker-compose logs that only displays new logs, since the last time you showed them up, since the last time images were restarted, or just with a --lines option that displays from the last X lines, just like tail.

@@ -1,0 +1,28 @@
+rommik commented on 7 Jul 2017 •
+edited
+A similar question has been floating around stackoverflow and github. Yet, I am not able to solve this problem, I hope somebody can point me in the right direction.
+lsb_release
+Distributor ID: Debian
+Release:        8.8
+Codename:       jessie
+docker-compose -v docker-compose version 1.9.0, build 2585387
+docker -v Docker version 17.05.0-ce, build 89658be
+/etc/environment
+http_proxy=http://10.50.2.67:3128/
+https_proxy=http://10.50.2.67:3128/
+/etc/sudoers
+...
+Defaults        env_keep += "http_proxy"
+Defaults        env_keep += "https_proxy"
+...
+In my docker compose, I'd like to pass both http_proxy and https_proxy as e vars.
+...
+web:
+  environment:
+    - http_proxy=$http_proxy
+    - https_proxy=$https_proxy
+on docker-compose up I get
+WARNING: The http_proxy variable is not set. Defaulting to a blank string.
+I get the same error with any variables in env list.
+What am I doing wrong?
+3

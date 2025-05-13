@@ -1,0 +1,45 @@
+Contributor
+edmorley commented on 8 Jun 2015
+I'm using Windows, so have to use the docker compose python package from pypi, since there isn't a native binary.
+docker-compose.yml:
+foo:
+  # a comment
+  image: busybox
+With both the python docker-compose 1.2.0 and 1.3.0rc1 packages, I get:
+[~/src/tmp]$ docker-compose ps
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.2.0', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 57, in perform_command
+    verbose=options.get('--verbose'))
+  File "/usr/lib/python2.7/site-packages/compose/cli/command.py", line 76, in get_project
+    config.load(config_path),
+  File "/usr/lib/python2.7/site-packages/compose/config.py", line 55, in load
+    return from_dictionary(load_yaml(filename), working_dir=working_dir, filename=filename)
+  File "/usr/lib/python2.7/site-packages/compose/config.py", line 409, in load_yaml
+    return yaml.safe_load(fh)
+  File "/usr/lib/python2.7/site-packages/yaml/__init__.py", line 93, in safe_load
+    return load(stream, SafeLoader)
+  File "/usr/lib/python2.7/site-packages/yaml/__init__.py", line 69, in load
+    loader = Loader(stream)
+  File "/usr/lib/python2.7/site-packages/yaml/loader.py", line 24, in __init__
+    Reader.__init__(self, stream)
+  File "/usr/lib/python2.7/site-packages/yaml/reader.py", line 85, in __init__
+    self.determine_encoding()
+  File "/usr/lib/python2.7/site-packages/yaml/reader.py", line 135, in determine_encoding
+    self.update(1)
+  File "/usr/lib/python2.7/site-packages/yaml/reader.py", line 169, in update
+    self.check_printable(data)
+  File "/usr/lib/python2.7/site-packages/yaml/reader.py", line 144, in check_printable
+    'unicode', "special characters are not allowed")
+yaml.reader.ReaderError: unacceptable character #x0000: special characters are not allowed
+  in "./docker-compose.yml", position 22
+This is being run on Windows 8.1, inside an MSYS2 shell, with Python 2.7.9 and Docker version 1.6.2.

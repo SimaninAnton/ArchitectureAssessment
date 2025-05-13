@@ -1,0 +1,6 @@
+agilgur5 commented on 30 Jul 2016 •
+edited
+Similarly to how Compose now supports the run -e ENV_VAR= option to mirror the behavior of docker, it would be extremely useful for Compose to also support build --build-arg ENV_VAR=.
+This would fix some of the issues in #3608 ; without this option, it's very hard to use the Dockerfile's optionally overrideable ARG syntax (e.g. ARG=YOU_CAN_OVERRIDE_ME_WITH_BUILD_ARG).
+One currently has to use the docker-compose.yml file's args: option, which effectively either hard-codes the build argument or requires one to use a .env file in conjunction that duplicates the Dockerfile's default argument.
+4

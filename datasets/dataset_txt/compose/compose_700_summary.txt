@@ -1,0 +1,1 @@
+docker-compose failed if is in path what contains dir starting on `_`

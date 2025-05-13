@@ -1,0 +1,19 @@
+shamil8124 commented on 26 Dec 2016 •
+edited
+I just recently upgraded to the latest docker toolbox and compose versions, and now my volume bindings are no longer working. I receive an "invalid bind mount spec" error when trying to build my container. Here is my compose file:
+version: '2'
+services:
+  fatbot:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: fatbot
+    ports:
+      - "80:80"
+    volumes:
+      - C:\Users\shamil8124\Desktop\backend:/var/www/html
+    command: /usr/sbin/apache2ctl -D FOREGROUND
+And the error:
+ERROR: for fatbot  Cannot create container for service fatbot: Invalid bind mount spec "C:\\Users\\shamil8124\\Desktop\\backend:/var/www/html:rw": Invalid volume specification: 'C:\Users\shamil8124\Desktop\backend:/var/www/html:rw'
+Apologies if this isn't the right place to ask for help with this. I've been lost for the past few days, and the docker forums along with Stackoverflow have not helped.
+1

@@ -1,0 +1,4 @@
+jwiegley commented on 21 Dec 2016
+When debugging a particular group of containers run with docker-compose, one becomes very familiar with looking for messages reported from a certain color. However, every once in a while these colors unpredictably change. It would be nice if the RGB code could be specified for each container in the docker-compose.yml file, to ensure the colors are always what I expect.
+Including @nweston, whose brought this idea to my attention.
+127

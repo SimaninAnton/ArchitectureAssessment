@@ -1,0 +1,55 @@
+berwyn commented on 19 Sep 2018
+Description of the issue
+I have my app split into multiple compose files so that different devs can run different parts of the stack based on the work they're doing. As an example, a front-end dev who only works on front-end would want to spin up our API, and potentially to a feature branch related to the feature they're working on. To this end, I have something like:
+# docker-compose.yml
+version: '3'
+services:
+  app:
+    # Some config here
+# docker-compose.backend.yml
+version: '3'
+services:
+  api:
+    image: ${DOCKER_BACKEND_IMAGE:-myorg/api:staging}
+and then I have a .env with something like DOCKER_BACKEND_IMAGE=myorg/api:foo
+When running docker-compose -f docker-compose.backend.yml up -d (or other commands like config or images), the values get templated correctly from .env and everything works as expected, but other commands like run will instead not use the environment variable and use the default value instead. Is this intended?
+Context information (for bug reports)
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      true
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ Kubernetes:
+  Version:          v1.10.3
+  StackAPI:         v1beta2
+Steps to reproduce the issue
+Assuming you have two tagged images which have differing file contents,
+Create a compose file with a templated image and default
+Run docker-compose up -d and watch the stack create
+Use docker-compose exec to attach to the service, note that it's the correct one
+Use docker-compose run to run a one-off container, note that it's not the correct image
+Observed result
+up, images, and config have the correct values while run does not
+Expected result
+run behaves the same as the other commands
+Additional information
+macOS High Sierra with latest patches, Docker for Mac (Community, Edge) installed via the website with Kubernetes enabled but otherwise stock.
+I'm more than happy to provide any more clarification or attempt to put a repro together sans the work code if that's helpful, just let me know!
+Thanks for your time and assistance :)

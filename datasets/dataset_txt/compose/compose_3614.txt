@@ -1,0 +1,125 @@
+ianblenke commented on 27 May 2015
+I'm having some weird unexplainable issues with a config file in the ianblenke/flexisip docker hub image being corrupted only when being run via docker-compose.
+This image works just fine run run manually via docker run:
+ubuntu@gce-server-1:~$ uname -a
+Linux gce-server-1 3.16.0-31-generic #43~14.04.1-Ubuntu SMP Tue Mar 10 20:13:38 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+ubuntu@gce-server-1:~$ docker --version
+Docker version 1.6.2, build 7c8fca2
+ubuntu@gce-server-1:~$ grep DOCKER_OPTS /etc/default/docker
+DOCKER_OPTS="-s aufs -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4"
+ubuntu@gce-server-1:~$ docker run --privileged --net=host -it --rm ianblenke/flexisip flexisip -c /etc/flexisip/flexisip.conf
+M: Starting flexisip version 1.0.0 (git 0.8.0-267-g15a1276)
+Starting flexisip version 1.0.0 (git 0.8.0-267-g15a1276)
+M: Creating module instance for [DoSProtection]
+M: Creating module instance for [SanityChecker]
+M: Creating module instance for [GarbageIn]
+M: Creating module instance for [NatHelper]
+M: Creating module instance for [Authentication]
+M: Creating module instance for [Redirect]
+M: Creating module instance for [GatewayAdapter]
+M: Creating module instance for [Registrar]
+M: Creating module instance for [StatisticsCollector]
+M: Creating module instance for [ContactRouteInserter]
+M: Creating module instance for [Router]
+M: Creating module instance for [PushNotification]
+M: Creating module instance for [LoadBalancer]
+M: Creating module instance for [MediaRelay]
+M: Creating module instance for [Forward]
+M: System wide maximum number of file descriptors is 1528979
+M: System wide maximum number open files is 1048576
+M: Maximum number of open file descriptors is 524288, limit=1048576, system wide limit=1048576
+M: Maximum number of file descriptor set to 1048576.
+Warning: Failed to connect to the agentx master agent ([NIL]):
+^C
+It waits there, as it should, having properly read and processed the /etc/flexisip/flexisip.conf file.
+I can stop that and create a docker-compose.yml file that should start this image the same way:
+ubuntu@gce-server-1:~$ cat <<EOF > docker-compose.yml
+flexisip:
+  privileged: true
+  net: host
+  image: ianblenke/flexisip:latest
+  command: flexisip -c /etc/flexisip/flexisip.conf
+EOF
+ubuntu@gce-server-1:~$ docker-compose up
+Recreating ubuntu_flexisip_1...
+Attaching to ubuntu_flexisip_1
+flexisip_1 | W: found key,item but no sections
+flexisip_1 | W: found key,item but no sections
+" for key "debug"  boolean: "false
+ubuntu_flexisip_1 exited with code 255
+Gracefully stopping... (press Ctrl+C again to force)
+ubuntu@gce-server-1:~$
+It isn't starting because there are CR's in the config file, somehow.
+Examining the contents of the config file, docker-compose shows the 0d's (carriage returns):
+ubuntu@gce-server-1:~$ cat <<EOF > docker-compose.yml
+flexisip:
+  privileged: true
+  net: host
+  image: ianblenke/flexisip:latest
+  command: bash -c 'od -A x -t x1z -v /etc/flexisip/flexisip.conf | head'
+EOF
+ubuntu@gce-server-1:~$ docker-compose up
+Recreating ubuntu_flexisip_1...
+Attaching to ubuntu_flexisip_1
+flexisip_1 | 000000 23 23 0d 0a 23 23 20 54 68 69 73 20 69 73 20 74  >##..## This is t<
+flexisip_1 | 000010 68 65 20 64 65 66 61 75 6c 74 20 46 6c 65 78 69  >he default Flexi<
+flexisip_1 | 000020 73 69 70 20 63 6f 6e 66 69 67 75 72 61 74 69 6f  >sip configuratio<
+flexisip_1 | 000030 6e 20 66 69 6c 65 0d 0a 23 23 0d 0a 0d 0a 0d 0a  >n file..##......<
+flexisip_1 | 000040 0d 0a 0d 0a 23 20 4e 6f 74 69 66 69 63 61 74 69  >....# Notificati<
+flexisip_1 | 000050 6f 6e 20 6d 65 73 73 61 67 65 20 70 61 79 6c 6f  >on message paylo<
+flexisip_1 | 000060 61 64 2e 0d 0a 23 20 20 44 65 66 61 75 6c 74 20  >ad...#  Default <
+flexisip_1 | 000070 76 61 6c 75 65 3a 20 0d 0a 6d 73 67 3d 0d 0a 0d  >value: ..msg=...<
+flexisip_1 | 000080 0a 23 20 4e 6f 74 69 66 69 63 61 74 69 6f 6e 20  >.# Notification <
+flexisip_1 | 000090 73 6f 75 72 63 65 20 70 61 79 6c 6f 61 64 2e 0d  >source payload..<
+ubuntu_flexisip_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+This is very odd indeed. They're not in the copy of the config file in the image.
+I can verify that by looking at the aufs diff for that image layer:
+ubuntu@gce-server-1:~$ sudo od -A x -t x1z -v /var/lib/docker/aufs/diff/9c65b203c8f5165add0778294dc762d49f1b414bd447aece2a078b2008789f9f/etc/flexisip/flexisip.conf | head
+000000 23 23 0a 23 23 20 54 68 69 73 20 69 73 20 74 68  >##.## This is th<
+000010 65 20 64 65 66 61 75 6c 74 20 46 6c 65 78 69 73  >e default Flexis<
+000020 69 70 20 63 6f 6e 66 69 67 75 72 61 74 69 6f 6e  >ip configuration<
+000030 20 66 69 6c 65 0a 23 23 0a 0a 0a 0a 0a 23 20 4e  > file.##.....# N<
+000040 6f 74 69 66 69 63 61 74 69 6f 6e 20 6d 65 73 73  >otification mess<
+000050 61 67 65 20 70 61 79 6c 6f 61 64 2e 0a 23 20 20  >age payload..#  <
+000060 44 65 66 61 75 6c 74 20 76 61 6c 75 65 3a 20 0a  >Default value: .<
+000070 6d 73 67 3d 0a 0a 23 20 4e 6f 74 69 66 69 63 61  >msg=..# Notifica<
+000080 74 69 6f 6e 20 73 6f 75 72 63 65 20 70 61 79 6c  >tion source payl<
+000090 6f 61 64 2e 0a 23 20 20 44 65 66 61 75 6c 74 20  >oad..#  Default <
+There are no 0d's in there.
+I can work around this by doing something truly horrible:
+ubuntu@gce-server-1:~$ cat <<EOF > docker-compose.yml
+flexisip:
+  privileged: true
+  net: "host"
+  image: ianblenke/flexisip:latest
+  command: bash -c 'tr -d "\015" < /etc/flexisip/flexisip.conf > /tmp/flexisip.conf; exec flexisip -c /tmp/flexisip.conf'
+EOF
+ubuntu@gce-server-1:~$ make
+docker-compose up
+Recreating ubuntu_flexisip_1...
+Attaching to ubuntu_flexisip_1
+flexisip_1 | M: Starting flexisip version 1.0.0 (git 0.8.0-267-g15a1276)
+flexisip_1 | M: Creating module instance for [DoSProtection]
+flexisip_1 | M: Creating module instance for [SanityChecker]
+flexisip_1 | M: Creating module instance for [GarbageIn]
+flexisip_1 | M: Creating module instance for [NatHelper]
+flexisip_1 | M: Creating module instance for [Authentication]
+flexisip_1 | M: Creating module instance for [Redirect]
+flexisip_1 | M: Creating module instance for [GatewayAdapter]
+flexisip_1 | M: Creating module instance for [Registrar]
+flexisip_1 | M: Creating module instance for [StatisticsCollector]
+flexisip_1 | M: Creating module instance for [ContactRouteInserter]
+flexisip_1 | M: Creating module instance for [Router]
+flexisip_1 | M: Creating module instance for [PushNotification]
+flexisip_1 | M: Creating module instance for [LoadBalancer]
+flexisip_1 | M: Creating module instance for [MediaRelay]
+flexisip_1 | M: Creating module instance for [Forward]
+flexisip_1 | M: System wide maximum number of file descriptors is 1528979
+flexisip_1 | M: System wide maximum number open files is 1048576
+flexisip_1 | M: Maximum number of open file descriptors is 524288, limit=1048576, system wide limit=1048576
+flexisip_1 | M: Maximum number of file descriptor set to 1048576.
+flexisip_1 | Warning: Failed to connect to the agentx master agent ([NIL]):
+^C
+Having to do something so horrible to work around an unexplainable filesystem behavior is so very wrong.
+So my question here is: why does docker-compose somehow get a filesystem that has CRLFs, while docker run does not?

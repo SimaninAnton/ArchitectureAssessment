@@ -1,0 +1,101 @@
+nullpixel commented on 5 May 2019 •
+edited
+Description of the issue
+Ports inside my docker-compose.yml file are not being mapped to the host.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.5
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        e8ff056dbc
+ Built:             Thu Apr 11 04:44:28 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       e8ff056
+  Built:            Thu Apr 11 04:10:53 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  jira-internal:
+    driver: bridge
+    internal: true
+services:
+  db:
+    command: postgres -c random_page_cost=1.0
+    environment:
+      POSTGRES_DB: Jira
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    expose:
+    - '5432'
+    image: postgres:10.4
+    networks:
+      jira-internal: null
+    volumes:
+    - pgdata-volume:/var/lib/postgresql/data:rw
+    - /home/projects/sileo-jira/config/init.sh:/docker-entrypoint-initdb.d/init.sh:rw
+  jira:
+    depends_on:
+    - db
+    image: dchevell/jira-software
+    networks:
+      jira-internal: null
+    ports:
+    - 127.0.0.1:3579:8080/tcp
+    volumes:
+    - jira-volume:/var/atlassian/application-data/jira:rw
+version: '3.5'
+volumes:
+  jira-volume: {}
+  pgdata-volume: {}
+Also available here.
+Steps to reproduce the issue
+Use above docker-compose.yml file
+Start with docker-compose up -d
+Observe that the port works inside the container, but is not correctly mapped to 3579.
+Observed result
+The port is not mapped to the host.
+Expected result
+The port should be mapped to the host.
+Additional information
+OS: Debian.
+I have tried numerous debugging steps.
+You can see the container being started here, and noting that the ports are not mapped to the host.
+projects ➜  sileo-jira (master) ✔ docker-compose up -d
+Creating network "sileo-jira_jira-internal" with driver "bridge"
+Creating sileo-jira_db_1 ... done
+Creating sileo-jira_jira_1 ... done
+projects ➜  sileo-jira (master) ✔ docker-compose ps
+      Name                     Command               State   Ports
+------------------------------------------------------------------
+sileo-jira_db_1     docker-entrypoint.sh postg ...   Up
+sileo-jira_jira_1   /tini -- /entrypoint.sh -fg      Up
+projects ➜  sileo-jira (master) ✔
+docker ps also shows this:
+projects ➜  sileo-jira (master) ✔ docker ps
+CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS                  PORTS                                 NAMES
+ae6fab72a319        dchevell/jira-software                                "/tini -- /entrypoin…"   7 minutes ago       Up 7 minutes                                                  sileo-jira_jira_1
+f3ccb0b607c7        postgres:10.4                                         "docker-entrypoint.s…"   7 minutes ago       Up 7 minutes                                                  sileo-jira_db_1
+I have started with docker-compose --verbose up and noticed that the ports are being passed to create_container:
+compose.cli.verbose_proxy.proxy_callable: docker create_host_config -> {'Binds': ['sileo-jira_jira-volume:/var/atlassian/application-data/jira:rw'],
+ 'Links': [],
+ 'LogConfig': {'Config': {}, 'Type': ''},
+ 'NetworkMode': 'sileo-jira_jira-internal',
+ 'PortBindings': {'8080/tcp': [{'HostIp': '127.0.0.1', 'HostPort': '3579'}]},
+ 'VolumesFrom': []}
+Finally, running the container with docker run and the -p flag without the database and without compose worked.
+Has anyone else experienced this issue?

@@ -1,0 +1,35 @@
+abrinckm commented on 24 Jun 2017
+Please let me know what other information you need.
+I'm simply trying to get command line help printed out by running
+$ docker-compose
+no options no arguments. I just want to view the help.
+Results in this error:
+Traceback (most recent call last):
+  File "/bin/docker-compose", line 7, in <module>
+    from compose.cli.main import main
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 17, in <module>
+    from . import errors
+  File "/usr/lib/python2.7/site-packages/compose/cli/errors.py", line 11, in <module>
+    from docker.errors import APIError
+  File "/usr/lib/python2.7/site-packages/docker/__init__.py", line 2, in <module>
+    from .api import APIClient
+  File "/usr/lib/python2.7/site-packages/docker/api/__init__.py", line 2, in <module>
+    from .client import APIClient
+  File "/usr/lib/python2.7/site-packages/docker/api/client.py", line 6, in <module>
+    import requests
+  File "/usr/lib/python2.7/site-packages/requests/__init__.py", line 60, in <module>
+    from .api import request, get, head, post, patch, put, delete, options
+  File "/usr/lib/python2.7/site-packages/requests/api.py", line 14, in <module>
+    from . import sessions
+  File "/usr/lib/python2.7/site-packages/requests/sessions.py", line 27, in <module>
+    from .adapters import HTTPAdapter
+  File "/usr/lib/python2.7/site-packages/requests/adapters.py", line 29, in <module>
+    from .packages.urllib3.exceptions import ResponseError
+ImportError: cannot import name ResponseError
+Figured something was wrong with urllib3 so I uninstalled and reinstalled like so:
+# sudo yum erase python-urllib3
+# sudo yum install python-urllib3
+This did not change the error.
+My system info:
+# cat /etc/system-release
+Red Hat Enterprise Linux Server release 7.3 (Maipo)

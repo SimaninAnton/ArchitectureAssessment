@@ -1,0 +1,9 @@
+ndarilek commented on 29 May 2015
+Apologies if this is already supported and I don't see it.
+Say you're building an app with a static HTML UI and a web server. During development you may use volumes and automatic rebuilds, but in production, maybe you only wish to run the static HTML container and have it dump output in a directory reachable by the HTML server container. It may be possible to start the container separately and just use Compose for the web server, but having the entire bootstrap process in docker-compose.yml would be nice.
+Or say you have an app and a sidekick container that registers details in etcd. The sidekick doesn't need to continue running once the app is launched. It just needs to run after the app container launches to register necessary details.
+It'd be nice if I could mark containers as not needing to continue running when Compose brings the stack up. Maybe as long as the exit code is 0, the launch is considered successful. Or maybe the exit code can be definable, something like success_on_exit: 0. If it isn't defined, the container must keep running as per usual. Otherwise, exiting with the specified code is deemed a success and the docker-compose up doesn't exit. So you'd have something like:
+html:
+image: someone/jekyll
+success_on_exit: 0
+This runs Jekyll on docker-compose up. If the return code is 0, html is considered to have finished successfully, and the other processes run as normal. html can be launched again to rebuild the static HTML, or run with a different cmd to rebuild on change in development.

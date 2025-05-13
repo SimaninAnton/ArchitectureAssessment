@@ -1,0 +1,3 @@
+dkirrane commented on 2 Mar 2015
+It would be good if one could start a specific service(s) in the background
+docker-compose up service1 service2 -d

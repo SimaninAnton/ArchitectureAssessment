@@ -1,0 +1,7 @@
+zhangpeihao commented on 11 May 2016
+Sometimes, the docker-compose up -d command would failed as:
+Recreating 3e34ccca77a7_yztest_crm2-api_1
+ERROR: No such container: 3e34ccca77a734582391f3dea84c17377fea636543709f66589398cf49132836
+I got the container name is yztest_crm2-api_1 by docker ps -a:
+3e34ccca77a7 yztest_crm2-api "/bin/sh -c '/usr/loc" 18 hours ago Exited (128) 2 minutes ago yztest_crm2-api_1
+8

@@ -1,0 +1,14 @@
+Vanuan commented on 31 Aug 2017 •
+edited
+Use case
+Run parallel docker compose run commands with an ability for dependent services to discover the "runned" service by its name.
+E.g. when I do this:
+docker compose run -p instance_1 --name my_service_interactive &
+docker compose run -p instance_2 --name my_service_interactive &
+I expect 2 sets of all containers (2 networks) to be created, each having a discoverable service name "my_service_interactive".
+But instead I get the name "my_service_interactive" is already in use.
+Problem
+It looks like the --name directive sets both the container name and (internally linked) service name.
+What I would want is an option to generate a unique container name, but provide a predefined service name.
+It's not clear what is a use case of the --name option: to prevent docker from creating 2 run instances or to provide a predefined discoverable service name. Or both?
+1

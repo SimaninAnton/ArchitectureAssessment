@@ -1,0 +1,1 @@
+log_printer broken pipe

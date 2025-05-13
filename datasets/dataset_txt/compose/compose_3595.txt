@@ -1,0 +1,13 @@
+edwinlunando commented on 3 Jun 2015
+I want to change the port of a service from. On 1.3.0 RC1
+elasticsearch:
+  image: elasticsearch:1.5.2
+  ports:
+    - 9200:9200
+    - 9300:9300
+into
+elasticsearch:
+  image: elasticsearch:1.5.2
+  ports:
+    - 9200:9200
+I run docker-compose up and it did not update to the new configuration. After that, I tried to rebuilt by docker-compose build then docker-compose up, but it still the previous container. Any idea? Is it a bug?

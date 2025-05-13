@@ -1,0 +1,71 @@
+daelmaak commented on 10 Jan 2018
+Running containers with docker-compose up results in
+Cannot start service keycloak: OCI runtime create failed: container_linux.go:296: starting container process caused "process_linux.go:398: container init caused \"rootfs_linux.go:58: mounting \\\"/etc/localtime\\\" to rootfs \\\"/var/lib/docker/overlay2/69cf1d19a0466351fee8c347aa94780338db98a29cb298b8807578b12ab758b0/merged\\\" at \\\"/var/lib/docker/overlay2/69cf1d19a0466351fee8c347aa94780338db98a29cb298b8807578b12ab758b0/merged/usr/share/zoneinfo/UTC\\\" caused \\\"not a directory\\\"\"": unknown: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+although we didn't have any such problems in version 17.09.0-ce-win32 (so downgrading back to 17.09.0-ce-win32 actually helps here).
+docker version
+Client:
+ Version:       17.12.0-ce
+ API version:   1.35
+ Go version:    go1.9.2
+ Git commit:    c97c6d6
+ Built: Wed Dec 27 20:05:22 2017
+ OS/Arch:       windows/amd64
+
+Server:
+ Engine:
+  Version:      17.12.0-ce
+  API version:  1.35 (minimum version 1.12)
+  Go version:   go1.9.2
+  Git commit:   c97c6d6
+  Built:        Wed Dec 27 20:12:29 2017
+  OS/Arch:      linux/amd64
+  Experimental: true
+docker info
+Containers: 5
+ Running: 4
+ Paused: 0
+ Stopped: 1
+Images: 7
+Server Version: 17.12.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host ipvlan macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 89623f28b87a6004d4b785663257362d1658a729
+runc version: b2567b37d7b75eb4cf325b77297b140ea686ce8f
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 4.9.60-linuxkit-aufs
+Operating System: Docker for Windows
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 9.48GiB
+Name: linuxkit-00155d0a5929
+ID: EK7T:UPIP:XBUF:QEUU:AWVW:V634:FZPE:WO6X:ISPG:XBAT:IYDZ:4VXM
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 46
+ Goroutines: 64
+ System Time: 2018-01-10T15:14:28.4095607Z
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Labels:
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+1

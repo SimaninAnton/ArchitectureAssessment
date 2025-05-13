@@ -1,0 +1,12 @@
+pacoxu commented on 17 Jan 2017 •
+edited
+"game2048":
+    image: daocloud.io/daocloud/dao-2048:latest
+    ports:
+      - 80
+      - 80
+    restart: unless-stopped
+    cpu_quota: 50000
+In Service Spec， docker can publish container port 80 to two different host port.
+However, the validation of docker compose will failed for
+The Compose file 'docker-compose.yml' is invalid because:\nservices.dao-2048_dao-2048.ports value ['8989:82/tcp', '80/tcp', '80/tcp'] has non-unique elements"

@@ -1,0 +1,35 @@
+Greek64 commented on 20 May 2018
+Currently I'm running a Docker Compose project with 20 services.
+One of these services is "gitlab/gitlab-ce:latest", which is quite chatty in it's logging output.
+[about 80 lines/min]
+I always start my services with "docker-compose up -d" followed by a "docker-compose logs -f"
+The Problem is, that after a (until now) unspecified time the logging of the "gitlab" container/service is not outputted with "docker-compose logs -f". But investigation of the actual logfile of the container/service shows that new log output is generated, but somehow ignored by "logs -f".
+A termination of the command (via CTRL+C) and a new execution of the command "docker-compose logs -f" shows and follows again the output of the "gitlab" container/service for an unspecified time.
+I realize that this is a specific scenario that I'm presenting. I will therefore try to find a minimal reproducible example of this behavior.
+Additional Info:
+docker-compose version 1.21.2, build a133471
+docker-py version: 3.3.0
+CPython version: 3.6.5
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Wed Mar 21 23:10:06 2018
+ OS/Arch:       linux/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:08:35 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Debian GNU/Linux 9 (stretch)
+4.9.0-6-amd64 #1 SMP Debian 4.9.88-1 (2018-04-29) x86_64 GNU/Linux
+7

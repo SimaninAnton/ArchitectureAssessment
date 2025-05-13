@@ -1,0 +1,1 @@
+Add option to resolve tags to hashes for config command

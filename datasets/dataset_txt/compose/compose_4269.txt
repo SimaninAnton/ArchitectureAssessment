@@ -1,0 +1,10 @@
+benjamine commented on 24 Jul 2014
+Hi, I noticed that container names created by fig always have a number on their name:
+DATABASE_1_PORT=tcp://172.17.0.32:5432
+DATABASE_1_PORT_5432_TCP=tcp://172.17.0.32:5432
+DATABASE_1_PORT_5432_TCP_ADDR=172.17.0.32
+DATABASE_1_PORT_5432_TCP_PORT=5432
+DATABASE_1_PORT_5432_TCP_PROTO=tcp
+I suppose the reason is there could be multiple containers running the same image (database), but that seems to violate the "principle of least suprise" to me, I wonder if could prevent this by making 1st container not be numbered, as that's the case for most people.
+In other words change database_1 to just database, and add numbers for 2,3,4 to the rest if there's any.
+I think that would help newcomers (like me) thoughts?

@@ -1,0 +1,1 @@
+Docker Compose "images" prints the registry port in the wrong column

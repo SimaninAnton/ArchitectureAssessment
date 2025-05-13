@@ -1,0 +1,32 @@
+Lanayx commented on 13 Jul 2017 •
+edited
+Diagnostic ID 9F77D425-42B9-4F96-9C8B-7154DDF17AC9/2017-07-13_11-03-12
+PS D:\Work\Imho\Api> docker-compose -f docker-compose.yml up
+Creating network "api_default" with the default driver
+Pulling ignite (apacheignite/ignite:latest)...
+latest: Pulling from apacheignite/ignite
+5040bd298390: Pulling fs layer
+fce5728aad85: Pulling fs layer
+
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose\cli\main.py", line 68, in main
+  File "compose\cli\main.py", line 118, in perform_command
+  File "compose\cli\main.py", line 926, in up
+  File "compose\project.py", line 401, in up
+  File "compose\service.py", line 305, in ensure_image_exists
+  File "compose\service.py", line 1001, in pull
+  File "compose\progress_stream.py", line 37, in stream_output
+  File "codecs.py", line 370, in write
+  File "site-packages\colorama\ansitowin32.py", line 40, in write
+  File "site-packages\colorama\ansitowin32.py", line 141, in write
+  File "site-packages\colorama\ansitowin32.py", line 169, in write_and_convert
+  File "site-packages\colorama\ansitowin32.py", line 174, in write_plain_text
+IOError: [Errno 0] Error
+Failed to execute script docker-compose
+docker-compose.yml:
+version: '3'
+services:
+  ignite:
+    image: apacheignite/ignite
+This error only happens on one of my 3 machines, so I have no idea what causes it. Resetting to factory defaults or reinstalling docker doesn't help. Without docker compose the image is pulling and then working fine. All the machines are on windows 10 and latest stable docker installed.

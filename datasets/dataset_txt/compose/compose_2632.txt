@@ -1,0 +1,10 @@
+Contributor
+aanand commented on 14 Mar 2016
+There's an increasing amount of functionality in Compose relating to "environment variables" in different contexts:
+Environment variables on the host used to configure Compose's behaviour (e.g. COMPOSE_FILE)
+Environment variables on the host used to parameterise configuration values in the Compose file (e.g. "${VAR}")
+Environment variables on the host passed through to containers using no-value entries in the environment key (e.g. environment: ["VAR"])
+Environment variables created by links in v1 files (e.g. DB_PORT)
+And now we're going to start letting you put any of 1-3 in a .env file (#3057).
+Maybe there should be a single page in the docs which explains the differences between all of these features and describes (or links off to the right page/section for) the semantics for each.
+2

@@ -1,0 +1,5 @@
+tstirrat15 commented on 15 Dec 2017
+I have a development environment setup that uses compose, and some of the environment variables are provided through a .env file. When I run docker-compose up from the folder where the .env is, everything works fine. When I run up from a subdirectory, the .env variables aren't picked up.
+It would make more sense to me if the .env file was expected to be in the same directory as docker-compose.yml and that docker-compose would only look there for the .env file.
+4
+1

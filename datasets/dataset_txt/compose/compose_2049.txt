@@ -1,0 +1,5 @@
+davidbarratt commented on 23 Sep 2016
+Is there a way for an application with a docker-compose.yml to depend on another application with docker-compose.yml?
+For instance, let's pretend I have an API in one repo and a UI in another repo. And both have a docker-compose.yml file and each has it's own set of containers that are required.
+Can the UI have some sort of directive that will tell it to load the API and all of it's containers?
+3

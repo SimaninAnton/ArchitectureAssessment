@@ -1,0 +1,21 @@
+Pankajdtrainer commented on 12 Nov 2019
+Hi there, Greetings.
+I am using docker-compose on GCP and exposing two ports with same server port numbers(80).
+However, when I am exposing external ports, port conflict is happening. Can you please advise how I can fix it? Example for the images and ports mentioned below.
+wordpress:
+image: wordpress
+ports:
+- 80:80
+phpmyadmin:
+image: corbinu/docker-phpmyadmin
+ports:
+- 80:80
+However, qhen I run in Localhost, it works fine with different port numbers(e.g. 8282 & 8181)
+wordpress:
+image: wordpress
+ports:
+- 8282:80
+phpmyadmin:
+image: corbinu/docker-phpmyadmin
+ports:
+- 8181:80

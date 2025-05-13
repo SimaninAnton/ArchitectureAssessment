@@ -1,0 +1,13 @@
+marcellodesales commented on 12 Nov 2018
+Is your feature request related to a problem? Please describe.
+docker-compose build --parallel outputs mixed output during the build
+It's very hard to see which log is what when using shared Dockerfiles for the build
+Describe the solution you'd like
+I'd like to see a more detailed output, including the name of the service in compose being built
+Each line appended with the service
+In addition, add some color as it is done during the docker-compose run commands
+When applicable (terms with colors)
+Describe alternatives you've considered
+Just show the of the service being built makes it easier to identify where the logs come from
+If coloring is not possible
+3

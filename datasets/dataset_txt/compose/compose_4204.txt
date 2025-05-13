@@ -1,0 +1,20 @@
+hanxiaole commented on 29 Aug 2014
+There is an error when i use the latest version of fig.
+Recreating figtest_db_1...
+Traceback (most recent call last):
+File "", line 3, in
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 30, in main
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 31, in dispatch
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.command", line 50, in perform_command
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+File "/code/build/fig/out00-PYZ.pyz/fig.cli.main", line 340, in up
+File "/code/build/fig/out00-PYZ.pyz/fig.project", line 170, in up
+File "/code/build/fig/out00-PYZ.pyz/fig.service", line 174, in recreate_containers
+File "/code/build/fig/out00-PYZ.pyz/fig.service", line 195, in recreate_container
+File "/code/build/fig/out00-PYZ.pyz/fig.container", line 112, in start
+File "/code/build/fig/out00-PYZ.pyz/fig.container", line 40, in id
+KeyError: u'Id'
+i try version 0.5.x to the latest version, it's the same error.
+however , when i downgrade fig version to 0.4.0 , fig run works well.

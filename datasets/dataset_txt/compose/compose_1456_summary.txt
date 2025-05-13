@@ -1,0 +1,1 @@
+docker-compose run doesn't populate DNS entries in the same way as "up"

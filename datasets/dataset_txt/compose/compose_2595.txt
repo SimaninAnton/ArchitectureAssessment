@@ -1,0 +1,2 @@
+dunk commented on 21 Mar 2016
+I currently use a container_name directive in every one of my services in order to prevent them from being named "project_container", which sucks for tab-completion. I only tend to have one set of these containers up on my development machine, and spend far more time tab-completing commands than I expect I ever will running N different container sets. I'm sure others are in the same boat.

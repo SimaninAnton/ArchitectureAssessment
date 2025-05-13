@@ -1,0 +1,5 @@
+artemkamolodets commented on 27 Nov 2017
+Hello, i was renamed the directory that contains the compose yml file (/opt/someproject => /opt/myproject). Now i've got an error on container restart:
+Cannot create container for service : Conflict. The container name "" is already in use by container "f8009f80b97fe12f0e82fdbcef5dd83921f1ed6a406cbaadd361c97c81875c9f". You have to remove (or rename) that container to be able to reuse that name.
+Is the docker-compose down\up the one way to apply changes to the project?
+Please help.

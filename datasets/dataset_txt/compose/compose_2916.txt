@@ -1,0 +1,19 @@
+yun-wang commented on 15 Jan 2016
+Server:
+Ubuntu
+Docker 1.9.0
+Client:
+Ubuntu 14.04.2 LTS
+kernel 3.13.0-55-generic
+Docker client 1.9.0
+docker-compose version 1.5.2, build 7240ff3
+DOCKER_TLS_VERIFY=1
+DOCKER_HOST=tcp://<host>
+DOCKER_CERT_PATH=<path to certs>
+Certs have been working well with docker cli to remote docker server.
+curl https://<host>/version --cacert ca.pem --cert cert.pem --key key.pem also works well with the certs.
+Using docker-compose gives an SSL error:
+$ docker-compose up
+ERROR: SSL error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:581)
+Issue happens after setting DOCKER_TLS_VERIFY, DOCKER_HOST, and DOCKER_CERT_PATH.
+6

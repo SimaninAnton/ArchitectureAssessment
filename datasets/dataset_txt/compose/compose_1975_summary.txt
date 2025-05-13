@@ -1,0 +1,1 @@
+command does not use latest environment variables

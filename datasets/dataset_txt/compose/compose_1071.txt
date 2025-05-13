@@ -1,0 +1,5 @@
+bergtwvd commented on 20 Nov 2017
+I have a multi-node composition (v3) and I use Swarm standalone for scheduling.
+The composition has an overlay network for all containers to use, and a bridge network for two containers (A and B) that use multi-cast to communicate.
+Since the composition is created by docker-compose in steps (i.e. first network, then containers) the containers A and/or B may end up on another host than the node with the bridge network. See also issue docker/swarm#2799.
+How can this be made to work?

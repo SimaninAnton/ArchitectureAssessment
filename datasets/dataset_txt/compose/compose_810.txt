@@ -1,0 +1,9 @@
+1605200517 commented on 9 Mar 2018 •
+edited
+On using a complex stack YAML (500+ lines) and environment variables e.g.
+..
+    zookeeper:
+      image: ${IMAGE_ZOOKEEPER}
+..
+it can happen that a glitch in the YAML causes the message "invalid reference format", and this is very hard to debug. If possible, more reference to the error is required. We use yamllint to recognize indentation errors but this does not help.
+Docker version 17.12.0-ce, build c97c6d6

@@ -1,0 +1,1 @@
+[FR] Provide a way to specify mount type (file vs dir) for the case when it's not yet present on host

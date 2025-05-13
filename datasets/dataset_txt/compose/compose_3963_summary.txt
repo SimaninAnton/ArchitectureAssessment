@@ -1,0 +1,1 @@
+Don't report proxy errors as connection errors

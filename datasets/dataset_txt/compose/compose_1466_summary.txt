@@ -1,0 +1,1 @@
+Rerunning compose on Windows errs that network needs to be recreated

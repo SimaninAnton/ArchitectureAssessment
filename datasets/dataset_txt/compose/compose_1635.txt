@@ -1,0 +1,14 @@
+adawolfs commented on 2 Mar 2017
+Hello I'm trying to start and stack with a docker-compose file
+sudo docker stack deploy --compose-file=docker-compose.yml my_stack
+But when I list the services:
+n2xwm703gz4t  my_stack_percona       replicated  0/1       localhost:5000/percona:latest
+o176qp0mdq2v  registry               replicated  1/1       registry:2
+udkxsbr5f4w0  my_stack_elastic       replicated  0/1       localhost:5000/percona:latest
+ugm94ewwsfnp  my_stack_nginx-proxy   replicated  0/1       jwilder/nginx-proxy:latest
+any service in the stack seems to be alive, but when I run
+**sudo docker service ps my_stack_nginx-proxy **
+ID            NAME                         IMAGE                       NODE  DESIRED STATE  CURRENT STATE       ERROR  PORTS
+jp8fr2shgjjj  liferay_stack_nginx-proxy.1  jwilder/nginx-proxy:latest        Running        New 20 minutes ago
+It seems to be running but there is no NODE, and when I go to the nodes there is no service running
+Can you help me with this?

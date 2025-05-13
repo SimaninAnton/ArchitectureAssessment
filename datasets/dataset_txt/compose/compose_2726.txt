@@ -1,0 +1,2 @@
+cgcgbcbc commented on 22 Feb 2016
+For example, if a projcet_A_network has a service name app, and project_B_network also as ha service name app, and B's app join A's network in additional to B's network, then app in A's network will be resolved to which container??

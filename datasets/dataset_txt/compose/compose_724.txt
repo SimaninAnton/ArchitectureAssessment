@@ -1,0 +1,15 @@
+neliel123 commented on 23 Apr 2018
+Anybody can comment on my question here?
+https://stackoverflow.com/questions/49973247/docker-compose-exit-code-from-is-ignored
+Supposed I have multiple containers deployed
+init
+service1
+service2
+db
+web
+test
+The init container runs into completion and then shutdowns by itself. That is his job, which is to do some pre-configuration stuffs then exit.
+When running locally, I dont have any issues running this in my desktop work environment.
+My issue is when it is deployed in my CI pipeline. When my init container finished up...it shutdowns the whole docker-compose network. Even if I explicitly set the --exit-code-from into my test container.
+docker-compose up --exit-code-from test
+The end result is that I am not able to run my test cases to its completion because everything is being shutdown by the init container that exits. Anybody has hints what can I do?

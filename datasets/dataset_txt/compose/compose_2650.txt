@@ -1,0 +1,33 @@
+immarvin commented on 10 Mar 2016
+How to set the ip address for docker container in docker-compose.yml , like "docker run -ip"
+man docker run
+...
+       --ip=""
+          Sets the container's interface IPv4 address (e.g. 172.23.0.9)
+
+       It can only be used in conjunction with --net for user-defined networks
+...
+docker version:
+[root@c910f05c01bc07 xcat-docker]# docker version
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 16:16:33 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 16:16:33 2016
+ OS/Arch:      linux/amd64
+[root@c910f05c01bc07 xcat-docker]# 
+docker compose version:
+[root@c910f05c01bc07 xcat-docker]# docker-compose version
+docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

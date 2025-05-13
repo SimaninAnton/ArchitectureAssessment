@@ -1,0 +1,4 @@
+Member
+thaJeztah commented on 30 Apr 2014
+Congrats with releasing fig 0.4!
+Just noticed that the installation instructions on the website (http://orchardup.github.io/fig/install.html) still point to release 0.3.2

@@ -1,0 +1,6 @@
+sharnaaysha commented on 9 Aug 2018
+I have installed docker on CentOS7 in VMware workstation. I want to install and run bWAPP. If I execute this command I get error. I don't understand the problem.
+[root@localhost careerbeat]# docker run -d -p 80:80 raesene/bwapp
+a2a849cce80e7d4f33d4016db5d2e5208513820955eb816ca675c88085fb2233
+/usr/bin/docker-current: Error response from daemon: driver failed programming external connectivity on endpoint unruffled_bhabha (9a05845ce9f631926221059cb259bebfc1f73d9fb2be46bfabd7bb4bb3ef1f75): Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use.
+Can anyone help me , How can I run bWAPP on docker.?

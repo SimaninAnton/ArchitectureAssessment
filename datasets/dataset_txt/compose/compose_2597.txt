@@ -1,0 +1,2 @@
+luoyunpeng commented on 21 Mar 2016
+docker-engine has docker-java api to control docker,does docker-compose have？

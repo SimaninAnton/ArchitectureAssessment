@@ -1,0 +1,1 @@
+Export fig container connection information as local environment variables

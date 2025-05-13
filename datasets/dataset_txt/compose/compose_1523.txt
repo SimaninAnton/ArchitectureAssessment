@@ -1,0 +1,16 @@
+daccle commented on 13 Apr 2017 •
+edited
+Hi folks!
+I am very sorry, I am not deep down into docker development and I am just learning about the whole docker world. Maybe I am just missing an obvious option. But in order to build on Raspbian on a Raspberry Pi 3 I need the following patch to Dockerfile
+diff --git Dockerfile Dockerfile
+index a03e151..028277a 100644
+--- Dockerfile
++++ Dockerfile
+@@ -1,4 +1,4 @@
+-FROM debian:wheezy
++FROM armhf/debian:latest
+
+ RUN set -ex; \
+     apt-get update -qq; \
+If there is an option I am missing here please point me to that option and close the issue.
+Best, Daniel

@@ -1,0 +1,27 @@
+Contributor
+allencloud commented on 29 Jan 2015
+Today I ran into such kind of problem.
+when I run fig up -d with the fig.yml like below:
+service:
+  image: service
+  ports:
+    - "1234:1234"
+  links:
+    - mysql:mysql
+  command: service
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=xxxxxx
+    - MYSQL_DATABASE=xxxxxx
+  ports:
+    - "3306:3306" 
+Although fig will check the starting sequence of service and mysql, and start mysql firstly, then service.
+Here is the sequence:
+1.create container "mysql", OK
+2.start container "mysql", starting........... seems OK
+3.create container "service", do the linking thing
+4.start container "service", as "service" needs to connect "mysql", However the mysqld process in "mysql" still hasn't finished. As a result, "service" starting fails.
+5.start container "mysql", completed !
+At first, I doubt that whether my fig.yml is not in correct format, However when I did fig up -d repeatedly in 10 times, there is once that I succeeded in making "service" and "mysql" both running. In the 9 failed times, when I manually ran docker start service, "service" could be started completely. Such experience made to realise this kind of situation.
+If what I said is reasonable, I suggest that fig should add some latency into the linking container starting sequence.

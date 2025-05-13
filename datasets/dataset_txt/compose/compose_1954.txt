@@ -1,0 +1,36 @@
+Contributor
+hholst80 commented on 5 Nov 2016 •
+edited
+root@7a13d39be559:/a3c# docker-compose version
+docker-compose version 1.5.2, build unknown
+docker-py version: 1.8.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+root@7a13d39be559:/a3c# 
+version: '2'
+
+services:
+  ps:
+    image: ${IMAGE}
+    command: python src/a3c.py --job_name=ps --logdir /efs/${LOGDIR} --environment ${ENVIRONMENT}
+    networks:
+      - default
+    volumes:
+      - /efs:/efs
+  worker:
+    image: ${IMAGE}
+    command: python src/a3c.py --job_name=worker --logdir /efs/${LOGDIR} --environment ${ENVIRONMENT}
+    networks:
+      - default
+    volumes:
+      - /efs:/efs
+  eval:
+    image: ${IMAGE}
+    command: python src/a3c.py --job_name=eval --logdir /efs/${LOGDIR} --environment ${ENVIRONMENT}
+    networks:
+      - default
+    volumes:
+      - /efs:/efs
+
+networks:
+  default:

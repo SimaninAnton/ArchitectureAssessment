@@ -1,0 +1,3 @@
+JanneSiren commented on 24 Jun 2019
+ERROR: docker-compose 1.24.0 has requirement PyYAML<4.3,>=3.10, but you'll have pyyaml 5.1 which is incompatible.
+3

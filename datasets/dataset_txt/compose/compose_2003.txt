@@ -1,0 +1,120 @@
+michalwarda commented on 18 Oct 2016 •
+edited
+When trying to launch a built container with docker-compose up I'm getting an error:
+ERROR: for app  Cannot start service app: invalid header field value "oci runtime error: container_linux.go:247: starting container process caused \"exec: \\\"script/docker-entrypoint.sh\\\": stat script/docker-entrypoint.sh: no such file or directory\"\n"
+ERROR: compose.cli.main.main: Encountered errors while bringing up the project.
+I've tried reinstalling docker, docker-compose, virtualbox, rebuilding containers, recreating machines.
+Downgrading almost all of those things to previous versions. Literally retrying the whole docker instalation flow.
+The problem occurs only in docker-compose up. Everything works fine when I use docker run ....
+The important thing is the whole setup works correctly on my OSX installation. Unfortunately my Xenial Ubuntu doesn't want to cooperate.
+I've checked the issues archive and couldn't find an answer that would help me fix the problem.
+Here are my whole setup configs:
+docker-compose.yml:
+version: "2"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - cache-redis
+    links:
+      - cache-redis
+  nginx:
+    image: nginx:1.11.1-alpine
+    depends_on:
+      - app
+    links:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx/app.conf:/etc/nginx/conf.d/default.conf
+  cache-redis:
+    image: redis:3.2.1-alpine
+    volumes:
+      - cache-redis:/var/lib/cache-redis/data
+
+volumes:
+  cache-redis:
+    driver: local
+Dockerfile
+FROM jruby:9.1.2.0-jre-alpine
+
+RUN apk --update --no-cache add build-base less git openssh
+
+RUN mkdir -p /app
+
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+
+RUN gem install bundler && bundle install
+
+COPY . ./
+
+CMD ["script/docker-entrypoint.sh"]
+script/docker-entrypoint.sh
+#!/bin/sh
+rm -f tmp/pids/server.pid
+padrino s -h 0.0.0.0
+docker-compose -v:
+docker-compose version 1.8.1, build 878cff1
+docker version:
+Client:
+ Version:      1.12.2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   bb80604
+ Built:        Tue Oct 11 18:29:41 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   bb80604
+ Built:        Tue Oct 11 17:00:50 2016
+ OS/Arch:      linux/amd64
+docker info:
+Containers: 6
+ Running: 1
+ Paused: 0
+ Stopped: 5
+Images: 15
+Server Version: 1.12.2
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 37
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.24-boot2docker
+Operating System: Boot2Docker 1.12.2 (TCL 7.2); HEAD : 9d8e41b - Tue Oct 11 23:40:08 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 995.9 MiB
+Name: default
+ID: G442:OWMQ:BPXD:7MK5:HM7J:R7PO:DNBP:ZSKI:HJH4:OCE4:UX36:M2PO
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 21
+ Goroutines: 38
+ System Time: 2016-10-18T09:18:30.024046419Z
+ EventsListeners: 0
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox
+Insecure Registries:
+ 127.0.0.0/8
+15

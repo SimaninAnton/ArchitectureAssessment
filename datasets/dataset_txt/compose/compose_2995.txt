@@ -1,0 +1,7 @@
+Contributor
+ekristen commented on 11 Dec 2015
+I have a container that already exists on every node in the swarm, call "certs" but when I run docker compose against my swarm master, it tells me it does not exist.
+The container is not running it has just been created.
+Compose complains that certs is not a service or container name, yet it exists on every server.
+Compose: 1.5.2
+Swarm: Master Branch

@@ -1,0 +1,10 @@
+florentvaldelievre commented on 12 Nov 2014
+Hi,
+It would be nice to have fig evaluate commands like this:
+data:  
+  volumes:
+    - /var/logs/`hostname`:/logs
+ environment:
+   - json: `cat ~/docker/zookeeper/env.json`
+PS: at the moment, i can't use fig as i run my container like this:
+docker run -e json="$(cat ~/docker/zookeeper/env.json)"  -v /var/logs/`hostname`:/logs

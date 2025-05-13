@@ -1,0 +1,10 @@
+farhadkzm commented on 2 May 2016
+.env file would be ignored if the working directory is different than that docker-compose.yml resides.
+|-directory1
+|--docker-compose.yml
+|--.env
+|-directory2
+if you run the following command inside directory2 it won't work:
+docker-compose path/to/directory1/docker-compose up -d
+It shows an error saying The VARIABLE_NAME variable is not set. Defaulting to a blank string.
+However if you run the same command inside directory1 it works fine.

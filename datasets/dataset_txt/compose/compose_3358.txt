@@ -1,0 +1,22 @@
+arthurtsang commented on 21 Aug 2015
+hi all,
+I have the following docker-compose.yml
+dataVolume:
+  image: data-volume
+  command: sh -c "while true; do echo "hello"; sleep 1d; done;"
+
+app:
+  image: app
+  volumes_from:
+    - dataVolume
+  ports:
+    - 9600:9600
+I have a 2-node docker swarm setup using consul as backend. when i issue, docker-compose up -d, i would have both dataVolume & app running on the same node.
+then, when i tries to scale it, docker-compose dataVolume=2 app=2, it started another container in the 2nd node (appears to be by chance, cause it could have started on the first node too) and when trying to start app on node 2 (i've specified the port so it has to start in node 2), i got an error like this.
+Service app specifies a port on the host. If multiple containers for this service are created on a single host, the port will clash.
+Creating app_app_2...
+Unable to find a node fulfilling all dependencies: --volumes-from=e7fa944015a72d9b53f4fd43ec4a88747136dbaad30b531907bd7be2d7d651b4 --volumes-from=6871736bb6f1380a31ccb631d88b0a0b260bb80aec7c2ec18487056917c624ed
+and i've verified that those 2 volumes-from are the container id of the two dataVolume but that are on different nodes, i guess that's why it couldn't find it.
+Now the question is, how to get it to work? the scenario is, I have an application that needs to read in the SSL certificates & keys. I'm trying to put that onto a container and when i scale it, i'd need the data container (ssl certs) to be scaled too.
+Thanks,
+Arthur Tsang

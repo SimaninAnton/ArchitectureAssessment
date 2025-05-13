@@ -1,0 +1,1 @@
+Allow healthcheck to be used with "run"

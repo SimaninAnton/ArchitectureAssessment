@@ -1,0 +1,272 @@
+ihorTymofieiev commented on 11 Jun 2019
+If I use command docker-compose up started superfluous containers.
+Context information (for bug reports)
+Output of docker-compose version
+╰─$ docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+╰─$ docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+╰─$ docker-compose config
+services:
+  account:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account1:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account10:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account11:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account12:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account13:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account14:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account15:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account2:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account3:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account4:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account5:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account6:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account7:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account8:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  account9:
+    depends_on:
+    - db_account
+    image: node:latest
+    restart: always
+  db_account:
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: database
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+    image: mysql:latest
+    ports:
+    - 3306:3306/tcp
+    restart: always
+version: '3.0'
+Steps to reproduce the issue
+Go to the folder with the docker-compose file in a terminal.
+Run docker-compose up command in the terminal.
+Observed result
+╰─$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+
+
+╰─$ docker-compose up             
+Creating readme_db_account_1 ... done
+Creating readme_account15_1  ... 
+Creating readme_account13_1  ... 
+Creating readme_account15_1  ... done
+Creating readme_account2_1   ... done
+Creating readme_account9_1   ... done
+Creating readme_account11_1  ... done
+Creating readme_account8_1   ... done
+Creating readme_account_1    ... done
+Creating readme_account3_1   ... done
+Creating readme_account5_1   ... done
+Creating readme_account6_1   ... done
+Creating readme_account10_1  ... done
+Creating readme_account7_1   ... done
+Creating readme_account4_1   ... done
+Creating readme_account12_1  ... done
+Creating readme_account14_1  ... done
+Attaching to readme_db_account_1, readme_account1_1, readme_account13_1, readme_account10_1, readme_account9_1, readme_account12_1, readme_account8_1, readme_account6_1, readme_account5_1, readme_account2_1, readme_account14_1, readme_account7_1, readme_account11_1, readme_account15_1, readme_account3_1, readme_account_1, readme_account4_1
+db_account_1  | Initializing database
+db_account_1  | 2019-06-10T15:11:07.568516Z 0 [Warning] [MY-011070] [Server] 'Disabling symbolic links using --skip-symbolic-links (or equivalent) is the default. Consider not using this option as it' is deprecated and will be removed in a future release.
+db_account_1  | 2019-06-10T15:11:07.575008Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.15) initializing of server in progress as process 28
+db_account_1  | 2019-06-10T15:11:13.366075Z 5 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+db_account_1  | 2019-06-10T15:11:17.264497Z 0 [System] [MY-013170] [Server] /usr/sbin/mysqld (mysqld 8.0.15) initializing of server has completed
+db_account_1  | Database initialized
+db_account_1  | MySQL init process in progress...
+db_account_1  | MySQL init process in progress...
+db_account_1  | mbind: Operation not permitted
+db_account_1  | MySQL init process in progress...
+db_account_1  | 2019-06-10T15:11:20.542013Z 0 [Warning] [MY-011070] [Server] 'Disabling symbolic links using --skip-symbolic-links (or equivalent) is the default. Consider not using this option as it' is deprecated and will be removed in a future release.
+db_account_1  | 2019-06-10T15:11:20.546077Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.15) starting as process 79
+db_account_1  | 2019-06-10T15:11:21.905873Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+db_account_1  | 2019-06-10T15:11:21.910027Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+db_account_1  | 2019-06-10T15:11:21.967720Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.15'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server - GPL.
+db_account_1  | 2019-06-10T15:11:22.038811Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: '/var/run/mysqld/mysqlx.sock'
+readme_account1_1 exited with code 0
+readme_account13_1 exited with code 0
+readme_account10_1 exited with code 0
+readme_account9_1 exited with code 0
+readme_account12_1 exited with code 0
+db_account_1  | Warning: Unable to load '/usr/share/zoneinfo/iso3166.tab' as time zone. Skipping it.
+db_account_1  | Warning: Unable to load '/usr/share/zoneinfo/leap-seconds.list' as time zone. Skipping it.
+readme_account8_1 exited with code 0
+db_account_1  | Warning: Unable to load '/usr/share/zoneinfo/zone.tab' as time zone. Skipping it.
+db_account_1  | Warning: Unable to load '/usr/share/zoneinfo/zone1970.tab' as time zone. Skipping it.
+db_account_1  | mysql: [Warning] Using a password on the command line interface can be insecure.
+db_account_1  | mysql: [Warning] Using a password on the command line interface can be insecure.
+db_account_1  | mysql: [Warning] Using a password on the command line interface can be insecure.
+db_account_1  | mysql: [Warning] Using a password on the command line interface can be insecure.
+db_account_1  | 
+readme_account3_1 exited with code 0
+readme_account_1 exited with code 0
+db_account_1  | 2019-06-10T15:11:41.974509Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.0.15)  MySQL Community Server - GPL.
+readme_account7_1 exited with code 0
+db_account_1  | 
+db_account_1  | MySQL init process done. Ready for start up.
+db_account_1  | 
+readme_account2_1 exited with code 0
+readme_account11_1 exited with code 0
+db_account_1  | 2019-06-10T15:11:42.698089Z 0 [Warning] [MY-011070] [Server] 'Disabling symbolic links using --skip-symbolic-links (or equivalent) is the default. Consider not using this option as it' is deprecated and will be removed in a future release.
+db_account_1  | 2019-06-10T15:11:42.698915Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.15) starting as process 1
+db_account_1  | 2019-06-10T15:11:43.733127Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+db_account_1  | 2019-06-10T15:11:43.738792Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+db_account_1  | 2019-06-10T15:11:43.786543Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.15'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+db_account_1  | 2019-06-10T15:11:43.797101Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: '/var/run/mysqld/mysqlx.sock' bind-address: '::' port: 33060
+readme_account14_1 exited with code 0
+readme_account6_1 exited with code 0
+readme_account15_1 exited with code 0
+readme_account4_1 exited with code 0
+readme_account5_1 exited with code 0
+readme_account7_1 exited with code 0
+readme_account_1 exited with code 0
+readme_account3_1 exited with code 0
+readme_account8_1 exited with code 0
+readme_account2_1 exited with code 0
+readme_account11_1 exited with code 0
+readme_account12_1 exited with code 0
+readme_account5_1 exited with code 0
+readme_account1_1 exited with code 0
+readme_account10_1 exited with code 0
+readme_account9_1 exited with code 0
+Exception in thread Thread-52:
+Traceback (most recent call last):
+  File "site-packages/docker/api/client.py", line 246, in _raise_for_status
+  File "site-packages/requests/models.py", line 940, in raise_for_status
+requests.exceptions.HTTPError: 409 Client Error: Conflict for url: http+docker://localhost/v1.25/containers/0e141dadaf757e383a6fcd674d8d67ff2c3e2f3474adba0e2f877524f35d7e8a/attach?logs=0&stdout=1&stderr=1&stream=1
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "threading.py", line 916, in _bootstrap_inner
+  File "threading.py", line 864, in run
+  File "compose/cli/log_printer.py", line 233, in watch_events
+  File "compose/container.py", line 215, in attach_log_stream
+  File "compose/container.py", line 307, in attach
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/container.py", line 57, in attach
+  File "site-packages/docker/api/client.py", line 385, in _read_from_socket
+  File "site-packages/docker/api/client.py", line 296, in _get_raw_response_socket
+  File "site-packages/docker/api/client.py", line 248, in _raise_for_status
+  File "site-packages/docker/errors.py", line 31, in create_api_error_from_http_exception
+docker.errors.APIError: 409 Client Error: Conflict ("b'container 0e141dadaf757e383a6fcd674d8d67ff2c3e2f3474adba0e2f877524f35d7e8a is restarting, wait until the container is running'")
+
+readme_account6_1 exited with code 0
+readme_account13_1 exited with code 0
+readme_account15_1 exited with code 0
+Expected result
+Successful start of all containers.
+Stacktrace / full error message
+Exception in thread Thread-52:
+Traceback (most recent call last):
+  File "site-packages/docker/api/client.py", line 246, in _raise_for_status
+  File "site-packages/requests/models.py", line 940, in raise_for_status
+requests.exceptions.HTTPError: 409 Client Error: Conflict for url: http+docker://localhost/v1.25/containers/0e141dadaf757e383a6fcd674d8d67ff2c3e2f3474adba0e2f877524f35d7e8a/attach?logs=0&stdout=1&stderr=1&stream=1
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "threading.py", line 916, in _bootstrap_inner
+  File "threading.py", line 864, in run
+  File "compose/cli/log_printer.py", line 233, in watch_events
+  File "compose/container.py", line 215, in attach_log_stream
+  File "compose/container.py", line 307, in attach
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/container.py", line 57, in attach
+  File "site-packages/docker/api/client.py", line 385, in _read_from_socket
+  File "site-packages/docker/api/client.py", line 296, in _get_raw_response_socket
+  File "site-packages/docker/api/client.py", line 248, in _raise_for_status
+  File "site-packages/docker/errors.py", line 31, in create_api_error_from_http_exception
+docker.errors.APIError: 409 Client Error: Conflict ("b'container 0e141dadaf757e383a6fcd674d8d67ff2c3e2f3474adba0e2f877524f35d7e8a is restarting, wait until the container is running'")
+Additional information
+macOS Mojave v. 10.14.3 , Docker Desktop community v. 2.0.0.3:
+Engine: 18.09.2
+Compose: 1.23.2
+Machine: 0.16.1
+Notary: 0.6.1
+Credential Helper: 0.6.0
+Kubernetes: v1.10.11

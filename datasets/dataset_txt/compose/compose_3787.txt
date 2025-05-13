@@ -1,0 +1,2 @@
+StevenWeathers commented on 26 Mar 2015
+I've setup a project that has a "data-only" container e.g. a container that defines a volume that is then "volumes_from" a parent application. This was working just fine in 1.1.0, however when I switched to 1.2 rc2 it fails on first "up", but works on second "up" (recreate vs create).

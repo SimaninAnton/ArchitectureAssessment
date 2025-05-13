@@ -1,0 +1,15 @@
+nonsensery commented on 18 Nov 2014
+Steps to Reproduce
+Create a folder named "FigTest".
+Add a Dockerfile:
+FROM ubuntu:14.04
+Add a fig.yml:
+app:
+  build: .
+Run fig build.
+Expected Result
+A container image would be built from the current directory.
+Actual Result
+Operation fails with an error from Docker: "Invalid repository name (FigTest_app), only [a-z0-9-_.] are allowed"
+Discussion
+It looks like Docker image names do not allow uppercase letters. Fig creates the image name from the name of the directory, with some processing to remove invalid characters, but it does not convert uppercase letters to lowercase.

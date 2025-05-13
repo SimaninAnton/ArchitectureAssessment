@@ -1,0 +1,3 @@
+yank1 commented on 14 Feb 2016
+Error when 'docker-compose down' where 2 service has the same image.
+It's easy to show.

@@ -1,0 +1,68 @@
+dcastor commented on 3 Nov 2018
+Description of the issue
+This is my first inquiry/issue, so if I did something wrong in the formatting I apologize. Just let me know and I'll resolve it.
+I'm noticing a seemingly peculiar issue when using docker-compose for our containers on Centos 7.4.1708. Shortly after the container(s) come up, the DNS works for roughly a minute; after about a minute or so, DNS is no longer able to resolve any domains at all. Further, on Ubuntu 14.04, the containers seem to maintain DNS just fine. I am assuming it's related to some config on Centos, but I'm not too sure yet.
+At first, I noticed this spinning up a number of images in a single compose file, but after removing all contents, I noticed it happens with as little as one bare bones container, so it doesn't seem to be related to the combination of the containers.
+I apologize for stripping some context out of the repo, but it's primarily internal. We noticed this error occurs with any image, though.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+[sdb@sdbl10say1-sdb1-1-prd:~/archival]$ 
+Output of docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:20:16 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:23:58 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+  zookeeper:
+    container_name: zookeeper
+    expose:
+    - '2888'
+    - '3888'
+    - '22'
+    - '2181'
+    image: [internal_repo]/zookeeper:latest
+    logging:
+      driver: none
+version: '2.0'
+/etc/resolv.conf contents of container:
+bash-4.2$ cat /etc/resolv.conf 
+nameserver 127.0.0.11
+options rotate timeout:2 attempts:2 ndots:2
+Steps to reproduce the issue
+docker-compose up -f [compose_file]
+Immediately after the lone container is up, do docker-compose exec zookeeper /bin/bash
+ping google.com (for us, it's primarily internal DNS, but I noticed it happens for external as well)
+Wait about 1-2 minutes
+Retry. Eventually, it will fail.
+Observed result
+bash-4.2$ ping google.com
+ping: google.com: Name or service not known
+Expected result
+Successful DNS connection via embedded docker DNS routing.
+Additional information
+Problem OS: Centos 7.4.1708
+Working OS: Distributor ID: Ubuntu
+Description: Ubuntu 14.04.5 LTS
+Release: 14.04
+Codename: trusty

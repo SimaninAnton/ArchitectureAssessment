@@ -1,0 +1,14 @@
+dsanders11 commented on 28 Apr 2016
+Currently if you do a docker-compose up --no-build for a docker-compose.yml file that looks like:
+version: '2'
+
+services:
+  foo:
+    build: "foo"
+    image: foo:latest
+And you're in an environment where the build folder doesn't exist, you'll get:
+ERROR: build path /foo either does not exist, is not accessible, or is not a valid URL.
+Creating an empty directory with that name allows things to continue as expected.
+I'd like to have a single docker-compose.yml file that can be used for building on the developer side and deploying on the production side. As such I never want to build in production and only use the prebuilt images, hence the '--no-build' flag. The behavior of reading the build option in this case is unexpected and counter intuitive.
+It looks like this is part of the validating the config logic, which is understandable, but it would be nice if no build was plumbed down so that a missing build path was not an error.
+15

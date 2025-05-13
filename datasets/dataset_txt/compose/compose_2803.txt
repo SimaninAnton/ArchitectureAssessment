@@ -1,0 +1,2 @@
+brunoborges commented on 10 Feb 2016
+The documentation is very unclear about how depends_on will work. Currently, it does not say when a service is considered "up and running" to proceed with startup of its dependees.

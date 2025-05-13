@@ -1,0 +1,282 @@
+adammcmaster commented on 18 Jan 2017
+I had to manually remove docker-py and then reinstall docker and docker-compose:
+ubuntu@ip-10-3-0-103:~$ docker-compose --version
+docker-compose version 1.9.0, build 2585387
+ubuntu@ip-10-3-0-103:~$ docker-compose pull
+Pulling moo (ubuntu:latest)...
+latest: Pulling from library/ubuntu
+b3e1c725a85f: Pull complete
+4daad8bdde31: Pull complete
+63fe8c0068a8: Pull complete
+4a70713c436f: Pull complete
+bd842a2105a8: Pull complete
+Digest: sha256:7a64bc9c8843b0a8c8b8a7e4715b7615e4e1b0d8ca3c7e7a76ec8250899c397a
+Status: Downloaded newer image for ubuntu:latest
+ubuntu@ip-10-3-0-103:~$ sudo pip install -U docker-compose
+The directory '/home/ubuntu/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/ubuntu/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:318: SNIMissingWarning: An HTTPS request has been made, but the SNI (Subject Name Indication) extension to TLS is not available on this platform. This may cause the server to present an incorrect TLS certificate, which can cause validation failures. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#snimissingwarning.
+  SNIMissingWarning
+/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:122: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+Collecting docker-compose
+  Downloading docker_compose-1.10.0-py2.py3-none-any.whl (81kB)
+    100% |████████████████████████████████| 81kB 6.0MB/s
+Requirement already up-to-date: PyYAML<4,>=3.10 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: websocket-client<1.0,>=0.32.0 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: backports.ssl-match-hostname>=3.5; python_version < "3.5" in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Collecting docker<3.0,>=2.0.1 (from docker-compose)
+  Downloading docker-2.0.1-py2.py3-none-any.whl (95kB)
+    100% |████████████████████████████████| 102kB 9.5MB/s
+Requirement already up-to-date: cached-property<2,>=1.2.0 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: dockerpty<0.5,>=0.4.1 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: requests!=2.11.0,<2.12,>=2.6.1 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: ipaddress>=1.0.16; python_version < "3.3" in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: colorama<0.4,>=0.3.7 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: enum34<2,>=1.0.4; python_version < "3.4" in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: six<2,>=1.3.0 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: texttable<0.9,>=0.8.1 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: jsonschema<3,>=2.5.1 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: docopt<0.7,>=0.6.1 in /usr/local/lib/python2.7/dist-packages (from docker-compose)
+Requirement already up-to-date: docker-pycreds>=0.2.1 in /usr/local/lib/python2.7/dist-packages (from docker<3.0,>=2.0.1->docker-compose)
+Requirement already up-to-date: functools32; python_version == "2.7" in /usr/local/lib/python2.7/dist-packages (from jsonschema<3,>=2.5.1->docker-compose)
+Installing collected packages: docker, docker-compose
+  Found existing installation: docker-compose 1.9.0
+    Uninstalling docker-compose-1.9.0:
+      Successfully uninstalled docker-compose-1.9.0
+Successfully installed docker-2.0.1 docker-compose-1.10.0
+/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:122: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+You are using pip version 8.1.2, however version 9.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+ubuntu@ip-10-3-0-103:~$ docker-compose pull
+Pulling moo (ubuntu:latest)...
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 64, in main
+    command()
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 607, in pull
+    ignore_pull_failures=options.get('--ignore-pull-failures')
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 453, in pull
+    service.pull(ignore_pull_failures)
+  File "/usr/local/lib/python2.7/dist-packages/compose/service.py", line 878, in pull
+    output = self.client.pull(repo, tag=tag, stream=True)
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/image.py", line 333, in pull
+    header = auth.get_config_header(self, registry)
+AttributeError: 'module' object has no attribute 'get_config_header'
+ubuntu@ip-10-3-0-103:~$ pip freeze | grep docker
+/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:318: SNIMissingWarning: An HTTPS request has been made, but the SNI (Subject Name Indication) extension to TLS is not available on this platform. This may cause the server to present an incorrect TLS certificate, which can cause validation failures. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#snimissingwarning.
+  SNIMissingWarning
+/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:122: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+You are using pip version 8.1.2, however version 9.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+docker==2.0.1
+docker-compose==1.10.0
+docker-py==1.10.6
+docker-pycreds==0.2.1
+dockerpty==0.4.1
+ubuntu@ip-10-3-0-103:~$ sudo pip uninstall docker-py
+The directory '/home/ubuntu/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Uninstalling docker-py-1.10.6:
+  /usr/local/lib/python2.7/dist-packages/docker/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/build.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/build.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/container.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/container.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/daemon.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/daemon.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/exec_api.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/exec_api.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/image.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/image.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/network.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/network.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/service.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/service.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/swarm.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/swarm.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/api/volume.py
+  /usr/local/lib/python2.7/dist-packages/docker/api/volume.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/auth/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/auth/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/auth/auth.py
+  /usr/local/lib/python2.7/dist-packages/docker/auth/auth.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/client.py
+  /usr/local/lib/python2.7/dist-packages/docker/client.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/constants.py
+  /usr/local/lib/python2.7/dist-packages/docker/constants.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/errors.py
+  /usr/local/lib/python2.7/dist-packages/docker/errors.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/ssladapter/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/ssladapter/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/ssladapter/ssladapter.py
+  /usr/local/lib/python2.7/dist-packages/docker/ssladapter/ssladapter.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/tls.py
+  /usr/local/lib/python2.7/dist-packages/docker/tls.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/transport/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/transport/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/transport/npipeconn.py
+  /usr/local/lib/python2.7/dist-packages/docker/transport/npipeconn.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/transport/npipesocket.py
+  /usr/local/lib/python2.7/dist-packages/docker/transport/npipesocket.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/transport/unixconn.py
+  /usr/local/lib/python2.7/dist-packages/docker/transport/unixconn.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/types/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/types/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/types/base.py
+  /usr/local/lib/python2.7/dist-packages/docker/types/base.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/types/containers.py
+  /usr/local/lib/python2.7/dist-packages/docker/types/containers.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/types/services.py
+  /usr/local/lib/python2.7/dist-packages/docker/types/services.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/types/swarm.py
+  /usr/local/lib/python2.7/dist-packages/docker/types/swarm.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/utils/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/utils/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/utils/decorators.py
+  /usr/local/lib/python2.7/dist-packages/docker/utils/decorators.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/utils/ports/__init__.py
+  /usr/local/lib/python2.7/dist-packages/docker/utils/ports/__init__.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/utils/ports/ports.py
+  /usr/local/lib/python2.7/dist-packages/docker/utils/ports/ports.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/utils/socket.py
+  /usr/local/lib/python2.7/dist-packages/docker/utils/socket.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/utils/types.py
+  /usr/local/lib/python2.7/dist-packages/docker/utils/types.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/utils/utils.py
+  /usr/local/lib/python2.7/dist-packages/docker/utils/utils.pyc
+  /usr/local/lib/python2.7/dist-packages/docker/version.py
+  /usr/local/lib/python2.7/dist-packages/docker/version.pyc
+  /usr/local/lib/python2.7/dist-packages/docker_py-1.10.6.dist-info/DESCRIPTION.rst
+  /usr/local/lib/python2.7/dist-packages/docker_py-1.10.6.dist-info/INSTALLER
+  /usr/local/lib/python2.7/dist-packages/docker_py-1.10.6.dist-info/METADATA
+  /usr/local/lib/python2.7/dist-packages/docker_py-1.10.6.dist-info/RECORD
+  /usr/local/lib/python2.7/dist-packages/docker_py-1.10.6.dist-info/WHEEL
+  /usr/local/lib/python2.7/dist-packages/docker_py-1.10.6.dist-info/metadata.json
+  /usr/local/lib/python2.7/dist-packages/docker_py-1.10.6.dist-info/top_level.txt
+Proceed (y/n)? y
+  Successfully uninstalled docker-py-1.10.6
+The directory '/home/ubuntu/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+You are using pip version 8.1.2, however version 9.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+ubuntu@ip-10-3-0-103:~$ sudo pip install --force -U docker-compose docker
+The directory '/home/ubuntu/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/ubuntu/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Collecting docker-compose
+/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:318: SNIMissingWarning: An HTTPS request has been made, but the SNI (Subject Name Indication) extension to TLS is not available on this platform. This may cause the server to present an incorrect TLS certificate, which can cause validation failures. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#snimissingwarning.
+  SNIMissingWarning
+/usr/local/lib/python2.7/dist-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:122: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+  Downloading docker_compose-1.10.0-py2.py3-none-any.whl (81kB)
+    100% |████████████████████████████████| 81kB 6.9MB/s
+Collecting docker
+  Downloading docker-2.0.1-py2.py3-none-any.whl (95kB)
+    100% |████████████████████████████████| 102kB 10.3MB/s
+Collecting PyYAML<4,>=3.10 (from docker-compose)
+  Downloading PyYAML-3.12.tar.gz (253kB)
+    100% |████████████████████████████████| 256kB 4.6MB/s
+Collecting websocket-client<1.0,>=0.32.0 (from docker-compose)
+  Downloading websocket_client-0.40.0.tar.gz (196kB)
+    100% |████████████████████████████████| 204kB 6.0MB/s
+Collecting backports.ssl-match-hostname>=3.5; python_version < "3.5" (from docker-compose)
+  Downloading backports.ssl_match_hostname-3.5.0.1.tar.gz
+Collecting cached-property<2,>=1.2.0 (from docker-compose)
+  Downloading cached_property-1.3.0-py2.py3-none-any.whl
+Collecting dockerpty<0.5,>=0.4.1 (from docker-compose)
+  Downloading dockerpty-0.4.1.tar.gz
+Collecting requests!=2.11.0,<2.12,>=2.6.1 (from docker-compose)
+  Downloading requests-2.11.1-py2.py3-none-any.whl (514kB)
+    100% |████████████████████████████████| 522kB 2.5MB/s
+Collecting ipaddress>=1.0.16; python_version < "3.3" (from docker-compose)
+  Downloading ipaddress-1.0.18-py2-none-any.whl
+Collecting colorama<0.4,>=0.3.7 (from docker-compose)
+  Downloading colorama-0.3.7-py2.py3-none-any.whl
+Collecting enum34<2,>=1.0.4; python_version < "3.4" (from docker-compose)
+  Downloading enum34-1.1.6-py2-none-any.whl
+Collecting six<2,>=1.3.0 (from docker-compose)
+  Downloading six-1.10.0-py2.py3-none-any.whl
+Collecting texttable<0.9,>=0.8.1 (from docker-compose)
+  Downloading texttable-0.8.7.tar.gz
+Collecting jsonschema<3,>=2.5.1 (from docker-compose)
+  Downloading jsonschema-2.5.1-py2.py3-none-any.whl
+Collecting docopt<0.7,>=0.6.1 (from docker-compose)
+  Downloading docopt-0.6.2.tar.gz
+Collecting docker-pycreds>=0.2.1 (from docker)
+  Downloading docker_pycreds-0.2.1-py2.py3-none-any.whl
+Collecting functools32; python_version == "2.7" (from jsonschema<3,>=2.5.1->docker-compose)
+  Downloading functools32-3.2.3-2.zip
+Installing collected packages: PyYAML, six, backports.ssl-match-hostname, websocket-client, ipaddress, requests, docker-pycreds, docker, cached-property, dockerpty, colorama, enum34, texttable, functools32, jsonschema, docopt, docker-compose
+  Found existing installation: PyYAML 3.12
+    Uninstalling PyYAML-3.12:
+      Successfully uninstalled PyYAML-3.12
+  Running setup.py install for PyYAML ... done
+  Found existing installation: six 1.10.0
+    Uninstalling six-1.10.0:
+      Successfully uninstalled six-1.10.0
+  Found existing installation: backports.ssl-match-hostname 3.5.0.1
+    Uninstalling backports.ssl-match-hostname-3.5.0.1:
+      Successfully uninstalled backports.ssl-match-hostname-3.5.0.1
+  Running setup.py install for backports.ssl-match-hostname ... done
+  Found existing installation: websocket-client 0.40.0
+    Uninstalling websocket-client-0.40.0:
+      Successfully uninstalled websocket-client-0.40.0
+  Running setup.py install for websocket-client ... done
+  Found existing installation: ipaddress 1.0.18
+    Uninstalling ipaddress-1.0.18:
+      Successfully uninstalled ipaddress-1.0.18
+  Found existing installation: requests 2.11.1
+    Uninstalling requests-2.11.1:
+      Successfully uninstalled requests-2.11.1
+  Found existing installation: docker-pycreds 0.2.1
+    Uninstalling docker-pycreds-0.2.1:
+      Successfully uninstalled docker-pycreds-0.2.1
+  Found existing installation: docker 2.0.1
+    Uninstalling docker-2.0.1:
+      Successfully uninstalled docker-2.0.1
+  Found existing installation: cached-property 1.3.0
+    Uninstalling cached-property-1.3.0:
+      Successfully uninstalled cached-property-1.3.0
+  Found existing installation: dockerpty 0.4.1
+    Uninstalling dockerpty-0.4.1:
+      Successfully uninstalled dockerpty-0.4.1
+  Running setup.py install for dockerpty ... done
+  Found existing installation: colorama 0.3.7
+    Uninstalling colorama-0.3.7:
+      Successfully uninstalled colorama-0.3.7
+  Found existing installation: enum34 1.1.6
+    Uninstalling enum34-1.1.6:
+      Successfully uninstalled enum34-1.1.6
+  Found existing installation: texttable 0.8.7
+    Uninstalling texttable-0.8.7:
+      Successfully uninstalled texttable-0.8.7
+  Running setup.py install for texttable ... done
+  Found existing installation: functools32 3.2.3.post2
+    Uninstalling functools32-3.2.3.post2:
+      Successfully uninstalled functools32-3.2.3.post2
+  Running setup.py install for functools32 ... done
+  Found existing installation: jsonschema 2.5.1
+    Uninstalling jsonschema-2.5.1:
+      Successfully uninstalled jsonschema-2.5.1
+  Found existing installation: docopt 0.6.2
+    Uninstalling docopt-0.6.2:
+      Successfully uninstalled docopt-0.6.2
+  Running setup.py install for docopt ... done
+  Found existing installation: docker-compose 1.10.0
+    Uninstalling docker-compose-1.10.0:
+      Successfully uninstalled docker-compose-1.10.0
+Successfully installed PyYAML-3.12 backports.ssl-match-hostname-3.5.0.1 cached-property-1.3.0 colorama-0.3.7 docker-2.0.1 docker-compose-1.10.0 docker-pycreds-0.2.1 dockerpty-0.4.1 docopt-0.6.2 enum34-1.1.6 functools32-3.2.3.post2 ipaddress-1.0.18 jsonschema-2.5.1 requests-2.11.1 six-1.10.0 texttable-0.8.7 websocket-client-0.40.0
+You are using pip version 8.1.2, however version 9.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+ubuntu@ip-10-3-0-103:~$ docker-compose pull
+Pulling moo (ubuntu:latest)...
+latest: Pulling from library/ubuntu
+Digest: sha256:7a64bc9c8843b0a8c8b8a7e4715b7615e4e1b0d8ca3c7e7a76ec8250899c397a
+Status: Image is up to date for ubuntu:latest
+ubuntu@ip-10-3-0-103:~$

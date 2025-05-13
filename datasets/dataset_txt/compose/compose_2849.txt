@@ -1,0 +1,7 @@
+fredrikaverpil commented on 2 Feb 2016
+It would be useful to be able to define a static IP address for a container within the docker-compose.yml.
+I see that docker run --ip xxx.xxx.xxx.xxx is now available in docker 1.10.0-rc2. More details in the merged pull request: moby/moby#19001
+Example:
+docker network create --driver=bridge --subnet=192.168.0.0/24 --gateway=192.168.0.1 mynet
+docker run --ip=192.168.0.10 --net=mynet -ti some_image
+11

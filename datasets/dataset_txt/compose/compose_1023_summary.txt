@@ -1,0 +1,1 @@
+compose silently ignore stop_grace_period when extends or multiple compose files

@@ -1,0 +1,8 @@
+iamKurt commented on 15 Apr 2016
+Just noticed that there is an error from the compose up command but still says that it's trying to attach. What's it trying to attach to here?
+docker-compose up --build
+Recreating poc_1
+
+ERROR: for poc  Container command './entrypoint.sh' not found or does not exist.
+Attaching to
+Might be just erroneous output.

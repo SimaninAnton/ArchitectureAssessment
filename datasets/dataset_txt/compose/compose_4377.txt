@@ -1,0 +1,3 @@
+Contributor
+marksteve commented on 4 Mar 2014
+Most of the time, I clean up containers create with fig run.

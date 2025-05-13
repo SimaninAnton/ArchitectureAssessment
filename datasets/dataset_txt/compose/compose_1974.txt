@@ -1,0 +1,33 @@
+Member
+StefanScherer commented on 29 Oct 2016
+Starting twelve containers with docker-compose 1.9.0-rc2 still shows a problem. Follow up of #4082
+PS C:\xxxxx> docker-compose up -d
+Creating xxxxx_consul_1
+Creating xxxxx_db_1
+Creating xxxxx_service1_1
+Creating xxxxx_service2_1
+Creating xxxxx_service3_1
+Creating xxxxx_service4_1
+Creating xxxxx_service5_1
+Creating xxxxx_cli_1
+
+ERROR: for service6  (121, 'WaitNamedPipe', 'The semaphore timeout period has expired.')
+
+ERROR: for service7  (121, 'WaitNamedPipe', 'The semaphore timeout period has expired.')
+
+ERROR: for service8  (121, 'WaitNamedPipe', 'The semaphore timeout period has expired.')
+
+ERROR: for service9  (121, 'WaitNamedPipe', 'The semaphore timeout period has expired.')
+
+ERROR: for service3  (121, 'WaitNamedPipe', 'The semaphore timeout period has expired.')
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 65, in main
+  File "compose\cli\main.py", line 117, in perform_command
+  File "compose\cli\main.py", line 849, in up
+  File "compose\project.py", line 400, in up
+  File "compose\parallel.py", line 64, in parallel_execute
+pywintypes.error: (121, 'WaitNamedPipe', 'The semaphore timeout period has expired.')
+docker-compose returned -1
+PS C:\xxxxx> docker-compose --version
+docker-compose version 1.9.0-rc2, build d41f869

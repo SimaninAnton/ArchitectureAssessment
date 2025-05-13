@@ -1,0 +1,25 @@
+typik89 commented on 30 Oct 2017
+I'd like to write my environment variable in multiple lines because it is too long and it would be easier to read when it would be written in multiple lines.
+E.g. I have Docker file:
+FROM openjdk
+COPY ./container /opt
+WORKDIR /opt
+CMD java ${JAVA_OPTIONS} -cp "./:lib/" mypackage.AppMain
+I'd like to have an opportunity to write in my compose file something like this:
+version: '3'
+services:
+myservice:
+image: myregistry/myapp
+container_name: myservice
+environment:
+- JAVA_OPTIONS="\
+-Dcom.sun.management.jmxremote \
+-Djava.rmi.server.hostname=127.0.0.1 \
+-Dcom.sun.management.jmxremote.port=7001 \
+-Dcom.sun.management.jmxremote.rmi.port=7001 \
+-Dcom.sun.management.jmxremote.local.only=false \
+-Dcom.sun.management.jmxremote.authenticate=false \
+-Dcom.sun.management.jmxremote.ssl=false"
+ports:
+- 7001:7001
+Is it possible and how to do this?

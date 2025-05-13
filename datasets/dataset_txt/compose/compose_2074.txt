@@ -1,0 +1,5 @@
+augnustin commented on 12 Sep 2016
+As from this SO question:
+I like to docker-compose up first to check that everything started correctly.
+Once everything's fine, I'd like to being able to send the command to daemon mode, without having to docker-compose stop and docker-compose -d up (two steps + service interruption).
+1

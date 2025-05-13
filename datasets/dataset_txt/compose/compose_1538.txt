@@ -1,0 +1,14 @@
+Robin479 commented on 6 Apr 2017 •
+edited
+Our code-project is structure such that all the docker related stuff resides in a sub-folder ./docker including ./docker/docker-compose.yml and various files and folders (e.g. ./docker/nginx/nginx.conf) to be volume-mounted by docker-compose using relative paths.
+Our build job used to invoke docker-compose from the project root (e.g. /workspace/project) with the -f ./docker/docker-compose.yml option, which started to fail since the update to 1.12.0, complaining that it couldn't find /workspace/project/nginx/ for mounting, which clearly should have been /workspace/project/docker/nginx/. I can change directory to /workspace/project/docker to avoid using the -f … option, to work around the problem. However, this clearly is a bug introduced in recent docker-compose, since nothing has changed in our project except the update to 1.12.0 (from 1.11.0, I guess).
+ERROR: build path /workspace/project/nginx either does not exist, is not accessible, or is not a valid URL.
+After some research I found, that 1.12.0 introduced the --project-directory option, so I tried docker-compose --project-directory ./docker from the project-root /workspace/project as before. It doesn't appear to work either, complaining that it couldn't find a suitable docker-compose.yml in this directory. Presumably, this directory mentioned is falsely assumed to be /workspace/project (=PWD), and docker-compose fails to properly check /workspace/project/docker as instructed (or maybe, I misunderstood the intended function of --project-directory …, in which case the -f … bug still applies).
+ERROR:
+Can't find a suitable configuration file in this directory or any
+parent. Are you in the right directory?
+    Supported filenames: docker-compose.yml, docker-compose.yaml
+Using absolute paths as in docker-compose -f /workspace/project/docker/docker-compose.yml or docker-compose --project-directory /workspace/project/docker won't work either, except iff PWD=/workspace/project/docker, which renders -f and --project-directory completely useless.
+I shall add that all mentioned paths are on the same file-system, and there are no soft-links involved.
+For now, the only way to work around these problems is to cd /workspace/project/docker before every (parameterless) docker-compose invocation.
+6

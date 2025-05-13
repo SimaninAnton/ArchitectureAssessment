@@ -1,0 +1,2 @@
+cdalexndr commented on 7 Oct 2019
+Documentation doesn't mention the unless-stopped option in restart section.

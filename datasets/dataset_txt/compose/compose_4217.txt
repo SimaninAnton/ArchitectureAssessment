@@ -1,0 +1,8 @@
+xeor commented on 23 Aug 2014
+Docker v1.2 just got released and brings in some new functionality which needs to be incorporated into fig.
+As far as I can see, fig now lacks support for:
+--restart
+--cap-add
+--cap-drop
+--device
+See http://blog.docker.com/2014/08/announcing-docker-1-2-0/ for the announcement.

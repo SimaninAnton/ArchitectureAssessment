@@ -1,0 +1,15 @@
+beephotography commented on 18 Jan 2018
+This works:
+version: '2.2'
+services:
+    template:
+      image: tutum/hello-world
+      scale: 2
+This doesn't work
+version: '3'
+services:
+    template:
+      image: tutum/hello-world
+      scale: 2
+but I didn't find any documentation about it on https://docs.docker.com/compose/compose-file/compose-versioning/#version-3
+1

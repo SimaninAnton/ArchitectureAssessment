@@ -1,0 +1,65 @@
+petr-ujezdsky commented on 3 Aug 2018
+Description of the issue
+When running docker-compose up tester & this command still listens to CTRL+C in subsequent programs (eg. less).
+The same applies to docker-compose logs -f tester | less -R +F (-R for colors, +F for follow). When I hit CTRL+C in the less to stop following the input and do some searching, the logs command aborts and stops giving the less new data.
+I am reading the logs using this approach because there is no way to show only logs after the boot time. But even when the #2227 (-since=boot option I am desperately waiting for) will be implemented, the less could not be used to easy navigate the logs due to this bug.
+Context information (for bug reports)
+Output of "docker-compose version"
+$ docker-compose version
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+$ docker version
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:05:26 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:13:46 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of "docker-compose config"
+$ docker-compose config
+services:
+  tester:
+    command: ping localhost
+    image: alpine:3.6
+version: '3.0'
+Steps to reproduce the issue
+create the docker-compose.yml file with content defined above
+create simple start-up shell script test.sh
+#!/bin/bash
+
+docker-compose up tester 2>&1 >> "temp.log" &
+less -R +F "temp.log"
+run the script test.sh, in window A
+see the expected pinging and the following feature of less command
+in another window, B, run command tail -f temp.log
+see the expected pinging and the following feature of tail -f command
+back to window A, hit CTRL+C to stop following, allows to navigate the log using arrow keys (less features)
+hit SHIFT+F to continue following
+Observed result
+The service was stopped (window B shows no more pinging). It somehow catched the signal.
+Expected result
+The service continue to work independently on the actions done in less command.
+Additional information
+The docker-compose logs command has same bug:
+run docker-compose logs -f tester | less -R +F
+hit CTRL+C to stop following, allows to navigate the log using arrow keys
+hit SHIFT+F to continue following
+the docker-compose logs command ended giving no data from now on
+OS version / distribution, docker-compose install method, etc.
+macOS High Sierra 10.13.6 (17G65)
+Docker installed via homebrew.

@@ -1,0 +1,5 @@
+zhucegep commented on 6 Mar 2015
+I create a group serive containers by use docker-compose.
+doker-compose will stop all container of this group when I use docker stop onecontainer to stop one container.
+Here is two way to prevent it,run docker-compose up with -d or close the windows whick run docker-compose up.
+Is a bug?

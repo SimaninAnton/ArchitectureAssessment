@@ -1,0 +1,29 @@
+codemang commented on 29 Aug 2017 •
+edited
+I've been grappling with this error for a few hours now.
+$ docker-compose
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.15.0', 'console_scripts', 'docker-compose')()
+  File "/usr/local/Cellar/docker-compose/1.15.0/libexec/lib/python2.7/site-packages/pkg_resources/__init__.py", line 564, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/local/Cellar/docker-compose/1.15.0/libexec/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2652, in load_entry_point
+    return ep.load()
+  File "/usr/local/Cellar/docker-compose/1.15.0/libexec/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2306, in load
+    return self.resolve()
+  File "/usr/local/Cellar/docker-compose/1.15.0/libexec/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2312, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/local/Cellar/docker-compose/1.15.0/libexec/lib/python2.7/site-packages/compose/cli/__init__.py", line 23, in <module>
+    env=env
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/subprocess.py", line 710, in __init__
+    errread, errwrite)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/subprocess.py", line 1334, in _execute_child
+    child_exception = pickle.loads(data)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pickle.py", line 1382, in loads
+    return Unpickler(file).load()
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pickle.py", line 858, in load
+    dispatch[key](self)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pickle.py", line 966, in load_string
+    raise ValueError, "insecure string pickle"
+ValueError: insecure string pickle
+I've tried uninstalling/re-installing my existing suite of docker tools via homebrew but to no avail. I'm running on OSX Sierra. Please let me know if I can provide any other information to help solve the problem.

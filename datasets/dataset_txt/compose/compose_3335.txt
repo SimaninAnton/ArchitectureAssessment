@@ -1,0 +1,2 @@
+edwinlunando commented on 30 Aug 2015
+I need TTY support for up command make make byebug working for my Rails application.

@@ -1,0 +1,4 @@
+fxdgear commented on 26 Mar 2016
+When using multiple compose files, and in those files there's a "common" service which gets extended. It causes issues where paths get stacked and can not be found:
+for example see this:
+https://github.com/fxdgear/composebug

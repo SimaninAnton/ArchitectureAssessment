@@ -1,0 +1,2 @@
+CircleCode commented on 22 Dec 2015
+as I understand it, -p overwrite the project name, but if you use ${COMPOSE_PROJECT_NAME} in your docker-compose.yml, it won't use the -p value

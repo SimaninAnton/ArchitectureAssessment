@@ -1,0 +1,60 @@
+mayppong commented on 25 Jul 2018
+Description of the issue
+docker-compose CLI did not provide me with the error message related to image name violating lowercase letters only
+11:28:30 [mpongpitpitak]@Mays-MBP: ~/Projects/dataservices/SdkMetrics (@work 0 | 1 | 4)
+>> docker-compose build release
+Building release
+11:28:36 [mpongpitpitak]@Mays-MBP: ~/Projects/dataservices/SdkMetrics (@work 0 | 1 | 4)
+>> vim Dockerfile
+11:36:02 [mpongpitpitak]@Mays-MBP: ~/Projects/dataservices/SdkMetrics (@work 0 | 1 | 4)
+>> docker build -t dataservices/SdkMetrics:0.1.0 ./
+invalid argument "dataservices/SdkMetrics:0.1.0" for "-t, --tag" flag: invalid reference format: repository name must be lowercase
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+services:
+  release:
+    build:
+      context: /Users/mpongpitpitak/Projects/dataservices/SdkMetrics
+    image: dataservices/SdkMetrics:0.1.0
+    volumes:
+    - /Users/mpongpitpitak/Projects/dataservices/SdkMetrics:/SdkMetrics:rw
+    working_dir: /SdkMetrics
+version: '3.2'
+Steps to reproduce the issue
+name an image in a docker-compose file with upper case letter(s)
+run docker-compose build
+Observed result
+The CLI outputs Building <service name>, then nothing.
+Expected result
+An error message about image/repository name violation
+Stacktrace / full error message
+n/a
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Mac OS 10.13.6

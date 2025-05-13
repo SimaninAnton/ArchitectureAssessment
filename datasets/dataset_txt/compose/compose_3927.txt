@@ -1,0 +1,2 @@
+immortal-tofu commented on 12 Feb 2015
+Since Docker allows multiple Dockerfile in a single directory, it would be great if docker-compose allows a Dockerfile as param for "build" instead of a directory.

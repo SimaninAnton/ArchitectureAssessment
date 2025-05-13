@@ -1,0 +1,33 @@
+asmaps commented on 21 Nov 2014
+Maybe this is a bug, maybe I'm just holding it wrong... But for me it seems to make a difference to use fig up or fig run even if there is just one container. See this example:
+asmaps@asmaps-x240 ~/git/morgana (git)-[master] % cat fig.yml
+morgana:
+  build: .
+  command: "grunt watch"
+  volumes:
+    - app:/opt/morgana/app
+    - dist:/opt/morgana/dist
+
+asmaps@asmaps-x240 ~/git/morgana (git)-[master] % fig up
+Recreating morgana_morgana_1...
+Attaching to morgana_morgana_1
+morgana_1 | grunt-cli: The grunt command line interface. (v0.1.13)
+morgana_1 |
+morgana_1 | Fatal error: Unable to find local grunt.
+morgana_1 |
+morgana_1 | If you're seeing this message, either a Gruntfile wasn't found or grunt
+morgana_1 | hasn't been installed locally to your project. For more information about
+morgana_1 | installing and configuring grunt, please see the Getting Started guide:
+morgana_1 |
+morgana_1 | http://gruntjs.com/getting-started
+morgana_morgana_1 exited with code 99
+Gracefully stopping... (press Ctrl+C again to force)
+
+asmaps@asmaps-x240 ~/git/morgana (git)-[master] % fig run morgana grunt watch
+Running "watch" task
+Waiting...
+
+asmaps@asmaps-x240 ~/git/morgana (git)-[master] % fig run morgana
+Running "watch" task
+Waiting...
+How is it possible that it works with fig up but raises an error on fig up? Afaik the 2 commands should do the same if there is just one container...

@@ -1,0 +1,58 @@
+chrissound commented on 28 Mar 2017
+version: '3'
+
+services:
+  test:
+    image: chris
+    ports:
+      - 8080:80
+sudo docker-compose up
+Pulling test (chris:latest)...
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/site-packages/docker/api/client.py", line 214, in _raise_for_status
+    response.raise_for_status()
+  File "/usr/lib/python3.6/site-packages/requests/models.py", line 909, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: http+docker://localunixsocket/v1.25/images/create?tag=latest&fromImage=chris
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/site-packages/compose/cli/errors.py", line 44, in handle_connection_errors
+    yield
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 876, in up
+    remove_orphans=remove_orphans)
+  File "/usr/lib/python3.6/site-packages/compose/project.py", line 395, in up
+    svc.ensure_image_exists(do_build=do_build)
+  File "/usr/lib/python3.6/site-packages/compose/service.py", line 316, in ensure_image_exists
+    self.pull()
+  File "/usr/lib/python3.6/site-packages/compose/service.py", line 896, in pull
+    output = self.client.pull(repo, tag=tag, stream=True)
+  File "/usr/lib/python3.6/site-packages/docker/api/image.py", line 370, in pull
+    self._raise_for_status(response)
+  File "/usr/lib/python3.6/site-packages/docker/api/client.py", line 216, in _raise_for_status
+    raise create_api_error_from_http_exception(e)
+  File "/usr/lib/python3.6/site-packages/docker/errors.py", line 30, in create_api_error_from_http_exception
+    raise cls(e, response=response, explanation=explanation)
+docker.errors.ImageNotFound: 404 Client Error: Not Found for url: http+docker://localunixsocket/v1.25/images/create?tag=latest&fromImage=chris ("repository chris not found: does not exist or no pull access")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 11, in <module>
+    load_entry_point('docker-compose==1.11.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 64, in main
+    command()
+  File "/usr/lib/python3.6/site-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/usr/lib/python3.6/contextlib.py", line 100, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/usr/lib/python3.6/site-packages/compose/cli/errors.py", line 54, in handle_connection_errors
+    log_api_error(e, client.api_version)
+  File "/usr/lib/python3.6/site-packages/compose/cli/errors.py", line 71, in log_api_error
+    if b'client is newer than server' not in e.explanation:
+TypeError: 'in <string>' requires string as left operand, not bytes
+docker-compose version 1.11.2, build dfed245
+Docker version 17.03.0-ce, build 60ccb2265b

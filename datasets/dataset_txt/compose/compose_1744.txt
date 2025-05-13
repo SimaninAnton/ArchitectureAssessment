@@ -1,0 +1,14 @@
+scne commented on 29 Jan 2017
+I get this error after type docker-compose --version. I've installed docker-compose with pip
+$ docker-compose --version
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 7, in <module>
+    from compose.cli.main import main
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/main.py", line 20, in <module>
+    from ..bundle import get_image_digests
+  File "/usr/local/lib/python2.7/dist-packages/compose/bundle.py", line 13, in <module>
+    from .network import get_network_defs_for_service
+  File "/usr/local/lib/python2.7/dist-packages/compose/network.py", line 7, in <module>
+    from docker.types import IPAMConfig
+ImportError: cannot import name IPAMConfig
+4

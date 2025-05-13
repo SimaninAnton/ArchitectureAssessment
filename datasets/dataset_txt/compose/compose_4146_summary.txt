@@ -1,0 +1,1 @@
+Add an option to the YAML file to specify an alternative signal to stop containers

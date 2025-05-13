@@ -1,0 +1,6 @@
+ain commented on 16 Jun 2016
+In addition to
+$ docker-compose config --services
+it'd be nice to have
+$ docker-compose config --volumes
+listing the named volumes similarly to services.

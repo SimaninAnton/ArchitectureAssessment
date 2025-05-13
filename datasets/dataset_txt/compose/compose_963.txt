@@ -1,0 +1,21 @@
+sanjaysiddhanti commented on 5 Jan 2018 •
+edited
+From the v1.10.1 release notes, one of the notes is "Fixed a bug where Compose would occasionally crash while streaming logs when containers would stop or restart".
+Can you please post the initial issue that has more details about this bug, or elaborate on it here? Sorry if this is discoverable somewhere - I searched the past issues in this repo and looked at the code diff for that version before posting here.
+I'm running docker-compose 1.9.0 and think that I may be seeing this issue. I get an exception with the below traceback unpredictably about once per day:
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 150, in tail_container_logs
+  File "compose/cli/log_printer.py", line 181, in wait_on_exit
+  File "compose/container.py", line 239, in wait
+  File "site-packages/docker/utils/decorators.py", line 21, in wrapped
+  File "site-packages/docker/api/container.py", line 455, in wait
+  File "site-packages/docker/utils/decorators.py", line 47, in inner
+  File "site-packages/docker/client.py", line 135, in _post
+  File "site-packages/requests/sessions.py", line 522, in post
+  File "site-packages/requests/sessions.py", line 475, in request
+  File "site-packages/requests/sessions.py", line 596, in send
+  File "site-packages/requests/adapters.py", line 473, in send
+ConnectionError: ('Connection aborted.', error(2, 'No such file or directory'))
+Thank you!

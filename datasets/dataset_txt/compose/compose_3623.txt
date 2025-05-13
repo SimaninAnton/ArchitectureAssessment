@@ -1,0 +1,20 @@
+MBuffenoir commented on 24 May 2015
+Example docker-compose.yml:
+dbdata:
+  image: postgres:9.3
+  command: echo "data only container (might already exists)"
+
+db:
+  image: postgres:9.3
+  environment:
+    DB_PASSWORD: postgres
+    DB_USER: postgres
+    DB_NAME: postgres
+  ports:
+    - "5432:5432"
+  volumes_from: 
+    - dbdata
+Error raised is:
+A service can not mount itself as volume
+I believe the error is due to the usage of "in" here:
+https://github.com/docker/compose/blob/master/compose/project.py#L38

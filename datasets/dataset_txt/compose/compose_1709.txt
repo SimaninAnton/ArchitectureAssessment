@@ -1,0 +1,134 @@
+Member
+StefanScherer commented on 9 Feb 2017
+It seems like docker-compose.exe does not work in a Windows container as it seems to be bundled with Python 2 binary.
+I just had to rerun a test for the Chocolatey package 1.10.1 as the download didn't work in the approval. So instead of spinning up a Windows VM I just took a Windows Container for that manual test. Well the package works and downloads the exe file, but running docker-compose --version shows an error:
+$ docker run -it stefanscherer/chocolatey powershell
+
+Windows PowerShell 
+Copyright (C) 2016 Microsoft Corporation. All rights reserved.
+
+PS C:\> choco install -y docker-compose -pre -version 1.10.1
+Parsing -version resulted in error (converted to warning):
+ Cannot bundle unregistered option '-e'.
+Chocolatey v0.10.3
+Installing the following packages:
+docker-compose
+
+docker-compose v1.10.1 - Possibly broken
+docker-compose package files install completed. Performing other installation s
+eps.                                                                           tDownloading docker-compose 64 bit
+  from 'https://github.com/docker/compose/releases/download/1.10.1/docker-compo
+e-Windows-x86_64.exe'                                                          s  File "compose\cli\docopt_command.py", line 12, in docopt_full_help
+  File "site-packages\docopt.py", line 575, in docopt
+  File "site-packages\docopt.py", line 484, in extras
+  File "site-packages\colorama\ansitowin32.py", line 40, in write
+  File "site-packages\colorama\ansitowin32.py", line 169, in write_and_convert
+  File "site-packages\colorama\ansitowin32.py", line 174, in write_plain_text
+LookupError: unknown encoding: cp65001
+docker-compose returned -1
+PS C:\> docker-compose version
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 88, in main
+  File "compose\cli\main.py", line 129, in perform_command
+  File "compose\cli\main.py", line 904, in version
+  File "site-packages\colorama\ansitowin32.py", line 40, in write
+  File "site-packages\colorama\ansitowin32.py", line 141, in write
+  File "site-packages\colorama\ansitowin32.py", line 169, in write_and_convert
+  File "site-packages\colorama\ansitowin32.py", line 174, in write_plain_text
+LookupError: unknown encoding: cp65001
+docker-compose returned -1
+PS C:\>
+Using Python 3.6.0 and pip works instead, also in a Windows container:
+$ docker run -it python:windowsservercore powershell
+Unable to find image 'python:windowsservercore' locally
+windowsservercore: Pulling from library/python
+3889bb8d808b: Already exists 
+3430754e4d17: Already exists 
+e9d9d048a108: Pull complete 
+f67b557e129b: Pull complete 
+c27e2637f929: Pull complete 
+ed3192a65c30: Pull complete 
+c1c824b35abd: Pull complete 
+be96214fda89: Pull complete 
+Digest: sha256:308b16794329b687482f9469e5d60962f0f8174f43f9953f815cee802b0d8c86
+Status: Downloaded newer image for python:windowsservercore
+
+Windows PowerShell 
+Copyright (C) 2016 Microsoft Corporation. All rights reserved.
+
+PS C:\> python --version
+Python 3.6.0
+
+PS C:\> pip install docker-compose
+Collecting docker-compose
+Collecting jsonschema<3,>=2.5.1 (from docker-compose)
+  Downloading jsonschema-2.6.0-py2.py3-none-any.whl
+Collecting requests!=2.11.0,<2.12,>=2.6.1 (from docker-compose)
+  Downloading requests-2.11.1-py2.py3-none-any.whl (514kB)
+    100% |????????????????????????????????| 522kB 1.7MB/s
+Collecting dockerpty<0.5,>=0.4.1 (from docker-compose)
+  Downloading dockerpty-0.4.1.tar.gz
+Collecting cached-property<2,>=1.2.0 (from docker-compose)
+  Downloading cached_property-1.3.0-py2.py3-none-any.whl
+Collecting PyYAML<4,>=3.10 (from docker-compose)
+  Downloading PyYAML-3.12.tar.gz (253kB)
+    100% |????????????????????????????????| 256kB 1.9MB/s
+Collecting websocket-client<1.0,>=0.32.0 (from docker-compose)
+  Downloading websocket_client-0.40.0.tar.gz (196kB)
+    100% |????????????????????????????????| 204kB 3.1MB/s
+Collecting six<2,>=1.3.0 (from docker-compose)
+  Downloading six-1.10.0-py2.py3-none-any.whl
+Collecting colorama<0.4,>=0.3.7 (from docker-compose)
+  Downloading colorama-0.3.7-py2.py3-none-any.whl
+Collecting docopt<0.7,>=0.6.1 (from docker-compose)
+  Downloading docopt-0.6.2.tar.gz
+Collecting docker<3.0,>=2.0.2 (from docker-compose)
+  Downloading docker-2.0.2-py2.py3-none-any.whl (96kB)
+    100% |????????????????????????????????| 102kB 4.2MB/s
+Collecting texttable<0.9,>=0.8.1 (from docker-compose)
+  Downloading texttable-0.8.7.tar.gz
+Collecting docker-pycreds>=0.2.1 (from docker<3.0,>=2.0.2->docker-compose)
+  Downloading docker_pycreds-0.2.1-py2.py3-none-any.whl
+Installing collected packages: jsonschema, requests, six, dockerpty, cached-pro
+erty, PyYAML, websocket-client, colorama, docopt, docker-pycreds, docker, texttp
+ble, docker-compose                                                            a  Running setup.py install for dockerpty ... done
+  Running setup.py install for PyYAML ... done
+  Running setup.py install for websocket-client ... done
+  Running setup.py install for docopt ... done
+  Running setup.py install for texttable ... done
+Successfully installed PyYAML-3.12 cached-property-1.3.0 colorama-0.3.7 docker-
+.0.2 docker-compose-1.11.0 docker-pycreds-0.2.1 dockerpty-0.4.1 docopt-0.6.2 js2
+nschema-2.6.0 requests-2.11.1 six-1.10.0 texttable-0.8.7 websocket-client-0.40.o                                                                               0
+
+PS C:\> docker-compose --version
+docker-compose version 1.11.0, build 6de1806
+I also tested the latest binary without Chocolatey in a Windows container:
+$ docker run -it microsoft/winowsservercore powershell
+
+Windows PowerShell 
+Copyright (C) 2016 Microsoft Corporation. All rights reserved.
+
+PS C:\> $ProgressPreference = 'SilentlyContinue'
+
+PS C:\> iwr -useb -outfile docker-compose.exe https://github.com/docker/compose/
+releases/download/1.11.0/docker-compose-Windows-x86_64.exe
+
+PS C:\> .\docker-compose.exe --version
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose\cli\main.py", line 85, in main
+  File "compose\cli\main.py", line 116, in dispatch
+  File "compose\cli\docopt_command.py", line 25, in parse
+  File "compose\cli\docopt_command.py", line 12, in docopt_full_help
+  File "site-packages\docopt.py", line 575, in docopt
+  File "site-packages\docopt.py", line 484, in extras
+  File "site-packages\colorama\ansitowin32.py", line 40, in write
+  File "site-packages\colorama\ansitowin32.py", line 141, in write
+  File "site-packages\colorama\ansitowin32.py", line 169, in write_and_convert
+  File "site-packages\colorama\ansitowin32.py", line 174, in write_plain_text
+LookupError: unknown encoding: cp65001
+Failed to execute script docker-compose
+PS C:\> 
+So is it possible to bundle the exe file with Python 3 to fix that problem?
+1

@@ -1,0 +1,20 @@
+terion-name commented on 19 Aug 2015
+Ok, trying to get a workaround of other issue (#1883) I've faced another.
+New file structure:
+project
+|-environments
+|-|-production-compose.yml
+|-production.docker
+production-compose.yml:
+web:
+  build: ../../
+  dockerfile: production.docker
+results in:
+Cannot locate specified Dockerfile: production.docker
+other variant:
+web:
+  build: ../../
+  dockerfile: ../../production.docker
+results in:
+The Dockerfile (../../production.docker) must be within the build context
+So, it looks for dockerfile relative to compose.yml, but it ignores specified build context. I understand that it will work if place all in root, but such polution of project root is not good. And it kills all advantages of -f option

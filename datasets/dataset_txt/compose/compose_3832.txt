@@ -1,0 +1,8 @@
+Contributor
+aleksandr-vin commented on 16 Mar 2015
+How to reproduce:
+shell 1> docker-compose scale xxx=1
+shell 2> docker-compose logs xxx
+shell 1> docker-compose scale xxx=2
+shell 1> (make xxx service produce logs in second container)
+expected: shell 2 must show ''xxx_2 | ..." logs as well

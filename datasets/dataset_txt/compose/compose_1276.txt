@@ -1,0 +1,4 @@
+povils commented on 4 Aug 2017 •
+edited
+Hi, I think this question is more from design point of view.
+I know that you can isolate containers with -p or COMPOSE_PROJECT_NAME environment variable. But in my case, I have many containers defined in docker-compose file which are all linked. And when I run docker and tests inside the container I could access another container by its container name, which I set it in docker-compose file. So now, of course, I can't run two simultaneous builds with same docker-compose definitions because container names are conflicting. I can't use container IP because containers are restarting. So I'm left with removing container_name setting from config? But when how the application which is in one of the containers can access another container if name is dynamic?

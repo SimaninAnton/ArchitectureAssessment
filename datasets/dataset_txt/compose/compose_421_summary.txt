@@ -1,0 +1,1 @@
+The default naming scheme for containers created by Compose

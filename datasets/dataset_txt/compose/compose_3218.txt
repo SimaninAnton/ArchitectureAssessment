@@ -1,0 +1,6 @@
+marioidival commented on 12 Oct 2015
+Specifically this command, the project is not created on the host
+docker-compose run web django-admin.py startproject composeexample.
+docker-compose --version
+docker-compose version: 1.4.2
+OSX El Capitan

@@ -1,0 +1,19 @@
+altsalt commented on 30 Mar 2016
+Currently, there appears to be no way to add a space character to an env_file entry.
+Here are some of the combinations I have tried:
+VAR=foo bar
+VAR=foo\ bar
+VAR='foo bar'
+VAR="foo bar"
+VAR='foo\ bar'
+VAR={foo bar}
+"VAR='foo bar'"
+'VAR="foo bar"'
+VAR=foo%20bar
+VAR=foo&nbsp;bar
+etc ...
+I am using Docker 1.10.3 and Compose 1.7.0
+This issue seems to be directly related to moby/moby#12997 which looked to be closed unsatisfactorily.
+Another related issue may be: #2854
+Any fix or work-around would be appreciated.
+Thanks!

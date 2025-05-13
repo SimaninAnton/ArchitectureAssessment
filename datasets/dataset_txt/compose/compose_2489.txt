@@ -1,0 +1,26 @@
+iamKurt commented on 14 Apr 2016
+When I force the container stop with Ctrl + C I get an error message. Nothing major though. Here's the error message:
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping poc_1 ... done
+Stopping poc_mongodb_1 ...
+^CTraceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 56, in main
+  File "compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "compose/cli/docopt_command.py", line 26, in dispatch
+  File "compose/cli/main.py", line 191, in perform_command
+  File "compose/cli/main.py", line 667, in up
+  File "contextlib.py", line 35, in __exit__
+  File "compose/cli/main.py", line 782, in up_shutdown_context
+  File "compose/project.py", line 221, in kill
+  File "compose/project.py", line 363, in containers
+  File "site-packages/docker/api/container.py", line 67, in containers
+  File "site-packages/docker/utils/utils.py", line 505, in convert_filters
+  File "json/__init__.py", line 243, in dumps
+  File "json/encoder.py", line 186, in encode
+  File "compose/cli/signals.py", line 12, in shutdown
+compose.cli.signals.ShutdownException
+docker-compose returned -1
+Here's the compose version:
+docker-compose -version
+docker-compose version 1.6.2, build 4d72027

@@ -1,0 +1,1 @@
+sending a kill TERM signal does not result in containers being shut down

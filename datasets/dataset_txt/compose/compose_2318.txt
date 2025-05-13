@@ -1,0 +1,46 @@
+csaftoiu commented on 9 Jun 2016
+The Use Case
+I have a project with two docker-compose files in different directories. The use case is to have a common set of containers in a subdirectory which I can include in other projects.
+The Bug
+Each docker-compose.yml uses build paths relative to the compose file. They work individually. However, when combining both files, the relative paths are all based off the location of the first compose file, instead of relative to the compose file that contains the specification. This basically makes this unworkable.
+How to Reproduce
+See the following project structure (zip file: relative-path.zip)
+MacBook-Pro:relative-path csaftoiu$ ls
+build1             docker-compose.yml subdir
+MacBook-Pro:relative-path csaftoiu$ ls subdir
+build2             docker-compose.yml
+MacBook-Pro:relative-path csaftoiu$ cat build1/Dockerfile
+FROM ubuntu:14.04
+
+MacBook-Pro:relative-path csaftoiu$ cat subdir/build2/Dockerfile
+FROM ubuntu:14.04
+
+MacBook-Pro:relative-path csaftoiu$ cat docker-compose.yml
+version: '2'
+
+services:
+  _build1:
+    build:
+      context: ./build1
+    command: "true"
+
+MacBook-Pro:relative-path csaftoiu$ cat subdir/docker-compose.yml
+version: '2'
+
+services:
+  _build2:
+    build:
+      context: ./build2
+    command: "true"
+The compose files are uncombinable:
+MacBook-Pro:relative-path csaftoiu$ docker-compose -f docker-compose.yml -f subdir/docker-compose.yml run --rm _build1
+ERROR: build path /Users/csaftoiu/tmp/relative-path/build2 either does not exist, is not accessible, or is not a valid URL.
+MacBook-Pro:relative-path csaftoiu$ docker-compose -f docker-compose.yml -f subdir/docker-compose.yml run --rm _build2
+ERROR: build path /Users/csaftoiu/tmp/relative-path/build2 either does not exist, is not accessible, or is not a valid URL.
+MacBook-Pro:relative-path csaftoiu$ docker-compose -f subdir/docker-compose.yml -f docker-compose.yml run --rm _build1
+ERROR: build path /Users/csaftoiu/tmp/relative-path/subdir/build1 either does not exist, is not accessible, or is not a valid URL.
+MacBook-Pro:relative-path csaftoiu$ docker-compose -f subdir/docker-compose.yml -f docker-compose.yml run --rm _build2
+ERROR: build path /Users/csaftoiu/tmp/relative-path/subdir/build1 either does not exist, is not accessible, or is not a valid URL.
+How to Fix
+Consider the build paths relative to the compose file they were defined in, instead of the first compose file on the command line.
+9

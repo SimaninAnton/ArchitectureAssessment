@@ -1,0 +1,39 @@
+Contributor
+johnharris85 commented on 15 Jul 2016
+Few people have mentioned this and the build functionality in compose seems be causing some ambiguities / issues etc... so wanted to just chuck a proposal on here to start discussion / comments. Couldn't see an existing one along these lines but apologies if there is!
+Changes to how compose would operate:
+docker-compose build would be removed
+Running docker-compose against a compose file with a build section(s) would result in no action and a warning that builds are deprecated in compose and to use docker build. There would be an override flag which would allow compose to go ahead and pull / run any services in the compose file that don't have a build section.
+Migration strategy:
+Utility within compose that would remove the build sections from compose files and generate a compose.build file with a list of equivalent docker build commands for each relevant service in the compose file. This is not a perfect alternative, but it's a friendly initial time-saver.
+Perhaps instead of just listing the docker commands to run, compose.build would instead be a json file with instructions about how to build multiple images (see related proposal)
+Advantages (reasons for this proposal):
+Build functionality seems to not sit cleanly within the remit of docker-compose, which could (should?) just focus on taking a set of images and configuration, and running them
+The logic of what should be built etc seems contentious and wide-ranging (judging by comments / issues & PRs). Seems that 'mass-building' may benefit from a robust tool of it's own outside of compose
+There are lots of other ways of building docker images (other than Dockerfiles), this would make compose more agnostic as to the 'builder' of the image (as opposed to right now, where it has to be a Docker / Dockerfile build)
+Brings functionality more in line with bundles (new in 1.12) which is concerned with the distributed deployment of applications (images) - build seems like an inconvenient pre-step here
+Parity with Docker workflow. build then run for single images / containers with docker, build then run for multiple / groups of images / containers for docker-compose.
+Disadvantages:
+docker build only supports building one image at a time and compose is a shortcut to building a lot of images from contexts rapidly, this functionality would be lost (see related proposals)
+Breaks existing workflows (in a big way) / backwards compatibility (does provide a migration path, but this point alone might just kill the proposal)
+Means orchestrating more moving parts to get the same current result (some kind of build mechanism, then compose, instead of the current single step)
+Potentially a slippery slope, should compose even do pulls? Why not just deal with running a logical situation / application of containers? (I think this is probably too far), Images seem the right level of granularity
+Related proposals:
+Either a docker or docker-compose tool to take a compose.build file (json?) to do a mass-build of multiple containers (to replace the implicit behaviour when a build section is included in the compose file)
+Maybe a third-party tool instead to facilitate this if it doesn't fit into the Docker roadmap
+Maybe docker build is extended to be able to build multiple images at once?
+Changes to compose workflows:
+Would basically just involve a pre-build step before docker-compose is run. This turns a 1-step process into a minimum 2-step process (assuming some other tool in the chain that could build multiple images)
+Shouldn't be too much of a leap since this flow is required right now for docker with single images / containers
+List of related issues / PRs:
+(not extensive, just from the last few pages of open Issues)
+#3724 Pull Image with docker-compose run
+#3720 docker-compose bundle --fetch-digests isn't a communicative name
+#3673 Docker compose pull should not pull image that's overrided with build option
+#3660 Docker compose pull doesn't respect local images
+#3640 docker-compose bundle should work with 'build: .'
+#3639 Creating DABs make docker-compose.yml files non-portable
+#3574 docker-compose up doesn't pull down latest image if the image exists locally
+#3448 Add --build and --no-build options to run analogous to up command.
+2
+33

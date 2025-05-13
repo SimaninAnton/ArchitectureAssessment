@@ -1,0 +1,5 @@
+lutskanu commented on 2 Dec 2016
+It wolud be perfect to add "--storage-opt" flag to docker-compose service parameters:
+https://github.com/docker/docker/blob/master/docs/reference/commandline/run.md#set-storage-driver-options-per-container
+It will be very useful for constraining storage size for specific containers.
+18

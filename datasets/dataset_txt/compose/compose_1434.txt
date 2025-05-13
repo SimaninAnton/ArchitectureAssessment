@@ -1,0 +1,102 @@
+bbinet commented on 24 May 2017
+With the following compose file, no secrets are bind mounted in the saltminion service whereas the secrets of the saltmaster service are correctly bind mounted:
+version: '3.1'
+services:
+  saltmaster:
+    image: bbinet/salt-master:latest
+    hostname: hlmaster
+    environment:
+      PRE_ACCEPT_MINIONS: hlminion
+      PRE_CREATE_USERS: heliosalt
+    ports:
+    - 10.0.0.1:4433:443
+    volumes:
+    - ./saltmaster/etc_salt_master.d:/etc/salt/master.d
+    - saltmaster-states:/srv/setupify/states:ro
+    - saltmaster-reclass:/srv/setupify/reclass:ro
+    secrets:
+    - heliosalt.password
+    - master.pem
+    - master.pub
+    - source: minion.pub
+      target: hlminion.pub
+  saltminion:
+    image: bbinet/salt-minion:jessie
+    hostname: hlminion
+    cap_add:
+    - SYS_ADMIN
+    environment:
+      TERM: xterm
+    secrets:
+    - minion.pem
+    - minion.pub
+    - master.pub
+    volumes:
+    - /sys/fs/cgroup:/sys/fs/cgroup
+    - ./saltminion/etc_salt_minion.d:/etc/salt/minion.d
+volumes:
+  saltmaster-reclass:
+    driver_opts:
+      device: /home/bruno/dev/setupify_reclass/reclass
+      o: bind
+      type: none
+  saltmaster-states:
+    driver_opts:
+      device: /home/bruno/dev/setupify_reclass/states
+      o: bind
+      type: none
+secrets:
+  heliosalt.password:
+    file: ./secrets/heliosalt.password
+  master.pem:
+    file: ./secrets/master.pem
+  master.pub:
+    file: ./secrets/master.pub
+  minion.pem:
+    file: ./secrets/minion.pem
+  minion.pub:
+    file: ./secrets/minion.pub
+$ tree
+.
+├── docker-compose.yml
+├── saltmaster
+│   └── etc_salt_master.d
+│       └── helioslite.conf
+├── saltminion
+│   └── etc_salt_minion.d
+│       └── helioslite.conf
+└── secrets
+    ├── heliosalt.password
+    ├── master.pem
+    ├── master.pub
+    ├── minion.pem
+    └── minion.pub
+$ docker exec -ti saltstack_saltminion_1 ls /run/secrets
+ls: cannot access /run/secrets: No such file or directory
+$ docker exec -ti saltstack_saltmaster_1 ls /run/secrets
+heliosalt.password  hlminion.pub  master.pem  master.pub
+Here is my docker and docker-compose versions:
+$ docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:04:27 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:04:27 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+
+$ docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.3.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Please ask if you want me to provide the result of docker inspect saltstack_saltminion_1 or any other information to help debug this issue.

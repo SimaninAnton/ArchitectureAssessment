@@ -1,0 +1,57 @@
+Serkan-devel commented on 23 Oct 2016 •
+edited
+The full output was
+[patently@Porzellangardine cloud]$ docker-compose build
+Building db
+Step 1 : FROM armhf/alpine
+---> 65e22dd58e7d
+Step 2 : RUN apk add --upgrade --no-cache mysql
+---> Running in fcdc74dce23e
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/main/armhf/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/community/armhf/APKINDEX.tar.gz
+(1/12) Upgrading busybox (1.24.2-r9 -> 1.24.2-r11)
+Executing busybox-1.24.2-r11.post-upgrade
+(2/12) Upgrading libcrypto1.0 (1.0.2h-r1 -> 1.0.2j-r0)
+(3/12) Upgrading libssl1.0 (1.0.2h-r1 -> 1.0.2j-r0)
+(4/12) Installing mariadb-common (10.1.18-r0)
+(5/12) Installing libaio (0.3.110-r0)
+(6/12) Installing ncurses-terminfo-base (6.0-r7)
+(7/12) Installing ncurses-terminfo (6.0-r7)
+(8/12) Installing ncurses-libs (6.0-r7)
+(9/12) Installing libgcc (5.3.0-r0)
+(10/12) Installing libstdc++ (5.3.0-r0)
+(11/12) Installing mariadb (10.1.18-r0)
+Executing mariadb-10.1.18-r0.pre-install
+(12/12) Installing mysql (10.1.18-r0)
+Executing busybox-1.24.2-r11.trigger
+OK: 130 MiB in 20 packages
+---> 516bb3d389ad
+Removing intermediate container fcdc74dce23e
+Step 3 : ENV MYSQL_ROOT_PASSWORD [password]
+---> Running in 15f44aa8ed62
+---> 9b9a65d1bbba
+Removing intermediate container 15f44aa8ed62
+Step 4 : ENV MYSQL_USER [user]
+---> Running in 24e5e54a89bf
+---> 00a2dd260fd8
+Removing intermediate container 24e5e54a89bf
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 11, in
+load_entry_point('docker-compose==1.8.1', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 62, in main
+command()
+File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 114, in perform_command
+handler(command, command_options)
+File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 220, in build
+force_rm=bool(options.get('--force-rm', False)))
+File "/usr/lib/python3.5/site-packages/compose/project.py", line 300, in build
+service.build(no_cache, pull, force_rm)
+File "/usr/lib/python3.5/site-packages/compose/service.py", line 731, in build
+all_events = stream_output(build_output, sys.stdout)
+File "/usr/lib/python3.5/site-packages/compose/progress_stream.py", line 23, in stream_output
+print_output_event(event, stream, is_terminal)
+File "/usr/lib/python3.5/site-packages/compose/progress_stream.py", line 91, in print_output_event
+stream.write("%s%s" % (event['stream'], terminator))
+UnicodeEncodeError: 'ascii' codec can't encode character '\xd6' in position 36: ordinal not in range(128)
+[patently@Porzellangardine cloud]$
+on a raspberry pi 2 model b, arch linux, Docker version 1.12.2, build bb80604

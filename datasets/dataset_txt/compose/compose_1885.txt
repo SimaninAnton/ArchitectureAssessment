@@ -1,0 +1,20 @@
+erikj commented on 30 Nov 2016 •
+edited
+Using variable substitution and format versions 1 and 2 (I don't have 2.1 available), a false variable-not-set WARNING and erroneous 'Defaulting to a blank string' message are output when variable is set via -e / --env and run and up are invoked.
+E.g.
+version: "2"
+
+services:
+  app:
+    image: alpine
+    environment:
+      FOO: "${FOO}" # and same results for $FOO and ${FOO}, quoted and unquoted
+$ echo $FOO # nothing up this sleeve
+=>
+$ docker-compose run -e "FOO=BAR" app sh
+=> WARNING: The FOO variable is not set. Defaulting to a blank string.
+/ # echo $FOO
+=> BAR
+Experiencing this w/ Compose versions 1.7.1 and 1.9.0.
+Expected result: no WARNING about variable not being set when variable is set via -e.
+Compose is an awesome tool, thanks!

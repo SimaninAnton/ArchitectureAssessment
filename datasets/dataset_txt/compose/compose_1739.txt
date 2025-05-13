@@ -1,0 +1,20 @@
+cirocosta commented on 1 Feb 2017 •
+edited
+Hey,
+giving a try to the new docker-compose v3 (running services with docker stack deploy ...) i noticed that there's no way to specify mode=<host|ingress> when publishing ports. As of https://docs.docker.com/compose/compose-file/#/ports target=<container_port>,publish=<host_port>,mode=<host|ingress> is not supported.
+Are there any plans to do so?
+Thx!
+example:
+docker service create \
+  --name nginx \
+  --replicas 3 \
+  --endpoint-mode dnsrr \
+  --publish target=80,mode=host \
+  nginx:alpine
+
+docker ps
+CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS              PORTS                            NAMES
+ffe309377f81        nginx@sha256:d34e2176d  "nginx -g 'daemon ..."   24 seconds ago      Up 22 seconds       443/tcp, 0.0.0.0:32770->80/tcp   nginx.3.8
+eace8787d428        nginx@sha256:d34e2176d  "nginx -g 'daemon ..."   24 seconds ago      Up 22 seconds       443/tcp, 0.0.0.0:32769->80/tcp   nginx.1.t
+fe59245ec3ed        nginx@sha256:d34e2176d  "nginx -g 'daemon ..."   24 seconds ago      Up 22 seconds       443/tcp, 0.0.0.0:32768->80/tcp   nginx.2.b
+15

@@ -1,0 +1,32 @@
+roja45 commented on 10 Jan 2018
+This was a section out of my docker compse to start the container, worked fine before the update
+dev-master-httpd-70:
+        build: ./images/httpd_php_7.0
+        working_dir: /var/www
+        container_name: dev_master_httpd_70_1
+        environment:
+            - VIRTUAL_HOST=localhost
+            - WORKING_DIR=/var/www
+            - XDEBUG_PORT=9000
+            - XDEBUG_REMOTE_HOST=192.168.1.100
+        volumes:
+            - ../environments/www:/var/www
+            - ../modules/somedir:/var/www/modules/somedie
+        ports:
+            - "80:80"
+After the update, the first line in volumes stopped mounting, only the second would mount.
+dev-master-httpd-70:
+        build: ./images/httpd_php_7.0
+        working_dir: /var/www
+        container_name: dev_master_httpd_70_1
+        environment:
+            - VIRTUAL_HOST=localhost
+            - WORKING_DIR=/var/www
+            - XDEBUG_PORT=9000
+            - XDEBUG_REMOTE_HOST=192.168.1.100
+        volumes:
+            - ../modules/somedir:/var/www/modules/somedie
+            - ../environments/www:/var/www
+        ports:
+            - "80:80"
+Updated the docker compose to reverse the volume entries, and it mounted both again.

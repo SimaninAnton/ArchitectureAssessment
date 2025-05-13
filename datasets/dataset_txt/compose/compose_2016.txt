@@ -1,0 +1,19 @@
+brentsmyth commented on 7 Oct 2016
+Hey!
+According to the docs build should be able to be supplied as an object where context defines the path. Though I get the following error with the latest version of compose...
+$ docker-compose up
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+web.build contains an invalid type, it should be a string
+
+$ docker-compose --version
+docker-compose version 1.8.0, build f3628c7
+My docker-compose.yml file looks like this...
+web:
+  build:
+    context: .
+    dockerfile: Dockerfile-dev
+  ports:
+    - "8000:8000"
+  environment:
+    ENV: dev
+It seems like I am doing this correctly... Is this feature not in 1.8.0 by chance?

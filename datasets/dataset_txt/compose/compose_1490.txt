@@ -1,0 +1,2 @@
+c-Monster commented on 2 May 2017
+I specify the port bindings in the docker-compose-build.yml, but when I run docker-compose, and docker-ps there is no listing for any ports, nor can I hit them with Postman.

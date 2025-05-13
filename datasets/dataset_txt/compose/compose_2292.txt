@@ -1,0 +1,3 @@
+teohhanhui commented on 20 Jun 2016
+When a network cannot be removed due to active containers (connected from another Docker Compose project in my case), docker-compose down just exits.
+This means when I do docker-compose down --volumes the volumes are not removed, as those are only processed after the networks.

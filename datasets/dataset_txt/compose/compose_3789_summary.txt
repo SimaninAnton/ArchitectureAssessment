@@ -1,0 +1,1 @@
+Use case: a service functional testing; How to do it; I might have come across a bug

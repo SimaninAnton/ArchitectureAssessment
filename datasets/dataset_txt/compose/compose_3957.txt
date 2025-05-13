@@ -1,0 +1,21 @@
+bitliner commented on 2 Feb 2015
+I have a fig.yml like this:
+db:
+  image: tutum/mysql
+  volumes:
+    - data/:/var/lib/mysql
+  environment:
+    - ...=...
+  ports:
+    - 8091:3306
+wp:
+  build: .
+  ports:
+    - 8092:80
+  links:
+    - db:mysql
+  volumes:
+    - wordpress/:/var/www/html/
+  environment:
+    - ...=...
+but if I run sudo docker ps after sudo fig up only the second container is started.

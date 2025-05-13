@@ -1,0 +1,1 @@
+Can I define a service in docker-compose.yml, which just need be extended, but not be started?

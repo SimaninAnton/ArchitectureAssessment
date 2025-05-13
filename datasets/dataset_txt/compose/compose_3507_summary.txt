@@ -1,0 +1,1 @@
+docker-compose up says "command not found" when container starts

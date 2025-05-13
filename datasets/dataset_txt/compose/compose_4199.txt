@@ -1,0 +1,7 @@
+zedtux commented on 1 Sep 2014
+Hello,
+I would like to execute my tests from Sublime Text within a container. When I run the command fig run web bundle exec cucumber feature/my_feature.feature manually from a console it's working perfectly.
+Now I'm using the RubyTest plugin in Sublime Text (I tried both versions: 2 and 3) and the command is correctly executed but I don't see anything in the Sublime Text console window excepted the elapsed time.
+I'm not very strong with Python but as far as I believe to have understood from the code, fig is logging in a stream and not in the stdout. Am I right ?
+If I'm right, can you please explain me why is it like this and if it's possible to change it (maybe with an option when running fig ?)
+Thank you a lot.

@@ -1,0 +1,83 @@
+micdahl commented on 12 Jan 2017
+Using docker-compose for developing Angular CLI app, running via ng serve inside the container does not detect file changes made on the host in a volume. Therfore I have to restart docker-compose up everytime I made changes to files. Timestamp and content of the files though are updated in the container. So alternative I can use touch <filename> inside the container to rebuild but this is not really a satisfying development flow as I have to do this for every changed file.
+docker-compose version
+docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h 3 May 2016
+docker version
+Client:
+Version: 1.12.6
+API version: 1.24
+Go version: go1.6.4
+Git commit: 78d1802
+Built: Wed Jan 11 00:23:16 2017
+OS/Arch: windows/amd64
+Server:
+Version: 1.12.6
+API version: 1.24
+Go version: go1.6.4
+Git commit: 78d1802
+Built: Wed Jan 11 00:23:16 2017
+OS/Arch: linux/amd64
+docker info
+Containers: 68
+Running: 0
+Paused: 0
+Stopped: 68
+Images: 176
+Server Version: 1.12.6
+Storage Driver: aufs
+Root Dir: /var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 265
+Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: bridge host null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.41-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.919 GiB
+Name: moby
+ID: YYNX:753B:ZI7R:HAY4:EVAG:WBK2:RD6P:YS7Y:Z67V:3SY3:JFUL:PLDQ
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+File Descriptors: 13
+Goroutines: 23
+System Time: 2017-01-12T15:08:14.0497198Z
+EventsListeners: 0
+Registry: https://index.docker.io/v1/
+WARNING: No kernel memory limit support
+Insecure Registries:
+127.0.0.0/8
+docker-compose.yml
+version: '2'
+services:
+angular:
+build: angular-client
+ports:
+- "4200:4200"
+volumes:
+- angular_node_modules:/usr/src/app/node_modules
+- ./angular-client:/usr/src/app
+volumes:
+angular_node_modules: {}
+Dockerfile
+FROM node:latest
+RUN apt-get update && apt-get install -y xvfb chromium
+RUN npm install -g angular-cli
+ENV APP_HOME /usr/src/app
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+EXPOSE 4200
+CMD ["npm", "start"]

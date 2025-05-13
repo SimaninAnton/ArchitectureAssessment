@@ -1,0 +1,85 @@
+KhurramSSiddiqui commented on 23 Oct 2018
+Description of the issue
+On windows,
+"docker-compose -H http://136.45.150.140:2375 run ubuntu_1" command fails with error message
+invalid argument "http://136.45.150.140:2375" for "-H, --host" flag: Invalid bind address format: http://136.45.150.140:2375
+While the same command executes without any problem on ubuntu machine.
+Context information (for bug reports)
+Output of "docker-compose version"
+On Windows:
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o 27 Mar 2018
+Output of "docker version"
+On windows:
+Client:
+Version: 18.06.1-ce
+API version: 1.38
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:21:34 2018
+OS/Arch: windows/amd64
+Experimental: false
+Server:
+Engine:
+Version: 18.06.1-ce
+API version: 1.38 (minimum version 1.12)
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:29:02 2018
+OS/Arch: linux/amd64
+Experimental: false
+On Linux:
+Client:
+Version: 18.06.1-ce
+API version: 1.38
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:24:51 2018
+OS/Arch: linux/amd64
+Experimental: false
+Server:
+Engine:
+Version: 18.06.1-ce
+API version: 1.38 (minimum version 1.12)
+Go version: go1.10.3
+Git commit: e68fc7a
+Built: Tue Aug 21 17:23:15 2018
+OS/Arch: linux/amd64
+Experimental: false
+Output of "docker-compose config"
+services:
+ubuntu_1:
+image: ubuntu:16.04
+version: '3.0'
+Steps to reproduce the issue
+Assuming an ubunutu machine with ip address 136.45.150.140
+Start docker daemon on ubuntu machine using the following command:
+sudo dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375
+Create a docker-compose.yml with contents:
+version: '3'
+services:
+ubuntu_1:
+image: ubuntu:16.04
+Execute the following command from the directory where docker-compose.yml file is present:
+docker-compose -H http://136.45.150.140:2375 run ubuntu_1
+The command would be successful.
+Create the same docker-compose.yml file on a windows machine with same contents as were listed in step 2 and execute the same command from the directory.
+docker-compose -H http://136.45.150.140:2375 run ubuntu_1
+It fails with error message:
+invalid argument "http://136.45.150.140:2375" for "-H, --host" flag: Invalid bind address format: http://136.45.150.140:2375
+On windows, it succeeds only if we replace http:// with tcp://
+docker-compose -H tcp://136.45.150.140:2375 run ubuntu_1
+Observed result
+invalid argument "http://136.45.150.140:2375" for "-H, --host" flag: Invalid bind address format: http://136.45.150.140:2375
+Expected result
+Connection should be successful and the service should execute properly
+Additional information
+Windows machine:
+Microsoft Windows [Version 10.0.16299.665]
+Ubuntu Machine:
+Distributor ID: Ubuntu
+Description: Ubuntu 18.04.1 LTS
+Release: 18.04
+Codename: bionic

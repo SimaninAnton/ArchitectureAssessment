@@ -1,0 +1,13 @@
+niieani commented on 5 May 2016 •
+edited
+I have a service that has affinity set so that it can only be created on a specific node in the swarm.
+That same service binds to a port on that node, meaning the service shouldn't scale to more than 1 container (by design).
+An error appears however when docker-compose up -d tries to recreate the container, when the underlying image has changed. It checks for whether the conditions are met BEFORE stopping the previous container. Because the port is still in use by the old version of the same container, it spits out an error:
+Recreating driver-singleton
+
+ERROR: for driver-singleton  Unable to find a node that satisfies the following conditions
+[port 443 (Bridge mode) port 80 (Bridge mode)]
+[container!=*driver* (soft=false)]
+docker-compose should ignore the container(s) it's about to recreate when deciding on which nodes to put the containers. Or even simpler, when it's recreating the container(s) it shouldn't even "think" about the nodes, just do it in place.
+The workaround is to first manually stop and remove the service and then run up -d again.
+3

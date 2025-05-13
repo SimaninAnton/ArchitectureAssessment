@@ -1,0 +1,18 @@
+chiefy commented on 14 Jan 2016
+I'm not sure if this is possible, but I was trying to do something like the following:
+app:
+  image: nginx
+  ports: 
+    - "80:80"
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: "udp://logstash:12201"
+  links:
+    - logstash
+
+logstash:
+  image: logstash
+  expose:
+    - "12201/udp"  
+Currently this won't work, I assume because the log driver tries to initialize before any linking is done?
+5

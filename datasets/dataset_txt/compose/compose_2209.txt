@@ -1,0 +1,212 @@
+kkrishna commented on 23 Jul 2016 •
+edited by aanand
+(Using https://github.com/shin-/compose/tree/3637-link-local-ips)
+docker-py version dependency here doesn't work. We proceeded using the latest from https://github.com/docker/docker-py/
+Sample compose file:
+version: '2.1'
+services:
+ app:
+   image: busybox
+   command: top
+   networks:
+     app_net:
+      link_local_ips: 
+        - 169.254.8.8
+networks:
+ app_net:
+   driver: bridge
+Docker logs for compose request, refer to network connect :
+time="2016-07-22T21:45:50.808612211Z" level=debug msg="attach: stdout: begin"
+time="2016-07-22T21:45:50.812520044Z" level=debug msg="Calling POST /v1.24/networks/compose_app_net/connect"
+time="2016-07-22T21:45:50.812937146Z" level=debug msg="form data: {\"Container\":\"5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201\",\"EndpointConfig\":{\"Aliases\":[\"app\",\"5c79e41f2527\"],\"LinkLocalIPs\":[\"169.254.8.8\"]}}"
+time="2016-07-22T21:45:50.830467214Z" level=debug msg="Calling GET /containers/5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201/json"
+time="2016-07-22T21:45:50.836106380Z" level=debug msg="Calling POST /v1.24/containers/5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201/start"
+time="2016-07-22T21:45:50.837312240Z" level=debug msg="container mounted via layerStore: /var/lib/docker/aufs/mnt/4d827c6163123e696ce144291494a2f3e5eb32c68f1846a8c8d77fff8e73bbce"
+time="2016-07-22T21:45:50.837797761Z" level=debug msg="Assigning addresses for endpoint compose_app_1's interface on network compose_app_net"
+time="2016-07-22T21:45:50.838051757Z" level=debug msg="RequestAddress(LocalDefault/172.20.0.0/16, <nil>, map[])"
+time="2016-07-22T21:45:50.841587535Z" level=debug msg="Assigning addresses for endpoint compose_app_1's interface on network compose_app_net"
+time="2016-07-22T21:45:50.847158483Z" level=debug msg="Programming external connectivity on endpoint compose_app_1 (0e7b15c6d27b725bb22e98840f04fa515000e6038272f1012a81bb9b44327aa6)"
+time="2016-07-22T21:45:51.201928757Z" level=debug msg="sandbox set key processing took 179.351938ms for container 5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201"
+time="2016-07-22T21:45:51.269597654Z" level=debug msg="received containerd event: &types.Event{Type:\"start-container\", Id:\"5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201\", Status:0x0, Pid:\"\", Timestamp:0x5792940f}"
+time="2016-07-22T21:45:51.276766294Z" level=debug msg="event unhandled: type:\"start-container\" id:\"5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201\" timestamp:1469223951 "
+time="2016-07-22T21:45:51.281401859Z" level=debug msg="Calling GET /v1.24/events?filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dcompose%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D"
+here is the docker inspect output on container
+container doesn't have any link local ip..
+docker inspect 5c79e41f2527
+[
+    {
+        "Id": "5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201",
+        "Created": "2016-07-22T20:37:59.434356567Z",
+        "Path": "top",
+        "Args": [],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 12633,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2016-07-22T21:45:51.270934458Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:2b8fd9751c4c0f5dd266fcae00707e67a2545ef34f9a29354585f93dac906749",
+        "ResolvConfPath": "/var/lib/docker/containers/5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201/hostname",
+        "HostsPath": "/var/lib/docker/containers/5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201/hosts",
+        "LogPath": "/var/lib/docker/containers/5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201/5c79e41f2527973815cc83a6dde2023e3403343868635c7368f21c0d8c1e3201-json.log",
+        "Name": "/compose_app_1",
+        "RestartCount": 0,
+        "Driver": "aufs",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": [
+            "8bf9def9185f7a64141a00eb1b1c4d35cb2039d97250ee6163298210256b2404"
+        ],
+        "HostConfig": {
+            "Binds": [],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "compose_app_net",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": [],
+            "CapAdd": null,
+            "CapDrop": null,
+            "Dns": null,
+            "DnsOptions": null,
+            "DnsSearch": null,
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DiskQuota": 0,
+            "KernelMemory": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": -1,
+            "OomKillDisable": false,
+            "PidsLimit": 0,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0
+        },
+        "GraphDriver": {
+            "Name": "aufs",
+            "Data": null
+        },
+        "Mounts": [],
+        "Config": {
+            "Hostname": "5c79e41f2527",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "no_proxy=*.local, 169.254/16",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "top"
+            ],
+            "Image": "busybox",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "com.docker.compose.config-hash": "c3276004acd20f42d926198b8af44a9555941a6b49a2e9f69b534007257e5979",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "compose",
+                "com.docker.compose.service": "app",
+                "com.docker.compose.version": "1.8.0dev"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "36b8b5f00d8c7a06c6824aa0fae1e319c8fc0983c42508b75fe2e840b618b1ff",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {},
+            "SandboxKey": "/var/run/docker/netns/36b8b5f00d8c",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "compose_app_net": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "app",
+                        "5c79e41f2527"
+                    ],
+                    "NetworkID": "bb99e5f32b7ba6e0b371bca68ddf34728a647d0a0bd50f65022c842000f47fd0",
+                    "EndpointID": "0e7b15c6d27b725bb22e98840f04fa515000e6038272f1012a81bb9b44327aa6",
+                    "Gateway": "172.20.0.1",
+                    "IPAddress": "172.20.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:14:00:02"
+                }
+            }
+        }
+    }
+]

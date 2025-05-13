@@ -1,0 +1,12 @@
+bergtwvd commented on 23 Mar 2015
+Following the intesructions on the docker site, In installed compose.
+curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s-uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+<<
+Next,
+docker@boot2docker:~$ uname -a
+Linux boot2docker 3.18.5-tinycore64 #1 SMP Sun Feb 1 06:02:30 UTC 2015 x86_64 GNU/Linux
+docker@boot2docker:~$ ls -l /usr/local/bin/docker-compose
+-rwxr-xr-x 1 root root 5257430 Mar 23 14:28 /usr/local/bin/docker-compose
+docker@boot2docker:~$ /usr/local/bin/docker-compose --version
+-sh: /usr/local/bin/docker-compose: not found

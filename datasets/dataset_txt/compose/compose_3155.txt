@@ -1,0 +1,7 @@
+divyakumarjain commented on 30 Oct 2015
+When using RC version of Docker Compose on Windows i am getting following error
+docker-compose.exe version output
+docker-compose version: 1.5.0rc1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014

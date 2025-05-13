@@ -1,0 +1,15 @@
+gthiruva commented on 8 Jun 2016
+I'm noticing an odd image pull failure when trying to pull images from Docker Hub using docker-compose. Yet, pulling with docker succeeds.
+With compose:
+$ docker-compose pull
+Pulling zookeeper (wurstmeister/zookeeper:latest)...
+ip-10-1-2-208: Pulling wurstmeister/zookeeper:latest... : Error response from daemon: Get https://registry-1.docker.io/v2/wurstmeister/zookeeper/manifests/latest: unknown: too many failed login attempts for username or IP address10-1-2-207: Pulling wurstmeister/zookeeper:latest... : Error response from daemon: Get https://registry-1.docker.io/v2/wurstmeister/zookeeper/manifests/latest: unknown: too many failed login attempts for username or IP addrip-10-1-2-82: Pulling wurstmeister/zookeeper:latest... : Error response from daemon: Get https://registry-1.docker.io/v2/wurstmeister/zookeeper/manifests/latest: unknown: too many failed login attempts for username or IP addreip-10-1-2-81: Pulling wurstmeister/zookeeper:latest... : Error response from daemon: Get https://registry-1.docker.io/v2/wurstmeister/zookeeper/manifests/latest: unknown: too many failed login attempts for username or IP addreip-10-1-2-209: Pulling wurstmeister/zookeeper:latest... : Error response from daemon: Get https://registry-1.docker.io/v2/wurstmeister/zookeeper/manifests/latest: unknown: too many failed login attempts for username or IP addrip-10-1-2-83: Pulling wurstmeister/zookeeper:latest... : Error response from daemon: Get https://registry-1.docker.io/v2/wurstmeister/zookeeper/manifests/latest: unknown: too many failed login attempts for username or IP addreERROR: Error response from daemon: Get https://registry-1.docker.io/v2/wurstmeister/zookeeper/manifests/latest: unknown: too many failed login attempts for username or IP address
+But with docker:
+$ docker pull wurstmeister/zookeeper:latest
+ip-10-1-2-207: Pulling wurstmeister/zookeeper:latest... : downloaded 
+ip-10-1-2-82: Pulling wurstmeister/zookeeper:latest... : downloaded 
+ip-10-1-2-81: Pulling wurstmeister/zookeeper:latest... : downloaded 
+ip-10-1-2-209: Pulling wurstmeister/zookeeper:latest... : downloaded 
+ip-10-1-2-83: Pulling wurstmeister/zookeeper:latest... : downloaded 
+ip-10-1-2-208: Pulling wurstmeister/zookeeper:latest... : downloaded 
+Any ideas what would trigger this? Or what's different about pulling via docker-compose vs docker?

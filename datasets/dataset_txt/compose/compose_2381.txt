@@ -1,0 +1,42 @@
+iamKurt commented on 20 May 2016 •
+edited
+I have two directories containing scripts for initializing and updating a PostgreSQL database and one with utility libraries. In the volumes section, I have mounted them as:
+      - ./db/compose/utils:/docker-entrypoint-initdb.d/utils
+      - ./db/compose/init:/docker-entrypoint-initdb.d/
+      - ./db/compose/update:/docker-entrypoint-initdb.d/
+Only the first and last ones seem to be mounted. If I switch the middle and last one around, then the same is true -- only the first and last ones get mounted.
+I haven't seen this before so am wondering why this would be the case.
+Docker info:
+Containers: 3
+ Running: 0
+ Paused: 0
+ Stopped: 3
+Images: 35
+Server Version: 1.11.1
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 137
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: host bridge null
+Kernel Version: 4.4.8-boot2docker
+Operating System: Boot2Docker 1.11.1 (TCL 7.0); HEAD : 7954f54 - Wed Apr 27 16:36:45 UTC 2016
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 7.79 GiB
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Debug mode (client): false
+Debug mode (server): true
+ File Descriptors: 12
+ Goroutines: 31
+ System Time: 2016-05-19T20:16:32.520546388Z
+ EventsListeners: 0
+Registry: https://index.docker.io/v1/
+Labels:
+ provider=virtualbox
+Thanks!

@@ -1,0 +1,8 @@
+Contributor
+garribas commented on 23 Oct 2017
+When trying to run the test suite on master branch the pre-commit hook fails with an flake8 error:
+$ script/test/default 
+Flake8...................................................................Failed
+hookid: flake8
+
+compose/bundle.py:124:5: E722 do not use bare except'

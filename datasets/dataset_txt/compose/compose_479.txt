@@ -1,0 +1,52 @@
+shammupoovar commented on 26 Sep 2018 •
+edited
+I have installed docker toolkit in my windows 7 desktop and normal docker commands are working fine. But when tried docker-compose, it showing segmentation fault and the error description is :
+`Problem signature:
+  Problem Event Name: APPCRASH
+  Application Name: docker-compose.exe
+  Application Version: 0.0.0.0
+  Application Timestamp: 5a2e9e81
+  Fault Module Name: ntdll.dll
+  Fault Module Version: 6.1.7601.17514
+  Fault Module Timestamp: 4ce7c8f9
+  Exception Code: c0000005
+  Exception Offset: 0000000000027659
+  OS Version: 6.1.7601.2.1.0.256.1
+  Locale ID: 1033
+  Additional Information 1: bff1
+  Additional Information 2: bff108051948070ef853abd8826d8c3a
+  Additional Information 3: 0a4c
+  Additional Information 4: 0a4c88e12653c20a406bfdad94485e36
+
+Read our privacy statement online:
+  http://go.microsoft.com/fwlink/?linkid=104288&clcid=0x0409
+
+If the online privacy statement is not available, please read our privacy statement offline:
+  C:\Windows\system32\en-US\erofflps.txt
+`
+So downloaded another docker-compose file from internet and it is running but showing some python script error.
+`# docker-compose-Windows-x86_64.exe up
+Creating visists_node-app_1 ...
+
+ERROR: for visists_node-app_1  __init__() got an unexpected keyword argument 'cpu_count'
+Creating visists_redis-server_1 ...
+
+ERROR: for visists_redis-server_1  __init__() got an unexpected keyword argument 'cpu_count'
+
+ERROR: for node-app  __init__() got an unexpected keyword argument 'cpu_count'
+
+ERROR: for redis-server  __init__() got an unexpected keyword argument 'cpu_count'
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose\cli\main.py", line 68, in main
+  File "compose\cli\main.py", line 118, in perform_command
+  File "compose\cli\main.py", line 926, in up
+  File "compose\project.py", line 424, in up
+  File "compose\parallel.py", line 69, in parallel_execute
+TypeError: __init__() got an unexpected keyword argument 'cpu_count'
+Failed to execute script docker-compose`
+Versions are :
+ # docker-compose-Windows-x86_64.exe -v
+docker-compose version 1.14.0-rc1, build c18a7ad9
+# docker -v
+Docker version 18.03.0-ce, build 0520e24302

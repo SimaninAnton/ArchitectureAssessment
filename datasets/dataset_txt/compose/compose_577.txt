@@ -1,0 +1,177 @@
+ghost commented on 16 Jul 2018 •
+edited by ghost
+Hi,
+I'm trying to run a PHP 7/Apache2 project using docker and the container exits with error code 0 even though I set stdin_open and tty to true.
+Here's my Dockerfile :
+FROM php:7.2-apache-stretch
+RUN mkdir /ec
+RUN apt-get update -y
+RUN apt-get install -y vim
+COPY . /my_project
+WORKDIR /my_project
+COPY config/apache/000-default.conf /etc/apache2/sites-available
+CMD ["apache2", "-D", "FOREGROUND" ]
+And the associated docker-compose.yml:
+version: '3.3'
+
+services:
+  web:
+    image: 'php:7.2.6-apache'
+    command: bash -c 'a2enmod rewrite && service apache2 restart'
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/my_app
+      - ./config/apache:/etc/apache2/sites-available
+    ports:
+      - '80:80'
+Now there are multiple issues:
+Minor ones not directly related to the main issue:
+WORKDIR is completely ignored. Running /bin/bash with docker-compose exec or run lands to /var/www/html
+typing vi from /bin/bash returns a command not found
+docker-compose --verbose output :
+docker.auth.find_config_file: Trying paths: ['/home/my_username/.docker/config.json', '/home/my_username/.dockercfg']
+docker.auth.find_config_file: No config file found
+compose.cli.command.get_client: docker-compose version 1.17.0, build ac53b73
+docker-py version: 2.5.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.9.0-0.bpo.6-amd64, Components=[{u'Version': u'18.03.1-ce', u'Name': u'Engine', u'Details': {u'KernelVersion': u'4.9.0-0.bpo.6-amd64', u'Os': u'linux', u'BuildTime': u'2018-04-26T07:14:13.000000000+00:00', u'ApiVersion': u'1.37', u'MinAPIVersion': u'1.12', u'GitCommit': u'9ee9f40', u'Arch': u'amd64', u'Experimental': u'false', u'GoVersion': u'go1.9.5'}}], Arch=amd64, BuildTime=2018-04-26T07:14:13.000000000+00:00, ApiVersion=1.37, Platform={u'Name': u''}, Version=18.03.1-ce, MinAPIVersion=1.12, GitCommit=9ee9f40, Os=linux, GoVersion=go1.9.5
+compose.cli.verbose_proxy.proxy_callable: docker info <- ()
+compose.cli.verbose_proxy.proxy_callable: docker info -> {u'Architecture': u'x86_64',
+ u'BridgeNfIp6tables': True,
+ u'BridgeNfIptables': True,
+ u'CPUSet': True,
+ u'CPUShares': True,
+ u'CgroupDriver': u'cgroupfs',
+ u'ClusterAdvertise': u'',
+ u'ClusterStore': u'',
+ u'ContainerdCommit': {u'Expected': u'773c489c9c1b21a6d78b5c538cd395416ec50f88',
+                       u'ID': u'773c489c9c1b21a6d78b5c538cd395416ec50f88'},
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network <- (u'my_project_default')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_network -> {u'Attachable': True,
+ u'ConfigFrom': {u'Network': u''},
+ u'ConfigOnly': False,
+ u'Containers': {},
+ u'Created': u'2018-07-16T16:01:27.158289395+02:00',
+ u'Driver': u'bridge',
+ u'EnableIPv6': False,
+ u'IPAM': {u'Config': [{u'Gateway': u'172.23.0.1',
+                        u'Subnet': u'172.23.0.0/16'}],
+           u'Driver': u'default',
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=False, filters={u'label': [u'com.docker.compose.project=my_project', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=my_project', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'fffc671a61af6f12e7b273c6988a38cdb88f32423267db7a4d477a64e40f09e1')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'bash', u'-c', u'a2enmod rewrite && service apache2 restart'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'bash',
+                      u'-c',
+                      u'a2enmod rewrite && service apache2 restart'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-php-entrypoint'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('php:7.2.6-apache')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'apache2-foreground'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-php-entrypoint'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=my_project', u'com.docker.compose.service=web', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 1 items)
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image <- ('php:7.2.6-apache')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'',
+ u'Comment': u'',
+ u'Config': {u'ArgsEscaped': True,
+             u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'apache2-foreground'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-php-entrypoint'],
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'fffc671a61af6f12e7b273c6988a38cdb88f32423267db7a4d477a64e40f09e1')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'bash', u'-c', u'a2enmod rewrite && service apache2 restart'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'bash',
+                      u'-c',
+                      u'a2enmod rewrite && service apache2 restart'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-php-entrypoint'],
+...
+compose.parallel.feed_queue: Pending: set([<Service: web>])
+compose.parallel.feed_queue: Starting producer thread for <Service: web>
+Starting my_project_web_1 ... 
+compose.parallel.feed_queue: Pending: set([<Container: my_project_web_1 (fffc67)>])
+compose.parallel.feed_queue: Starting producer thread for <Container: my_project_web_1 (fffc67)>
+compose.service.start_container_if_stopped: Starting my_project_web_1
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'fffc671a61af6f12e7b273c6988a38cdb88f32423267db7a4d477a64e40f09e1', stderr=True, stream=True, stdout=True)
+compose.cli.verbose_proxy.proxy_callable: docker attach -> <generator object socket_raw_iter at 0x7fcab794beb0>
+compose.cli.verbose_proxy.proxy_callable: docker start <- (u'fffc671a61af6f12e7b273c6988a38cdb88f32423267db7a4d477a64e40f09e1')
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.cli.verbose_proxy.proxy_callable: docker start -> None
+Starting my_project_web_1 ... done
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.parallel_execute_iter: Finished processing: <Service: web>
+compose.parallel.feed_queue: Pending: set([])
+Attaching to my_project_web_1
+compose.cli.verbose_proxy.proxy_callable: docker events <- (decode=True, filters={u'label': [u'com.docker.compose.project=my_project', u'com.docker.compose.oneoff=False']})
+web_1  | Module rewrite already enabled
+compose.cli.verbose_proxy.proxy_callable: docker events -> <generator object _stream_helper at 0x7fcab79cb0f0>
+web_1  | [....] Restarting Apache httpd web server: apache2AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.23.0.2. Set the 'ServerName' directive globally to suppress this message
+[ ok   | .
+compose.cli.verbose_proxy.proxy_callable: docker wait <- (u'fffc671a61af6f12e7b273c6988a38cdb88f32423267db7a4d477a64e40f09e1')
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'fffc671a61af6f12e7b273c6988a38cdb88f32423267db7a4d477a64e40f09e1')
+compose.cli.verbose_proxy.proxy_callable: docker wait -> 0
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container -> {u'AppArmorProfile': u'',
+ u'Args': [u'bash', u'-c', u'a2enmod rewrite && service apache2 restart'],
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'bash',
+                      u'-c',
+                      u'a2enmod rewrite && service apache2 restart'],
+             u'Domainname': u'',
+             u'Entrypoint': [u'docker-php-entrypoint'],
+...
+my_project_web_1 exited with code 0

@@ -1,0 +1,47 @@
+gregory commented on 8 Oct 2015
+Based on the documentation, this should work by now no? :)
+test:
+  image: busybox
+  ports:
+    - "9090-9091:8080-8081"
+➜  bug  docker-compose --verbose up test
+Compose version 1.4.2
+Docker base_url: https://192.168.99.100:2376
+Docker version: KernelVersion=4.0.9-boot2docker, Os=linux, BuildTime=Thu Aug 13 02:49:29 UTC 2015, ApiVersion=1.20, Version=1.8.1, GitCommit=d12ea79, Arch=amd64, GoVersion=go1.4.2
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bug', u'com.docker.compose.service=test', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 6 items)
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bug', u'com.docker.compose.service=test', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker containers <- (all=True)
+docker containers -> (list with 6 items)
+docker inspect_image <- ('busybox')
+docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'J\xe9r\xf4me Petazzoni <jerome@docker.com>',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=bug', u'com.docker.compose.service=test', u'com.docker.compose.oneoff=False']})
+docker containers -> (list with 0 items)
+docker inspect_image <- ('busybox')
+docker inspect_image -> {u'Architecture': u'amd64',
+ u'Author': u'J\xe9r\xf4me Petazzoni <jerome@docker.com>',
+ u'Comment': u'',
+ u'Config': {u'AttachStderr': False,
+             u'AttachStdin': False,
+             u'AttachStdout': False,
+             u'Cmd': [u'/bin/sh'],
+             u'Domainname': u'',
+             u'Entrypoint': None,
+             u'Env': None,
+...
+Creating bug_test_1...
+docker create_container <- (name=u'bug_test_1', image='busybox', labels={u'com.docker.compose.service': u'test', u'com.docker.compose.project': u'bug', 'com.docker.compose.config-hash': '4f0090db73df0841986204d87743c954e9545f84860f2a0f9474c6b1c5badfd8', 'com.docker.compose.version': u'1.4.2', u'com.docker.compose.oneoff': u'False', 'com.docker.compose.container-number': '1'}, host_config={'Links': [], 'PortBindings': {'8080-8081/tcp': [{'HostPort': '9090-9091', 'HostIp': ''}]}, 'Binds': [], 'ExtraHosts': [], 'LogConfig': {'Type': u'json-file', 'Config': {}}, 'VolumesFrom': []}, environment={}, detach=True, ports=[u'8080-8081'])
+Invalid port specification: "8080-8081"

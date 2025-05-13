@@ -1,0 +1,31 @@
+aviaryan commented on 9 Aug 2016 •
+edited
+$ docker-compose version
+docker-compose version 1.8.0, build f3628c7
+docker-py version: 1.9.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+I am using docker-compose v1.8.0 on ubuntu 14.04x64. For docker-compose.yml, I am using version 2 syntax.
+The issue I am getting is with the command parameter which seems to be running the host application rather than the container's application and all data created by the application is being saved in host and not inside the container.
+I am running the application using docker-compose up.
+Let me explain the events which led me believe that (Flask application).
+open(file).write() files are being created in the host, not inside the container.
+the application opens a file which is in container but not on the host. OSError is raised by the container suggesting the application is running at host level.
+It should be noted that the app runs correctly if I run it as docker run -p 5000:5000 ymp3_web
+Following is my docker-compose.yml
+version: '2'
+
+services:
+  web:
+    build: .
+    command: python "/ymp3/app.py" # runs current instance
+    environment:
+      OPENSHIFT_PYTHON_IP: '0.0.0.0'
+      OPENSHIFT_PYTHON_PORT: '5000'
+      FFMPEG_PATH: 'ffmpeg/ffmpeg'
+    volumes:
+      - '.:/ymp3'
+    ports:
+      - '5000:5000'
+So I think that python is running the host's python and not the one inside container.
+PS - I can't give the full source code right now as the project is private.

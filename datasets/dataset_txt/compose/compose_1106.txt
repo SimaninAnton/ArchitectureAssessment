@@ -1,0 +1,162 @@
+chowdaryidavalapati commented on 2 Nov 2017
+I have a Julia program which loads 8 GB of data using AdaGram. It is working fine on my local machine.
+But when I try it in docker container it is not loading data and giving bus error.
+It is working fine with small data up to 20 MB in the docker container.
+Error
+julia_1  | signal (7): Bus error
+julia_1  | while loading /tmp/adagram_server.jl, in expression starting on line 118
+julia_1  | macro expansion at ./multidimensional.jl:431 [inlined]
+julia_1  | macro expansion at ./cartesian.jl:64 [inlined]
+julia_1  | macro expansion at ./multidimensional.jl:429 [inlined]
+julia_1  | _unsafe_batchsetindex! at ./multidimensional.jl:421
+julia_1  | _setindex! at ./multidimensional.jl:370 [inlined]
+julia_1  | setindex! at ./abstractarray.jl:832 [inlined]
+julia_1  | #9 at /root/.julia/v0.5/AdaGram/src/AdaGram.jl:64
+julia_1  | #600 at ./multi.jl:1030
+julia_1  | run_work_thunk at ./multi.jl:1001
+julia_1  | run_work_thunk at ./multi.jl:1010 [inlined]
+julia_1  | #597 at ./event.jl:68
+julia_1  | unknown function (ip: 0x7f0920c479af)
+julia_1  | jl_call_method_internal at /home/centos/buildbot/slave/package_tarball64/build/src/julia_internal.h:189 [inlined]
+julia_1  | jl_apply_generic at /home/centos/buildbot/slave/package_tarball64/build/src/gf.c:1942
+julia_1  | jl_apply at /home/centos/buildbot/slave/package_tarball64/build/src/julia.h:1392 [inlined]
+julia_1  | start_task at /home/centos/buildbot/slave/package_tarball64/build/src/task.c:253
+julia_1  | unknown function (ip: 0xffffffffffffffff)
+julia_1  | Allocations: 8730803 (Pool: 8729778; Big: 1025); GC: 14
+docker_julia_1 exited with code 135
+Dockerfile:
+FROM ubuntu:16.04
+
+WORKDIR /julia
+
+RUN apt-get -y update
+
+RUN apt-get -y install unzip
+
+RUN apt-get -y install cmake
+
+RUN apt-get -y install clang
+
+RUN apt-get -y install wget
+
+RUN cd /tmp/
+
+RUN wget "https://julialang.s3.amazonaws.com/bin/linux/x64/0.5/julia-0.5.0-linux-x86_64.tar.gz"
+
+RUN tar -xzvf julia-0.5.0-linux-x86_64.tar.gz
+
+RUN mv julia-3c9d75391c/ ~/julia
+
+ENV PATH="/root/julia/bin:${PATH}"
+
+RUN julia --eval 'Pkg.add("JSON")'
+
+RUN julia --eval 'Pkg.add("HttpServer")'
+
+RUN julia --eval 'Pkg.add("URIParser")'
+
+RUN julia --eval 'Pkg.clone("https://github.com/deep-compute/AdaGram.jl.git")'
+
+RUN julia --eval 'Pkg.build("AdaGram")'
+
+CMD ["julia", "/tmp/adagram_server.jl", "80", "/julia/full.embed"]
+docker-compose.yml
+version: "3.1"
+services:
+    julia:
+        image: ramidavalapati/julia:v-1
+        volumes:
+            - /home/ram/adagram_data:/julia
+            - /home/ram/adagram_server/adagram_server.jl:/tmp/adagram_server.jl
+        ports:
+            - 8080:80
+        command: ["julia", "/tmp/adagram_server.jl", "80", "/julia/full.embed"]
+Docker version:
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:42:18 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:40:56 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Docker info:
+Containers: 24
+ Running: 0
+ Paused: 0
+ Stopped: 24
+Images: 24
+Server Version: 17.09.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: active
+ NodeID: jlkmigmtyjhz6yvi3zuvkobu7
+ Is Manager: true
+ ClusterID: rqt03ulgvvnym235m1qm8vd17
+ Managers: 4
+ Nodes: 15
+ Orchestration:
+  Task History Retention Limit: 5
+ Raft:
+  Snapshot Interval: 10000
+  Number of Old Snapshots to Retain: 0
+  Heartbeat Tick: 1
+  Election Tick: 3
+ Dispatcher:
+  Heartbeat Period: 5 seconds
+ CA Configuration:
+  Expiry Duration: 3 months
+  Force Rotate: 0
+ Autolock Managers: false
+ Root Rotation In Progress: false
+ Node Address: X.X.X.X
+  Manager Addresses:
+   X.X.X.X:2377
+   X.X.X.X:2377
+   X.X.X.X:2377
+   X.X.X.X:2377
+ Runtimes: runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+ runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+ init version: 949e6fa
+ Security Options:
+  apparmor
+  seccomp
+   Profile: default
+ Kernel Version: 4.10.0-35-generic
+ Operating System: Ubuntu 16.04.3 LTS
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 12
+ Total Memory: 251.8GiB
+ Name: ram
+ ID: 3OGG:275C:Q3IW:O4HX:DPLP:DPI3:5TIT:AG5J:EDMK:7NK3:L4UZ:BTQH
+ Docker Root Dir: /var/lib/docker
+ Debug Mode (client): false
+ Debug Mode (server): false
+ Username: ramidavalapati
+ Registry: https://index.docker.io/v1/
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Live Restore Enabled: false
+And finally I am doing sudo docker-compose up
+Any kind of help is appreciated!

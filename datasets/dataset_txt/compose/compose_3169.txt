@@ -1,0 +1,41 @@
+steve-jansen commented on 28 Oct 2015
+Hi Docker Team!
+Looks like explicitly setting the project name with docker-compose up breaks the behavior of docker-compose ps.
+In the example below, docker-compose ps works as expected with a default project name. The output of docker-compose ps is empty when using a non-default project name. My docker-compose ps doesn't accept a project name parameter either (which is what I expected).
+This is a small issue but figured worth reporting.
+Thanks for building such a great product!
+Steve
+$ docker -v
+Docker version 1.8.2, build 0a8c2e3
+$ docker-compose -v
+docker-compose version: 1.4.2
+$ cat docker-compose.yml
+example:
+  image: busybox:latest
+  command: /bin/sh -c "while true; do sleep 1; done"
+$ docker-compose up
+Recreating repro_example_1...
+Attaching to repro_example_1
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping repro_example_1...
+Killing repro_example_1... done
+me:/tmp/repro$ docker-compose up -d
+Starting repro_example_1...
+me:/tmp/repro$ docker-compose ps
+     Name                    Command               State   Ports
+----------------------------------------------------------------
+repro_example_1   /bin/sh -c while true; do  ...   Up
+$ docker-compose stop
+Stopping repro_example_1... done
+$ docker-compose rm -f
+Going to remove repro_example_1
+Removing repro_example_1... done
+$ docker-compose --project-name test up -d
+Creating test_example_1...
+$ docker-compose ps
+Name   Command   State   Ports
+------------------------------
+$ docker ps
+CONTAINER ID        IMAGE                       COMMAND                  CREATED              STATUS              PORTS                         NAMES
+40a47cc8fd63        busybox:latest              "/bin/sh -c 'while tr"   About a minute ago   Up About a minute                                 test_example_1
+$

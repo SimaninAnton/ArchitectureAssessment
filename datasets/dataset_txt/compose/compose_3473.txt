@@ -1,0 +1,20 @@
+ChrisRut commented on 14 Jul 2015
+I just upgraded from 1.1.0 to 1.3.2, and after dealing with the /tmp directory being mounted as noexec (issue #1339), I ran into another issue that I couldn't find in the backlog;
+$ docker-compose up -d
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 32, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 471, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 230, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 398, in remove_duplicate_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 405, in duplicate_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 112, in containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.legacy", line 56, in check_for_legacy_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.legacy", line 138, in get_legacy_containers
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.legacy", line 152, in _get_legacy_containers_iter
+TypeError: argument of type 'NoneType' is not iterable
+Downgrading to 1.3.1 seems to alleviate this behavior.

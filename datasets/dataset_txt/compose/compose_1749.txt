@@ -1,0 +1,30 @@
+SamCB commented on 27 Jan 2017
+I've been doing some experimenting with restarts and have come across some strange behaviour.
+Say I have the following docker-compose.yml:
+version: '2'
+services:
+  testA:
+    image: ubuntu:16.04
+    restart: always
+    command: bash  -c "exit 1"
+
+  testB:
+    image: ubuntu:16.04
+    restart: always
+    command: bash
+If I call docker-compose run testA it runs, crashes, then restarts as expected:
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                                  PORTS               NAMES
+1fcd3c128245        ubuntu:16.04        "bash -c 'exit 1'"       12 seconds ago      Restarting (1) Less than a second ago                       restarttest_testA_run_1
+If I call docker-compose run testB, and then call exit 1, it says exit, and then hangs, without going back to the normal terminal.
+root@19972505e027:/# exit 1
+exit
+In a seperate terminal:
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                          PORTS               NAMES
+19972505e027        ubuntu:16.04        "bash"                   19 seconds ago      Up 6 seconds                                        restarttest_testB_run_3
+It appears as if it's restarted, in fact I can exec into the container (docker exec -it $(docker ps -lq) bash) and fiddle around a bit. However when I go back to the original container and ctrl+c, it closes, goes back to terminal, and kills the container.
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                         PORTS               NAMES
+I understand that I should be running this kind of scenario with up instead of run but I was experimenting with something that required a bit of interactivity and I'm more curious than anything right now.
+I'm wondering what's happening between me exiting the container and the container shutting down, and what I'm actually doing by pressing ctrl+c?

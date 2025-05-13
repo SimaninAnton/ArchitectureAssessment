@@ -1,0 +1,8 @@
+AtomicBit commented on 21 Dec 2017 •
+edited
+There are various informations about in which docker-engine version is which docker-compose file version available:
+Release page says 3.3-3.5 are for 17.06+
+Compose-matrix (include file for doc page) doesn't even mention 3.5
+https://github.com/docker/docker.github.io/blob/3c44bc7f746d161efb4399a56db809c352ab5521/_includes/content/compose-matrix.md
+And this (I guess correct) document shows that 3.4 and 3.5 needs version 17.09 and 17.12 respectively.
+https://github.com/docker/docker.github.io/blob/3c44bc7f746d161efb4399a56db809c352ab5521/compose/compose-file/compose-versioning.md

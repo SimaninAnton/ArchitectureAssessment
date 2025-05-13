@@ -1,0 +1,39 @@
+sflins commented on 14 Jan 2018
+Compose throws error just checking version with Microsoft NanoServer
+docker-compose version
+docker-compose.exe : Error loading Python DLL: C:\Users\Administrator\AppData\Local\Temp_MEI20282\python27.dll (error code 1114)
++ CategoryInfo : NotSpecified: (Error loading P...rror code 1114):String) [], RemoteException
++ FullyQualifiedErrorId : NativeCommandError
+Os version:
+Major Minor Build Revision
+10 0 14393 0
+$PSVersionTable
+Name Value
+PSRemotingProtocolVersion 2.3
+CLRVersion
+PSVersion 5.1.14393.1000
+PSEdition Core
+BuildVersion 10.0.14393.1000
+WSManStackVersion 3.0
+PSCompatibleVersions {1.0, 2.0, 3.0, 4.0...}
+SerializationVersion 1.1.0.1
+docker version
+Client:
+Version: 17.06.2-ee-6
+API version: 1.30
+Go version: go1.8.3
+Git commit: e75fdb8
+Built: Mon Nov 27 22:46:09 2017
+OS/Arch: windows/amd64
+Server:
+Version: 17.06.2-ee-6
+API version: 1.30 (minimum version 1.24)
+Go version: go1.8.3
+Git commit: e75fdb8
+Built: Mon Nov 27 22:55:16 2017
+OS/Arch: windows/amd64
+Experimental: false
+Install docker-compose
+Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.18.0/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile $Env:ProgramFiles\docker\docker-compose.exe
+Any ideas ?
+Sergio

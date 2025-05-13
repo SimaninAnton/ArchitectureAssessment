@@ -1,0 +1,4 @@
+cdalexndr commented on 6 Oct 2019 •
+edited
+Using compose file version 3, "restart: unless-stopped" works fine with docker-compose, but this version is dedicated to docker swarm (as stated in #4513 (comment)).
+Please add this option to version 2, that is maintained in parallel for normal docker compose.

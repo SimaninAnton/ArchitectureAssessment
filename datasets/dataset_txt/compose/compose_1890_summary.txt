@@ -1,0 +1,1 @@
+stopping tail -f with ctrl-c says "error: aborting"

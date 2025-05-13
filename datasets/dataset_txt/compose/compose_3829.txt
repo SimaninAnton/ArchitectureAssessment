@@ -1,0 +1,5 @@
+Contributor
+aanm commented on 17 Mar 2015
+Add an option to show the current docker-compose version being used.
+$ docker-compose version
+1.1.0-dev d21b8f1

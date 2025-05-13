@@ -1,0 +1,63 @@
+codemonstur commented on 7 Aug 2016 •
+edited
+I'm trying to create a volume inside a docker container so that the container can read host files (specifically database creation scripts for postgres). It's not working:
+$ ll
+total 16
+drwxr-xr-x 3 jurgen jurgen 4096 Aug  7 17:56 ./
+drwxr-xr-x 8 jurgen jurgen 4096 Aug  7 17:49 ../
+-rw-r--r-- 1 jurgen jurgen  122 Aug  7 17:57 docker-compose.yml
+drwxr-xr-x 2 jurgen jurgen 4096 Aug  7 17:50 schema/
+$ ll schema/
+total 16
+drwxr-xr-x 2 jurgen jurgen 4096 Aug  7 17:50 ./
+drwxr-xr-x 3 jurgen jurgen 4096 Aug  7 17:56 ../
+-rw-r--r-- 1 jurgen jurgen 5887 Aug  7 17:50 01_schema.sql
+$ cat docker-compose.yml 
+version: "2"
+services:
+  postgres:
+    image: postgres:latest
+    volumes:
+      - ./schema/:/docker-entrypoint-initdb.d/
+$ docker-compose run postgres bash
+Pulling postgres (postgres:latest)...
+latest: Pulling from library/postgres
+357ea8c3d80b: Pull complete
+c2c7a60f64c5: Pull complete
+41ae9dccaf61: Pull complete
+f97dc66893de: Pull complete
+ff0ae6b27f85: Pull complete
+0ad5d181a0a1: Pull complete
+6861d8947ef1: Pull complete
+344507bd6890: Pull complete
+c99d65d740b7: Pull complete
+5feaa8590d3d: Pull complete
+a0f3af5df7fc: Pull complete
+Digest: sha256:49beb9182d0107fec18e5bbac962bffb887092563964d5ba2f4d9614c590c4bf
+Status: Downloaded newer image for postgres:latest
+root@fa89e99a48fa:/# ls -al docker-entrypoint-initdb.d/
+total 4
+drwxr-xr-x  2 root root   40 Aug  7 15:56 .
+drwxr-xr-x 51 root root 4096 Aug  7 16:01 ..
+root@fa89e99a48fa:/# exit
+exit
+$ docker --version
+Docker version 1.12.0, build 8eab29e
+$ docker-compose --version
+docker-compose version 1.8.0, build f3628c7
+$ docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:40:59 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 23:54:00 2016
+ OS/Arch:      linux/amd64

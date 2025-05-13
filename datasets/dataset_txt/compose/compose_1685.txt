@@ -1,0 +1,36 @@
+jleeothon commented on 15 Feb 2017
+I get this error message intermittently:
+ERROR: for testdb-data  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
+An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+Docker: 1.13.1
+Compose: 1.10.1
+We run around 20 testing jobs that execute docker-compose up in around 14 Jenkins agents. There is a weak correlation between running many jobs at the same time and getting this error.
+I have the output from docker-compose --verbose up but cannot apart the relevant parts of it yet. Some potentially useful excepts:
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=rosetta', u'com.docker.compose.service=testdb-data', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+...
+compose.project._get_convergence_plans: other-container has upstream changes (testdb-data, some-container)
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=some-project', u'com.docker.compose.service=other-container', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker containers -> (list with 0 items)
+...
+(more similar lines)
+...
+compose.parallel.feed_queue: Starting producer thread for <Service: testdb-data>
+...
+compose.cli.verbose_proxy.proxy_callable: docker containers <- (all=True, filters={u'label': [u'com.docker.compose.project=rosetta', u'com.docker.compose.service=testdb-data', u'com.docker.compose.oneoff=False']})
+...
+compose.service.create_container: Creating testdb-data
+compose.cli.verbose_proxy.proxy_callable: docker create_container <- (name='testdb-data', image='docker-registry.bln.int.planetromeo.com:5000/pr-testdb:master_master', labels={u'com.docker.compose.service': u'testdb-data', u'com.docker.compose.project': u'rosetta', u'com.docker.compose.config-hash': 'c336deb9e460cd8f979029d54975bc936fee5ff573d9698c65ca479c6a7ed507', u'com.docker.compose.version': u'1.10.1', u'com.docker.compose.oneoff': u'False', u'com.docker.compose.container-number': '1'}, host_config={'NetworkMode': u'rosetta_default', 'Links': [], u'Isolation': None, 'PortBindings': {}, 'Binds': [], 'LogConfig': {'Type': u'', 'Config': {}}, 'VolumesFrom': []}, environment=[], entrypoint=['tail', '-f', '/dev/null'], volumes={u'/var/lib/mysql': {}, u'/var/www/dynamic/caches': {}, u'/var/www/pics': {}, u'/data/elastic-profilesearch': {}, u'/var/www/files/lib/_test': {}, u'/data/elastic-activitystream': {}, u'/var/www/dynamic/world': {}}, detach=True, networking_config={u'EndpointsConfig': {u'rosetta_default': {u'IPAMConfig': {}, u'Aliases': ['testdb-data']}}})
+...
+compose.parallel.parallel_execute_iter: Failed: <Service: testdb-data>
+compose.parallel.feed_queue: Pending: set([<Service: service1>, <Service: service2>, <Service: service3>, ...)
+compose.parallel.feed_queue: <Service: service1> has upstream errors - not processing
+compose.parallel.feed_queue: <Service: service2> has upstream errors - not processing
+compose.parallel.feed_queue: <Service: service3> has upstream errors - not processing
+...
+What kind of HTTP connection is this relevant to? Is it docker internals, or bad lines in dockerfiles / docker-compose files, or was it likely caused by code particular to our application?
+Do you think this is indeed related to our servers being overloaded hence we have this timeout?
+Or did we run into a bug?
+Can I help providing more details?
+9

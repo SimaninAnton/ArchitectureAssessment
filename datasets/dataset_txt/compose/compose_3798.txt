@@ -1,0 +1,7 @@
+mahnunchik commented on 25 Mar 2015
+Hi,
+Do you plan to add deployment/releases functionality to the docker-compose?
+I mean:
+Deploying a new version of the service or services specified in the configuration
+Rolling back to a previous release
+If not, could you please recommend a tool for that kind of tasks for small projects without clustering, private registry, and orchestration?

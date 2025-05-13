@@ -1,0 +1,66 @@
+vxsx commented on 4 May 2018 •
+edited
+Description of the issue
+After 1.21 update i can no longer exec into running containers if the project has dash/underscore in the name. Works correctly in 1.20 and with projects that don't have dashes/underscore in the name.
+Same goes for docker-compose logs
+Context information (for bug reports)
+± % docker-compose version                                                                                                                                                                                                    
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+± % docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+± % docker-compose config
+services:
+  db:
+    environment:
+      POSTGRES_DB: db
+    image: postgres:9.6-alpine
+    volumes:
+    - /Users/username/path/swsw11111-2:/app:rw
+  web:
+    build:
+      context: /Users/username/path/swsw11111-2
+    command: python manage.py runserver 0.0.0.0:80
+    environment:
+      DATABASE_URL: postgres://postgres@postgres:5432/db
+      DEBUG: "True"
+      STAGE: local
+    links:
+    - db:postgres
+    ports:
+    - 8350:80/tcp
+    volumes:
+    - /Users/username/path/swsw11111-2:/app:rw
+    - /Users/username/path/swsw11111-2/data:/data:rw
+version: '2.0'
+Steps to reproduce the issue
+docker-compose up -d
+docker-compose exec web bash
+Observed result
+ERROR: No container found for web_1
+Expected result
+Opens shell
+Additional information
+± % uname -a
+Darwin methos 16.7.0 Darwin Kernel Version 16.7.0: Tue Jan 30 11:27:06 PST 2018; root:xnu-3789.73.11~1/RELEASE_X86_64 x86_64
+Docker-compose installed with docker for mac

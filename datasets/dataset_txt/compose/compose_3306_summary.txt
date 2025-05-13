@@ -1,0 +1,1 @@
+config schema allows for `detach` field

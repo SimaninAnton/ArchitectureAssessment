@@ -1,0 +1,1 @@
+build complains "Volume foo declared as external but specifies additional attributes (driver)."

@@ -1,0 +1,13 @@
+sherzberg commented on 29 Jan 2014
+I'd like to not change any of my env variable code in my app and be able to do something like this:
+web:
+  build: .
+  ports:
+   - 8000:8000
+  links:
+   - db
+  environment:
+   DATABASE_URL: mysql://user:password@${DB_1_PORT_3306_TCP_ADDR}/db
+db:
+  image: orchardup/mysql
+Is there a way to do this currently with the linked ports? If not, is there any interest in this? I'd like to implement it there is a second person that would find it useful.

@@ -1,0 +1,1 @@
+docker-compose does not see EOF on STDIN when used on TLS protected docker engine

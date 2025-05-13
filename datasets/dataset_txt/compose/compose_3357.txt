@@ -1,0 +1,6 @@
+jportner commented on 21 Aug 2015
+This StackOverflow post describes my issue well: http://stackoverflow.com/questions/31210197/how-to-make-environmental-variables-available-to-docker-run-commands-from-docker
+I'm trying to set environment variables within docker-compose.yml via the "env_file" directive.
+I've got my environment variables (such as http_proxy, etc.) but those variables aren't available until after the Docker container is built.
+Ideally, those environment variables would be set before the Docker container starts to build, so commands such as "RUN apt-get install package" would have access to them (and be affected by them, as is the case with http_proxy)
+I think this is a reasonable request, but is it even possible to implement with the way docker-compose is written?

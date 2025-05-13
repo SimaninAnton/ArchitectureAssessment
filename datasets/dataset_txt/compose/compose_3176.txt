@@ -1,0 +1,15 @@
+Contributor
+adrian-budau commented on 26 Oct 2015
+With this Dockerfile
+FROM busybox
+
+RUN exit 1
+and docker-compose.yml
+service:
+  build: .
+Running
+docker-compose build service
+will fail because of the "RUN exit 1" and will leave in intermediate container there (which is completely unusable and useless).
+There is an option for docker called --force-rm which fixes this but I see no option in compose for this.
+Could there be one added?
+Thanks!

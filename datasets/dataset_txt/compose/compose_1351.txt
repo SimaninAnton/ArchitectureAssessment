@@ -1,0 +1,16 @@
+Puneeth-n commented on 30 Jun 2017
+I was wondering if it is possible to build docker images using docker-compose file with multiple tags?
+version: '2.2'
+
+services:
+    foo:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                CT_TAG: 6.10
+            labels:
+                com.example.description: "Accounting webapp"
+        image: foo:baz
+        image: foo:bar
+This will only tag the image as foo:bar and not foo:baz

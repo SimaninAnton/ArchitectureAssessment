@@ -1,0 +1,5 @@
+arruda commented on 9 Feb 2015
+It would be nice if fig could do the same as:
+docker run --rm -i --user="$(id -u):$(id -g)" ubuntu /bin/bash -v $PWD:/data
+This way one would be able to set the same user user/group as the current user without having to set manually each time for every different user.
+(using this would make the files created within the container to be with the same permission of the actual user)

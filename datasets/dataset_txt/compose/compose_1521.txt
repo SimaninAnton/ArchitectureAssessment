@@ -1,0 +1,6 @@
+drrtuy commented on 15 Apr 2017
+Docker-compose has a peculiar syntax check feature that states: no duplicate arguments in the entrypoint configuration key. There are many situations when there are duplicate args in a command string. Here is an example output which drives me crazy:
+root@cs81649:~/bottledwater-pg# docker-compose up -d kafka schema-registry postgres
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+Service 'psql' configuration key 'entrypoint' contains non unique items, please remove duplicates from ['psql', '-h', 'postgres', '-U', 'postgres']
+Is it possible to change the syntax check behavior?

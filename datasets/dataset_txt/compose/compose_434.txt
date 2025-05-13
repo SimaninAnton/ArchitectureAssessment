@@ -1,0 +1,131 @@
+thomasfaller commented on 25 Oct 2018
+Description of the issue
+I'm new to Docker and playing around with Dockerfiles and .yml scripts. I tried to replicate the example on the get started page for compose and when I type either docker-compose up or docker-compose build I get the same error message as follows:
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 41, in project_from_options
+  File "compose/cli/command.py", line 126, in get_project
+  File "compose/project.py", line 100, in from_config
+  File "compose/network.py", line 320, in get_networks
+  File "compose/network.py", line 125, in true_name
+  File "compose/network.py", line 146, in _set_legacy_flag
+  File "compose/network.py", line 106, in inspect
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/network.py", line 211, in inspect_network
+  File "site-packages/docker/utils/decorators.py", line 46, in inner
+  File "site-packages/docker/api/client.py", line 198, in _get
+  File "site-packages/requests/sessions.py", line 521, in get
+  File "site-packages/requests/sessions.py", line 499, in request
+  File "site-packages/requests/sessions.py", line 672, in merge_environment_settings
+  File "site-packages/requests/utils.py", line 692, in get_environ_proxies
+  File "site-packages/requests/utils.py", line 676, in should_bypass_proxies
+  File "urllib/request.py", line 2612, in proxy_bypass
+  File "urllib/request.py", line 2589, in proxy_bypass_macosx_sysconf
+  File "urllib/request.py", line 2575, in _proxy_bypass_macosx_sysconf
+ValueError: negative shift count
+[24498] Failed to execute script docker-compose
+Context information (for bug reports)
+Output of docker-compose version
+1.22.0, build f46880f
+Output of docker version
+18.06.1-ce, build e68fc7a
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  redis:
+    image: redis:alpine
+  web:
+    build:
+      context: /Users/guest/DockerData/composetest
+    ports:
+    - 5000:5000/tcp
+version: '3.0'
+Steps to reproduce the issue
+Basically the steps explained the get started docs
+mkdir composetest
+cd composetest
+Content of app.py
+import time
+
+import redis
+from flask import Flask
+
+
+app = Flask(__name__)
+cache = redis.Redis(host='redis', port=6379)
+
+
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+
+
+@app.route('/')
+def hello():
+    count = get_hit_count()
+    return 'Hello World! I have been seen {} times.\n'.format(count)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=True)
+Content of requirements.txt
+flask
+redis
+Content of Dockerfile
+FROM python:3.4-alpine
+ADD . /code
+WORKDIR /code
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+docker-compose.yml
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "5000:5000"
+  redis:
+    image: "redis:alpine"
+Observed result
+The traceback error output shown above
+Expected result
+built image
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/command.py", line 41, in project_from_options
+  File "compose/cli/command.py", line 126, in get_project
+  File "compose/project.py", line 100, in from_config
+  File "compose/network.py", line 320, in get_networks
+  File "compose/network.py", line 125, in true_name
+  File "compose/network.py", line 146, in _set_legacy_flag
+  File "compose/network.py", line 106, in inspect
+  File "site-packages/docker/utils/decorators.py", line 19, in wrapped
+  File "site-packages/docker/api/network.py", line 211, in inspect_network
+  File "site-packages/docker/utils/decorators.py", line 46, in inner
+  File "site-packages/docker/api/client.py", line 198, in _get
+  File "site-packages/requests/sessions.py", line 521, in get
+  File "site-packages/requests/sessions.py", line 499, in request
+  File "site-packages/requests/sessions.py", line 672, in merge_environment_settings
+  File "site-packages/requests/utils.py", line 692, in get_environ_proxies
+  File "site-packages/requests/utils.py", line 676, in should_bypass_proxies
+  File "urllib/request.py", line 2612, in proxy_bypass
+  File "urllib/request.py", line 2589, in proxy_bypass_macosx_sysconf
+  File "urllib/request.py", line 2575, in _proxy_bypass_macosx_sysconf
+ValueError: negative shift count
+[24498] Failed to execute script docker-compose
+Additional information
+Since I'm new to Docker, I'm not too sure where to look for a more extended log for this.
+Any help will be greatly appreciated!
+OS version / distribution, docker-compose install method, etc.
+Mac OS: 10.14

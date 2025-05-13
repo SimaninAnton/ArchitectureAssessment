@@ -1,0 +1,2 @@
+Neppord commented on 9 Jul 2015
+I have a command that restarts the service whenever my source files changes. After a while the restart command don't exit (in any reasonable time). But if I take a look at the logs then I can see that the service have indeed restarted long before compose exits.

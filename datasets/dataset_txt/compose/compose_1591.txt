@@ -1,0 +1,3 @@
+mcandre commented on 18 Mar 2017
+Sometimes, docker-compose rm -f reports No stopped containers, instead of deleting the actually still running containers.
+For example, this can happen with https://github.com/zoidbergwill/docker-compose-kafka

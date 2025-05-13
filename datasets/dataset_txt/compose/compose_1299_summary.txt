@@ -1,0 +1,1 @@
+Limit stdout tail of `docker-compose up`

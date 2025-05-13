@@ -1,0 +1,45 @@
+shrikrishnaholla commented on 10 Oct 2015
+I am working on a PR that adds a flag called --script to docker-compose run, which can be used to run frequently used one-off scripts in a container with an alias. It also includes adding a directive called scripts within a service that allows us to define aliases to scripts and their corresponding commands.
+Example:
+Say I have a django app in a service named web. Its YAML would typically be something like
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  ports:
+    - "8000:8000"
+And if I wanted to run migrations, or run the django shell, I would run commands like
+docker-compose run web python manage.py migrate
+docker-compose run web python manage.py shell
+docker-compose run web python manage.py collectstatic
+There is easily an opportunity to abstract this out if I'm going to have to do this frequently. With the above script feature, I would write the docker-compose file as
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  ports:
+    - "8000:8000"
+  scripts:
+    shell: python manage.py shell
+    migrate: python manage.py migrate
+    static: python manage.py collectstatic
+and the corresponding runs would be
+docker-compose run --script web shell
+docker-compose run --script web migrate
+docker-compose run --script web static
+One more example:
+A typical postgres directive is
+db:
+  image: postgres:9.4
+  ports:
+    - "5432:5432"
+And one uses docker-compose run db psql -h db -U postgres or something along those lines to connect to psql. If you are using such a command frequently (no autocompletes for commands inside the container!), it gets tiring pretty soon. With the above feature, the docker-compose yaml would change to
+db:
+  image: postgres:9.4
+  ports:
+    - "5432:5432"
+  scripts:
+    proot: psql -h db -U postgres
+    psql: psql -h db -U myuser mydb
+and the runs would be
+docker-compose run --script db proot
+docker-compose run --script db psql
+I've already got it working, tests and docs are yet to be written. But before going further, I wanted to know the community's thoughts on a feature like this, and any feedback on whether there is a scope for improvement on the proposal.

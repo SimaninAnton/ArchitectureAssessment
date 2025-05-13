@@ -1,0 +1,12 @@
+shrikrishnaholla commented on 1 Oct 2015
+I'm working with master (which is currently at dabf1e8), and while building or starting, I'm getting the above warning, and those commands won't work
+Ex: I am using a service
+rcli:
+  image: redis:latest
+  links:
+    - redis
+  command: >
+     sh -c 'redis-cli -h "$REDIS_PORT_6379_TCP_ADDR" -p "$REDIS_PORT_6379_TCP_PORT"'
+Here, since the env variable REDIS_PORT_6379_TCP_ADDR is obtained because of linking, and it's non-existent when building, or before starting the redis service, I can't use this service. It substitutes the value with an empty string.
+The REDIS_PORT_6379_TCP_ADDR variable is not set. Substituting a blank string.
+The REDIS_PORT_6379_TCP_PORT variable is not set. Substituting a blank string.

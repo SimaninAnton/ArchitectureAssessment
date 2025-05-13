@@ -1,0 +1,50 @@
+iMerica commented on 28 Aug 2015
+I have roughly 20-30 containers. This is what I'm starting to see when running docker-compose stop
+Exception in thread Thread-3:
+Traceback (most recent call last):
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 763, in run
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.utils", line 31, in inner_execute_function
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 203, in <lambda>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.container", line 143, in stop
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.utils.decorators", line 20, in wrapped
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 815, in stop
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 83, in _post
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 508, in post
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 465, in request
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 573, in send
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 433, in send
+ReadTimeout: HTTPSConnectionPool(host='192.168.99.100', port=2376): Read timed out. (read timeout=70)
+
+Exception in thread Thread-4:
+Traceback (most recent call last):
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 763, in run
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.utils", line 31, in inner_execute_function
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 203, in <lambda>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.container", line 143, in stop
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.utils.decorators", line 20, in wrapped
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 815, in stop
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 83, in _post
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 508, in post
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 465, in request
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 573, in send
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 433, in send
+ReadTimeout: HTTPSConnectionPool(host='192.168.99.100', port=2376): Read timed out. (read timeout=70)
+
+Exception in thread Thread-6:
+Traceback (most recent call last):
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/compose/build/docker-compose/out00-PYZ.pyz/threading", line 763, in run
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.utils", line 31, in inner_execute_function
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.project", line 203, in <lambda>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.container", line 143, in stop
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.utils.decorators", line 20, in wrapped
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.client", line 815, in stop
+  File "/compose/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 83, in _post
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 508, in post
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 465, in request
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 573, in send
+  File "/compose/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 433, in send
+ReadTimeout: HTTPSConnectionPool(host='192.168.99.100', port=2376): Read timed out. (read timeout=70)
+I've truncated the output since it's quite large.

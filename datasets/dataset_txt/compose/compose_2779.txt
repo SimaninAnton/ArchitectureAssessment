@@ -1,0 +1,13 @@
+aramalipoor commented on 13 Feb 2016
+In v1 we would simply link two containers and access the linked container env variables, we would do,
+web:
+  links:
+    - db
+
+db:
+  image: mysql:5.6
+  environment:
+    MYSQL_ROOT_PASSWORD: mypass
+Then access mysql's env in web entrypoint.sh,
+set_parameter "database_password" ${DB_ENV_MYSQL_ROOT_PASSWORD}
+How we're supposed to do this when using v2, besides passing that as env directly to web?

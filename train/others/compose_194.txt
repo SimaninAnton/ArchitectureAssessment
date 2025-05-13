@@ -1,0 +1,71 @@
+arilwan commented on 29 Apr 2019
+Docker stopped working after a service restart. All suggestions in previously reported issues did not solve the problem. I did not delete any file, I only run a service restart via my script s follows:
+#!/bin/bash
+
+echo "###Shutting down all containers####"
+
+docker-compose down
+
+echo "###Turning them back on####"
+
+docker-compose up -d
+Unfortunately, this time docker didn't shut down properly, therefore unable to start again:
+$docker --version
+Docker version 18.09.0, build 4d60db4
+$docker-compose --version
+docker-compose version 1.22.0, build f46880fe
+$docker info
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+$docker-compose up
+ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+$sudo docker-compose up
+sudo: docker-compose: command not found
+$systemctl status docker.service
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
+   Active: deactivating (stop-sigterm)
+     Docs: https://docs.docker.com
+ Main PID: 12895 (dockerd)
+   CGroup: /system.slice/docker.service
+           └─12895 /usr/bin/dockerd -H unix://
+
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.925508825Z" level=info msg="pickfirstBalancer: HandleSubConnStateChange: 0xc420658690, REA...odule=grpc
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.968508750Z" level=info msg="ClientConn switching balancer to \"pick_first\"" module=grpc
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.969364064Z" level=info msg="pickfirstBalancer: HandleSubConnStateChange: 0xc420658910, CON...odule=grpc
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.970291215Z" level=info msg="pickfirstBalancer: HandleSubConnStateChange: 0xc420658910, REA...odule=grpc
+Apr 29 11:21:48 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:48.700242870Z" level=warning msg="Usage of loopback devices is strongly discouraged for produ...vicemapper
+Apr 29 11:21:48 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:48.788995880Z" level=warning msg="Base device already exists and has filesystem xfs on it. Us...vicemapper
+Apr 29 11:21:48 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:48.799030787Z" level=info msg="[graphdriver] using prior storage driver: devicemapper"
+Apr 29 11:21:50 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:50.749392075Z" level=info msg="Graph migration to content-addressability took 0.00 seconds"
+Apr 29 11:21:50 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:50.753684781Z" level=info msg="Loading containers: start."
+Apr 29 14:02:15 fiware.localhost dockerd[12895]: time="2019-04-29T14:02:15.823862127Z" level=info msg="Processing signal 'terminated'"
+Hint: Some lines were ellipsized, use -l to show in full.
+[root@fiware fiware]#
+[root@fiware fiware]#
+[root@fiware fiware]#
+[root@fiware fiware]# systemctl status docker.service
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
+   Active: deactivating (stop-sigterm)
+     Docs: https://docs.docker.com
+ Main PID: 12895 (dockerd)
+   CGroup: /system.slice/docker.service
+           └─12895 /usr/bin/dockerd -H unix://
+
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.925508825Z" level=info msg="pickfirstBalancer: HandleSubConnStateChange: 0xc420658690, REA...odule=grpc
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.968508750Z" level=info msg="ClientConn switching balancer to \"pick_first\"" module=grpc
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.969364064Z" level=info msg="pickfirstBalancer: HandleSubConnStateChange: 0xc420658910, CON...odule=grpc
+Apr 29 11:21:47 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:47.970291215Z" level=info msg="pickfirstBalancer: HandleSubConnStateChange: 0xc420658910, REA...odule=grpc
+Apr 29 11:21:48 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:48.700242870Z" level=warning msg="Usage of loopback devices is strongly discouraged for produ...vicemapper
+Apr 29 11:21:48 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:48.788995880Z" level=warning msg="Base device already exists and has filesystem xfs on it. Us...vicemapper
+Apr 29 11:21:48 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:48.799030787Z" level=info msg="[graphdriver] using prior storage driver: devicemapper"
+Apr 29 11:21:50 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:50.749392075Z" level=info msg="Graph migration to content-addressability took 0.00 seconds"
+Apr 29 11:21:50 fiware.localhost dockerd[12895]: time="2019-04-29T11:21:50.753684781Z" level=info msg="Loading containers: start."
+Apr 29 14:02:15 fiware.localhost dockerd[12895]: time="2019-04-29T14:02:15.823862127Z" level=info msg="Processing signal 'terminated'"
+Hint: Some lines were ellipsized, use -l to show in full.
+
+$sudo dockerd --debug
+Error starting daemon: pid file found, ensure docker is not running or delete /var/run/docker.pid
+What is the problem here please?

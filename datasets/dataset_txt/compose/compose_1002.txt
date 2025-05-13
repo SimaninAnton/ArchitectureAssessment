@@ -1,0 +1,54 @@
+abernier commented on 19 Dec 2017 •
+edited
+Considering that toto.env file:
+toto_foo0=foo
+toto_foo1=fo o
+toto_foo2=fo\ o
+toto_foo3="fo o"
+toto_foo4='fo o'
+Let's verify we can source that file and retrieve values from set:
+$ sh -c '. toto.env && set |grep ^toto_'
+toto.env: line 2: o: command not found
+toto_foo0=foo
+toto_foo2='fo o'
+toto_foo3='fo o'
+toto_foo4='fo o'
+Everything is ok, except for the first line toto_foo1 where source does not accept value containing space without being "quoted"
+Let's now try with docker-compose-toto.yml loading that same toto.env file using env_file and display them using env:
+version: '3'
+services:
+  toto:
+    image: alpine
+    env_file: toto.env
+    command: sh -c 'env |grep ^toto_'
+$ docker-compose -f docker-compose-toto.yml up toto
+toto_1  | toto_foo0='foo'
+toto_1  | toto_foo1='fo o'
+toto_1  | toto_foo2='fo\ o'
+toto_1  | toto_foo3='"fo o"'
+toto_1  | toto_foo4=''"'"'fo o'"'"
+No complain about toto_foo1 here
+toto_foo2 value is here 'fo\ o' rather than fo o previously
+toto_foo3 and toto_foo4 are kinda "overescaped"
+If we check using docker-compose config, it even different:
+$ docker-compose -f docker-compose-toto.yml config
+services:
+  toto:
+    command: sh -c 'env |grep ^toto_'
+    environment:
+      toto_foo0: foo
+      toto_foo1: fo o
+      toto_foo2: fo\ o
+      toto_foo3: '"fo o"'
+      toto_foo4: '''fo o'''
+    image: alpine
+version: '3.0'
+My system environment:
+$ docker --version
+Docker version 17.06.2-ce, build cec0b72
+
+$ docker-compose --version
+docker-compose version 1.14.0, build c7bdf9e
+
+$ uname -a
+Darwin Antoines-MacBook-Air.local 14.5.0 Darwin Kernel Version 14.5.0: Wed Jul 29 02:26:53 PDT 2015; root:xnu-2782.40.9~1/RELEASE_X86_64 x86_64

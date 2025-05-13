@@ -1,0 +1,11 @@
+Contributor
+cameronmaske commented on 18 Jan 2014
+Screencast with this happening (sorry it's not edited, skip to 4 minutes in to see the issue in action).
+Steps to recreate
+Clone the fig rails example
+Start docker (if on Mac)
+Run fig up, wait for the build to complete and stop the process
+Try running fig up again.
+Results it an error message
+Recreating RailsFig_db_1...                                                                          
+create: No such image: ubuntu (tag: latest)

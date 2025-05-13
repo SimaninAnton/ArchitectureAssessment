@@ -1,0 +1,8 @@
+Contributor
+shin- commented on 9 Sep 2016
+See: moby/moby#26294
+Also pointed out by @PatrickLang in #3897 (comment)
+We can try and detect the type of daemon compose is connected to and normalize paths accordingly. I don't know if this is even possible, and it creates additional network roundtrips that will make Compose feel slower in some environments.
+We do not normalize by default, and create additional documentation to inform non-native users of the format they should employ. This would be a breaking change, but is much simpler to implement.
+cc @aanand @dnephin @friism WDYT?
+Relevant: moby/moby#23569 (comment)

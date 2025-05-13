@@ -1,0 +1,28 @@
+geertvanheusden commented on 18 Aug 2015
+Hi,
+I encountered an issue when using docker-compose version 1.4.0.
+Let me try to explain it by describing the different steps I took.
+Create a Dockerfile with the following content:
+FROM debian
+
+VOLUME /test
+
+CMD ls -la /test
+Create a docker-compose.yml file in the same directory with the following content:
+test:
+    build: .
+Run the following commands:
+docker-compose build
+docker-compose up
+The ls command should return zero files which is correct
+Now create a testsrc directory with a file in it and update the docker-compose.yml file to:
+test:
+    build: .
+    volumes:
+      - ./testsrc:/test
+Run docker-compose up again and you will see that the test directory in the container is still empty. This behaviour is unexpected and in my opinion incorrect.
+Run docker-compose rm and docker-compose up and the result is correct. One file available in the volume on the container.
+Removing the volumes line from the docker-compose.yml file will still result in one file available in the container when you don't execute the docker-compose rm command.
+If this is not a bug it think the behaviour should be clearly explained in the docs.
+Regards,
+Geert

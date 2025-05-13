@@ -1,0 +1,6 @@
+reyman commented on 19 Nov 2015
+Hi,
+I'm new on docker, and docker-compose.
+After pull on some image, i search the way to configure it with docker-compose.
+Where are located the image pulled on the local disk (i'm using ubuntu) ? How can i run docker-compose on an existing docker-compose.yml into this pulled image ? I don't find this information in docker manual. Can you enlight me ?
+Thanks

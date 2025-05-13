@@ -1,0 +1,2 @@
+lwis commented on 24 Nov 2015
+When will the --cpu-quota=0: Limit the CPU CFS (Completely Fair Scheduler) quota flag be supported? Is there a viable workaround for using this with compose today?

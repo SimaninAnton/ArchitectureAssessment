@@ -1,0 +1,12 @@
+knutole commented on 17 Sep 2015
+Running an image with an external data container. If I create a new volume (eg. postgis_store_7), and change the docker-compose.yml, the compose still runs the postgis_store_6 volume. To get it to reflect changes, I have to delete postgis_store_6 AND the container that used it (dev_postgis_1). Only then will it start using the configured postgis_store_7. No errors thrown.
+From docker-compose.yml:
+postgis:
+  image: systemapic/postgis
+  ports:
+    - 5432
+  volumes_from:
+    - postgis_store_6
+  command: ./start.sh
+Docker version 1.8.2, build 0a8c2e3
+docker-compose 1.2.0 and 1.4.1 (both)

@@ -1,0 +1,4 @@
+tannaalok commented on 16 Aug 2017 •
+edited
+Docker Version : Client: Version: 17.05.0-ce API version: 1.29 Go version: go1.7.5 Git commit: 89658be Built: Thu May 4 22:06:25 2017 OS/Arch: linux/amd64
+Server: Version: 17.05.0-ce API version: 1.29 (minimum version 1.12) Go version: go1.7.5 Git commit: 89658be Built: Thu May 4 22:06:25 2017 OS/Arch: linux/amd64 Experimental: false

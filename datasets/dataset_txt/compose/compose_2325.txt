@@ -1,0 +1,42 @@
+richburdon commented on 7 Jun 2016 •
+edited
+From the command line, everything works, from docker-compose, I have the following hello-world example (would be really useful if somewhere in the docs there were examples):
+services:
+  test_container:
+    build:
+      context: .
+      dockerfile: Dockerfile-container
+    volumes:
+      - /usr/share
+  test_client:
+    build:
+      context: .
+      dockerfile: Dockerfile-client
+    volumes_from:
+      - service:test_container:ro
+Dockerfile-container:
+FROM busybox
+ENV DIR=/usr/share
+RUN mkdir $DIR
+RUN echo $(date) > $DIR/timestamp.txt
+RUN cat $DIR/timestamp.txt
+VOLUME $DIR
+Dockerfile-client
+FROM busybox
+ENV DIR=/usr/share
+VOLUME $DIR
+"docker-compose build" returns OK.
+"docker run volume_test_container cat /usr/share/timestamp.txt" prints the timestamp as expected.
+"docker-compose start" returns OK.
+But:
+"docker-compose up" throws internal errors:
+Recreating 98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_98147d3b76d6_volume_test_container_1
+
+ERROR: for test_container  No such image: sha256:249cac03be97d189d297fae85bd69df87264670a65d7d164b8e77a27e530da8b
+Traceback (most recent call last):
+  File "/usr/local/Cellar/docker-compose/1.7.1/libexec/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+  File "/usr/local/Cellar/docker-compose/1.7.1/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 63, in main
+    log.error(e.msg)
+AttributeError: 'ProjectError' object has no attribute 'msg'
+2). No combination of magic will enable the "client" container to see the contents of the "container"s share.

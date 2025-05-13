@@ -1,0 +1,64 @@
+dcendents commented on 16 Oct 2018
+Description of the issue
+This bug is similar to #5885, while that one is fixed, this variant is not
+Rebuilding a running container with docker-compose up -d --build will fail with the error message: Cannot create container for service svc: Duplicate mount point: /mnt
+This happens when:
+The docker-compose.yml specifies a build target (stage)
+The Dockerfile defines a VOLUME
+The docker-compose.yml defines the same volume
+Context information (for bug reports)
+Output of "docker-compose version"
+
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of "docker version"
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:56 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:21 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"
+
+services:
+  svc:
+    build:
+      context: /home/user/docker-compose-error-duplicate-mount-point
+      target: production
+    container_name: container_name
+    volumes:
+    - source: vol
+      target: /mnt
+      type: volume
+version: '3.4'
+volumes:
+  vol: {}
+Steps to reproduce the issue
+Clone https://github.com/dcendents/docker-compose-error-duplicate-mount-point
+Run reproduce_error.sh
+Observed result
+After triggering a service upgrade by changing the command and running docker-compose -f up -d, the upgrade failed with the error:
+Cannot create container for service svc: Duplicate mount point: /mnt
+Expected result
+The service should be upgraded without an error
+Stacktrace / full error message
+Recreating container_name ... error
+
+ERROR: for container_name  Cannot create container for service svc: Duplicate mount point: /mnt
+
+ERROR: for svc  Cannot create container for service svc: Duplicate mount point: /mnt
+ERROR: Encountered errors while bringing up the project.

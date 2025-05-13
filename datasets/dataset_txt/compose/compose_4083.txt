@@ -1,0 +1,2 @@
+bmustata commented on 24 Nov 2014
+Currently I'm looking for an alternative to run fig.sh with node.js (or heroku style). Any suggestions?

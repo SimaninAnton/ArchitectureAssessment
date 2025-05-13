@@ -1,0 +1,1 @@
+Feature request: add scale parameter in yml

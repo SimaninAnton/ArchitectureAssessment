@@ -1,0 +1,30 @@
+Gardezi1 commented on 11 Dec 2017
+Hello, guys, I'm kind of new to this.
+I've created a Docker File
+FROM node:7
+# Working directory for application
+WORKDIR /usr/src/app
+# Binds to port 7777
+EXPOSE 7777
+# Creates a mount point
+VOLUME [ "/usr/src/app" ]
+and this is my docker-compose.yml file
+version: "2"
+services:
+  redis:
+    image: "redis"
+  postgres:
+    image: "postgres:9.4"  
+  web:
+    build: .
+    ports:
+     - "4000:4000"
+    volumes:
+     - .:/usr/src/app
+    depends_on:
+      - postgres
+      - redis
+    command: ["npm", "start"]
+Now I ran docker-compose up -d and I'm not getting any error. But the problem is when I try to access it using this url 0.0.0.0:4000 it throws me this error "this site can't be reached"
+Can you guys help me out thanks
+2

@@ -1,0 +1,11 @@
+Contributor
+joakimr-axis commented on 11 Mar 2019
+run.sh contains some unnecessary statements that can be removed. For instance, a statement like
+if [ -n "$foo" ]; then
+echo bar
+fi
+adds an extra check for the [ result that was already evaluated, and shell script best practice is then to write
+[ -z "$foo" ] || echo bar
+instead and save us from wasting some extra CPU cycles while decreasing the shell script footprint too.
+Furthermore, there is no need to add quotes where not needed, and also not make external calls to external binaries like dirname (where the shell build-in string manipulation can do the job for us at a much lower cost).
+I will add a pull request for this.

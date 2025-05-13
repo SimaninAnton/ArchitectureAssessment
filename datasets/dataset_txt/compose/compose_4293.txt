@@ -1,0 +1,9 @@
+Contributor
+d11wtq commented on 2 Jul 2014
+This question came up as we're potentially going to start using fig on our Bamboo agents that run docker builds needing multiple containers, though there was a question from the team about cleanup of containers once the build has run.
+Since fig run and fig up now start linked containers (if they are not running), does it make sense for fig stop, fig kill and fig rm to apply the same logic when given a named service?
+In the case fig run --rm was used, it is also possible there may be an expectation that linked services will also be cleaned up on exit, though this is a more complex problem, as those linked services may have already been running before fig run was executed.
+Use case running our tests:
+fig run tests /ci.sh
+fig rm --force tests
+Thoughts?

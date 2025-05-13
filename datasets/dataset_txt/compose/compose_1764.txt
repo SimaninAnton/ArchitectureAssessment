@@ -1,0 +1,17 @@
+mishas commented on 24 Jan 2017
+To reproduce:
+Create a docker-compose.yml file with the following content:
+version: '2'
+
+services:
+    my_service:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: my/image
+Running docker-compose pull --ignore-pull-failures prints out the expected ERROR output (
+ERROR: b'repository my/image not found: does not exist or no pull access'),
+And returns the unexpected 1 status code :(.
+This worked well in versions 1.12.x, but stopped working once updated to 1.13
+3
+1

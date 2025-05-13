@@ -1,0 +1,12 @@
+karmux commented on 23 Aug 2015
+For some reason I cannot forward port 25 when running container using Compose. I can forward all other ports in Compose. Forwarding port 25 works well in plain Docker.
+yml:
+mail:
+    image: mymail
+    ports:
+        - 25:25
+        - 465:465
+        - 587:587
+        - 993:993
+        - 995:995
+docker ps shows "25/tcp" when run using Compose and "0.0.0.0:25->25/tcp" when run using plain Docker.

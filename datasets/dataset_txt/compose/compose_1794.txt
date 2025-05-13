@@ -1,0 +1,13 @@
+Contributor
+kinghuang commented on 14 Jan 2017
+Description
+Docker 1.13 adds the option to deploy stacks using Docker Compose version 3 files in addition to Distributed Application Bundle (DAB) files. When docker-compose bundle is used to produce a DAB, it fetches image digests and replaces image tags with digests in the compose project. This produces a DAB whose images are pinned to a specific digest, rather than a tag that can be changed to different digests over time.
+docker-compose config can be used to “compile” or combine multiple compose files together, resolve .env variables, and handle all of Docker Compose's options to produce a single compose file suitable for use with docker stack deploy --compose-file. It would be useful to add an option to the config command that replaces image tags with digests—like the bundle command—to produce a compose file destined for stack deployments that acts like DAB files with respect to image pinning.
+Steps to reproduce the issue:
+Given Docker Compose file(s) forming a project, call docker-compose config.
+Describe the results you received:
+A combined/resolved Docker Compose configuration is outputted. Any image tags remain as tags.
+Describe the results you expected:
+An option on docker-compose config that causes Docker Compose to output image digests instead of tags.
+Additional information you deem important (e.g. issue happens only occasionally):
+The brief description of the config command says that is is to “Validate and view the compose file.” But, it is the only way to produce a Docker Compose file that uses features not supported by docker stack deploy --compose-file. I believe this feature request points to a broader need for docker-compose config to be treated more like docker-compose bundle, and be used for generating a single/compiled/resolved Compose file for a Docker Compose project. This includes adopting bundle's options (--push-images and --output).

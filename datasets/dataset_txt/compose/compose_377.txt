@@ -1,0 +1,4 @@
+jithinpjames commented on 29 Nov 2018
+I have 9 containers defined inside a docker-compose file. While coding, i need to bring 1 container down and restart it.
+docker-compose restart works for me, but the port is not exposed.
+I mean, the container gets restarted and we can see that its up and running and we can get inside the container too. However the API calls to the container doesn't work because the port is not exposed/up.

@@ -1,0 +1,3 @@
+bwiklund commented on 28 Aug 2014
+FIY, if you're using boot2docker and follow the OSX setup instructions on the site, fig doesn't work (any command just exits siliently)
+It does however work if installed via brew. I don't know the reason behind it but hopefully this helps you guys.

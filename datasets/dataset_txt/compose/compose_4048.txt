@@ -1,0 +1,2 @@
+tianon commented on 13 Dec 2014
+Now that moby/moby#9281 is in Docker 1.4.0, it'd be great to have either pull: true in fig.yml next to build: or have a fig build --pull!

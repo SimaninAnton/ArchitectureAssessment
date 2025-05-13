@@ -1,0 +1,1 @@
+Add support for build-time extra_hosts for Version 3

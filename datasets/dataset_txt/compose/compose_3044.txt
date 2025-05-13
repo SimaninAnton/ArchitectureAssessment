@@ -1,0 +1,57 @@
+aldarund commented on 29 Nov 2015
+Im trying to launch compose on win 10 without any luck.
+docker-compose version: 1.5.1
+Docker version 1.9.1, build a34a1d5 ( all installed via docker-toolbox )
+First error is following. I have set following env vars: DOCKER_CERT_PATH='C:\Users\ShapeR.docker\machine\machines\default' ( which is a valid path and keys are there ca.pem, cert.pem, key.pem ).
+DOCKER_TLS_VERIFY="1"
+When i try to launch docker-compose up i get following error:
+C:\Dev\PycharmProjects\django-rentapplication>docker-compose up
+Traceback (most recent call last):
+File "", line 3, in
+File "C:\projects\compose\compose\cli\main.py", line 54, in main
+File "C:\projects\compose\compose\cli\docopt_command.py", line 23, in sys_dispatch
+File "C:\projects\compose\compose\cli\docopt_command.py", line 26, in dispatch
+File "C:\projects\compose\compose\cli\main.py", line 169, in perform_command
+File "C:\projects\compose\compose\cli\command.py", line 54, in project_from_options
+File "C:\projects\compose\compose\cli\command.py", line 91, in get_project
+File "C:\projects\compose\compose\cli\command.py", line 71, in get_client
+File "C:\projects\compose\compose\cli\docker_client.py", line 23, in docker_client
+File "c:\projects\compose\venv\lib\site-packages\docker\utils\utils.py", line 412, in kwargs_from_env
+File "c:\projects\compose\venv\lib\site-packages\docker\tls.py", line 46, in init
+docker.errors.TLSParameterError: Path to a certificate and key files must be provided through the client_config param. TLS configurations should map the Docker CLI client configurations. See http://docs.docker.com/examples/https/ for API details.
+docker-compose returned -1
+Seems like it doesnt find a keys where they are. Also paths in stacktrace are non existent. ( like C:\projects\compose\ - there is no such folder on my pc)
+I looked into sources of compose and figured out if i take out DOCKER_TLS_VERIFY it should run fine. I did it. And get a new error.
+C:\Dev\PycharmProjects\django-rentapplication>docker-compose up
+Traceback (most recent call last):
+File "", line 3, in
+File "C:\projects\compose\compose\cli\main.py", line 54, in main
+File "C:\projects\compose\compose\cli\docopt_command.py", line 23, in sys_dispatch
+File "C:\projects\compose\compose\cli\docopt_command.py", line 26, in dispatch
+File "C:\projects\compose\compose\cli\main.py", line 169, in perform_command
+File "C:\projects\compose\compose\cli\command.py", line 54, in project_from_options
+File "C:\projects\compose\compose\cli\command.py", line 91, in get_project
+File "C:\projects\compose\compose\cli\command.py", line 71, in get_client
+File "C:\projects\compose\compose\cli\docker_client.py", line 28, in docker_client
+File "c:\projects\compose\venv\lib\site-packages\docker\client.py", line 58, in init
+File "c:\projects\compose\venv\lib\site-packages\docker\utils\utils.py", line 336, in parse_host
+docker.errors.DockerException: Invalid bind address protocol: "tcp://192.168.99.100:2376"
+Which is totally mystery for me, since in utils.py that i find on my disk parse_host is on different line and dont see how it can not strip tcp:// which it should..
+But then again i found if i strip tcp:// from addres it should work again.
+But again no luck. New error.
+C:\Dev\PycharmProjects\django-rentapplication>docker-compose up
+Traceback (most recent call last):
+File "", line 3, in
+File "C:\projects\compose\compose\cli\main.py", line 54, in main
+File "C:\projects\compose\compose\cli\docopt_command.py", line 23, in sys_dispatch
+File "C:\projects\compose\compose\cli\docopt_command.py", line 26, in dispatch
+File "C:\projects\compose\compose\cli\main.py", line 169, in perform_command
+File "C:\projects\compose\compose\cli\command.py", line 54, in project_from_options
+File "C:\projects\compose\compose\cli\command.py", line 91, in get_project
+File "C:\projects\compose\compose\cli\command.py", line 71, in get_client
+File "C:\projects\compose\compose\cli\docker_client.py", line 28, in docker_client
+File "c:\projects\compose\venv\lib\site-packages\docker\client.py", line 58, in init
+File "c:\projects\compose\venv\lib\site-packages\docker\utils\utils.py", line 357, in parse_host
+docker.errors.DockerException: ('Invalid port: %s', '"192.168.99.100:2376"')
+docker-compose returned -1
+And at this point i totally lost since don't see how this could happen becvause from sources that i look into its not possible ( well like any previous errors too..) and neither i see how to solve this.

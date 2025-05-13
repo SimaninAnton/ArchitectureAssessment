@@ -1,0 +1,31 @@
+ripperdoc commented on 28 Feb 2016
+I have a private repo with src and Dockerfile to build from, and I am connecting to a remote docker host using docker-machine. I am able to run the following:
+docker build -t MYCONTAINER git@github.com:myrepo/myrepo.git#master
+However, if I try to run docker-compose, with the following build command:
+  MYCONTAINER:
+    build: git@github.com:MYREPO/myrepo.git#master
+It fails due to github authentication, although I believed that the git cloning happens locally in the same way as docker build? Here is the verbose output form docker-compose:
+compose.config.config.find: Using configuration files: ./production-dc.yml
+docker.auth.auth.load_config: File doesn't exist
+compose.cli.command.get_client: docker-compose version 1.6.2, build 4d72027
+docker-py version: 1.7.2
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+compose.cli.command.get_client: Docker base_url: https://REMOTEIP:2376
+compose.cli.command.get_client: Docker version: KernelVersion=3.13.0-58-generic, Os=linux, BuildTime=2016-02-22T21:37:01.910365059+00:00, ApiVersion=1.22, Version=1.10.2, GitCommit=c3959b1, Arch=amd64, GoVersion=go1.5.3
+compose.service.build: Building MYCONTAINER
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=True, tag=u'containers_fablr', buildargs=None, rm=True, forcerm=False, path='git@github.com:MYREPO/myrepo.git#master', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: No auth config in memory - loading from filesystem
+docker.auth.auth.load_config: File doesn't exist
+docker.api.build._set_auth_headers: No auth config found
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x104d01d70>
+ERROR: compose.cli.main.log_api_error: Error trying to use git: exit status 128 (Cloning into '/var/lib/docker/tmp/docker-build-git575327272'...
+Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+)
+I replaced my URLs and repo names, as you can see. Not sure what the auth_headers errors relate to.
+18

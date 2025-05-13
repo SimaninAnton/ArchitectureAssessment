@@ -1,0 +1,81 @@
+ThomProbst commented on 22 Nov 2016
+Hi,
+In our organisation we want to use private docker registries and a docker proxy registry as well. While this is working with plain Docker CLI, I encotuntered some difficulties with docker-compose.
+When referencing an image from the private repository directly from docker-compose.yml (e.g. image: localhost:8083/tomcat-custom:0.1) this works fine. But referencing it from a Dockerfile fails. For the private repositories we use Nexus. But the problem also occurs when using a repository from Docker Cloud.
+The example does not make much sense but it explains the problem:
+docker-compose.yml
+version: '2'
+
+services:
+  web:
+    build: ./tomcat
+    image: tomcat-project:0.1
+    ports:
+    - "8080:8080"`
+tomcat/Dockerfile
+FROM localhost:8083/tomcat-custom:0.1
+The output from docker-compose --verbose build is the following:
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.auth.find_config_file: Trying paths: ['C:\\Users\\tp\\.docker\\config.json', 'C:\\Users\\tp\\.dockercfg']
+docker.auth.auth.find_config_file: Found file at path: C:\Users\tp\.docker\config.json
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Auth data for {0} is absent. Client might be using a credentials store instead.
+docker.auth.auth.parse_auth: Auth data for {0} is absent. Client might be using a credentials store instead.
+docker.auth.auth.parse_auth: Auth data for {0} is absent. Client might be using a credentials store instead.
+docker.auth.auth.load_config: Found 'credsStore' section
+compose.cli.command.get_client: docker-compose version 1.9.0-rc4, build bd5d90b
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+compose.cli.command.get_client: Docker base_url: http+docker://localnpipe
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.30-moby, Os=linux, BuildTime=2016-10-27T00:09:21.561869186+00:00, ApiVersion=1.24, Version=1.12.3, GitCommit=6b644ec, Arch=amd64, Experimental=True, GoVersion=go1.6.3
+compose.service.build: Building web
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag='tomcat-custom:0.1', buildargs=None, rm=True, forcerm=False, path='C:\\docker-private-repo-problem\\tomcat', dockerfile=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: Sending auth config (u'localhost:8083', u'https://index.docker.io/v1/', 'credsStore', u'localhost:8082')
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x0000000003A9E510>
+Step 1 : FROM localhost:8083/tomcat-custom:0.1
+Pulling repository localhost:8083/tomcat-custom
+ERROR: compose.cli.main.main: Service 'web' failed to build: Error: image tomcat-custom:0.1 not found
+As a workaround I have to execute docker pull ... prior to docker-compose build.
+Docker info
+Containers: 3
+ Running: 2
+ Paused: 0
+ Stopped: 1
+Images: 12
+Server Version: 1.12.3
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 57
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: null overlay bridge host
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.30-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.94 GiB
+Name: moby
+ID: 4IPN:V6OM:ZDCU:FSG4:UTNK:NYGF:SQ65:HOAV:KJ7K:DFXN:WKWT:6WET
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+ File Descriptors: 37
+ Goroutines: 52
+ System Time: 2016-11-21T16:59:31.0575248Z
+ EventsListeners: 1
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+ 127.0.0.0/8
+Thank you for any advice.

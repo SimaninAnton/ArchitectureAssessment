@@ -1,0 +1,3 @@
+imaia commented on 13 Oct 2017
+Is there a way to translate a docker-compose to a list of docker commands? I know docker-compose manages that behind the scenes, but I would like some flexibility over the what is done.
+1

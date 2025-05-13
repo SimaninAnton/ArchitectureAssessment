@@ -1,0 +1,58 @@
+ac111 commented on 17 Feb 2016
+I have a compose application that has a use-case for passing vars between a scaled service layer (wildfly) and a data collection service (collectd) -- is there a recommended way to effectively "link" environment (or some other approach) between the services in an overlay network swarm?
+The application has a mod_cluster service which acts as the load-balancer for the wildfly containers, and collectd agents (scaled to run on each node in the swarm) + graphite service to graph session-state metrics for the wildfly instances. The ideal scenario would be to update a node-specific collectd agent when a new wildfly instance has been added to a server group (and its env details injected), but I'm guessing this type of dynamic dependency would need some external logic to drive the compose definition & workflow.
+Snippet of the compose file (wf, collectd, graphite):
+version: '2'
+
+services:
+  wildfly-apps:
+    image: wftest:latest
+    ports:
+      - 8080
+      - 9990
+      - 9999
+      - 8009
+    environment:
+      - DC_PORT_9999_TCP_ADDR=wildfly-dc
+      - DC_PORT_9999_TCP_PORT=9999
+      - MC_PORT_10001_TCP_PORT=10001
+      - MC_PORT_10001_TCP_ADDR=modcluster
+
+  graphite:
+    image: graphitetest:latest
+    container_name: graphite1
+    ports:
+      - 8000:8000
+      - 3000:3000
+      - 9200:9200
+      - 2003:2003
+      - 2004:2004
+      - 7002:7002
+      - 8125
+      - 8126
+    volumes:
+      - /opt/grafana/data
+      - /opt/graphite/storage
+      - /var/log/grafana
+      - /var/log/supervisor
+      - /var/log/elasticsearch
+    environment:
+      - LDAP_URL=ldap://ldap:389
+      - LDAP_LDAP_HOST=ldap
+      - LDAP_INSTANCES=ldap
+      - LDAP_LDAP_CLIENT_PORT=389
+
+  collectd:
+    image: collectdtest:latest
+    volumes:
+      - /var/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - GRAPHITE_GRAPHITE1_HOST=graphite1
+      - GRAPHITE_GRAPHITE1_CARBON_LINE_PORT=2003
+      - CONTAINER_HOST_ADDRESS=collectd
+      - "affinity:container!=*_collectd_*"
+
+networks:
+  default:
+    driver: overlay

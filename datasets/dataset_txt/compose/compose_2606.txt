@@ -1,0 +1,55 @@
+tgross commented on 18 Mar 2016
+In Compose 1.6 and above with a v1 Compose file, services that extend another service ignore the values of the log_driver and log_opt options and instead fallback to the default json driver. This worked as expected in Compose 1.5.
+Here's a minimal test Compose file:
+base:
+  image: alpine:latest
+  command: "true"
+
+# this one works
+control:
+  image: alpine:latest
+  log_driver: syslog
+  log_opt:
+    syslog-address: "tcp://192.168.99.100"
+
+# this one does not work
+test:
+  extends:
+    service: base
+  log_driver: syslog
+  log_opt:
+    syslog-address: "tcp://192.168.99.100"
+With 1.6 I can use the config validator as follows. I expect that the test service shows the same logging configuration as the control service.
+$ docker-compose -f test-compose.yml config
+networks: {}
+services:
+  base:
+    command: 'true'
+    image: alpine:latest
+  control:
+    image: alpine:latest
+    logging:
+      driver: syslog
+      options:
+        syslog-address: tcp://192.168.99.100
+  test:
+    command: 'true'
+    image: alpine:latest
+version: '1'
+volumes: {}
+With 1.5.x there's no docker-compose config feature, but I can simply run the container to demonstrate that it worked as expected:
+$ docker-compose -f test-compose.yml up test
+Creating my_test_1
+Attaching to my_test_1
+my_test_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+
+$ docker inspect my_test_1 | json -a HostConfig.LogConfig
+{
+  "Type": "syslog",
+  "Config": {
+    "syslog-address": "tcp://192.168.99.100"
+  }
+}
+I suspect this is happening somewhere in the intersection of normalize_v1_service_format and where we merge the extended config, but I haven't got any further than that yet. I'd be happy to contribute a patch if I can track it down.
+cc @misterbisson as an FYI

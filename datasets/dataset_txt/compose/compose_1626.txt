@@ -1,0 +1,101 @@
+Yajo commented on 7 Mar 2017
+When trying to exec in a rebooting container:
+$ docker-compose -f prod.yaml exec proxy sh
+Traceback (most recent call last):
+  File "/home/yajo/.local/lib/python3.5/site-packages/docker/api/client.py", line 214, in _raise_for_status
+    response.raise_for_status()
+  File "/home/yajo/.local/lib/python3.5/site-packages/requests/models.py", line 862, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 409 Client Error: Conflict for url: http+docker://localunixsocket/v1.24/containers/6e4476fbc03e711b187ef37046d89125449f69a2fa7f741db06a0742ddfc9f51/exec
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/cli/errors.py", line 44, in handle_connection_errors
+    yield
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/cli/main.py", line 448, in exec_command
+    exec_id = container.create_exec(command, **create_exec_options)
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/container.py", line 220, in create_exec
+    return self.client.exec_create(self.id, command, **options)
+  File "/home/yajo/.local/lib/python3.5/site-packages/docker/utils/decorators.py", line 35, in wrapper
+    return f(self, *args, **kwargs)
+  File "/home/yajo/.local/lib/python3.5/site-packages/docker/utils/decorators.py", line 21, in wrapped
+    return f(self, resource_id, *args, **kwargs)
+  File "/home/yajo/.local/lib/python3.5/site-packages/docker/api/exec_api.py", line 58, in exec_create
+    return self._result(res, True)
+  File "/home/yajo/.local/lib/python3.5/site-packages/docker/api/client.py", line 220, in _result
+    self._raise_for_status(response)
+  File "/home/yajo/.local/lib/python3.5/site-packages/docker/api/client.py", line 216, in _raise_for_status
+    raise create_api_error_from_http_exception(e)
+  File "/home/yajo/.local/lib/python3.5/site-packages/docker/errors.py", line 30, in create_api_error_from_http_exception
+    raise cls(e, response=response, explanation=explanation)
+docker.errors.APIError: 409 Client Error: Conflict for url: http+docker://localunixsocket/v1.24/containers/6e4476fbc03e711b187ef37046d89125449f69a2fa7f741db06a0742ddfc9f51/exec ("Container 6e4476fbc03e711b187ef37046d89125449f69a2fa7f741db06a0742ddfc9f51 is restarting, wait until the container is running")
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yajo/.local/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/cli/main.py", line 64, in main
+    command()
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/cli/main.py", line 116, in perform_command
+    handler(command, command_options)
+  File "/usr/lib64/python3.5/contextlib.py", line 77, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/cli/errors.py", line 54, in handle_connection_errors
+    log_api_error(e, client.api_version)
+  File "/home/yajo/.local/lib/python3.5/site-packages/compose/cli/errors.py", line 71, in log_api_error
+    if b'client is newer than server' not in e.explanation:
+TypeError: 'in <string>' requires string as left operand, not bytes
+Additional information:
+$ docker-compose version
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.2k-fips  26 Jan 2017
+
+$ docker info
+Containers: 15
+ Running: 4
+ Paused: 0
+ Stopped: 11
+Images: 207
+Server Version: 17.03.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: journald
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 977c511eda0925a723debdc94d09459af49d082a
+runc version: a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+ selinux
+Kernel Version: 4.9.13-200.fc25.x86_64
+Operating System: Fedora 25 (Workstation Edition)
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 6.761 GiB
+Name: yajolap.yajodomain
+ID: KUBN:F7JL:URX6:HO55:R3L2:SCUU:IWVY:EZ2O:F53G:WHTO:3G4D:R4YU
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false

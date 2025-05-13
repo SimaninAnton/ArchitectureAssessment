@@ -1,0 +1,8 @@
+rknLA commented on 29 Mar 2017
+Related to this issue, it seems that docker-compose up doesn't support the same --service-ports flag.
+Ideally, I would like to be able to specify this flag in some compose.yml file, so that I can run docker-compose -f foo.yml up -d and still be able to use ipdb.
+Looking at the code a bit, I wonder - is this because the ports set by the service-ports flag need to be set when the container is built?
+If that's the case, would it be as simple as setting ports correctly in some docker-compose.yml file passed into up?
+Unfortunately, setting ports: [] in the yaml doesn't result in opening the service ports, even though that appears to be what happens when service-ports is set when calling run.
+Any chance this will be supported in a future version?
+11

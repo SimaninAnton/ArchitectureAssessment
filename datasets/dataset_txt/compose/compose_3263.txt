@@ -1,0 +1,93 @@
+etc0de commented on 27 Sep 2015
+Problem description:
+For some of my services, docker-compose has randomly started taking a really long time (2-3 minutes) for docker-compose build to even start doing anything. It prints out e.g. Building nginx... and then it just sits there for 2-3 minutes before it starts doing anything, and that happens for a fully cached build with a build context of just a few kilobyte. Using docker build directly doesn't suffer from this issue.
+Demonstration of slow problematic docker-compose build:
+root@Ubuntu-1404-trusty-64-minimal ~/.docker-services/nginx # docker-compose --verbose build
+Compose version 1.2.0
+Docker base_url: http+unix://var/run/docker.sock
+Docker version: KernelVersion=3.13.0-51-generic, Arch=amd64, ApiVersion=1.18, Version=1.6.0, GitCommit=4749651, Os=linux, GoVersion=go1.4.2
+Building nginx...
+docker build <- (u'/root/.docker-services/nginx', rm=True, tag=u'nginx_nginx', nocache=False, stream=True)
+<<< HANGS HERE FOR 2-3 MINUTES !! what does it do??? >>>
+docker build -> <generator object _stream_helper at 0x7fce43f4bfa0>
+Step 0 : FROM ubuntu
+ ---> 07f8e8c5e660
+Step 1 : RUN apt-get update && apt-get upgrade -y
+ ---> Using cache
+ ---> 670f5fc73c72
+Step 2 : RUN apt-get install -y nginx python python3
+ ---> Using cache
+ ---> 27d642e6c29f
+Step 3 : RUN apt-get install -y vsftpd
+ ---> Using cache
+ ---> 15a449a8b2cd
+Step 4 : RUN mkdir -p /var/run/vsftpd/empty
+ ---> Using cache
+ ---> ee5f69865c5a
+Step 5 : RUN useradd -d /home/www2/<DOMAIN RETRACTED>/ -s /bin/bash <USER RETRACTED>
+ ---> Using cache
+ ---> 29abf98f5dbd
+Step 6 : RUN echo "<USER RETRACTED>:<PASSWORD RETRACTED>" | chpasswd
+ ---> Using cache
+ ---> 7fa31b054c82
+Step 7 : RUN echo "#!/bin/sh" > /startvsftpd.sh
+ ---> Using cache
+ ---> c177cd71013f
+Step 8 : RUN echo "nohup vsftpd > /dev/null &" >> /startvsftpd.sh
+ ---> Using cache
+ ---> 6214c1d9dc43
+Step 9 : RUN chmod +x /startvsftpd.sh
+ ---> Using cache
+ ---> 4650414f1b25
+Step 10 : RUN rm -f /etc/vsftpd.conf
+ ---> Using cache
+ ---> 598a56d7089b
+Step 11 : RUN useradd ftpsecure
+ ---> Using cache
+ ---> 62db8844aba9
+Step 12 : RUN usermod -u 1011 www-data
+ ---> Using cache
+ ---> 70e3051ed995
+Step 13 : RUN mkdir -p /home/www/
+ ---> Using cache
+ ---> b2c8c5999dd1
+Step 14 : RUN chown 1011:1011 /home/www
+ ---> Using cache
+ ---> 05d59cdfb346
+Step 15 : VOLUME /home/www
+ ---> Using cache
+ ---> 48a0dca633c2
+Step 16 : CMD chown root /home/www2/<DOMAIN RETRACTED> && chmod -R 555 /home/www2/<DOMAIN RETRACTED>/ && chown -R <USER RETRACTED> /home/www2/<DOMAIN RETRACTED>/www/ && chmod -R 755 /home/www2/<DOMAIN RETRACTED>/www/ && ./startvsftpd.sh && nginx -g "daemon off;"
+ ---> Using cache
+ ---> a66f93e71af5
+Successfully built a66f93e71af5
+root@Ubuntu-1404-trusty-64-minimal ~/.docker-services/nginx #
+... and this finishes in like 2 seconds:
+root@Ubuntu-1404-trusty-64-minimal ~/.docker-services/nginx # docker build -t my_nginx_test .
+Reproducability:
+It seems to be somewhat random which services it chooses to affect, and it started to happen for one of my services that had quick builds before out of nothing from one day to the next. I didn't do any docker-compose or docker upgrade I'm aware of at that specific day.
+All my other services that are similarly constructed to this one don't suffer from this problem. However, it now happens 100% of that time for this specific service since it started happening, for whatever reason.
+Machine/Environment:
+I have encountered this on both a Fedora and an Ubuntu machine, so I would assume it's not something highly specific to the machines in question. Both machines use the official docker.com packages (not distribution-provided).
+Details for my affected Ubuntu host:
+docker-compose: 1.2.0
+Docker version 1.6.0, build 4749651
+uname -a: Linux Ubuntu-1404-trusty-64-minimal 3.13.0-51-generic #84-Ubuntu SMP Wed Apr 15 12:08:34 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+Corresponding docker-compose.yml:
+  build: .
+  tty: true
+  volumes:
+  - ./readonly-data/etc/nginx/:/etc/nginx/:ro
+  - ./readonly-data/etc/vsftpd.conf:/etc/vsftpd.conf:ro
+  - ./readonly-data/etc/vsftpd.allowedusers:/etc/vsftpd.allowedusers:ro
+  - ./readonly-data/home/www/:/home/www/:ro
+  - ./livedata/home/www2/<DOMAIN RETRACTED>/:/home/www2/<DOMAIN RETRACTED>/:rw
+  ports:
+  - "80:80"
+  - "21:21"
+  - "20:20"
+Dockerfile:
+The Dockerfile does nothing special and since this also happens when the entire build is cached (see output above) it shouldn't matter anyway, right? You can glimpse at the commands in the command line output above if it's truly relevant.
+A closing note
+Since I also encounter this on my production machine, this bug is also affecting the downtime I have for a rebuild & restart cycle. (since docker-compose wants to rebuild with the same name as far as I'm aware, and so I assume I always need to shut down the old container first? At least that's what I'm doing now)
+6

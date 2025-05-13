@@ -1,0 +1,39 @@
+rulatir commented on 10 May 2019 •
+edited
+Description of the issue
+Extension fields defined in one -f file are not available in subsequent -f files, making it impossible to factor out common definitions into a base "defs" file that would be used by multiple other "compositions".
+docker-compose-defs.yml:
+...
+x-phpservice-def:
+    &phpservice-def
+    image: 'foo.bar.baz'
+    volumes:
+        - ./themes:/themes
+        - ./storage:/storage
+    networks:
+        - somenetwork
+...
+docker-compose-dev.yml:
+...
+services:
+  some-service:
+    <<: *phpservice-def
+    entrypoint:
+      - command
+      - some
+      - arguments
+...
+When running:
+docker-compose -f docker/docker-compose-defs.yml -f docker/docker-compose-dev.yml --project-directory="." up
+Expected result:
+No errors, the service should go up.
+Actual result:
+ERROR: yaml.composer.ComposerError: found undefined alias 'phpservice-def'
+  in "././docker-compose-dev.yml", line 14, column 9
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build unknown
+Output of docker version
+Docker version 18.09.5-ce, build e8ff056dbc
+Output of docker-compose config
+(predictably, the same error message as with up)

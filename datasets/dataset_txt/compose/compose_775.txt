@@ -1,0 +1,103 @@
+kamichidu commented on 27 Mar 2018
+Description of the issue
+docker-compose expects docker-compose.yml is same file encoding with terminal encoding.
+It should detect by file content or use utf8 (not same with terminal encoding, at least).
+When I change utf8 to cp932 of docker-compose.yml file encoding, this bug is not occurred.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built: Wed Mar 21 23:06:28 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:14:32 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 329, in config
+  File "compose\cli\command.py", line 67, in get_config_from_options
+  File "compose\config\config.py", line 283, in find
+  File "compose\config\config.py", line 283, in <listcomp>
+  File "compose\config\config.py", line 183, in from_filename
+  File "compose\config\config.py", line 1434, in load_yaml
+  File "site-packages\yaml\__init__.py", line 94, in safe_load
+  File "site-packages\yaml\__init__.py", line 70, in load
+  File "site-packages\yaml\loader.py", line 24, in __init__
+  File "site-packages\yaml\reader.py", line 85, in __init__
+  File "site-packages\yaml\reader.py", line 124, in determine_encoding
+  File "site-packages\yaml\reader.py", line 178, in update_raw
+UnicodeDecodeError: 'cp932' codec can't decode byte 0x83 in position 19: illegal multibyte sequence
+[11180] Failed to execute script docker-compose
+Steps to reproduce the issue
+chcp 932 in cmd.exe/powershell.exe
+Creating docker-compose.yml with utf8 encoding and contains multi-byte characters
+Do docker-compose ps and many commands reading docker-compose.yml
+Observed result
+Got python exception below:
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 329, in config
+  File "compose\cli\command.py", line 67, in get_config_from_options
+  File "compose\config\config.py", line 283, in find
+  File "compose\config\config.py", line 283, in <listcomp>
+  File "compose\config\config.py", line 183, in from_filename
+  File "compose\config\config.py", line 1434, in load_yaml
+  File "site-packages\yaml\__init__.py", line 94, in safe_load
+  File "site-packages\yaml\__init__.py", line 70, in load
+  File "site-packages\yaml\loader.py", line 24, in __init__
+  File "site-packages\yaml\reader.py", line 85, in __init__
+  File "site-packages\yaml\reader.py", line 124, in determine_encoding
+  File "site-packages\yaml\reader.py", line 178, in update_raw
+UnicodeDecodeError: 'cp932' codec can't decode byte 0x83 in position 19: illegal multibyte sequence
+[11180] Failed to execute script docker-compose
+Expected result
+No exception and proceed a command
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 121, in perform_command
+  File "compose\cli\main.py", line 329, in config
+  File "compose\cli\command.py", line 67, in get_config_from_options
+  File "compose\config\config.py", line 283, in find
+  File "compose\config\config.py", line 283, in <listcomp>
+  File "compose\config\config.py", line 183, in from_filename
+  File "compose\config\config.py", line 1434, in load_yaml
+  File "site-packages\yaml\__init__.py", line 94, in safe_load
+  File "site-packages\yaml\__init__.py", line 70, in load
+  File "site-packages\yaml\loader.py", line 24, in __init__
+  File "site-packages\yaml\reader.py", line 85, in __init__
+  File "site-packages\yaml\reader.py", line 124, in determine_encoding
+  File "site-packages\yaml\reader.py", line 178, in update_raw
+UnicodeDecodeError: 'cp932' codec can't decode byte 0x83 in position 19: illegal multibyte sequence
+[11180] Failed to execute script docker-compose
+Additional information
+OS Version:
+Windows 10 Pro, 10.0.16299 Build 16299
+docker-compose install method:
+Binary from github release page
+and docker ce for windows installer (stable channel) from docker store
+chcp outputs:
+Active code page: 932

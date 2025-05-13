@@ -1,0 +1,1 @@
+Entrypoint/CMD behavior changed or documented wrong

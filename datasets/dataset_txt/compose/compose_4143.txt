@@ -1,0 +1,17 @@
+jokeyrhyme commented on 24 Oct 2014
+I have a use case where the images should not be pushed to a registry, but there is a high amount of duplication between the Dockerfiles for 2 or more services in my fig.yml.
+Is it possible to have fig pre-parse the Dockerfiles it is about to use so that it can fix up references between images created for fig-defined services as in the below example?
+fig.yml
+a:
+    build: ./a/
+
+b:
+    build ./b/
+b/Dockerfile
+FROM a
+# OR
+FROM fig://a
+# OR
+FROM project_a
+
+# ...

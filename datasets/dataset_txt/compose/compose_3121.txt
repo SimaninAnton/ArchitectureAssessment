@@ -1,0 +1,25 @@
+dmiwell commented on 9 Nov 2015
+Hi,
+I got
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+at the end of docker-compose up output
+I can run all the containers using docker itself tough. Here is docker info:
+docker info
+Containers: 5
+Images: 45
+Server Version: 1.9.0
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 67
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.16.0-38-generic
+Operating System: Ubuntu 14.04.3 LTS
+CPUs: 8
+Total Memory: 7.719 GiB
+Name: msi
+ID: WMNW:PT44:XQSH:RXDX:GU56:A3UP:MHD6:M7RQ:W3O4:PSEP:DMAS:BMSF
+WARNING: No swap limit support
+Is that something in my configuration or a bug?

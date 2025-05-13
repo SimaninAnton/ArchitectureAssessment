@@ -1,0 +1,1 @@
+Wrong format in the healthcheck test does not issue a warning

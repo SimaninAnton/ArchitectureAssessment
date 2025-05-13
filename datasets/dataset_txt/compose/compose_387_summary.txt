@@ -1,0 +1,1 @@
+Allow turning off environment variable interpolation in `docker-compose config`

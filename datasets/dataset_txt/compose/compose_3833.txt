@@ -1,0 +1,43 @@
+olalonde commented on 14 Mar 2015
+Here's my (simplified) docker-compose.yml file:
+db:
+  image: postgres:9.3
+  ports:
+    - "5432"
+api:
+  image: node:0.10-onbuild
+  volumes:
+    - .:/app
+  links:
+    - db
+  working_dir: /app
+  command: node index.js
+  ports:
+    - "3000:3000"
+  environment:
+    - DB_HOST=db
+Sometimes I want to test my Node.js app using an external database hosted on AWS, so I use a container which is just a ssh tunnel to an external database.
+db:
+  image: thomass/ssh-client
+  volumes:
+    - ~/.ssh:/ssh
+  command: "ssh -Ng -L 5432:localhost:5432 -i /ssh/identity.pem -o StrictHostKeyChecking=no user@mydomain.com"
+  ports:
+    - "5432"
+#db:
+#  image: postgres:9.3
+#  ports:
+#    - "5432"
+api:
+  image: node:0.10-onbuild
+  volumes:
+    - .:/app
+  links:
+    - db
+  working_dir: /app
+  command: node index.js
+  ports:
+    - "3000:3000"
+  environment:
+    - DB_HOST=db
+Right now, my workflow consists of commenting/uncommenting which db I want to use (remote or local). I was wondering if there was a better way to achieve this? Would it be possible for docker-compose to launch the right container by passing some environment variable (e.g. REMOTE=1 docker-compose up)?

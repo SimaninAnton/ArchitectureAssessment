@@ -1,0 +1,26 @@
+tszymanek commented on 30 May 2017
+.env:
+HOME_DIR=/home/user
+DOCKER_DIR="${HOME_DIR}/docker"
+PROJECTS_DIR="${DOCKER_DIR}/projects"
+docker-compose.yml:
+version: "2.2"
+
+volumes:
+    projects:
+        external:
+            name: "${PROJECTS_DIR}"
+   webapp1:
+        external:
+            name: "${PROJECTS_DIR}/webapp1"
+services:
+    ...
+    webapp2:
+    ...
+        volumes:
+            - "${PROJECTS_DIR}/webapp2:/var/www/html/webapp"
+    ...
+I get the following:
+ERROR: Named volume ""${DOCKER_DIR}/projects"/webapp2:/var/www/html/webapp:rw" is used in service "webapp2" but no declaration was found in the volumes section.
+Is this a proper bevahiour? Shouldn't compose substitute the env within the env? Am I forced to use named volumes for each service?
+1

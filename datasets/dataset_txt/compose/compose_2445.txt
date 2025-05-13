@@ -1,0 +1,56 @@
+thatgibbyguy commented on 29 Apr 2016
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+
+Client:
+ Version:      1.9.1
+ API version:  1.21
+ Go version:   go1.4.3
+ Git commit:   a34a1d5
+ Built:        Fri Nov 20 17:56:04 UTC 2015
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.11.1-rc1
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   c90c70c
+ Built:        2016-04-26T04:05:21.005928627+00:00
+ OS/Arch:      linux/amd64
+When running dc up [appname] it all hangs at Attaching to:
+swarm_redis_1 is up-to-date
+swarm_postgres_1 is up-to-date
+swarm_elasticsearch_1 is up-to-date
+Starting swarm_patients_1
+Attaching to swarm_patients_1
+I've removed the container, rebuilt the container, etc. Nothing gets past this hang. When switching to verbose mode we will see:
+compose.parallel.feed_queue: Pending: set([<Service: redis>, <Service: postgres>, <Service: elasticsearch>, <Service: appname>])
+compose.parallel.feed_queue: Starting producer thread for <Service: redis>
+compose.service.execute_convergence_plan: swarm_redis_1 is up-to-date
+compose.parallel.feed_queue: Starting producer thread for <Service: postgres>
+compose.service.execute_convergence_plan: swarm_postgres_1 is up-to-date
+compose.parallel.feed_queue: Starting producer thread for <Service: elasticsearch>
+compose.service.execute_convergence_plan: swarm_elasticsearch_1 is up-to-date
+compose.parallel.parallel_execute_iter: Finished processing: <Service: redis>
+compose.parallel.feed_queue: Pending: set([<Service: appname>])
+compose.parallel.parallel_execute_iter: Finished processing: <Service: postgres>
+compose.parallel.feed_queue: Pending: set([<Service: appname>])
+compose.parallel.parallel_execute_iter: Finished processing: <Service: elasticsearch>
+compose.parallel.feed_queue: Pending: set([<Service: appname>])
+compose.parallel.feed_queue: Starting producer thread for <Service: appname>
+compose.service.start_container_if_stopped: Starting swarm_appname_1
+compose.cli.verbose_proxy.proxy_callable: docker attach <- (u'1667b5d7e8c9e17255a593ab0e6ec21a6968970b90abb4471d07592201e51972', stream=True, stderr=True, stdout=True)
+compose.cli.verbose_proxy.proxy_callable: docker attach -> <generator object _multiplexed_response_stream_helper at 0x107da7730>
+compose.cli.verbose_proxy.proxy_callable: docker start <- (u'1667b5d7e8c9e17255a593ab0e6ec21a6968970b90abb4471d07592201e51972')
+compose.parallel.feed_queue: Pending: set([])
+compose.parallel.feed_queue: Pending: set([])
+compose.cli.verbose_proxy.proxy_callable: docker start -> None
+compose.parallel.parallel_execute_iter: Finished processing: <Service: appname>
+compose.parallel.feed_queue: Pending: set([])
+Attaching to swarm_appname_1
+compose.cli.verbose_proxy.proxy_callable: docker events <- (decode=True, filters={u'label': [u'com.docker.compose.project=swarm', u'com.docker.compose.oneoff=False']})
+compose.cli.verbose_proxy.proxy_callable: docker events -> <generator object _stream_helper at 0x107d1a0a0>
+Before upgrading to 1.7.0 I was at 1.4.2 and had the same issue.
+1

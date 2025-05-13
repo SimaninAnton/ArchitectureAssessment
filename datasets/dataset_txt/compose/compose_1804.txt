@@ -1,0 +1,36 @@
+akhildangore commented on 11 Jan 2017 •
+edited
+Hello friends,
+I am getting this error: ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1' while running container via docker-compose
+Note : With docker command works fine.
+Below is compose file.
+version: "2"
+
+services:
+
+  web-app:
+    image: "${DOCKER_IMAGE}"
+    build:
+       context: .
+       dockerfile: Dockerfile
+    ports:
+      - "9000:80"
+    network_mode: host
+    depends_on:
+      - db
+    env_file:
+       - ./env/web.env
+    
+  db:
+    image: mysql
+    volumes:
+       - db-data:/var/lib/mysql/data
+    container_name: "${MYSQL_CONTAINER_NAME}"
+    network_mode: host
+    env_file:
+       - ./env/db.env
+
+
+volumes:
+  db-data:
+Please guide me.....

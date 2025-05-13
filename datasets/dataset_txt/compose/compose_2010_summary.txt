@@ -1,0 +1,1 @@
+Missing first few characters of output with `docker-compose up`

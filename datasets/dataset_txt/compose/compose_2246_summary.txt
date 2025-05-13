@@ -1,0 +1,1 @@
+On Windows, the cli should connect to a named pipe by default

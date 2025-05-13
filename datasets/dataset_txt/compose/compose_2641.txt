@@ -1,0 +1,15 @@
+robertd commented on 12 Mar 2016
+Experiencing issues with docker-compose (out of the blue since it used to work). Everything was installed through brew
+➜  simple-dockerized-dev-env git:(master) docker --version
+Docker version 1.10.2, build c3959b1
+➜  simple-dockerized-dev-env git:(master) docker-compose --version
+docker-compose version 1.6.2, build unknown
+➜  simple-dockerized-dev-env git:(master) docker-machine --version
+docker-machine version 0.6.0, build e27fb87
+➜  simple-dockerized-dev-env git:(master) docker-compose build
+db uses an image, skipping
+Building autotest
+/usr/local/Cellar/docker-compose/1.6.2/libexec/vendor/lib/python2.7/site-packages/requests/packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+ERROR: SSL error: [Errno 1] _ssl.c:507: error:1407742E:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert protocol version
+➜  simple-dockerized-dev-env git:(master)

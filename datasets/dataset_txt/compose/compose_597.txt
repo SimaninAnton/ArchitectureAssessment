@@ -1,0 +1,3 @@
+christhomas commented on 3 Jul 2018
+Why don't you use the apt-get repository that docker already provides in order to release this? Why do I have to use a fragile, difficult, and manual curl+chmod process when docker already has a perfectly working apt-get repository to use?
+This makes absolutely no sense.

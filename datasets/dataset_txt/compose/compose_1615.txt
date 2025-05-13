@@ -1,0 +1,19 @@
+goetas commented on 9 Mar 2017 •
+edited
+I'm not sure this is a docker-machine or docker-compose issue, but will try to explain it.
+I have to following compose file:
+services:
+    db:
+      image: postgres
+      volumes:
+          - .pgdata:/var/lib/postgresql/data
+   .... more services...
+I run docker-compose and and docker-machine the commands from my laptop.
+The local laptop user is goetas and the folder where is stored the application on my laptop is /home/goetas/projects/events.
+When running:
+eval $($docker machine env my-machine)
+docker-compose up
+On the remote hosts (my-machine) the container is created, and the a folder /home/goetas/events/.pgdata has been created (to store the database data).
+No user goetas has been created on the remote host, only a folder.
+From what I could guess, the naming strategy is /home/[LOCAL-USER]/[LOCAL-FOLDER-NAME].
+My question is: Is there a way to configure the folder that is used as working directory when running the container?

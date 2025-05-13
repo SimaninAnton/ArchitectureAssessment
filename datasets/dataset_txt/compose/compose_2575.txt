@@ -1,0 +1,4 @@
+nejtr0n commented on 25 Mar 2016
+It would be greate to use -H flag similar to docker, but not only environment variable DOCKER_HOST.
+For exmaple
+docker-compose -H ${CLUSTER_IP}:4000 -f cluster.yml up -d

@@ -1,0 +1,121 @@
+shiftedreality commented on 14 Mar 2019 •
+edited
+Description of the issue
+There is some weird issue happens if any of volume magento is read-only. I didn't find any proper way to make this work currently.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:39 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+version: '2'
+services:
+  fpm:
+    image: 'magento/magento-cloud-docker-php:7.1-fpm'
+    ports:
+      - 9000
+    links:
+      - db
+    volumes:
+      - 'magento:/var/www/magento:ro'
+    volumes_from:
+      - appdata
+  db:
+    image: 'mariadb:10.2'
+    ports:
+      - 3306
+    volumes:
+      - /var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=magento2
+      - MYSQL_DATABASE=magento2
+      - MYSQL_USER=magento2
+      - MYSQL_PASSWORD=magento2
+  web:
+    image: 'magento/magento-cloud-docker-nginx:latest'
+    ports:
+      - '8030:80'
+    links:
+      - fpm
+      - db
+    volumes:
+      - 'magento:/var/www/magento:ro'
+    volumes_from:
+      - appdata
+  build:
+    image: 'magento/magento-cloud-docker-php:7.1-cli'
+    hostname: build.magento2.docker
+    container_name: build
+    depends_on:
+      - db
+    volumes:
+      - '~/.composer/cache:/root/.composer/cache'
+      - 'magento:/var/www/magento:rw'
+    volumes_from:
+      - appdata
+  deploy:
+    image: 'magento/magento-cloud-docker-php:7.1-cli'
+    hostname: deploy.magento2.docker
+    container_name: deploy
+    depends_on:
+      - db
+    volumes:
+      - '~/.composer/cache:/root/.composer/cache'
+      - 'magento:/var/www/magento:ro'
+    volumes_from:
+      - appdata
+  cron:
+    image: 'magento/magento-cloud-docker-php:7.1-cli'
+    hostname: cron.magento2.docker
+    container_name: cron
+    depends_on:
+      - db
+    volumes:
+      - '~/.composer/cache:/root/.composer/cache'
+      - 'magento:/var/www/magento:ro'
+    volumes_from:
+      - appdata
+    command: run-cron
+  appdata:
+    image: tianon/true
+    volumes:
+      - '.:/var/www/ece-tools'
+      - /var/www/magento/pub/static
+      - /var/www/magento/pub/media
+      - /var/www/magento/var
+      - /var/www/magento/app/etc
+volumes:
+  magento: {  }
+Steps to reproduce the issue
+Run docker-compose up -d
+Observed result
+Errors
+ERROR: for cron  Cannot start service cron: b'OCI runtime create failed: container_linux.go:344: starting container process caused "process_linux.go:424: container init caused \\"rootfs_linux.go:58: mounting \\\\\\"/var/lib/docker/volumes/7d24f15f654301784aa3d664964a971d6927f4d6dc2631b2bd5610ae7546f10f/_data\\\\\\" to rootfs \\\\\\"/var/lib/docker/overlay2/66f4ae310ed45dccdf8dc4367f30d692b467a571618f95192aa20b4ddd905baa/merged\\\\\\" at \\\\\\"/var/lib/docker/overlay2/66f4ae310ed45dccdf8dc4367f30d692b467a571618Creating deploy              ... error
+/var/www/magento/var: read-only file system\\\\\\"\\"": unknown'
+Expected result
+Containers started
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.

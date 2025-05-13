@@ -1,0 +1,1 @@
+Possible division by zero error when pulling an image

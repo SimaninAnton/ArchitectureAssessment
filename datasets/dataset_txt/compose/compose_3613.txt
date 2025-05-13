@@ -1,0 +1,39 @@
+Contributor
+bfirsh commented on 27 May 2015
+$ docker run -d nginx
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS                  PORTS               NAMES
+82d6b3f424df        nginx:latest        "nginx -g 'daemon of   10 seconds ago      Up Less than a second   80/tcp, 443/tcp     swarm-master/clever_nobel
+$ docker-compose up
+/Library/Python/2.7/site-packages/requests-2.6.2-py2.7.egg/requests/packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+Recreating clever_nobel...
+Traceback (most recent call last):
+  File "/usr/local/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.3.0dev', 'console_scripts', 'docker-compose')()
+  File "/Users/ben/p/compose/compose/cli/main.py", line 32, in main
+    command.sys_dispatch()
+  File "/Users/ben/p/compose/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/Users/ben/p/compose/compose/cli/command.py", line 34, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/Users/ben/p/compose/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/Users/ben/p/compose/compose/cli/command.py", line 66, in perform_command
+    handler(project, command_options)
+  File "/Users/ben/p/compose/compose/cli/main.py", line 470, in up
+    do_build=not options['--no-build'],
+  File "/Users/ben/p/compose/compose/project.py", line 230, in up
+    do_build=do_build,
+  File "/Users/ben/p/compose/compose/service.py", line 333, in execute_convergence_plan
+    for c in containers
+  File "/Users/ben/p/compose/compose/service.py", line 380, in recreate_container
+    number=container.labels.get(LABEL_CONTAINER_NUMBER),
+  File "/Users/ben/p/compose/compose/service.py", line 214, in create_container
+    number or self._next_container_number(one_off=one_off),
+  File "/Users/ben/p/compose/compose/service.py", line 450, in _next_container_number
+    filters={'label': self.labels(one_off=one_off)})
+  File "/Users/ben/p/compose/compose/container.py", line 70, in number
+    self.short_id, LABEL_CONTAINER_NUMBER))
+ValueError: Container 82d6b3f424 does not have a com.docker.compose.container-number label
+Looks like that nginx container is considered part of the project even though it doesn't have any Compose labels.

@@ -1,0 +1,34 @@
+zasca commented on 27 Sep 2018
+Description of the issue
+When volume defined with long syntax, its source paths which starts with ~ do not expand well as a paths started with .
+Context information (for bug reports)
+docker-compose version 1.22.0, build f46880f
+version: "3.4"
+
+services:
+  test:
+    image: "test:${DISTRO:-trusty}"
+    build:
+      context: test/
+      args: { version: "${DISTRO:-trusty}" }
+    volumes:
+      - type: bind
+        read_only: true
+        source: ~/tmp/test1
+        target: /tmp/test1
+      
+      - ~/tmp/test2:/tmp/test2:ro
+Steps to reproduce the issue
+Define volume with use of long syntax and set source started with ~
+docker-compose up -d --force-recreate <service>
+Observed result
+Recreating test_test_1 ... error
+
+ERROR: for test_test_1  Cannot create container for service test: invalid mount config for type "bind": invalid mount path: '~/tmp/test1' mount path must be absolute
+
+ERROR: for test  Cannot create container for service test: invalid mount config for type "bind": invalid mount path: '~/tmp/test1' mount path must be absolute
+ERROR: Encountered errors while bringing up the project.
+Expected result
+Recreating 48d9f6c670d9_test_test_1 ... done
+Additional information
+Ubuntu 18.04.1 LTS

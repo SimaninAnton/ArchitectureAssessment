@@ -1,0 +1,41 @@
+winggundamth commented on 27 Jan 2016
+Does docker-compose pull command support pull with constraint?
+For example
+$ docker info
+Containers: 29
+Images: 56
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 3
+ pre-01: pre-01:2376
+  └ Status: Healthy
+  └ Containers: 4
+  └ Reserved CPUs: 0 / 2
+  └ Reserved Memory: 0 B / 2.044 GiB
+  └ Labels: preproduction=true, executiondriver=native-0.2, kernelversion=3.19.0-47-generic, operatingsystem=Ubuntu 14.04.3 LTS, provider=generic, storagedriver=overlay
+ prd-01: prd-01:2376
+  └ Status: Healthy
+  └ Containers: 5
+  └ Reserved CPUs: 0 / 4
+  └ Reserved Memory: 0 B / 8.179 GiB
+  └ Labels: production=true, executiondriver=native-0.2, kernelversion=3.19.0-47-generic, operatingsystem=Ubuntu 14.04.3 LTS, provider=generic, storagedriver=overlay
+ prd-02: prd-02:2376
+  └ Status: Healthy
+  └ Containers: 4
+  └ Reserved CPUs: 0 / 4
+  └ Reserved Memory: 0 B / 8.179 GiB
+  └ Labels: production=true, executiondriver=native-0.2, kernelversion=3.19.0-47-generic, operatingsystem=Ubuntu 14.04.3 LTS, provider=generic, storagedriver=overlay
+
+$ cat docker-compose.yml
+nginx:
+    image: nginx
+    environment:
+        - "constraint:label==production=true"
+But when I did docker-compose pull it still pull to whole swarm cluster.
+$ docker-compose pull
+Pulling nginx (nginx:latest)...
+pre-01: Pulling nginx:latest... : downloaded
+prd-01: Pulling nginx:latest... : downloaded
+prd-02: Pulling nginx:latest... : downloaded
+Does the docker-compose has an option to pull by constraint or this need to be done by docker swarm?

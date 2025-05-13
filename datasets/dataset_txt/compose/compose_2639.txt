@@ -1,0 +1,3 @@
+mfilotto commented on 13 Mar 2016
+Hi,
+Would be nice to have the ability to give a container a deployment strategy of type : on every nodes.

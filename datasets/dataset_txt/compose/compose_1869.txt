@@ -1,0 +1,9 @@
+k2xl commented on 7 Dec 2016
+I have two containers. App and Database.
+I have them both join a network via networks
+networks:                                                                                                                                    
+  custom_network:                                                                                                                           
+    driver: bridge                                                                                                                               
+I also want to have "App" join the host network. The App has some features where it runs ifconfig things and needs to have access to the hosts network information.
+How can I do this?
+1

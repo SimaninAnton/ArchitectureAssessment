@@ -1,0 +1,6 @@
+jianbin-wei commented on 10 Feb 2016
+In docker-compose, it supports -f, --file option to use alternate compose file. In the config option we would need that feature too.
+docker-compose config 
+ERROR: 
+        Can't find a suitable configuration file in this directory or any parent. Are you in the right directory?
+        Supported filenames: docker-compose.yml, docker-compose.yam

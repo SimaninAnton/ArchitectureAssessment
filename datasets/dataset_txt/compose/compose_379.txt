@@ -1,0 +1,26 @@
+dbjpanda commented on 28 Nov 2018 •
+edited
+Is your feature request related to a problem? Please describe.
+It will be really good to enable a docker plugin via docker-compose.yml file and if the plugin does not exist on the host then first pull, install and then enable. It should do the work of docker plugin install and docker plugin enable
+Describe the solution you'd like
+version: "3.5"
+
+services:
+
+  php:
+    build: ./docker/drupal-tools
+    restart: always
+    volumes:
+      - drupal:/var/www/drupal
+
+plugins:
+    local-persist
+    
+volumes:
+    drupal
+      driver: local-persist
+Describe alternatives you've considered
+I always had to enable a plugin manually executing a command docker plugin enable before docker-compose up
+Additional context
+Add any other context or screenshots about the feature request here.
+2

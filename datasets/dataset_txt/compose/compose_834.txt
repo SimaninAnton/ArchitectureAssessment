@@ -1,0 +1,22 @@
+kill0rz commented on 1 Mar 2018
+I have following docker-compose:
+  db:
+    image: mariadb
+    environment:
+        MYSQL_ROOT_PASSWORD: mysecretpass
+    restart: always
+I can backup my databases using this command:
+cd /opt/docker_data/ && /usr/local/bin/docker-compose exec db sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > /opt/backup.sql
+This works fine.
+I added the same line of code to my crontable, but then I get to following error:
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 124, in perform_command
+  File "compose/cli/main.py", line 467, in exec_command
+  File "site-packages/dockerpty/pty.py", line 338, in start
+  File "site-packages/dockerpty/io.py", line 32, in set_blocking
+ValueError: file descriptor cannot be a negative integer (-1)
+Failed to execute script docker-compose
+What is my mistake?
+Thank you!

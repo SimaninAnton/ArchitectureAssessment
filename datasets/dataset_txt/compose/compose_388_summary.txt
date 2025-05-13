@@ -1,0 +1,1 @@
+container internal DNS resolution fails for scaled services

@@ -1,0 +1,65 @@
+gnavgire commented on 14 Sep 2018
+docker-compose down command does not remove the container images
+Context information (for bug reports)
+docker-compose down is not deleting or removing the container images
+Output of "docker-compose version"
+docker-compose -v
+docker-compose version 1.18.0, build 8dd22a9
+Output of "docker version"
+docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.2
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:25 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:23:03 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+docker-compose config
+services:
+  webapp:
+    image: nginx
+    network_mode: bridge
+    ports:
+    - 8000:8000/tcp
+version: '2.1'
+Steps to reproduce the issue
+docker-compose up -d ==> pull nginx image and creates the service
+docker images ==> shows the nginx image being pulled
+docker-compose down ==> deletes the service and container, but not the container image
+docker images ==> shows the nginx image is still present
+Observed result
+docker-compose up -d
+Creating root_webapp_1 ... done
+Attaching to root_webapp_1
+root_webapp_1 exited with code 0
+docker images
+REPOSITORY TAG IMAGE ID CREATED SIZE
+nginx latest 06144b287844 9 days ago 109MB
+docker-compose ps
+Name Command State Ports
+root_webapp_1 nginx -g daemon off; Up 80/tcp, 0.0.0.0:8000->8000/tcp
+docker-compose down
+Stopping root_webapp_1 ... done
+Removing root_webapp_1 ... done
+docker images
+REPOSITORY TAG IMAGE ID CREATED SIZE
+nginx latest 06144b287844 9 days ago 109MB
+Expected result
+docker container image nginx should be removed/deleted
+Stacktrace / full error message
+(if applicable)
+Additional information
+Linux node2 4.4.0-96-generic #119-Ubuntu SMP Tue Sep 12 14:59:54 UTC 2017 x86_64 Linux

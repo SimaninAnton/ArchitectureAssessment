@@ -1,0 +1,29 @@
+flik commented on 31 Mar 2018
+Description of the issue
+I have downloaded the docker for windows from https://store.docker.com/editions/community/docker-ce-desktop-windows
+and when I tried to install, it is giving me errors:
+Method not found: 'Windows.Data.Json.JsonArray Windows.Data.Json.JsonObject.GetNamedArray(System.String, Windows.Data.Json.JsonArray)'.
+at LightweightInstaller.Manifest.FromJson(String json)
+at LightweightInstaller.ExtractManifestStep.d__34.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+at LightweightInstaller.InstallWorkflow.d__26.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+at LightweightInstaller.InstallWorkflow.d__23.MoveNext()
+Context information (for bug reports
+Output of "docker-compose version"
+Output of "docker version"
+Output of "docker-compose config"
+Steps to reproduce the issue
+Download from https://store.docker.com/editions/community/docker-ce-desktop-windows
+Install it on widows 8.1
+You will get errors.
+Observed result
+Expected result
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

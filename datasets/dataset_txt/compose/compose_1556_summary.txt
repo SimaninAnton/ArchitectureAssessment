@@ -1,0 +1,1 @@
+Pulling empty image (zero bytes) fails

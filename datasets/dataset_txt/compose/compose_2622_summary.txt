@@ -1,0 +1,1 @@
+entrypoint defined in docker-compose.yml wipes out CMD defined in Dockerfile

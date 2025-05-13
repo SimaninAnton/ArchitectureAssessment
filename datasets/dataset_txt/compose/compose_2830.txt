@@ -1,0 +1,6 @@
+Mattnmoore commented on 6 Feb 2016
+Since interactive mode is not yet supported on Windows, is there any easy workaround for running commands on services the way you would with Linux?
+For example:
+docker-compose run web php -v
+Thanks!
+7

@@ -1,0 +1,7 @@
+rosskevin commented on 12 Sep 2015
+I'm having problems issuing multiple commands:
+  command: bundle install --jobs 4 --retry 3 && bundle exec spring binstub --all && bin/rake log:clear && bundle exec docker-rails-db-check && bin/rake db:rebuild_test
+Unknown switches '--all'
+I'm sure it's simple but I'm pulling my hair out. What's the best way to do this (I don't want it in an external script).
+If I remove the second statement, I get ERROR: "bundle install" was called with arguments ["&&", "bin/rake", "log:clear", "&&", "bundle", "exec", "docker-rails-db-check", "&&", "bin/rake", "db:rebuild_test"], so this seems to be a simple bash usage failure on my part.
+2

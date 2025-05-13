@@ -1,0 +1,16 @@
+kitingChris commented on 20 Sep 2017
+I am currently in trouble with IP ranges that docker uses. Due to public wifi using 172.18.0.1 for login purpose I wanted to restrict docker using IP Range starting at 172.20.0.0
+So I set up the /etc/docker/daemon.js
+{
+  "bip": "172.20.0.1/15",
+  "fixed-cidr": "172.20.0.0/14",
+  "fixed-cidr-v6": "2001:db8::/64",
+  "mtu": 1500,
+  "default-gateway": "172.20.1.1",
+  "default-gateway-v6": "2001:db8:abcd::89",
+  "dns": ["172.20.1.2","172.20.1.3"]
+}
+It works very well for the docker0 bridge but every docker-compose project starts again using 172.17... and then 172.18....
+Why does it ignore my config or am I missing something?
+How to prevent docker in general to use those IPs?
+2

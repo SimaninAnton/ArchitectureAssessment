@@ -1,0 +1,1 @@
+Continue printing log output after Ctrl-C has been pressed

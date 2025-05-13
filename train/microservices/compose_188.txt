@@ -1,0 +1,66 @@
+velychkovsky commented on 7 May 2019
+Looks like content on NFS does not updates when we change NFS server ip and redeploy docker stack. I see old content inside volume connected to container.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f1306
+Output of docker version
+Client:
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:35:01 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:06:30 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+version: '3.7'
+services:
+  nginx:
+    image: "${DOCKER_REPOS}:nginx"
+    hostname: nginx
+    environment:
+      - NODE_HOSTNAME={{.Node.Hostname}}
+    volumes:
+     - data-2:/data-2
+    deploy:
+     mode: replicated
+     replicas: 2
+     placement:
+        constraints: [node.labels.main == true]
+     rollback_config:
+        failure_action: continue
+     update_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first
+        failure_action: rollback
+
+volumes:
+  data-2:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.10.10.10,nolock,soft,rw,vers=4"
+      device: ":/home"
+Steps to reproduce the issue
+Deploy services using docker stack deploy command
+Connect to nginx container and check, that NFS volume was attached to /data-2 inside this container.
+Change NFS ip to 10.0.0.1 (second NFS server)
+Deploy stack
+Checked that NFS volume was attached to /data-2 but has content from first (10.10.10.10) NFS share.
+Observed result
+NFS does not update volume data, after pointing to another server.
+Expected result
+New data in /data-2 volume.
+Additional information
+Was tested on Centos 7, and Gentoo.

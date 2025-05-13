@@ -1,0 +1,50 @@
+alexandrevicenzi commented on 26 Apr 2017
+If I run docker run <image> it works well. When I run docker-compose up/run/build docker stops working.
+For some reason when I try to run compose and it needs to build the image it hangs docker. It build some layers, but after some layers are built it get stuck somewhere.
+I've been trying to figure out this since yesterday, but I have no idea. I upgraded docker to 1.13, it wasn't working with 1.12 as well, I tryed to reinstall, cleanup every docker config file and I still have the issue.
+After it get stuck I need to restart docker service and docker come back to live, but if I run compose again it starts all over.
+I openned this issue for docker, but I looks like the problem is more on compose.
+Here's the output:
+docker-compose --verbose build app 
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+docker.auth.auth.find_config_file: Trying paths: ['/home/alexandre/.docker/config.json', '/home/alexandre/.dockercfg']
+docker.auth.auth.find_config_file: Found file at path: /home/alexandre/.docker/config.json
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Found entry (registry=u'https://133649222752.dkr.ecr.us-east-1.amazonaws.com', username=u'AWS')
+docker.auth.auth.parse_auth: Found entry (registry=u'https://index.docker.io/v1/', username=u'alexandrevicenzi')
+compose.cli.command.get_client: docker-compose version 1.8.1, build unknown
+docker-py version: 1.10.6
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2k-fips  26 Jan 2017
+compose.cli.command.get_client: Docker base_url: http+docker://localunixsocket
+compose.cli.command.get_client: Docker version: KernelVersion=4.10.12-2.g11b3f7c-default, Arch=amd64, BuildTime=2017-04-17T09:04:48.438327270+00:00, ApiVersion=1.25, Version=1.13.0, MinAPIVersion=1.12, GitCommit=78d1802, Os=linux, GoVersion=go1.7
+compose.service.build: Building app
+compose.cli.verbose_proxy.proxy_callable: docker build <- (pull=False, stream=True, nocache=False, tag=u'cscontent_app', buildargs=None, rm=True, forcerm=False, path='/home/alexandre/workspace/eventials/cs-content', dockerfile='Dockerfile.app.devel')
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: Sending auth config (u'https://133649222752.dkr.ecr.us-east-1.amazonaws.com', u'https://index.docker.io/v1/')
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object _stream_helper at 0x7fa287a52190>
+Step 1/6 : FROM golang:1.8
+ ---> b68b30c9a259
+Step 2/6 : RUN apt-get update && apt-get install -y wget
+ ---> Using cache
+ ---> 616ae9c7e56f
+Step 3/6 : RUN wget https://github.com/jwilder/dockerize/releases/download/v0.2.0/dockerize-linux-amd64-v0.2.0.tar.gz
+ ---> Running in 605bfe040241
+converted 'https://github.com/jwilder/dockerize/releases/download/v0.2.0/dockerize-linux-amd64-v0.2.0.tar.gz' (ANSI_X3.4-1968) -> 'https://github.com/jwilder/dockerize/releases/download/v0.2.0/dockerize-linux-amd64-v0.2.0.tar.gz' (UTF-8)
+--2017-04-26 14:39:10--  https://github.com/jwilder/dockerize/releases/download/v0.2.0/dockerize-linux-amd64-v0.2.0.tar.gz
+Resolving github.com (github.com)... 192.30.253.113, 192.30.253.112
+Connecting to github.com (github.com)|192.30.253.113|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://github-cloud.s3.amazonaws.com/releases/25178920/a08c8284-c2ef-11e5-9e51-c6d6c1c18649.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAISTNZFOVBIJMK3TQ%2F20170426%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20170426T143911Z&X-Amz-Expires=300&X-Amz-Signature=8421e066814a31d10b2e2b95fe4f30563da0c3fb47ae5bf89c3eeb1f911133e6&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment%3B%20filename%3Ddockerize-linux-amd64-v0.2.0.tar.gz&response-content-type=application%2Foctet-stream [following]
+converted 'https://github-cloud.s3.amazonaws.com/releases/25178920/a08c8284-c2ef-11e5-9e51-c6d6c1c18649.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAISTNZFOVBIJMK3TQ%2F20170426%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20170426T143911Z&X-Amz-Expires=300&X-Amz-Signature=8421e066814a31d10b2e2b95fe4f30563da0c3fb47ae5bf89c3eeb1f911133e6&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment%3B%20filename%3Ddockerize-linux-amd64-v0.2.0.tar.gz&response-content-type=application%2Foctet-stream' (ANSI_X3.4-1968) -> 'https://github-cloud.s3.amazonaws.com/releases/25178920/a08c8284-c2ef-11e5-9e51-c6d6c1c18649.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAISTNZFOVBIJMK3TQ/20170426/us-east-1/s3/aws4_request&X-Amz-Date=20170426T143911Z&X-Amz-Expires=300&X-Amz-Signature=8421e066814a31d10b2e2b95fe4f30563da0c3fb47ae5bf89c3eeb1f911133e6&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment; filename=dockerize-linux-amd64-v0.2.0.tar.gz&response-content-type=application/octet-stream' (UTF-8)
+--2017-04-26 14:39:11--  https://github-cloud.s3.amazonaws.com/releases/25178920/a08c8284-c2ef-11e5-9e51-c6d6c1c18649.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAISTNZFOVBIJMK3TQ/20170426/us-east-1/s3/aws4_request&X-Amz-Date=20170426T143911Z&X-Amz-Expires=300&X-Amz-Signature=8421e066814a31d10b2e2b95fe4f30563da0c3fb47ae5bf89c3eeb1f911133e6&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment;%20filename=dockerize-linux-amd64-v0.2.0.tar.gz&response-content-type=application/octet-stream
+Resolving github-cloud.s3.amazonaws.com (github-cloud.s3.amazonaws.com)... 52.216.16.136
+Connecting to github-cloud.s3.amazonaws.com (github-cloud.s3.amazonaws.com)|52.216.16.136|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2323678 (2.2M) [application/octet-stream]
+Saving to: 'dockerize-linux-amd64-v0.2.0.tar.gz'
+
+2017-04-26 14:39:15 (743 KB/s) - 'dockerize-linux-amd64-v0.2.0.tar.gz' saved [2323678/2323678]
+
+ ---> e4ad16d81417
+^CERROR: compose.cli.main.main: Aborting.

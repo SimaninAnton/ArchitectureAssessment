@@ -1,0 +1,1 @@
+docker-compose up exits with "ValueError: No JSON object could be decoded"

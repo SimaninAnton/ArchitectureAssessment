@@ -1,0 +1,24 @@
+rm-jamotion commented on 23 Feb 2016
+I have the following docker-compose.yml file:
+version: '2'
+services:
+ psqlsync:
+    image: jamotion/psqlsync:latest
+    networks:
+    - odoo-prod
+    - odoo-dev
+    hostname: psqlsync
+
+networks:
+  odoo-dev:
+    external: true
+  odoo-prod:
+    external: true
+Now when I run this service only the services of odoo-prod network are reachable:
+root@psqlsync:/# ping psqlprod
+PING psqlprod (10.0.0.3) 56(84) bytes of data.
+64 bytes from psqlprod.odoo-prod (10.0.0.3): icmp_seq=1 ttl=64 time=0.062 ms
+The services of network odoo-dev are not reachable (but the name is resolved):
+root@psqlsync:/# ping psqldev
+PING psqldev (10.0.1.4) 56(84) bytes of data.
+From psqlsync (10.0.1.12) icmp_seq=1 Destination Host Unreachable

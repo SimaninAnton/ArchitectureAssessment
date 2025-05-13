@@ -1,0 +1,1 @@
+Throw an error if you specify an unrecognised option in `fig.yml`

@@ -1,0 +1,95 @@
+JankyGaming commented on 28 Dec 2019 •
+edited by ndeloof
+Description of the issue
+When running my compose file, my secrets will not mount.
+Context information (for bug reports)
+The compose file gets ran from Jetbrains, but I don't think that adds any extra layers here. Correct me if I'm wrong.
+The docker deamon is on my homelab, the commands are being ran from compose on my laptop. Everything works as expected without any secrets implemented in compose file.
+My compose file
+secrets:
+  auth:
+    file: ./auth
+
+services:
+  secrets-server:
+    build: secrets-server/
+    ports:
+      - "8080:80"
+    secrets:
+      - auth
+    environment:
+      INTERNAL_AUTH_FILE: /run/secrets/auth
+    deploy:
+      replicas: 1
+Output of docker-compose version
+docker-compose version 1.25.0, build 0a186604
+docker-py version: 4.1.0
+CPython version: 3.7.5
+OpenSSL version: OpenSSL 1.1.1d  10 Sep 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:29:11 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:27:45 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+WARNING: Some services (secrets-server) use the 'deploy' key, which will be ignored. Compose does not support 'deploy' configuration - use `docker stack deploy` to deploy to a swarm.
+secrets:
+  auth:
+    file: C:\Users\James\GolandProjects\jankylogin\auth
+services:
+  secrets-server:
+    build:
+      context: C:\Users\James\GolandProjects\jankylogin\secrets-server
+    deploy:
+      replicas: 1
+    environment:
+      INTERNAL_AUTH_FILE: /run/secrets/auth
+    ports:
+    - published: 8080
+      target: 80
+    secrets:
+    - source: auth
+version: '3.7'
+Steps to reproduce the issue
+have those files
+run docker compose
+Observed result
+Its failing saying it cant mount the secrets
+Expected result
+It to work
+Stacktrace / full error message
+Successfully built c27f128cb1d4
+Successfully tagged jankylogin_secrets-server:latest
+Recreating b93bbb268144_jankylogin_secrets-server_1 ... 
+Recreating b93bbb268144_jankylogin_secrets-server_1 ... error
+ERROR: for b93bbb268144_jankylogin_secrets-server_1  Cannot create container for service secrets-server: invalid mount config for type "bind": invalid mount path: 'C:/Users/James/GolandProjects/jankylogin/auth' mount path must be absolute
+
+ERROR: for secrets-server  Cannot create container for service secrets-server: invalid mount config for type "bind": invalid mount path: 'C:/Users/James/GolandProjects/jankylogin/auth' mount path must be absolute
+Encountered errors while bringing up the project.
+Failed to deploy 'Compose: docker-compose.yml': `docker-compose` process finished with exit code 1
+Additional information
+OS version / distribution, docker-compose install method, etc.

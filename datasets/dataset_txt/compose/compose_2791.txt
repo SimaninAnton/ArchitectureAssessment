@@ -1,0 +1,35 @@
+aperepel commented on 12 Feb 2016
+Hello, I've upgraded to compose 1.6 and docker 1.10, hoping to leverage the v2 config format and get rid of hostname workarounds. My cluster doesn't really work with these versions, and I narrowed it down to this very odd issue with hostnames that compose assigns to services.
+Full config (in a current, somewhat broken form) is here: https://github.com/aperepel/docker-nifi/blob/master/nifi-cluster/docker-compose.yml. The actual service name is processing in case I haven't pushed the update to this branch yet.
+05:57:07::nifi-cluster ♨ >  docker inspect nificluster_processing_1 | jq .[0].NetworkSettings.Networks
+{
+  "nificluster_default": {
+    "IPAMConfig": null,
+    "Links": null,
+    "Aliases": [
+      "processing",
+      "f4c3cf526a"
+    ],
+    "NetworkID": "5f640667a6638b5524a4d155041a5c891be2906baeee26efc93f4e1d38c9bd97",
+    "EndpointID": "0000db113d27382277f43338c3a094963d6daa13abd9f723a1d32634531c3bcb",
+    "Gateway": "",
+    "IPAddress": "10.0.3.2",
+    "IPPrefixLen": 24,
+    "IPv6Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "MacAddress": "02:42:0a:00:03:02"
+  }
+}
+And now inside that container:
+root@f4c3cf526ab8:/nifi-1.1.1.0-12/bin# hostname
+f4c3cf526ab8
+The generated alias from inspect and actual hostname alias have different lengths!:
+From inspect:
+"Aliases": [
+      "processing", // this is the service name from docker-compose.yml
+      "f4c3cf526a" // this is the generated hostname
+    ],
+The hostname from above is resolvable from other containers on this app network.
+The hostname from the container (and in /etc/hosts) has 2 extra chars at the end and **is not resolvable.
+My processing nodes report to the cluster manager using the $HOSTNAME. However, the manager node can't reach back to them because they are giving out the name which is not resolvable.

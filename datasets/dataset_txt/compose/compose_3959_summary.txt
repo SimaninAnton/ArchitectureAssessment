@@ -1,0 +1,1 @@
+Add optional flag, so container is not starting with all "fig up", but only on manual demand

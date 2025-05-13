@@ -1,0 +1,2 @@
+AnthonyMastrean commented on 29 Mar 2019
+The Docker Compose release notes page on the official Docker website is out-of-date. It's missing both a patch release (1.23.2) and the latest major release (1.24.0). Should I subscribe to the GitHub releases page, instead?

@@ -1,0 +1,51 @@
+deeky666 commented on 21 Jan 2017
+First of all thanks for all you awesome work!
+I checked out the healthcheck feature of v1.10 and discovered an issue when used with depends_on.
+It seems the healthcheck condition defined in depends_on is ignored when using docker-compose run and not waiting for the dependency to be healthy. When using docker-compose up it works as expected.
+Failing docker-compose.yml (just to reveal the issue):
+version: '2.1'
+services:
+  db:
+    image: redis
+    healthcheck:
+      test: "exit 1"
+
+  test:
+    image: busybox
+    depends_on:
+      db:
+        condition: service_healthy
+$ docker-compose up
+Creating network "healthcheck_default" with the default driver
+Creating healthcheck_db_1
+
+ERROR: for test  Container "8f8f8d2728d3" is unhealthy.
+ERROR: Encountered errors while bringing up the project.
+$ docker-compose run test
+Creating network "healthcheck_default" with the default driver
+Creating healthcheck_db_1
+/ # 
+$ docker version
+Client:
+ Version:      1.13.0
+ API version:  1.25
+ Go version:   go1.7.3
+ Git commit:   49bf474
+ Built:        Tue Jan 17 10:05:19 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.13.0
+ API version:  1.25 (minimum version 1.12)
+ Go version:   go1.7.3
+ Git commit:   49bf474
+ Built:        Tue Jan 17 10:05:19 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+$ docker-compose version
+docker-compose version 1.10.0, build 4bd6f1a
+docker-py version: 2.0.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Is this expected behaviour? I guess not, otherwise defining such dependencies on one-off commands is misleading and doesn't make any sense.
+31

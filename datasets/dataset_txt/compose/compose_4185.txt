@@ -1,0 +1,17 @@
+Contributor
+gilclark commented on 24 Sep 2014
+Specifying net: "container:name" implies that the named container should be something fig recognizes as a service specified in the fig file. It should also recognize that service as a dependency to be started first.
+Example:
+foo:
+image: kubernetes/pause:go
+ports:
+- "80:80"
+bar:
+image: mynginx:latest
+net: "container: foo"
+Right now this won't work because fig will look for the container literally named foo instead of the docker name actually given to it by fig. Also fig doesn't know to start foo first because it doesn't know bar needs it.
+Maybe something like;
+bar:
+image: mynginx:latest
+net: "service:foo"
+Thanks

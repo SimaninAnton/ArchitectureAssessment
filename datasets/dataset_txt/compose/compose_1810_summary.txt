@@ -1,0 +1,1 @@
+docker-compose run ignores --rm when run with -d

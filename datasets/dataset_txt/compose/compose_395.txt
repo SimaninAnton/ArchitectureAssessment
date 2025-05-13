@@ -1,0 +1,8 @@
+oysteiae commented on 20 Nov 2018
+Description of the issue
+96a49a0#r31367442
+This breaks url builds. Eg. if you want to build from a github repo in docker compose on windows.
+A fix would be to change the if check to check for urls:
+if IS_WINDOWS_PLATFORM and not path.startswith(WINDOWS_LONGPATH_PREFIX) and not "://" in path:
+     path = WINDOWS_LONGPATH_PREFIX + os.path.normpath(path)
+A more sophisticated way of checking for urls would perhaps be needed.

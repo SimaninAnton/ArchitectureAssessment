@@ -1,0 +1,4 @@
+mikewaters commented on 21 Apr 2014
+It would be useful to be able to run many figs in parallel, for instance to support a CI system similar in nature to drone.io (which fig appears to be partially, and thankfully, emulating in python).
+One issue in particular is the fact that containers are removed when fig is run, to support workflows where the run configuration had changed (thanks @bfirsh).
+I have no recommendations or patches, apologies!

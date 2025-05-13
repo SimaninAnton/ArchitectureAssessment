@@ -1,0 +1,25 @@
+vsknov commented on 11 Dec 2017
+Hi All,
+Can you please help me out on below issue.
+I have docker-compose.yml with below details
+version: "2"
+services:
+postgres:
+image: ${registryurl}:cri-postgres.${imageversion}
+mem_limit: ${postgresmem}
+cpu_shares: ${postgrescpus}
+Created .env file for above variables as below.
+registryurl=docker.com/test/images
+imageversion=V1.5-00
+pass=pass
+postgrescpus=0.5
+postgresmem=8G
+3.Issue:- cpu_shares value is not passing as mentioned in .env file
+Unable to launch the container please see the error message below.
+root@server2:~/docker-compose/postgres# docker-compose up -d
+Creating postgres_postgres_1 ...
+ERROR: for postgres_postgres_1 Invalid type for cpu_shares param: expected int but found <type 'unicode'>
+ERROR: for postgres Invalid type for cpu_shares param: expected int but found <type 'unicode'>
+Please help me with this issue.
+Thanks
+Saravanan

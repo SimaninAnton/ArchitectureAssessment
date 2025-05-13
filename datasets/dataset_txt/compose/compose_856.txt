@@ -1,0 +1,30 @@
+artisticcheese commented on 21 Feb 2018
+This is only supported in "swarm" mode and not in "compose" per instructions and error message. Why is it not supported in "compose"?
+PS C:\Users\Desktop\interdocker> docker-compose down
+WARNING: Some services (iis, sql) use the 'credential_spec' key, which will be ignored. Compose does not support 'credential_spec' configuration - use `docker stack deploy` to deploy to a swarm.
+Compose file
+version: "3.3"
+services:
+
+  iis:
+    image: microsoft/iis
+    ports:
+      - "80:80"
+    networks:
+      - nat
+    credential_spec:
+      file: win.json
+  sql:
+    image: microsoft/mssql-server-windows-developer
+    environment: 
+      - sa_password=123456
+      - ACCEPT_EULA=Y
+    networks:
+      - nat
+    credential_spec:
+      file: win.json
+
+networks: 
+  nat:
+    external: true
+1

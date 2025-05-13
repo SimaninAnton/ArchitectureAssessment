@@ -1,0 +1,64 @@
+airycanon commented on 16 Jul 2016
+docker verion
+Docker version 1.11.2, build b9f10c9
+docker info
+Containers: 5
+ Running: 0
+ Paused: 0
+ Stopped: 5
+Images: 12
+Server Version: 1.11.2
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 52
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: host bridge null
+Kernel Version: 4.4.0-21-generic
+Operating System: Ubuntu 16.04 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 1
+Total Memory: 2.568 GiB
+Name: ubuntu
+ID: TH3M:2PEP:RVDP:45LA:2WVF:CFVT:NQOH:SMYN:GZG5:UNP2:LEUB:VGRB
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+docker-compose version
+docker-compose version 1.7.1, build 0a9ab35
+my docker-compose.yml
+version: '2'
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - xxx
+        networks:
+            default:
+                ipv4_address: 192.168.0.7
+networks:
+    default:
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.0.0/24
+                  gateway: 192.168.0.1
+I got this error when docker-compose up
+ERROR: for nginx  User specified IP address is supported only when connecting to networks with user configured subnets
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 63, in main
+AttributeError: 'ProjectError' object has no attribute 'msg'
+docker-compose returned -1
+then I change the network "defualt“ to a custom name,it works.
+I want to know if I could set static ip when using the default network,my English is not so good,thanks for any help.
+8

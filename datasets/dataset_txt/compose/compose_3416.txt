@@ -1,0 +1,10 @@
+gnz00 commented on 3 Aug 2015
+If you have any tasks inside your Dockerfile that require environment variables specified in the docker-compose file, they will not be found. An easy solution would be to have environment variables passed in as arguments to the docker build command, i.e.
+docker-compose.yml
+dev:
+  build: .
+  environment:
+    - RACK_ENV=development
+    - SESSION_SECRET=12345
+As executed by docker-compose:
+docker build . -eRACK_ENV=development -eSESSION_SECRET=12345

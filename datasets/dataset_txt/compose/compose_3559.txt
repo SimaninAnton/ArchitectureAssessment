@@ -1,0 +1,20 @@
+Contributor
+josephpage commented on 17 Jun 2015
+Just got this error with docker-compose 1.3.0rc2 :
+$ docker-compose up --x-smart-recreate
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 469, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 221, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 261, in _get_convergence_plans
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 285, in convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 299, in _containers_have_diverged
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 415, in config_hash
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 420, in config_dict
+TypeError: 'NoneType' object has no attribute '__getitem__'
+Resolved after docker-compose pull

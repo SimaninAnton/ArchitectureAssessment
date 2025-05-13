@@ -1,0 +1,12 @@
+howardjones commented on 16 Dec 2016
+I have a docker host running on esxi, created with docker-machine. I have Docker for Windows installed locally to get docker-compose and docker-machine on my Windows desktop. Then I can use docker-machine env to set the relevant environment for compose to work.
+That all worked fine until I wanted to add an haproxy container from dockercloud, which needs to talk to the host. Their docs say to add this to the docker-compose.yml for the LB.
+volumes:
+  - /var/run/docker.sock:/var/run/docker.sock
+so that the LB can find the web servers that it is supposed to be balancing.
+However when I run docker-compose up on my Windows desktop, I get this error:
+ERROR: for lb  Cannot create container for service lb: b'create \\var\\run\\docker.sock: "\\\\var\\\\run\\\\docker.sock" includes invalid characters for a local volume name, only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed'
+ERROR: Encountered errors while bringing up the project.
+Note there are backslashes here, not forward slashes. So I think that something in docker-compose is incorrectly translating the paths to Windows paths, and then looking at them on Linux, seeing they aren't paths, and complaining that they aren't valid volume names, which is true but unhelpful.
+Is there a magic switch to say that the host is not the local windows system and side-step this?
+1

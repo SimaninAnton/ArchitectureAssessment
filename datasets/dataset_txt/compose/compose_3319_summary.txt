@@ -1,0 +1,1 @@
+doing a run with a 'restart: always' service causes the run to repeat infinitely

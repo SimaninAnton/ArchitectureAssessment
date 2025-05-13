@@ -1,0 +1,18 @@
+phocean commented on 19 Aug 2016
+I suddenly got this issue, after my settings had been working for weeks (Fedora 24, x86_64).
+I don't remember any change on the compose configuration that could explain it:
+% docker-compose --version
+docker-compose version 1.7.1, build 6c29830
+
+% sudo docker-compose up             
+Starting pythdb
+Creating pythweb
+
+ERROR: for pythweb  no such file or directory
+Traceback (most recent call last):
+  File "/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/site-packages/compose/cli/main.py", line 63, in main
+    log.error(e.msg)
+AttributeError: 'ProjectError' object has no attribute 'msg'
+Moreover, this error message is totally cryptic.

@@ -1,0 +1,19 @@
+rockymeza commented on 27 Mar 2015
+Hi,
+Is there a way to manually recreate containers (without running up)?
+I find that I often run into the following situation:
+$ docker-compose up
+# Oh no there are errors in one of my containers, I want to rebuild it.
+^C # shut down everything
+$ # Change Dockerfile
+$ docker-compose build
+$ docker-compose up
+I believe this is the recommended way of using compose, and I think it's a good interface for normal development, but I think that when I'm settings up my Dockerfile and the docker-compose.yml, I would much rather this sort of interface:
+$ docker-compose start
+# Oh no there are in my web container, I need to rebuild it.
+$ docker-compose stop web # leaves the other non-dependent services running
+$ # fix the web container Dockerfile
+$ docker-compose build web
+$ docker-compose start web
+This doesn't work though, because the containers haven't been recreated. This has bitten me and my colleagues several times, but running docker-compose up just to have one of the containers recreated, is quite slow.
+Thanks,

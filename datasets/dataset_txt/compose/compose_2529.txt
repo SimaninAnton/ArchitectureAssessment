@@ -1,0 +1,27 @@
+jamshid commented on 7 Apr 2016
+I'm pretty sure this was working on docker-compose 1.7.0-rc1 before I installed the latest Docker for Mac beta, which upgraded to docker 1.11.0-rc3. I'm trying to get the socat service to run on port 172.17.0.1:8123, so that it's available to docker builds. My real yml uses an environment variable for the IP address, but it happens even when hardcoded.
+ERROR: for socat_httpcache  driver failed programming external connectivity on endpoint test_socat_httpcache_1 (5d973ed559d63a5561b715248f797a336915a44960b5e32e622ac8349b16e5d2): Error starting userland proxy: failed to bind port: Unix.Unix_error(Unix.EADDRNOTAVAIL, "bind", "")
+version: '2'
+services:
+  httpcache:
+    restart: always
+    image: clue/polipo
+    command: proxyAddress=0.0.0.0 allowedClients=0.0.0.0/0 disableIndexing=false disableServersList=false
+    mem_limit: 500m
+    memswap_limit: 500m
+    volumes:
+      - /var/cache/polipo
+
+  socat_httpcache:
+    restart: always
+    hostname: POLIPO1
+    image: bobrik/socat
+    mem_limit: 50m
+    command: TCP-LISTEN:8123,fork,reuseaddr TCP:httpcache:8123
+    depends_on:
+      - httpcache
+    ports:
+      - "172.17.0.1:8123:8123"
+verbose.txt
+97
+1

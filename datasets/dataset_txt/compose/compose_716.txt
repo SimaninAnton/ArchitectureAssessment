@@ -1,0 +1,3 @@
+tedivm commented on 26 Apr 2018
+Description of the issue
+I'll admit this is kind of a silly request, but I think it would be nice if docker-compose avoided using the "red" cli text during normal operations. For most tools red means something bad happened, so I (and at least eighteen other people) think the CLI would be much better if it didn't use red.

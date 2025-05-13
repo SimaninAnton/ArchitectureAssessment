@@ -1,0 +1,88 @@
+usr42 commented on 19 Apr 2018
+Description of the issue
+I've encountered a similar issue to #4751
+I broke down the error in to a minimal setup to reproduce which can be found in this repository: https://github.com/usr42/docker-compose-error-duplicate-mount-point (Just run reproduce_error.sh inside the repo).
+TL;DR:
+When I define a volume in the docker-compose.yml which was already defined in docker image (with VOLUME inside the Dockerfile) this issue happens then the service is changed and so an update is triggered. I then get following error:
+Recreating dockercomposeerrorduplicatemountpoint_svc_1 ... error
+
+ERROR: for dockercomposeerrorduplicatemountpoint_svc_1  Cannot create container for service svc: Duplicate mount point: /mnt
+
+ERROR: for svc  Cannot create container for service svc: Duplicate mount point: /mnt
+ERROR: Encountered errors while bringing up the project.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2n  7 Dec 2017
+Output of "docker version"
+Client:
+ Version: 18.03.0-ce
+ API version: 1.37
+ Go version: go1.9.4
+ Git commit: 0520e24
+ Built: Wed Mar 21 23:06:22 2018
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:14:32 2018
+  OS/Arch: linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+services:
+  svc:
+    build:
+      context: /Users/bbiederm/git-repos/docker-compose-error-duplicate-mount-point
+    volumes:
+    - source: vol
+      target: /mnt
+      type: volume
+version: '3.2'
+volumes:
+  vol: {}
+Steps to reproduce the issue
+Clone https://github.com/usr42/docker-compose-error-duplicate-mount-point
+Run reproduce_error.sh
+Content of docker-compose.yml:
+version: '3.2'
+services:
+  svc:
+    build:
+      context: .
+    volumes:
+     - type: volume
+       source: vol
+       target: /mnt
+volumes:
+  vol:
+Content of Dockerfile:
+FROM alpine:latest
+
+VOLUME ["/mnt"]
+
+CMD ["ping","google.com"]
+Observed result
+After triggering a service upgrade by changing the command and running docker-compose -f up -d, the upgrade failed with the error:
+Cannot create container for service svc: Duplicate mount point: /mnt
+Expected result
+The service should be upgraded without an error
+Stacktrace / full error message
+Recreating dockercomposeerrorduplicatemountpoint_svc_1 ... error
+
+ERROR: for dockercomposeerrorduplicatemountpoint_svc_1  Cannot create container for service svc: Duplicate mount point: /mnt
+
+ERROR: for svc  Cannot create container for service svc: Duplicate mount point: /mnt
+ERROR: Encountered errors while bringing up the project.
+Additional information
+OS: macOS Sierra
+Kernel details: 16.7.0 Darwin Kernel Version 16.7.0: Tue Jan 30 11:27:06 PST 2018; root:xnu-3789.73.11~1/RELEASE_X86_64 x86_64
+install method: brew
+2

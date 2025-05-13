@@ -1,0 +1,19 @@
+GeorgeTaveras1231 commented on 26 Dec 2015
+Recently, I've been writing compose files where many of the services had small similarities. The way in which I attempted to deal with this was by using yaml's inheritance. The reason why I wanted to use yaml's inheritance feature was because using docker-compose's extends feature felt like an overkill. It also did not help that in order to extend a service, the base service had to have a valid service configuration, otherwise, docker-compose would complain. Also, if I define random shared objects at the top level, when I run docker-compose up -d it will attempt to create docker containers based on those objects.
+My proposal is to support a top level namespace that can be used to define any yaml object you want. This will provide a namespace to define shared properties and leverage yaml's inheritance.
+Here is an example, (leveraging the proposed format in #2478):
+ignore:
+  has_special_env: &has_special_env
+     VAR_A: 1
+     VAR_B: 2
+
+services:
+  a:
+    environment:
+      <<: *has_special_env
+      CUSTOM_VAR: 3
+  b:
+    environment:
+      <<: *has_special_env
+It would be nice if this was included in #2504
+5

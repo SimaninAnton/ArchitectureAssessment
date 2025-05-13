@@ -1,0 +1,55 @@
+AmeBel commented on 12 Jun 2015
+Details:
+docker-compose 1.2.0
+Docker version 1.6.2, build 7c8fca2
+https://github.com/opencog/docker/blob/master/opencog/docker-compose.yml
+Scenario 1 : The linked containers are stopped, but the main service isn't
+>> docker-compose run dev
+Creating opencog_relex_1...
+Creating opencog_postgres_1...
+opencog@d30bfd9002c7:/opencog$ 
+
+# another terminal
+>> docker-compose --verbose stop 
+Compose version 1.2.0
+Docker base_url: http+unix://var/run/docker.sock
+Docker version: KernelVersion=3.16.0-39-generic, Arch=amd64, ApiVersion=1.18, Version=1.6.2, GitCommit=7c8fca2, Os=linux, GoVersion=go1.4.2
+docker containers <- (all=False)
+docker containers -> (list with 3 items)
+docker containers <- (all=False)
+docker containers -> (list with 3 items)
+Stopping opencog_postgres_1...
+docker stop <- (u'f3ee1402febd49dc6b1f6f8caf111d71c98e7e0fd8be57051cf51c7a960f39e5')
+docker stop -> None
+docker containers <- (all=False)
+docker containers -> (list with 2 items)
+Stopping opencog_relex_1...
+docker stop <- (u'c8d759c2a953b393b0c514b0f903a7639904d9a1f8399450ec167e1ac84c6a90')
+docker stop -> None
+
+>> docker-compose ps
+       Name                     Command                State                                                 Ports                                             
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+opencog_dev_run_1    /bin/sh -c /bin/bash             Up         16312/tcp, 16313/tcp, 16315/tcp, 17001/tcp, 18001/tcp, 4444/tcp, 5000/tcp, 5432/tcp, 5563/tcp 
+opencog_postgres_1   /docker-entrypoint.sh postgres   Exit 0                                                                                                   
+opencog_relex_1      /bin/sh -c ant clean && an ...   Exit 137                                       
+Scenario 2 : None of the containers are stopped even for time > 10s
+>> docker-compose run dev
+Creating opencog_relex_1...
+Creating opencog_postgres_1...
+opencog@d30bfd9002c7:/opencog$ 
+
+# another terminal
+>> docker-compose --verbose stop dev
+Compose version 1.2.0
+Docker base_url: http+unix://var/run/docker.sock
+Docker version: KernelVersion=3.16.0-39-generic, Arch=amd64, ApiVersion=1.18, Version=1.6.2, GitCommit=7c8fca2, Os=linux, GoVersion=go1.4.2
+docker containers <- (all=False)
+docker containers -> (list with 3 items)
+
+>> docker-compose ps
+       Name                     Command               State                                               Ports                                             
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+opencog_dev_run_1    /bin/sh -c /bin/bash             Up      16312/tcp, 16313/tcp, 16315/tcp, 17001/tcp, 18001/tcp, 4444/tcp, 5000/tcp, 5432/tcp, 5563/tcp 
+opencog_postgres_1   /docker-entrypoint.sh postgres   Up      5432/tcp                                                                                      
+opencog_relex_1      /bin/sh -c ant clean && an ...   Up      0.0.0.0:3333->3333/tcp, 0.0.0.0:4444->4444/tcp, 0.0.0.0:9000->9000/tcp                        

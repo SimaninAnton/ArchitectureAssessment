@@ -1,0 +1,28 @@
+rsynnest commented on 16 Feb 2017 •
+edited
+I'm creating a new request for specifying required environment variables in docker-compose.yml. This applies to both env vars used for variable substitution, and also for those passed to containers in the environment block. This has been asked for in the past ( see #2441 and #1377), but issues have been closed without addressing this. @dnephin 's implementation of default environment variables via :- suffix is the closest thing to what a required variable implementation would look like.
+Variable Substitution
+Current Behavior
+Environment variables used for variable substitution (ie: ${ENV_VAR}) in docker-compose.yml are currently replaced with a blank string at runtime if they are not set. Compose throws a warning but continues running the container.
+Proposal
+Allow users to specify environment variables that must be set and can not be empty by appending the variable with suffix ?. This maintains backwards compatibility with current ENV VAR naming implementation (current ENV VARS keys can not contain '?'). The container would not run unless this variable was set via .env or exists and is not empty on the host.
+Another option for the suffix is :? which follows POSIX/bash convention, but this gets a bit messy later on in the environment block due to : being a key/value separator. I also think ! is a fine option though it doesn't follow any familiar convention that I know of).
+Example:
+volumes:
+    - ${SOURCE_VOLUME?}:/app/code
+Note: Specifying a default/fallback ENV VAR value via $VAR:-default should not be allowed in combination with the "required" suffix. The "required" suffix throws an error on empty vars, while the "default" suffix catches empty vars and replaces them with the default. The two cannot not be combined.
+Environment Block
+Current behavior
+When a key with no value is placed in the environment: block (or env_file), compose inherits that variable from the host. If the variable does not exist on the host, the variable is not set and is not passed to the container, and no warnings are thrown. The container runs without the environment variable.
+Proposal
+Allow users to specify required environment variables in the environment block (or env_file), throwing a runtime error at container startup if any required vars are empty or do not exist.
+Example:
+environment:
+    DEPLOYMENT?:
+Work Needed
+I'm basing this off of @dnephin 's implementation of default environment variables. I'm not sure yet how to implement similar in the environment block.
+interpolation.py will need to parse the suffix ? as a "required and not empty" flag. Regex will look something like this regex for the default env var suffix.
+Throw error at runtime in environment.py try/catch if var is required and empty with error message "ERROR: The {} variable is required and not set." Do not continue to run container.
+Add interpolation testing for required vars
+Update documentation to reflect required variables spec
+38

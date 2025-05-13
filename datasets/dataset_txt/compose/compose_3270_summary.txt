@@ -1,0 +1,1 @@
+Specify both image name and build path

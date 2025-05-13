@@ -1,0 +1,14 @@
+kmpm commented on 12 Feb 2016
+When I do a docker-compose rm it just shows a new empty line and then nothing.
+By trial and error I found out that the "Are you sure?" question doesn't display but it waits for input.
+Look at the flow below...
+$ docker-compose rm
+y
+Removing afdriftmysql_phpmyadmin_1 ... done
+Removing afdriftmysql_db_1 ... done
+Going to remove afdriftmysql_phpmyadmin_1, afdriftmysql_db_1
+Are you sure? [yN]
+I would expect the question to be asked before having to answer it.
+Windows 7 Pro x64
+docker-toolbox 1.10.0
+git 2.6.2 x64 from git-scm.com

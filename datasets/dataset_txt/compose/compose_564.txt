@@ -1,0 +1,71 @@
+ohcibi commented on 23 Jul 2018
+Description of the issue
+The docker-compose file reference states that volumes_from directives should be replaced by a toplevel volumes definition. I tried that with:
+Dockerfile:
+FROM alpine
+
+VOLUME /var
+docker-compose.yml:
+version: '3'
+
+services:
+  app:
+    build: .
+    volumes:
+      - data:/data
+  db:
+    image: another-image:tag
+    volumes:
+      - data:/otherpath
+
+volumes:
+  data:
+However I noticed that when creating the containers and the volume from scratch (i.e. docker rm <containername> followed by docker volume rm <volumename> before running docker-compose up) the volume contains either data from the one or from the other image, so either the data in /data of the foo_app image or the data at /otherpath of the anoter-image image. As far as I understand the volumes_from directive it wasn't using random data from one of the services but from the container that got referenced. It seems that this functionality is missing so a real replacement for volumes_from is necessary.
+Output of "docker-compose version"
+docker-compose version 1.21.1, build 5a3f1a3
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Output of "docker-compose config"
+
+services:
+  app:
+    build:
+      context: /Users/ohcibi/Documents/Projekte/fscs/wichteln
+    volumes:
+    - app_data:/app:rw
+  www:
+    image: nginx:alpine
+    ports:
+    - 3000:80/tcp
+    volumes:
+    - app_data:/usr/share/nginx/html:rw
+    - /Users/ohcibi/Documents/Projekte/fscs/wichteln/default.conf:/etc/nginx/conf.d/default.conf:rw
+version: '3.0'
+volumes:
+  app_data: {}
+Steps to reproduce the issue
+Use above config or similar to create to services where one service should use data from a directory of the other with a common named volume, mounted somewhere
+Start and stop with docker-compose and delete all containers and volumes in between
+Observed result
+The contents of the volumes is different any time the volumes get recreated
+Expected result
+I'm actually not expecting a different result from the above config as a key semantic, namely the _from part, which determines a "direction" of data flow through these services. But thats what the documentation says when it comes to the volumes_from directive. So I'm not sure if this is a documentation issue, missing feature, a bug or simply me doing something wrong but to me it appears as one of the first three.
+1

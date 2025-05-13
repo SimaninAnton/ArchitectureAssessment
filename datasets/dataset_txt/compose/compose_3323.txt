@@ -1,0 +1,7 @@
+blop commented on 4 Sep 2015
+Hello,
+It seems there is no way to configure a range of ports in docker-compose.yml.
+It's supported by docker with something like -p 1234-1236:1234-1236/tcp
+https://docs.docker.com/reference/run/#expose-incoming-ports
+I could not make it work with docker-compose 1.4.0.
+Thanks.

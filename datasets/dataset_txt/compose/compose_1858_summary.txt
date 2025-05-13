@@ -1,0 +1,1 @@
+Error when mounting host path with Docker for Windows when using different DOCKER_HOST

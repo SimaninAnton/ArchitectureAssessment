@@ -1,0 +1,1 @@
+dns configuration option does not work on docker-compose

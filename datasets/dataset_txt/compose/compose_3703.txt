@@ -1,0 +1,6 @@
+yamii commented on 22 Apr 2015
+use docker-compose v1.2.0
+docker-compose up
+it takes 2/3 mins to start the server while running other 7 containers( 1 min if running alone)
+same goes when nodemon fires up to restart server
+downgraded to v1.1.0 issue didn't occur.

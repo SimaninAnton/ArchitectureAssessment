@@ -1,0 +1,30 @@
+myuseringithub commented on 15 Oct 2018 •
+edited
+Description of the issue
+network flag for the build option of a service in Docker Compose yml file, doesn't work when using the name of the network. It only does when prefixing the network name with the project name (<project name>_<network name>). I don't think it is an expected behavior.
+Error:
+Service servicename failed to build: network networkname not found.
+Output of "docker-compose config":
+networks: 
+  "networkname": 
+    driver: bridge 
+
+services:
+    "servicename": 
+        build:
+            context: ../
+            dockerfile: ./dockerfile
+            network: # add network for build runtime (dockerfile RUN commands).
+                "networkname" # ISSUE - docker doesn't resolve the project name, it should be specified explicitly. i.e. `<networkname>` -> `<projectName>_<networkName>`
+Steps to reproduce the issue
+Create yml file with network flag for the build, using the name of the network only.
+Run docker-compose --project-name <project name> build <service name>
+Error - network not found
+Observed result
+Usage of <project name>_<network name> fixes the issue. But requires knowledge of the project name before hand, not so dynamic for usage on different project names (e.g. with the compose --project-name flag).
+Expected result
+Use name of network only (without specifying project name explicitly) to attach the container to it on build runtime.
+Additional information
+Docker for Windows (edge channel) also reproduced on stable channel, Windows 10 pro
+Docker version 18.09.0-ce-beta1, build 78a6bdb
+docker-compose version 1.22.0, build f46880fe

@@ -1,0 +1,88 @@
+Contributor
+tuttieee commented on 6 Feb 2019 •
+edited
+Description of the issue
+stop_grace_period is ignored when it is set to a service which is depended by another service.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build unknown
+docker-py version: 3.7.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:33:12 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:41:49 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+services:
+  first:
+    command:
+    - sleep 365d & trap 'echo SIGTERM received && i=0 && while true; do echo $$i;
+      sleep 1; i=$$((i+1)); done' 15 && wait
+    entrypoint:
+    - sh
+    - -c
+    image: alpine:latest
+    stop_grace_period: 20s
+  second:
+    command:
+    - sleep 365d & trap 'echo SIGTERM received && i=0 && while true; do echo $$i;
+      sleep 1; i=$$((i+1)); done' 15 && wait
+    depends_on:
+    - first
+    entrypoint:
+    - sh
+    - -c
+    image: alpine:latest
+version: '3.0'
+This project has 2 services: first and second.
+second depends_on first. Then, at termination, first is stopped after second.
+first has stop_grace_period: 20s configuration, then, it is expected to take at most 20 seconds to terminate first.
+(While each command looks complicated, it works just as a debug message printer and does nothing but waits for termination)
+Steps to reproduce the issue
+Execute docker-compose up
+Execute docker-compose stop in another shell.
+See the output of the first shell.
+Observed result
+second_1  | SIGTERM received
+second_1  | 0
+second_1  | 1
+second_1  | 2
+second_1  | 3
+second_1  | 4
+second_1  | 5
+second_1  | 6
+second_1  | 7
+second_1  | 8
+second_1  | 9
+second_1  | 10
+docker-compose-bug-mock_second_1 exited with code 137
+first_1   | SIGTERM received
+first_1   | 0
+first_1   | 1
+first_1   | 2
+first_1   | 3
+first_1   | 4
+first_1   | 5
+first_1   | 6
+first_1   | 7
+first_1   | 8
+first_1   | 9
+docker-compose-bug-mock_first_1 exited with code 137
+Expected result
+first service should be killed after 20 seconds after it receives SIGTERM (docker stop) while it actually is killed in 10 seconds.

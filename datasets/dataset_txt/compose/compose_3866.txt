@@ -1,0 +1,5 @@
+Contributor
+bfirsh commented on 5 Mar 2015
+We're starting to use waffle to categorise issues:
+https://waffle.io/docker/compose
+We should probably also explain the process somewhere. "Sprints" are currently very Docker, Inc centric, but it would be nice to include contributors from outside Inc in this process.

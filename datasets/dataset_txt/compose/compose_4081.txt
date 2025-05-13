@@ -1,0 +1,22 @@
+brianantonelli commented on 24 Nov 2014
+I am running the latest version of Boot2Docker (with the most current Docker image) and Fig. I have initid my Docker instance and exported my B2D shell variables. I'm also able to successfully SSH into the Docker instance.
+Whenever I tried to run fig up (or fig ps, fig run, etc) I get a timeout exception, and yes this is the correct IP for my Docker instance (verified with boot2docker ip):
+/Users/brianantonelli/Dev/figtest> fig up
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 31, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 28, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 56, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 427, in up
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.project", line 174, in up
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 196, in recreate_containers
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 79, in containers
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/docker.client", line 493, in containers
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/docker.client", line 76, in _get
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.sessions", line 395, in get
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.sessions", line 383, in request
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.sessions", line 486, in send
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/requests.adapters", line 387, in send
+requests.exceptions.Timeout: (<requests.packages.urllib3.connection.VerifiedHTTPSConnection object at 0x10f11e910>, 'Connection to 192.168.59.103 timed out. (connect timeout=60)')

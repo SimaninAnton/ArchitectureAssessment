@@ -1,0 +1,1 @@
+mount folder with fig vs with docker

@@ -1,0 +1,1 @@
+Environment variables not handled in docker-compose.yml when in detached mode.

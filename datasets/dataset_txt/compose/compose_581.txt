@@ -1,0 +1,128 @@
+nopenopenope commented on 11 Jul 2018
+Description of the issue
+Lets say I have 4 container:
+NGINX => VARNISH => NGINX => PHP
+Browser calls catch on first NGINX instance and go trough the infrastructure. At some specific point some CURL Actions are triggered on PHP-service.
+PHP tries to do the following:
+$ curl https://mycustom.domain (first NGINX is configured to listen to mycustom.domain and does so when using the browser).
+However, cURL cant resolve https://mycustom.domain. This also happens to http:// and non-www calls.
+Output of "docker-compose version":
+docker-compose version 1.11.1, build 7c5d5e4
+Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+networks: {}
+services:
+  cache:
+    build:
+      context: /mnt/hdd/project/docker/builds/redis
+    ports:
+    - 6379:6379
+  mysql:
+    environment:
+      MYSQL_DATABASE: project
+      MYSQL_PASSWORD: project
+      MYSQL_ROOT_PASSWORD: project
+    image: mariadb:latest
+    ports:
+    - 3306:3306
+    volumes:
+    - /mnt/hdd/project/docker/data:/data:rw
+    - /mnt/hdd/project/docker/builds/mysql/my.cnf:/etc/mysql/my.cnf:rw
+    - /mnt/hdd/project/docker/mysql:/var/lib/mysql_shared:rw
+  php:
+    build:
+      context: /mnt/hdd/project/docker/builds/php
+    links:
+    - cache
+    - session
+    - mysql
+    volumes:
+    - /mnt/hdd/project/src/ps-magento/build:/var/www/magento/build:rw
+    - /mnt/hdd/project/docker/builds/nginx/app/etc/local.ps_de.xml:/var/www/magento/build/app/etc/local.ps_de.xml:rw
+    - /mnt/hdd/project/docker/builds/nginx/app/etc/local.xml:/var/www/magento/build/app/etc/local.xml:rw
+    - /mnt/hdd/project/docker/builds/nginx/app/etc/version.xml:/var/www/magento/build/app/etc/version.xml:rw
+  session:
+    build:
+      context: /mnt/hdd/project/docker/builds/redis
+    ports:
+    - 6389:6379
+  solr:
+    command: solr -f -cloud -p 8983 -a "-Djute.maxbuffer=6291456"
+    image: solr:7.1
+    ports:
+    - 8983:8983
+    - 9983:9983
+  ssl:
+    build:
+      context: /mnt/hdd/project/docker/builds/nginx
+    links:
+    - varnish
+    ports:
+    - 443:443
+    - 80:80
+    volumes:
+    - /mnt/hdd/project/docker/builds/nginx/sites-enabled/nginx_ssl.conf:/etc/nginx/sites-enabled/nginx_ssl.conf:rw
+  varnish:
+    build:
+      context: /mnt/hdd/project/docker/builds/varnish
+    links:
+    - web
+    ports:
+    - 1337:80
+  web:
+    build:
+      context: /mnt/hdd/project/docker/builds/nginx
+    links:
+    - php
+    ports:
+    - 8080:80
+    volumes:
+    - /mnt/hdd/project/docker/builds/nginx/sites-enabled/nginx_web.conf:/etc/nginx/sites-enabled/nginx_web.conf:rw
+    - /mnt/hdd/project/src/ps-magento/build:/var/www/magento/build:rw
+    - /mnt/hdd/project/docker/builds/nginx/app/etc/local.ps_de.xml:/var/www/magento/build/app/etc/local.ps_de.xml:rw
+    - /mnt/hdd/project/docker/builds/nginx/app/etc/local.xml:/var/www/magento/build/app/etc/local.xml:rw
+    - /mnt/hdd/project/docker/builds/nginx/app/etc/version.xml:/var/www/magento/build/app/etc/version.xml:rw
+  zookeeper:
+    command: bash -c "set -x; export; wait-for-solr.sh; solr zk -z localhost:9983
+      upconfig -n default -d /opt/solr/server/solr/configsets/default; solr -f -cloud
+      -p 8984 -z localhost:9983 -a "-Djute.maxbuffer=6291456"; tail -f /dev/null"
+    depends_on:
+    - solr
+    image: solr:7.1
+    network_mode: service:solr
+    volumes:
+    - /mnt/hdd/project/docker/builds/solr/7.1/configsets/default:/opt/solr/server/solr/configsets/default:rw
+version: '2.0'
+volumes:
+  mysql: {}
+  solr0-data: {}
+Steps to reproduce the issue
+Use $ docker-compose exec php bash and execute curl http://mycustom.domain => cannot resolve host
+Use $ docker-compose exec web bash and execute curl http://mycustom.domain => cannot resolve host
+Observed result
+cURL cannot resolve custom domain that is registered in "ssl" container via config.
+Expected result
+cURL can resolve custom domain that is registered in "ssl" container via config.
+Basically I think this a problem from the Docker DNS. I tried several things to get the "ssl" IP and echo it into /etc/hosts/, but this hasn't worked either.
+I try it with this line of code:
+echo "$(getent hosts ssl | awk '{ print $1 }') de.test" >> /etc/hosts
+Does not work, however it works if I execute it while being in the php-container. I guess Docker can resolve the functions at this point.

@@ -1,0 +1,7 @@
+tristan0x commented on 10 Mar 2015
+The following config drives compose crazy:
+service:
+  build: .
+  links:
+Altough this is valid YAML., compose raises the following Exception: TypeError: 'NoneType' object is not iterable
+This should be allowed.

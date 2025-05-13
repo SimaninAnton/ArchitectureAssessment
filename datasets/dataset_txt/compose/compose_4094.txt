@@ -1,0 +1,19 @@
+andrewmichaelsmith commented on 18 Nov 2014
+Similar to #159 but with fig starting the linked container first. You would need some "global id" to indicate that this is a container shared between other fig.ymls.
+So I might have:
+app1/fig.yml:
+couchdb:
+    global_id: couchdb_database
+
+app:
+    links:
+        - couchdb
+app2/fig.yml:
+couchdb:
+    global_id: couchdb_database
+
+app2:
+    links:
+        - couchdb
+If I fig up app1 then couchdb is started. But If I fig up on app2 (after starting app1) then the pre-existing couchdb would be linked to app2.
+This basically gets rid of a manual step of launching couchdb that I would have to do it #159

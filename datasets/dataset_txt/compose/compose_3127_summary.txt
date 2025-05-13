@@ -1,0 +1,1 @@
+Django project does not work when I try to put it into a Docker-Compose container

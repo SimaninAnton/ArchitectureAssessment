@@ -1,0 +1,30 @@
+codekitchen commented on 1 Mar 2016
+The documentation seems to suggest this is intended to work: https://docs.docker.com/compose/extends/#extending-services
+Note: links, volumes_from, and depends_on are never shared between services using >extends. These exceptions exist to avoid implicit dependencies—you always define links and volumes_from locally. This ensures dependencies between services are clearly visible when reading the current file. Defining these locally also ensures changes to the referenced file don’t result in breakage.
+I read this as "you can extend a service with links defined, but those links won't come along with the rest of the definition." Instead, we get an error:
+ERROR: Cannot extend service 'web' in .../docker-compose.yml: services with 'links' cannot be extended
+My use case is related containers in dev environments, such as a web app that also runs background jobs or a file watcher:
+web:
+  build: .
+  links:
+    - consul
+    - postgres
+    - redis
+
+guard:
+  extends: web
+  command: bundle exec guard -i
+  links:
+    - postgres
+This doesn't seem like a good use case for multiple compose files. Granted there are workarounds -- for now we're using (abusing?) YAML references:
+web: &WEB
+  build: .
+  links:
+    - consul
+    - postgres
+    - redis
+
+guard:
+  <<: *WEB
+  command: bundle exec guard -i
+But it'd be nice to allow this. If it's not going to be allowed, maybe the documentation just needs clarification that this will result in an error.

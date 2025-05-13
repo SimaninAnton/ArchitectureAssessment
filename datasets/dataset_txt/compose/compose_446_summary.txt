@@ -1,0 +1,1 @@
+docker-compose build command for build network option in yml not creating network automatically

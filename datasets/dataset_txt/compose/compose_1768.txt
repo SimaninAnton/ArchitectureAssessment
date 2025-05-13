@@ -1,0 +1,2 @@
+anfinil commented on 23 Jan 2017
+Didn't find the ability to use secrets for SwarmMode services creation. Any chance to add such feature? Or how I can use docker-compose file for creating swarm and use secret keys?

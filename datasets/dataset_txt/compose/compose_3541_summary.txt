@@ -1,0 +1,1 @@
+docker-compose ignores .dockercfg if run in non interactive-shell.

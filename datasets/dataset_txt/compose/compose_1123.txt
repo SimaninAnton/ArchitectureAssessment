@@ -1,0 +1,31 @@
+Contributor
+andyneff commented on 26 Oct 2017
+Version
+Docker version 17.09.0-ce, build afdb6d4
+docker-compose version 1.17.0-rc1, build a0f95af
+Problem
+Setting timeout on docker-compose up does not affect the shutdown timeout
+docker-compose.yml file
+version: "3.3"
+services:
+  test2:
+    image: debian:9
+    command: nohup sleep 1000
+(Also tried with version 2.0, and 2.3)
+$ docker-compose up -d --timeout 123 test2
+$ docker inspect issue_test2_1 # Shows no StopTimeout set at all
+$ time docker-compose stop
+Stopping issue_test2_1 ... done
+
+real 0m11.473s
+user 0m0.908s
+sys 0m0.144s
+(Also tried down)
+Expected behavior
+$ docker run -it --rm --stop-timeout=121 --name test1 debian:9 nohup sleep 1000
+$ docker inspect test1 # Show a StopTimeout of 121 set in the "Config" section
+$ docker stop test1 # takes the ~121 seconds
+Other
+Using stop_grace_period does work when using docker-compose commands, but not docker commands, as it appears that docker-compose stop or down just re-reads the docker-compose.yml file at stop time, and has nothing to do with how the container was started
+Objective
+I am trying to set the StopTimeout in the actual container, so the daemon knows what to respect when it is shutdown (for example during a full system shutdown). Something like stop_grace_period doesn't help me, as that only tells docker-compose how long to wait, not the docker daemon.

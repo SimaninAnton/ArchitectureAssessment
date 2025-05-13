@@ -1,0 +1,139 @@
+oeuftete commented on 6 Apr 2017 •
+edited
+With these files:
+base.yml:
+version: '2'
+
+services:
+  _nginx:
+    image: nginx:1.11.12
+docker-compose.yml:
+version: '2'
+
+services:
+  nginx:
+    extends:
+      file: base.yml
+      service: _nginx
+    ports:
+      - "8080:80"
+Running config:
+$ docker-compose config
+Traceback (most recent call last):
+  File "/home/ken/.virtualenvs/compose3_clean/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/compose/cli/main.py", line 67, in main
+    command()
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/compose/cli/main.py", line 111, in perform_command
+    handler(command, options, command_options)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/compose/cli/main.py", line 306, in config
+    print(serialize_config(compose_config, image_digests))
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/compose/config/serialize.py", line 62, in serialize_config
+    width=80)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/__init__.py", line 216, in safe_dump
+    return dump_all([data], stream, Dumper=SafeDumper, **kwds)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/__init__.py", line 188, in dump_all
+    dumper.represent(data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 26, in represent
+    node = self.represent_data(data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 47, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 205, in represent_dict
+    return self.represent_mapping('tag:yaml.org,2002:map', data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 116, in represent_mapping
+    node_value = self.represent_data(item_value)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 47, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 205, in represent_dict
+    return self.represent_mapping('tag:yaml.org,2002:map', data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 116, in represent_mapping
+    node_value = self.represent_data(item_value)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 47, in represent_data
+    node = self.yaml_representers[data_types[0]](self, data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 205, in represent_dict
+    return self.represent_mapping('tag:yaml.org,2002:map', data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 116, in represent_mapping
+    node_value = self.represent_data(item_value)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 57, in represent_data
+    node = self.yaml_representers[None](self, data)
+  File "/home/ken/.virtualenvs/compose3_clean/lib/python3.5/site-packages/yaml/representer.py", line 229, in represent_undefined
+    raise RepresenterError("cannot represent an object: %s" % data)
+yaml.representer.RepresenterError: cannot represent an object: <map object at 0x7f3caace4470>
+$ docker-compose --version
+docker-compose version 1.12.0, build b31ff33
+
+$ python -V
+Python 3.5.2
+
+$ pip list
+DEPRECATION: The default format will switch to columns in the future. You can use --format=(legacy|columns) (or define a format=(legacy|columns) in your pip.conf under the [list] section) to disable this warning.
+appdirs (1.4.3)
+cached-property (1.3.0)
+click (6.7)
+colorama (0.3.7)
+docker (2.2.1)
+docker-compose (1.12.0)
+docker-pycreds (0.2.1)
+dockerpty (0.4.1)
+docopt (0.6.2)
+first (2.0.1)
+jsonschema (2.6.0)
+packaging (16.8)
+pip (9.0.1)
+pip-tools (1.8.2)
+pyparsing (2.2.0)
+PyYAML (3.12)
+requests (2.11.1)
+setuptools (34.3.3)
+six (1.10.0)
+texttable (0.8.8)
+websocket-client (0.40.0)
+wheel (0.29.0)
+
+$ docker info
+Containers: 3
+ Running: 0
+ Paused: 0
+ Stopped: 3
+Images: 181
+Server Version: 17.04.0-ce
+Storage Driver: aufs
+ Root Dir: /media/r0/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 577
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins: 
+ Volume: local
+ Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: 
+containerd version: 422e31ce907fd9c3833a38d7b8fdd023e5a76e73
+runc version: 9c2d8d184e5da67c95d601382adf14862e4f2228
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.4.0-71-generic
+Operating System: Ubuntu 16.04.2 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 15.56GiB
+Name: oblako
+ID: V6CL:5652:TVAP:Z4Q2:DOBE:CHDS:G3MY:Y6TU:BWGK:5B6E:REYP:PNGR
+Docker Root Dir: /media/r0/var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Username: oeuftete
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+WARNING: No swap limit support

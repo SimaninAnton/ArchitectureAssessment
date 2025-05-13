@@ -1,0 +1,14 @@
+danncoba commented on 18 Jul 2018
+Docker compose up doesnt work when providing --scale flag anymore
+I have 2 compose files that i'm trying to run using docker-compose up
+The compose files require one service to start with 5 containers. So i'm using --scale flag
+Without scale flag the build is successfull, with it docker-compose gives me up command info:
+Builds, (re)creates, starts, and attaches to containers for a service etc....
+The full command is as follows
+docker-compose -f docker/docker-compose-common.yml -f docker/docker-compose-prod.yml -p sidprod up -d --scale adt=5
+Just without the --scale flag at the end it builds containers as it should.
+With it it throws that up command info.
+The adt service is existing that's not the problem
+docker version: 18.03 on ubuntu
+docker-compose files version used: 2.0
+Docker documentation still shows the --scale flag as being used in the system which is not helping me with this

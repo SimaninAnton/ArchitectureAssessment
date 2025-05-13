@@ -1,0 +1,1 @@
+Output the equivalent docker command in verbose/debug mode

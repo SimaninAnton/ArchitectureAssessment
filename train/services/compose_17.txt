@@ -1,0 +1,170 @@
+bizlevel commented 19 days ago •
+edited
+i have debian 10
+with worked docker
+$ docker version
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea838
+ Built:             Wed Nov 13 07:25:38 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea838
+  Built:            Wed Nov 13 07:24:09 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+
+
+$ sudo netstat -nlp |grep docker
+tcp        0      0 127.0.0.1:2375          0.0.0.0:*               LISTEN      8398/dockerd        
+unix  2      [ ACC ]     STREAM     LISTENING     101142   1/init               /var/run/docker.sock
+unix  2      [ ACC ]     STREAM     LISTENING     101161   8398/dockerd         /var/run/docker/metrics.sock
+unix  2      [ ACC ]     STREAM     LISTENING     97120    8398/dockerd         /var/run/docker.sock
+unix  2      [ ACC ]     STREAM     LISTENING     96190    8398/dockerd         /var/run/docker/libnetwork/9c84f8d85c76dfe826a29813d762caa1eb1ef358e4f2c3cec17d1a3a6944369f.sock
+
+
+/etc/docker $ cat daemon.json 
+{
+    "debug": true,
+    "hosts": ["tcp://127.0.0.1:2375", "unix:///var/run/docker.sock"]
+}
+
+
+$ env |grep DOCKER
+And my problem - i cant run docker-compose build
+$ docker-compose build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+But see it is magic:
+$ docker-compose -H http://localhost:2375 -p voting build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+Step 1/9 : FROM composer:1.9 AS composer
+ ---> b02efded7ec8
+Step 2/9 : WORKDIR /app
+ ---> Using cache
+ ---> 30b8327d0180
+Step 3/9 : RUN docker-php-ext-install pdo pdo_mysql     && mkdir -p /usr/src/php/ext/redis     && curl -L https://github.com/phpredis/phpredis/archive/5.0.0.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1     && echo 'redis' >> /usr/src/php-available-exts     && docker-php-ext-install redis
+ ---> Using cache
+ ---> 6ebde2f159c1
+Step 4/9 : COPY . .
+ ---> Using cache
+ ---> 5924fb055877
+Step 5/9 : RUN composer install
+ ---> Using cache
+ ---> c4b36a13b0ff
+Step 6/9 : FROM php:7.3.3-fpm-alpine AS phpfpm
+ ---> 55da0c6a2a53
+Step 7/9 : RUN docker-php-ext-install pdo pdo_mysql     && mkdir -p /usr/src/php/ext/redis     && curl -L https://github.com/phpredis/phpredis/archive/5.0.0.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1     && echo 'redis' >> /usr/src/php-available-exts     && docker-php-ext-install redis
+ ---> Using cache
+ ---> 47892d7bd8c4
+Step 8/9 : COPY --from=composer /app /var/www/html
+ ---> Using cache
+ ---> c69b8a98b4f6
+Step 9/9 : WORKDIR /var/www/html
+ ---> Using cache
+ ---> ed9dd515665d
+Successfully built ed9dd515665d
+Successfully tagged voting_voting:latest
+
+
+$ docker-compose -p voting build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+Step 1/9 : FROM composer:1.9 AS composer
+ ---> b02efded7ec8
+Step 2/9 : WORKDIR /app
+ ---> Using cache
+ ---> 30b8327d0180
+Step 3/9 : RUN docker-php-ext-install pdo pdo_mysql     && mkdir -p /usr/src/php/ext/redis     && curl -L https://github.com/phpredis/phpredis/archive/5.0.0.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1     && echo 'redis' >> /usr/src/php-available-exts     && docker-php-ext-install redis
+ ---> Using cache
+ ---> 6ebde2f159c1
+Step 4/9 : COPY . .
+ ---> Using cache
+ ---> 5924fb055877
+Step 5/9 : RUN composer install
+ ---> Using cache
+ ---> c4b36a13b0ff
+Step 6/9 : FROM php:7.3.3-fpm-alpine AS phpfpm
+ ---> 55da0c6a2a53
+Step 7/9 : RUN docker-php-ext-install pdo pdo_mysql     && mkdir -p /usr/src/php/ext/redis     && curl -L https://github.com/phpredis/phpredis/archive/5.0.0.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1     && echo 'redis' >> /usr/src/php-available-exts     && docker-php-ext-install redis
+ ---> Using cache
+ ---> 47892d7bd8c4
+Step 8/9 : COPY --from=composer /app /var/www/html
+ ---> Using cache
+ ---> c69b8a98b4f6
+Step 9/9 : WORKDIR /var/www/html
+ ---> Using cache
+ ---> ed9dd515665d
+Successfully built ed9dd515665d
+Successfully tagged voting_voting:latest
+
+
+$ docker-compose -H http://localhost:2375 build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+ERROR: invalid reference format
+$ export DOCKER_HOST=http://localhost:2375
+$ docker-compose build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+ERROR: invalid reference format
+$ export DOCKER_HOST="http://localhost:2375"
+$ docker-compose build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+ERROR: invalid reference format
+$ export DOCKER_HOST=tcp://localhost:2375
+$ docker-compose build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+ERROR: invalid reference format
+$ unset DOCKER_HOST
+$ docker-compose build
+mysql uses an image, skipping
+redis uses an image, skipping
+nginx uses an image, skipping
+Building voting
+ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+How it is possible, that docker-compose -p voting build worked,
+but docker-compose build NOT ???
+where we have:
+  -p, --project-name NAME     Specify an alternate project name
+                              (default: directory name)
+  -H, --host HOST             Daemon socket to connect to

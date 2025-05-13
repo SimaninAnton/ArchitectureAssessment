@@ -1,0 +1,5 @@
+Contributor
+bfirsh commented on 3 Jun 2014
+It's a bit confusing that they're the only exception to all fig.yml options being lists.
+environment:
+ - FOO=bar

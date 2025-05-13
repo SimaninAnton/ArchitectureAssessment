@@ -1,0 +1,8 @@
+AnthonyMastrean commented on 28 Jul 2017
+If I have a Docker image reference including a full registry host name and port
+example.com:8443/example
+It's not displayed properly in the images table
+$ docker-compose images
+   Container         Repository       Tag         Image Id       Size
+----------------------------------------------------------------------
+example_example_1   example.com   8443/example   abcdef123456   173 MB

@@ -1,0 +1,1 @@
+Bug when merging ports with service inheritance and python 3.6

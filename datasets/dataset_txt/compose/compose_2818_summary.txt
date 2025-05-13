@@ -1,0 +1,1 @@
+docker-compose log should show the Volume creation

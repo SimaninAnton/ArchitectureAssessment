@@ -1,0 +1,11 @@
+gimler commented on 2 Nov 2016
+It would be nice if i can use a containername instate of a ip in extra_hosts and docker resolve the ip for me.
+example:
+I have a project with multiple container now i would start a phantomjs container with a domain alias
+#!/usr/bin/env sh
+
+# grab container ip
+IP=`docker-compose exec webserver ip add show eth1 | grep global | awk -F '[/ ]+' '{print $3}'`
+
+# start phantomjs with the alias
+docker run -d -v ${PWD}:/phantomjs --net=schoolm_default --add-host="www.example.local:${IP}" --name=phantomjs fgrehm/phantomjs2 --config /phantomjs/phantomjs-config.json

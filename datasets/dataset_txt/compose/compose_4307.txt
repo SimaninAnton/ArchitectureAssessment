@@ -1,0 +1,10 @@
+Contributor
+d11wtq commented on 15 Jun 2014
+I have no idea what might be causing this, but I have confirmed that it only happens when running docker via fig.
+If I start a bash shell inside a docker container, then start typing a long command at the bash prompt, I get to maybe 50-60 characters across the window, then the line wraps back on itself and I'm then typing over the top of what I've already written. It doesn't affect the input, only the rendering of the shell.
+See copy/paste of an example below. The | indicates where the cursor is (this is the end of the line, not the middle of some gibberish).
+vagrant@gentoo ~/environments/python2 $ fig run --rm console bash
+ wrap around back onto the same line?|really long command here, and it's going to
+Using the exact same docker image without fig:
+vagrant@gentoo ~/environments/python2 $ docker run --rm -ti d11wtq/python:2.7.7 bash
+default@de72b52f7075:~$ I'm typing a really long command here, and it's going to wrap around back onto the same line?|

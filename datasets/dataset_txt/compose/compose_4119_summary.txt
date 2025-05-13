@@ -1,0 +1,1 @@
+NoneType is not callable when ctrl-c twice for kill

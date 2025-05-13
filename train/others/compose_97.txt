@@ -1,0 +1,13 @@
+homoluctus commented on 25 Sep 2019
+Is your feature request related to a problem? Please describe.
+In version 1.24.1, executes config subcommand and then displays the configuration content of docker-compose.yml.
+But the message doesn't include a message indicating validation was successful.
+I don't know if configuration validation succeeded or failed.
+So, it is better to display like "PASS: Validate the compose file".
+Describe the solution you'd like
+Make a few changes on compose/cli/main.py#L367:
+- print(serialize_config(compose_config, image_digests))
+
++ successful_msg = 'PASS: Validate the compose file'
++ print('{}\n{}'.format(successful_msg, serialize_config(compose_config, image_digests)))
+Thanks

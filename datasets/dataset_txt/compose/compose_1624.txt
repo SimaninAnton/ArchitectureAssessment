@@ -1,0 +1,6 @@
+Contributor
+AlexeyRokhin commented on 7 Mar 2017
+docker-compose does not support cpus parameter:
+ERROR: The Compose file '.\.\docker-compose.test.yml' is invalid because: Unsupported config option for services.test: 'cpus'
+Please add support for --cpus parameter.
+1

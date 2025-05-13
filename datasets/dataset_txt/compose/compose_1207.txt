@@ -1,0 +1,2 @@
+flatwound commented on 14 Sep 2017
+the url https://github.com/docker/compose/releases/download/1.16.1/docker-compose-Windows-x86_64.exe is not working, same for 1.16.0

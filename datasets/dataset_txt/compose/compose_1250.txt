@@ -1,0 +1,9 @@
+sgammill commented on 22 Aug 2017
+When running docker-compose with the --no-ansi flag and the config command with a yml file that has Docker stack-only elements, docker-compose displays the warning message with ANSI color sequences.
+Affects: docker-compose 1.16.0-rc1
+Example invocation:
+./docker-compose --file stackfile.yml --no-ansi config
+Output:
+WARNING: Some services (docker-api-http, eieio-esb, eieio-management-api, eieio-management-ui) use the 'deploy' key, which will be ignored. Compose does not support 'deploy' configuration - use `docker stack deploy` to deploy to a swarm.
+(then the yml output)
+However, the word WARNING in the warning message is colored using ANSI escape sequences, despite the fact that --no-ansi has been specified on the command line. I've tried placing "--no-ansi" before "--file", to no avail. (Also, the warning should print to stderr instead of stdout.)

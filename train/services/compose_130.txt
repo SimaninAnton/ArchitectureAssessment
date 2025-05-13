@@ -1,0 +1,41 @@
+Contributor
+hholst80 commented on 17 Jul 2019
+$ docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+
+$ docker version
+Client:
+ Version:           18.09.7-ce
+ API version:       1.39
+ Go version:        go1.12.6
+ Git commit:        2d0083d657
+ Built:             Tue Jul  2 01:00:04 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.7-ce
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.12.6
+  Git commit:       2d0083d657
+  Built:            Tue Jul  2 00:59:35 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+$ docker-compose -f conf.d/base.yml --project-directory $PWD config --services > services
+WARNING: The tag variable is not set. Defaulting to a blank string.
+WARNING: The build variable is not set. Defaulting to a blank string.
+
+$ head -n2 services
+grafana
+prometheus
+
+$ docker-compose -f conf.d/base.yml --project-directory $PWD config --services |& tee services
+The tag variable is not set. Defaulting to a blank string.
+The build variable is not set. Defaulting to a blank string.
+grafana
+prometheus
+[snip]

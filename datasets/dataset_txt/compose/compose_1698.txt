@@ -1,0 +1,87 @@
+horsemanV commented on 11 Feb 2017
+I'm having a hard time getting the extends option to work properly in docker-compose in a situation where it worked previously:
+File structure:
+Docker
+--conf
+----docker
+------docker-compose.yaml
+------common.yaml
+------environment
+--------brand.env
+------sites
+--------brand.docker-compose.yaml
+------.env
+----nginx
+--data
+----initdb.d
+----mysql
+--sites
+----brand
+In the docker directory running docker-compose -f docker-compose.yaml -f common.yaml -f ./sites/brand.docker-compose.yaml config
+yields the following:
+ERROR: The Compose file '././sites/brand.docker-compose.yaml' is invalid because: Unsupported config option for services.brand.nginx: 'extends' Unsupported config option for services.brand.wordpress: 'extends'
+Here are the files:
+docker version
+Client
+Version: 1.13.1
+API version: 1.26
+Go version: go1.7.5
+Git commit: 092cba3
+Built: Wed Feb 8 08:47:51 2017
+OS/Arch: darwin/amd64
+Server:
+Version: 1.13.1
+API version: 1.26 (minimum version 1.12)
+Go version: go1.7.5
+Git commit: 092cba3
+Built: Wed Feb 8 08:47:51 2017
+OS/Arch: linux/amd64
+Experimental: true
+docker info
+Containers: 2
+Running: 0
+Paused: 0
+Stopped: 2
+Images: 10
+Server Version: 1.13.1
+Storage Driver: aufs
+Root Dir: /var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 85
+Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: bridge host ipvlan macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1
+runc version: 9df8b306d01f59d3a8029be411de015b7304dd8f
+init version: 949e6fa
+Security Options:
+seccomp
+Profile: default
+Kernel Version: 4.9.8-moby
+Operating System: Alpine Linux v3.5
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.952 GiB
+Name: moby
+ID: MQRV:TZXW:YBRA:TQHV:JWDC:7MOR:D23V:KWZF:L2WA:6OPG:D6H5:2P6M
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+File Descriptors: 16
+Goroutines: 26
+System Time: 2017-02-11T00:26:39.392634547Z
+EventsListeners: 1
+No Proxy: *.local, 169.254/16
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+127.0.0.0/8
+Live Restore Enabled: false

@@ -1,0 +1,4 @@
+iffy commented on 1 Apr 2015
+I want to mimic something like docker build --file something.Dockerfile . in docker-compose.yml But the --file option is not supported. From docker build --help:
+-f, --file=""        Name of the Dockerfile(Default is 'Dockerfile' at context root)
+I'm happy to attempt a patch. It looks like a name needs to be chosen for the docker-compose.yml name but that docker-py supports this already: https://github.com/docker/docker-py/blob/master/docker/client.py#L304

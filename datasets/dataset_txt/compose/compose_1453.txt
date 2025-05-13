@@ -1,0 +1,3 @@
+bibiteix commented on 17 May 2017
+I'm using docker-compose for two containers and I run it using docker-compose up -d
+But when I try to see its logs with docker-compose logs -f it shows me only the logs of one of the containers. I tried running the other container individually and it shows the logs just fine. I appreciate any help.

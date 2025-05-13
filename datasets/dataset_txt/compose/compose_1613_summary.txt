@@ -1,0 +1,1 @@
+Network config not applied when docker-compose.yml changes

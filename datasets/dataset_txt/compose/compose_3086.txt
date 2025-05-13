@@ -1,0 +1,3 @@
+ahmetb commented on 17 Nov 2015
+Printed service names are inaccurate. It goes like 2,3,2... Very similar to docker/libcompose#35.
+From dockercon keynote:

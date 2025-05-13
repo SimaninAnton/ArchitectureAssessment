@@ -1,0 +1,12 @@
+namgivu commented on 18 Jul 2017
+Reading the help by docker-compose -h will give us the option --project-directory PATH
+docker-compose [-f ...] [options] [COMMAND] [ARGS...]
+--project-directory PATH Specify an alternate working directory
+(default: the path of the compose file)
+But I tried to call the below command and failed - I have ensured the file at ./mySubFolder/docker-compose.yml has already been created.
+docker-compose --project-directory ./mySubFolder up
+The error
+Can't find a suitable configuration file in this directory or anyparent.
+Are you in the right directory?
+Supported filenames: docker-compose.yml, docker-compose.yaml
+What I did wrong? How to pass the parameter properly?

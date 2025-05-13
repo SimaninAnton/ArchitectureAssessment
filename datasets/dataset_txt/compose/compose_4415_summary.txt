@@ -1,0 +1,1 @@
+Fig installation fails on Mac OS X

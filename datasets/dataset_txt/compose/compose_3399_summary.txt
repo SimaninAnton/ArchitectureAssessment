@@ -1,0 +1,1 @@
+Using "scale" exhausts system limits and then errors out

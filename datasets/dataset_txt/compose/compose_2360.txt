@@ -1,0 +1,6 @@
+yank1 commented on 25 May 2016
+When I use a one node.
+I can use compose up to up a image like jenkins.
+And then I compose down
+But when I add a node to swarm, And compose up again.
+There would be a error can not find image.

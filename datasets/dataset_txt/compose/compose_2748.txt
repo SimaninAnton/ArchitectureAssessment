@@ -1,0 +1,93 @@
+marceloamaral commented on 18 Feb 2016
+I created a compose file with two service where each one has a different constraint. Each constraint specifies characteristics from different hosts.
+As far as I could test, it works fine when the constraint is from the same host, but when I try to spread the containers to many hosts the swarm ends up with no host candidate.
+Using different compose files I could send containers to different hosts using the constraints. The problem is when I am doing it in the same compose file.
+The docker compose yml file is:
+app:
+  image: flask/app
+  links:
+    - redis
+  #environment:
+   # - "constraint:x.pci==fpga"
+app2:
+  image: flask/app
+  links:
+    - redis
+  environment:
+    - "constraint:x.storage==ssd"
+haproxy:
+  image: tutum/haproxy
+  links:
+    - app
+    - app2
+  environment:
+    - BACKEND_PORT=5000
+nginx:
+  image: nginx/loadbalancer
+  ports:
+    - "80:80"
+  links:
+    - haproxy
+redis:
+  image: redis
+docker-compose --version
+docker-compose version 1.6.0, build d99cad6
+docker version 
+Client:
+ Version:      1.10.0
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   590d5108
+ Built:        Thu Feb  4 18:36:33 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      swarm/1.1.0
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   a0fd82b
+ Built:        Thu Feb  4 08:55:18 UTC 2016
+ OS/Arch:      linux/amd64
+
+
+docker info
+Containers: 3
+ Running: 2
+ Paused: 0
+ Stopped: 1
+Images: 8
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 2
+ host1: 172.20.0.16:2376
+  └ Status: Healthy
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 8
+  └ Reserved Memory: 0 B / 12.32 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.19.0-25-generic, x.storage=ssd, operatingsystem=Ubuntu 14.04.3 LTS, provider=generic, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-02-17T19:49:07Z
+ host2: 172.20.0.11:2376
+  └ Status: Healthy
+  └ Containers: 1
+  └ Reserved CPUs: 0 / 4
+  └ Reserved Memory: 0 B / 16.45 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=3.19.0-25-generic, x.pci=fpga, operatingsystem=Ubuntu 14.04.3 LTS, provider=generic, storagedriver=aufs
+  └ Error: (none)
+  └ UpdatedAt: 2016-02-17T19:49:29Z
+Plugins: 
+ Volume: 
+ Network: 
+Kernel Version: 3.19.0-25-generic
+Operating System: linux
+Architecture: amd64
+CPUs: 12
+Total Memory: 28.77 GiB
+Name: host2
+ERROR: unable to find a node that satisfies x.storage==ssd
+For some reason, it maybe understand the constraints from different hosts as a conflict, then in the end there is host candidate to deploy the containers. 
+I have also tried to link this compose file to another container in a different host. But I got this error:
+ERROR: Unable to find a node fulfilling all dependencies: --link=1f38b99b9e73:1f38b99b9e73 --link=loadbalancernginx_app_1:app --link=loadbalancernginx_app_1:app_1 --link=loadbalancernginx_app_1:loadbalancernginx_app_1
+the 1f38b99b9e73 is a container in host 1 and the docker compose file has constraints to go to host2.
+Thus, it seems that the problem is with links.

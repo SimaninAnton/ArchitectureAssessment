@@ -1,0 +1,93 @@
+MLaurenzo commented on 7 Jun 2018 •
+edited
+Description of the issue
+I cannot interact with django shell when using docker-compose, but I can by launching manually my container with docker.
+Context information (for bug reports)
+Output of "docker-compose version"
+$ docker-compose --version
+docker-compose version 1.21.2, build unknown
+Output of "docker version"
+$ docker --version
+Docker version 18.05.0-ce, build f15032478
+Output of "docker-compose config"
+  my-service:
+    build:
+      context: /home/laurent/dev/my_service
+    command:
+    - shell
+    stdin_open: true
+    tty: true
+version: '3.0'
+
+Dockerfile:
+FROM python:3.4
+
+WORKDIR /usr/src/app
+COPY requirements.txt /usr/src/app/
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+
+EXPOSE 8000
+ENTRYPOINT ["python", "manage.py"]
+CMD ["runserver", "0.0.0.0:8000"]
+Steps to reproduce the issue
+run the command "docker-compose up --build"
+Observed result
+$ docker-compose up --build
+WARNING: The Docker Engine you're using is running in swarm mode.
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+To deploy your application across the swarm, use docker stack deploy.
+Building creative-status-manager
+Step 1/8 : FROM python:3.4
+---> f94d71bdb6f4
+Step 2/8 : WORKDIR /usr/src/app
+---> Using cache
+---> e682f0424c7d
+Step 3/8 : COPY requirements.txt /usr/src/app/
+---> Using cache
+---> 2ba12e87fd5f
+Step 4/8 : RUN pip install --no-cache-dir -r requirements.txt
+---> Using cache
+---> df865d4b5530
+Step 5/8 : COPY . .
+---> e9ce85f3f8df
+Step 6/8 : EXPOSE 8000
+---> Running in 25d891b0b372
+Removing intermediate container 25d891b0b372
+---> d72893d74df8
+Step 7/8 : ENTRYPOINT ["python", "manage.py"]
+---> Running in 4143ebb8b2fe
+Removing intermediate container 4143ebb8b2fe
+---> 20c904ca6842
+Step 8/8 : CMD ["runserver", "0.0.0.0:8000"]
+---> Running in cfa05bc99997
+Removing intermediate container cfa05bc99997
+---> f837be5a86e5
+Successfully built f837be5a86e5
+Successfully tagged my_service:latest
+Recreating my_service ... done
+Attaching to my_service
+my_service | Python 3.4.8 (default, May 5 2018, 03:20:07)
+my_service | Type "copyright", "credits" or "license" for more information.
+my_service |
+my_service | IPython 5.0.0 -- An enhanced Interactive Python.
+my_service | ? -> Introduction and overview of IPython's features.
+my_service | %quickref -> Quick reference.
+my_service | help -> Python's own help system.
+my_service | object? -> Details about 'object', use 'object??' for extra details.
+From here typing anything has no effect.
+Expected result
+I can type some text and run some python commands.
+Additional information
+$ docker run -ti my_service shell
+Python 3.4.8 (default, May 5 2018, 03:20:07)
+Type "copyright", "credits" or "license" for more information.
+IPython 5.0.0 -- An enhanced Interactive Python.
+? -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help -> Python's own help system.
+object? -> Details about 'object', use 'object??' for extra details.
+In [1]:
+Here I can run some python commands.
+$ uname -r
+4.16.12-1-ARCH

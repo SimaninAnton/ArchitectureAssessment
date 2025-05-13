@@ -1,0 +1,1 @@
+$ at the end of environment variable causes "Invalid Interpolation" error

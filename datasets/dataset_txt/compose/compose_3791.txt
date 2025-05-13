@@ -1,0 +1,13 @@
+caiguanhao commented on 26 Mar 2015
+docker-compose 1.1.0 doesn't support ro in volumes_from yet.
+error message:
+Service "container" mounts volumes from "nginx_logs_1:ro", which is not the name of a service or container.
+docker-compose.yml:
+container:
+  build: .
+  ports:
+    - '19198:22'
+  volumes_from:
+    - 'nginx_logs_1:ro'
+docker command that works:
+docker run -d -p=19198:22 --volumes-from=nginx_logs_1:ro --name=ssh_container_1 ssh_container

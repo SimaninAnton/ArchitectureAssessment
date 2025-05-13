@@ -1,0 +1,89 @@
+ghost commented on 22 May 2018
+Description of the issue
+Docker-compose fails to pull image saying it cannot find the credential helper in path.
+Using docker pull works correctly.
+Context information (for bug reports)
+# Output of "docker-compose version"
+docker-compose version 1.21.1, build 7641a569
+#Output of "docker version"
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:48 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+services:
+  cassandra:
+    environment:
+      HEAP_NEWSIZE: 256M
+      MAX_HEAP_SIZE: 512M
+    image: cassandra:2.1
+    ports:
+    - 9042:9042/tcp
+    - 9160:9160/tcp
+  facthistory:
+    command:
+    - -jar
+    - fact-history.jar
+    - --cassandra_hosts=cassandra
+    - host=facthistory
+    image: eu.gcr.io/configuration-wfm/facthistory:195-5f2330265ae66ee1626527913cc90d40fd2051c0
+  mongodb:
+    image: mongo:2.6
+    ports:
+    - 27017:27017/tcp
+version: '3.0'
+Steps to reproduce the issue
+docker-compose up
+Observed result
+Fails to pull facthistory image.
+Expected result
+Image pulls correctly (as it does when running docker pull eu.gcr.io/configuration-wfm/facthistory:195-5f2330265ae66ee1626527913cc90d40fd2051c0)
+Stacktrace / full error message
+Pulling facthistory (eu.gcr.io/configuration-wfm/facthistory:195-5f2330265ae66ee1626527913cc90d40fd2051c0)...
+Traceback (most recent call last):
+  File "site-packages\dockerpycreds\store.py", line 52, in _execute
+  File "subprocess.py", line 336, in check_output
+  File "subprocess.py", line 403, in run
+  File "subprocess.py", line 709, in __init__
+  File "subprocess.py", line 997, in _execute_child
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "site-packages\docker\auth.py", line 126, in _resolve_authconfig_credstore
+  File "site-packages\dockerpycreds\store.py", line 25, in get
+  File "site-packages\dockerpycreds\store.py", line 70, in _execute
+dockerpycreds.errors.StoreError: docker-credential-gcloud not installed or not available in PATH
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 1052, in up
+  File "compose\cli\main.py", line 1048, in up
+  File "compose\project.py", line 466, in up
+  File "compose\service.py", line 324, in ensure_image_exists
+  File "compose\service.py", line 1142, in pull
+  File "site-packages\docker\api\image.py", line 380, in pull
+  File "site-packages\docker\auth.py", line 47, in get_config_header
+  File "site-packages\docker\auth.py", line 94, in resolve_authconfig
+  File "site-packages\docker\auth.py", line 143, in _resolve_authconfig_credstore
+docker.errors.DockerException: Credentials store error: StoreError('docker-credential-gcloud not installed or not available in PATH',)
+[3652] Failed to execute script docker-compose

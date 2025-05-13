@@ -1,0 +1,6 @@
+Contributor
+schmunk42 commented on 18 Dec 2015
+We have an application template with docker-compose.override.yml files.
+If a user with docker-compose < 1.5.0 tries to start it, it breaks.
+The stack basically starts, but volumes settings for local development are missing and the user gets unrelated errors, see phundament/app#191 for an example.
+This may be also very useful for all the new features like networking and volumes, which are also planned for compose.

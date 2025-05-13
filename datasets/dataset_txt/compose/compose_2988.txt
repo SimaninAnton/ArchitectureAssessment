@@ -1,0 +1,8 @@
+ghost commented on 14 Dec 2015
+In previous version 1.5.1 was working. Tested in two computers, in one directly with 1.5.2, in the other was working with 1.5.1 after update to 1.5.2, no.
+So it stops because of the timeout
+Example output, but here you cannot see nothing strange:
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping pep-container ... done
+Stopping idm ... done
+Stopping pdp-container ... done

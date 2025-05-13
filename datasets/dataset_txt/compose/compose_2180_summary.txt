@@ -1,0 +1,1 @@
+Docker Swarm and Docker Engine Swarm should be clearly distinguished in documentation

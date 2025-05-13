@@ -1,0 +1,8 @@
+Contributor
+bfirsh commented on 15 Jan 2014
+Now Docker caches ADD in Dockerfiles, we can safely build on every fig up without builds taking ages.
+There perhaps should also be an option in fig.yml to cache the build with a tag as it currently does. We should also document how to cache installation of code dependencies. E.g.:
+ADD requirements.txt /code/
+RUN pip install -r /code/requirements.txt
+ADD . /code/
+This means pip install will only be run when requirements.txt changes. If pip install were after the last line, it would be run anytime any file changed.

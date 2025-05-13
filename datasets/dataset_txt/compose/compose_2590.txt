@@ -1,0 +1,27 @@
+m3l7 commented on 22 Mar 2016
+my compose file looks like this:
+  version: '2'
+  services:
+      ms1:
+         expose:
+              - "13010"
+          networks:
+              services:
+                  aliases:
+                      - ms1
+      ms2:
+          expose:
+              - "13010"
+          networks:
+              services:
+                  aliases:
+                      - ms2
+  networks:
+      services:
+when I try to resolve i.e. ms1 host inside ms2 container, it seems that dns waits for my internet DNS, so in the best case it is slow due to ping, and if I'm not connected to inernet it hangs.
+If I try to "dig ms1", the response is instantaneous. However, using host it hangs:
+[user@816feca682ad ~]$ host ms1
+ms1 has address 172.18.0.3
+Host ms1 not found: 3(NXDOMAIN)
+Host ms1 not found: 3(NXDOMAIN)
+Am I doing something wrong? is there a way to ignore internet resolution for network aliases?

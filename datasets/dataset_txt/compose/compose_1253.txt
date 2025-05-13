@@ -1,0 +1,3 @@
+codejamninja commented on 20 Aug 2017
+It would be nice to be able to pipe a docker-compose.yml file into docker-compose. Yes, I know, it would not be good practice to run your production environments using this. However, it would be super useful for quickly testing different docker stack setups.
+curl https://raw.githubusercontent.com/liberapay/liberapay.com/master/docker-compose.yml | docker-compose up

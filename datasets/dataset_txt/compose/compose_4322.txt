@@ -1,0 +1,10 @@
+sheax0r commented on 22 May 2014
+I haven't found a way to use fig to specify the hostname of a Docker container. I think this would be useful to have. Configuring could be something like this:
+test:
+  image: busybox
+  hostname: mycomputer.somewhere.com
+  run: hostname
+Output would be something like this:
+> fig up test
+test_1 | mycomputer
+fig_test_1 exited with code 0

@@ -1,0 +1,14 @@
+lucasvc commented on 21 Oct 2014
+In fig.yml you can pass some environment variables to docker hosts, using environment section. But in ports section you can't reuse those variables, so a replace should be done before executing fig file. Following first example, would be nice to do:
+web:
+  build: .
+  command: python app.py
+  links:
+   - db
+  environment:
+   - OUTPUT_PORT
+  ports:
+   - "$OUTPUT_PORT:8000"
+db:
+  image: postgres
+So executor and container know each other the port value, without having replace any content.

@@ -1,0 +1,1 @@
+fig build: no logs are progress indication

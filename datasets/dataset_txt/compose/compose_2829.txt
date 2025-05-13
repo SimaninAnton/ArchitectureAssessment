@@ -1,0 +1,14 @@
+jacobtomlinson commented on 6 Feb 2016
+I'm trying to use the netshare volume plugin with a v2 docker compose file.
+In netshare the volume name is the same as the network location to be mounted, e.g docker volume create -d cifs --name someserver.example.com/path/to/mount. When trying to set this name in compose using the following format I get an error message.
+version: '2'
+
+services:
+  # Services are here
+
+volumes:
+  someserver.example.com/path/to/mount:
+    driver: cifs
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+volumes value Additional properties are not allowed ('someserver.example.com/path/to/mount' was unexpected)
+Am I doing something wrong?

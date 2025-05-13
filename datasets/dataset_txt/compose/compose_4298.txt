@@ -1,0 +1,26 @@
+luislavena commented on 28 Jun 2014
+Hello,
+I found fig quite useful, however found a minor annoyance in the way it terminates the services.
+Right now, doing fig stop <name> performs similar to docker kill and produces processes not to exit cleanly.
+Short example:
+memcached:
+  image: luislavena/mini-memcached
+  ports:
+    - "11211"
+Sending a simple fig stop memcached result in -1 as status:
+$ fig ps
+          Name               Command     State    Ports
+-------------------------------------------------------
+skeletonrails_memcached_1   /start.sh   Exit -1
+Which is the same as plain docker kill.
+Instead, if INT or TERM is issued, container stops gracefully (Exit 0):
+$ docker kill --signal="INT" c935d8fe691a
+c935d8fe691a
+
+$ fig ps
+          Name               Command     State    Ports
+-------------------------------------------------------
+skeletonrails_memcached_1   /start.sh   Exit 0
+I'm worried that the forced termination might cause missing data due flushes or caching (not at least on the memcached container, but others)
+Should this be tackled by fig or should I report this to Docker instead?
+Thank you for your time and for creating such great utility!

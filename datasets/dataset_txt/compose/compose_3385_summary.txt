@@ -1,0 +1,1 @@
+Since 1.4, `docker-compose up container` logs all containers, not just those passed as argument

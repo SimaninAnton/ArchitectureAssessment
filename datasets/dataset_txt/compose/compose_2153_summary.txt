@@ -1,0 +1,1 @@
+docker-compose bundle is not creating a bundle file with the correct image digest

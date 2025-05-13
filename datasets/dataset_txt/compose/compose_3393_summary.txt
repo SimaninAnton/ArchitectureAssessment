@@ -1,0 +1,1 @@
+Blank lines in docker-compose pull output when piping

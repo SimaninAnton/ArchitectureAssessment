@@ -1,0 +1,2 @@
+isaacdorfman commented on 16 May 2019
+When a pod specification requests the same port twice(for example because of a change in a .env file), the "docker-compose run " command responds with "Bind for 0.0.0.0: failed: port is already allocated" instead of responding that the problem is in the compose file.

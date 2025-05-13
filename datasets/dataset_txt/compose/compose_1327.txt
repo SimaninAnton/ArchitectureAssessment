@@ -1,0 +1,4 @@
+djalal commented on 10 Jul 2017
+Hello,
+can't find how to specify the equivalent of --update-order=start-first in my docker-compose.yml ?
+Any help appreciated, thanks

@@ -1,0 +1,2 @@
+kuhnroyal commented on 6 Jan 2016
+docker-compose up should have a flag and preferably also a config file option to allocate a pseudo tty during the container creation. The run command already allows for this.

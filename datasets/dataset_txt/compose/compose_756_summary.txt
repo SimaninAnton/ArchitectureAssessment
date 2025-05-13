@@ -1,0 +1,1 @@
+Compose build doesn't respect credential helpers

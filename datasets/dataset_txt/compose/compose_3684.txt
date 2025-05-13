@@ -1,0 +1,5 @@
+Contributor
+aanand commented on 24 Apr 2015
+Docker 1.7 will introduce the top-level concept of a "network", accompanied by new CLI and API functionality. Compose should add support for networks, which might involve one or both of:
+putting all containers in a project-wide network
+adding a network key so that users can enable more specific inter-service communication

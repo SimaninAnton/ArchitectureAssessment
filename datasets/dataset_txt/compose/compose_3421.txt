@@ -1,0 +1,24 @@
+samber commented on 30 Jul 2015
+My docker-compose.yml :
+www:
+  build: .
+  volumes:
+    - .:/app
+  command: /app/docker-entrypoint.sh
+After renaming a parent directory from "/home/samber/projects/XXX/scope" to "/home/samber/projects/YYY/scope", every docker-compose up was broken :
+$ docker-compose logs www
+Attaching to scope_www_1
+www_1 | /bin/sh: 1: /app/docker-entrypoint.sh: not found
+Compose seems to put in a cache the volume path ("." = pwd) :
+$ docker inspect scope_www_1
+[...]
+"Volumes": {
+        "/app": "/home/samber/projects/XXX/scope"
+    },
+[...]
+$ docker-compose -v
+docker-compose version: 1.3.3
+CPython version: 2.7.8
+$ docker -v
+Docker version 1.6.2.fc21, build c3ca5bb/1.6.2
+IMO compose should read the docker-compose.yml at each command.

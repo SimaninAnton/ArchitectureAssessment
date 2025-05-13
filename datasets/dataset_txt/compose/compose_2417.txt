@@ -1,0 +1,10 @@
+Contributor
+anton44eg commented on 9 May 2016
+$ docker-compose up
+Traceback (most recent call last):
+File "/usr/local/Cellar/docker-compose/1.7.1/libexec/bin/docker-compose", line 9, in <module>
+load_entry_point('docker-compose==1.7.1', 'console_scripts', 'docker-compose')()
+File "/usr/local/Cellar/docker-compose/1.7.1/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 63, in main
+log.error(e.msg)
+AttributeError: 'ProjectError' object has no attribute 'msg'
+15

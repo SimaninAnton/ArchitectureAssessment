@@ -1,0 +1,1 @@
+Unable to find image 'autoware-kinetic:latest' locally docker: Error response from daemon: pull access denied for autoware-kinetic, repository does not exist or may require'docker login'. See 'docker run --help'.

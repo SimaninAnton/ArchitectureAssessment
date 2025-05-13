@@ -1,0 +1,1 @@
+docker-compose unable to use the pre-existing external bridge network in swarm cluster

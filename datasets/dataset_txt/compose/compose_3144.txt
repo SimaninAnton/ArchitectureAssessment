@@ -1,0 +1,3 @@
+dieend commented on 4 Nov 2015
+In my local docker-compose configuration, I have 4 container that need to be run. But sometime I don't need all of them. For example when I am using staging database configuration and I don't want mysql container going up. Or when we are migrating and there are two mysql database and I want to select only one of them turned on.
+It would be awesome if this feature implemented.

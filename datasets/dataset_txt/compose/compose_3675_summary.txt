@@ -1,0 +1,1 @@
+https://test.docker.com/builds/Linux/x86_64/docker-1.6.0-rc4 returns 404 causing Jenkins test to fail

@@ -1,0 +1,1 @@
+docker-compose -p should set COMPOSE_PROJECT_NAME

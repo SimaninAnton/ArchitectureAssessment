@@ -1,0 +1,6 @@
+andrewmilson commented on 21 Feb 2017
+It would be nice to create attachable networks from the Docker Compose file instead of having to create the network through the Docker CLI.
+networks:
+  my-network:
+    driver: overlay
+    attachable: true

@@ -1,0 +1,5 @@
+BrianBland commented on 21 Apr 2015
+I received the following error message when running any docker-compose commands using the package installed from pip (1.2.0) on OSX 10.10.1 with docker 1.6.0.
+SSL error: [Errno 1] _ssl.c:510: error:14090086:SSL routines:ssl3_get_server_certificate:certificate verify failed
+My issue was resolved when installing the github release package via the provided curl script.
+@aanand

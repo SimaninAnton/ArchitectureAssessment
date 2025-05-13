@@ -1,0 +1,1 @@
+"pull" output is still present when using > /dev/null

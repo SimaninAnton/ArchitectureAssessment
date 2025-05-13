@@ -1,0 +1,55 @@
+jeyglk commented on 12 Apr 2018
+Description of the issue
+Compose is failing if a dockerfile is specified in the context's path.
+Context information (for bug reports)
+docker-compose version 1.21.0, build unknown
+docker-py version: 3.2.1
+CPython version: 2.7.14
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version: 18.04.0-ce
+ API version: 1.37
+ Go version: go1.10.1
+ Git commit: 3d479c0
+ Built: unknown-buildtime
+ OS/Arch: darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version: 18.03.0-ce
+  API version: 1.37 (minimum version 1.12)
+  Go version: go1.9.4
+  Git commit: 0520e24
+  Built: Wed Mar 21 23:14:32 2018
+  OS/Arch: linux/amd64
+  Experimental: true
+networks:
+  devops-test: {}
+services:
+  devops-test:
+    build:
+      context: /Users/johndoe/repos/test/devops-test/
+      dockerfile: /Users/johndoe/repos/test/devops-test/dockerfile/Dockerfile
+    environment:
+    image: repo.dkr.ecr.eu-west-1.amazonaws.com/devops-test
+    networks:
+      devops-test: null
+version: '3.0'
+Steps to reproduce the issue
+Just run docker-compose build with a declared dockerfile in the context.
+Observed result
+Building devops-test
+ERROR: Cannot locate specified Dockerfile /Users/johndoe/repos/test/devops-test/dockerfile/Dockerfile
+Expected result
+docker-compose -f tools/docker/docker-compose.yml build
+Building devops-test
+Step 1/21 : FROM alpine:3.7
+3.7: Pulling from library/alpine
+Stacktrace / full error message
+(if applicable)
+Additional information
+macOS 10.13.3
+This is following up #5823
+4

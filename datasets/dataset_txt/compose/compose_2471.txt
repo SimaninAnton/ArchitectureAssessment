@@ -1,0 +1,7 @@
+natarajanv commented on 20 Apr 2016
+In my script, I have this line
+docker-compose -f "${COMPOSE_FILE}" pull
+The warnings started one we upgraded compose to 1.2.0
+Pulling cadvisor (docker-registry.mitre.org:8443/autobuild/cadvisor:master-177)...
+20-Apr-2016 08:32:46 /tmp/_MEIoXe8sl/requests/packages/urllib3/connection.py:251: SecurityWarning: Certificate has no subjectAltName, falling back to check for a commonName for now. This feature is being removed by major browsers and deprecated by RFC 2818. (See urllib3/urllib3#497 for details.)
+1

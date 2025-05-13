@@ -1,0 +1,52 @@
+x3ro commented on 3 Aug 2016
+I've been trying to set up a network of different containers to run a bunch of selenium tests, and have encountered some problems along the way. I've tried to break this down as much as possible, and now have the following problem:
+Given are two containers "source" and "target", which need to be able to talk to each other through their names as well as aliases. My MVE dockerfile is the following:
+version: '2'
+
+services:
+  source:
+    image: ping
+    command: bash -c 'sleep 3; set -x; ping -c 2 target; ping -c 2 target-alias; sleep 5'
+    networks:
+      default:
+        aliases:
+          - "source-alias"
+
+  target:
+    image: ping
+    depends_on:
+      - source
+    networks:
+      default:
+        aliases:
+          - "target-alias"
+    command: bash -c 'sleep 3; set -x; ping -c 2 source; ping -c 2 source-alias; sleep 5'
+When using docker-compose up, my setup works as expected: both containers can ping each other. docker-compose run however does not seem to create any aliases for the service being run. It does create aliases for the services that are started as a dependency.
+# docker inspect target-container Aliases when created via docker-compose run
+"Aliases": [
+    "9ac76719de49"
+],
+
+# docker inspect target-container aliases when created via docker-compose up
+"Aliases": [
+    "target-alias",
+    "target",
+    "c059f3fdefff"
+],
+I've created an MVE repository that should reproduce this issue. Just use make run and make up and examine the difference in behavior (or not :D).
+$ docker version
+Client:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.12.0
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   8eab29e
+ Built:        Thu Jul 28 21:15:28 2016
+ OS/Arch:      linux/amd64

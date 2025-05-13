@@ -1,0 +1,1 @@
+Sporadic "failed to add interface" on startup with 1.6-rc2

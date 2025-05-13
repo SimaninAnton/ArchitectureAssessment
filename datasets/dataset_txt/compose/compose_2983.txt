@@ -1,0 +1,17 @@
+brunoborges commented on 16 Dec 2015
+To demonstrate the problem, here's a test case scenario. Given the following fictitious ~/sample/docker-compose.yml:
+    master:
+      build: master/
+      hostname: master
+    slave:
+      build: slave/
+Docker Compose is called to bring these services up:
+    $ docker-compose up -d
+A process inside master can ping itself through the hostname master. Such command works:
+    $ docker exec -ti <master id> ping master
+A process inside master can also ping the slave service with the generated hostname sample_slave_0:
+    $ docker exec -ti <master id> ping sample_slave_0
+A process inside slave will not be able to ping itself with the generated hostname:
+    $ docker exec -ti <slave id> ping sample_slave_0
+Now given the problem statement above, a possible solution would be to include hostname: slave in the definition of the slave service. The problem is that slave is a scalable service and therefore cannot have a statically defined hostname. It is also important that the process running inside slave knows about its own hostname so it can communicate with master to self-register in whatever process is inside of master.
+Is there any work in progress to support such scenario?

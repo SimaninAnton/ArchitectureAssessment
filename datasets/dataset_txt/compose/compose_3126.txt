@@ -1,0 +1,5 @@
+lelit commented on 7 Nov 2015
+I switched one of my projects to use version 1.5.0 with Python 3.4, and hit a subtle problem related to the hash randomization feature introduced in Python 3.3.
+One of the effects is that docker-compose up keeps recreating some of the services, even if nothing has been changed in their configuration.
+The problem disappear executing export PYTHONHASHSEED=0 (actually, any value except the default 'random') before running docker-compose.
+I created a tiny example that demonstrate the problem: https://github.com/lelit/docker-compose-config-ordering-issue-demo

@@ -1,0 +1,20 @@
+patrick-bark commented on 13 Apr 2016
+Hey, I am trying to volume mount an nfs share but I am running into some issues with that. When I run a regular docker command such as:
+docker run -i -t privileged=true -v /mnt/bluearc:/mnt/bluarc -v /net:/net ubuntu bash
+I have my desired drive mounted at /mnt/bluearc. However, if I run it with docker-compose:
+test_ser:
+  container_name: test_ser
+  hostname: test_ser
+  image: ubuntu
+  restart: always
+  working_dir: /repo/drop_zone_dub
+  volumes_from:
+    - nerve_repo_data
+  volumes:
+    - /mnt/bluearc:/mnt/bluearc
+    - /net:/net
+  privileged: true
+  command: bash
+When I try to access the directories I get the following error:
+Too many levels of symbolic links
+What is compose doing differently that would cause this? Thanks

@@ -1,0 +1,91 @@
+karneaud commented on 2 Jul 2017 •
+edited
+0
+down vote
+favorite
+I'm using a browser sync + web pack + docker workflow where a mounted volume is used
+I can get everything up and running but the problem comes when there are edits.
+Edits to the files on the volume form the host is reflected in the container but does not trigger browser sync or web pack to reload
+However edits in the container are reflected in the host and triggers reloads from web pack and browser sync
+I'm running
+macOS
+docker >= 17
+docker-machine - 0.12.0
+docker-compose - 17.05.0-ce
+node >=8
+npm >=5
+yarn => 0.24.6.
+web pack 2
+my compose file
+version: '3.2'
+services:
+  node:
+    image: node:latest
+    volumes:
+     #files on this volume does not trigger reload unless it had been modified from within the container
+      - ~/Documents/Git/gblsf-wp-child-theme:/usr/src/app:rw 
+      - wordpress-data:/var/www/html
+      - /usr/src/app/node_modules
+    working_dir: /usr/src/app
+    entrypoint: yarn
+    command: install
+    ports:
+      - '3000:3000'
+      - '3001:3001'
+  nginx:
+    image: nginx:latest
+    ports:
+      - '8000:8000'
+    depends_on:
+      - wordpress
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - wordpress-data:/var/www/html
+  mysql:
+    image: mysql:latest
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql:rw
+    environment:
+      - MYSQL_ROOT_PASSWORD=aqwe123
+    restart: always
+  wordpress-cli:
+    image: wordpress:cli-1.2-php5.6
+    depends_on:
+      - mysql
+      - wordpress
+    links:
+      - mysql
+    working_dir: /var/www/html
+    volumes:
+      - wordpress-data:/var/www/html
+      - ./install-wp.sh:/var/www/install-wp.sh
+    entrypoint: /bin/sh
+    command: /var/www/install-wp.sh
+    environment:
+      - WP_VER=4.8
+      - WORDPRESS_DB_PASSWORD=aqwe123
+    restart: on-failure
+  wordpress:
+    image: wordpress:php5.6-fpm
+    depends_on:
+      - mysql
+      - node
+    ports:
+      - '9000:9000'
+    working_dir: /var/www/html
+    volumes:
+      - wordpress-data:/var/www/html
+    links:
+      - mysql
+    restart: always
+volumes:
+  wordpress-data:
+    driver_opts:
+      type: none
+      device: /Users/kendallarneaud/Documents/SERVER/htdocs/gbslf
+      o: bind
+  mysql-data:
+    driver: local
+Why does the triggered work from the container edits but not from the host edits

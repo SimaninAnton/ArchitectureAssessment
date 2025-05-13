@@ -1,0 +1,1 @@
+Backgrounded 'docker-compose up ...' and piped 'docker-compose logs ...' still listen to CTRL+C

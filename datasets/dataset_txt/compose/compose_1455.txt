@@ -1,0 +1,19 @@
+cesarjorgemartinez commented on 17 May 2017 •
+edited
+Hi,
+I'm using docker-compose v11.1, and sometimes when try to start the containers, some container fail to start:
+Recreating shacode_shacode_containername (two shacode)
+And no such image
+My container always named containername
+I do not know how to reproduce it
+Doing a docker inspect shacode_shacode_shacode_containername get:
+"Name": "/shacode_shacode_shacode_containername",
+The shacode is the same always
+"Name": "/2c457ba8998f_2c457ba8998f_2c457ba8998f_containername",
+My docker compose has the definition
+containername:
+container_name: containername
+hostname: containername
+I'm using algo docker 17.03
+What could be happening?
+2

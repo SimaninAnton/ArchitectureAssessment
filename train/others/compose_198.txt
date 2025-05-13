@@ -1,0 +1,2 @@
+manojmsrit commented on 28 Apr 2019
+I am just trying to create a single container for multiple applications. Currently my setup has multiple Docker files ( NUnit, MsBuild and SonarQube ) where i am using these docker files under Jenkins ( which is also running in a docker container ). Is it possible to build all these applications using Docker compose and run the applications such as ( NUnit, MSBuild and Sonarqube ) through Jenkins and if it is possible how the docker compose file looks alike ? Can you please suggest me regarding this

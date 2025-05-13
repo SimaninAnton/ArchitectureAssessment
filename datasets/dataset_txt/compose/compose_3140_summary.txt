@@ -1,0 +1,1 @@
+1.5.0 docker-compose up has --no-build by default

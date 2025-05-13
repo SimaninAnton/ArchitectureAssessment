@@ -1,0 +1,22 @@
+nsteinmetz commented on 12 Apr 2016
+Hi,
+On Alpine Linux 3.3 64 bits, I have an issue with docker-compose:
+curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose 
+/usr/local/bin/docker-compose --version
+-ash: /usr/local/bin/docker-compose: not found
+docker-compose --version
+-ash: docker-compose: not found
+Using bash instead of default shell returns the same answer.
+I have:
+ls -al /usr/local/bin/docker-compose 
+-rwxr-xr-x    1 root     root       7929597 Apr 11 21:12 /usr/local/bin/docker-compose
+Regarding docker by itself, I use alpine package in community repo.
+which docker
+/usr/bin/docker
+cvsq:~# docker -v
+Docker version 1.10.3, build a5815f5
+Using binary docker instead of alpine package does not change anything.
+Any idea on the proper way to use docker-compose in an Alpine box ?
+Thanks,
+Nicolas

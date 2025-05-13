@@ -1,0 +1,23 @@
+viveky4d4v commented on 20 Feb 2017
+I am unable to specify CPU & memory for services specified in version 3 .
+With version 2 it works fine with "mem_limit" & "cpu_shares" parameters under the services . But it fails while using version 3 , putting them under deploy section doesn't seem worthy unless i am using swarm mode .
+Can somebody help ?
+version: "3"
+services:
+  node:
+    build:
+      context: .
+      dockerfile: ./docker-build/Dockerfile.node
+    restart: always
+    environment:
+      - VIRTUAL_HOST=localhost
+    volumes:
+      - logs:/app/out/
+    expose:
+      - 8083
+    command: ["npm","start"]
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+39
+6

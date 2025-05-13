@@ -1,0 +1,1 @@
+Output logs then exit

@@ -1,0 +1,18 @@
+blelump commented on 24 Oct 2015
+Hi there!
+Sorry if this is another such kind of question, but perhaps it needs some clarification. I'd like to ask how to deal with linked containers or what are best practices to deal with them? Having such stack, e.g:
+carbonrelay:
+  links:
+   - carboncache1
+   - carboncache2
+
+graphite:
+  links:
+   - carboncache1
+   - carboncache2
+
+nginx:
+  links:
+   - graphite
+how to ensure that if I'd --force-recreate on nginx, then carbonrelay would also get rebuilt? If I'd run docker-compose up -d --force-recreate nginx, then carbonrelay looses linking with carboncacheN which isn't expected behaviour. I'm using --force-recreate in certain cases during building app stack, e.g I've added new service I'd like to add it to nginx so I'd like to link to that serviceX so nginx would discover it properly. However, it seems adding another link to container implies that it needs to be recreated and recreating cause that certain dependent containers loose linking (as said above).
+Is there any good practice for that instead of just docker-compose up -d --force-recreate the whole app? I'd like to avoid the latter.

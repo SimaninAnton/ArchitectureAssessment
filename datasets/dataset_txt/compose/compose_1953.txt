@@ -1,0 +1,14 @@
+strarsis commented on 5 Nov 2016 •
+edited
+I want to use env variables - but only for build.
+The most elegant approach available now is using build-args.
+Edit: The issue was in the Dockerfile, not in the docker-compose.yml, and was unrelated.
+version: '2'
+services:
+  php:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        http_proxy: http://172.17.0.1:3128
+        https_proxy: http://172.17.0.1:3128

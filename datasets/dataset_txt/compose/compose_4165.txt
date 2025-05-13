@@ -1,0 +1,2 @@
+sirwolfgang commented on 16 Oct 2014
+I have tested using docker build both within target(docker build .) and parallel to my fig location(docker build web/). When I use the direct docker command, my context builds normally about <8 MBs. When I invoke fig build the web container building process seems to not use the .dockerignore located in my web folder. Leading to Service 'web' failed to build: write /mnt/sda1/var/lib/docker/aufs/mnt/.../app/log/development.log: no space left on device

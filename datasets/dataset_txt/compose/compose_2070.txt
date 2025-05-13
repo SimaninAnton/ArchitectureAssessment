@@ -1,0 +1,3 @@
+DominicCronin commented on 13 Sep 2016
+In https://github.com/docker/compose/blob/master/docs/reference/overview.md it says: "Compose builds the configuration in the order you supply the files. Subsequent files override and add to their successors."
+If the meaning is that they override the files that come before them, then 'successors' is incorrect. A better word would be 'predecessors'.

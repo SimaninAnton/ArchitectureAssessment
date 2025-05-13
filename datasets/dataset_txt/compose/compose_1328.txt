@@ -1,0 +1,29 @@
+sivagollapalli commented on 10 Jul 2017 •
+edited
+# docker-compose.yml
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - data:/var/lib/postgres/data
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  data:
+    external: true
+I have created a volume with options as docker volume create --name=data. Then I run docker-compose up which creates a volume apart from data as shown below.
+DRIVER              VOLUME NAME
+local               2293833c2781bc0c57baad7add8af771086b8c693b2346030cfb59e04b8fcc22
+local               data
+docker version is 17.03.1-ce, build c6d412e and docker compose version is 1.11.2, build dfed245.
+OSX version is 10.12.5
+Could you let me know what went wrong?

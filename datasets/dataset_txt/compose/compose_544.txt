@@ -1,0 +1,9 @@
+VManikantaraju commented on 7 Aug 2018
+I'm new to this. Im using Ubuntu 16.04
+When i run this command 'sudo sh run.sh kinetic' in /Autoware/docker/generic, after asking password Iam getting output like this
+Use kinetic
+Shared directory: /home/root/shared_dir
+Unable to find image 'autoware-kinetic:latest' locally
+docker: Error response from daemon: pull access denied for autoware-kinetic, repository does not exist or may require 'docker login'.
+See 'docker run --help'.
+What can be the possible reasons for this error and how can it be avoided? plz help me with this

@@ -1,0 +1,49 @@
+airtonix commented on 17 Dec 2016
+version: "2"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ./src/foo:/www/
+FROM matriphe/alpine-php:fpm-5.6
+
+ENV TIMEZONE Asia/Jakarta
+ENV PHP_MEMORY_LIMIT 512M
+ENV MAX_UPLOAD 50M
+ENV PHP_MAX_FILE_UPLOAD 200
+ENV PHP_MAX_POST 100M
+ENV DOCKERIZE_VERSION v0.3.0
+
+
+RUN apk update && \
+ apk add \
+  curl make gcc g++ python linux-headers paxctl libgcc libstdc++ gnupg \
+  wget bash build-base && \
+ rm -rf /var/cache/apk/*
+
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz -C /usr/local/bin \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+ADD ./core /opt/install
+
+ADD ./docker/entrypoint.d/* /entrypoint.d/
+ADD ./docker/entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.d/*
+
+WORKDIR /www
+ENTRYPOINT '/entrypoint.sh'
+CMD ['php -S localhost:8000']
+docker-compose build
+# output is fine
+docker-compose up
+
+
+ERROR: for app  Cannot create container for service app: Invalid bind mount spec "C:\\Users\\zenobius\\Projects\\other\\aligent\\docker-magento-1\\src\\foo:/www/:rw": Invalid volume specification: 'C:\Users\zenobius\Projects\other\aligent\docker-magento-1\src\foo:/www/:rw'
+�[31mERROR�[0m: Encountered errors while bringing up the project.

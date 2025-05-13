@@ -1,0 +1,38 @@
+enriquecatala commented on 27 Mar 2018 •
+edited by shin-
+Description of the issue
+After updating to docker-compose version 1.20.1, build 5d8c71b, my docker-compose.yml file start crashing
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b2
+Output of "docker version"
+Docker version 18.03.0-ce, build 0520e24
+Output of "docker-compose config"
+PS D:\Docker> docker-compose config
+ERROR: In file '.\docker-compose.yml', service 'ï»¿version' must be a mapping not a string.
+Steps to reproduce the issue
+Create the following docker-compose.yml file:
+version: '3'
+services:
+  mssql-server-linux:
+    container_name: sql2017_flex_powerbi    
+    image: microsoft/mssql-server-linux:latest
+    volumes:
+      - mssql-server-linux-data:/var/opt/mssql/data
+    environment:
+      MSSQL_SA_PASSWORD: "P@ssW0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "14333:1433"
+
+volumes:
+  mssql-server-linux-data:
+execute docker-compose config
+Observed result
+ERROR: In file '.\docker-compose.yml', service 'ï»¿version' must be a mapping not a string.
+Expected result
+Create and run the new image
+Stacktrace / full error message
+ERROR: In file '.\docker-compose.yml', service 'ï»¿version' must be a mapping not a string.
+Additional information
+OS version / distribution, docker-compose install method, etc.
+I´m runing docker on Windows 10 Pro Version 1709 (os compilation 16299.309)

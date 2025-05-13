@@ -1,0 +1,5 @@
+RobLoach commented on 24 Jan 2015
+Now that Docker Compose 1.1.0-rc1 is out and is no longer named Fig, we should start to think about what will happen to the Fig.sh website.
+Move it to a sub-documentation section of https://docs.docker.com ?
+Re-brand the website under http://compose.docker.com ?
+Make a whole new http://fig.sh and deal with moving the domain later on?

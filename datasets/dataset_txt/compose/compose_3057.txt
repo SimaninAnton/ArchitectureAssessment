@@ -1,0 +1,11 @@
+glenbot commented on 24 Nov 2015
+Im using gelf logging in my docker-compose file and I lose the ability to use fig run <container> bash because it gives the error "Error attaching: configured logging reader does not support reading". An example config is:
+my_container:
+  image: link-to-image
+  log_driver: "gelf"
+  log_opt:
+    gelf-address: udp://0.0.0.0:12201
+    gelf-tag: my_container
+I understand that I lose the ability to use docker-compose logs or docker-compose logs my_container but I would expect docker-compose run my_container bash to let me into the container as I am overriding the CMD line manually.
+docker-compose version: 1.5.1
+Docker version 1.9.0, build 76d6bc9

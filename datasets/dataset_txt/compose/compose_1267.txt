@@ -1,0 +1,8 @@
+ghost commented on 9 Aug 2017
+The problem is when I try to use the long syntax present in version 3.2.
+I've searched but not found anything related to this in the open issues.
+Using the same code as in file reference, but getting this error message.
+Here is a screenshot with more information about the versions on my machine.
+docker: 17.06.0-ce, build 3dfb8343
+docker-compose: version 1.15.0, build e12f3b9
+2

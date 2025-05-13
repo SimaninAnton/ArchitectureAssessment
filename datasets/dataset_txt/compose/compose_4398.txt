@@ -1,0 +1,12 @@
+dlintw commented on 19 Feb 2014
+10:25:35# fig
+Traceback (most recent call last):
+File "/usr/bin/fig", line 5, in
+from pkg_resources import load_entry_point
+File "/usr/lib/python3.3/site-packages/pkg_resources.py", line 2716, in
+working_set.require(requires)
+File "/usr/lib/python3.3/site-packages/pkg_resources.py", line 685, in require
+needed = self.resolve(parse_requirements(requirements))
+File "/usr/lib/python3.3/site-packages/pkg_resources.py", line 588, in resolve
+raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: websocket-client==0.11.0

@@ -1,0 +1,10 @@
+stevens-r commented on 24 Feb 2019 •
+edited
+need to get access to my media and download folders
+tried a symlink from ~/docker/shared/M2 to /disks/M2
+volumes:
+- ${USERDIR}/docker/shared/M2:/M2
+but I'm guessing the container has no access to the drive
+ERROR: for sickchill Cannot start service sickchill: error while creating mount source path '/home/stevensr/docker/shared/M2': mkdir /home/stevensr/docker/shared/M2: file exists
+I'm mostly winging this docker install i have 12 containers running with traefik as a reverse proxy
+just need access to my drives

@@ -1,0 +1,25 @@
+Contributor
+kojiromike commented on 11 Feb 2015
+I propose that Compose be able to support a way to create volume containers that never run. Right now, if you want to describe a volume container in your figfile, you must expect it to run. The best you can do is
+data:
+    image: tianon/true
+    volumes:
+        - /my/volume
+service:
+    image: whatever
+    volumes_from:
+        - data
+But it shouldn't be necessary to run a DVC at all. In the commandline Docker client I can do:
+c=$(docker create --entrypoint=_ -v /my/volume scratch)
+docker run --rm --volumes-from="$c" busybox dd if=/dev/urandom of=/my/volume/foo bs=1M count=1
+docker run --rm --volumes-from="$c" busybox du -hs /my/volume/foo
+docker rm -v "$c"
+It's admittedly a little strange to have to provide an entrypoint to scratch, but it doesn't ever run, so it doesn't make a difference. It would be nice to be able to do this in Compose as well.
+data:
+    image: scratch
+    create_only: true
+    volume: …
+Related:
+#697 asks to be able to run a subset of containers. This is similar in that it asks not to run a container. Perhaps this provides a use case for that, but that issue still implies that the containers can be run. This proposal is to mark containers for creation, but never to run them.
+#613 - Despite the similar title this is a feature request with significantly different implications.
+17

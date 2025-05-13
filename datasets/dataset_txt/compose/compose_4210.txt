@@ -1,0 +1,4 @@
+japrescott commented on 26 Aug 2014
+When I build a container/service with fig and then later change the directory structure and adjust the volume mounts in fig.yml, my container always wants to mount the old directory. This happens also when I rebuild the container with the --no-cache flag.
+Only way I have found to get the volumes to be updated is by removing all containers and their images (and the layers) and rebuilding. Interestingly, I've found that when I run the container with fig run [container] /bin/bash, the volumes are updated. Using fig up does not update the paths to the volumes.
+I think this is a bug, but it very well could be that I am missing a point..

@@ -1,0 +1,15 @@
+cu commented on 22 Jul 2015
+Hello,
+I have the following container configuration:
+foodata:
+    image: data-volume
+    volumes:
+        - /var/lib/foo
+    comand: true
+foobackup:
+    image: data-volume
+    volumes_from:
+        - foodata:ro
+When I run "docker-compose up", it returns the following error:
+Service "foo-backup" mounts volumes from "foo-data:ro", which is not the name of a service or container.
+It looks to me like docker-compose does not understand suffixes in "volumes-from", even though they have been supported in docker itself for a long time. For what it's worth, it appears that the "volumes" command does support suffixes.

@@ -1,0 +1,73 @@
+xcash commented on 29 Apr 2019
+Description of the issue
+In a new server installation (on a VPS provided by OVH) running Ubuntu 18.x the Docker system works flawlessy and fast but docker-compose sometimes hangs indefinitely for no reason. And for every command, from version to ps, up, logs and so on.
+I tried everything regarding DNS and name resolution, even disabling systemd-resolved.
+When it works it is fast. When it hangs I can see the /tmp/_Mxyz123123 directory created.
+Running with verbose hangs before any output. And then completes flawlessy.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.5
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        e8ff056
+ Built:             Thu Apr 11 04:43:57 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       e8ff056
+  Built:            Thu Apr 11 04:10:53 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+... not related to a specific docker-compose file
+Steps to reproduce the issue
+docker-compose
+Observed result
+Sometimes hangs
+Expected result
+Run fast.
+Stacktrace / full error message
+No stacktrace but i managed to strace the behavior.
+[...]
+openat(AT_FDCWD, "/tmp/_MEIsYFQ2P/lib/python3.6/config-3.6m-x86_64-linux-gnu/Makefile", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3</tmp/_MEIsYFQ2P/lib/python3.6/config-3.6m-x86_64-linux-gnu/Makefile> <0.000038>
+fstat(3</tmp/_MEIsYFQ2P/lib/python3.6/config-3.6m-x86_64-linux-gnu/Makefile>, {st_mode=S_IFREG|0644, st_size=0, ...}) = 0 <0.000020>
+write(3</tmp/_MEIsYFQ2P/lib/python3.6/config-3.6m-x86_64-linux-gnu/Makefile>, "# Generated automatically from M"..., 69632) = 69632 <0.000130>
+fchmod(3</tmp/_MEIsYFQ2P/lib/python3.6/config-3.6m-x86_64-linux-gnu/Makefile>, 0700) = 0 <0.000050>
+write(3</tmp/_MEIsYFQ2P/lib/python3.6/config-3.6m-x86_64-linux-gnu/Makefile>, "type.o   -o Modules/xxsubtype$(E"..., 43) = 43 <0.000029>
+close(3</tmp/_MEIsYFQ2P/lib/python3.6/config-3.6m-x86_64-linux-gnu/Makefile>) = 0 <0.000021>
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f2088645a10) = 3110 <0.000276>
+rt_sigaction(SIGINT, {sa_handler=0x404840, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f2087c55f20}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0 <0.000051>
+rt_sigaction(SIGKILL, {sa_handler=0x404840, sa_mask=[KILL], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f2087c55f20}, 0x7ffe82f7d900, 8) = -1 EINVAL (Invalid argument) <0.000031>
+rt_sigaction(SIGTERM, {sa_handler=0x404840, sa_mask=[TERM], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f2087c55f20}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0 <0.000028>
+wait4(-1, 
+
+[... here it hangs and then after 114s it continues output ...]
+
+wait4(-1, docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+[{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 3110 <114.945565>
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=3110, si_uid=0, si_status=0, si_utime=43, si_stime=6} ---
+rt_sigaction(SIGINT, {sa_handler=SIG_DFL, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f2087c55f20}, {sa_handler=0x404840, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f2087c55f20}, 8) = 0 <0.000094>
+rt_sigaction(SIGKILL, {sa_handler=SIG_DFL, sa_mask=[KILL], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f2087c55f20}, 0x7ffe82f7d900, 8) = -1 EINVAL (Invalid argument) <0.000150>
+
+[...]
+Additional information
+Linux vps[omit] 4.15.0-48-generic #51-Ubuntu SMP Wed Apr 3 08:28:49 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+Ubuntu 18.04.2 LTS
+docker-compose installed with curl
+I have lot of other docker-compose environments working and this is the first time I see this behavior. Any idea on what to check or where to look?
+9

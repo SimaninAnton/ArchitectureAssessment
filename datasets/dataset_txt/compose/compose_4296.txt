@@ -1,0 +1,4 @@
+pmlopes commented on 30 Jun 2014
+Sometimes I would like to have a simple HA container, that in case it terminates with a status code other than 0 would relaunch with the same args it used before.
+Imagine that you have a python/nodejs app and there was an exception, the node/python process dies and if the flag ha is true then fig would issue again a up command.
+This would be a very simple HA feature but good enough for most of deployment scenarios...

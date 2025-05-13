@@ -1,0 +1,14 @@
+sindile commented on 17 Oct 2017
+Running docker-compose - docker-compose version 1.8.0, build unknown
+Traceback (most recent call last):
+File "/usr/bin/docker-compose", line 11, in
+load_entry_point('docker-compose==1.8.0', 'console_scripts', 'docker-compose')()
+File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 58, in main
+command = dispatch()
+File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 89, in dispatch
+options, handler, command_options = dispatcher.parse(sys.argv[1:])
+File "/usr/lib/python2.7/dist-packages/compose/cli/docopt_command.py", line 31, in parse
+handler = get_handler(self.command_class, command)
+File "/usr/lib/python2.7/dist-packages/compose/cli/docopt_command.py", line 42, in get_handler
+command = command.replace('-', '_')
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 3: ordinal not in range(128)

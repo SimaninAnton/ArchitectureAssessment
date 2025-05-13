@@ -1,0 +1,1 @@
+TypeError: kwargs_from_env() got an unexpected keyword argument 'environment' after 1.7 update

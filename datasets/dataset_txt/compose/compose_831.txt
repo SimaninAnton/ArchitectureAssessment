@@ -1,0 +1,17 @@
+ebuildy commented on 1 Mar 2018
+Given the following docker-compose:
+version: "2"
+
+services:
+
+  maven:
+    image: maven:3.5-jdk-8
+    command: "ls "
+    network_mode: "none"
+
+  http:
+    image: http
+    command: "ls "
+Running docker-compose -p toto run --rm maven ls is creating a network Creating network "toto_default" with the default driver.
+Issue: docker-compose should not create a network when running a container that has no network!
+Note: I can see a network is not created if all containers have network_mode: "none"

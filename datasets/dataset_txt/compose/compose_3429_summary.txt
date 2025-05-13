@@ -1,0 +1,1 @@
+Epic: Define an application once in a way that can be used in dev, test and prod

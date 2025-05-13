@@ -1,0 +1,46 @@
+MahadevG commented on 23 Apr 2018 •
+edited
+I am trying to monitor docker containers using Prometheus. When I run
+"docker-compose up " i got following error
+/usr/local/bin$ sudo docker-compose up
+[sudo] password for mahadev:
+Starting bin_node-exporter_1 ...
+Starting cadvisor-exporter ...
+Starting bin_prometheus_1 ... error
+ERROR: for bin_prometheus_1 Cannot start service prometheus: b'OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:402: container init caused "rootfs_linux.go:58: mounting \"/usr/local/bin/prometheus.yml\" to rootfs \"/var/lib/docker/overlay2/f4b34c5866b191683d4e8c08e59fb14f56127cbcd67a603225954dd59c0a6a50/merged\" at \"/var/lib/docker/overlay2/f4b34c5866b191683d4e8c08e59fb14f56127cbcd67a603225954dStarting bin_node-exporter_1 ... done
+Starting cadvisor-exporter ... done
+ce-versa)? Check if the specified host path exists and is the expected type'
+ERROR: for prometheus Cannot start service prometheus: b'OCI runtime create failed: container_linux.go:348: starting container process caused "process_linux.go:402: container init caused "rootfs_linux.go:58: mounting \"/usr/local/bin/prometheus.yml\" to rootfs \"/var/lib/docker/overlay2/f4b34c5866b191683d4e8c08e59fb14f56127cbcd67a603225954dd59c0a6a50/merged\" at \"/var/lib/docker/overlay2/f4b34c5866b191683d4e8c08e59fb14f56127cbcd67a603225954dd59c0a6a50/merged/etc/prometheus/prometheus.yml\" caused \"not a directory\""": unknown: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type'
+ERROR: Encountered errors while bringing up the project.
+Docker version 18.03.0-ce, build 0520e24
+Ubuntu 16.04
+docker-compose version 1.21.0, build 5920eb0
+And please find the docker.compse.yml and prometheus.yml file
+docker-compose.yml file
+version: '3'
+services:
+prometheus:
+image: prom/prometheus
+volumes:
+- ./prometheus.yml:/etc/prometheus/prometheus.yml
+- ./alert.rules:/etc/prometheus/alert.rules
+command:
+- '-config.file=/etc/prometheus/prometheus.yml'
+ports:
+- '9090:9090'
+
+node-exporter:
+image: prom/node-exporter
+ports:
+- '9100:9100'
+
+cadvisor-exporter:
+container_name: "cadvisor-exporter"
+image: google/cadvisor
+ports:
+- "9200:8080"
+volumes:
+- "/:/rootfs:ro"
+- "/var/run:/var/run:rw"
+- "/sys:/sys:ro"
+- "/var/lib/docker/:/var/lib/docker:ro"

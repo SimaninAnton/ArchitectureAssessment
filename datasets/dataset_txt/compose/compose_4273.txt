@@ -1,0 +1,3 @@
+penelopezone commented on 23 Jul 2014
+it'd be super good if typing
+fig run first_few_letters_of_container_name<tab> and other such potentially long typings bash completed. I'm not sure what the threshold for that would be.

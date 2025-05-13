@@ -1,0 +1,25 @@
+nihn commented on 22 Feb 2016
+Hi,
+I get error when I try to use mem_limit option.
+When I pass some big value:
+version: "2"
+
+services:
+...
+  db:
+    image: mongo:3.0.8
+    volumes_from:
+      - dbdata
+    networks:
+      - back
+    links:
+      - dbdata
+    cpu_shares: 3
+    mem_limit: 3G
+
+...
+docker-compose -f swarm.yml up -d
+Starting autofill_dbdata_1
+Recreating b3c3af8c07_autofill_db_1
+ERROR: json: cannot unmarshal number 3.221225472e+09 into Go value of type int64
+1

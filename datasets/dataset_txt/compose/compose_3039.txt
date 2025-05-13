@@ -1,0 +1,4 @@
+pandeiro commented on 30 Nov 2015
+Prior to docker-compose 1.5.x, if a single container exited, the entire set of compose's running containers exited as well. (This is actually a rather major semantic change for 1.4.2 -> 1.5.x IMO.)
+There are still cases where the previous behavior is more desirable. For one example: running an integration test suite using dockerized Selenium container(s) -- ideally when the integration tests exit, the entire docker compose process would exit as well.
+Is there any way to enable this prior behavior through a flag or other mechanism?

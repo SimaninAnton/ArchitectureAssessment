@@ -1,0 +1,31 @@
+nashley commented on 28 Jun 2017 •
+edited
+The documentation implies that environment variables can be referenced anywhere within docker-compose.yml files, yet they aren't properly parsed under the secrets directive.
+Here's a simple example.
+docker-compose.yml contains the following:
+version: '3.1'
+services:
+  test:
+    image: ${CONTAINER_IMAGE}
+    secrets:
+      - test_secret
+secrets:
+  test_secret:
+    file: ${SECRET_FILE_PATH}
+Run these commands:
+$ export CONTAINER_IMAGE='redis'; export SECRET_FILE_PATH='secrets/test_cert_file'
+$ echo $CONTAINER_IMAGE; echo $SECRET_FILE_PATH
+redis
+secrets/test_cert_file
+$ docker-compose up
+${CONTAINER_IMAGE} is correctly evaluated and a redis container is built (good).
+${SECRET_FILE_PATH} is treated literally instead of the environment variable being evaluated, causing a folder with the same name as the environment variable to be created (bad).
+Changing file: ${SECRET_FILE_PATH} to file: "${SECRET_FILE_PATH}" doesn't make a difference.
+$ docker-compose version
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016
+$ docker --version
+Docker version 17.03.1-ce, build c6d412e
+Let me know if I have glossed over anything or if I can provide any further information.

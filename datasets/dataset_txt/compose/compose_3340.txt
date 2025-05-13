@@ -1,0 +1,18 @@
+arun-gupta commented on 28 Aug 2015
+For the following docker-compose.yml, container_name directive is not recognized:
+gitlab:
+  image: gitlab/gitlab-ce:latest
+  container_name: gitlab
+  ports:
+    - "8443:443"
+    - "8080:80"
+    - "2222:22"
+  volumes:
+    - /Users/arungupta/tmp/gitlab/config:/etc/gitlab
+    - /Users/arungupta/tmp/gitlab/logs:/var/log/gitlab
+    - /Users/arungupta/tmp/gitlab/data:/var/opt/gitlab
+  restart: always
+It gives the following error:
+Unsupported config option for gitlab service: 'container_name'
+docker --version
+Docker version 1.8.1, build d12ea79

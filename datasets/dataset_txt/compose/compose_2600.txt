@@ -1,0 +1,11 @@
+victorock commented on 20 Mar 2016
+It would be great in dynamic environment with multiple networks and connectivity to have the ability to define filters based on the ip address of the nodes.
+If the node has the specific IP
+service1:
+environment:
+- "affinity:ipaddress==10.10.10.10"
+If the node is part of the network
+service2:
+environment:
+- "affinity:ipaddress=~10.10.10"
+...etc

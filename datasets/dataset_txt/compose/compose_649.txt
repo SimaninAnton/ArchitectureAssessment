@@ -1,0 +1,35 @@
+mosafer-koochooloo commented on 26 May 2018 •
+edited
+Description of the issue
+Hello.
+I use latest version of visual studio 2017 community which is (15.7.2). when I create a project using .net core and I want to run it with docker it can not create container because of invalid volume specification.
+I searched and what I got was about setting .env file or environmental variable to set
+COMPOSE_CONVERT_WINDOWS_PATHS = 1 and also reset credentials. the version of docker which I use do not supports shared drive option in setting so I switched to Linux mod and reset the credentials then I came back to the windows mode but none of these things did not fix the problem.
+I also use the latest version of docker edge which is Version 18.05.0-ce-win66 (17760). and I have
+windows 10 enterprise.
+Output of "docker-compose version"
+1>Building webapplication8
+1>Step 1/3 : FROM microsoft/aspnetcore:2.0-nanoserver-1709 AS base
+1> ---> 695b7a371096
+1>Step 2/3 : WORKDIR /app
+1> ---> Using cache
+1> ---> 67082a679ae7
+1>Step 3/3 : EXPOSE 80
+1> ---> Using cache
+1> ---> 020f0dbdfc22
+1>Successfully built 020f0dbdfc22
+1>Successfully tagged docker.iowebapplication8:dev
+1>Creating dockercompose6407963385411531661_webapplication8_1 ...
+1>Creating dockercompose6407963385411531661_webapplication8_1 ... error
+1>ERROR: for dockercompose6407963385411531661_webapplication8_1  Cannot create container for service webapplication8: invalid volume specification: '/c/Users/XXX/.nuget/packages:c:\.nuget\packages:ro'
+1>ERROR: for webapplication8  Cannot create container for service webapplication8: invalid volume specification: '/c/Users/XXX/.nuget/packages:c:\.nuget\packages:ro'
+1>Encountered errors while bringing up the project.
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : Building webapplication8
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : Creating dockercompose6407963385411531661_webapplication8_1 ... 
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : Creating dockercompose6407963385411531661_webapplication8_1 ... error
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : ERROR: for dockercompose6407963385411531661_webapplication8_1  Cannot create container for service webapplication8: invalid volume specification: '/c/Users/XXX/.nuget/packages:c:\.nuget\packages:ro'
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : ERROR: for webapplication8  Cannot create container for service webapplication8: invalid volume specification: '/c/Users/XXX/.nuget/packages:c:\.nuget\packages:ro'
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : Encountered errors while bringing up the project..
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : 
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\build\Microsoft.VisualStudio.Docker.Compose.targets(363,5): error : For more troubleshooting information, go to http://aka.ms/DockerToolsTroubleshooting
+1>Done building project "docker-compose.dcproj" -- FAILED.

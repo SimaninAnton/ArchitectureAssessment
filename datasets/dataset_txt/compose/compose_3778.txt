@@ -1,0 +1,12 @@
+tomav commented on 28 Mar 2015
+Hi guys,
+Example of a part of my docker-compose.yml:
+environment:
+  my_var:
+  - "foo"
+  - "bar"
+When I echo $my_var I have ['foo', 'bar']
+Is that a bash array?
+I can't find the best way to parse this result using bash.
+Any input?
+Thanks!

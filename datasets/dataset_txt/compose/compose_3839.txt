@@ -1,0 +1,13 @@
+ailjushkin commented on 13 Mar 2015
+Hey,
+please, can you help me to find out what am I doing wrong.
+This is my docker-compose.yml
+myservice:
+    hostname: myservice
+    domainname: local
+    image: localhost:5000/myservice
+    ports:
+     - "2222:22"
+docker-compose up -d myservice works perfectly - my container is up and running. I can connect to it by ssh using IP , but I need to use constant hostname for this to be sure that i can connect to the right container each time I'm running my deployment script on ansible.
+So after running this yml, my host machine does not have any new hosts in /etc/hosts and /etc/resolv.conf so im not able to connect to container using myservice.local hostname.
+What's wrong with it ? I wrote hostname just like it written in docker-compose documentation...

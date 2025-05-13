@@ -1,0 +1,1 @@
+Install docs incorrectly say this doesn't work on windows

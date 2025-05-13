@@ -1,0 +1,1 @@
+I run docker-compose up with new docker ,but it print error info,how can I resolved?

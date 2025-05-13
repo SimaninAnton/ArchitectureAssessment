@@ -1,0 +1,15 @@
+eidge commented on 28 Apr 2015
+I'm using docker from development to production and while developing I find annoying the need to prepend docker-compose run --rm SOME-CONTAINER PUT-YOU-FAVORITE-TOOL-HERE arg1 arg2.
+For instance, image you're working in a ruby project, you'll run docker-compose run ruby-container --rm rake some-task at least a dozen times a day. The way I'm solving this right now is creating a binstub under ./bin/rake and adding .binto my PATH.
+The binstub is a simple delegate to a new container run implemented like so: docker-compose run --rm ruby-container rake $@.
+My proposal is to add a new key to docker-compose.yml, like so:
+ruby:
+  image: ruby
+  binstubs:
+    - rake
+    - rails
+    - some-other-random-executable
+And then (maybe) in the build process actually generate these binstubs.
+Let me know if this makes sense for you, of if you've solved this in any other way.
+Thank you,
+Hugo Ribeira

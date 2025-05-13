@@ -1,0 +1,15 @@
+danonorato commented on 31 Jan 2017 •
+edited
+I just installed the native docker for MAC OS. (had been using docker-machine for a few years). I can no longer "docker exec it <containter_id>" for containers launched via docker-compose who have links to transient containers(ie come up and run and exit, like to hydrate a database for example). I now get the "Error response from daemon: Cannot link to a non running container: AS error.
+Steps to reproduce:
+Create a docker compose file that defines 2 containers(A,B) and has a link to container B from container A.
+Have container B run a trivial command and exit
+docker-compose up
+docker exec -it /bin/bash
+5)Notice this error
+Error response from daemon: Cannot link to a non running container: AS error.
+Notice this error
+Error response from daemon: Cannot link to a non running container: AS error.
+Docker version :: 1.13.0, build 49bf474
+docker-compose version :: 1.10.0, build 4bd6f1a
+I hope there is a work around that does require the complication of docker networks. Frustrated to see this regression.

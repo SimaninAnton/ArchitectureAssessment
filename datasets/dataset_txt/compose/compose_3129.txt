@@ -1,0 +1,47 @@
+penhauer-xiao commented on 6 Nov 2015
+Meaning multiple containers created by docker-compose, it can be assigned to different hosts to run it? If so, how to operate, there are examples of it?
+I've tested, simply by container docker run -H run successfully assigned to different hosts to run.
+the following is my swarm cluster info:
+@server-03:~$ sudo docker -H 192.168.194.88:2376 info
+Containers: 390
+Images: 92
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 3
+server-02: 192.168.194.86:2375
+└ Containers: 13
+└ Reserved CPUs: 0 / 16
+└ Reserved Memory: 0 B / 16.44 GiB
+└ Labels: executiondriver=native-0.2, kernelversion=3.13.0-24-generic, operatingsystem=Ubuntu 14.04.3 LTS, storagedriver=aufs
+server-03: 192.168.194.87:2375
+└ Containers: 338
+└ Reserved CPUs: 0 / 16
+└ Reserved Memory: 0 B / 16.44 GiB
+└ Labels: executiondriver=native-0.2, kernelversion=3.13.0-52-generic, operatingsystem=Ubuntu 14.04.2 LTS, storagedriver=aufs
+server-02: 192.168.194.88:2375
+└ Containers: 26
+└ Reserved CPUs: 0 / 16
+└ Reserved Memory: 0 B / 16.44 GiB
+└ Labels: executiondriver=native-0.2, kernelversion=3.13.0-24-generic, operatingsystem=Ubuntu 14.04 LTS, storagedriver=aufs
+CPUs: 64
+Total Memory: 65.78 GiB
+Name: 382d6ddfff38
+sudo docker -H 192.168.194.88:2376 run --name a-node-2 -d -P redis
+sudo docker -H 192.168.194.88:2376 run --name a-node-3 -d -P redis
+the following is my docker info
+@server-03:~$ sudo docker version
+Client:
+Version: 1.9.0
+API version: 1.21
+Go version: go1.4.2
+Git commit: 76d6bc9
+Built: Tue Nov 3 17:43:42 UTC 2015
+OS/Arch: linux/amd64
+Server:
+Version: 1.9.0
+API version: 1.21
+Go version: go1.4.2
+Git commit: 76d6bc9
+Built: Tue Nov 3 17:43:42 UTC 2015
+OS/Arch: linux/amd64

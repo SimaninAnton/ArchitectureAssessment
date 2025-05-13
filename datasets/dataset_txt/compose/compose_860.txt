@@ -1,0 +1,37 @@
+immerrr commented on 20 Feb 2018
+I have a compose file that looks like this:
+version: "2"
+
+services:
+  dep:
+    image: rwgrim/docker-noop
+    cpu_shares: 1
+
+  runnable:
+    image: rwgrim/docker-noop
+    depends_on:
+      - dep
+A trained eye would notice that cpu_shares: 1 is an invalid value, and indeed if you try to run the runnable service: docker-compose run runnable, it'll complain about it:
+$ docker-compose run runnable
+Creating network "test_default" with the default driver
+Creating test_dep_1 ... error
+
+ERROR: for test_dep_1  Cannot start service dep: OCI runtime create failed: container_linux.go:296: starting container process caused "process_linux.go:398: container init caused \"process_linux.go:365: setting cgroup config for procHooks process caused \\\"The minimum allowed cpu-shares is 2\\\"\"": unknown
+
+ERROR: for dep  Cannot start service dep: OCI runtime create failed: container_linux.go:296: starting container process caused "process_linux.go:398: container init caused \"process_linux.go:365: setting cgroup config for procHooks process caused \\\"The minimum allowed cpu-shares is 2\\\"\"": unknown
+ERROR: Encountered errors while bringing up the project.
+Ok, I fix the problem by setting cpu-shares to 2 and re-run the command, but I see the same error:
+$ sed 's/cpu_shares: 1/cpu_shares: 2/' -i docker-compose.yml 
+$ docker-compose run runnable
+Starting test_dep_1 ... error
+
+ERROR: for test_dep_1  Cannot start service dep: OCI runtime create failed: container_linux.go:296: starting container process caused "process_linux.go:398: container init caused \"process_linux.go:365: setting cgroup config for procHooks process caused \\\"The minimum allowed cpu-shares is 2\\\"\"": unknown
+
+ERROR: for dep  Cannot start service dep: OCI runtime create failed: container_linux.go:296: starting container process caused "process_linux.go:398: container init caused \"process_linux.go:365: setting cgroup config for procHooks process caused \\\"The minimum allowed cpu-shares is 2\\\"\"": unknown
+ERROR: Encountered errors while bringing up the project.
+It seems to be specific for run only, because up recreates the container as expected:
+$ docker-compose up runnable
+Recreating test_dep_1 ... done
+Creating test_runnable_1 ... done
+Attaching to test_runnable_1
+test_runnable_1 exited with code 0

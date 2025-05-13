@@ -1,0 +1,72 @@
+pinoniq commented on 14 Jun 2017
+I'm running the following docker-compose file:
+version: '2'
+services:
+    web:
+        image: pinoniq/httpd:1.4
+        environment:
+            - HOSTNAME=app.local
+            - ENVIRONMENT=dev
+            - FLAVOR=symfony
+        ports:
+            - "80:80"
+        volumes:
+            - ./api:/var/www
+
+    php:
+        image: pinoniq/php7:1.7
+        ports:
+            - "9000:9000"
+            - "8080:8080"
+        volumes:
+            - ./api:/var/www
+            - /var/www/node_modules
+            - /var/www/vendor
+
+    db:
+        image: mariadb:10.1
+        environment:
+            - MYSQL_ROOT_PASSWORD=secret
+        ports:
+            - "3306:3306"
+
+    rabbitmq:
+        image: "rabbitmq:3-management"
+        hostname: "rabbitmq"
+        environment:
+            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+            RABBITMQ_DEFAULT_USER: "rabbitmq"
+            RABBITMQ_DEFAULT_PASS: "rabbitmq"
+            RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+both the http and php DockerFile can be fond here:
+http: https://github.com/pinoniq/httpd
+php: https://github.com/pinoniq/php7
+The issue lies in the php docker container. More specifically the the /var/www/vendor mountpoint.
+I do this to speed up development on windows. I mount the application under /var/www and then mount an additional internal mount to /var/www/vendor.
+running docker-compose exec php mount | grep /var gives the following result:
+//10.0.75.1/C on /var/www type cifs (rw,relatime,vers=3.02,sec=ntlmssp,cache=strict,username=jme,domain=EMAKINA,uid=0,noforceuid,gi
+d=0,noforcegid,addr=10.0.75.1,file_mode=0755,dir_mode=0755,iocharset=utf8,nounix,serverino,mapposix,nobrl,mfsymlinks,noperm,rsize=1
+048576,wsize=1048576,echo_interval=60,actimeo=1)
+/dev/sda2 on /var/www/node_modules type ext4 (rw,relatime,data=ordered)
+/dev/sda2 on /var/www/vendor type ext4 (rw,relatime,data=ordered)
+All is fine and working nicely. I then however, get issues where after running a set of commands, the /var/www/vendor mount is removed.
+The commands I'm running are:
+# Update compose inside the docker container
+docker-compose exec php composer update
+
+# once finished, remove the local vendor file
+rm -R -f ./api/vendor
+
+# copy the docker vendor file to a mounted part of the container
+docker-compose exec php cp -R /var/www/vendor /var/www/vendor-temp
+
+# move the newly created local copy to vendor
+mv ./api/vendor-temp ./api/vendor
+It is most often the docker-compose exec php composer update command that makes the /var/www/vendor be removed.
+Anyone any idea,
+Host: Windows 10
+docker version: Docker version 17.03.1-ce, build c6d412e
+docker-compose version: docker-compose version 1.11.2, build f963d76

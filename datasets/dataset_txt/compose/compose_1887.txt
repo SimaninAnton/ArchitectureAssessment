@@ -1,0 +1,11 @@
+siboulet commented on 29 Nov 2016
+docker-compose version 1.9.0, build 2585387
+I can't get stop_signal to work.
+version: '2'
+services:
+  some_name:
+    image: node:4.4-onbuild
+    command: some_command
+    stop_signal: SIGINT
+It seems stop_signal is just ignored and I need to wait timeout (10 seconds) for SIGKILL to be sent and container terminated.
+I think stop_signal was introduced in 1.6? #2508.

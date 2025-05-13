@@ -1,0 +1,29 @@
+Vad1mo commented on 4 Feb 2015
+Some docker options can be set on each container and also on a global level in the docker daemon.
+Examples: --dns, dns_search, -r ...
+It would be handy if docker-compose would also have such an option on global level:
+Example:
+docker_compose_global:
+  dns_search: .docker
+  dns: 172.17.42.1
+
+dnsdock:
+  image: tonistiigi/dnsdock
+  hostname: dnsdock
+  command: -ttl=30
+  privileged: true
+  restart:  always
+  ports:
+    - "8080:80"
+    - "172.17.42.1:53:53/udp"
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+
+mongodb:
+  image: mongo
+  command: mongod --smallfiles
+  hostname: mongodb
+  restart:  always
+  volumes:
+    - /mnt/sda1/data/db:/data/db
+...

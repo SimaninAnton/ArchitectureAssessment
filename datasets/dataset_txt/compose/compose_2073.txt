@@ -1,0 +1,8 @@
+goloroden commented on 12 Sep 2016
+I am running Docker 1.11.2, and so far, everything is fine. The Docker engine is exposed via TCP, TLS is enabled. The certificate is a self-signed one, but so far it has always been working. E.g., if you run
+$ docker ps
+everything is fine and the running processes are shown. Now I tried to use docker-compose to start an application. This failed with the following error message:
+TLS configuration is invalid - make sure your DOCKER_TLS_VERIFY and DOCKER_CERT_PATH are set correctly
+The same error happens if you provide the parameters --tlscert and --tlskey manually. The certificate contains the host name, so it should not be related to #3365. I have read multiple times that setting CURL_CA_BUNDLE to an empty value should help, but it didn't.
+I have experienced this behavior with docker-compose 1.7.0 and 1.8.0.
+Any ideas?

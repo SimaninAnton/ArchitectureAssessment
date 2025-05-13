@@ -1,0 +1,1 @@
+docker login fails while docker-compose is installed on Ubuntu 18.04

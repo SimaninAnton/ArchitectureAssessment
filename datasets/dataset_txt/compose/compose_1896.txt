@@ -1,0 +1,3 @@
+whitecolor commented on 28 Nov 2016
+If this moby/moby#12886 will be implemented ignore option would be need for build instruction.
+1

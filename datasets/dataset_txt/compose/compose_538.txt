@@ -1,0 +1,18 @@
+sam0104 commented on 10 Aug 2018
+Description of the issue
+I am using below config in docker-compose . Just want to understand if it is safe to use SYS_ADMIN and /dev/fuse . I need it for running few applications which are only working on SYS_ADMIN , /dev/fuse.
+Is there any risk to the host Linux VM ? Can someone inside Docker container attack or modify host VM /dev/fuse or other file systems ? What type of risk is there if I am using SYS_ADMIN and /dev/fuse
+- SYS_ADMIN
+devices:
+- "/dev/fuse"
+Context information (for bug reports)
+Output of "docker-compose version"
+Output of "docker version"
+Output of "docker-compose config"
+Steps to reproduce the issue
+Observed result
+Expected result
+Stacktrace / full error message
+(if applicable)
+Additional information
+OS version / distribution, docker-compose install method, etc.

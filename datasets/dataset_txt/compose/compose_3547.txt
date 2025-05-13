@@ -1,0 +1,3 @@
+peter-leonov commented on 21 Jun 2015
+At times it might be needed to build images first, then run some docker … commands creating the whole picture, and only then run docker-compose up/run. This is impossible with current implementation to just build and incomplete setup.
+What do you think of not checking dependencies on docker build?

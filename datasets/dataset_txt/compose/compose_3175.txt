@@ -1,0 +1,33 @@
+wicope commented on 26 Oct 2015
+Hi
+$ docker --version
+Docker version 1.9.0-rc2, build 60d36f7
+$ docker-compose --version
+docker-compose version: 1.5.0rc1
+$ docker-compose up -d feTestsWatch
+$ docker-compose logs feTestsWatch
+(...)
+feTestsWatch | chrome 43 (2/0/0)                     
+feTestsWatch | [15:23:29] Finished 'wct:local' after 32 s
+feTestsWatch | [15:23:29] Starting 'test:local'...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 53, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 23, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 26, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 165, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 221, in logs
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.log_printer", line 27, in run
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.multiplexer", line 35, in loop
+UnicodeDecodeError: 'utf8' codec can't decode byte 0xce in position 0: unexpected end of data
+It worked with docker 1.7 and docker-compose 1.4:
+$ docker-compose up -d feTestsWatch
+$ docker-compose logs feTestsWatch
+(...)
+feTestsWatch_1 | chrome 43 (1/0/0) 
+feTestsWatch_1 | [16:26:33] Finished 'wct:local' after 29 s
+feTestsWatch_1 | [16:26:33] Starting 'test:local'...
+feTestsWatch_1 | [16:26:33] Finished 'test:local' after 36 μs
+I think the problem is in the character μ:
+feTestsWatch_1 | [16:26:33] Finished 'test:local' after 36 μs
+Thanks

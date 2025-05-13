@@ -1,0 +1,16 @@
+gggeek commented on 17 Feb 2016
+We have a v1 docker-compose.yml file, which we used so far with the x-networking flag:
+web:
+    build: images/web
+    hostname: web
+    container_name: project1_web
+
+cli:
+    build: images/cli
+    hostname: web
+    container_name: project1_cli
+In the containers, we used so far the container name to refer to each other - the declared hostname not being added to each other's host file (see discussion issue #2925).
+Now, some devs have updated their posts to docker-compose 1.6. The x-networking flag is gone, which is okish, but the problem is that the containers do not have any more a fixed hostname to refer to each other.
+I might switch to a v2 compose file, but that will not do, as we have some developers on compose 1.5.
+So far, the only workaround we found is to add everywhere 'links' tagss in the compose config, but that is not a perfect solution, as it only allows one-direction linking, whereas before we had circular references.
+Am I missing something, or is this a bug ?

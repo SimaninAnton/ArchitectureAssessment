@@ -1,0 +1,45 @@
+atrauzzi commented on 13 Oct 2015
+I'm encountering some odd situations where compose seems to hang any time it reaches the last container in my configuration:
+$ docker-compose up
+Creating project_data
+Creating project_fpm
+Creating project_nginx
+Here's my .yml file for compose:
+data:
+  container_name: project_data
+  image: ubuntu
+  volumes:
+    - /var/data/files
+
+# HTTP
+
+nginx:
+
+  container_name: project_nginx
+  build: .
+  dockerfile: laravel/Dockerfile.nginx
+
+  volumes_from:
+    - data
+
+  links:
+    - fpm:fpm
+
+  ports:
+    - "80:80"
+
+fpm:
+
+  container_name: project_fpm
+  build: .
+  dockerfile: laravel/Dockerfile.fpm
+
+  volumes_from:
+    - data
+What's odd is if I do a ctrl-c and then re-run docker-compose up, the behaviour is the same, but the last message is slightly different:
+$ docker-compose up
+Starting project_data
+project_fpm is up-to-date
+Starting project_nginx
+Although unfortunately, even on the second run, my web service isn't running. As far as what the fpm and nginx containers are using for Dockerfiles, it's just the official ones for php and nginx from the docker hub.
+If there's anything I can do to get better insights, let me know and I'll paste the output here. But I feel like something isn't quite right.

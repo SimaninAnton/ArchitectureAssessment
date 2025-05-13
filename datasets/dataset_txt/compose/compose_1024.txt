@@ -1,0 +1,6 @@
+jarvisjarb commented on 9 Dec 2017
+I probably have missed something important but I would kindly appreciate you help.
+After playing with running "python server.py", I have installed docker-compose, and ran "docker-compose up".
+All of the configuration of CTFD I have previously made (challenges for example) are not showing. Starting the "server.py" makes them appear again.
+How can I make this work ?
+(I have already tried using the export and import features, but with no success. What am I missing ?)

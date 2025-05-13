@@ -1,0 +1,4 @@
+mcbhenwood commented on 31 Oct 2014
+It would be great to have an ability to specify Dockerfile-like "RUN" steps, just for the Fig container. My specific situation is this:
+My Dockerfile for my Django-based service installs basic service dependencies. However in my Fig container where I run tests and also run the dev server, I would want also to install test dependencies, which should never be built into the Docker container itself, rather as a layer on top for the Fig user.
+I have tried a few shell-based ways of doing this but they are all dirty. The beauty of Fig is the way it applies a "thin override" to Dockerfile settings, in a slightly altered container. It seems to me that being able to RUN commands as well, as part of the Fig build, would be a good addition.

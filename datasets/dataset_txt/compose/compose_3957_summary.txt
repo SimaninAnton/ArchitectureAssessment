@@ -1,0 +1,1 @@
+declared 2 containers in fig.yml, but sudo docker ps shows only one of them

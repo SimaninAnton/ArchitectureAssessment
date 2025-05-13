@@ -1,0 +1,7 @@
+andizzle commented on 17 Nov 2014
+In Dockerfile I can append ENV like this:
+ENV PATH /code/.python/bin:$PATH
+Is it possible to do something similar in fig.yml:
+environment:
+  - PATH=/code/.python/bin:$PATH
+Any hints are appreciated.

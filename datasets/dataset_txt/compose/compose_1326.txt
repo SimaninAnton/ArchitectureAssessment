@@ -1,0 +1,18 @@
+alexanderdavis commented on 11 Jul 2017
+Docker daemon failed with message:
+at Docker.Backend.ContainerEngine.Windows.DoStart(Settings settings)
+at Docker.Backend.ContainerEngine.Windows.Start(Settings settings)
+at Docker.Core.Pipe.NamedPipeServer.<>c__DisplayClass9_0.b__0(Object[] parameters)
+at Docker.Core.Pipe.NamedPipeServer.RunAction(String action, Object[] parameters)
+Crash ID:
+4488FFE2-E3B4-408C-838B-A288F7376F4C/2017-07-11_01-47-45
+Client:
+Version: 17.06.0-ce
+API version: 1.30
+Go version: go1.8.3
+Git commit: 02c1d87
+Built: Fri Jun 23 21:30:30 2017
+OS/Arch: windows/amd64
+error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.30/version: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
+I have tried to use Linux containers and Windows containers. Is there something wrong with Hyper-v?
+I attempted to install Docker Toolbox as well, and it could not find a path to bash.exe.

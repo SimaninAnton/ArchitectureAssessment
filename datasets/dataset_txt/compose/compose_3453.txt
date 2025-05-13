@@ -1,0 +1,6 @@
+tarunlalwani commented on 20 Jul 2015
+Hello,
+I have a situation where we need to create multiple environments on the same machine. For each environment I have docker-compose.yml file. The host machine is 32 GB + 8 cores. We want to be able to associated 2 cores + 8 GB to each composition. A composition is having around 8 containers in total. Now I know we can limit memory per container, which doesn't work for me as I want the whole limit to be applied on the composition.
+Is there a possible way to do this?
+Regards,
+Tarun

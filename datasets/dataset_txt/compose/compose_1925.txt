@@ -1,0 +1,74 @@
+rydente commented on 15 Nov 2016
+When running a service network with nginx and several php and node-based services, exposing only the nginx service to the outside world, after connecting to an OpenConnect VPN, the nginx service cannot connect to its upstreams, namely the php:5-fpm services.
+When I previously used hhvm services, it still could not connect. Can't seem to isolate the problem. I have presented my local information below for debugging purposes:
+docker version:
+Client:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.7.3
+ Git commit:   6b644ec
+ Built:        Thu Oct 27 19:42:59 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.7.3
+ Git commit:   6b644ec
+ Built:        Thu Oct 27 19:42:59 2016
+ OS/Arch:      linux/amd64
+docker info:
+ Running: 13
+ Paused: 0
+ Stopped: 71
+Images: 135
+Server Version: 1.12.3
+Storage Driver: devicemapper
+ Pool Name: docker-254:3-440621-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 15.76 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 91.61 GB
+ Metadata Space Used: 26.47 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.121 GB
+ Thin Pool Minimum Free Space: 10.74 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.136 (2016-11-05)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.8.7-1-ARCH
+Operating System: Arch Linux
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 15.6 GiB
+Name: ugnis
+ID: TMPT:XWB3:BSQA:VICD:RV47:6WV6:Z6AA:PTPZ:HUWR:JCGU:GVKD:T2MC
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Insecure Registries:
+ 127.0.0.0/8
+docker-compose version:
+docker-compose version 1.8.1, build 878cff1
+docker-py version: 1.10.6
+CPython version: 3.5.2
+OpenSSL version: OpenSSL 1.0.2j  26 Sep 2016

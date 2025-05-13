@@ -1,0 +1,5 @@
+kmalakoff commented on 9 May 2017
+I have been writing build scripts in Node.js that include docker-compose.yml files and would like to install them globally (eg. npm install -g) so that they can be available to multiple clusters of servers.
+I would like to pass an option to docker-compose that provides the cwd for context entries to not make them relative to the compose file (https://docs.docker.com/compose/compose-file/#context), but instead to the current cwd.
+docker-compose build -f {absolute_path} -cwd {cwd}
+Is this something that you would be interested in supporting?

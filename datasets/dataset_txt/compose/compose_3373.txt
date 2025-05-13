@@ -1,0 +1,4 @@
+screwgoth commented on 16 Aug 2015
+Most of the times, during development of a docker-compose.yml file, I found myself killing services and then removing the stopped containers immediately. To do this, I had to execute 2 docker-compose commands , first to kill the services and then to remove the containers and associated volumes.
+I think It would be very convenient if one command did the complete clean-up , viz., killing AND removing the stopped containers.
+So, I think it would be a great convenience option to have --rm in the kill command.

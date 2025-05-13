@@ -1,0 +1,23 @@
+Durisvk commented on 24 Mar 2017
+I am using docker-compose like this:
+version: "2"
+services:
+  3dominator:
+    build: .
+    image: 3dominator:0.1
+    container_name: 3dominator
+    environment:
+      NODE_ENV: development
+      DB_ENV: container
+      DOCKERHOST: $${DOCKERHOST}
+    ports:
+      - "3004:3004"
+    volumes:
+      - ./src:/app/src
+    links:
+      - 3dominatordb
+      - 3dominatores
+     ...
+     ...
+I want to pass a variable DOCKERHOST from my linux environment to docker container environment.
+How to do that?

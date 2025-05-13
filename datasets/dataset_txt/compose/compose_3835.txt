@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 13 Mar 2015
+How to define different environments for your application (development, testing, production, etc). This would also be a good opportunity to explain how to use an existing image instead of building an image.
+How to split your application out into multiple files / repositories

@@ -1,0 +1,61 @@
+krasi-georgiev commented on 9 Mar 2017 •
+edited
+on Docker for Mac
+Version 17.03.0-ce-mac2 (15657)
+Channel: beta
+32de842512
+docker-compose version 1.11.2, build dfed245
+Containers: 8
+Running: 2
+Paused: 0
+Stopped: 6
+Images: 359
+Server Version: 17.03.0-ce
+Storage Driver: aufs
+Root Dir: /var/lib/docker/aufs
+Backing Filesystem: extfs
+Dirs: 356
+Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+Volume: local
+Network: bridge host ipvlan macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 977c511eda0925a723debdc94d09459af49d082a
+runc version: a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70
+init version: 949e6fa
+Security Options:
+seccomp
+Profile: default
+Kernel Version: 4.9.12-moby
+Operating System: Alpine Linux v3.5
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 1.952 GiB
+Name: moby
+ID: ZKIX:T2WL:MSTH:NE6X:3KJ6:FMJN:OSIH:FEEP:YNHO:Z2XS:YQZR:7PBE
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): true
+File Descriptors: 41
+Goroutines: 73
+System Time: 2017-03-09T15:39:25.046538073Z
+EventsListeners: 3
+Username: krasimir
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+127.0.0.0/8
+Live Restore Enabled: false
+docker swarm init
+git clone https://github.com/docker/docker.github.io.git
+cd docker.github.io.git
+docker-compse up
+shows a warning
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.....
+and nothing else happens , doesn't continue

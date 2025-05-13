@@ -1,0 +1,1 @@
+up --force-recreate <service> doesn't recreate dependents

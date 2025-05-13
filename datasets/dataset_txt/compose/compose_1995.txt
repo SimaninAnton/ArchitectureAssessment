@@ -1,0 +1,18 @@
+PaulWeb commented on 22 Oct 2016 •
+edited by shin-
+I have config:
+version: '2'
+services:
+    db: 
+        image: "mysql/mysql-server:5.6"
+        environment:
+         - MYSQL_ROOT_PASSWORD=password
+    server:
+        image: "php:5.6-apache"
+        command: a2enmod vhost_alias 
+        ports:
+         - "80:80"
+        links:
+         - db:mysql
+I want to enable vhost_alias for apache2, but command doesn't execute. I'm trying example from documentation, from stackoverflow: bash -c and e.t.c
+Could you explain how it works and give me tip how to execute command like a2enmod vhost_alias without prepare dockerfile?

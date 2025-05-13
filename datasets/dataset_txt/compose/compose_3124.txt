@@ -1,0 +1,36 @@
+alexandrev commented on 8 Nov 2015
+I'm trying to use the experimental Networking API inside my docker environment but when I try, I'm getting an error like this option is not recognized. It only shows me the 'help' menu, like you can see here:
+PS D:\OneDrive\Docker\tibco-bw6> docker-compose --x-networking up
+Define and run multi-container applications with Docker.
+
+Usage:
+  docker-compose [-f=<arg>...] [options] [COMMAND] [ARGS...]
+  docker-compose -h|--help
+
+Options:
+  -f, --file FILE           Specify an alternate compose file (default: docker-compose.yml)
+  -p, --project-name NAME   Specify an alternate project name (default: directory name)
+  --verbose                 Show more output
+  -v, --version             Print version and exit
+
+Commands:
+  build              Build or rebuild services
+  help               Get help on a command
+  kill               Kill containers
+  logs               View output from containers
+  pause              Pause services
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pulls service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  unpause            Unpause services
+  up                 Create and start containers
+  migrate-to-labels  Recreate containers to add labels
+  version            Show the Docker-Compose version information
+I'm using 1.5.0dev version as you can see here:
+PS D:\OneDrive\Docker\tibco-bw6> docker-compose version docker-compose version: 1.5.0dev docker-py version: 1.4.0 CPython version: 2.7.10 OpenSSL version: OpenSSL 1.0.2a 19 Mar 2015

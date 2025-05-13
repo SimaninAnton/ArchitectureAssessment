@@ -1,0 +1,2 @@
+ccverak commented on 26 Apr 2014
+It does not flushes logs and has encoding issues when running on jenkins

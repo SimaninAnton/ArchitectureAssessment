@@ -1,0 +1,37 @@
+nursejason commented on 26 Aug 2016
+We upgraded to v2 YML to statically assign an IP to Consul, with which we can assign to all containers, and not have to worry about the IP changing between startups. The network is defined as such:
+networks:
+  consul:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1
+Then our Consul Agent is given the static IP
+  consul-agent:
+    image: "gliderlabs/consul-agent"
+    networks:
+      consul:
+        ipv4_address: "172.16.238.99"
+    hostname: "node-${DOCKER_MACHINE_NAME}"
+    command: ["-config-file", "/etc/consul/conf.json", "-join", "${CONSUL_IP}", "-advertise", "${HOST_IP}", "-client", "0.0.0.0"]
+When working with a service that uses ONLY Consul for DNS, everything seems to function fine.
+  my-service-1:
+    depends_on:
+      - consul-agent
+    image: my_image_1
+    dns:
+      - "172.16.238.99"
+However, if a service uses Consul AND other DNS servers, it's unable to resolve past the first one.
+  my-service-2:
+    depends_on:
+      - consul-agent
+    image: my_image_2
+    dns:
+      - "172.16.238.99"
+      - "yy.yy.yy.yy"
+      - "xx.xx.xx.xx"
+Using Compose 1.8.0 and Docker 1.10.3
+Latest version of Consul iirc.
+Switching the YML to v1 and getting rid of the networks magically fixes everything, and I'm a bit stumped.

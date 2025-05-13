@@ -1,0 +1,5 @@
+coodoo commented on 17 Sep 2016
+Is there a fix for error message like this? Under what circumstance will this happen?
+ $ docker-compose up
+ERROR: Network "swarmplay_default" needs to be recreated - options have changed
+3

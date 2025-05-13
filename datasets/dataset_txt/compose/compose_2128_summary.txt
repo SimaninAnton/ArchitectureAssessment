@@ -1,0 +1,1 @@
+page not found if DOCKER_HOST ends with a /

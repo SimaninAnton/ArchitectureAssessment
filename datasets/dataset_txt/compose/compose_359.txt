@@ -1,0 +1,38 @@
+kutschkem commented on 12 Dec 2018
+Description of the issue
+docker-compose --tlsverify=false build returns the help text. I also tried docker-compose --tlsverify false build but this only tried to parse false as option.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.20.1, build 5d8c71b2
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of docker version
+Client:         18.03.0-ce
+ API version:   go1.9.4
+ Git comFri Mar 23 08:31:36 2018
+ OS/Arch:       falsews/amd64
+ Orchestrator:  swarm
+
+Server: Docker Engine - Community
+ Engine:        18.09.0
+  API version:  go1.10.4nimum version 1.12)
+  Git commit:   Wed Nov  7 00:52:55 2018
+  OS/Arch:      false/amd64
+  Experimental:
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+irrelevant
+Steps to reproduce the issue
+call docker-compose --tlsverify=false build
+???
+Profit
+Observed result
+Help text is displayed
+Expected result
+same as docker --tlsverify=false <command>
+Stacktrace / full error message
+(paste here)
+Additional information
+OS version / distribution, docker-compose install method, etc.
+Windows 7, Docker Tooling for Windows

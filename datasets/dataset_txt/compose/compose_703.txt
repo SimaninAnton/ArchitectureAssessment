@@ -1,0 +1,56 @@
+JoelLarson commented on 2 May 2018
+Description of the issue
+I am not able to build images from a Git repository with the format git@<hostname>:<group>/<name>.git
+Context information (for bug reports)
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Config:
+services:
+  demo:
+    build:
+      context: git@github.com:dockerfile/ubuntu.git
+version: '3.4'
+Steps to reproduce the issue
+Copy the above config into a docker-compose.yml file.
+Run docker-compose build.
+Observed result
+> docker-compose -f test.yml build
+Building demo
+ERROR: error fetching: fatal: cannot run ssh: No such file or directory
+fatal: unable to fork
+: exit status 128
+Expected result
+Ubuntu image should build successfully.
+Stacktrace / full error message
+compose.service.build: Building demo
+compose.cli.verbose_proxy.proxy_callable: docker build <- (path='git@github.com:dockerfile/ubuntu.git', tag='imr_demo', rm=True, forcerm=False, pull=False, nocache=False, dockerfile=None, cache_from=None, labels=None, buildargs={}, network_mode=None, target=None, shmsize=None, extra_hosts=None, container_limits={'memory': None}, gzip=False, isolation=None, platform=None)
+docker.api.build._set_auth_headers: Looking for auth config
+docker.api.build._set_auth_headers: Sending auth config ()
+urllib3.connectionpool._make_request: http://localhost:None "POST /v1.30/build?t=demo&remote=git%40github.com%3Adockerfile%2Fubuntu.git&q=False&nocache=False&rm=True&forcerm=False&pull=False HTTP/1.1" 500 121
+compose.cli.verbose_proxy.proxy_callable: docker build -> <generator object APIClient._stream_helper at 0x1104e2fc0>
+ERROR: compose.cli.errors.log_api_error: error fetching: fatal: cannot run ssh: No such file or directory
+fatal: unable to fork
+: exit status 128
+Additional information
+OS X 10.12.6 / Docker for Mac install

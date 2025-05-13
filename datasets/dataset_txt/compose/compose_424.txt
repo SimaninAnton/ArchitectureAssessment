@@ -1,0 +1,50 @@
+benjefferies commented on 31 Oct 2018
+Description of the issue
+This issue relates to changes introduced by /pull/6134
+The understanding is that --project-directory will allow you run start up a docker-compose from another directory by specifying the 'project directory'. The understanding is that it will also load the .env file within that directory.
+This pull request is only included in the latest release so ensure you're using docker-compose from docker/compose@1.23.0-rc3 (release).
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.0-rc3, build ea3d406e
+docker-py version: 3.5.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0h  27 Mar 2018
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:21:31 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:29:02 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  java:
+    command: java -version
+    image: java:alpine
+version: '3.1'
+Steps to reproduce the issue
+Clone https://github.com/benjefferies/docker-compose-project-directory
+Run docker-compose --project-directory docker up or docker-compose --project-directory docker -f docker/docker-compose.yml up
+Observed result
+Docker container does not run
+Expected result
+docker container to run using .env within the docker directory
+Stacktrace / full error message
+ERROR:
+WARNING: The TAG variable is not set. Defaulting to a blank string.
+ERROR: no such image: java:: invalid reference format
+Additional information
+See README.md in https://github.com/benjefferies/docker-compose-project-directory

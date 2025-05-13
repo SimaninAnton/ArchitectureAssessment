@@ -1,0 +1,1 @@
+Build fails when missing some environment variables

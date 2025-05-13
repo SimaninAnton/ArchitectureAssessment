@@ -1,0 +1,17 @@
+inscrutabledude commented on 9 Feb 2017 •
+edited by shin-
+Hi All,
+I'm trying to set up an overlay network in docker-compose using consul as external key etc. I WAS getting the error "ERROR: error getting pools config from store: could not get pools config from store:" which mentioned ipam, so I added an ipam section in my network declaration and now I get this: "ERROR: Invalid subnet : invalid CIDR address:"
+My config follows:
+networks:
+       workernet:
+         driver: overlay
+         ipam:
+           driver: default
+           config:
+             - subnet: "192.168.0.0/24"
+             - gateway: "192.168.0.1"
+       default:
+         driver: bridge
+Could someone tell me where I've gone wrong and show me how this is supposed to work? I should mention that I've been working with and googling this for 3 days with no success.
+Thanks in advance!

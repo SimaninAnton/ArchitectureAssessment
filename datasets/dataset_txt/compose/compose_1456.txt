@@ -1,0 +1,65 @@
+olatheander commented on 17 May 2017
+Hi,
+It seem like there is a difference in the way docker-compose run ... populate DNS entries for the services in the compose file.
+To reproduce, use a slightly modified version of the compose file from the dockercloud-hello-world repo:
+version: '3.1'
+
+services:
+  helloworld:
+    build: .
+    depends_on:
+      - helloworld2
+    ports:
+      - "80:80"
+
+  helloworld2:
+    build: .
+to just create one more service helloworld2 that helloworld depends on.
+Now, if I bring up the composition with docker-compose up
+docker ps
+CONTAINER ID        IMAGE                               COMMAND                  CREATED             STATUS              PORTS                NAMES
+50e974c34efb        dockercloudhelloworld_helloworld    "/bin/sh -c 'php-f..."   38 seconds ago      Up 37 seconds       0.0.0.0:80->80/tcp   dockercloudhelloworld_helloworld_1
+8794a0e04dba        dockercloudhelloworld_helloworld2   "/bin/sh -c 'php-f..."   38 seconds ago      Up 37 seconds       80/tcp               dockercloudhelloworld_helloworld2_1
+I can then connect to both containers and ping from both to both, e.g.
+docker exec -it 50e sh
+/ # ping helloworld
+PING helloworld (172.18.0.3): 56 data bytes
+64 bytes from 172.18.0.3: seq=0 ttl=64 time=0.083 ms
+^C
+--- helloworld ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.083/0.083/0.085 ms
+/ # ping helloworld2
+PING helloworld2 (172.18.0.2): 56 data bytes
+64 bytes from 172.18.0.2: seq=0 ttl=64 time=0.201 ms
+64 bytes from 172.18.0.2: seq=1 ttl=64 time=0.121 ms
+^C
+--- helloworld2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.121/0.161/0.201 ms
+/ #
+But if I start the composition using docker-compose run --service-ports helloworld both services will be started since there is a dependency:
+docker ps
+CONTAINER ID        IMAGE                               COMMAND                  CREATED             STATUS              PORTS                NAMES
+bc8ed7837923        dockercloudhelloworld_helloworld    "/bin/sh -c 'php-f..."   12 seconds ago      Up 11 seconds       0.0.0.0:80->80/tcp   dockercloudhelloworld_helloworld_run_1
+d69c037624eb        dockercloudhelloworld_helloworld2   "/bin/sh -c 'php-f..."   12 seconds ago      Up 11 seconds       80/tcp               dockercloudhelloworld_helloworld2_1
+But connecting to each of them in the same way with docker exec, only the helloworld2 service have a DNS entry:
+docker exec -it bc8 sh
+/ # ping helloworld
+ping: bad address 'helloworld'
+/ # ping helloworld2
+PING helloworld2 (172.18.0.2): 56 data bytes
+64 bytes from 172.18.0.2: seq=0 ttl=64 time=0.196 ms
+and
+docker exec -it d69 sh
+/ # ping helloworld
+ping: bad address 'helloworld'
+/ # ping helloworld2
+PING helloworld2 (172.18.0.2): 56 data bytes
+I find this a bit peculiar and it would make sense to have all started services registered in the DNS just as they are with docker-compose up.
+Version info:
+docker -v
+Docker version 17.05.0-ce, build 89658bed64
+
+docker-compose -v
+docker-compose version 1.12.0, build unknown

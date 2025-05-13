@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 12 Jul 2016
+According to one rather alarmed test user, the name of the --fetch-digests flag didn't make it clear that images were going to be pushed. We should perhaps come up with a better one.

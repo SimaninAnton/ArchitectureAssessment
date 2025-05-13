@@ -1,0 +1,1 @@
+Unexpected keyword argument 'environment' while executing 'docker-compose up'

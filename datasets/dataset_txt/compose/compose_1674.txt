@@ -1,0 +1,17 @@
+reidlai commented on 16 Feb 2017
+Have added es service in docker-compose. No error during build time but got run error "error: sysctl vm.max_map_count is not in a separate kernel namespace". My docker version is 1.12.6 bundled with RancherOS and docker-compose is 1.11.1. I also tried array format but same error.
+ES service setting in docker-compose.yml
+es:
+build:
+context: ./xyz-elasticsearch
+dockerfile: Dockerfile
+image: xyz-elasticsearch
+sysctls:
+vm.max_map_count: 262144
+ports:
+- 9200:9200
+- 9300:9300
+volumes:
+- /tmp/elasticsearch/data:/usr/share/elasticsearch/data
+environment:
+ES_JAVA_OPTS: "-Xms1g -Xmx1g"

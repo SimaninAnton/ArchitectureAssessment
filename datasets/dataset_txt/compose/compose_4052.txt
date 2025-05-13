@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 10 Dec 2014
+#659 (comment)
+It is currently hardcoded to 1.14.

@@ -1,0 +1,6 @@
+lucj commented on 18 Feb 2016
+I really like working with compose, the new version adds some even more good things.
+In my compose file, I describe my application services (www, api, db) and also some services for logging (logstash, elasticsearch, kibana) and some for message queue (rabbitmq), ...
+I also use the new volume feature that makes volume a first class citizen of compose.
+When I deploy my app in Docker cloud, there is the notion of stack, that does not appear in the compose file. I do not know if my approach is correct but I split my compose file into stack (one stack for the app and another one for all the ELK logging stuff). Is that the right way to do or should I keep the entire services list into a single stack ? Any recommended way for the split ?
+In the future, will stacks also become first class citizens of the compose file or, in the other way round, will it be possible to just copy the compose file in Docker Cloud (including volumes and networks definitions) ?

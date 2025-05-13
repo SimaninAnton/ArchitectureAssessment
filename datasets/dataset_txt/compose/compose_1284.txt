@@ -1,0 +1,4 @@
+Techwolfy commented on 1 Aug 2017
+The isolation parameter was added in #3906, and was released in compose file version 2.1. However, it was never included in the version 3 schema file, so it causes errors with newer compose file versions.
+The v3 schema documentation at https://docs.docker.com/compose/compose-file/#isolation indicates that it is still supported so it took me quite a while to find the problem. It seems that the line "isolation": {"type": "string"} (from compose/config/config_schema_v2.3.json#L163) was left out in the move to v3.0, and hasn't appeared again since. The parameter is still in compose/service.py and the tests were never removed so this is probably an easy fix.
+The compose file I'm working with is intended to be deployed to a swarm, so unfortunately I can't just downgrade it. I've set "exec-opts": ["isolation=hyperv"] in C:\ProgramData\docker\config\daemon.json on each node to change the default as a workaround for now.

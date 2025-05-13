@@ -1,0 +1,1 @@
+Variable substitution issue with curly braces in default values

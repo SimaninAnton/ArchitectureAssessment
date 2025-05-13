@@ -1,0 +1,73 @@
+mash commented on 23 Nov 2015
+docker-compose fails to recreate container after docker image or docker-compose.yml changes.
+docker-compose up -d app outputs
+Recreating composerund_sleep_1
+ERROR: unable to find a node with port XXXX available
+Am I doing something wrong?
+Steps to reproduce:
+% docker run swarm create
+ae1df2bbad984eefc7e2eafe79066eef
+% docker-machine create \
+    -d virtualbox \
+    --swarm \
+    --swarm-master \
+    --swarm-discovery token://ae1df2bbad984eefc7e2eafe79066eef \
+    swarm-master
+% eval "$(docker-machine env --swarm swarm-master)"
+
+% docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                                     NAMES
+fc22bd7acc12        swarm:latest        "/swarm join --advert"   About a minute ago   Up About a minute   2375/tcp                                  swarm-master/swarm-agent
+11e95b6e3907        swarm:latest        "/swarm manage --tlsv"   2 minutes ago        Up About a minute   2375/tcp, 192.168.99.103:3376->3376/tcp   swarm-master/swarm-agent-master
+
+% cat docker-compose.yml
+sleep:
+  command: sleep 9999
+  image: ubuntu
+  ports:
+    - "7000:7000"
+
+% docker-compose up -d sleep
+Pulling sleep (ubuntu:latest)...
+swarm-master: Pulling ubuntu:latest... : downloaded
+Creating composerund_sleep_1
+
+% docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                     NAMES
+24e7345fc5ee        ubuntu              "sleep 9999"             33 seconds ago      Up 32 seconds       192.168.99.103:7000->7000/tcp             swarm-master/composerund_sleep_1
+fc22bd7acc12        swarm:latest        "/swarm join --advert"   11 minutes ago      Up 11 minutes       2375/tcp                                  swarm-master/swarm-agent
+11e95b6e3907        swarm:latest        "/swarm manage --tlsv"   11 minutes ago      Up 11 minutes       2375/tcp, 192.168.99.103:3376->3376/tcp   swarm-master/swarm-agent-master
+
+# edit docker-compose.yml to add environment variable
+
+% docker-compose up -d sleep
+Recreating composerund_sleep_1
+ERROR: unable to find a node with port 7000 available
+
+# I expect this to successfully recreate and run
+
+% docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS                        PORTS                                     NAMES
+24e7345fc5ee        ubuntu              "sleep 9999"             About a minute ago   Exited (137) 16 seconds ago                                             swarm-master/24e7345fc5_composerund_sleep_1
+fc22bd7acc12        swarm:latest        "/swarm join --advert"   12 minutes ago       Up 12 minutes                 2375/tcp                                  swarm-master/swarm-agent
+11e95b6e3907        swarm:latest        "/swarm manage --tlsv"   12 minutes ago       Up 12 minutes                 2375/tcp, 192.168.99.103:3376->3376/tcp   swarm-master/swarm-agent-master
+
+# once again
+
+% docker-compose up -d sleep
+Recreating 24e7345fc5_composerund_sleep_1
+ERROR: unable to find a node with port 7000 available
+
+% docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                                     NAMES
+24e7345fc5ee        ubuntu              "sleep 9999"             2 minutes ago       Exited (137) 46 seconds ago                                             swarm-master/24e7345fc5_24e7345fc5_composerund_sleep_1
+fc22bd7acc12        swarm:latest        "/swarm join --advert"   13 minutes ago      Up 13 minutes                 2375/tcp                                  swarm-master/swarm-agent
+11e95b6e3907        swarm:latest        "/swarm manage --tlsv"   13 minutes ago      Up 13 minutes                 2375/tcp, 192.168.99.103:3376->3376/tcp   swarm-master/swarm-agent-master
+
+% docker rm -v $(docker ps -a -q)
+...
+
+# ok again
+% docker-compose up -d sleep
+Creating composerund_sleep_1
+This issue seems to be related to #1562 but I created this issue because it's much more simple to reproduce with these steps.

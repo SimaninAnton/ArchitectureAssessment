@@ -1,0 +1,6 @@
+jsharpe commented on 30 Apr 2018
+Description of the issue
+If running in non swarm mode with compose file v3 the following is an example of an error you get when a secret is missing:
+ERROR: for app Cannot create container for service app: invalid mount config for type "bind": bind source path does not exist
+docker-compose should check for existence of the source path and provide a user friendly error if it doesn't exist.
+1

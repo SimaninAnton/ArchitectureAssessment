@@ -1,0 +1,6 @@
+Contributor
+d11wtq commented on 5 Jul 2014
+Docker handles the key sequence C-p C-q as a way of detaching from the running container if you're inside a PTY. This means it closes the PTY, but leaves the container running, so you can re-attach later.
+Currently if you do that in fig, you'll appear to have 'locked' your terminal until you press Ctrl-C. This is because fig includes a call to client.wait(container), which will wait indefinitely on a detached session.
+I'm not 100% what the correct approach is to fix this. I'm just documenting the issue and pointing to where the problem is.
+1

@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 22 Jul 2015
+If a service web depends on a service db, and both services specify an image, then docker-compose pull web will pull the images for both db and web, rather than just web. There's no --no-deps workaround either.

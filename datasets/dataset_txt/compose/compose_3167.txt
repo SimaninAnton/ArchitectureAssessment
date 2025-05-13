@@ -1,0 +1,47 @@
+Contributor
+SvenDowideit commented on 28 Oct 2015
+see https://github.com/docker/docs.docker.com/tree/hugo-github-linking
+if you checkout the hugo-github-linking branch, and run with 1.5.0rc1 you get:
+15:26 $ make clean
+docker-compose -p docsdockercom rm -fv ; \
+docker rmi $( docker images | grep -E '^docsdockercom_' | awk '{print $1}' ) 2>/dev/null ||:
+The AWS_S3_BUCKET variable is not set. Substituting a blank string.
+Invalid interpolation format for "command" option in service "cleanup": "/bin/bash -c ' \
+if [[ "$AWS_S3_BUCKET" =~ "/" ]] ; then
+    BUCKET_PATH=$( echo "$AWS_S3_BUCKET" | sed "s/[^\/]*\///" )
+    BUCKET_PATH+="/"
+    AWS_S3_BUCKET=$( echo "$AWS_S3_BUCKET" | sed "s/\/.*//")
+else
+    BUCKET_PATH=
+fi
+
+[ -z "$RM_OLDER_THAN" ] && exit 1
+CUTOFF_UNIX_TS=$( date --date "$RM_OLDER_THAN" '+%s' )
+aws s3 ls --recursive s3://$AWS_S3_BUCKET/$BUCKET_PATH | while read -a LINE ; do
+    DATE="${LINE[0]}"
+    TIME="${LINE[1]}"
+    SIZE="${LINE[2]}"
+    NAME="${LINE[*]:3}"
+
+    VERSION_REGEX="^${BUCKET_PATH}v[0-9]+\.[0-9]+/"
+    UNIX_TS=$( date --date "$DATE $TIME" "+%s" )
+
+    if [[ "$NAME" =~ $VERSION_REGEX ]] || [[ "$CUTOFF_UNIX_TS" -le "$UNIX_TS" ]] ; then
+        echo "Keeping $NAME"
+        continue
+    fi
+
+    echo "Creating redirect for $NAME"
+    aws s3 cp "s3://$AWS_S3_BUCKET/$NAME" "s3://$AWS_S3_BUCKET/$NAME" --website-redirect="/${BUCKET_PATH}index.html" --acl=public-read > /dev/null
+done
+'
+"
+docker rmi -f docsdockercom:latest 2>/dev/null ||:
+✔ ~/src/docs.docker.com [hugo-github-linking|…5⚑ 3] 
+when using compose 1.4.2, you get:
+15:29 $ make clean
+docker-compose -p docsdockercom rm -fv ; \
+docker rmi $( docker images | grep -E '^docsdockercom_' | awk '{print $1}' ) 2>/dev/null ||:
+No stopped containers
+docker rmi -f docsdockercom:latest 2>/dev/null ||:
+✔ ~/src/docs.docker.com [hugo-github-linking|…5⚑ 3] 

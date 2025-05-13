@@ -1,0 +1,77 @@
+k7k0 commented on 4 Nov 2015
+Description of problem:
+Containers outputing non-unicode characters throws a fatal exception.
+How reproducible:
+Since version 1.5.0 (final version and both RC)
+Steps to Reproduce:
+Create the following docker-compose.yml file:
+web:
+  image: ubuntu
+  command: "/code/test.sh"
+  volumes:
+   - .:/code
+Create a test.sh file in the same folder (Important: file should include some ISO8859-1 encoded characters or from other non-unicode charset). For example download this one https://www.dropbox.com/s/clsuzzv5g9zc2qj/test.sh?dl=0
+#!/bin/sh
+echo ae��u
+Run docker-compose up
+Actual Results:
+Creating composer_web_1
+Attaching to composer_web_1
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping composer_web_1 ... done
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/compose/cli/main.py", line 54, in main
+  File "/code/compose/cli/docopt_command.py", line 23, in sys_dispatch
+  File "/code/compose/cli/docopt_command.py", line 26, in dispatch
+  File "/code/compose/cli/main.py", line 170, in perform_command
+  File "/code/compose/cli/main.py", line 588, in up
+  File "/code/compose/cli/main.py", line 658, in attach_to_logs
+  File "/code/compose/cli/log_printer.py", line 27, in run
+  File "/code/compose/cli/multiplexer.py", line 35, in loop
+UnicodeDecodeError: 'utf8' codec can't decode byte 0xed in position 2: invalid continuation byte
+docker-compose returned -1
+Expected Results:
+Starting composer_web_1
+Attaching to composer_web_1
+web_1 | ae��u
+composer_web_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Additional info:
+Containers are running ok with docker run, it's a docker-compose issue
+On 1.5.0 RC1 and 1.5.0 RC2 it only fails after running a sleep command inside the script, on final version it fails on every non-unicode output
+uname -a:
+Linux smarconi 3.19.0-31-generic #36-Ubuntu SMP Wed Oct 7 15:04:02 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+docker-compose version:
+docker-compose version: 1.5.0
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+docker version:
+Client version: 1.7.1
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 786b29d
+OS/Arch (client): linux/amd64
+Server version: 1.7.1
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 786b29d
+OS/Arch (server): linux/amd64
+docker info:
+Containers: 0
+Images: 415
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 419
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.19.0-31-generic
+Operating System: Ubuntu 15.04
+CPUs: 8
+Total Memory: 7.516 GiB
+Name: smarconi
+ID: JWSO:PS6C:FOC4:NSTQ:DA2N:FVTD:ZJM3:JJCN:CDOW:EORB:YSJW:GYCJ
+WARNING: No swap limit support

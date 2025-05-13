@@ -1,0 +1,82 @@
+phawxby commented on 12 Jun 2018 •
+edited
+Description of the issue
+Docker compose on windows does not mount volumes unless explicitly using bind.
+# Use the CircleCI image as our base
+FROM circleci/node:8-browsers
+
+# Prepare repo directory
+RUN sudo mkdir -p /var/repo
+RUN sudo chown circleci /var/repo
+USER circleci
+
+# Create dir for repo
+WORKDIR /var/repo
+
+# Install dependencies
+RUN yarn install
+version: "3.6"
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    # command: yarn run test
+    command: ls -lA
+    volumes:
+      - ./:/usr/repo
+      - /usr/repo/node_modules
+PS C:\Users\Paul\Documents\GitHub\framework> docker-compose up
+Recreating test_1 ... done
+Attaching to test_1
+test_1  | **total 0**
+test_1 exited with code 0
+Context information (for bug reports)
+Output of "docker-compose version"
+
+PS C:\Users\Paul\Documents\GitHub\framework> docker-compose version
+docker-compose version 1.21.1, build 7641a569
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of "docker version"
+
+PS C:\Users\Paul\Documents\GitHub\framework> docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:12:48 2018
+ OS/Arch:      windows/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+Output of "docker-compose config"
+
+PS C:\Users\Paul\Documents\GitHub\framework> docker-compose config
+services:
+  test:
+    build:
+      context: C:\Users\Paul\Documents\GitHub\framework
+      dockerfile: Dockerfile.test
+    command: ls -lA
+    volumes:
+    - C:\Users\Paul\Documents\GitHub\framework:/usr/repo:rw
+    - /usr/repo/node_modules
+version: '3.6'
+Observed result
+Empty /usr/repo directory
+Expected result
+/usr/repo directory containing the contents of the framework directory
+Stacktrace / full error message
+None. Silent fail

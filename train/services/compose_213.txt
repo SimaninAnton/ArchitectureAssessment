@@ -1,0 +1,60 @@
+xkortex commented on 19 Apr 2019
+Description of the issue
+docker-compose build fails when image name contains capital letters (maybe related to #1416). However, the error message returned is
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+when running locally or
+Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+if running on a drone server.
+I only figured this out once I tried running
+docker build -t url.com/proj/REPO_WITH_CAPS/img:latest
+and got the useful message:
+invalid reference format: repository name must be lowercase
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa5906
+Output of docker version
+9 | Client:
+10 | Version: 18.09.1-ce
+11 | API version: 1.39
+12 | Go version: go1.11.4
+13 | Git commit: 4c52b901c6cb019f7552cd93055f9688c6538be4
+14 | Built: Fri Jan 11 15:41:33 2019
+15 | OS/Arch: linux/amd64
+16 | Experimental: false
+17 |  
+18 | Server: Docker Engine - Community
+19 | Engine:
+20 | Version: 18.09.5
+21 | API version: 1.39 (minimum version 1.12)
+22 | Go version: go1.10.8
+23 | Git commit: e8ff056
+24 | Built: Thu Apr 11 04:10:53 2019
+25 | OS/Arch: linux/amd64
+26 | Experimental: false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  redacted:
+    build:
+      context: /home/$USER/code/REDACTED
+      dockerfile: docker/redacted.docker
+    container_name: redacted
+    entrypoint:
+    - bash
+    image: url.com:1234/project/REDACTED/redacted:latest
+    runtime: nvidia
+    tty: true
+version: '2.4'
+Steps to reproduce the issue
+Make a compose file with capital letters in image name
+docker-compose build
+Profit
+Observed result
+Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+Expected result
+invalid reference format: repository name must be lowercase
+Additional information
+ubuntu 18.04 desktop
+drone/dind/linux/amd64

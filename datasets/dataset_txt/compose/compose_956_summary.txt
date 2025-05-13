@@ -1,0 +1,1 @@
+--remove-orphans is ignored when using up --no-start

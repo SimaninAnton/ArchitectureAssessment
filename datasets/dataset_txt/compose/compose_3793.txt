@@ -1,0 +1,3 @@
+Contributor
+akoskaaa commented on 26 Mar 2015
+I was scanning through the config files during installing and I noticed that some of them and some test files are not pep8 compatible.

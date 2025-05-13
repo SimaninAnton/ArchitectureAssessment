@@ -1,0 +1,10 @@
+Contributor
+bfirsh commented on 17 Jul 2015
+The docker-compose command should support these options from the docker command:
+  -H, --host=[]                      Daemon socket(s) to connect to 
+  --tls=false                        Use TLS; implied by --tlsverify
+  --tlscacert=~/.docker/ca.pem       Trust certs signed only by this CA
+  --tlscert=~/.docker/cert.pem       Path to TLS certificate file
+  --tlskey=~/.docker/key.pem         Path to TLS key file
+  --tlsverify=false                  Use TLS and verify the remote
+This will allow you to do docker-compose $(docker-machine config dev) ... etc.

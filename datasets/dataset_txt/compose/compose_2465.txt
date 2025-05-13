@@ -1,0 +1,4 @@
+jamshid commented on 21 Apr 2016
+I asked this in https://forums.docker.com/t/shouldnt-ports-be-moved-underneath-networks/8890 but no hits, so trying here...
+A docker-compose.yml can define two separate networks. Then each service can be associated with one or both of those networks, meaning they'll have an ip on that network and can talk to other containers on that network.
+Shouldn't ports be a property underneath each network? In my case, I want to "publish" a port on only one network, but the service needs access to both networks. Seems I need separate "ports" under each network.

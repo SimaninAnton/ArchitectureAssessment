@@ -1,0 +1,7 @@
+abulte commented on 24 Sep 2015
+Hi,
+I'm using docker-compose + docker-machine to deploy my services on remote cloud machines. I noticed that the first phase of the docker-compose build is very slow for me w/ a decent internet connection (typically between 3 mins and 15 minutes).
+When running with --verbose the slow phase is docker build <- (pull=False, nocache=False, stream=True, tag=u'backenddev_web', path='XXX', rm=True, dockerfile='Dockerfile-production')
+From what I can see from the activity monitor of my laptop, this is a phase where some data upload is being done. I also noticed that the time decreases if I decrease the size of the directory I'm building from. The upload speed during this phase is between 100Ko/s and 200Ko/s, wether I'm building on a Google Compute or Digital Ocean - which feels quite slow. I should be able to upload at least 800Ko/s.
+Any idea how to speed things up or dig deeper into my problem?
+Thanks.

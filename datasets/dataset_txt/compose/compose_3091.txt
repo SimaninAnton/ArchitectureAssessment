@@ -1,0 +1,8 @@
+alexpdp7 commented on 16 Nov 2015
+pip install docker-compose
+
+...
+Downloading/unpacking texttable>=0.8.1,<0.9 (from docker-compose)
+Could not find a version that satisfies the requirement texttable>=0.8.1,<0.9 (from docker-compose) (from versions: v0.8.3)
+Some externally hosted files were ignored (use --allow-external to allow).
+I've filed foutaise/texttable#1 too, just filing a ticket here so the issue is visible...

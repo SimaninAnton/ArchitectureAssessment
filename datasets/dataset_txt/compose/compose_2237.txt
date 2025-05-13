@@ -1,0 +1,6 @@
+GuillaumeLeclerc commented on 12 Jul 2016
+Hello,
+For some reason I have a service I'm not able to build. when I run docker-compose --verbose build service-name it hangs on the following line:
+docker.api.build._set_auth_headers: Sending auth config ('https://index.docker.io/v1/')
+Any Idea ?
+Thanks !

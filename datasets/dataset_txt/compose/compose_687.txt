@@ -1,0 +1,52 @@
+deanrock commented on 8 May 2018
+Description of the issue
+Context information (for bug reports)
+docker-compose version 1.22.0dev, build unknown
+docker-py version: 3.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:09:06 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:09:06 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Steps to reproduce the issue
+Have docker-compose.yml with around ~50 services defined like the one below:
+version: '3'
+services:
+  flask:
+    image: app
+    volumes:
+      - .:/app
+      - ./some/path:/storage
+    networks:
+      - dev
+      - test
+    env_file:
+      - .env
+      - .dev
+    restart: on-failure
+    command: ./run.py
+    depends_on:
+      - nginx
+      - mysql
+Observed result
+Latest development and stable versions of docker-compose are opening and parsing the following files for each defined service separately:
+.env
+.dev
+config_schema_v3.0.json
+This results in each of those files being read and parsed 50 times. The results are worse for version 2 of docker-compose file, when using extends.
+Expected result
+docker-compose should read each of the files only once. When I added caching of output of load_jsonschema / env_vars_from_file / load_yaml functions, it resulted in 4 times faster execution of docker-compose ps (it was reduced from 8 to 2 seconds).
+1

@@ -1,0 +1,3 @@
+romfreiman commented on 28 Jul 2019
+I'm interested in docker-compose output (log.info, log.warning) and not in containers output.
+We're executing docker-compose commands via systemd and since the output is missing, we cannot use -d flag and have to keep the compose process up.

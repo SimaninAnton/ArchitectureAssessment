@@ -1,0 +1,1 @@
+Forcing compose to stop causes error

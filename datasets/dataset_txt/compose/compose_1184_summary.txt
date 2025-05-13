@@ -1,0 +1,1 @@
+Docker-compose up very slow. docker-compose run fast as it used to be [LINUX]

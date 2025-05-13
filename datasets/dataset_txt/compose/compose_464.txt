@@ -1,0 +1,10 @@
+Contributor
+nvllsvm commented on 5 Oct 2018
+Description of the issue
+The official Docker image can be used to simplify the Docker Compose image (docker/compose). The official image is also based on Alpine Linux.
+Context information (for bug reports)
+Observed result
+Building Dockerfile.run inherits from alpine:3.6 and downloads the Docker binary from https://download.docker.com/linux/static/stable/x86_64/docker-17.12.1-ce.tgz.
+Expected result
+Building Dockerfile.run inherits from docker:17.12.1 and uses the inherited Docker binary
+1

@@ -1,0 +1,2 @@
+natlibfi-arlehiko commented on 8 Feb 2018
+Allow using hyphens and underscores in project name. Now they get removed so that app db with project name foo-ui-test becomes foouitest-db

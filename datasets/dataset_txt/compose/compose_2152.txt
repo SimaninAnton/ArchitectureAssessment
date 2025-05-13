@@ -1,0 +1,38 @@
+lukaso commented on 13 Aug 2016
+The hostname directive does not work properly in docker compose as the environment variable HOSTNAME does not contain the full domain name.
+$ docker run --hostname host.dom.example.com busybox hostname
+host.dom.example.com
+And
+$ docker run --hostname host.dom.example.com busybox printenv HOSTNAME
+host.dom.example.com
+But in docker compose:
+$ cat > test.yml <<'EOF'
+version: '2'
+services:
+  host.dom.example.com:
+    image: busybox
+    hostname: host.dom.example.com
+    command: printenv HOSTNAME
+EOF
+$ docker-compose -f test.yml up
+host.dom.example.com_1  | host
+Not:
+host.dom.example.com_1  | host.dom.example.com
+Yet:
+cat > test2.yml <<'EOF'
+version: '2'
+services:
+  host.dom.example.com:
+    image: busybox
+    hostname: host.dom.example.com
+    command: hostname
+EOF
+$ docker-compose -f test2.yml up
+host.dom.example.com_1  | host.dom.example.com
+Versions:
+$ docker --version
+Docker version 1.12.0, build 8eab29e
+$ docker-compose --version
+docker-compose version 1.8.0, build f3628c7
+I've also posted this issue to: https://forums.docker.com/t/docker-compose-hostname-env-works-differently-than-in-docker-run/20280
+5

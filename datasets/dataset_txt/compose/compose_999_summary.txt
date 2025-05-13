@@ -1,0 +1,1 @@
+Race condition with "docker-compose run -d" and docker rm

@@ -1,0 +1,3 @@
+queicherius commented on 28 Feb 2017
+While starting and stopping around 100 containers seems relatively fast (around 30s), recreating containers is painfully slow (around 6m). Judging from the CLI output and a short look at the code, it seems as if the recreation process (running up multiple times) runs in sequence, and not in parallel, like start, stop and similar commands.
+Could this be addressed, or are there any underlying issues? I'm more than happy to try and put a PR together, but I did not read the entire codebase, so I am not sure of the implications.

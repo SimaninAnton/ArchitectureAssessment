@@ -1,0 +1,51 @@
+szxp commented on 2 Jul 2017 •
+edited
+I'm seeing the following WARNING message:
+My docker-compose.yml file:
+version: '2'
+services:
+  web:
+    image: alpine
+    environment:
+      DB_DEV: ${DB_DEV}
+I'm running the following commands:
+$ export DB_DEV=xxx
+$ env | grep DB_DEV
+DB_DEV=xxx
+$ sudo docker-compose config
+WARNING: The DB_DEV variable is not set. Defaulting to a blank string.
+services:
+  web:
+    environment:
+      DB_DEV: ''
+    image: alpine
+version: '2.0'
+My environment:
+$ sudo docker version
+Client:
+ Version:      17.06.0-ce
+ API version:  1.30
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:20:04 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.06.0-ce
+ API version:  1.30 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   02c1d87
+ Built:        Fri Jun 23 21:18:59 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+$ sudo docker-compose version
+docker-compose version 1.14.0-rc2, build 24dae73
+docker-py version: 2.3.0
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+$ uname -a
+Linux laptop 3.16.0-4-amd64 #1 SMP Debian 3.16.43-2 (2017-04-30) x86_64 GNU/Linux
+$ echo $BASH_VERSION
+4.3.30(1)-release
+I use Debian 8.
+1

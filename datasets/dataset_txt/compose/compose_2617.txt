@@ -1,0 +1,36 @@
+derkork commented on 16 Mar 2016
+I have the following compose file:
+version: '2'
+services:
+  loadbalancer:
+    image: some.registry/loadbalancer
+    environment:
+      - DOCKER_HOST=tcp://localhost:3375
+      - constraint:node==epsilon
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:44304:44304"
+
+networks:
+  default:
+    driver: bridge
+Now I launch this one on my docker swarm:
+root@epsilon:/home/vagrant# docker-compose -f /opt/compose/loadbalancer/docker-compose.yml up
+Creating network "loadbalancer_default" with driver "bridge"
+Creating loadbalancer_loadbalancer_1
+ERROR: network loadbalancer_default not found
+So I wondered why that might be. So i checked the networks
+root@epsilon:/home/vagrant# docker network ls
+NETWORK ID          NAME                         DRIVER
+195abbbe800c        epsilon/bridge               bridge              
+d0ceb15f253c        alpha/none                   null                
+5848b4344156        alpha/host                   host                
+51b9fa03feeb        alpha/bridge                 bridge              
+57dfc8f865f9        alpha/loadbalancer_default   bridge              
+f4808456bc30        epsilon/host                 host                
+72af6e4e6913        epsilon/docker_gwbridge      bridge              
+175b77a7ce31        alpha/docker_gwbridge        bridge              
+e29f50c47110        beta/bridge                  bridge              
+9d4c94a8d7a8        epsilon/none                 null           
+So even the composefile specifically said that the application must run on the epsilon node, the network was created on the alpha node. And that's why compose didn't find it.
+I would expect that compose creates the network on the node that will actually run the container.

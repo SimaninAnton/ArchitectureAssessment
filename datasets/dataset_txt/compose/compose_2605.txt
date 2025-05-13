@@ -1,0 +1,2 @@
+luoyunpeng commented on 18 Mar 2016
+docker engine can bind static ip for container,but how docker-compose does?

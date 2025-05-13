@@ -1,0 +1,1 @@
+"Get Started with Rails" directions result in error (in a directory with upper-case letters)

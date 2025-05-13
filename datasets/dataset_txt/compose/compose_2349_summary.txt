@@ -1,0 +1,1 @@
+Question: Should dependent containers be stopped when the dependency is stopped?

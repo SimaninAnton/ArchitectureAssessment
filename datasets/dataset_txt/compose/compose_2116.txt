@@ -1,0 +1,3 @@
+jonaskello commented on 27 Aug 2016
+I have a CI build in GitLab that uses docker-compose to deploy on a remote docker host. The CI build can do everything using only the docker-compose binary, except for one thing. The images are coming from a private registry which requires authentication (the registry in GitLab). So I need to run docker login before I do docker-compose pull. This means I have to install the full docker package in the CI build just to execute the docker login command. I propose that login in is added directly to docker-compose and work the same way as in docker. So I can run something like docker-compose login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY.
+25

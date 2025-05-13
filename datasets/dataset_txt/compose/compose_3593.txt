@@ -1,0 +1,32 @@
+tomdavidson commented on 3 Jun 2015
+I am struggling with the proper use, when I include a data volume to a host directory mariadb fails. How do I use a host folder with docker-compose and with the correct permissions. In my docker-compose.yml I have:
+expressionengine:
+  image: mariadb
+  expose: 
+   - "3306"
+  volumes:
+   - ../containers/expressionengine/var-lib-mysql/:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=
+   - MYSQL_DATABASE=expressionengine
+But something is off:
+Attaching to builddev_expressionengine_1
+expressionengine_1 | Running mysql_install_db ...
+expressionengine_1 | Installing MariaDB/MySQL system tables in '/var/lib/mysql/' ...
+expressionengine_1 | 150603  5:15:20 [Note] /usr/sbin/mysqld (mysqld 10.0.19-MariaDB-1~wheezy-log) starting as process 38 ...
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Using mutexes to ref count buffer pool pages
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: The InnoDB memory heap is disabled
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Memory barrier is not used
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Compressed tables use zlib 1.2.7
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Using Linux native AIO
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Not using CPU crc32 instructions
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Initializing buffer pool, size = 256.0M
+expressionengine_1 | 150603  5:15:20 [Note] InnoDB: Completed initialization of buffer pool
+expressionengine_1 | 2015-06-03 05:15:20 7f2425ed9760  InnoDB: Operating system error number 13 in a file operation.
+expressionengine_1 | InnoDB: The error means mysqld does not have the access rights to
+expressionengine_1 | InnoDB: the directory.
+Im sure its permissions given that the dir is written with my host user ownership:
+bash-3.2$ cd containers/expressionengine/var-lib-mysql/
+bash-3.2$ ls -l
+drwxr-xr-x  2 tom  staff   68 Jun  3 10:16 mysql

@@ -1,0 +1,26 @@
+STOIE commented on 29 Oct 2014
+Hi there,
+First, here is my fig.yml:
+web:
+  image: web:latest
+  links:
+   - "db"
+  ports:
+   - "80"
+db:
+  image: db:latest
+I am trying to run the following (hope you can get a simple understanding of my example):
+fig scale web=1 db=3
+This is how fig starts the containers:
+prefix_db_1
+prefix_db_2
+prefix_db_3
+prefix_web_1
+However, if I "docker exec -t -i prefix_web_1 /bin/bash" and run "cat /etc/hosts" on the container I can't see any db links.
+Where as, if I simply run "fig -d up", I can see the db references in /etc/hosts. But, it only starts up the following:
+prefix_db_1
+prefix_web_1
+...as expected.
+Anyone able to help, I think this is a bug?!?
+Thanks,
+Aaron.

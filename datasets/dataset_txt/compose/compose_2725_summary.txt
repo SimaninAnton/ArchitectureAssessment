@@ -1,0 +1,1 @@
+Detail release note for build --pull with image

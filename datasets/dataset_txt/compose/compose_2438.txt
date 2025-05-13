@@ -1,0 +1,5 @@
+anaibol commented on 2 May 2016 •
+edited
+Hi! I am currently working with Docker cloud to build my images and deploy my services.
+The images are beeing built based on the Dockerfiles. I would like to know if it's possible to user docker-compose.yml files on Docker cloud instead.
+Thanks!

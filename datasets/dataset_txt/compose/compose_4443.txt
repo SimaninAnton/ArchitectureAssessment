@@ -1,0 +1,28 @@
+frankscholten commented on 15 Jan 2014
+I installed fig from source by running
+$ sudo python setup.py install
+and then when I run fig I get the following error
+frank@franktop:~/src/fig$ fig
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==0.0.2', 'console_scripts', 'fig')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 343, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2307, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources.py", line 2013, in load
+    entry = __import__(self.module_name, globals(),globals(), ['__name__'])
+  File "/usr/local/lib/python2.7/dist-packages/fig-0.0.2-py2.7.egg/fig/cli/main.py", line 12, in <module>
+    from ..project import NoSuchService
+  File "/usr/local/lib/python2.7/dist-packages/fig-0.0.2-py2.7.egg/fig/project.py", line 5, in <module>
+    from .compat import cmp_to_key
+ImportError: No module named compat
+Any idea how to fix this?
+$ python --version
+Python 2.7.4
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 13.04
+Release: 13.04
+Codename: raring

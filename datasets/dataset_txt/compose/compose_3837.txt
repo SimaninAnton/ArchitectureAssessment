@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 13 Mar 2015
+#1099 makes env_file paths relative to the YAML file. volume host paths should follow the same logic.

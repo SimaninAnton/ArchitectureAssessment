@@ -1,0 +1,51 @@
+pacuna commented on 15 May 2017
+Hi, I just installed Docker and Docker Compose on Fedora 26 using dnf. Everything seems to work fine except when running docker-compose logs -f on a project. After a few seconds, the command crashes and all the containers are stopped. This is part of the log:
+...
+kenneth-migrate_1  |    -> 0.0783s
+kenneth-migrate_1  | -- create_table("users", {:force=>:cascade, :options=>"ENGINE=InnoDB DEFAULT CHARSET=latin1"})
+kenneth-migrate_1  |    -> 0.0978s
+kenneth-migrate_1  | -- initialize_schema_migrations_table()
+kenneth-migrate_1  |    -> 0.0636s
+Traceback (most recent call last):
+  File "/usr/lib64/python3.6/http/client.py", line 546, in _get_chunk_left
+    chunk_left = self._read_next_chunk_size()
+  File "/usr/lib64/python3.6/http/client.py", line 513, in _read_next_chunk_size
+    return int(line, 16)
+ValueError: invalid literal for int() with base 16: b''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib64/python3.6/http/client.py", line 578, in _readinto_chunked
+    chunk_left = self._get_chunk_left()
+  File "/usr/lib64/python3.6/http/client.py", line 548, in _get_chunk_left
+    raise IncompleteRead(b'')
+http.client.IncompleteRead: IncompleteRead(0 bytes read)
+
+During handling of the above exception, another exception occurred:
+...
+Docker version:
+Client:
+ Version:         1.13.1
+ API version:     1.26
+ Package version: <unknown>
+ Go version:      go1.8
+ Git commit:      14cc629/1.13.1
+ Built:           Thu Apr 13 20:40:33 2017
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.13.1
+ API version:     1.26 (minimum version 1.12)
+ Package version: <unknown>
+ Go version:      go1.8
+ Git commit:      14cc629/1.13.1
+ Built:           Thu Apr 13 20:40:33 2017
+ OS/Arch:         linux/amd64
+ Experimental:    false
+Docker Compose version:
+docker-compose version 1.11.2, build dfed245
+docker-py version: 2.1.0
+CPython version: 3.6.1
+OpenSSL version: OpenSSL 1.1.0e-fips  16 Feb 2017
+Any clues? Thanks in advance.

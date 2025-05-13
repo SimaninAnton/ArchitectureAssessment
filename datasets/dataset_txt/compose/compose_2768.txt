@@ -1,0 +1,28 @@
+kimptoc commented on 15 Feb 2016
+Hi,
+I have a compose file like so:
+printversion:
+  image: jruby:1.7.24-onbuild
+  command: -v
+server:
+  image: jruby:1.7.24-onbuild
+  volumes:
+    - .:/app/jruby-drb-test
+  command: scripts/drb_server.rb
+client:
+  image: jruby:1.7.24-onbuild
+  volumes:
+    - .:/app/jruby-drb-test
+  command: scripts/drb_client.rb
+  links:
+    - server
+  environment:
+    - runs
+    - message_size
+However this gives an error when running it 'up'
+$ docker-compose up
+Starting dockerjrubywebricktester_server_1
+Container command not found or does not exist.
+I have a similar compose file (https://github.com/kimptoc/docker-jruby-drb-tester) that works on OSX/Linux - is this a Windows issue perhaps?
+Thanks in advance,
+Chris

@@ -1,0 +1,4 @@
+iMerica commented on 19 Nov 2015
+Just got this email:
+On December 7, 2015, pulls via clients 1.5 and earlier will be disabled. Only version 1.6 or later will be supported.
+Which version of Compose does this correspond to? What is the minimum version of Compose that will now be supported for pulls/pushes on Docker Hub?

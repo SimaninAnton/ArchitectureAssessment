@@ -1,0 +1,1 @@
+.env; extra_hosts; entrypoint and other way to pass IP to container's environment from composer.yml

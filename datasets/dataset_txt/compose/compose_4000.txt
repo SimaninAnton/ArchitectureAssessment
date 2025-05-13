@@ -1,0 +1,45 @@
+hamiltont commented on 12 Jan 2015
+Currently fig.yml is required to use this format:
+   volumes:
+     - /lxc/nginx/sites-available:/etc/nginx/sites-available
+     - /lxc/nginx/sites-enabled:/etc/nginx/sites-enabled
+     - /lxc/nginx/logs:/var/log/nginx
+     - /lxc/shared/certs:/certs
+     - /lxc/nginx/nginx.conf:/etc/nginx.conf
+Instead of the much more readable:
+   volumes:
+     - /lxc/nginx/sites-available:  /etc/nginx/sites-available
+     - /lxc/nginx/sites-enabled:    /etc/nginx/sites-enabled
+     - /lxc/nginx/logs:             /var/log/nginx
+     - /lxc/shared/certs:           /certs
+     - /lxc/nginx/nginx.conf:       /etc/nginx.conf
+If you attempt to use the second format, this error happens:
+Creating media_nginx_1...
+Traceback (most recent call last):
+  File "/usr/local/bin/fig", line 9, in <module>
+    load_entry_point('fig==1.0.1', 'console_scripts', 'fig')()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 31, in main
+    command.sys_dispatch()
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 28, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/command.py", line 56, in perform_command
+    handler(project, command_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/cli/main.py", line 427, in up
+    insecure_registry=insecure_registry,
+  File "/usr/local/lib/python2.7/dist-packages/fig/project.py", line 174, in up
+    for (_, container) in service.recreate_containers(insecure_registry=insecure_registry):
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 199, in recreate_containers
+    container = self.create_container(insecure_registry=insecure_registry, **override_options)
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 176, in create_container
+    container_options = self._get_container_create_options(override_options, one_off=one_off)
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 366, in _get_container_create_options
+    for v in container_options['volumes'])
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 366, in <genexpr>
+    for v in container_options['volumes'])
+  File "/usr/local/lib/python2.7/dist-packages/fig/service.py", line 470, in parse_volume_spec
+    parts = volume_config.split(':')
+AttributeError: 'dict' object has no attribute 'split'

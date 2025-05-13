@@ -1,0 +1,46 @@
+MitchK commented on 28 Aug 2015
+Hi,
+I have three containers:
+MongoDB for persistance
+Web application container
+Cronjob container to execute scheduled tasks via an API endpoint. /poll_markets
+The problem is that the web application container gets killed by (I think) docker-compose without (obvious) reason.
+This is how my docker-compose.yml looks like:
+db:
+  image: mongo
+cron:
+  build: ./.docker/cron
+  env_file:
+    - .secrets/cron.env
+  links:
+    - web
+web:
+  build: .
+  environment:
+    DB_HOST: db
+    DB_NAME: dabobert_mdw
+  env_file:
+    - .secrets/web.env
+  ports:
+    - "8000:8000"
+  links:
+    - db
+This is the output of docker-compose:
+...
+db_1   | 2015-08-28T14:04:13.287+0000 I NETWORK  [initandlisten] connection accepted from 172.17.0.41:35459 #35 (5 connections now open)
+web_1  | warn:    --minUptime not set. Defaulting to: 1000ms
+web_1  | warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+web_1  | Connecting to mongodb://db/dabobert_mdw
+web_1  | Connected to mongodb://db/dabobert_mdw
+web_1  | App listening at http://0.0.0.0:8000
+web_1  | cidvpoc6m00000er3zntt2lpt GET /poll_markets {}
+cron_1 |   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+cron_1 |                                  Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+web_1  | Asset AAPL/USD updated
+web_1  | Asset TSLA/USD updated
+db_1   | 2015-08-28T14:05:26.661+0000 I NETWORK  [conn32] end connection 172.17.0.41:35456 (4 connections now open)
+web_1  | error: Forever detected script was killed by signal: SIGKILL
+web_1  | error: Script restart attempt #1
+Thanks for any help,
+Mitch

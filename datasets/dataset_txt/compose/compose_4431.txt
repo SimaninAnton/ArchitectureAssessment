@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 22 Jan 2014
+As well as fig logs web, I should be able to run fig logs web_1 and fig logs myapp_web_1.

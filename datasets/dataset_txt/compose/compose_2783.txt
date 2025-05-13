@@ -1,0 +1,22 @@
+Contributor
+clkao commented on 12 Feb 2016
+It seems 1.6 changed the links merging behaviour:
+If you have a.yml:
+web:
+  image: nginx
+  environment:
+    - DEBUG=1
+  cpu_shares: 5
+  links:
+  - db
+db:
+  image: postgres
+and b.yml:
+web:
+  links: []
+  external_links:
+    - foodb:db
+It seems "links" for web is now ['db'], this is different 1.5's behaviour where the b.yml will override links.
+I can see that links are merged with local names, however the use case here is to override existing links with external_links, which doesn't seem to be possible now.
+Perhaps we can make external_links part of the merging logic, where foodb:db cancels existing db.
+1

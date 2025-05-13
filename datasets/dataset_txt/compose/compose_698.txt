@@ -1,0 +1,34 @@
+TomMcQuarrieOTH commented on 3 May 2018
+Description of the issue
+docker-compose build fails with "Impossible to perform platform-targeted builds for API version < 1.35" error after updating to latest (edge) docker.
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version 1.21.0, build 5920eb0
+docker-py version: 3.2.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k 26 Jan 2017
+Output of "docker version"
+Client:
+Version: 18.05.0-ce-rc1
+API version: 1.37
+Go version: go1.9.5
+Git commit: 33f00ce
+Built: Thu Apr 26 00:57:53 2018
+OS/Arch: windows/amd64
+Experimental: false
+Orchestrator: swarm
+Server:
+Engine:
+Version: 18.05.0-ce-rc1
+API version: 1.37 (minimum version 1.12)
+Go version: go1.10.1
+Git commit: 33f00ce
+Built: Thu Apr 26 01:06:49 2018
+OS/Arch: linux/amd64
+Experimental: true
+Steps to reproduce the issue
+Download latest docker edge for windows
+Perform a simple docker-compose build
+There is no step 3
+Additional information
+Docker for windows. Started off on edge, switched to stable, error still present. Looks like it's related to this commit: 520f5d0#diff-db70ffd20201b81c947f72fea35551d2. It thinks my version is < 1.35 but you can see above I'm on 1.37.

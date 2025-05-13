@@ -1,0 +1,39 @@
+aflag commented on 27 Apr 2018
+Description of the issue
+The --renew-anon-volumes should allow me mount a new volume to a previously anonymous volume without recreating all containers.
+Context information (for bug reports)
+docker-compose version 1.22.0dev, build unknown
+docker-py version: 3.3.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015
+Client:
+ Version:      17.09.0-ce
+ API version:  1.32
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:41:23 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.09.0-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   afdb6d4
+ Built:        Tue Sep 26 22:42:49 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+version: '2'
+services:
+  service1:
+    image: my-image:2
+    volumes:
+     - /tmp:/greetings
+
+  service2:
+    image: other-image:1
+Steps to reproduce the issue
+Given that my-image:2 defined VOLUME /greetings and that we just added /tmp:/greetings, run docker-compose up -d --renew-anon-volumes
+Observed result
+service1's /greetings now points to /tmp, but both service1 and service2 got recreated.
+Expected result
+service1's /greetings now points to /tmp and only service1 is recreated.

@@ -1,0 +1,1 @@
+_get_legacy_containers_iter() TypeError: argument of type 'NoneType' is not iterable

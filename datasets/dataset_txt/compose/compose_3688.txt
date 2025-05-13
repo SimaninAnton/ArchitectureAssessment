@@ -1,0 +1,11 @@
+mattes commented on 24 Apr 2015
+It would be nice if docker-compose up|down|.. would look for custom scripts in the current directory, like:
+docker-compose.before.up
+docker-compose.after.up
+I guess this is mostly helpful when docker-compose is used to run the development environment. These scripts should not be meant to configure containers.
+My current use-cases include:
+set up hostnames in /etc/hosts after container startup
+run docker-rsync after container started
+Eventually docker-compose should allow these scripts to run in the background and stream stdout/stderr to docker-compose logs.
+Related #74 #57
+71

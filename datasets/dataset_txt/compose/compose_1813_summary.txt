@@ -1,0 +1,1 @@
+1.10.0-rc1 docker compose doesn't work with slashes in .dockerignore file.

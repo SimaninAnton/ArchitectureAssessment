@@ -1,0 +1,18 @@
+endophage commented on 4 Feb 2016
+So I had an errant - in my compose yaml file, and it manifested itself during docker-compose build as the following error:
+Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+The yml file was bad in the below format (the service name was prefixed with the -):
+-test:
+    build: .
+    dockerfile: Dockerfile
+The error docker is returning (dug it out of journalctl) is:
+Feb 03 15:51:05 endophage docker[593]: time="2016-02-03T15:51:05.252721921-08:00" level=info msg="POST /v1.19/build?pull=False&nocache=False&q=False&t=david_-test&forcerm=False&rm=True&dockerfile=server.Dockerfile"
+Feb 03 15:51:05 endophage docker[593]: time="2016-02-03T15:51:05.252859421-08:00" level=error msg="Handler for POST /v1.19/build returned error: repository name component must match \"[a-z0-9](?:-*[a-z0-9])*(?:[._][a-z0-9](?:-*[a-z0-9])*)*\""
+Feb 03 15:51:05 endophage docker[593]: time="2016-02-03T15:51:05.252878753-08:00" level=error msg="HTTP Error" err="repository name component must match \"[a-z0-9](?:-*[a-z0-9])*(?:[._][a-z0-9](?:-*[a-z0-9])*)*\"" statusCode=500
+My error in the yaml file is obvious now I've seen it but the error message is very unintuitive and I assume this isn't the only case in which docker returns a reasonable (if technical) error message and compose returns something more obscure.
+FYI, when trying to build a similarly badly named thing on docker itself, it returns the expected error:
+15:52 $ docker build -t -test .
+[sudo] password for david: 
+repository name component must match "[a-z0-9](?:-*[a-z0-9])*(?:[._][a-z0-9](?:-*[a-z0-9])*)*"

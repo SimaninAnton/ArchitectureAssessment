@@ -1,0 +1,12 @@
+brunocascio commented on 11 Oct 2016 •
+edited
+version: '2'
+services:
+  mongo:
+    image: mongo
+    privileged: $PRIVILEGED
+But I got this error output:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.mongo.privileged contains an invalid type, it should be a boolean
+Might be accept the value "true" will make sense..
+Thanks

@@ -1,0 +1,1 @@
+OSX 10.6 Snow Leopard - "Couldn't connect to Docker daemon - you might need to run `docker-osx shell`."

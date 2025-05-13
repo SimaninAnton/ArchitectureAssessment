@@ -1,0 +1,95 @@
+ceball commented on 14 Nov 2016
+I can docker pull image:tag from a private docker hub repository, but I can't seem to docker-compose pull the same image:tag.
+PS > docker login
+Username: X
+Password: Z
+Login Succeeded
+PS > docker-compose --verbose pull
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.auth.find_config_file: Trying paths: ['C:\\Users\\chris\\AppData\\Roaming\\.docker\\config.json', 'C:\\Users
+\\chris\\AppData\\Roaming\\.dockercfg']
+docker.auth.auth.find_config_file: No config file found
+compose.cli.command.get_client: docker-compose version 1.8.1, build 004ddae
+docker-py version: 1.10.3
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+compose.cli.command.get_client: Docker base_url: http://127.0.0.1:2375
+compose.cli.command.get_client: Docker version: KernelVersion=4.4.27-moby, Os=linux, BuildTime=2016-10-26T23:26:11.10516
+8198+00:00, ApiVersion=1.24, Version=1.12.3, GitCommit=6b644ec, Arch=amd64, GoVersion=go1.6.3
+compose.service.pull: Pulling Y (X/Y:d4e922a)...
+compose.cli.verbose_proxy.proxy_callable: docker pull <- (u'X/Y', tag=u'd4e922a', stream=True)
+docker.auth.auth.get_config_header: Looking for auth config
+docker.auth.auth.get_config_header: No auth config in memory - loading from filesystem
+docker.auth.auth.find_config_file: Trying paths: ['C:\\Users\\chris\\AppData\\Roaming\\.docker\\config.json', 'C:\\Users
+\\chris\\AppData\\Roaming\\.dockercfg']
+docker.auth.auth.find_config_file: No config file found
+docker.auth.auth.resolve_authconfig: Looking for auth entry for 'docker.io'
+docker.auth.auth.resolve_authconfig: No entry found
+docker.auth.auth.get_config_header: No auth config found
+compose.cli.verbose_proxy.proxy_callable: docker pull -> <generator object _stream_helper at 0x0000000003AD7948>
+Pulling repository docker.io/X/Y
+ERROR: compose.cli.main.main: Error: image X/Y:d4e922a not found
+PS > docker pull X/Y:d4e922a
+d4e922a: Pulling from X/Y
+...
+Status: Downloaded newer image for X/Y:d4e922a
+My problem looks similar to #1622 (closed).
+I'm on Windows 10 Enterprise - docker information below...
+PS > docker info
+Containers: 65
+ Running: 0
+ Paused: 0
+ Stopped: 65
+Images: 385
+Server Version: 1.12.3
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 556
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: host bridge null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 4.4.27-moby
+Operating System: Alpine Linux v3.4
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 1.919 GiB
+Name: moby
+ID: MMZQ:KDVO:C23Y:YRJJ:NXBI:F26V:4AGW:RLNN:2MGF:JB54:WJ2X:FSMH
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No kernel memory limit support
+Insecure Registries:
+ 127.0.0.0/8
+PS > docker version
+Client:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 23:26:11 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.12.3
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   6b644ec
+ Built:        Wed Oct 26 23:26:11 2016
+ OS/Arch:      linux/amd64
+PS > docker-compose version
+docker-compose version 1.8.1, build 004ddae
+docker-py version: 1.10.3
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016
+1

@@ -1,0 +1,5 @@
+prologic commented on 7 Jul 2015
+Hi All,
+I see there are talks about plans to support this in the future which is great. What have we come up with so far? I'm starting to think about this more with the stuff I do and would like to see something get started on this. I was at least initially thinking of an upgrade command that gracefully pulls down the latest image for a service, spawns a new instance and terminates the old one.
+I think things like (typical web production stuff) like database migrations/upgrades, load balancer raining and switching are likely out-of-scope for Docker Compose and should probably be handled by some other decoupled tooling. But I'm not sure yet; I'm just thinking about the "first step".
+Thoughts?

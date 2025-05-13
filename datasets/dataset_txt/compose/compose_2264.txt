@@ -1,0 +1,32 @@
+Contributor
+lindt commented on 30 Jun 2016
+I do have several compose files. My goal is to combine them using "docker-compose config". The problem is, that docker-compose does not understand its own created file after that.
+Given a compose file with a service using a volume_frmo
+version: '2'
+services:
+  first:
+    image: ubuntu
+    volumes_from:
+      - second
+  second:
+    image: ubuntu
+    volumes:
+      - /data
+When running 'docker-compose config'
+Then the output will be
+networks: {}
+services:
+  first:
+    image: ubuntu
+    volumes_from:
+    - service:second:rw
+  second:
+    image: ubuntu
+    volumes:
+    - /data:rw
+version: '2.0'
+volumes: {}
+But "service:second:rw" is an invalid volume spec
+ERROR: for second  b'Invalid volume spec "rw": volumeabs: Invalid volume destination path: \'rw\' mount path must be absolute.'
+ERROR: Encountered errors while bringing up the project.
+1

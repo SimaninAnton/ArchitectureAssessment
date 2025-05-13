@@ -1,0 +1,53 @@
+davethegr8 commented on 1 Apr 2017
+I'm not sure if this is a bug or user configuration issue, but it seems like it might be a corner case with dns, so submitting here.
+I've got a very simple scenario where any external dns lookup with a docker compose project fails, while analogous commands with plain docker work. I suspect something in the embedded dns server has a conflict with my network's settings and what docker uses/expects, but I don't know enough to diagnose or troubleshoot.
+I've setup https://gist.github.com/davethegr8/f791ed7fac6f3fdc897b6945b422d36a with the relevant code, but I suspect that this might be host/kernel specific due to it not reproducing on other systems I have. The problematic host is Ubuntu 14.04.1, while it works on an OSX 10.11.6 host.
+Here's what happens:
+I have a docker-compose file that runs two containers, one which pings google.com and one which cats /etc/resolv.conf.
+version: "2"
+services:
+  ping:
+    image: python:3.6-alpine
+    command: "ping -c 1 google.com"
+  dns:
+    image: python:3.6-alpine
+    command: "cat /etc/resolv.conf"
+The output looks something like this:
+search redacted.com
+options ndots:2
+nameserver 172.18.0.1
+nameserver 172.18.0.2
+nameserver 10.50.5.1
+
+Creating pingtest_ping_1
+Creating pingtest_dns_1
+Attaching to pingtest_ping_1, pingtest_dns_1
+dns_1   | search redacted.com
+dns_1   | nameserver 127.0.0.11
+dns_1   | options ndots:2 ndots:0
+pingtest_dns_1 exited with code 0
+ping_1  | ping: bad address 'google.com'
+pingtest_ping_1 exited with code 1
+But, if I run basically identical commands with plain docker, they both succeed.
+$ docker run --rm python:3.6-alpine ping -c 1 google.com
+
+PING google.com (172.217.3.174): 56 data bytes
+64 bytes from 172.217.3.174: seq=0 ttl=50 time=3.913 ms
+
+--- google.com ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 3.913/3.913/3.913 ms
+
+$ docker run --rm python:3.6-alpine cat /etc/resolv.conf
+
+search redacted.com
+options ndots:2
+nameserver 172.18.0.1
+nameserver 172.18.0.2
+nameserver 10.50.5.1
+I've already tried hardcoding dns settings in my docker-compose file, the end result is the same. Any ideas/suggestions?
+Version info:
+$ sudo docker --version
+Docker version 17.03.0-ce, build 60ccb22
+$ sudo docker-compose --version
+docker-compose version 1.11.2, build dfed245

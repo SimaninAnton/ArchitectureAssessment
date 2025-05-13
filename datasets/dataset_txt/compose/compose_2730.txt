@@ -1,0 +1,40 @@
+mixja commented on 21 Feb 2016
+This is tested on Docker Compose 1.6.
+Assuming either of the following docker-compose.yml files:
+mysql: 
+  image: mysql
+  entrypoint: bash
+version: '2'
+services:
+  mysql: 
+    image: mysql
+    entrypoint: bash
+If you run docker-compose run --rm mysql and then exit the bash shell, the container is correctly removed but any volumes in the container are not removed as shown by the output of the last command below:
+$ docker volume ls
+DRIVER              VOLUME NAME
+
+$ docker-compose run --rm mysql
+Creating network "dockercomposermissue_default" with the default driver
+root@78f1cda8a67d:/# exit
+exit
+
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+$ docker volume ls
+DRIVER              VOLUME NAME
+local               5a51985639a67a55f5eea31a5a806a4ac061f16c99f46539283d2b3421d36f07
+The docker-compose down -v command also has no effect (as expected given the use of docker-compose run):
+$ docker-compose down -v
+Removing network dockercomposermissue_default
+
+$ docker volume ls
+DRIVER              VOLUME NAME
+local               5a51985639a67a55f5eea31a5a806a4ac061f16c99f46539283d2b3421d36f07
+If using docker commands directly, docker run --rm does remove volumes as expected:
+$ docker run -it --rm --entrypoint bash mysql
+root@b3443b7be310:/# exit
+exit
+
+$ docker volume ls
+DRIVER              VOLUME NAME

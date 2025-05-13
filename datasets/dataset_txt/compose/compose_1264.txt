@@ -1,0 +1,4 @@
+rickardp commented on 11 Aug 2017
+It would be really convenient to be able to change docker-compose.override.yml into docker-compose.myenv.yml by specifying only "myenv", e.g. on the command line. It would be even more convenient to specify multiple such files.
+The docker-compose.override.yml and multiple -f files arguments are powerful concepts that I tend to use a lot. If there is only one override, this can to some extent be mitigated by using symlinks to a git-ignored docker-compose.override.yml. Because the command lines become quite complex, I tend to create wrapper scripts around docker-compose to quickly be able to start a dev, prod, staging environment (which is often orthogonal to a "site" concept in a multi tenant env, further complicating things).
+This is just a convenience feature request. There is nothing that a solution would provide that can't be done today, only a lot easier.

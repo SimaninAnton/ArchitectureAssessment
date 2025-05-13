@@ -1,0 +1,13 @@
+jamshid commented on 5 Nov 2014
+Fig does not seem to rebuild the image it uses to create a container when the referenced "build:" Dockerfile or directory has changed. More documentation about how using "build:" differs from "docker build" would be good.
+E.g., I have directories "foo" and "foo-single":
+foo/Dockerfile
+...
+foo-single/Dockerfile
+FROM foo
+...
+I changed foo/Dockerfile and rebuilt both images with "docker build -t foo ./foo" and "docker build -t foo-single ./foo-single" (though I guess that doesn't matter, fig only looks at the build directory?).
+My fig.yml has this so I expected it to pick up the new foo-single, but it does not. I even tried deleting the container ("docker rm myproject_bar") thinking it would check for build changes, but it still used the outdated "myproject_bar" image .
+bar:
+  build: foo-single
+I guess fig doesn't check if the Dockerfile or its directory contents have changed? I had to explicitly "docker rmi myproject_bar" in order to get the new "foo" changes.

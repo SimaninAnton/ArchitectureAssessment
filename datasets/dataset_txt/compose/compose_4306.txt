@@ -1,0 +1,18 @@
+matthewrobertbell commented on 18 Jun 2014
+Fresh Ubuntu 14.04 VPS:
+apt-get install docker.io python-pip
+pip install fig
+I then follow the example, on fig up I get:
+Attaching to root_redis_1, root_web_1
+web_1 | Traceback (most recent call last):
+web_1 | File "app.py", line 7, in
+web_1 | port=int(os.environ.get('REDIS_1_PORT_6379_TCP_PORT'))
+web_1 | TypeError: int() argument must be a string or a number, not 'NoneType'
+root_web_1 exited with code 1
+env data:
+root@fig-test:~# fig run web env
+HOME=/
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=f78a9c73c3be
+TERM=xterm
+It seems fig isn't setting env variables for flask to use to connect to redis?

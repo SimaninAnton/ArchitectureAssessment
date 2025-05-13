@@ -1,0 +1,3 @@
+Contributor
+bfirsh commented on 16 Feb 2014
+The progress bar prints a newline every time it is updated.

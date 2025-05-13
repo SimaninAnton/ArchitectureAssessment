@@ -1,0 +1,34 @@
+RNiveau commented on 4 Dec 2014
+Hi guys,
+I would like to use fig with kafka to manage a kafka cluster.
+I'm a beginner with fig and I have a problem with hostPort mapping.
+I use kafka-docker as kafka image. My fig.yml is here:
+zookeeper:
+  image: jplock/zookeeper:3.4.6
+  ports:
+    - "2181"
+kafka:
+  image: wurstmeister/kafka:0.8.1.1-1
+  ports:
+    - "9092"
+  links:
+    - zookeeper:zk
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: 192.168.59.103
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+It's the exemple given with the image.
+Now, here is my problem:
+I run this command to launch a cluster:
+fig scale kafka=2
+I create a kafka topic like this:
+./kafka-topics.sh --create --zookeeper 192.168.59.103:49157
+--replication-factor 2 --partitions 1 --topic test
+Next:
+$ ./kafka-topics.sh --describe --zookeeper 192.168.59.103:49157
+--topic test2 Topic:test2 PartitionCount:1 ReplicationFactor:2 Configs: Topic:
+test2 Partition: 0 Leader: 49158 Replicas: 49159,49158 Isr: 49159,49158
+Now my figKakfa_2 crashes for some reasons (it run on 49159 port).
+How can I restart this container with the same port ?
+If I run again the scale command, I get a new container but mapped on another hostPort and the zookeeper doesn't get it as the old instance.
+Thanks.

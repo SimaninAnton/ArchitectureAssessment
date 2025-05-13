@@ -1,0 +1,48 @@
+mattiasghodsian commented on 14 Aug 2017
+Im having some issues with composer library cache the path whre mu json file is, i have defined the path but it stills go back to ./app
+Project folder
+docker-compose.yml
+version: "3"
+
+services:
+  nginx:
+    build: ./nginx/
+    ports:
+      - "81:81"
+    volumes:
+      - "${PROJECT_ROOT}:/var/www/public:ro"
+    networks:
+      - server
+    depends_on:
+      - php
+
+  php:
+    build: ./php/
+    expose:
+      - 9000
+    volumes:
+      - "${PROJECT_ROOT}:/var/www/public"
+    networks:
+      - server
+
+  composer:
+    restart: 'no'
+    image: composer/composer:php7
+    command: install
+    volumes:
+      - "${PROJECT_UROOT}:/var/www"
+
+volumes:
+  data:
+
+networks:
+  server:
+.env
+PROJECT_ROOT=./www/public
+PROJECT_UROOT=./www
+Message on docker-compose up
+I have also tryed run this commands to clear up everything on my pc
+docker rm $(docker ps -a -q)  
+docker_clean_ps     
+docker rmi $(docker images -a -q)  
+docker volume rm $(docker volume ls -f dangling=true -q) 

@@ -1,0 +1,39 @@
+Cypaubr commented on 12 Oct 2017
+Hi,
+I try to run a PHP application in various containers with this docker compose configuration :
+application:
+    build: ./docker/application/
+    volumes:
+        - ./cityfid:/var/www/cityfid
+        - ./logs/cityfid:/var/www/cityfid/var/log
+    tty: true
+
+mongo:
+    image: mongo
+    ports:
+        - 27017:27017
+    volumes:
+        - /data/db:/data/db
+
+engine:
+    build: ./docker/engine/
+    links:
+        - application
+        - mongo
+    volumes_from:
+        - application
+    volumes:
+        - ./logs/apache2/:/var/logs/apache2/
+    expose:
+        - 80
+        - 443
+When I run docker-compose up, all images are built correctly but after MongoDB started, the timeout error occurs. Here is the last output lines:
+root@vps441711:~/cityfid# docker-compose up
+cityfid_application_1 is up-to-date
+Starting cityfid_mongo_1
+Creating cityfid_engine_1
+Attaching to cityfid_application_1, cityfid_mongo_1, cityfid_engine_1
+...
+mongo_1        | 2017-10-12T08:58:13.429+0000 I NETWORK  [thread1] waiting for connections on port 27017
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).

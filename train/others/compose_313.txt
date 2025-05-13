@@ -1,0 +1,25 @@
+nathanwebsterdotme commented on 24 Jan 2019
+Description of the issue
+It seems that docker-compose breaks when using a python virtual environment with the --relocatable flag set. Removing --relocatable seems to fix the issues.
+I'm not entirely sure if the problem is with Python Virtual Envs or Docker Compose specifically yet, but we have only had a problem with docker-compose at so far. I thought it might be a good idea to have this issue reported here regardless to help others, as the failure message isn't obvious to what the problem is.
+Context information (for bug reports)
+Output of docker-compose version
+1.23.1
+Output of docker version
+3.5.1
+Steps to reproduce the issue
+Install docker-compose via requirements.txt in a python virtual environment.
+Set the --relocatable flag in your virtual environment config.
+Attempt to run a docker-compose command, such as docker-compose down
+Observed result
+Error message listed below
+Expected result
+Command should work fine.
+Stacktrace / full error message
+Traceback (most recent call last):
+  File "/Users/test_user/working_dir/.venv_Darwin_x86_64_3.7.2/bin/docker-compose", line 9, in <module>
+    from compose.cli.main import main
+ImportError: No module named compose.cli.main
+Additional information
+macOS High Sierra
+python 3.7.2

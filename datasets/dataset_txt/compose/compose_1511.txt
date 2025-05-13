@@ -1,0 +1,42 @@
+mvasin commented on 22 Apr 2017 •
+edited
+Suddenly, docker-compose became terrifically slow. I'm eager to find out why.
+Simple docker-compose ps when there are no running containers takes 10 seconds:
+$ time docker-compose ps
+Name   Command   State   Ports
+------------------------------
+
+real 0m10.320s
+user 0m0.232s
+sys 0m0.061s
+while docker's ps takes 0.02 seconds:
+$ time docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+real 0m0.019s
+user 0m0.008s
+sys 0m0.006s
+Getting up this docker-compose.yml (with image already pulled in)
+version: "3"
+services:
+  ubuntu:
+    image: ubuntu
+    command: ["echo", "hello"]
+takes more then 1 minute 16 seconds:
+$ time docker-compose up -d
+Creating network "test_default" with the default driver
+Creating test_ubuntu_1
+
+real 1m16.356s
+user 0m0.459s
+sys 0m0.112s
+(I'm not sure why I don't see 'hello' output here, tell me if you know)
+while docker does the same in less then a second:
+$ time docker run ubuntu echo hello
+hello
+
+real 0m0.794s
+user 0m0.011s
+sys 0m0.010s
+I'm running docker version 17.03.1-ce, build c6d412e and docker-compose version 1.11.2, build dfed245 on macOS 10.12.4.
+46

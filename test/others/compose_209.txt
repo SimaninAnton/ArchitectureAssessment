@@ -1,0 +1,7 @@
+xytnba commented on 23 Apr 2019 •
+edited
+Could anyone told me why I install the version is 1.8.0 ?
+OS：Debian 9 X64
+I got this by using apt install docker-compose and the same ,pip install docker-compose
+I considered if my python version is too low ,it is 2.7.13 ,
+Thanks a lot for replying me！

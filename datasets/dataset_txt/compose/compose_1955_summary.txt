@@ -1,0 +1,1 @@
+--no-color does not disable colors on ERROR and WARNING logs

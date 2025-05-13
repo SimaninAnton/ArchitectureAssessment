@@ -1,0 +1,22 @@
+Contributor
+aanm commented on 4 Sep 2015
+I think parallel scale should be more resilient. I tried to do compose scale web=50 and I saw a couple of messages like this one:
+Exception in thread Thread-4:
+Traceback (most recent call last):
+  File "/code/build/docker-compose/out00-PYZ.pyz/threading", line 810, in __bootstrap_inner
+  File "/code/build/docker-compose/out00-PYZ.pyz/threading", line 763, in run
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.utils", line 31, in inner_execute_function
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 222, in <lambda>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 175, in create_and_start
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 276, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.container", line 42, in create
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 245, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 252, in create_container_from_config
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 128, in _post_json
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.clientbase", line 83, in _post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 508, in post
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 465, in request
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.sessions", line 573, in send
+  File "/code/build/docker-compose/out00-PYZ.pyz/requests.adapters", line 415, in send
+ConnectionError: ('Connection aborted.', ResponseNotReady())
+Since scale has a -t timeout argument I think it would make sense to have a -r retries argument that retries N more times.

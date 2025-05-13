@@ -1,0 +1,157 @@
+robert-bo-davis commented on 10 Apr 2016
+~/test$ docker-compose -v
+docker-compose version 1.7.0rc1, build 1ad8866
+~/test$ docker -v
+Docker version 1.11.0-rc4, build f5e2b40
+Everything works so long as we are only dealing with 3 services:
+~/test$ cat docker-compose.yml
+version: '2'
+services:
+  consul0:
+    image: gliderlabs/consul:legacy
+    command: -server
+  consul1:
+    image: gliderlabs/consul:legacy
+    command: -server
+  consul2:
+    image: gliderlabs/consul:legacy
+    command: -server
+Bring them up:
+~/test$ docker-compose up -d
+Creating network "test_default" with the default driver
+Creating test_consul2_1
+Creating test_consul0_1
+Creating test_consul1_1
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED             STATUS              PORTS                                                              NAMES
+5a3339caef0c        gliderlabs/consul:legacy   "/bin/start -server"   4 seconds ago       Up 3 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul1_1
+7560fec4347c        gliderlabs/consul:legacy   "/bin/start -server"   4 seconds ago       Up 3 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul0_1
+d1efb7c4c048        gliderlabs/consul:legacy   "/bin/start -server"   4 seconds ago       Up 3 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+Now stop one:
+~/test$ docker stop test_consul0_1
+test_consul0_1
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED              STATUS              PORTS                                                              NAMES
+5a3339caef0c        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul1_1
+d1efb7c4c048        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+Now run up again:
+~/test$ docker-compose up -d
+test_consul2_1 is up-to-date
+test_consul1_1 is up-to-date
+Starting test_consul0_1
+Starting test_consul0_1
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED              STATUS              PORTS                                                              NAMES
+5a3339caef0c        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul1_1
+7560fec4347c        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up 2 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul0_1
+d1efb7c4c048        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+Everything works as expected. Now let's take everything down and then add a 4th container:
+~/test$ docker-compose down
+Stopping test_consul1_1 ... done
+Stopping test_consul0_1 ... done
+Stopping test_consul2_1 ... done
+Removing test_consul1_1 ... done
+Removing test_consul0_1 ... done
+Removing test_consul2_1 ... done
+Removing network test_default
+~/test$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+~/test$ cat docker-compose.yml
+version: '2'
+services:
+  consul0:
+    image: gliderlabs/consul:legacy
+    command: -server
+  consul1:
+    image: gliderlabs/consul:legacy
+    command: -server
+  consul2:
+    image: gliderlabs/consul:legacy
+    command: -server
+  consul3:
+    image: gliderlabs/consul:legacy
+    command: -server
+That is some weird output while taking things down, but we have a nice clean docker instance now. We also have another service/container to deal with. Lets bring it up:
+~/test$ docker-compose up -d
+Creating network "test_default" with the default driver
+Creating test_consul0_1
+Creating test_consul3_1
+Creating test_consul1_1
+Creating test_consul2_1
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED             STATUS              PORTS                                                              NAMES
+195e0f3d61f7        gliderlabs/consul:legacy   "/bin/start -server"   4 seconds ago       Up 3 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+746276d596da        gliderlabs/consul:legacy   "/bin/start -server"   4 seconds ago       Up 3 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul1_1
+b3eeb385d3a5        gliderlabs/consul:legacy   "/bin/start -server"   4 seconds ago       Up 3 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul3_1
+379246898ca4        gliderlabs/consul:legacy   "/bin/start -server"   4 seconds ago       Up 3 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul0_1
+That is fine. Lets try to stop a container and then run compose up again:
+~/test$ docker stop test_consul1_1
+test_consul1_1
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED              STATUS              PORTS                                                              NAMES
+195e0f3d61f7        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+b3eeb385d3a5        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul3_1
+379246898ca4        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul0_1
+~/test$ docker-compose up -d
+test_consul3_1 is up-to-date
+test_consul2_1 is up-to-date
+Starting test_consul1_1
+test_consul0_1 is up-to-date
+test_consul0_1 is up-to-date
+test_consul2_1 is up-to-date
+Starting test_consul1_1
+test_consul0_1 is up-to-date
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED              STATUS              PORTS                                                              NAMES
+195e0f3d61f7        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+b3eeb385d3a5        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul3_1
+379246898ca4        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul0_1
+Compose says it is bringing up the container, but it doesn't. Running compose up multiple times has the same effect. Lets remove the container and see what happens.
+~/test$ docker rm test_consul1_1
+test_consul1_1
+~/test$ docker-compose up -d
+test_consul3_1 is up-to-date
+test_consul2_1 is up-to-date
+test_consul0_1 is up-to-date
+test_consul2_1 is up-to-date
+test_consul0_1 is up-to-date
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED             STATUS              PORTS                                                              NAMES
+195e0f3d61f7        gliderlabs/consul:legacy   "/bin/start -server"   4 minutes ago       Up 4 minutes        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+b3eeb385d3a5        gliderlabs/consul:legacy   "/bin/start -server"   4 minutes ago       Up 4 minutes        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul3_1
+379246898ca4        gliderlabs/consul:legacy   "/bin/start -server"   4 minutes ago       Up 4 minutes        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul0_1
+That doesn't work either. Hmm... lets get rid of another container and see what happens.
+~/test$ docker stop test_consul0_1
+test_consul0_1
+~/test$ docker-compose up -d
+test_consul3_1 is up-to-date
+test_consul2_1 is up-to-date
+Starting test_consul0_1
+Starting test_consul0_1
+Starting test_consul0_1
+Creating test_consul1_1
+Creating test_consul1_1
+
+ERROR: for consul1  Conflict. The name "/test_consul1_1" is already in use by container 5a3593003e7d0114fcef32c186055186d41c18755a7730dc26e79f5ee7e13c51. You have to remove (or rename) that container to be able to reuse that name.
+
+ERROR: for consul0  rpc error: code = 2 desc = "oci runtime error: exit status 1"
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED             STATUS              PORTS                                                              NAMES
+195e0f3d61f7        gliderlabs/consul:legacy   "/bin/start -server"   6 minutes ago       Up 6 minutes        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+b3eeb385d3a5        gliderlabs/consul:legacy   "/bin/start -server"   6 minutes ago       Up 6 minutes        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul3_1
+That didn't really help anything. Let's remove that container and see what happens:
+~/test$ docker rm test_consul0_1
+test_consul0_1
+~/test$ docker-compose up -d
+test_consul3_1 is up-to-date
+test_consul2_1 is up-to-date
+Starting test_consul1_1
+Creating test_consul0_1
+~/test$ docker ps
+CONTAINER ID        IMAGE                      COMMAND                CREATED              STATUS              PORTS                                                              NAMES
+7ec690a9ff79        gliderlabs/consul:legacy   "/bin/start -server"   3 seconds ago        Up 2 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul0_1
+5a3593003e7d        gliderlabs/consul:legacy   "/bin/start -server"   About a minute ago   Up 2 seconds        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul1_1
+195e0f3d61f7        gliderlabs/consul:legacy   "/bin/start -server"   6 minutes ago        Up 6 minutes        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul2_1
+b3eeb385d3a5        gliderlabs/consul:legacy   "/bin/start -server"   6 minutes ago        Up 6 minutes        53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8500/tcp, 8301-8302/udp   test_consul3_1
+Looks like compose started dealing with less than 3 containers again and was happy about it.
+Sorry for how long this is. This was the least amount of information I could use to show the caveats of the bug. It doesn't matter what images you use or how many services above 3 that you define. The behavior goes wonky at > 3. The messages and errors aren't always consistent, but the behavior is. The up command won't recreate or restart containers if it is dealing with 4 or more services. I've observed similarly strange behavior with 3 services, but I can't consistently recreate those problems well enough to file a bug report.

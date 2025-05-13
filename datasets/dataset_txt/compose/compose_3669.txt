@@ -1,0 +1,3 @@
+Contributor
+aanand commented on 1 May 2015
+As of docker/swarm#673, this is done with labels, not environment variables.

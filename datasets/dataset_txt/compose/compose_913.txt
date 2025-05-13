@@ -1,0 +1,54 @@
+strausd commented on 27 Jan 2018 •
+edited
+I've got a docker container running Node 8.9.4. I can build the container fine and I can run 'up' on docker compose fine. It will start the webpack dev server or my node server without issues.
+When I run docker-compose up, webpack runs and it tells me it is running on port 8000. In my docker-compose file, I map that port so I can access it. But I am never able to access the page. It is as if port mapping is not working at all. Everything runs fine in the container, but nothing ever leaves the container.
+Any help would be greatly appreciated!
+Here is my .Dockerfile:
+FROM node:8.9.4
+RUN mkdir /code
+WORKDIR /code
+COPY . /code/
+RUN yarn install
+And here is my docker-compose.ym:
+version: '3'
+
+services:
+  web:
+    build: .
+    command: yarn run dev-server
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+And here is the output from running docker-compose up:
+web_1  | Project is running at http://localhost:8000/
+web_1  | webpack output is served from /dist/
+web_1  | Content not from webpack is served from /code/public
+web_1  | 404s will fallback to /index.html
+web_1  | Hash: 080dfe380f7e5e80fae7
+web_1  | Version: webpack 3.10.0
+web_1  | Time: 4566ms
+web_1  |       Asset       Size  Chunks                    Chunk Names
+web_1  | bundle.0.js    1.43 kB       0  [emitted]
+web_1  |   bundle.js     3.4 MB       1  [emitted]  [big]  main
+web_1  |   style.css  219 bytes       1  [emitted]         main
+web_1  |    [0] ./node_modules/react/index.js 190 bytes {1} [built]
+web_1  |   [51] multi (webpack)-dev-server/client?http://localhost:8000 ./src/app.jsx 40 bytes {1} [built]
+web_1  |   [52] (webpack)-dev-server/client?http://localhost:8000 7.63 kB {1} [built]
+web_1  |   [53] ./node_modules/url/url.js 23.3 kB {1} [built]
+web_1  |   [59] (webpack)-dev-server/node_modules/strip-ansi/index.js 150 bytes {1} [built]
+web_1  |   [61] ./node_modules/loglevel/lib/loglevel.js 7.86 kB {1} [built]
+web_1  |   [62] (webpack)-dev-server/client/socket.js 1.06 kB {1} [built]
+web_1  |   [64] (webpack)-dev-server/client/overlay.js 3.69 kB {1} [built]
+web_1  |   [69] (webpack)/hot nonrecursive ^\.\/log$ 170 bytes {1} [built]
+web_1  |   [71] (webpack)/hot/emitter.js 77 bytes {1} [built]
+web_1  |   [73] ./src/app.jsx 822 bytes {1} [built]
+web_1  |   [76] ./node_modules/react-dom/index.js 1.36 kB {1} [built]
+web_1  |  [110] ./src/store/store.jsx 612 bytes {1} [built]
+web_1  |  [113] ./src/components/App.jsx 2.44 kB {1} [built]
+web_1  |  [146] ./src/styles/styles.scss 41 bytes {1} [built]
+web_1  |     + 137 hidden modules
+web_1  | Child extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/index.js!node_modules/sass-loader/lib/loader.js!src/styles/styles.scss:
+web_1  |        [0] ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/styles/styles.scss 200 bytes {0} [built]
+web_1  |        [1] ./node_modules/css-loader/lib/css-base.js 2.26 kB {0} [built]
+web_1  | webpack: Compiled successfully.

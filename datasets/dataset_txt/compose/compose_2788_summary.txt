@@ -1,0 +1,1 @@
+`docker-compose rm` on windows waits for y/N answer before the question is shown.

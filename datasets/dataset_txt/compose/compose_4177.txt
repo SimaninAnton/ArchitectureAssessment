@@ -1,0 +1,15 @@
+Contributor
+kojiromike commented on 2 Oct 2014
+The second time you fig up, fig rewrites the entry point on a container. To reproduce this issue, start with the following fig file:
+whomovedmyentrypoint:
+    image: scratch
+    entrypoint: fail
+Then, run fig up twice, inspecting the entry point each time:
+$ fig up; docker inspect --format='{{.Config.Entrypoint}}' $(docker ps -ql); fig up; docker inspect --format='{{.Config.Entrypoint}}' $(docker ps -ql)
+Creating foo_whomovedmyentrypoint_1...
+Cannot start container 5206410efc5dce757cc0146d5dd3b28ac3cf37e23100015ea8565adf832edeb1: exec: "/fail": stat /fail: no such file or directory
+[/fail]
+Recreating foo_whomovedmyentrypoint_1...
+Cannot start container 3fc0d214031cf7a0f955501f43e546381139610bd30ee8df98b9d938579707b9: exec: "echo": executable file not found in $PATH
+[echo]
+The use case for not changing the entry point is that the minimal container just for housing volumes (documented by Docker as Data Volume Containers) is little more than scratch with directories and a single, no-op executable like true-asm.

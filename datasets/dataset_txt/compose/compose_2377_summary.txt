@@ -1,0 +1,1 @@
+Bad file descriptor when running "docker-compose exec" from a git hooks

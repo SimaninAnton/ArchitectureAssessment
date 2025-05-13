@@ -1,0 +1,5 @@
+zhang6464 commented on 26 Sep 2015
+Hi, guys, I wanna add my code directory as a volume to the container, launching the containers by docker-compose up.
+I know volumes attribute in docker-compose.yml file, but the code directory differs from each of my colleagues. I checked the doc, but not found -v or similar parameter.
+Any help is appreciated.
+2

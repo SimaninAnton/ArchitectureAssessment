@@ -1,0 +1,1 @@
+Compose network configuration not following docker0 network setup

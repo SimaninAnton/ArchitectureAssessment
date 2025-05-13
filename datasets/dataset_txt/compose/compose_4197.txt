@@ -1,0 +1,12 @@
+phuongnd08 commented on 2 Sep 2014
+I'm having this fig.yml:
+db:
+  image: postgres:9.3
+  volumes:
+    - /var/lib/pgsql/9.3/data:/var/lib/postgresql/data
+  ports:
+    - "5432"
+I can run this docker command just fine
+docker run --name db3 -P -v /var/lib/pgsql/9.3/data:/var/lib/postgresql/data postgres:9.3
+But when I try fig up, it complains that:
+Cannot start container d5b358ebcb035253a76bb2a7510a4b683e4dd05d4f91ac29f288259d265e329d: stat /var/lib/docker/devicemapper/mnt/85e8de017e4f2d02a2fd2b26ed3014a1fbced0b8540d22e6cb3b78198fe4bc42/rootfs/var/lib/postgresql/data: no such file or directory

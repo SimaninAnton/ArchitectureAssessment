@@ -1,0 +1,28 @@
+lukasjuhrich commented on 13 Apr 2016
+If NetworkSettings.Networks is None when trying to run a container, this fails because in compose/service.py:453, connected_network may be None(or does it?) when assigned. Because connected_network is used in an __contains__ check later on, a TypeError is raised.
+This happens using docker-compose v. 1.6.2dev as well as a cloned version using commit:f10bc8072ed9e2b043cf3dae602a03143858b712
+Used .yml: https://github.com/lukasjuhrich/sipa/blob/docker_compose_failure/testing.yml
+Used Dockerfile: https://github.com/lukasjuhrich/sipa/blob/docker_compose_failure/Dockerfile
+It seems suspicious to me that there don't exist any Networks in the NetworkSettings. If I can debug things further, please guide me concerning how to debug this, since I do not know a lot about docker{,compose} internals (I know some things about python though).
+Stacktrace:
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.6.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 56, in main
+    command.sys_dispatch()
+  File "/usr/lib/python3.5/site-packages/compose/cli/docopt_command.py", line 23, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/lib/python3.5/site-packages/compose/cli/docopt_command.py", line 26, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 191, in perform_command
+    handler(project, command_options)
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 524, in run
+    run_one_off_container(container_options, project, service, options)
+  File "/usr/lib/python3.5/site-packages/compose/cli/main.py", line 744, in run_one_off_container
+    service.start_container(container)
+  File "/usr/lib/python3.5/site-packages/compose/service.py", line 427, in start_container
+    self.connect_container_to_networks(container)
+  File "/usr/lib/python3.5/site-packages/compose/service.py", line 435, in connect_container_to_networks
+    if network in connected_networks:
+TypeError: argument of type 'NoneType' is not iterable
+I hope I did provide enough information. I could open up a PR with an if-none-return check once it is confirmed this is a bug. For including a test I might need some guidance.

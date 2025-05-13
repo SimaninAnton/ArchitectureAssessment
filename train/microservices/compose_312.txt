@@ -1,0 +1,72 @@
+MartinMuzatko commented on 24 Jan 2019 •
+edited
+Description of the issue
+Hello! We are using compose to roll out our updates.
+We found that when running compose, some lines are output to stderr and some to stdout, but it is hard to tell why something is an error or not. This inadvertently broke our roll-out process, because we try/catch the execution of compose.
+I used this script here to check what is stdout and stderr: https://superuser.com/questions/453598/determine-if-output-is-stdout-or-stderr
+Steps to reproduce:
+> $ { { BRANCH_NAME=master docker-compose -f docker/docker-compose-onBox.yml up -d; } 2>&3 | sed 's/^/STDOUT: /'; } 3>&1 1>&2 | sed 's/^/STDERR: /'
+STDERR: The VERSION variable is not set. Defaulting to a blank string.
+STDERR: sicon_mqtt is up-to-date
+STDERR: sicon_db is up-to-date
+STDERR: sicon_backend is up-to-date
+STDERR: sicon_services is up-to-date
+stopped sicon_mqtt to test
+> $ { { BRANCH_NAME=master docker-compose -f docker/docker-compose-onBox.yml up -d; } 2>&3 | sed 's/^/STDOUT: /'; } 3>&1 1>&2 | sed 's/^/STDERR: /'
+STDERR: The VERSION variable is not set. Defaulting to a blank string.
+STDERR: Starting sicon_mqtt ...
+Starting sicon_mqtt ... done
+sicon_backend is up-to-date
+STDERR: sicon_services is up-to-date
+Maybe here is the problem, I have no idea about python, but this looks like this ALWAYS raises an exception and thus report to stderr?
+compose/compose/service.py
+Lines 570 to 574 in 8f5f7e7
+         log.info("%s is up-to-date" % c.name) 
+        return containers 
+    raise Exception("Invalid action: {}".format(action)) 
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:56 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:21 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+> $ docker-compose config -f docker/docker-compose-onBox.yml
+Validate and view the Compose file.
+
+Usage: config [options]
+
+Options:
+    --resolve-image-digests  Pin image tags to digests.
+    -q, --quiet              Only validate the configuration, don't print
+                             anything.
+    --services               Print the service names, one per line.
+    --volumes                Print the volume names, one per line.
+It says nothing else? :S
+Observed result
+regular status logs get written to STDERR
+Expected result
+Unless the container can't start or the compose file is malformed, there should be no stderr for succesful container status updates.
+Additional information
+Windows 10 - WSL Ubuntu
+Maybe related: #3267

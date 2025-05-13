@@ -1,0 +1,65 @@
+campbel commented on 4 Aug 2016 •
+edited
+In the process of migrating to Docker for Windows from Docker Toolbox. Docker functionality is working the same, however, docker-compose is running into issues.
+Here is my test docker-compose file.
+docker-compose.yml
+version: "2"
+
+services:
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+Running docker-compose up on this config results in the following output
+PS> docker-compose --verbose up
+compose.config.config.find: Using configuration files: .\docker-compose.yml
+docker.auth.auth.load_config: Found 'auths' section
+docker.auth.auth.parse_auth: Auth data for {0} is absent. Client might be using a credentials store instead.
+docker.auth.auth.load_config: Found 'credsStore' section
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose\cli\main.py", line 61, in main
+  File "compose\cli\main.py", line 110, in perform_command
+  File "compose\cli\command.py", line 35, in project_from_options
+  File "compose\cli\command.py", line 110, in get_project
+  File "compose\cli\command.py", line 85, in get_client
+  File "site-packages\docker\api\daemon.py", line 76, in version
+  File "site-packages\docker\client.py", line 181, in _result
+  File "site-packages\requests\models.py", line 819, in json
+  File "json\__init__.py", line 339, in loads
+  File "json\decoder.py", line 364, in decode
+  File "json\decoder.py", line 382, in raw_decode
+ValueError: No JSON object could be decoded
+docker-compose returned -1
+The output isn't very helpful as it doesn't specify what JSON could not be decoded. I'm not sure if this is a docker configuration file somewhere else on my system or an internal docker-compose configuration file.
+Here is my docker config file, although it is pretty plain.
+{
+    "auths": {
+        "https://index.docker.io/v1/": {}
+    },
+    "credsStore": "wincred"
+}
+Environment
+Windows 10 Enterprise
+Version: 1511
+OS Build: 10586.494
+docker version
+Client:
+Version: 1.12.0
+API version: 1.24
+Go version: go1.6.3
+Git commit: 8eab29e
+Built: Thu Jul 28 21:15:28 2016
+OS/Arch: windows/amd64
+Server:
+Version: 1.12.0
+API version: 1.24
+Go version: go1.6.3
+Git commit: 8eab29e
+Built: Thu Jul 28 21:15:28 2016
+OS/Arch: linux/amd64
+docker-compose version
+docker-compose version 1.8.0, build d988a55
+docker-py version: 1.9.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2d 9 Jul 2015

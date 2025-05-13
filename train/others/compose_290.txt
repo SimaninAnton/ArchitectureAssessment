@@ -1,0 +1,8 @@
+tnguyen14 commented on 8 Feb 2019
+When I do
+docker-compose run service ...
+the one off container has the name ${project-name}_service_run_1, but if I do
+docker-compose run --name custom-name service ...
+then the name is just custom-name.
+I understand that this is the expected behavior, but I was wondering if there's a way to also have the project-name applied as a prefix to the custom name?
+Or perhaps I'm trying to solve the problem with the wrong approach. The problem I have is, if I run the docker-compose run command twice in parallel, one of them will fail because the they will try and spin off containers with the same name. Is there a way to get around that issue?

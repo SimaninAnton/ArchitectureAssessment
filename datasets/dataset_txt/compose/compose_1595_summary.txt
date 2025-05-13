@@ -1,0 +1,1 @@
+docker-compose hangs if a fifo pipe exists in directory hierarchy

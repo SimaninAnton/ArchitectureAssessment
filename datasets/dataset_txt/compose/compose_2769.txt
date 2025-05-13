@@ -1,0 +1,11 @@
+lruslan commented on 15 Feb 2016
+It would be good to allow usage of the underscores in a project names. Compose allows usage of underscores in a container names, but in case of a project name underscores being silently removed.
+docker-compose -p api_backend up -d with service name "service_a" will result in a container with name "apibackend_service_a_1" and labels:
+"com.docker.compose.project": "apibackend",
+"com.docker.compose.service": "service_a",
+Looks like undocumented feature.
+compose/compose/cli/command.py
+Line 92 in 89c5b80
+ return re.sub(r'[^a-z0-9]', '', name.lower()) 
+Is there particular need to remove underscores in a project name? Having direct mapping of project name to internal docker compose naming would help us to do less non transparent name transformations when automating compose based deployments.
+In any case it would be useful to have documentation describing naming conventions and transformations.

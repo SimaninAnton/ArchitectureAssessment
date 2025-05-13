@@ -1,0 +1,20 @@
+mrfawy commented on 16 Dec 2017 •
+edited
+I've in my docker-compose file
+this line KAFKA_CREATE_TOPICS: "topic1:3:3,topic2:3:3:compact"
+But when I list topics on container , I only see topic 1 and with replication factor=1
+zookeeper:
+image: wurstmeister/zookeeper
+ports:
+- "2181:2181"
+kafka:
+image: wurstmeister/kafka
+ports:
+- "9092:9092"
+environment:
+HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'" # local machine IP
+KAFKA_CREATE_TOPICS: "topic1:3:3,topic2-snapshot:3:3:compact"
+KAFKA_DELETE_TOPIC_ENABLE: "true"
+KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+volumes:
+- /var/run/docker.sock:/var/run/docker.sock

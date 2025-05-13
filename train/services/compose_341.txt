@@ -1,0 +1,104 @@
+vanyakosmos commented on 2 Jan 2019
+Description of the issue
+Can't build image if gcloud credHelpers are specified. None of the images is hosted on gcr.
+~/.docker/config.json looks like this:
+{
+  "auths" : {
+    "https://gcr.io" : {},
+  },
+  "credHelpers" : {
+    "us.gcr.io" : "gcloud",
+    "asia.gcr.io" : "gcloud",
+    "gcr.io" : "gcloud",
+    "eu.gcr.io" : "gcloud",
+    "staging-k8s.gcr.io" : "gcloud"
+  },
+  "credSstore" : "osxkeychain"
+}
+Everytime when I build images with compose I just remove credHelpers key from config and everything magically starts to work.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+Output of docker version
+Docker version 18.09.0, build 4d60db4
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  app:
+    build:
+      context: /Users/aiven/projects/fba
+      dockerfile: ./config/Dockerfile.django
+    command:
+    - ./run_django.sh
+    - dev
+    depends_on:
+    - db
+    environment:
+      DEBUG: '1'
+      PYTHONUNBUFFERED: '1'
+      SECRET_KEY: such-secret
+    ports:
+    - 8000:8000/tcp
+    stop_signal: SIGINT
+    volumes:
+    - /Users/aiven/projects/fba/fba:/django:rw
+  db:
+    hostname: db
+    image: postgres:11.1
+    ports:
+    - 5432:5432/tcp
+    volumes:
+    - dbdata:/var/lib/postgresql/data:rw
+version: '3.0'
+volumes:
+  dbdata: {}
+Steps to reproduce the issue
+setup credHelpers with gcloud utility
+run docker-compose build
+Observed result
+error
+Expected result
+no error
+Stacktrace / full error message
+$ docker-compose up app
+Building app
+Traceback (most recent call last):
+  File "/Users/Vania/Downloads/google-cloud-sdk/lib/gcloud.py", line 20, in <module>
+    from __future__ import absolute_import
+ImportError: No module named __future__
+Traceback (most recent call last):
+  File "site-packages/dockerpycreds/store.py", line 74, in _execute
+  File "subprocess.py", line 336, in check_output
+  File "subprocess.py", line 418, in run
+subprocess.CalledProcessError: Command '['/Users/Vania/Downloads/google-cloud-sdk/bin/docker-credential-gcloud', 'get']' returned non-zero exit status 1.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "site-packages/docker/auth.py", line 129, in _resolve_authconfig_credstore
+  File "site-packages/dockerpycreds/store.py", line 35, in get
+  File "site-packages/dockerpycreds/store.py", line 87, in _execute
+dockerpycreds.errors.StoreError: Credentials store docker-credential-gcloud exited with "".
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1080, in up
+  File "compose/cli/main.py", line 1076, in up
+  File "compose/project.py", line 475, in up
+  File "compose/service.py", line 358, in ensure_image_exists
+  File "compose/service.py", line 1082, in build
+  File "site-packages/docker/api/build.py", line 251, in build
+  File "site-packages/docker/api/build.py", line 313, in _set_auth_headers
+  File "site-packages/docker/auth.py", line 96, in resolve_authconfig
+  File "site-packages/docker/auth.py", line 146, in _resolve_authconfig_credstore
+docker.errors.DockerException: Credentials store error: StoreError('Credentials store docker-credential-gcloud exited with "".',)
+[6046] Failed to execute script docker-compose
+Additional information
+OS version / distribution, docker-compose install method, etc.
+osx - 10.14 (18A391)
+Docker Desktop for OSX - 2.0.0.0-mac81 (29211)
+3

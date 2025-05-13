@@ -1,0 +1,13 @@
+glensc commented 25 days ago •
+edited
+in docker-compose < 1.25 it worked to define build and image labels together and by default pull the pre-built image, but also allow to build it locally.
+this functionality no longer works with docker compose 1.25 (buildkit or no buildkit) mode
+version: "3.6"
+
+services:
+  app:
+    # having "image" and "build" allows to use pre-defined image and also issue build command locally
+    image: gitlab.example.net:4567/app:latest
+    build: .
+it was very convenient for start developing project (pre-built image is pulled), but also convenient to update image locally (just invoke docker-compose build).
+now having both defined docker-compose pull does nothing, expected be it to pull image defined in image label.

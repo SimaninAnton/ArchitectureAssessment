@@ -1,0 +1,101 @@
+deathtracktor commented on 19 Aug 2019
+"docker-compose up" fails when external network labels dict is None
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.25.0dev, build 7258edb75d7023ff06fbf5b65fb906a20e1b0626
+docker-py version: 4.0.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2k  26 Jan 2017
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.25 (downgraded from 1.39)
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:31 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          1.5.0
+  API version:      1.25 (minimum version 1.19)
+  Go version:       go1.8.6
+  Git commit:       b830072b
+  Built:            Mon Jan 14 03:05:43 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  bridge:
+    external: true
+services:
+  reverse-proxy:
+    build:
+      context: *****
+    container_name: revproxy
+    image:  *****
+    networks:
+      bridge: null
+    ports:
+    - 80:80/tcp
+    - 8080:8080/tcp
+    - 443:443/tcp
+    volumes:
+    - certs:/etc/ssl:rw
+    - acme:/acme:rw
+version: '2.0'
+volumes:
+  acme: {}
+  certs: {}
+Steps to reproduce the issue
+The issue can be observed when docker-compose up is executed against external Docker API exposed by VSphere Integrated Containers (VIC) environment. VIC default bridge network has no labels dict. Output of docker network inspect bridge:
+...
+"IPAM": {
+    "Driver": "",
+    "Options": {},
+    "Config": [
+        {
+            "Subnet": "172.16.0.0/16",
+            "Gateway": "172.16.0.1"
+        }
+    ]
+},
+...
+Observed result
+$ sudo -E docker-compose up --detach
+[16436] Failed to execute script docker-compose
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1096, in up
+  File "compose/cli/main.py", line 1092, in up
+  File "compose/project.py", line 514, in up
+  File "compose/project.py", line 569, in initialize
+  File "compose/network.py", line 298, in initialize
+  File "compose/network.py", line 74, in ensure
+  File "compose/network.py", line 230, in check_remote_network_config
+AttributeError: 'NoneType' object has no attribute 'keys'
+Expected result
+docker compose up does not fail.
+Stacktrace / full error message
+$ sudo -E docker-compose up --detach
+[16436] Failed to execute script docker-compose
+Traceback (most recent call last):
+  File "bin/docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1096, in up
+  File "compose/cli/main.py", line 1092, in up
+  File "compose/project.py", line 514, in up
+  File "compose/project.py", line 569, in initialize
+  File "compose/network.py", line 298, in initialize
+  File "compose/network.py", line 74, in ensure
+  File "compose/network.py", line 230, in check_remote_network_config
+AttributeError: 'NoneType' object has no attribute 'keys'
+Additional information
+This issue is similar to #4767.
+Suggested fix (compose/network.py, line 229):
+remote_labels = remote.get('Labels') or {}

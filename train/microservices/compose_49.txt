@@ -1,0 +1,112 @@
+berwyn commented on 19 Nov 2019 •
+edited
+Description of the issue
+I have a Compose-based app that I'm running using the WSL2 Tech Preview. I'm able to build and launch the application, but one-off containers fail to start with a TypeError.
+Context information (for bug reports)
+I've tried running via both my host OS and via Ubuntu Bionic in WSL2 using the integration features and injected docker-compose binary. In both cases, the command fails.
+Output of docker-compose version
+docker-compose version 1.25.0-rc4, build 8f3c9c58
+docker-py version: 4.1.0
+CPython version: 3.7.4
+OpenSSL version: OpenSSL 1.1.1c  28 May 2019
+Output of docker version
+Client: Docker Engine - Community
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        633a0ea
+ Built:             Wed Nov 13 07:22:37 2019
+ OS/Arch:           windows/amd64
+ Experimental:      true
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.5
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.12
+  Git commit:       633a0ea
+  Built:            Wed Nov 13 07:29:19 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.2.10
+  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc:
+  Version:          1.0.0-rc8+dev
+  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+networks:
+  platterz:
+    external: true
+services:
+  db:
+    image: mdillon/postgis:10-alpine
+    ports:
+    - 5432:5432/tcp
+    volumes:
+    - pgdata:/var/lib/postgresql/data:rw
+  elasticsearch:
+    environment:
+      discovery.type: single-node
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+    - 1080:1080/tcp
+  memcached:
+    image: memcached:1.5.10-alpine
+  redis:
+    image: redis:4.0.6-alpine
+  web: # This is just a Rails app with nothing special, should be able to replicate with any Ruby container
+    build:
+      context: C:\Users\berwyn\dev\platterz\api
+    depends_on:
+    - db
+    - elasticsearch
+    - mailcatcher
+    - memcached
+    - redis
+    environment:
+      # redacted
+    networks:
+      default: {}
+      platterz:
+        aliases:
+        - api
+    ports:
+    - 3000:3000/tcp
+    stdin_open: true
+    tty: true
+    volumes:
+    - C:\Users\berwyn\dev\platterz\api:/app:cached
+version: '3.0'
+volumes:
+  pgdata: {}
+Steps to reproduce the issue
+docker compose run --rm web rails db:migrate
+Observed result
+Starting api_mailcatcher_1 ... done
+Starting api_redis_1       ... done
+Starting api_memcached_1   ... done
+Starting api_elasticsearch_1 ... done
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose\cli\main.py", line 71, in main
+  File "compose\cli\main.py", line 127, in perform_command
+  File "compose\cli\main.py", line 897, in run
+  File "compose\cli\main.py", line 1377, in run_one_off_container
+  File "compose\cli\main.py", line 1497, in call_docker
+  File "subprocess.py", line 323, in call
+  File "subprocess.py", line 775, in __init__
+  File "subprocess.py", line 1178, in _execute_child
+TypeError: environment can only contain strings
+[5196] Failed to execute script docker-compose
+Expected result
+The container boots, runs the command, shuts down, and is removed.
+Stacktrace / full error message
+See above.
+Additional information

@@ -1,0 +1,11 @@
+HuanhuanSunMSFT commented on 20 Jan 2017
+E.g., The context path refers to the project path, which contains Chinese characters. The docker compose resolve these characters as escape characters, which will result in error when composing.
+version: '2.0'
+services:
+  service_0:
+   build:
+      args:
+        source: obj/Docker/empty/
+        context: "c:\\users\\user1\\documents\\visual studio 2017\\Projects\\webproject\\
+        \u8FC7\u4E86\u5C31\u5403\u996D"
+        dockerfile: Dockerfile

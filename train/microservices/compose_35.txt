@@ -1,0 +1,55 @@
+RedlineTriad commented on 19 Dec 2019
+Description of the issue
+I wanted to use mandatory variables in my compose file after reading the linked documentation for a real-world use-case.
+https://docs.docker.com/compose/compose-file/#variable-substitution
+Similarly, the following syntax allows you to specify mandatory variables:
+${VARIABLE:?err} exits with an error message containing err if VARIABLE is unset or empty in the environment.
+${VARIABLE?err} exits with an error message containing err if VARIABLE is unset in the environment.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.17.1, build unknown
+docker-py version: 2.5.1
+CPython version: 2.7.15+
+OpenSSL version OpenSSL 1.1.1  11 Sep 2018
+Output of docker version
+Client:
+ Version:           18.09.7
+ API version:       1.39
+ Go version:        go1.10.1
+ Git commit:        2d0083d
+ Built:             Fri Aug 16 14:20:06 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.7
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.1
+  Git commit:       2d0083d
+  Built:            Wed Aug 14 19:41:23 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+ERROR: Invalid interpolation format for "environment" option in service "hello": "TEST=${VARIABLE:?err}"
+Steps to reproduce the issue
+Create a file called docker-compose.yml
+inset the following text:
+version: "3"
+
+services:
+  hello:
+    image: hello-world
+    environment:
+      - TEST=${VARIABLE:?err}
+docker-compose up
+Observed result
+ERROR: Invalid interpolation format for "environment" option in service "hello": "TEST=${VARIABLE:?err}"
+Expected result
+A message that '$VARIABLE' is not set.
+Stacktrace / full error message
+compose.config.config.find: Using configuration files: ./docker-compose.yml
+ERROR: compose.cli.main.main: Invalid interpolation format for "environment" option in service "hello": "TEST=${VARIABLE:?err}"
+Additional information
+Ubuntu 18.04.3 LTS
+Installed using https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository

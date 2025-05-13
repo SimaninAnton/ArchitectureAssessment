@@ -1,0 +1,7 @@
+oprearocks commented on 8 Sep 2015
+Hi,
+I often found myself in a situation where I would need, a test environment, for example, and that test environment is made up of selenium/hub and selenium/standalone-chrome.
+I think it would be helpful to have some sort of functionality, custom YAML filenames, besides docker-compose.yml, or sections within docker-compose.yml denoting that we're launching a multi-container structure.
+Currently, in order to "replicate" this use-case, I use docker-machine, I create a separate VM, and instantiate the images I need, but I think that this would be helpful if it would be baked into compose.
+Thanks,
+Adrian.

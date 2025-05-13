@@ -1,0 +1,16 @@
+skrysmanski commented on 31 Aug 2016
+I just got this error (running version 1.8.0, build f3628c7):
+pxeboot_1  | dnsmasq: exiting on receipt of SIGTERM
+pxedocker_pxeboot_1 exited with code 0
+Exception in thread Thread-3 (most likely raised during interpreter shutdown):
+Traceback (most recent call last):
+  File "threading.py", line 810, in __bootstrap_inner
+  File "threading.py", line 763, in run
+  File "compose/cli/log_printer.py", line 190, in watch_events
+  File "compose/project.py", line 343, in events
+  File "site-packages/docker/client.py", line 245, in _stream_helper
+  File "site-packages/requests/packages/urllib3/response.py", line 243, in read
+  File "httplib.py", line 549, in read
+  File "httplib.py", line 593, in _read_chunked
+<type 'exceptions.TypeError'>: 'NoneType' object is not callable
+Happened when I called docker-compose down.

@@ -1,0 +1,3 @@
+electrofelix commented on 21 Jun 2017
+Docker CE 17.06 will contain support for --health-start-period, compose should add a matching capability and updates to the corresponding v3.x & v2.x compose formats to support this option.
+Originally mentioned in docker/cli#116

@@ -1,0 +1,1 @@
+docker-compose build service coping unicode filename with wrong encoding, while docker build works fine.

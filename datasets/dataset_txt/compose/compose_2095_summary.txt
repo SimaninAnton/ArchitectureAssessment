@@ -1,0 +1,1 @@
+Transfering information of a linked container in a build argument

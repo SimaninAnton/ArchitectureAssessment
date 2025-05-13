@@ -1,0 +1,35 @@
+jayfk commented on 6 Apr 2016
+The scale command begins to count at whatever value the last running container has at com.docker.compose.container-number when starting new containers.
+Imagine the following: foo is scaled to 2, but foo_1 is stopped and removed. When scaling up, compose starts to create and run foo_3 instead of foo_1.
+To reproduce:
+version: "2"
+
+services:
+  foo:
+    image: busybox
+    command: sleep 300
+docker-compose scale foo=2              
+Creating and starting 1 ... done
+Creating and starting 2 ... done
+docker-compose ps  
+     Name          Command    State   Ports
+-------------------------------------------
+increment_foo_1   sleep 300   Up
+increment_foo_2   sleep 300   Up
+docker stop increment_foo_1  
+increment_foo_1
+docker-compose ps               
+     Name          Command    State    Ports
+--------------------------------------------
+increment_foo_1   sleep 300   Exit 0
+increment_foo_2   sleep 300   Up
+docker-compose rm -f    
+Going to remove increment_foo_1
+Removing increment_foo_1 ... done
+docker-compose scale foo=2  
+Creating and starting 3 ... done
+docker-compose ps 
+     Name          Command    State   Ports
+-------------------------------------------
+increment_foo_2   sleep 300   Up
+increment_foo_3   sleep 300   Up

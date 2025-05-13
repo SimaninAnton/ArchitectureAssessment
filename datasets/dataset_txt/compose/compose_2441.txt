@@ -1,0 +1,11 @@
+Contributor
+schmunk42 commented on 1 May 2016
+Let's assume you've these files:
+/.env
+/docker-compose.yml
+/docker-compose.override.yml
+
+/tests/.env
+/tests/docker-compose.override.yml
+Running docker-compose up from / uses the files on that level, while running it from tests/ takes the .env from tests/ but docker-compose.override.yml from the root directory.
+I'd have expected it to use the override file from the current directory, even if docker-compose.yml is not present.

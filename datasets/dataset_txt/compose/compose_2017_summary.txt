@@ -1,0 +1,1 @@
+Add an url for latest version for easy Linux upgrade

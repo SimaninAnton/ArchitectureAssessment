@@ -1,0 +1,8 @@
+asarkar commented on 26 Dec 2017 •
+edited
+According to the doc, the following parameters were added in v2.2. The corresponding PR appears to be #4835
+However, I couldn't find any explanation whatsoever of what these parameters do. Doc says:
+analogous to its docker run counterpart
+But, docker run doesn't have these parameters. Neither does this.
+So I'm looking at cpu_count: 2 and wondering how in the world is it different from cpus: 2. What does the word cpu_count mean to anyone who speaks English? Two counts of cpu. Well, that's exactly what cpus is supposed to be.
+Can we stop this guessing game and clearly document the parameters?

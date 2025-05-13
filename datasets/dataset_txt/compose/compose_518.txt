@@ -1,0 +1,7 @@
+Billy- commented on 31 Aug 2018 •
+edited
+Description of the issue
+--detach and --abort-on-contatiner-exit cannot be used in conjunction
+Context information (for bug reports)
+This is the expected and documented behaviour, however I cannot see why this would be the case, I don't see any technical or semantic limitation. Should be able to run a stack detached and still abort if a container exits..
+Skipping the rest of the issue template as this is not a bug (feature req) so versions etc. are irrelevant.

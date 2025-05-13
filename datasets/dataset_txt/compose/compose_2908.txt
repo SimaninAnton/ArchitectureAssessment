@@ -1,0 +1,20 @@
+jamshid commented on 18 Jan 2016
+Any idea why I keep getting this error trying to bring up a service? Had to upgrade to docker 1.10rc1 to try to workaround a bug. Did clean builds on a new 1.10rc1 server.
+docker-compose version 1.5.2, build 7240ff3
+Server Version: 1.10.0-rc1
+socat_foo_console:
+  image: bobrik/socat
+  mem_limit: 50m
+  links:
+     - foo:foo1
+  command: TCP-LISTEN:80,fork,reuseaddr TCP:foo1:90
+  ports:
+    - "7190:80"
+docker-compose up -d
+...
+Creating example71_socat_foo_console_1
+ERROR: name is reserved
+systemctl status docker
+
+Jan 18 10:30:23 docker110 docker[17741]: time="2016-01-18T10:30:23.228078648-05:00" level=warning msg="Your kernel does not support swap limit capabilities, memory limited without swap."
+Jan 18 10:30:23 docker110 docker[17741]: time="2016-01-18T10:30:23.270394958-05:00" level=error msg="Handler for POST /v1.19/containers/create returned error: name is reserved"

@@ -1,0 +1,58 @@
+dooman87 commented on 29 May 2016
+I used original docker instruction (https://docs.docker.com/engine/installation/linux/ubuntulinux/) to install docker on ubuntu 16.04 that was created in GCP. It worked like a charm and manual is really great!
+However, docker compose didn't work out of the box:
+:~$ docker-compose --version
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.5.2', 'console_scripts', 'docker-compose')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 542, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2569, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2229, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2235, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/lib/python2.7/dist-packages/compose/cli/main.py", line 11, in <module>
+    from docker.errors import APIError
+  File "/usr/lib/python2.7/dist-packages/docker/__init__.py", line 20, in <module>
+    from .client import Client, AutoVersionClient, from_env # flake8: noqa
+  File "/usr/lib/python2.7/dist-packages/docker/client.py", line 25, in <module>
+    from . import api
+  File "/usr/lib/python2.7/dist-packages/docker/api/__init__.py", line 2, in <module>
+    from .build import BuildApiMixin
+  File "/usr/lib/python2.7/dist-packages/docker/api/build.py", line 9, in <module>
+    from .. import utils
+  File "/usr/lib/python2.7/dist-packages/docker/utils/__init__.py", line 1, in <module>
+    from .utils import (
+  File "/usr/lib/python2.7/dist-packages/docker/utils/utils.py", line 33, in <module>
+    from .. import tls
+  File "/usr/lib/python2.7/dist-packages/docker/tls.py", line 5, in <module>
+    from .ssladapter import ssladapter
+  File "/usr/lib/python2.7/dist-packages/docker/ssladapter/__init__.py", line 1, in <module>
+    from .ssladapter import SSLAdapter # flake8: noqa
+  File "/usr/lib/python2.7/dist-packages/docker/ssladapter/ssladapter.py", line 21, in <module>
+    from .ssl_match_hostname import match_hostname
+  File "/usr/lib/python2.7/dist-packages/docker/ssladapter/ssl_match_hostname.py", line 6, in <module>
+    import ipaddress
+ImportError: No module named ipaddress
+I was able to fix it by installing python-ipaddress package:
+:~$ sudo apt-get install python-ipaddress
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following NEW packages will be installed:
+  python-ipaddress
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 18.0 kB of archives.
+After this operation, 103 kB of additional disk space will be used.
+Get:1 http://us-east1-b.gce.clouds.archive.ubuntu.com/ubuntu xenial/main amd64 python-ipaddress all 1.0.16-1 [18.0 kB]
+Fetched 18.0 kB in 0s (48.2 kB/s)     
+Selecting previously unselected package python-ipaddress.
+(Reading database ... 64040 files and directories currently installed.)
+Preparing to unpack .../python-ipaddress_1.0.16-1_all.deb ...
+Unpacking python-ipaddress (1.0.16-1) ...
+Setting up python-ipaddress (1.0.16-1) ...
+:~$ docker-compose --version
+docker-compose version 1.5.2, build unknown
+16

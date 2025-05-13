@@ -1,0 +1,1 @@
+Getting Started guide does not successfully get me started w/ docker-compose 1.7.0 / docker client+server 1.11.0, darwin/amd64

@@ -1,0 +1,9 @@
+dummycode commented on 3 Jul 2017
+After upgrading to 17.06 I receive the following error when running docker-compose up
+Recreating 3976a0934e55_3976a0934e55_3976a0934e55_api_web_1 ... error
+
+ERROR: for 3976a0934e55_3976a0934e55_3976a0934e55_api_web_1  Cannot create container for service web: invalid IP address in add-host: "db"
+
+ERROR: for web  Cannot create container for service web: invalid IP address in add-host: "db"
+ERROR: Encountered errors while bringing up the project.
+Rolling back to 17.03.1-ce fixes this error. Any idea what is causing this?

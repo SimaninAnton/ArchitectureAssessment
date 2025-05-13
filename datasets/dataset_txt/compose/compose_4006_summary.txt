@@ -1,0 +1,1 @@
+Ctrl-C during build doesn't shut down the container instance

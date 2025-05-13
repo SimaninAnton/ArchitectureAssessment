@@ -1,0 +1,1 @@
+topic: extends, "Circular reference" when trying to extend more than 1 service

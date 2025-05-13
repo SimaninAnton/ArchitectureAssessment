@@ -1,0 +1,73 @@
+ss75710541 commented on 16 Aug 2017
+system version:
+# cat /etc/centos-release
+CentOS Linux release 7.3.1611 (Core)
+docker info
+Containers: 26
+ Running: 24
+ Paused: 0
+ Stopped: 2
+Images: 22
+Server Version: 17.03.2-ce
+Storage Driver: overlay
+ Backing Filesystem: xfs
+ Supports d_type: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 4ab9917febca54791c5f071a9d1f404867857fcc
+runc version: 54296cf40ad8143b62dbcaa1d90e520a2136ddfe
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 3.10.0-514.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 3.702 GiB
+Name: srymaster1
+ID: JCWM:T3P3:4OUX:LFSX:ZSSD:NXKQ:BMDF:GJAZ:TI24:X3DC:VFQR:PTZH
+Docker Root Dir: /data/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Cluster Store: consul://192.168.1.241:8500
+Insecure Registries:
+ 192.168.1.241
+ 127.0.0.0/8
+Live Restore Enabled: false
+docker-compose.yml
+docker image offlineregistry.dataman-inc.com:5000/library/centos7-base is centos7.2
+version: '2'
+services:
+  centosa:
+    image: offlineregistry.dataman-inc.com:5000/library/centos7-base:latest
+    container_name: centos-base-testa
+    restart: always
+    command: "tail -f /var/log/yum.log"
+    depends_on:
+      - centosb
+    logging:
+      driver: journald
+
+  centosb:
+    image: offlineregistry.dataman-inc.com:5000/library/centos7-base:latest
+    container_name: centos-base-testb
+    restart: always
+    command: "tail -f /var/log/yum.log"
+    logging:
+      driver: journald
+docker-compose up -d
+# docker exec -it centos-base-testa bash
+[root@584d59bb7be9 /]# ping centosb
+ping: unknown host centosb
+1

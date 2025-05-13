@@ -1,0 +1,4 @@
+tgpfeiffer commented on 18 Dec 2014
+When defining multiple containers with links, such as
+db <-- wordpress <-- nginxproxy
+how can I recreate the wordpress container from an updated image and restart it with all containers that depend on it? Basically, I want fig up, but the db container (and other unrelated containers) should not be touched, for example, because a long downtime comes with restarting the db container. How would that work?

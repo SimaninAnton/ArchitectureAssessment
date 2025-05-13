@@ -1,0 +1,13 @@
+Contributor
+bfirsh commented on 24 Sep 2015
+It should be possible to specify the name of an image, and the path it can be built from. Like so:
+web:
+  image: hyperglobalmegacorp/web
+  build: .
+This lets you do various things:
+Bootstrap an environment by pulling pre-built master images from the Hub so you don't have to build them locally when setting up an initial environment (docker-compose pull; docker-compose up)
+Lets you easily push images that you have built
+Lets you customise the name of the built image
+Makes it easier to use the same Compose file in development and production (production can pull images in advance or ignore build)
+Related: #213
+10

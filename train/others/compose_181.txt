@@ -1,0 +1,6 @@
+blah238 commented on 14 May 2019
+For feature parity with the docker logs command, I'd like to be able to use the --since and --until options in docker-compose logs.
+I believe at least --since was mentioned in the now-closed #2227 but it apparently never made it into the checklist.
+There is also a --details option in docker logs but I am not familiar with it and it may not be applicable to docker-compose. If someone wants it perhaps chime in here or open another issue?
+4
+1

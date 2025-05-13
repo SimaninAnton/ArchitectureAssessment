@@ -1,0 +1,28 @@
+hcervantes commented on 25 Feb 2016
+I have one question regarding adding service to existing container. How can I add a new service to my existing container without having to kill the currently running services? Here is what I have in my yaml:
+postgis_native:
+  image: mdillon/postgis:9.4
+  container_name: postgis_native
+  restart: always
+  environment:
+    - POSTGRES_PASSWORD=1FMp0stg1s
+  ports:
+    - "5432:5432"
+  volumes:
+    - /srv/postgis_native/data:/var/lib/postgresql/data
+
+postgis_eGDB_100:
+  image: mdillon/postgis:9.4
+  container_name: postgis_eGDB_100
+  restart: always
+  environment:
+    - POSTGRES_PASSWORD=1FMp0stg1s
+  ports:
+    - "5433:5432"
+  volumes:
+    - /srv/postgis_eGDB_100/data:/var/lib/postgresql/data
+and I want to add a different service to this file and start up that service. When I issue the docker-compose up, I get an error saying
+ERROR: Conflict. The name "postgis_native" is already in use by container 19c82d5ecbf7.
+You have to delete (or rename) that container to be able to reuse
+My problem is that I cannot stop any of my current services.
+Thank you!

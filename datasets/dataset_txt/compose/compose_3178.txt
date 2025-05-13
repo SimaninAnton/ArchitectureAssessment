@@ -1,0 +1,22 @@
+ybalt commented on 24 Oct 2015
+AFter pressing Ctrl-C
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping cass2... done
+Traceback (most recent call last):
+File "", line 3, in
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 39, in main
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 500, in up
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 556, in attach_to_logs
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.log_printer", line 22, in run
+File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.multiplexer", line 25, in loop
+File "/code/build/docker-compose/out00-PYZ.pyz/Queue", line 182, in get
+thread.error: release unlocked lock
+$ docker-compose version
+docker-compose version: 1.4.2
+docker-py version: 1.3.1
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013

@@ -1,0 +1,4 @@
+karlkfi commented on 14 Aug 2015
+Warning added in #1833 is triggered by volumes starting with environment variables (e.g. ${VOLUME_DIR}:/var/stuff).
+How would we know whether the env-var was a name or a path?
+Is there a way to wait to test for .~/ until after env-vars are evaluated?

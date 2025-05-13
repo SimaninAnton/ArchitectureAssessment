@@ -1,0 +1,140 @@
+desdulianto commented on 17 Nov 2016
+I have a problem when connecting service to macvlan network when the service is using 2 or more network. Here's the docker-compose.yml content:
+docker.compose.yml
+-----------------------------
+version: "2"
+
+services:
+    frontend:
+        image: nginx:stable
+        networks:
+            backend:
+            frontend:
+                ipv4_address: 172.16.9.222
+
+networks:
+    backend:
+        external:
+            name: backend
+    frontend:
+        external:
+            name: serverlan
+
+Here's the network definition:
+david@liliput:~/t$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+0a00b694977c        backend             bridge              local               
+4dea9ef4737e        bridge              bridge              local               
+13912eb3a6c2        host                host                local               
+f9a25a81cf2c        none                null                local               
+4537b626c7ff        serverlan           macvlan             local
+
+david@liliput:~/t$ docker network inspect backend
+[
+    {
+        "Name": "backend",
+        "Id": "0a00b694977c07fc596e49af711aac542e557363e0582bba4b739bbf06b616a7",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "10.255.255.0/24",
+                    "Gateway": "10.255.255.254"
+                }
+            ]
+        },
+        "Internal": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+david@liliput:~/t$ docker network inspect serverlan
+[
+    {
+        "Name": "serverlan",
+        "Id": "4537b626c7ff9a5e1cc22d9a31ba3ec7a03a93c48836ff3dc1198b8e98201ff9",
+        "Scope": "local",
+        "Driver": "macvlan",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.16.9.0/24",
+                    "Gateway": "172.16.9.254"
+                }
+            ]
+        },
+        "Internal": false,
+        "Containers": {},
+        "Options": {
+            "parent": "bond0.9"
+        },
+        "Labels": {}
+    }
+]
+
+david@liliput:~/t$ docker info
+Containers: 12
+ Running: 11
+ Paused: 0
+ Stopped: 1
+Images: 72
+Server Version: 1.12.3
+Storage Driver: devicemapper
+ Pool Name: docker-8:3-14155777-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: ext4
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 4.859 GB
+ Data Space Total: 107.4 GB
+ Data Space Available: 102.5 GB
+ Metadata Space Used: 7.148 MB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.14 GB
+ Thin Pool Minimum Free Space: 10.74 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Use `--storage-opt dm.thinpooldev` to specify a custom block storage device.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.90 (2014-09-01)
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: host bridge macvlan null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options:
+Kernel Version: 3.16.0-4-amd64
+Operating System: Debian GNU/Linux 8 (jessie)
+OSType: linux
+Architecture: x86_64
+CPUs: 4
+Total Memory: 15.66 GiB
+Name: liliput
+ID: WGD2:6Q6P:IWAP:YCLR:EV2B:OD7H:4VHA:QTEI:FC4K:6GIF:JA4J:64LU
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No kernel memory limit support
+WARNING: No cpu cfs quota support
+WARNING: No cpu cfs period support
+Insecure Registries:
+ 127.0.0.0/8
+the workaround for now is that I have to manually connect the service to the network after the service is up and running:
+docker network connect --ip 172.16.9.14 serverlan container

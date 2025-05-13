@@ -1,0 +1,1 @@
+docker-compose file version 3 not reading ENV files properly, is this a bug?

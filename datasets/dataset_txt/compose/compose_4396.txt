@@ -1,0 +1,19 @@
+Contributor
+Gazler commented on 19 Feb 2014
+It make be worth making a note somewhere in the documentation that mapping any port below 60 will produce erroneous results.
+Consider the following YAML file:
+web:
+  ports:
+    - 49100:22
+This is clearly trying to map the container port 22 to the host port 49100 - however this will raise an error when trying to start the container because it is trying to allocate port 176761320
+After some investigation I found this was only happening on ports below 60 because YAML interprets this format as time in seconds:
+2.0.0-p353 :036 > YAML.load("ports:\n - 1:59")
+ => {"ports"=>[7140]}  # 7140 seconds is 1 hour 59 minutes
+2.0.0-p353 :037 > YAML.load("ports:\n - 1:60")
+ => {"ports"=>["1:60"]} 
+While this happens because of YAML and is perfect valid in the spec, it can cause issues - what is worse is if they try to map to a port that is in the valid port range then it won't even raise an error.
+The following will work without issue:
+web:
+  ports:
+    - "49100:22"
+I will happily add this note to the documentation if you agree with it.

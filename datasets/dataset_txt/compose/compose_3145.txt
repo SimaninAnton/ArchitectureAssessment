@@ -1,0 +1,3 @@
+arun-gupta commented on 4 Nov 2015
+Currently docker-compose only takes docker-compose.yml that has to be on the local file system. Just like docker build, it'll be good to provide a context for docker-compose up -d. This will allow to run an application from a github project.
+6

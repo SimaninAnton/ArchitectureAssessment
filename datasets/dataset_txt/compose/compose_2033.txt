@@ -1,0 +1,11 @@
+bwnyasse commented on 29 Sep 2016 •
+edited
+It would be usefull if you add the capability to interpolate env vars when using docker-compose . if I have a following vars.env file :
+VAR_1=value_1
+VAR_2=value_1/value2
+VAR_3=value_1/value3
+It would be more maintainable to interpolate VAR_1 value like this
+VAR_1=value_1
+VAR_2=${VAR_1}/value2
+VAR_3=${VAR_1}/value3
+What do you think ?

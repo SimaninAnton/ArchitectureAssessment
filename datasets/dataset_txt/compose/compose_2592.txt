@@ -1,0 +1,22 @@
+aleemb commented on 22 Mar 2016
+As expected:
+environment:
+- FOO
+
+FOO=external docker-compose run test env
+# shows "external"
+As expected:
+environment:
+- FOO=internal
+
+docker-compose run test env
+# shows "internal"
+Weirdness:
+environment:
+- FOO=internal
+
+FOO=external docker-compose run test env
+# shows "internal"
+The output should be external since the host overrode the default value.
+Is there any way right now (1.6.2) to achieve 3? That is, to allow for an environment variable from host but fallback to a default value if absent?
+Also referenced by @fazy in #1377 (comment)

@@ -1,0 +1,35 @@
+thomas-riccardi commented on 25 Feb 2016
+build.args doc states:
+Build arguments with only a key are resolved to their environment value on the machine Compose is running on.
+It's the same feature as for environment.
+However, it doesn't work with object syntax:
+version: '2'
+services:
+  test:
+    build:
+      context: .
+      args:
+        BLA:
+$ BLA=foo docker-compose config
+ERROR: Validation failed in file './docker-compose.yml', reason(s):
+services.test.build.args contains null, which is an invalid type, it should be a string, or a number
+It should work (and maybe it shouldn't not accept a number, I don't know).
+Array syntax does work:
+version: '2'
+services:
+  test2:
+    build:
+      context: .
+      args:
+        - BLA
+$ BLA=foo docker-compose config
+networks: {}
+services:
+  test2:
+    build:
+      args:
+        BLA: foo
+      context: /xxx
+version: '2.0'
+volumes: {}
+Also, build.args doc is missing example for these specific points. environment has nice examples for that.

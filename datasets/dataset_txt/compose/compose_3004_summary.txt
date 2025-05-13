@@ -1,0 +1,1 @@
+compose creates a host-port mapping even if an overlay is used

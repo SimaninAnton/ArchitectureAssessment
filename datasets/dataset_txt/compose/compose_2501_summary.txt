@@ -1,0 +1,1 @@
+"KeyError: u'status'" with 1.7.0rc1 and swarm

@@ -1,0 +1,8 @@
+Globegitter commented on 5 Nov 2014
+I am writing a node app, which calls fig up, but now I have the problem that not all output is displayed anymore.
+I am getting the first line:
+stdout: Recreating test_db_1...
+stdout: Recreating test_server_1...
+But I am not getting any of the logs of the actual containers. Are these not printed to stdout? How does this work under the hood? What could the reason be that node does not catch the output?
+The server does get started though correctly.
+(Also looking into the source code now, so might be able to find that out myself at some point)

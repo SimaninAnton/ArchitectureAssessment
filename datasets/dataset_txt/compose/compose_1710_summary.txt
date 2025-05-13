@@ -1,0 +1,1 @@
+Allow referencing transient service, volume and network names as variables

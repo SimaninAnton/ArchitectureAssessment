@@ -1,0 +1,15 @@
+gkop commented on 16 Jul 2016
+I'm seeking a convenient workaround for #423 (comment) . I want to default to stdin_open and tty false so that I can use docker-compose logs, but I want and easy way to turn them for interactive debugging and to allow me to detach from containers.
+$ docker-compose --version                   
+docker-compose version 1.7.1, build 0a9ab35
+# in .env
+INTERACTIVE=false
+# in docker-compose.yml
+services:
+  foo:
+    stdin_open: ${INTERACTIVE}
+    tty: ${INTERACTIVE}
+$ INTERACTIVE=true docker-compose up
+ERROR: The Compose file '/home/gabe/src/docker/docker-compose.yml' is invalid because:
+services.foo.stdin_open contains an invalid type, it should be a boolean
+services.foo.tty contains an invalid type, it should be a boolean

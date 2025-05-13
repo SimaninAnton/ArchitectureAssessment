@@ -1,0 +1,33 @@
+MichaelNesterenko commented on 3 Jan 2016
+I have following simple services:
+srv_0:
+  image: busybox
+  command: sleep 300
+  links:
+    - srv_1
+
+srv_1:
+  image: busybox
+  command: sleep 300
+They are successfully started with up command:
+docker-compose up srv_0
+CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                                                   NAMES
+3f553caaedfb        busybox                       "sleep 300"              18 seconds ago      Up 17 seconds                                                               dockercompose_srv_0_1
+45bf185cc27f        busybox                       "sleep 300"              31 minutes ago      Up 18 seconds                                                               dockercompose_srv_1_1
+Now srv_1 is deprecated and I replace it with srv_2:
+srv_0:
+  image: busybox
+  command: sleep 300
+  links:
+    - srv_2
+
+srv_2:
+  image: busybox
+  command: sleep 350
+docker-compose up srv_0
+still works successfully, but it leaves orphaned srv_1:
+[vagrant@epplkraw0047t1 docker_compose]$ sudo docker ps
+CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                                                   NAMES
+5262677b73c9        busybox                       "sleep 300"              41 seconds ago      Up 40 seconds                                                               dockercompose_srv_0_1
+922f5e4172b8        busybox                       "sleep 350"              33 minutes ago      Up 51 seconds                                                               dockercompose_srv_2_1
+45bf185cc27f        busybox                       "sleep 300"              33 minutes ago      Up 2 minutes                                                                dockercompose_srv_1_1

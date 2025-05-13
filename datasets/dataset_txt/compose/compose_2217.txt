@@ -1,0 +1,7 @@
+RotemEmergi commented on 19 Jul 2016
+I am using Docker 1.12 and Compose 1.8. I am trying to understand how to mount the volumes for an image to global volumes.
+The purpose is to use Docker services and Docker bundle for deploying clusters.
+This is the error that I got :
+WARNING: Unsupported top level key 'volumes' - ignoring
+WARNING: Unsupported key 'volumes' in services.momgodb - ignoring
+Best regarsd

@@ -1,0 +1,37 @@
+guankin commented on 15 Dec 2017 •
+edited
+Hi,everyone
+I have tried to check all the online resource but I still cant get any solution on this.Hope somebody can help me on this.
+I trying on portia and scrapy, I have successfully running portia locally, but then when I try to extract the data,It pop out the error.
+Error response from daemon: pull access denied for portiacrawl, repository does not exist or may require 'docker login'.
+I want to extract the data into json format.
+This is the code that I used and try to extract the data
+docker run -i -t --rm -v aD:/silverlakething/portia/portia/data/projects:rw -v aD:/silverlakething/output:rw -p 9001:900 1 portiacrawl /silverlakething/portia/portia/data/projects/BigData www.lazada.com.my -o /silverlakethin g/output/www.lazada.com.my.json
+This is the Error
+Unable to find image 'portiacrawl:latest' locally
+D:\silverlakething\Docker Toolbox\docker.exe: Error response from daemon: pull access denied for portiacrawl, repository does not exist or may require 'docker login'.
+See 'D:\silverlakething\Docker Toolbox\docker.exe run --help'.
+docker images the repository is running.
+Login is successful.
+When I run docker images
+REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+scrapinghub/portia   latest              f453caf755d4        4 weeks ago         1.12GB
+My laptop is Window 10 home, currently using docker toolbox.
+Here is my docker version
+Client:
+ Version:      17.10.0-ce
+ API version:  1.32 (downgraded from 1.33)
+ Go version:   go1.8.3
+ Git commit:   f4ffd25
+ Built:        Tue Oct 17 19:00:02 2017
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      17.09.1-ce
+ API version:  1.32 (minimum version 1.12)
+ Go version:   go1.8.3
+ Git commit:   19e2cf6
+ Built:        Thu Dec  7 22:28:28 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+So how can I solve this?Please help

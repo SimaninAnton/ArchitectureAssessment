@@ -1,0 +1,75 @@
+pennywisdom commented on 10 May 2017
+I am unable to set a label (set in docker-compose.yml) using an env_file that overrides a base .env file setting. My expectations are as follows:
+What I am doing:
+setting the env var FOO=test in .env file
+overriding the env var FOO=overriden in .env2
+setting the label "foo=$FOO"
+My expectations:
+when I docker inspect my container I would expect the label for "foo" to equal "overridden".
+labels can only be set dynamically through the use of env vars is my understanding.
+Note:
+If I set FOO=cmdoverridden then run docker-compose up -d then the label is overridden from and equals "cmdoverridden" as expected
+I have pushed a repo here with an example of my expectations and would be really grateful if you could confirm if this is by design or a bug. I cannot seem to find anything saying that my expectation is wrong, other than as per the documentation:
+If your service specifies a build option, variables defined in environment files will not be automatically visible during the build. Use the args sub-option of build to define build-time environment variables.
+In the example I am using a build directive (it doesn't do anything really) but its an example of my usage case. I don't believe that the labels are being set during the build.
+If you clone the repo and run thetest.ps1 file you will a summary of my expectations:
+############################
+environment data:
+############################
+docker version
+Client:
+Version: 17.05.0-ce
+API version: 1.29
+Go version: go1.7.5
+Git commit: 89658be
+Built: Thu May 4 21:43:09 2017
+OS/Arch: windows/amd64
+Server:
+Version: 17.05.0-ce
+API version: 1.29 (minimum version 1.24)
+Go version: go1.7.5
+Git commit: 89658be
+Built: Thu May 4 21:43:09 2017
+OS/Arch: windows/amd64
+Experimental: true
+docker-compose version
+docker-compose version 1.13.0, build 1719ceb
+docker-py version: 2.2.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.2j 26 Sep 2016
+docker info
+Containers: 1
+Running: 1
+Paused: 0
+Stopped: 0
+Images: 52
+Server Version: 17.05.0-ce
+Storage Driver: windowsfilter
+Windows:
+Logging Driver: json-file
+Plugins:
+Volume: local
+Network: l2bridge l2tunnel nat null overlay transparent
+Swarm: inactive
+Default Isolation: hyperv
+Kernel Version: 10.0 14393 (14393.693.amd64fre.rs1_release.161220-1747)
+Operating System: Windows 10 Enterprise
+OSType: windows
+Architecture: x86_64
+CPUs: 4
+Total Memory: 15.89GiB
+Name: xxxxx
+ID: GWL2:6FZX:M7I3:LI75:KFOY:RJY5:HPV4:CV22:5FOE:YNS5:7ROG:TB2A
+Docker Root Dir: C:\ProgramData\Docker
+Debug Mode (client): false
+Debug Mode (server): true
+File Descriptors: -1
+Goroutines: 27
+System Time: 2017-05-10T10:53:33.8279823+01:00
+EventsListeners: 0
+Username: xxxxx
+Registry: https://index.docker.io/v1/
+Experimental: true
+Insecure Registries:
+127.0.0.0/8
+Live Restore Enabled: false

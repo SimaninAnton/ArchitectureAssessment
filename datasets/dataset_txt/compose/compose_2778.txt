@@ -1,0 +1,62 @@
+otbe commented on 13 Feb 2016
+Hi everyone,
+Im not sure if this is a docker, docker-compose or a "me" bug. But Im not getting my head around this for several hours.
+My simple docker-compose.yml
+version: "2"
+services:
+  app:
+    image: nginx:latest
+    volumes_from:
+      - storage
+  storage:
+    image: ubuntu:latest
+    volumes:
+      - /var/data
+I bootstrap it with $ docker-compose up -d.
+Now I jump into "app" via docker exec -it docker_app_1 bash and add a test file within my new created volume.
+root@8f5f850c30c7:/# touch /var/data/test
+root@8f5f850c30c7:/# ls /var/data
+test
+Seems to work. Shutdown via $ docker-compose stop. Now I add a second volume to my storage container:
+version: "2"
+services:
+  app:
+    image: nginx:latest
+    volumes_from:
+      - storage
+  storage:
+    image: ubuntu:latest
+    volumes:
+      - /var/data
+      - /my/host/folder:/var/data2
+This time this volume is backed by a host directory. Rerun:
+$ docker-compose up -d
+Recreating docker_storage_1
+Recreating docker_app_1
+Okay so far. Recreated my storage container, but should preserve existing volumes (docs). Lets check this:
+$ docker exec -it docker_app_1 bash
+root@8f5f850c30c7:/# ls /var/data
+Oh my data is gone, but why? This is not the only time my data gots "lost" the last days.
+Its not 100% clear when this will happen. Simple running $ docker-compose up -d --force-recreate twice kills my data also. After the first launch my data is still there and after the second one its lost. Is this expected behavior? Recreate process seems to be broken in compose 1.6.0 :(
+This happens on my local environment (OS X, docker 1.10.0, compose 1.6.0) and on my ubuntu-backed vServer (docker 1.10.1, compose 1.6.0).
+Thanks for any advice
+System:
+$ docker-compose -v
+docker-compose version 1.6.0, build d99cad6
+
+$ docker version
+Client:
+ Version:      1.10.0
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   590d5108
+ Built:        Thu Feb  4 18:18:11 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.10.0
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   590d5108
+ Built:        Thu Feb  4 19:55:25 2016
+ OS/Arch:      linux/amd64

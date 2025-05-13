@@ -1,0 +1,8 @@
+zhucegep commented on 12 Feb 2015
+like this:
+ports:
+80+8000:80
+and this:
+ports:
+80+$base_port:80
+I need something like that,thank you.

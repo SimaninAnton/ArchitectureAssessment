@@ -1,0 +1,66 @@
+Marusyk commented on 3 Jun 2019
+Description of the issue
+Error
+readlink /var/lib/docker/overlay2: invalid argument
+when run docker-compose up devices-db
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.0, build 0aa59064
+docker-py version: 3.7.2
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.0.2q  20 Nov 2018
+Output of docker version
+Client: Docker Engine - Community                                
+ Version:           19.03.0-beta3                                
+ API version:       1.40                                         
+ Go version:        go1.12.4                                     
+ Git commit:        c55e026                                      
+ Built:             Thu Apr 25 19:05:10 2019                     
+ OS/Arch:           windows/amd64                                
+ Experimental:      false                                        
+                                                                 
+Server: Docker Engine - Community                                
+ Engine:                                                         
+  Version:          19.03.0-beta3                                
+  API version:      1.40 (minimum version 1.12)                  
+  Go version:       go1.12.4                                     
+  Git commit:       c55e026                                      
+  Built:            Thu Apr 25 19:13:00 2019                     
+  OS/Arch:          linux/amd64                                  
+  Experimental:     true                                         
+ containerd:                                                     
+  Version:          v1.2.6                                       
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb     
+ runc:                                                           
+  Version:          1.0.0-rc7+dev                                
+  GitCommit:        029124da7af7360afa781a0234d1b083550f797c     
+ docker-init:                                                    
+  Version:          0.18.0                                       
+  GitCommit:        fec3683                                      
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  devices-db:
+    build:
+      context: C:\Users\rmarusyk\source\work\mbv-devices
+      dockerfile: db/Dockerfile
+    environment:
+      POSTGRES_DB: devices
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+    image: devices-db
+    ports:
+    - published: 10011
+      target: 5432
+version: '3.7'
+Steps to reproduce the issue
+docker-compose build devices-db
+docker-compose up devices-db
+Observed result
+readlink /var/lib/docker/overlay2: invalid argument
+Expected result
+docker-compose create and start containers
+Stacktrace / full error message
+readlink /var/lib/docker/overlay2: invalid argument
+Additional information
+OS version : Windows10

@@ -1,0 +1,75 @@
+Contributor
+maxwellb commented on 13 Sep 2018
+Description of the issue
+When running compose as a container, and the docker host has userns-remap configured, then compose cannot connect to the Docker daemon.
+Context information (for bug reports)
+Output of "docker-compose version"
+
+docker-compose version 1.22.0, build f46880fe
+docker-py version: 3.4.1
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of "docker version"
+
+Client:
+ Version:           18.06.1-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        e68fc7a
+ Built:             Tue Aug 21 17:24:51 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.1-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       e68fc7a
+  Built:            Tue Aug 21 17:23:15 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of "docker-compose config"
+
+services:
+  sql:
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Express
+      SA_PASSWORD: nicetry
+    image: microsoft/mssql-server-linux
+    ports:
+    - published: 1433
+      target: 1433
+version: '3.4'
+Steps to reproduce the issue
+Configure docker with userns-remap per https://docs.docker.com/engine/security/userns-remap/#enable-userns-remap-on-the-daemon by updating daemon.json
+Run compose-as-a-container per https://docs.docker.com/compose/install/#install-as-a-container (version 1.22.0 as of opening this issue)
+Author a docker-compose.yaml script
+Run docker-compose up
+Observed result
+$ docker-compose up -d
+ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+Setting DOCKER_HOST to any seemingly sensible value does not resolve the issue.
+Expected result
+$ docker-compose up -d
+Starting container_sql_1 ... done
+Additional information
+$ uname -a
+Linux server1 4.15.0-1023-azure #24-Ubuntu SMP Tue Aug 28 17:35:08 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+
+$ cat /etc/os-release
+NAME="Ubuntu"
+VERSION="18.04.1 LTS (Bionic Beaver)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.04.1 LTS"
+VERSION_ID="18.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=bionic
+UBUNTU_CODENAME=bionic

@@ -1,0 +1,10 @@
+Contributor
+clkao commented on 13 Feb 2016
+with v2 services are default to use project-scoped network, however the _default network isn't created during docker-compose create, at least for the first time the project is run with.
+This simple docker-compose.yml fails with docker-compose create:
+version: '2.0'
+services:
+  foo:
+    image: nginx
+18
+1

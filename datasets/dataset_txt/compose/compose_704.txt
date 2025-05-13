@@ -1,0 +1,44 @@
+ghost commented on 1 May 2018
+Description of the issue
+When running docker-compose up, the Compose file is falsely flagged as invalid when using ip_range in ipam.config with this error:
+networks.default.ipam.config value Additional properties are not allowed ('ip_range' was unexpected)
+Despite being documented as a valid option: https://docs.docker.com/compose/compose-file/compose-file-v2/#ipam
+Context information (for bug reports)
+Versions
+docker-compose version 1.21.1, build 5a3f1a3
+docker-py version: 3.3.0
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:13:02 2018
+ OS/Arch:      darwin/amd64
+ Experimental: false
+ Orchestrator: swarm
+
+Server:
+ Engine:
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:22:38 2018
+  OS/Arch:      linux/amd64
+  Experimental: true
+Config
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+networks.default.ipam.config value Additional properties are not allowed ('ip_range' was unexpected)
+Steps to reproduce the issue
+Create a Compose file that specifies an ip_range in ipam.config
+Attempt to use the Compose file
+Observed result
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+networks.default.ipam.config value Additional properties are not allowed ('ip_range' was unexpected)
+Expected result
+The command should succeed with a valid Compose file.
+Additional information
+Running High Sierra v10.13.4.
+3

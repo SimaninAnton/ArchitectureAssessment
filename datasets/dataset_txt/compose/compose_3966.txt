@@ -1,0 +1,5 @@
+wernight commented on 28 Jan 2015
+fig up should build but I noticed it does some kind of build only in some cases, not sure when. So in practice as said for #734 on has to:
+$ fig build
+$ fig up -d
+but why not just run then fig restart (which should do a fig start and stop if there is any existing). fig start is actually lot faster than fig up -d.

@@ -1,0 +1,8 @@
+CrimsonGlory commented on 13 Nov 2015
+Currently I can do interactive debugging with
+docker-compose run --service-ports web
+This is as described in issue #359 . But over time I end up with many containers, as run creates a new one each time.
+I would like something like:
+docker-compose start --bind web
+Something to start all the containers, but be able to do interactive debugging of a specific one.
+I'm using pry

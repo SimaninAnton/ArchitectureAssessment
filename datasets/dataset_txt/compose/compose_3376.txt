@@ -1,0 +1,2 @@
+snouhaud commented on 14 Aug 2015
+Docker 1.8 support GELF log driver. But actual docker-compose (1.4) don't support this option

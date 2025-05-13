@@ -1,0 +1,20 @@
+frntn commented on 22 Apr 2015
+What I do
+Trying to create a container with a bind mount on a file existing in the image.
+I use docker-compose -f lb.yaml up -d with the following lb.yaml
+loadbalancer:
+  ports:
+    - 443:443
+  volumes:
+    - /tmp/haproxy.cfg:/etc/haproxy/haproxy.cfg
+  image: ekino/haproxy:base
+What I get
+Every time, even from a clean install (no image / no container yet), I get something like that :
+500 Internal Server Error: file exists at /var/lib/docker/aufs/mnt/d6b22d7cc86c3798687cc06ef7923557c076dddf4ecbd6810bd460bed20a94ec/etc/haproxy/haproxy.cfg, can't create volume there
+What I expected
+I expected the same behaviour as with the equivalent cli command which is always OK
+docker run -d \
+    --name loadbalancer \
+    -p 443:443 \
+    -v /tmp/haproxy.cfg:/etc/haproxy/haproxy.cfg \
+    ekino/haproxy:base

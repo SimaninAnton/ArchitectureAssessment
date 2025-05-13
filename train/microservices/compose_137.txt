@@ -1,0 +1,95 @@
+Mandy91 commented on 5 Jul 2019 •
+edited
+Description of the issue
+There are some strange things happening when using the env_file section for a docker-compose service.
+In the example below the I tried to make clear that the environment variables which are in the
+environment section of a service after viewing the docker-compose file through docker-compose config
+are not always being used properly in the volumes section of the same service.
+Context information (for bug reports)
+Tested with docker-compose 1.19.0 1.22.0 and 1.24.1, all the same behaviour
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.7
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        2d0083d
+ Built:             Thu Jun 27 17:56:38 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.7
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       2d0083d
+  Built:            Thu Jun 27 17:26:28 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Steps to reproduce the issue
+Git clone https://github.com/Mandy91/docker-compose-env-volumes-example
+Run the ./run.sh script
+Compare the output of docker-compose config with the docker-compose file and see the comments on what I am expecting
+Observed result
+Environment variables passed through env_file do not always are used properly in the volumes section of a docker-compose service.
+Expected result
+Variables which are in the environment section of the docker-compose service config (through docker-compose config) should be used in the volumes section at all times.
+Additional information
+Fedora 29
+Output of the ./run.sh script in my test git repository
+Left column is 'docker-compose config' output
+Right column is original docker-compose.yml file
+
+Example 1
+=========
+
+services:                                                                   version: "3.7"
+  my_service:
+    build:                                                                  services:
+      context: /home/mandy/src/docker-compose-env-volumes-example/example1    my_service:
+    environment:                                                                build: .
+      A: /1                                                                     env_file:
+      B: /2                                                                       - .env # from this environment file things are being loaded
+    volumes:                                                                      - .env2 # B is loaded from here, but only for the environment section
+    - /1:/1:rw                                                                  volumes:
+    - /1:/2:rw                                                                    - $A:/1 # is correct
+version: '3.7'                                                                    - $B:/2 # should be /2:/2 but is /1:/2
+
+Example 2
+==========
+
+WARNING: The A variable is not set. Defaulting to a blank string.
+WARNING: The B variable is not set. Defaulting to a blank string.
+services:                                                                   # Variables are not set warnings are coming from the volumes section,
+  my_service:                                                               #  A and B are not replaced there. They do show up in `docker-compose config` environment section
+    build:                                                                  version: "3.7"
+      context: /home/mandy/src/docker-compose-env-volumes-example/example2
+    environment:                                                            services:
+      A: /1                                                                   my_service:
+      B: /2                                                                     build: .
+    volumes:                                                                    env_file:
+    - .:/1:rw                                                                     - .env1
+    - .:/2:rw                                                                     - .env2
+version: '3.7'                                                                  volumes:
+                                                                                  - $A:/1 # should be /1:/1, but actually is .:/1, A is in environment section
+                                                                                  - $B:/2 # should be /2:/2, but actually is .:/2, B is in environment section
+Example 3
+=========
+
+services:                                                                   version: "3.7"
+  my_service:
+    build:                                                                  services:
+      context: /home/mandy/src/docker-compose-env-volumes-example/example3    my_service:
+    environment:                                                                build: .
+      B: /2                                                                     env_file:
+    volumes:                                                                      - .env2 # Only B is in the environment section
+    - /1:/1:rw                                                                  volumes:
+    - /1:/2:rw                                                                    - $A:/1 # should be ./:/2 because A is not in the environment section of `docker-compose config` (on the left)
+version: '3.7'                                                                            #  and also .env is not explicitly loaded in he env_file section
+                                                                                  - $B:/2 # should be /2:/2, because B = /2 in the environment section
+Possibly related to #2636

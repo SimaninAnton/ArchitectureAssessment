@@ -1,0 +1,6 @@
+justusongera2 commented on 22 Jul 2019
+PS C:\Users\justus.ongera\Desktop\Docker Exercises\backend> docker-compose up
+Creating mongo ... error
+ERROR: for mongo Cannot create container for service mongo: b'invalid volume specification: '/host_mnt/c/Users/justus.ongera/Desktop/Docker Exercises/backend/data:-/data/db:rw': invalid mount config for type "bind": invalid mount path: '-/data/db' mount path must be absolute'
+ERROR: for mongo Cannot create container for service mongo: b'invalid volume specification: '/host_mnt/c/Users/justus.ongera/Desktop/Docker Exercises/backend/data:-/data/db:rw': invalid mount config for type "bind": invalid mount path: '-/data/db' mount path must be absolute'
+ERROR: Encountered errors while bringing up the project.

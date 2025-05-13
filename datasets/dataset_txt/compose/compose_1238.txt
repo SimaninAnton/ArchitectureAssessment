@@ -1,0 +1,10 @@
+thebetterjort commented on 31 Aug 2017 •
+edited
+When I run docker run the container acts "normally".
+I have two build context, ./server ./client
+The servers job is to grab an XML file and convert it to JSON and serve that JSON file out.
+The client then grabs JSON file and displays the data. (nodeJS + react create app)
+If I use docker-compose build && docker-compose up the node server.js command fires off, but the JSON file never gets downloaded.
+If I build the containers myself (server / client ) and run the containers, everything works as expected.
+Can anybody explain why the difference in behavior? And might point me on possible areas to investigate?
+This is a private repo, I can show snippets of code, if need be.

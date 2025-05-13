@@ -1,0 +1,3 @@
+withinboredom commented on 4 Jul 2016
+Docker Compose shouldn't auto-push to non-existent repos. Instead it should prompt.
+Many users use Docker and Docker Compose to provision development environments. This can cause someone running docker-compose bundle to accidentally push new repos that could contain source code. Most people never change their default in Docker Hub from "auto public" to "auto private" for new repos. This can cause people to inadvertently release source code from their development environment if they have permission to create new repos.

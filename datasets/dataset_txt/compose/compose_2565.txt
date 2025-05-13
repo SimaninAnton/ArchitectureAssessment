@@ -1,0 +1,4 @@
+rafaelsierra commented on 29 Mar 2016
+When creating multiple services in a docker-compose.yml, it would be useful to set the same logging system for all services without having to set a logging for each service.
+My suggestion would be to allow logging to be a top-level configuration that can be overwrite by per-service logging configuration
+5

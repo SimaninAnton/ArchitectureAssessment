@@ -1,0 +1,23 @@
+lxe commented on 29 Aug 2015
+I'm using docker and docker-compose from homebrew (with boot2docker/docker-machine):
+$ docker -v
+Docker version 1.8.1, build d12ea79
+$ docker-compose --version
+docker-compose version: 1.4.0
+The docker daemon version is:
+$ boot2docker ssh docker -v 
+Docker version 1.8.0, build 0d03096
+I'm specifying my log_driver in the docker-compose.yml file as per https://docs.docker.com/compose/yml/#log-driver, and setting it to none:
+docker-compose.yml:
+helloworld:
+  image: busybox
+  command: echo "Hello World!"
+  log_driver: none
+I'm getting the following error when I 'docker-compose up`:
+~/dockercompose-test ❯❯❯ docker-compose up
+Starting dockercomposetest_helloworld_1...
+Attaching to dockercomposetest_helloworld_1
+helloworld_1 | taching: Failed to get logging factory: logger: no log driver named 'none' is registered
+dockercomposetest_helloworld_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+The weird thing is this worked in lower versions of docker-compose and docker.

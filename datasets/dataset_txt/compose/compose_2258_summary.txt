@@ -1,0 +1,1 @@
+Docker-compose exec always return error "exit status 255" when executed by go os/exec package.

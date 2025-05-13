@@ -1,0 +1,2 @@
+analytically commented on 3 May 2014
+I'd be great to be able to declare 'global' env variables, that are set for all containers.

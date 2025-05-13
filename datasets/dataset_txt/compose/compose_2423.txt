@@ -1,0 +1,31 @@
+dansteen commented on 6 May 2016 •
+edited
+It would be really nice if we could have network aliases applied to dynamic networks that are created by default in docker if you don't specifically provide a named network. This would allow us to spin up multiple copies of the same set of containers in isolation from each other (if using the -p flag). As an example, given the following config:
+services:
+
+  moto.local:
+    image: moto:1.0.0
+    command: -p 80 -H 0.0.0.0
+    networks:
+      test:
+        aliases:
+          - email.us-east-1.amazonaws.com
+
+  api.app.local:
+    image: api:composer
+     networks:
+      - test
+If I want to spin up more than one of these environments using composer, and I want each environment to run in isolation from the other, I would have to do the following:
+services:
+
+  moto.local:
+    image: moto:1.0.0
+    command: -p 80 -H 0.0.0.0
+
+  api.app.local:
+    image: api:composer
+and then run
+docker-compose up -p <name>
+so that each environment has a network based off it's own name. However, I lose the ability to use my aliases that I defined in the first config set. As of now I use "links" instead, however, those are defined on the consuming containers, and need to be defined in many locations through the config files, rather than just a single time on the container that provides the service.
+Thanks!
+2

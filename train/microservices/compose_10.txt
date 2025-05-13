@@ -1,0 +1,66 @@
+gurutech-thomasr commented 9 days ago
+I have tried with the latest version of my channel (Stable or Edge)
+I have uploaded Diagnostics
+Diagnostics ID:
+Expected behavior
+docker-compose.exe behaves as it did in Docker Desktop for Windows 2.1.0.5.
+Actual behavior
+If terminal code page is UTF-8, docker-compose exec fails with LookupError: unknown encoding: cp65001
+If .env file contains any entries, docker-compose exec fails with TypeError: environment can only contain strings
+Information
+Windows Version: Windows 10 Pro, build 18363.592
+Docker Desktop Version: 2.2.0.0
+Are you running inside a virtualized Windows e.g. on a cloud server or on a mac VM: No
+The bundled docker-compose.exe appears to have been compiled using Python 2.7 and an older version of python-dotenv.
+The issue can be worked around by installing docker-compose via pip and Python 3
+Steps to reproduce the behavior
+Add docker-compose.yml:
+ version: "3"
+ services:
+   test:
+     image: ubuntu
+     command: tail -f /dev/null
+Add .env:
+ A=
+In powershell, run:
+ $OutputEncoding = `
+   [Console]::OutputEncoding = `
+   [Console]::InputEncoding = [Text.Encoding]::UTF8
+ chcp.com 65001
+ docker-compose down
+ docker-compose up -d test
+ docker-compose exec test echo 1
+Observe unexpected error:
+ Traceback (most recent call last):
+   File "logging\__init__.py", line 879, in emit
+   File "site-packages\colorama\ansitowin32.py", line 41, in write
+   File "site-packages\colorama\ansitowin32.py", line 162, in write
+   File "site-packages\colorama\ansitowin32.py", line 187, in write_and_convert
+   File "site-packages\colorama\ansitowin32.py", line 195, in write_plain_text
+ LookupError: unknown encoding: cp65001
+ Logged from file main.py, line 78
+Switch codepage to Windows 1252 and try again:
+ $OutputEncoding = `
+   [Console]::OutputEncoding = `
+   [Console]::InputEncoding = [Text.Encoding]::GetEncoding(1252)
+ chcp 1252
+ docker-compose exec test echo 1
+Observe error:
+ Traceback (most recent call last):
+   File "docker-compose", line 6, in <module>
+   File "compose\cli\main.py", line 72, in main
+   File "compose\cli\main.py", line 128, in perform_command
+   File "compose\cli\main.py", line 491, in exec_command
+   File "compose\cli\main.py", line 1469, in call_docker
+   File "subprocess.py", line 172, in call
+   File "subprocess.py", line 394, in __init__
+   File "subprocess.py", line 644, in _execute_child
+ TypeError: environment can only contain strings
+ [8940] Failed to execute script docker-compose
+Remove .env and try again:
+ rm .env
+ docker-compose down
+ docker-compose up -d test
+ docker-compose exec test echo 1
+Observe expected output: 1
+25

@@ -1,0 +1,10 @@
+Contributor
+mnowster commented on 19 Oct 2015
+There are some additional classifiers we could include that'd be helpful from https://pypi.python.org/pypi?%3Aaction=list_classifiers
+Also look into whether we could add the generic "Python 2" and "Python 3" classifiers or if it's better to specify major.minor versions.
+Development Status :: 5 - Production/Stable
+Environment :: Console
+Intended Audience :: Developers
+License :: OSI Approved :: Apache Software License
+Programming Language :: Python :: 2
+Programming Language :: Python :: 3

@@ -1,0 +1,32 @@
+MichaelHindley commented on 5 Apr 2016
+As per https://docs.docker.com/v1.9/compose/env/
+Using this file
+version: '2'
+
+services:
+    legacyBackend:
+        image: someimage:latest
+        volumes:
+            - /var/www/backend
+        ports:
+            - "8100:80"
+            - "8101:81"
+            - "3315:3306"
+        tty: true
+
+    app:
+        image: anotherimage:latest
+        links:
+            - legacyBackend
+        volumes:
+            - /var/www/app
+        ports:
+            - "8104:4200"
+        tty: true
+I would expect $APP_PORT to be a available env variable inside the legacyBackend service, and I would expect $LEGACYBACKEND_PORT to be available inside the app service.
+Which as you can see in the image above, is not the case.
+You can however ping the app service:
+But you cant echo it to get a IP:
+Listing the env variables:
+Using inspect, the "Links" value is null, alltough they are clearly defined in docker-compose.yml and they work with the ping command:
+I'm not sure how I can get a linked containers network address when the documented env variables are not available. A common use case is for REST based mobile apps, where you need to sed config files with correct ip's in a local environment setup.

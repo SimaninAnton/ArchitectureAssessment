@@ -1,0 +1,15 @@
+WillemMali commented on 16 Feb 2017
+It would be really nice to be able to call docker-compose ps with the -a flag to show running and exited containers alike, while omitting the flag would result in a list of only the running services. This would then match the API of docker ps, and make it easier to script docker-compose.
+Or perhaps introduce both the -a flag and a --only-running flag to maintain backwards compatibility, and then start showing warnings for a while, after which the default is changed to only showing running services?
+CLI example:
+$ docker-compose create mysql 1>/dev/null 2>&1
+$ docker-compose start mysql 1>/dev/null 2>&1
+$ docker-compose ps mysql
+f19b1b1c12e89648f3f6b8b1f89b353b079dad767a731f151cb72e1e15272d4f
+$ docker-compose stop mysql 1>/dev/null 2>&1
+$ docker-compose ps mysql
+
+$ docker-compoes ps -a mysql
+f19b1b1c12e89648f3f6b8b1f89b353b079dad767a731f151cb72e1e15272d4f
+I'm sorry if this already is in docker-compose, I think I'm using the latest version but as I'm on Debian Stable I might've accidentally installed an ancient build.
+My local version: docker-compose version 1.10.1, build b252738

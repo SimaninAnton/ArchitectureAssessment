@@ -1,0 +1,34 @@
+pavlo commented on 26 Mar 2015
+I would like to have a RUnit service to supervise a set of containers launched by docker-compose tool, here's my the runit script:
+In /etc/sv/app/run
+#!/bin/bash
+exec 2>&1
+
+APP_HOME=/home/myapp
+
+source $APP_HOME/env.sh
+exec docker-compose -f $APP_HOME/docker-compose.yml up
+In docker-compose.yml
+rabbitmq:
+  build: ./rabbitmq/_image
+  environment:
+    - RABBITMQ_PASS
+    - RABBITMQ_STOMP_CLIENT_NAME
+    - RABBITMQ_STOMP_CLIENT_PASS
+  ports:
+    - "5672:5672"
+ mysql:
+   build: ./mysql/_image
+   volumes_from:
+     - mysql_data
+  environment:
+    - MYSQL_PASS
+    - MYSQL_USER
+    - MYSQL_DB
+    - MYSQL_DB_TEST
+  ports:
+    - "3306:3306"
+Here's what I have then:
+sv start app - launches the docker-compose thing just fine
+sv stop app - stops docker-compose process itself but for unknown reason it leaves the containers running
+Is there any chance to have the stop command to stop containers as well? I thought that is what docker-compose should do when it gets stopped by RUnit.

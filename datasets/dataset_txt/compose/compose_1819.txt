@@ -1,0 +1,39 @@
+kvramana commented on 5 Jan 2017
+I have a docker-compose.yml script with two services in it. The first service is a NODEJS service and second service is a HAPROXY service that fronts NODEJS service.
+My versions are:
+Docker version 1.12.5, build 7392c3b
+docker-compose version 1.9.0, build 2585387
+The inter-container linking from HAPROXY to NODEJS is not working and here is the docker-compose.yml script:
+version: '2'
+
+services:
+  # The NODEJS service for application.
+  svc_nodejs:
+    image: node:6.9.2-alpine
+    volumes:
+      - $PWD:/code
+#    ports:
+#      - 7777:7777 # Don't give a port mapping container, so Docker can be scaled out with its dynamic port assignment.
+    command: npm install
+    entrypoint:
+      - node
+      - /code/server.js
+
+  # The HAPROXY service to provide high-availability, load balancing and proxying to NODEJS service.
+  svc_haproxy:
+    image: dockercloud/haproxy
+    depends_on:
+      - svc_nodejs
+    links:
+      - svc_nodejs
+    environment:
+      - DOCKER_TLS_VERIFY
+      - DOCKER_HOST
+      - DOCKER_CERT_PATH
+#    volumes:
+#      - $DOCKER_CERT_PATH:$DOCKER_CERT_PATH
+    ports:
+      - 80:80
+Please let me know if i am missing any steps.
+Thanks,
+Venky.

@@ -1,0 +1,1 @@
+`docker-compose logs` gets confused when scaling down and then up again

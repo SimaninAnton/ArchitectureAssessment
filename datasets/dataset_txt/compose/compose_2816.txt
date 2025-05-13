@@ -1,0 +1,4 @@
+Contributor
+thieman commented on 8 Feb 2016
+There are multiple breaking changes in the 1.6.0 release, specifically the three bullets under New Features which begin with the word Removed. Discovering these breaking changes currently requires a careful read over the entire changelog, since Compose neither uses semantic versioning nor groups breaking changes under a Breaking Changes headline to make them obvious. Additionally, the placement of a breaking change under New Features is unintuitive.
+It would be much more friendly to users if breaking changes were grouped together in a Breaking Changes headline in the future so that anyone parsing the changelog can easily identify them.

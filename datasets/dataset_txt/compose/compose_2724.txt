@@ -1,0 +1,5 @@
+wernight commented on 22 Feb 2016
+https://github.com/docker/compose/blob/1.6.0/docs/networking.md states that links sections are deprecated (note that it doesn't say specifically link environment variables):
+Docker links are a one-way, single-host communication system. They should now be considered deprecated, and as part of upgrading your app to the v2 format, you must remove any links sections from your docker-compose.yml and use service names (e.g. web, db) as the hostnames to connect to.
+The linked document on top, https://github.com/docker/compose/blob/1.6.0/docs/compose-file.md#versioning, shows and states that links sections are supported and the way to convert v1 to v2 format.
+Also https://github.com/docker/compose/blob/1.6.0/docs/compose-file.md#upgrading doesn't say links are deprecated.

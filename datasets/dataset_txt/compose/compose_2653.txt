@@ -1,0 +1,45 @@
+chen-xin commented on 9 Mar 2016
+I tried to mount Windows host directory as volume in compose, get no error but nothing contained in the host directory was accessable inside the container, it seemed compose just create empty directorys in container.
+I'm using docker-compose version 1.6.0, build cdb920a in Windows.
+And here is my docker-compose.yml:
+version: '2'
+services:
+  www:
+    image: nginx
+    volumes:
+     - ./php.conf:/etc/nginx/conf.d/php.conf
+    ports:
+     - "8080:8080"
+     - "80:80"
+    environment:
+     - PHP_SCRIPT_ROOT=/var/opt/phpmyadmin
+    links:
+     - php-fpm
+    # command: /bin/bash
+  php-fpm:
+    image: my/php5-fpm
+    volumes:
+     - ./data/phpmyadmin:/var/opt/phpmyadmin
+run docker-compose up -d get no error, and then
+$ docker-compose ps
+     Name               Command          State     Ports
+----------------------------------------------------------
+nginx_php-fpm_1   php5-fpm               Up       9000/tcp
+nginx_www_1       nginx -g daemon off;   Exit 1
+here nginx says /etc/nginx/conf.d/php.conf is a direcotry and exit with error.
+then I tried:
+$ docker exec nginx_php-fpm_1 ls -al /var/opt/phpmyadmin
+total 4
+drwxr-xr-x 2 root root   40 Mar  9 17:08 .
+drwxr-xr-x 3 root root 4096 Mar  9 17:51 ..
+
+$ ls -al ./data/phpmyadmin
+total 707
+drwxr-xr-x 1 xin xin     0 Mar  9 16:28 ./
+drwxr-xr-x 1 xin xin     0 Mar  9 16:57 ../
+-rw-r--r-- 1 xin xin   102 Feb 22 06:00 .coveralls.yml
+-rw-r--r-- 1 xin xin   584 Feb 22 06:00 .scrutinizer.yml
+-rw-r--r-- 1 xin xin  1655 Feb 22 06:00 CONTRIBUTING.md
+-rw-r--r-- 1 xin xin  5273 Feb 22 06:00 ChangeLog
+...
+Thank you for your attention.

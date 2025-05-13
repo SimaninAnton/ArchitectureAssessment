@@ -1,0 +1,81 @@
+jakubsuchybio commented on 22 Mar 2019
+Description of the issue
+I need to get logs and output data from one of the service inside docker-compose.
+The thing is, when I try to run blank windowsservercore image via:
+docker run -it -v C:\docker-output:C:\docker-output microsoft/windowsservercore
+It works like a charm.
+C:\>dir
+ Volume in drive C has no label.
+ Volume Serial Number is 9EC8-666B
+
+ Directory of C:\
+
+11/22/2016  11:45 PM             1,894 License.txt
+01/02/2019  11:45 PM    <DIR>          PerfLogs
+03/22/2019  11:36 AM    <DIR>          Program Files
+07/16/2016  02:18 PM    <DIR>          Program Files (x86)
+03/22/2019  11:35 AM    <SYMLINKD>     test [\\?\ContainerMappedDirectories\E2983428-4D24-440E-BEB2-A5021824358E]
+01/03/2019  12:02 AM    <DIR>          Users
+01/03/2019  12:00 AM    <DIR>          Windows
+               1 File(s)          1,894 bytes
+               6 Dir(s)  21,193,465,856 bytes free
+But when I try to run this docker-compose.yml:
+version: "3.2"
+
+services:
+  test:
+    image: microsoft/windowsservercore
+    volumes:
+      - C:\docker-output:C:\docker-output
+It doesn't work. When I try to docker-compose up on it, it gives me:
+Creating test_test_1 ... error
+
+ERROR: for test_test_1  Cannot create container for service test: invalid volume specification: '/c/docker-output:C:\docker-output:rw'
+
+ERROR: for test  Cannot create container for service test: invalid volume specification: '/c/docker-output:C:\docker-output:rw'
+ERROR: Encountered errors while bringing up the project.
+Context information (for bug reports)
+I am running docker engine via "Docker on Windows"
+I am using Windows Containers
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:31 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.24)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:28:48 2019
+  OS/Arch:          windows/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  test:
+    image: microsoft/windowsservercore
+    volumes:
+    - /c/docker-output:C:\docker-output:rw
+version: '3.2'
+Observed result
+Error (see above)
+Expected result
+I would expect the docker-compose.yml behave the same as the example via docker run only. (see above)
+Stacktrace / full error message
+(see above)
+Additional information
+I am running Windows 10 Pro
+Version 1803
+OS Build 17134.648

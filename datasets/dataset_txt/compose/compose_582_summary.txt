@@ -1,0 +1,1 @@
+Option to log to stdout instead of stderr

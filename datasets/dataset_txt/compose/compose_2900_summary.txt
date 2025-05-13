@@ -1,0 +1,1 @@
+strict validation of `networks` section in the config schema

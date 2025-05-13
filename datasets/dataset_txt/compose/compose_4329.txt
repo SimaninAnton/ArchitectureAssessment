@@ -1,0 +1,11 @@
+analytically commented on 11 May 2014
+Ubuntu 14.04 defaults to Python 3.4 be default, so let's make fig compatible.
+Use https://github.com/bufordtaylor/python-texttable instead of texttable
+Upgrade websocket-client to v0.14 (will be released on May 15)
+Upgrade PyYAML to 3.11
+In fig's source, change
+except StreamOutputError, e:
+to
+except StreamOutputError as e:
+Add '3.4' to .travis.yml
+I'll submit a pull request when websocket-client 0.14 is released.

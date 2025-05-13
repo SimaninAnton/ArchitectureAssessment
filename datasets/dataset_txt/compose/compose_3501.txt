@@ -1,0 +1,4 @@
+Contributor
+bfirsh commented on 6 Jul 2015
+Stopping a project can often take a long time, sometimes even longer than doing "up".
+When hitting ctrl-c in "up", we should stop all of the containers in parallel to speed it up. This can also be done when doing "stop", "kill" and "rm".

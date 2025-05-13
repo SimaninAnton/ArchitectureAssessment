@@ -1,0 +1,9 @@
+digits21 commented on 11 Jul 2017 •
+edited
+Hi Folks ,
+I'm new with laradock and after installing i'm having an error after running this command
+sudo docker-compose up -d mysql
+and the error is
+Service 'mysql' failed to build: The command '/bin/sh -c ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone' returned a non-zero code: 1
+What could the problem with the Time zone setting ?
+I have checked everywhere and changed the TZ to my Time zone but still having the same issue

@@ -1,0 +1,9 @@
+wythend commented on 21 Feb 2017
+In ubuntu 16.04
+Docker version 1.12.6, build 78d1802
+Docker-compose version 1.11.1
+I use the compose.yml file from https://docs.docker.com/compose/wordpress/
+$ docker exec -ti wordpress_wordpress_1 /bin/bash
+$ ping db
+It seems the wordpress can't not ping db.
+But when I change the docker-compose version to 1.8, it works.

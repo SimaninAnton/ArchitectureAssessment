@@ -1,0 +1,3 @@
+ajc161 commented on 19 Nov 2015
+Running one-off commands with docker-compose does not delete volumes used by the container. This is different than docker run --rm which does remove volumes after the container is deleted.
+7

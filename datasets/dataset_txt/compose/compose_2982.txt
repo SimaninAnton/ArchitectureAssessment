@@ -1,0 +1,15 @@
+Contributor
+schmunk42 commented on 17 Dec 2015
+While docker-compose says it would be Up
+root# docker-compose ps
+            Name                          Command               State                  Ports                 
+------------------------------------------------------------------------------------------------------------
+project_appnginx_1    sh -c rm /app/web/robots.t ...   Up      443/tcp, 1.2.3.4:33077->80/tcp 
+project_appphp_1      sh /app/src/run.sh               Up      9000/tcp                             
+project_appworker_1   yii resque/work *                Up      9000/tcp                             
+project_redis_1       /entrypoint.sh redis-server      Up      6379/tcp      
+my redis container is Exited as a matter of fact
+root# docker ps -a | grep project_redis_1
+451d6da89102        redis:3        "/entrypoint.sh redis"    5 days ago          Exited (0) 3 hours ago         6379/tcp                                               PAUL-hz1/project_redis_1
+This happened after a node failure and restart.
+Versions: docker 1.9.1, docker-compose 1.5.1

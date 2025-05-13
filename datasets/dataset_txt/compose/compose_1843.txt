@@ -1,0 +1,55 @@
+marcelorodrigo commented on 17 Dec 2016 •
+edited
+Windows 10 Home
+Docker Compose
+In previous versions of docker-compose I could access mapped host directories as volumes, but after I've upgraded docker-compose to 1.9.0 this mapping does not work anymore.
+I'm using Windows 10 and Docker Toolbox, and ./database is currenty a directory inside the current user folder tree.
+docker-compose.yml
+version: '2'
+services:
+  database:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+
+  web:
+    image: marcelorodrigo/apache-php-kohana
+    ports:
+      - "80:80"
+    links:
+      - database
+    volumes:
+      - ./:/var/www
+    environment:
+      - APP_ENV=development
+      - DOCUMENTROOT=.
+    depends_on:
+      - "database"
+docker-compose up
+Creating johndoe_database_1
+
+ERROR: for database  Cannot create container for service database: Invalid bind mount spec "C:\\Users\\Marcelo\\projects\\johndoe\\database:/docker-entrypoint-initdb.d:rw": Invalid volume specification: 'C:\Users\Marcelo\projects\johndoe\database:/docker-entrypoint-initdb.d:rw'
+�[31mERROR�[0m: Encountered errors while bringing up the project.
+docker version
+Client:
+ Version:      1.12.4
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   1564f02
+ Built:        Tue Dec 13 02:47:26 2016
+ OS/Arch:      windows/amd64
+
+Server:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      linux/amd64
+docker-compose version
+docker-compose version 1.9.0, build 2585387
+docker-py version: 1.10.6
+CPython version: 2.7.12
+OpenSSL version: OpenSSL 1.0.2h  3 May 2016 

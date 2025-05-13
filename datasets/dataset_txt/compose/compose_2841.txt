@@ -1,0 +1,2 @@
+drmacro commented on 4 Feb 2016
+Using docker-compose version 1.5.2, build 7240ff3 on OS X, if I use --project-name with "up", subsequent commands (stop, kill, pause) do not affect the containers. If I remove the --project-name the containers are affected as expected.

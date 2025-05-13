@@ -1,0 +1,13 @@
+frol commented on 30 Apr 2015
+Please, look at this config:
+mynode:
+    image: myimage
+    environment:
+        - "affinity:container!=myproject_mynode_*"
+    ports:
+        - "50010:50010"
+Once I try to scale it with docker-compose scale mynode=3 it rejects to scale with the following error:
+Service "mynode" cannot be scaled because it specifies a port on the host. If multiple containers for this service were created, the port would clash.
+Remove the ":" from the port definition in docker-compose.yml so Docker can choose a random port for each container.
+However, the ports won't clash because of the affinity.
+Now, I'm forced to use net: host to avoid this.

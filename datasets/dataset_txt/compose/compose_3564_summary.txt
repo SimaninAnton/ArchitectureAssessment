@@ -1,0 +1,1 @@
+`build` fails on component non-zero exit code when `docker build` does not

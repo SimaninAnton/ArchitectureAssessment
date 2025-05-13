@@ -1,0 +1,6 @@
+veqryn commented on 29 Jul 2017
+Can you please publish the binaries with Python 3 embedded somewhere?
+I realize they are still in a bit of beta, so they could be marked as beta or put behind a link, or under some nightly/unstable builds area, or something.
+I'm running into an issue with encodings that python 3 solves: #2775
+Side benefit would be more people looking at and reporting any issues with the python 3 versions.
+7

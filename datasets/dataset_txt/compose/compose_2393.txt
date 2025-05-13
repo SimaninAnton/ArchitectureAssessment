@@ -1,0 +1,73 @@
+jicki commented on 17 May 2016
+docker-compose version 1.7.1, build 6c29830
+[root@swarm-master ]# docker-compose ps
+Name Command State Ports
+nginx-1 /usr/sbin/sshd -D Up 22/tcp, 172.16.1.28:443->443/tcp, 5222/tcp, 172.16.1.28:80->80/tcp
+nginx-2 /usr/sbin/sshd -D Up 22/tcp, 172.16.1.29:443->443/tcp, 5222/tcp, 172.16.1.29:80->80/tcp
+[root@swarm-master jicki]# docker-compose up -d
+Recreating nginx-1
+Recreating nginx-2
+Creating zookeeper-1
+ERROR: for nginx-1 Unable to find a node that satisfies the following conditions
+[port 443 (Bridge mode) port 80 (Bridge mode)]
+[available container slots]
+[node==swarm-node-28]
+ERROR: for nginx-2 Unable to find a node that satisfies the following conditions
+[port 443 (Bridge mode) port 80 (Bridge mode)]
+[available container slots]
+[root@swarm-master ]# docker-compose ps
+Name Command State Ports
+459eefd54eea_nginx-2 /usr/sbin/sshd -D Exit 0
+d61023cb35c5_nginx-1 /usr/sbin/sshd -D Exit 0
+zookeeper-1 /opt/local/zookeeper/bin/z ... Up
+docker-compose.yaml
+version: '2'
+networks:
+network-cn:
+external:
+name: ovrcn
+services:
+nginx-1:
+image: 172.16.1.26:5000/mx-nginx
+networks:
+network-cn:
+aliases:
+- nginx
+hostname: nginx
+container_name: nginx-1
+ports:
+- "80:80"
+- "443:443"
+environment:
+- constraint:node==swarm-node-28
+volumes:
+- /opt/data/nginx/logs:/opt/local/nginx/logs
+    nginx-2:
+            image: 172.16.1.26:5000/mx-nginx
+            networks:
+                    network-cn:
+                           aliases:
+                                    - nginx
+            hostname: nginx
+            container_name: nginx-2
+            ports:
+            - "80:80"
+            - "443:443"
+            environment:
+            - constraint:node==swarm-node-29
+            volumes:
+            - /opt/data/nginx/logs:/opt/local/nginx/logs
+
+    zookeeper-1:
+            image: 172.16.1.26:5000/cn/zookeeper1
+            networks:
+                    network-cn:
+                           aliases:
+                                    - zookeeper
+            hostname: zookeeper-1
+            container_name: zookeeper-1
+            environment:
+            - constraint:node==swarm-node-32
+            volumes:
+            - /opt/upload/zookeeper/data:/opt/local/zookeeper/data
+            - /opt/upload/zookeeper/logs:/opt/local/zookeeper/logs 

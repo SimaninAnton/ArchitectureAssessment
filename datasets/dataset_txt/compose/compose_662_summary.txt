@@ -1,0 +1,1 @@
+"docker-compose logs -f" stops outputting logs of service after some time

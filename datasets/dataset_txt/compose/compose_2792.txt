@@ -1,0 +1,15 @@
+jianbin-wei commented on 12 Feb 2016
+I first run up command and later use scale to increase the number of services. The output is inconsistent. The new containers are not shown in the output either.
+docker-compose -f kafka-cluster.yml scale zookeeper=2 kafka=3
+Starting docker_zookeeper_1 ... done
+Creating and starting 2 ... done
+Starting docker_kafka_1 ... done
+Creating and starting 2 ... done
+Creating and starting 3 ... done
+The output would be consistent and more descriptive as
+docker-compose -f kafka-cluster.yml scale zookeeper=2 kafka=3
+Starting docker_zookeeper_1 ... done
+Creating and starting docker_zookeeper_2 ... done
+Starting docker_kafka_1 ... done
+Creating and starting docker_kafka_2 ... done
+Creating and starting docker_kafka_3 ... done

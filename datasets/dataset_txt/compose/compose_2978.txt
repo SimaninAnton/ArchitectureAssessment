@@ -1,0 +1,5 @@
+bonifaido commented on 18 Dec 2015
+Only if I run docker-compose stop and docker-compose start afterwards. docker-compose restart doesn't work either.
+Versions:
+docker-version 1.9.1
+docker-compose 1.5.2

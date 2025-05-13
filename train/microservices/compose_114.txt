@@ -1,0 +1,13 @@
+jpic commented on 5 Aug 2019 •
+edited
+Given:
+services:
+  foo:
+    environment:
+    - BAR=test
+    labels:
+    - foo=${BAR}
+Will results in:
+WARNING: The BAR variable is not set. Defaulting to a blank string.
+Instead of expected: label foo=test, no warning
+1

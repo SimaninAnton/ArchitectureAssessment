@@ -1,0 +1,27 @@
+hallas commented on 4 May 2014
+When running fig build with a Dockerfile that does an npm install, I get this error, I think it has to do with the color encoding of the output or something. I know I can disable it in npm but I'd just let you guys know about it.
+ api (master) ✗ fig build
+db uses an image, skipping
+Building api...
+ ---> 3569a0cc91be
+Step 1 : ADD . /src
+ ---> a5c4eaf5cd5e
+Step 2 : ENV NODE_ENV production
+ ---> Running in 4a8cb758c176
+ ---> 6dc07f2288e7
+Step 3 : RUN cd /src; npm --loglevel silent install
+ ---> Running in 18a1d07d1a82
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 39, in main
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 21, in sys_dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 30, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 24, in dispatch
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.command", line 47, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.docopt_command", line 27, in perform_command
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.cli.main", line 107, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.project", line 123, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 312, in build
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 373, in stream_output
+  File "/Users/ben/fig/build/fig/out00-PYZ.pyz/fig.service", line 418, in print_output_event
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 45-47: ordinal not in range(128)

@@ -1,0 +1,13 @@
+brunokunace commented on 23 Mar 2018
+Hi all,
+i try to install a docker without a Hyper-v.
+I install a virtualbox and create a docker-machine with command
+docker-machine create --driver virtualbox default
+works fine, now i shared a folder
+D:/docker (my windows folder) named "docker"
+on my docker-machine ssh, i see the folder on "/docker" directory
+how i create now my docker-compose.yml to create a volume on this?
+on Hyper-v i get only
+./:/var/app/www
+now i have a empty folder
+(its a ambientum/php image)

@@ -1,0 +1,5 @@
+beverts312 commented on 15 Jul 2016
+Bundle should support the logging key.
+With bundles currently being the only way to leverage compose files (indirectly) with the new swarm mode, it is important that we can leverage settings configured under the logging key
+docker-compose bundle
+WARNING: Unsupported key 'logging' in services.app - ignoring

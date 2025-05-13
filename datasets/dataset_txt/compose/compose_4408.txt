@@ -1,0 +1,20 @@
+stefanw commented on 11 Feb 2014
+On OS X with boot2docker 0.5.4:
+$ docker version
+Client version: 0.8.0
+Go version (client): go1.2
+Git commit (client): cc3a8c8
+Server version: 0.8.0
+Git commit (server): cc3a8c8
+Go version (server): go1.2
+$ ~/bin/boot2docker up
+[2014-02-10 21:58:12] boot2docker-vm is already running.
+$ echo $DOCKER_HOST
+tcp://
+$ fig --version
+fig 0.2.1
+$ fig up
+Couldn't connect to Docker daemon at http:/ - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+docker build . worked fine for me, but fig seems unable to handle the tcp:// URL.

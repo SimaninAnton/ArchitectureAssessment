@@ -1,0 +1,46 @@
+chadzink commented on 10 Nov 2015
+I may have a related issue. In Windows 10 and using Docker I can not seem to get the docker-compose to work. A coworkers using Apple OS has the docker-compose working, but it fails on my system.
+I get:
+$ docker-compose up web
+denovo_herokuPostgresql_1 is up-to-date
+Starting denovo_web_1
+Attaching to denovo_web_1
+: No such file or directory
+denovo_web_1 exited with code 127
+Gracefully stopping... (press Ctrl+C again to force)
+from:
+-- docker-compose.yml
+web:
+  extends:
+    file: common.yml
+    service: web
+  volumes:
+    - '.:/app/user'
+  links:
+    - herokuPostgresql
+  ports:
+    - 'localhost:8080:8080'
+  environment:
+    RACK_ENV: development
+    PORT: 3000
+herokuPostgresql:
+  extends:
+    file: common.yml
+    service: herokuPostgresql
+
+-- common.yml
+web:
+  build: .
+  command: 'bash -c ''bundle exec puma -C config/puma.rb'''
+  working_dir: /app/user
+  environment:
+    PORT: 8080
+    DATABASE_URL: 'valid url here'
+herokuPostgresql:
+  image: postgres
+my inspect is: https://gist.github.com/chadzink/2ac7459529572f3cc710
+not working in windows 10 = no_working.inspect
+working in OSX = working.inspect
+A diff seemed to show a couple variances, but of interest is line 99 on not working:
+"VolumeDriver": ""
+Any help would be great.

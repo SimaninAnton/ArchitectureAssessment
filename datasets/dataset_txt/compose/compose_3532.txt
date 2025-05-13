@@ -1,0 +1,7 @@
+abridgett commented on 26 Jun 2015
+(running v1.3.1). In particular this could be useful for pulling in per-user settings:
+root@ip-10-0-0-141:/home/ubuntu/central# docker-compose ps
+Couldn't find env file: /home/ubuntu/central/~/.docker/secrets.env
+root@ip-10-0-0-141:/home/ubuntu/central# docker-compose ps
+Couldn't find env file: /home/ubuntu/central/$HOME/docker/secrets.env
+(couldn't see any pre-existing issue for this).

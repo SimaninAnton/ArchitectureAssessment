@@ -1,0 +1,4 @@
+robbinalexander commented on 16 Nov 2016 •
+edited
+Is there a plan to redirect some of the CLI logs to a logfile? Currently, docker-compose start, stop, up, run, build etc can potentially do multiple things - create volume, build image, start dependent service. All these information is only available in the CLI console? It would be nice to redirect this to a log.
+We are currently using docker-compose installed as a container.

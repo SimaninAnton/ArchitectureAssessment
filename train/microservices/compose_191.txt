@@ -1,0 +1,91 @@
+gautaz commented on 3 May 2019 •
+edited
+Description of the issue
+According to this documentation of a previous Docker version, links should add iptables rules based on the exposed ports of the image of the linked container when ICC is disabled.
+Even if this documentation refers to Docker 17.09, the --link option is still available on docker run and this option seems still to be looking at exposed ports.
+I know that the links section is considered deprecated but I would still expect that using it for now would comply with the --link behavior. My current experiments prove me wrong.
+Context information (for bug reports)
+In order to test a STUN/TURN server in an isolated Docker environment, we need all clients to see the server but without seeing each other.
+Moreover an isolated network for each client would not work as STUN clients need to find a common ICE candidate (the server).
+The current strategy is to declare all containers (clients and server) in a bridge network with the option "com.docker.network.bridge.enable_icc=false" and to link clients to the server.
+Output of docker-compose version
+docker-compose version 1.23.1, build b02f1306
+docker-py version: 3.5.0
+CPython version: 3.6.7
+OpenSSL version: OpenSSL 1.1.0f  25 May 2017
+Output of docker version
+Client:
+ Version:           18.09.5
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        e8ff056
+ Built:             Thu Apr 11 04:44:24 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.8
+  Git commit:       e8ff056
+  Built:            Thu Apr 11 04:10:53 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+networks:
+  noicc:
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "false"
+secrets:
+  turnserver_certificate.pem:
+    file: /home/gautaz/dev/ama/coturn-docker/dev/crt.pem
+  turnserver_private_key.pem:
+    file: /home/gautaz/dev/ama/coturn-docker/dev/key.pem
+  turnserver_users.txt:
+    file: /home/gautaz/dev/ama/coturn-docker/dev/users.txt
+services:
+  left:
+    build:
+      context: /home/gautaz/dev/ama/coturn-docker/test/peer
+    links:
+    - turn
+    - signal
+    networks:
+      noicc: null
+  right:
+    build:
+      context: /home/gautaz/dev/ama/coturn-docker/test/peer
+    links:
+    - turn
+    - signal
+    networks:
+      noicc: null
+  signal:
+    build:
+      context: /home/gautaz/dev/ama/coturn-docker/test/signaling-server
+    networks:
+      noicc: null
+  turn:
+    build:
+      context: /home/gautaz/dev/ama/coturn-docker
+    environment:
+    image: XXXXXXXX:PPPP/amadev/coturn:dev
+    networks:
+      noicc: null
+    secrets:
+    - source: turnserver_users.txt
+    - source: turnserver_certificate.pem
+    - source: turnserver_private_key.pem
+version: '3.1'
+Steps to reproduce the issue
+Put all containers in a bridge network with ICC disabled
+link containers to one particular container which image is exposing a port
+Observed result
+No iptables rules allow containers to reach the exposed port of the linked container.
+Expected result
+ipatbles rules should allow containers to reach the exposed port of the linked container.
+Stacktrace / full error message
+N/A
+Additional information
+OS: Ubuntu 16.04

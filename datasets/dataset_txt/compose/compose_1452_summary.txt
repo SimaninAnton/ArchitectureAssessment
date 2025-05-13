@@ -1,0 +1,1 @@
+Feature Request: Access to composer environment variables

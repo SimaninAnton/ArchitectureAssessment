@@ -1,0 +1,39 @@
+AngryGami commented on 5 Nov 2019 •
+edited
+Here is my docker-compose.yaml file
+version: '3.7'
+volumes:
+  server-vol:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind,X-mount.mkdir"
+      device: "/mnt/my-volumes/server-vol"
+services:
+  server:
+    image: "alpine:3.8"
+    volumes:
+      - type: volume
+        source: server-vol
+        target: /server-data
+I expect it to create /mnt/my-volumes/server-vol upon first run of docker-compose up because I've used X-mount.mkdir option. Path /mnt/my-volumes does exists on host (i.e. it only need to create "server-vol")
+Instead I got this:
+Creating volume "test_server-vol" with local driver
+Creating test_server_1 ... error                                                                                                                                                                                                
+ERROR: for test_server_1  Cannot start service server: error while mounting volume '/mnt/docker-data/volumes/test_server-vol/_data': failed to mount local volume: mount /mnt/my-volumes/server-vol:/mnt/docker-data/volumes/test_server-vol/_data, flags: 0x1000, data: X-mount.mkdir: no such file or directory
+
+ERROR: for server  Cannot start service server: error while mounting volume '/mnt/docker-data/volumes/test_server-vol/_data': failed to mount local volume: mount /mnt/my-volumes/server-vol:/mnt/docker-data/volumes/test_server-vol/_data, flags: 0x1000, data: X-mount.mkdir: no such file or directory
+ERROR: Encountered errors while bringing up the project.
+I know this works fine in command line:
+someuser@test:~$ ls
+someuser@test:~$ mkdir aaa
+someuser@test:~$ touch aaa/test.aaa
+someuser@test:~$ sudo mount -o bind,X-mount.mkdir aaa bbb
+someuser@test:~$ ls
+aaa  bbb
+someuser@test:~$ ls bbb/
+test.aaa
+So why docker-compose is trying to be too smart here?
+It looks to me that it pre-validate existence of the directory and fails before even trying to call mount.
+2
+1

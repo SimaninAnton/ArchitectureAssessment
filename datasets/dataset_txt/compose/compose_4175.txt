@@ -1,0 +1,15 @@
+jney commented on 6 Oct 2014
+hello, i'm using fig in project with the following configuration :
+web:
+  build: images/node
+  links:
+    - db
+  ports:
+   - 3000:3000
+  volumes:
+   - www:/www
+i've got Dockerfile files in images/image_name/ folders.
+But running fig up web i've got the following error : Service 'web' failed to build: www: no such file or directory.
+But when i move the Dockerfile to project root, adjusting the build parameter, it just works.
+It makes me think that the context is where the Dockerfile is not where fig command is executed.
+Is it the standard behaviour or not ? Issue #488 makes think it is not.

@@ -1,0 +1,22 @@
+itsNikolay commented on 7 Feb 2015
+[~/projects/test/docker/myapp]$ docker-compose build                                                                              
+bundles uses an image, skipping
+db uses an image, skipping
+Building web...
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 31, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 27, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 59, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 119, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 166, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 479, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.client", line 436, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/docker.utils.utils", line 80, in tar
+  File "/code/build/docker-compose/out00-PYZ.pyz/tarfile", line 1990, in add
+IOError: [Errno 13] Permission denied: './vendor/bundle/ruby/2.2.0/gems/nokogiri-1.6.6.2/ports/archives/libxml2-2.9.2.tar.gz'
+Ubuntu 14.04 x64
+Dockerfile & docker-compose.yml
+P.S. but fig works well

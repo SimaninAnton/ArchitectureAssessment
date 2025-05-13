@@ -1,0 +1,23 @@
+ajrouvoet commented on 4 Nov 2014
+Using this simple configuration:
+data:
+  image: base/arch
+  volumes:
+    - /var/lib/mysql
+  command: true
+
+mysql:
+  build: .
+  volumes_from:
+    - data
+I would expect that the mysql data is persisted on the data-only container 'data'. But writing anything to /var/lib/mysql is NOT persisted across runs. Doing this with plain docker does work.
+Am I overlooking something, or is this either a bug or a feature of fig?
+The fig commands I'm trying to use are:
+fig run mysql init
+fig run mysql start
+The mysql image has an entrypoint that takes init and start command. The first one populates /var/lib/mysql, the second one starts the mysql server with /var/lib/mysql as it's datadir. Both run, but the second one fails because /var/lib/mysql is empty.
+The following is a minimal example of it failing:
+fig run mysql /bin/bash -c "touch /var/lib/mysql/testfile && ls -l /var/lib/mysql"
+fig run mysql /bin/bash -c "ls -l /var/lib/mysql"
+Where the first ls -l shows that the file was created, where as the second one returns empty.
+Using docker 1.3.0 and fig 1.0.0

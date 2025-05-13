@@ -1,0 +1,9 @@
+skylerbunny commented on 21 Nov 2017
+https://docs.docker.com/compose/compose-file/
+https://docs.docker.com/compose/compose-file/compose-versioning/
+https://docs.docker.com/compose/compose-file/compose-versioning/#version-34
+All of the above indicate that the minimum version for docker-compose file format version 3.4 is docker-compose 17.09.0+.
+However, references in this repository, at
+https://github.com/docker/compose/blob/master/CHANGELOG.md
+https://github.com/docker/compose/releases
+(Possibly others, I didn't look) say that the minimum Docker Engine version for compose file version 3.4 is 17.06.0+. One or the other is wrong. Please correct this to be consistent one way or the other.

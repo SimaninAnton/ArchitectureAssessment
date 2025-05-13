@@ -1,0 +1,1 @@
+docker-compose pull fails with error image not found for private repos

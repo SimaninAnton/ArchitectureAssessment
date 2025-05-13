@@ -1,0 +1,4 @@
+josh-devops-center commented on 16 Aug 2014
+Hi,
+When running fig up -d, I notice that if there is an error starting a dependent container, the error is silent. For example, if a postgres container fails to startup, the state in fig ps is 'Exit 1'. Since the container didn't start, and other containers depend on this container thru links, would it be possible for better alerts and/or messaging if a dependent container has errors starting?
+Thanks

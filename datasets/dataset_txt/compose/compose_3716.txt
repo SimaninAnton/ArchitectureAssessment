@@ -1,0 +1,5 @@
+gastonmorixe commented on 17 Apr 2015
+Guys,
+After upgrading to v1.2 and docker v1.6 I am getting "Cannot find child for XXX" manually forced to fire the up command twice and in the second time it goes up ok.
+Any idea?
+Thanks

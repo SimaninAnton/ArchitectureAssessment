@@ -1,0 +1,4 @@
+Nelrohd commented on 16 Apr 2015
+Hi,
+Currently docker-compose only supports the characters [a-zA-Z0-9] for the container's name inside docker-compose.yml, which is not consistent since you can name your docker my-super-container and use that name with the FROM command in the Dockerfile.
+What about that? I didn't see any discussions about it.

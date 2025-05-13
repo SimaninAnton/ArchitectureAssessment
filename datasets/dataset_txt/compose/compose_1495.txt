@@ -1,0 +1,88 @@
+CrimsonGlory commented on 29 Apr 2017
+I get this error when I do docker-compose up. But everything works fine and the services continue running and printing logs. So I report this just in case.
+Its probably because I'm using ppc64le. (not sure if docker officially supports that arch)
+Exception in thread Thread-13:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 801, in __bootstrap_inner
+    self.run()   
+  File "/usr/lib/python2.7/threading.py", line 754, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/compose/cli/log_printer.py", line 197, in watch_events
+    for event in event_stream:
+  File "/usr/local/lib/python2.7/dist-packages/compose/project.py", line 356, in events
+    decode=True  
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 290, in _stream_helper
+    for chunk in json_stream(self._stream_helper(response, False)):
+  File "/usr/local/lib/python2.7/dist-packages/docker/utils/json_stream.py", line 66, in split_buffer
+    for data in stream_as_text(stream):
+  File "/usr/local/lib/python2.7/dist-packages/docker/utils/json_stream.py", line 22, in stream_as_text
+    for data in stream:
+  File "/usr/local/lib/python2.7/dist-packages/docker/api/client.py", line 296, in _stream_helper
+    data = reader.read(1)
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/response.py", line 324, in read
+    flush_decoder = True
+  File "/usr/lib/python2.7/contextlib.py", line 35, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/response.py", line 237, in _error_catcher
+    raise ReadTimeoutError(self._pool, None, 'Read timed out.')
+ReadTimeoutError: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out.
+Description
+When I start
+Steps to reproduce the issue:
+docker-compose up
+Additional information you deem important (e.g. issue happens only occasionally):
+Output of docker version:
+Client:
+ Version:      1.12.6
+ API version:  1.24
+ Go version:   go1.6.2
+ Git commit:   78d1802
+ Built:        Tue Jan 31 23:34:35 2017
+ OS/Arch:      linux/ppc64le
+
+Server:
+ Version:      1.12.6
+ API version:  1.24
+ Go version:   go1.6.2
+ Git commit:   78d1802
+ Built:        Tue Jan 31 23:34:35 2017
+ OS/Arch:      linux/ppc64le
+Output of docker info:
+Containers: 25
+ Running: 12
+ Paused: 0
+ Stopped: 13
+Images: 70
+Server Version: 1.12.6
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 158
+ Dirperm1 Supported: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local   
+ Network: overlay host null bridge
+Swarm: inactive  
+Runtimes: runc   
+Default Runtime: runc
+Security Options: apparmor seccomp
+Kernel Version: 4.4.0-72-generic
+Operating System: Ubuntu 16.04.2 LTS
+OSType: linux
+Architecture: ppc64le
+CPUs: 32
+Total Memory: 127.8 GiB
+Name: amadeus
+ID: Z2RP:PHWT:F4KH:2FQ2:A2QQ:LAR5:QU6F:BFSJ:KOJP:I6LQ:YKWY:KDDL
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Username: crimsonglory
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Insecure Registries:
+ 127.0.0.0/8
+Additional environment details (AWS, VirtualBox, physical, etc.):
+physical power8 with ubuntu 16.04

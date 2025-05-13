@@ -1,0 +1,1 @@
+Allow services with published ports to be scaled to 1

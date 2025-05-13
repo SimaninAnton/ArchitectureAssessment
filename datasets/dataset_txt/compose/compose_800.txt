@@ -1,0 +1,4 @@
+dharnnie commented on 15 Mar 2018
+I created a mongodb volume with compose. After creating the volume, like so...
+db: image: mongo container_name: mongodb_container restart: always environment: - MONGO_DATA_DIR=/data/db - MONGO_LOG_DIR=/dev/null - MONGODB_USER="user" - MONGODB_PASS="password" volumes: - ./data/db:/data/db ports: - 27017:27017 command: mongod --smallfiles --logpath=/dev/null
+I got a data/db directory(with files in it) in my root. I am trying to get rid of data/db but unable to do so. Can I get help?

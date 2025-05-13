@@ -1,0 +1,11 @@
+giper45 commented on 28 May 2017
+Hello, from the last docker update I cannot start my compose files more... when I give docker-compose up it gives the following error:
+unable to insert jump to DOCKER-ISOLATION rule in FORWARD chain: 
+ (iptables failed: iptables --wait -I FORWARD -j DOCKER-ISOLATION: iptables v1.6.0: 
+Couldn't load target `DOCKER-ISOLATION':No such file or directory
+docker-compose version 1.11.2, build dfed245
+Docker version 17.03.1-ce, build c6d412e
+MacOS Sierra
+Is there some configuration to do? Docker run-cli works correctly, only docker-compose gives this, but I often use this....
+Thanks in advance
+2

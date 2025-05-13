@@ -1,0 +1,30 @@
+sameerk129 commented on 7 Feb 2018 •
+edited
+Hi,
+I am running a react app using create-react-app, and have set up docker-compose.yml to run the project, everything is running fine, i run docker-compose up to run the server, and for build i have created docker-compose-production.yml, so, to create a build i have to run docker-compose -f docker-compose-production.yml up, i wanted to create only a single docker-compose.yml, which on docker-compose up should start the server in development mode, but using docker-compose build-project should create the build.
+Here is my docker-compose.yml
+`version: '3'
+services:
+frontend:
+build: .
+working_dir: /opt/app/
+command: npm start
+volumes:
+- .:/opt/app/
+- /opt/app/node_modules
+ports:
+- "3000:3000"
+`
+Here is the docker-compose-production.yml
+`version: '3'
+services:
+frontend:
+build: .
+working_dir: /opt/app/
+command: npm run build
+volumes:
+- .:/opt/app/
+- /opt/app/node_modules
+ports:
+- "3000:3000"
+`

@@ -1,0 +1,20 @@
+ericjmiller commented on 21 Jul 2015
+Here is an example of my Dockerfile:
+FROM python:2.7
+ENV PYTHONUNBUFFERED
+RUN mkdir /code
+WORKDIR /code
+ADD requirements.txt /code/
+RUN pip install -r requirements.txt
+ADD . /code/
+My docker-compose file:
+web:
+    build: .
+    command: python manage.py runserver
+    ports:
+        - "5000:5001"
+    volumes:
+        - .:/code
+When I 'docker compose build', the process goes error-free until I get to 'step 5: RUN pip install -r requirements.txt'. Then, the build process stalls. I get the following message repeated:
+Retrying (Retry(total=4, connect=None, read=None, redirect=None)) after connection broken by 'ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known'))': /simple/alembic/
+Any ideas on what's going on here? My web app needs these python packages to run.

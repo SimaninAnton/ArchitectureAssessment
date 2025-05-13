@@ -1,0 +1,1 @@
+Containers cannot reach each other (nothing in /etc/hosts for linked container)

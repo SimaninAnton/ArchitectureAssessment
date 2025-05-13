@@ -1,0 +1,1 @@
+Build target doesn't work in compose 1.19

@@ -1,0 +1,107 @@
+BenoitRanque commented on 18 Apr 2019
+Description of the issue
+Background
+I use nodemon and a folder binding to facilitate develoment of my nodejs server container.
+I have confirmed the same problem when using just node.
+Bug description
+Container crashes after docker reboot. Works fine first time docker-compose up -d is run.
+Aparently this is due to docker not mounting a bind volume properly.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.23.2, build 1110ad01
+docker-py version: 3.6.0
+CPython version: 3.6.6
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of docker version
+Client: Docker Engine - Community
+ Version:           18.09.2
+ API version:       1.39
+ Go version:        go1.10.8
+ Git commit:        6247962
+ Built:             Sun Feb 10 04:12:31 2019
+ OS/Arch:           windows/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  docker-application:
+    build:
+      args:
+        NODE_ENV: development
+      context: C:\Users\BENOIT\Dev\docker-bug-test\docker-application
+    command:
+    - nodemon
+    - -L
+    environment:
+      NODE_ENV: development
+    restart: always
+    volumes:
+    - C:\Users\BENOIT\Dev\docker-bug-test\docker-application\src:/usr/app/src:ro
+version: '3.6'
+Steps to reproduce the issue
+Clone the bug report repo here
+Run docker-compose up -d (docker will ask for permission to share drive if not granted already)
+Run docker ps to get the container id
+Run docker logs -f <container id> to view logs
+Logs should look like this:
+[nodemon] 1.18.11
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching: *.*
+[nodemon] starting `node src/index.js`
+Listening on port 3000
+Restart docker
+Run docker logs -f <container id> to view logs
+Logs now look like this:
+[nodemon] 1.18.11
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching: *.*
+[nodemon] starting `node src/index.js`
+Listening on port 3000
+[nodemon] 1.18.11
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching: *.*
+[nodemon] starting `node src/index.js`
+internal/modules/cjs/loader.js:584
+    throw err;
+    ^
+
+Error: Cannot find module '/usr/app/src/index.js'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:582:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:508:25)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:754:12)
+    at startup (internal/bootstrap/node.js:283:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:622:3)
+[nodemon] app crashed - waiting for file changes before starting...
+Observed result
+Aparently the bind is not mounting properly, causing the server to crash.
+Nodemon does not react to file changes like it should.
+And quite obviously the server does not start because node cannot find the file.
+Note we can confirm the package.json is begin read properly, as that is where we specify the entrypoint src/index.js that node cannot access.
+We also can confirm that docker is mounting something at this point.
+If not, the local copy of the code would be used (the image copies the code locally when built).
+Expected result
+Server starts
+Things I have tried
+Removing the bind
+Solves the problem. Also defeats the purpose. Not a solution
+Using an absolute path
+I tried using an absolute path for the host folder
+No change
+Node versions
+So far, I have tried the folowing nodejs versions: node:8-alpine, node:10-alpine, node:10
+No change
+Stacktrace / full error message
+See reproduction steps above
+Additional information
+OS: Windows 10
+1

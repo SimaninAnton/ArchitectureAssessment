@@ -1,0 +1,84 @@
+soulne4ny commented on 23 Sep 2018
+Description of the issue
+docker-compose stop and restart with long timeout before kill could stop with Read timed out
+# docker-compose restart -t 3600 database
+Restarting test_database_1 ...
+
+ERROR: for test_database_1  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+Context information (for bug reports)
+docker-compose version 1.20.1, build 5d8c71b
+docker-py version: 3.1.4
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016```
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:04:27 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May  4 22:04:27 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Steps to reproduce the issue
+It occurs under load. I didn't manage to reproduce it. An attempt was like follows, but read_timeout does not occur.
+version: '2.0'
+services:
+    sleep:
+        image: alpine:3.8
+        command: [ 'sh', '-c', 'sleep 3600' ]
+docker-compose up sleep
+In other shell docker-compose stop -t 600 sleep
+Observed result
+It is hard to guess the state of services requested to be stopped.
+Sometime it looks like it has stopped, sometimes it runs like stop was not requested at all.
+Expected result
+A clear statement about what to expect:
+The service is expected to stop before hh:mm:ss, and will be killed if still running after the time.
+The service is expected to stop before hh:mm:ss, but won't be killed it is didn't get the intention.
+The service is expected to be running, but could stop. See logs.
+Stacktrace / full error message
+docker-compose stop -t 3600 database
+Stopping srv_database_1             ...
+ERROR: for srv_database_1  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+docker-compose stop -t 3600
+Stopping srv_A_1             ...
+Stopping srv_A_2             ...
+...
+
+
+ERROR: for srv_A_6  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_B_4  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_Z_30  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_C_3  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_C_6  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_B_3  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_A_8  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_A_3  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_A_1  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_X_18  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+
+ERROR: for srv_C_5  UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=70)
+ERROR: An HTTP request took too long to complete. Retry with --verbose to obtain debug information.
+If you encounter this issue regularly because of slow network conditions, consider setting COMPOSE_HTTP_TIMEOUT to a higher value (current value: 60).
+Additional information
+Installed from https://github.com/docker/compose/releases/tag/1.20.1/.

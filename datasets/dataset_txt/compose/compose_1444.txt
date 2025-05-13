@@ -1,0 +1,7 @@
+akaibukai commented on 19 May 2017 •
+edited
+Hi,
+I'm running Docker for Windows on a Windows 10 Enterprise (1703 build 15063.296) machine with an E3-1225 v3 processor and 16Gb RAM.
+When I run the docker-compose top I always get the following error ERROR: Unexpected pid '121157root': strconv.ParseInt: parsing "121157root": invalid syntax (obviously the PID number changes overtime)
+Here is a screenshot..
+BTW, I'm running a french version if this is relevant..

@@ -1,0 +1,2 @@
+sourav82 commented on 13 Mar 2015
+I noticed docker-compose automatically provides name to the containers like compose_<service_name>_1. Is there any way for users to provide name to those containers as --name in docker CLI?

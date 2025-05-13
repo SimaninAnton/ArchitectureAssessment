@@ -1,0 +1,20 @@
+abotalov commented on 1 Mar 2018 •
+edited
+I have the docker-compose file with two containers:
+version: "2"
+services:
+  dev:
+    build: .
+    links: db
+  
+  db:
+    image: mysql
+I'd like to scale these dev and db containers in a way so each dev container will be in the network with only one db container, i.e.:
+I'd like to have:
+N networks "network_1", ..., "network_N"
+N dev containers: "dev_1", ..., "dev_N" ("dev_x" belongs to network "network_x")
+N db containers: "db_1", ..., "db_N" ("db_x" belongs to network "network_x")
+The problems are:
+"--scale dev=N --scale db=N" option makes every dev container link to db_1 container as "db"
+Not sure how to specify such network relationships in docker-compose
+I have only one host machine so I think I don't need Docker Swarm or Docker Stack but if they support such use case it may be fine to use them.

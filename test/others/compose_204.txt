@@ -1,0 +1,6 @@
+lig commented on 24 Apr 2019
+There was this one about 2 years ago on that topic #4826
+It looks like Docker Compose is pointing to Docker and Docker is pointing to orchestration tools.
+Is it possible to have restart policy to depend on health status? It looks like the job for Docker Compose for me.
+Also, it was there for version 2 compose files in depends_on section.
+18

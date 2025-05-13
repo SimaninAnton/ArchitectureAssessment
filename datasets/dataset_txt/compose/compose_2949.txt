@@ -1,0 +1,25 @@
+DarqueWarrior commented on 5 Jan 2016
+I copied docker.exe from a machine where I installed Docker tools. I copied my certs and I set Docker_Host, Docker_Cert_Path and Docker_Tls_verify and I can run my Docker commands no issue.
+I downloaded version 1.5.2 from https://github.com/docker/compose/releases of docker-compose-windows-x86_64.exe of Docker-compose and when I run any docker-compose commands that connect to my daemon I get the following error.
+ERROR: SSL error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:590)
+My system settings are below:
+Client:
+Version: 1.8.1
+API version: 1.20
+Go version: go1.4.2
+Git commit: d12ea79
+Built: Thu Aug 13 02:49:29 UTC 2015
+OS/Arch: windows/amd64
+64-bit Windows 10 Pro. Version 1511
+Server:
+Version: 1.8.3
+API version: 1.20
+Go version: go1.4.2
+Git commit: f4bf5c7
+Built: Mon Oct 12 05:39:44 UTC 2015
+OS/Arch: linux/amd64
+docker-compose version 1.5.2, build e5cf49d
+docker-py version: 1.5.0
+CPython version: 2.7.10
+OpenSSL version: OpenSSL 1.0.2a 19 Mar 2015
+I have read through issue 890. I really need a xcopy solution. I am building a Visual Studio Team Services custom build task that must be able to simply copy Docker-compose.exe to a hosted agent machine with the certs and execute commands. This method works fine with Docker.exe and I need Docker-Compose.exe to work the same way.

@@ -1,0 +1,10 @@
+jamshid commented on 27 Nov 2016
+NBD but I was surprised that if you have multiple sections in docker-compose.yml, the earlier ones are ignored. I'd expect them to be merged or at least a warning.
+  elasticsearch:
+    ...
+    # This volumes is completely ignored because it's defined later
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    ...
+    volumes:
+      - /var/lib/elasticsearch/data

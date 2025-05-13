@@ -1,0 +1,30 @@
+adriancooney commented on 13 Jan 2017 •
+edited
+Just testing out the new healthcheck feature in config v2.1 and ensuring my containers start in order via the depends_on however, intermittently, I get an error like this:
+$ docker-compose up
+Creating network "default" with the default driver
+Creating rabbitmq_1
+Creating redis_1
+Creating s3_1
+Creating database_1
+Creating elasticsearch_1
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "compose/cli/main.py", line 64, in main
+  File "compose/cli/main.py", line 116, in perform_command
+  File "compose/cli/main.py", line 848, in up
+  File "compose/project.py", line 410, in up
+  File "compose/parallel.py", line 44, in parallel_execute
+  File "compose/parallel.py", line 118, in parallel_execute_iter
+  File "compose/parallel.py", line 175, in feed_queue
+  File "compose/parallel.py", line 175, in <genexpr>
+  File "compose/service.py", line 560, in <lambda>
+  File "compose/service.py", line 920, in is_healthy
+compose.errors.HealthCheckFailed
+docker-compose returned -1
+This occurs when my database's healthcheck fails on startup.
+After doing some digging, it looks like exceptions raised in the is_healthy method aren't being caught because they're called (as ready_check) outside the try..except scope (inside feed_queue) in the parralel_execute_iter method. Does that make sense?
+$ docker --version
+Docker version 1.13.0-rc6, build 2f2d055
+$ docker-compose --version
+docker-compose version 1.10.0-rc2, build fb241d0

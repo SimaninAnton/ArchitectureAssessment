@@ -1,0 +1,7 @@
+Contributor
+nkovacs commented on 21 Jun 2016
+I'm using the secretservice credentials helper with docker 1.11.2 and docker-compose 1.8.0-rc1.
+If I try to run docker-compose up, it fails to pull private images from our gitlab registry. --verbose says:
+docker.auth.auth.resolve_authconfig: No entry found
+docker.api.image.pull: No auth config found
+Pulling the image manually using docker pull works.

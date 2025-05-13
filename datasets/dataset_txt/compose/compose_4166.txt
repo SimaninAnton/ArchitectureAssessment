@@ -1,0 +1,11 @@
+vidarl commented on 15 Oct 2014
+There are use-cases where you want to create base images ( which you'll use for creating other images ), but you don't need any containers from those images.
+There are also use-cases where you want containers to be created, but purged once they ends ( like docker run --rm ... )
+This could be configurable with the following syntax:
+ubuntu:
+  build: dockerfiles/ubuntu
+  create_container: false # true is default
+foobar:
+  build: dockerfiles/foobar
+  remove_container: true # false is default
+1

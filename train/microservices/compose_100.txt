@@ -1,0 +1,64 @@
+abl commented on 8 Sep 2019
+Description of the issue
+Using docker-compose I'm unable to get environment variables to be set at runtime. This is applying both to docker-compose up and docker-compose run with -e overrides. docker run works as expected.
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.24.1, build 4667896b
+docker-py version: 3.7.3
+CPython version: 3.6.8
+OpenSSL version: OpenSSL 1.1.0j  20 Nov 2018
+Output of docker version
+Client:
+ Version:           18.09.6
+ API version:       1.39
+ Go version:        go1.11
+ Git commit:        8cdf373
+ Built:             Thu Aug 15 06:47:17 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.09.6
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.11
+  Git commit:       62fd7b0
+  Built:            Thu Aug 15 06:45:45 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+services:
+  letsencrypt-dns:
+    container_name: letsencrypt-dns
+    environment:
+      LETSENCRYPT_USER_MAIL: redacted@redacted.com
+      LEXICON_LINODE4_AUTH_TOKEN: redacted
+      LEXICON_LINODE4_TTL: '300'
+      LEXICON_PROVIDER: linode4
+      LEXICON_SLEEP_TIME: '1200'
+    image: adferrand/letsencrypt-dns:latest
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    volumes:
+    - /volume1/docker/letsencrypt-dns:/etc/letsencrypt:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+version: '3.0'
+Steps to reproduce the issue
+docker-compose run --rm -e LETSENCRYPT_STAGING=true letsencrypt-dns env | grep LETSENCRYPT_STAGING
+docker run --rm -e LETSENCRYPT_STAGING=true adferrand/letsencrypt-dns env | grep LETSENCRYPT_STAGING
+Attempt to run the above docker-compose.yml and note that all environment variables are as their defaults in the Dockerfile.
+Observed result
+LETSENCRYPT_STAGING=false
+LETSENCRYPT_STAGING=true
+Various failures in the logs as all environment variables are set to their defaults.
+Expected result
+LETSENCRYPT_STAGING=true
+LETSENCRYPT_STAGING=true
+Success.
+Stacktrace / full error message
+N/A
+Additional information
+Synology DSM 6.2.2-24922 Update 2 (synology_apollolake_918+); docker-compose installed via curl.

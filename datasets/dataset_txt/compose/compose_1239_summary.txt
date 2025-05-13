@@ -1,0 +1,1 @@
+compose run --name: distinction between service name and container name wrt project name

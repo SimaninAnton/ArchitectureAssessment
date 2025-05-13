@@ -1,0 +1,1 @@
+Should docker-compose be installed under /usr/local/bin?

@@ -1,0 +1,27 @@
+soulne4ny commented on 14 Jan 2017
+I'd like to clarify if there is any order how env-file and environment are applied.
+I tried to the following:
+version: '2.0'
+services:
+  x:
+    # skipped
+    env_file:
+      - a.txt # setting X=0
+      - b.txt # setting X=1
+    environment:
+      - 'X=2'
+I've got 'X=2' inside the container as I expected. I'd like to be sure that it is not by an accident.
+About files a.txt and b.txt it is clear as there is explicit order. The questions are following:
+Is environment applied after env_file always?
+Or is it because of order of env_file and environment?
+System info
+Docker for Mac
+Version 1.12.6 (14937)
+Channel: Stable
+a3b0f11292
+$ uname -a
+Darwin me.local 15.6.0 Darwin Kernel Version 15.6.0: Thu Sep  1 15:01:16 PDT 2016; root:xnu-3248.60.11~2/RELEASE_X86_64 x86_64
+$ docker --version
+Docker version 1.12.6, build 78d1802
+$ docker-compose --version
+docker-compose version 1.9.0, build 2585387

@@ -1,0 +1,5 @@
+b00giZm commented on 23 Nov 2014
+Personally, I thinks it's kind of a bummer that there are no "Get started" tutorials for Node.js projects on the Fig homepage. Bringing a "real world" workflow with tools like Nodemon, Grunt etc. over to Fig and Docker is a bit tricky. You can find many Github repositories that aim to show you how to do it, but not one (at least of the ones I found) of them are not suitable for real development.
+I'm maintaining a set of example projects which may serve as starting points for those who want to get started with Fig and Node.js:
+https://github.com/b00giZm/fig-nodejs-examples
+If you want, feel free to integrate them ;)

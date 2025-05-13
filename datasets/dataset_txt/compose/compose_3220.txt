@@ -1,0 +1,2 @@
+mcandre commented on 11 Oct 2015
+To make docker-compose easier to install for Windows users.

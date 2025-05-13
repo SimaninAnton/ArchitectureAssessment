@@ -1,0 +1,15 @@
+jonocodes commented on 5 Jun 2015
+When piping "docker-compose ps" to anything, the terminal size effects the output. For example, lets say my terminal is maximized and if I run "docker-compose up"
+docker-compose up
+docker ps | wc -l
+8
+docker-compose ps | wc -l
+9
+Now I shrink my terminal to half the width
+docker ps | wc -l
+8
+docker-compose ps | wc -l
+16
+I need to be able to pipe the output because I am grepping it as a way to determine what a container is named after compose starts it. So I presumed it would output one container per line, but it does not.
+As you can see 'docker ps' does not exhibit this behavior. It produces the same line count regardless of the terminal size.
+To be clear about what I am looking for, look at 'ls'. It is terminal aware. 'ls' in a terminal show files side by side. But if you pipe it to something else, it presents files line by line which allows for further processing.

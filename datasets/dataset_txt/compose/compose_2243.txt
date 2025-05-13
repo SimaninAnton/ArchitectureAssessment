@@ -1,0 +1,27 @@
+fhitchen commented on 8 Jul 2016
+the docker --tlsverify=false option works fine, the compose --skip-hostname-check does not.
+$ docker-compose -v
+docker-compose version 1.8.0-rc2, build c72c966
+$ docker-compose --skip-hostname-check ps
+WARNING: Some networks were defined but are not used by any service: back
+Traceback (most recent call last):
+File "", line 3, in
+File "compose/cli/main.py", line 60, in main
+File "compose/cli/main.py", line 111, in perform_command
+File "compose/cli/main.py", line 530, in ps
+File "compose/project.py", line 461, in containers
+File "compose/project.py", line 452, in _labeled_containers
+File ".tox/py27/lib/python2.7/site-packages/docker/api/container.py", line 70, in containers
+File ".tox/py27/lib/python2.7/site-packages/docker/utils/decorators.py", line 47, in inner
+File ".tox/py27/lib/python2.7/site-packages/docker/client.py", line 138, in _get
+File ".tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 477, in get
+File ".tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 465, in request
+File ".tox/py27/lib/python2.7/site-packages/requests/sessions.py", line 573, in send
+File ".tox/py27/lib/python2.7/site-packages/requests/adapters.py", line 370, in send
+File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 544, in urlopen
+File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 341, in _make_request
+File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py", line 761, in _validate_conn
+File ".tox/py27/lib/python2.7/site-packages/requests/packages/urllib3/connection.py", line 253, in connect
+File ".tox/py27/lib/python2.7/site-packages/backports/ssl_match_hostname/init.py", line 147, in match_hostname
+backports.ssl_match_hostname.CertificateError: hostname '10.120.8.51' doesn't match either of 'localhost', '192.168.99.100'
+docker-compose returned -1

@@ -1,0 +1,35 @@
+soulne4ny commented on 24 Jan 2017
+The following configuration runs nginx as reverse proxy on two bridge networks. It handles https and redirects http to https for requests from the internet.
+version: '2.0'
+services:
+    nginx:
+         image: prod-nginx
+        ports:
+            - '80:80'
+            - '443:443'
+        networks:
+             a_front:
+             default:
+    # Other services defined as well.
+networks:
+    a_front:  # requests from the world
+        ipam:
+            config:
+              - subnet: 172.31.xx.xx/xx
+                gateway: 172.31.xx.xx
+    default:  # inner request
+        ipam:
+            config:
+              - subnet: 172.18.xx.xx/xx
+                gateway: 172.18.xx.xx
+There is no need to run https on internal interface. And nginx is able to handle requests differently depending on interface where request comes from. Therefore it needs to know exact ip for each interface, which can be defined on start using scripts.
+However world requests should be routed to the interface where nginx expect them, and internal requests too.
+I've found that ports 80 and 443 are mapped to the first network in alphabetical order. That's why network front is named a_front.
+But I haven't found in the docs that it should be so.
+It is not neither obvious, nor explicit.
+If it is true about alphabetical order, it should be stated clearly in the docs.
+There be better an explicit way to specify ports on particular network, not on service top-level.
+Versions
+docker-compose version 1.9.0, build 2585387
+Docker version 1.12.6, build 78d1802
+Linux me.local 3.16.0-4-amd64 #1 SMP Debian 3.16.39-1 (2016-12-30) x86_64 GNU/Linux

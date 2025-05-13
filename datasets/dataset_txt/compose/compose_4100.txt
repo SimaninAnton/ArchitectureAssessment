@@ -1,0 +1,4 @@
+inklesspen commented on 16 Nov 2014
+If I run fig run --rm web bash, then run a command which produces a very long line, that line is cut off at 1024 characters. (Fig 1.0.1)
+If I run docker run -i -t --rm mimir_web:latest bash (where mimir_web is the image Fig generated for web), and run the command which produces the very long line, that line is not cut off.
+Any ideas?

@@ -1,0 +1,38 @@
+BentCoder commented on 30 Dec 2017
+Hi,
+First of all this is more of an advice/help request than an issue. I am facing this issue hence reason I am here.
+ubuntu@linux:~/hello-world$ tree -a
+.
+├── config
+│   └── params.yml
+├── docker
+│   ├── docker-compose.yml
+│   ├── .env
+│   └── nginx
+│       └── Dockerfile
+├── .gitignore
+├── index.html
+├── Readme.md
+└── src
+    └── controller
+        ├── default.php
+        └── user.php
+
+5 directories, 9 files
+When I create my container(s), I want everything you see above copied into nginx_con container. Obviously Dockerfile below or similar ones won't work. How can I achieve this? What is the best practise?
+nginx/Dockerfile
+FROM nginx:1.13.8
+
+...
+COPY ./../ /usr/share/nginx/html
+...
+docker-compose.yml
+version: '3'
+
+services:
+    nginx_img:
+        container_name: nginx_con
+        build: ./nginx
+        ports:
+            - 1000:80
+Thanks

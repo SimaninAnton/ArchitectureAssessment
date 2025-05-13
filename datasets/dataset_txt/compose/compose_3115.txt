@@ -1,0 +1,2 @@
+greg0ire commented on 10 Nov 2015
+I have a webserver that runs nginx, and an appserver that runs php-fpm. webserver is linked to appserver. On the appserver, I run some tests, in particular, I'm using an http client to run tests against my API. I need to reference my webserver container for that, and that was easy in 1.8 , but seems to be no longer possible in 1.9 : the reference has disappeared from the hosts file. I tried using the x-networking flag, but the webserver container still does not appear in the hosts file. What can I try ?

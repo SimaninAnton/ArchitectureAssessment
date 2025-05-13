@@ -1,0 +1,16 @@
+bfolliot commented on 25 Apr 2017
+Hello.
+Sorry for this issue (and for my english) but i don't understand how to manage users and permissions.
+Example docker-compose.yml:
+version: '3'
+services:
+  php:
+    image: php:7.1.4-fpm-alpine
+    volumes:
+      - .:/var/www/html
+    user: www-data
+
+ # ... and other services
+If i run docker-compose up on my mac : inside the container, if i do a ls -la, the user and the group of the mounted files is www-data. php and me can read and write files.
+If i run docker-compose up on my debian : inside the container, if i do a ls -la, the user and the group of the mounted files is 1000. php and me can't read and write files.
+Can you explain me how can i have both php and me the permission to write files in the container on Debian ?

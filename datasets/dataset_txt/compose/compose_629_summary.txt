@@ -1,0 +1,1 @@
+Compose on windows does not support Utf-8 BOM on 1.21.2

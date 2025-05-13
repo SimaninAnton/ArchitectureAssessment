@@ -1,0 +1,14 @@
+jamshid commented on 8 Feb 2017
+Nobody wants to run systemd in a container, but it's necessary because not all software is docker-ready, or docker is being used to simulate a production system.
+It's great that docker 1.13 can now deploy a docker-compose.yml to swarm, but the limited configuration support means systemd containers will not run. docker stack deploy reports:
+Ignoring unsupported options: cap_add, devices, privileged, security_opt, tmpfs
+When will stack/bundle/dab/whatever support systemd containers, which require cap_add and tmpfs?
+    cap_add:
+      - SYS_ADMIN
+    tmpfs: /run
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    environment:
+      - container=docker
+Ref moby/moby#28614 (comment)
+PS: devices would also be very useful especially if the value could somehow be made different on different swarm nodes.

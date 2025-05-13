@@ -1,0 +1,4 @@
+boaz0 commented on 12 Apr 2015
+Hi all,
+I am not sure whether this request is duplicated. Nevertheless, I find the usage of variables in the docker-compose files necessary. In other words, in addition to the docker-compose.yml file, there is a vars-compose.yml file, where those variables are assigned.
+BR

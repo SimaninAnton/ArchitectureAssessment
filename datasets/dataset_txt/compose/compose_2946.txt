@@ -1,0 +1,56 @@
+ChristianKniep commented on 6 Jan 2016
+Hey there,
+I try to tweak the max locked memory within a container, which could be done by starting it with this options:
+--ulimit memlock="68719476736"
+This results in max locked memory (kbytes, -l) 67108864.
+If I am not mistaken (code) the compose script works with arbitrary key/value pairs.
+If I start a container like this:
+hpcg2:
+    extends:
+      file: base.yml
+      service: hpcg
+    hostname: hpcg2
+    container_name: hpcg2
+    environment:
+     - constraint:node==venus002
+    ulimits:
+      nofile:
+        soft: 20000
+        hard: 40000
+      memlock:
+        soft: 68719476736
+        hard: 68719476736
+The .HostConfig.Ulimits stays empty.
+[root@venus001 hpcg]# docker inspect -f '{{ .HostConfig.Ulimits }}' hpcg2
+[]
+Started like this:
+docker run -d --net=global \
+                -v "/scratch/:/scratch/" \
+                --dns=127.0.0.1 \
+                --privileged \
+                -e DC_NAME=dc1 -e CONSUL_CLUSTER_IPS=consul1,consul2 -e COLLECT_METRICS=true \
+                -e SENSU_CHECK_IB=true \
+                --hostname=hpcg${1} \
+                --name=hpcg${1} \
+                -e constraint:node==venus00${1} \
+                --ulimit memlock="68719476736" \
+        qnib/hpcg tail -f /dev/null
+It's fine:
+[root@venus001 hpcg]# docker inspect -f '{{ .HostConfig.Ulimits }}' hpcg3
+[memlock=68719476736:68719476736]
+I use 1.5.1:
+[root@venus001 hpcg]# docker-compose version
+docker-compose version: 1.5.1
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+[root@venus001 hpcg]#
+and 1.5.2:
+[root@venus001 hpcg]# compose version
+docker-compose version 1.5.2, build 7240ff3
+docker-py version: 1.5.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1e 11 Feb 2013
+[root@venus001 hpcg]#
+Any hint why the ulimits do not show up?
+EDIT: Should docker-py be in lockstep with docker-compose? Since ulimit came with 1.5.1...

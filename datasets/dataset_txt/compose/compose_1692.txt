@@ -1,0 +1,10 @@
+samudurand commented on 13 Feb 2017 •
+edited
+Docker 1.13 on Mac Sierra, with latest Docker Compose (1.11.1)
+If I have a file docker-compose.yml and use the command
+$ docker-compose up -d
+Then it immediately starts creating the containers (I see logs like 'Creating...) , which is what I expect.
+However if I use a specific file with a different name then it hangs for at least 5s before starting to create the containers.
+docker-compose -f test.yml up -d
+I attempted to investigate with dtruss , but it does not report any obvious difference in the operations done (I am on Mac and not accustomed to using dtruss so I might have missed something)
+Is that any expected behaviour and if yes then why ?

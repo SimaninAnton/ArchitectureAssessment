@@ -1,0 +1,18 @@
+feinblat commented on 11 Oct 2017
+the scenario :
+config.yaml version >=3.2 which contains service port like:
+ports:
+- "127.0.0.1:3306:3306"
+Run of the following commands fails in the second command
+docker-compose config > config.yaml
+docker-compose -f config.yaml up
+The error I got in the docker-compose up line is:
+services.mysql.ports contains unsupported option: 'external_ip'
+The issue:
+The output of docker-compose for version >= 3.2
+Contain service ports in the following format:
+ports:
+- external_ip: 127.0.0.1
+published: 3306
+target: 3306
+2

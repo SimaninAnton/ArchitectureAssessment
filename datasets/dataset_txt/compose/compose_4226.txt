@@ -1,0 +1,6 @@
+ccverak commented on 20 Aug 2014
+How can I execute commands like:
+cd /data && echo 'Hello World'
+or
+while true; do sleep 2; done
+directly on command key?

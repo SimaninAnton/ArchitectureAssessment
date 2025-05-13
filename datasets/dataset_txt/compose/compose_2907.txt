@@ -1,0 +1,30 @@
+Perseid commented on 18 Jan 2016
+This docker-compose.yml file (note the use upper case "V" in dumbVendor):
+nginx:
+  build: nginx
+  ports:
+   - "80:80"
+  links:
+   - dumbVendor
+dumbVendor:
+  build: dumbVendor
+produces the following unhelpful error message:
+Building dumbVendor
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+
+If it's at a non-standard location, specify the URL with the DOCKER_HOST environment variable.
+while docker.service logs these messages:
+level=info msg="GET /v1.19/containers/json?filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dcleanslate%22%2C+%22com.docker.compose.service%3DdumbVendor%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&all=1&limit=-1&size=0&trunc_cmd=0"
+level=info msg="GET /v1.19/containers/json?all=1&limit=-1&size=0&trunc_cmd=0"
+level=info msg="GET /v1.19/containers/json?filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dcleanslate%22%2C+%22com.docker.compose.service%3Dnginx%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&all=1&limit=-1&size=0&trunc_cmd=0"
+level=info msg="GET /v1.19/containers/be3ae50f10d3215090fd14092d3f69451914b0776621fc2906c9e4d3526f2f5d/json"
+level=info msg="GET /v1.19/containers/json?filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dcleanslate%22%2C+%22com.docker.compose.service%3DdumbVendor%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&all=1&limit=-1&size=0&trunc_cmd=0"
+level=info msg="GET /v1.19/containers/json?all=1&limit=-1&size=0&trunc_cmd=0"
+level=info msg="GET /v1.19/containers/json?filters=%7B%22label%22%3A+%5B%22com.docker.compose.project%3Dcleanslate%22%2C+%22com.docker.compose.service%3Dnginx%22%2C+%22com.docker.compose.oneoff%3DFalse%22%5D%7D&all=1&limit=-1&size=0&trunc_cmd=0"
+level=info msg="GET /v1.19/images/cleanslate_dumbVendor/json"
+level=error msg="Handler for GET /v1.19/images/cleanslate_dumbVendor/json returned error: No such image: cleanslate_dumbVendor"
+level=error msg="HTTP Error" err="No such image: cleanslate_dumbVendor" statusCode=404
+level=info msg="POST /v1.19/build?t=cleanslate_dumbVendor&pull=False&rm=True&forcerm=False&nocache=False&q=False"
+level=error msg="Handler for POST /v1.19/build returned error: repository name component must match \"[a-z0-9](?:-*[a-z0-9])*(?:[._][a-z0-9](?:-*[a-z0-9])*)*\""
+level=error msg="HTTP Error" err="repository name component must match \"[a-z0-9](?:-*[a-z0-9])*(?:[._][a-z0-9](?:-*[a-z0-9])*)*\"" statusCode=500
+Using dumbvendor instead of dumbVendor everthing works fine. It would be very nice if the docker-compose error message could be more to the point, otherwise it's hard to locate the problem in your docker-compose.yml. I'm using the Arch Linux packages in versions "docker-compose version 1.5.2, build unknown" and "Docker version 1.9.1, build a34a1d5-dirty".

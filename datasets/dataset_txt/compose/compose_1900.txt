@@ -1,0 +1,4 @@
+pocesar commented on 27 Nov 2016 •
+edited
+I'm using bunyan as a stdout / stderr logger, and it outputs the log as JSON, although it can read directly when using docker logs myserver, it doesn't work for docker-compose logs myserver because it uses colors (although you can disable it with --no-color), and put the name of the service name in front as
+this makes the JSON parsing not possible. in practice, I want all the logs from all services, and I can filter them using bunyan command line, and per severity.

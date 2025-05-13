@@ -1,0 +1,4 @@
+draghuram commented on 29 Mar 2015
+The README file gives instructions on how to get started with compose. However, if one were to follow the instructions verbatim, the Docker container build process would fail because the Dockerfile assumes a particular organization of python app files which most probably will not be present.
+It seems that docs/index.md does have more detailed instructions that may work better (this is the file that makes up http://docs.docker.com/compose/). So I propose that README remove the example section and point to index.md or perhaps, copy the contents from there.
+I am willing to work on the PR but I wanted to first check if there are any objections to this approach.

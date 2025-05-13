@@ -1,0 +1,28 @@
+Member
+ehazlett commented on 24 Aug 2015
+I'm getting this issue when trying to build against Swarm:
+Building web...
+docker build <- (pull=False, nocache=False, stream=True, tag=u'composetest_web', path='/home/ehazlett/sandbox/composetest', rm=True, dockerfile=None)
+docker build -> <generator object _stream_helper at 0x7f4daf6525a0>
+Step 0 : FROM python:2.7
+ ---> e1857ee1f3b5
+Step 1 : ADD . /code
+ ---> 65534a2a411c
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 32, in main
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 21, in sys_dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 34, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 24, in dispatch
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 66, in perform_command
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 471, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.project", line 245, in up
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 318, in execute_convergence_plan
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 212, in create_container
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 239, in ensure_image_exists
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.service", line 657, in build
+  File "/code/build/docker-compose/out00-PYZ.pyz/compose.progress_stream", line 18, in stream_output
+  File "/code/build/docker-compose/out00-PYZ.pyz/json", line 338, in loads
+  File "/code/build/docker-compose/out00-PYZ.pyz/json.decoder", line 369, in decode
+ValueError: Extra data: line 2 column 1 - line 3 column 1 (char 61 - 100)
+The build works fine using the Docker CLI against Swarm so I think the JSON should be what is expected from the API.

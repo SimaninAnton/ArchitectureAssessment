@@ -1,0 +1,42 @@
+stepanselyuk commented on 5 Aug 2018
+Description of the issue
+In .env file I can do such trick, building variables:
+STAGE=dev
+PRODUCT=foobar
+SERVICE_SUFFIX=devenv
+CONTAINER_NAME_PREFIX=${STAGE}_${PRODUCT}_${SERVICE_SUFFIX}
+But in an env_file I can use neither variables defined in .env file, or defined in the env_file itself. For example, I would have to define base domain variable and build other a few variables from it:
+BASE_DOMAIN=dev.product.com
+WP_MAIN_DOMAIN=${BASE_DOMAIN}
+WP_ALIAS_DOMAINS=www.${BASE_DOMAIN} blog.${BASE_DOMAIN}
+CDN_DOMAIN=cdn.${BASE_DOMAIN}
+CMS_DOMAIN=cms.${BASE_DOMAIN}
+But it won't work this way, cause in docker-compose config I see variables like CDN_DOMAIN=cdn.$${BASE_DOMAIN}.
+Do you plan to add such functionality in env_file logic to make even with .env file logic?
+Context information (for bug reports)
+Output of "docker-compose version"
+docker-compose version
+docker-compose version 1.22.0, build f46880f
+docker-py version: 3.4.1
+CPython version: 3.6.4
+OpenSSL version: OpenSSL 1.0.2o  27 Mar 2018
+Output of "docker version"
+docker version
+Client:
+ Version:           18.06.0-ce
+ API version:       1.38
+ Go version:        go1.10.3
+ Git commit:        0ffa825
+ Built:             Wed Jul 18 19:05:26 2018
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18.06.0-ce
+  API version:      1.38 (minimum version 1.12)
+  Go version:       go1.10.3
+  Git commit:       0ffa825
+  Built:            Wed Jul 18 19:13:46 2018
+  OS/Arch:          linux/amd64
+  Experimental:     true

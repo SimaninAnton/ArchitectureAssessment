@@ -1,0 +1,17 @@
+olalonde commented on 30 Oct 2016 •
+edited
+I have an issue with a service (minio/minio) when running in Docker and would like to connect to a minio server running on my host to debug the issue:
+local:
+  image: filepunk:test
+  external_links:
+    - blockai_postgres_1:db
+      # - blockai_minio_1:minio
+  command: >
+    /bin/bash -c "
+      npm run knex -- migrate:latest && npm test
+    "
+  environment:
+    - PG_CONNECTION_STRING=postgres://postgres@db/filepunk-test
+    # - AWS_S3_ENDPOINT=http://minio:9000
+    - AWS_S3_ENDPOINT=http://<IP OF HOST HERE>:9000
+Is there any env variable for <IP OF HOST HERE> or any other way to achieve this?

@@ -1,0 +1,35 @@
+skunde commented on 13 Apr 2018
+Description of the issue
+docker-compose version 1.21.0 is not able to handle com.docker.compose.project labels set with an older version of docker-compose that contain - or _ in their container names.
+Our deployment does the following:
+// pull new images
+$ docker-compose pull
+// stop old containers
+$ docker-compose rm -s -f
+// replace docker-compose.yml
+// start new containers
+$ docker-compose up -d
+Context
+docker-compose version 1.21.0, build 5920eb0
+Docker version 18.03.0-ce, build 0520e24
+Steps to reproduce the issue
+Deploy some containers with - or _ in their container names with docker-compose version 1.20
+Change docker-compose to version 1.21
+Try to restart the containers
+Observed result
+docker-compose does not recognize containers deployed with an older version.
+It fails to stop already deployed containers and fails to start the new containers afterwards.
+Expected result
+docker-compose recognizes containers deployed with an old version and transparently rewrites existing com.docker.compose.project labels to the new format.
+Stacktrace / full error message
+$ docker-compose rm -s -f
+No stopped containers
+$ sudo -E docker-compose up -d
+Creating container-name ... 
+
+Creating container-name ... error
+
+ERROR: for container-name  Cannot create container for service container-name: Conflict. The container name "/container-name" is already in use by container "e7dfd157fed12251ed21a70f8243d87baa6fb1e2768e872875c101d37cf99891". You have to remove (or rename) that container to be able to reuse that name.
+Additional information
+This issue was introduced with #5844 at https://github.com/docker/compose/blob/9cc30ad0e940453228d6d968e4827cae34eda770/compose/cli/command.py
+3

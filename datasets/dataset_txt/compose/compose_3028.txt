@@ -1,0 +1,24 @@
+thatgibbyguy commented on 1 Dec 2015
+When attempting to do anything with docker-compose, I get the following error:
+Traceback (most recent call last):
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/bin/docker-compose", line 9, in <module>
+    load_entry_point('docker-compose==1.4.2', 'console_scripts', 'docker-compose')()
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/main.py", line 39, in main
+    command.sys_dispatch()
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 21, in sys_dispatch
+    self.dispatch(sys.argv[1:], None)
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/command.py", line 27, in dispatch
+    super(Command, self).dispatch(*args, **kwargs)
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/docopt_command.py", line 24, in dispatch
+    self.perform_command(*self.parse(argv, global_options))
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/command.py", line 57, in perform_command
+    verbose=options.get('--verbose'))
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/cli/command.py", line 78, in get_project
+    config.load(config_details),
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/config.py", line 142, in load
+    service_dict = loader.make_service_dict(service_name, service_dict)
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/config.py", line 166, in make_service_dict
+    service_dict = self.resolve_extends(service_dict)
+  File "/usr/local/Cellar/docker-compose/1.4.2/libexec/lib/python2.7/site-packages/compose/config.py", line 193, in resolve_extends
+    other_service_dict = other_config[extends_options['service']]
+KeyError: 'defaultworker'

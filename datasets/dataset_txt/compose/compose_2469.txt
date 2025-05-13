@@ -1,0 +1,15 @@
+JacobHayes commented on 21 Apr 2016
+When monitoring logs from a service (docker-compose logs -f service1), container starts from a different service will be shown in the log output. The feature in 1.7 to add new containers to exiting log outputs is nice, but should still be limited to containers of the same service when one is specified (ie: only when the scale changes).
+To recreate:
+version: '2'
+services:
+    service1:
+        image: alpine
+        command: sh -c 'while true; do echo "service1"; sleep 1; done;'
+    service2:
+        image: alpine
+        command: sh -c 'while true; do echo "service2"; sleep 1; done;'
+docker-compose up -d service1 && \
+eval '(sleep 5 && docker-compose up -d service2) &' && \
+docker-compose logs -f service1
+After five seconds, you will start to see output from both services, even though we just requested logs for service1.

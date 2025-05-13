@@ -1,0 +1,37 @@
+anentropic commented on 12 Oct 2015
+I had a yaml like:
+redis:
+  image: redis
+  expose:
+    - 6379
+
+myapp:
+  links:
+    - postgres
+    # forgot to link redis here
+I did a docker-compose up -d and saw the problem with my app, it couldn't connect to hostname redis
+no problem, I edited the yaml:
+redis:
+  image: redis
+  expose:
+    - 6379
+
+myapp:
+  links:
+    - postgres
+    - redis
+I did a docker-compose up -d again expecting it to be fixed
+nope ConnectionError: Error -2 connecting to redis:6379. Name or service not known
+tried a docker-compose restart myapp... not fixed
+restarted all services
+docker-compose stop
+docker-compose up -d
+not fixed
+exec'd into myapp and had a look in /etc/hosts ...I only have these entries:
+172.17.0.219    postgres adddb7bd4709 oceania_postgres_1
+172.17.0.219    postgres_1 adddb7bd4709 oceania_postgres_1
+172.17.0.219    oceania_postgres_1.bridge
+172.17.0.220    oceania_redis_1
+172.17.0.220    oceania_redis_1.bridge
+so, obviously problem is due to the missing link entry for redis container
+it's a bit weird because normally this 'just works'

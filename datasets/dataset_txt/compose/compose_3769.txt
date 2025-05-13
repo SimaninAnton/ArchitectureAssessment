@@ -1,0 +1,4 @@
+Contributor
+aanand commented on 31 Mar 2015
+Currently you get a stack trace with KeyError: u'image', which isn't very helpful.
+Sort-of-related to #129.

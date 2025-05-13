@@ -1,0 +1,12 @@
+gymnopedies7 commented on 5 Jul 2018
+I just want to install numpy, but there is issue for that.
+I think that it's because of security in my company.
+How can I fix it?
+C:\Users\ff>pip install numpy
+Collecting numpy
+Could not fetch URL https://pypi.python.org/simple/numpy/: There was a problem
+confirming the ssl certificate: [SSL: CERTIFICATE_VERIFY_FAILED] certificate ve
+rify failed (_ssl.c:749) - skipping
+Could not find a version that satisfies the requirement numpy (from versions:
+)
+No matching distribution found for numpy

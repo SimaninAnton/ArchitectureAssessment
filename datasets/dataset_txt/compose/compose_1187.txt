@@ -1,0 +1,56 @@
+pupssman commented on 22 Sep 2017
+when a compose file has duplicate entries in build.cache_from section any interaction with compose crashes on reporting validation error.
+Example compose file:
+version: '3.3'
+services:
+  nginx:
+    build:
+        context: nginx
+        cache_from:
+            - "example/my-nginx:develop"
+            - "example/my-nginx:master"
+            - "example/my-nginx:develop"
+    image: example/my-nginx:new
+Example output:
+$ docker-compose -f example.yml build
+Traceback (most recent call last):
+  File "/home/pupssman/venv/py2/bin/docker-compose", line 11, in <module>
+    sys.exit(main())
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/cli/main.py", line 68, in main
+    command()
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/cli/main.py", line 118, in perform_command
+    project = project_from_options('.', options)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/cli/command.py", line 37, in project_from_options
+    override_dir=options.get('--project-directory'),
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/cli/command.py", line 91, in get_project
+    config_data = config.load(config_details)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/config.py", line 368, in load
+    for config_file in config_details.config_files
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/config.py", line 534, in process_config_file
+    validate_against_config_schema(config_file)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 393, in validate_against_config_schema
+    config_file.filename)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 454, in handle_errors
+    error_msg = '\n'.join(format_error_func(error) for error in errors)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 454, in <genexpr>
+    error_msg = '\n'.join(format_error_func(error) for error in errors)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 380, in process_config_schema_errors
+    return handle_generic_error(error, path)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 252, in handle_generic_error
+    config_key, error_msg = _parse_oneof_validator(error)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 335, in _parse_oneof_validator
+    _parse_valid_types_from_validator(context.validator_value)),
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 300, in _parse_valid_types_from_validator
+    return anglicize_json_type(validator)
+  File "/home/pupssman/venv/py2/local/lib/python2.7/site-packages/compose/config/validation.py", line 216, in anglicize_json_type
+    if json_type.startswith(('a', 'e', 'i', 'o', 'u')):
+AttributeError: 'bool' object has no attribute 'startswith'
+Versions:
+$ pip freeze | grep docker
+docker==2.5.1
+docker-compose==1.16.1
+Expected behaviour:
+do not crash on error reporting
+extra credit: actually allow duplicates there as:
+that should not pose any trouble
+it is convenient to have one of those parametrized and one default to something (like develop here`) and pass the var from build script

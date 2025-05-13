@@ -1,0 +1,86 @@
+etoews commented on 4 Mar 2016
+Compose cannot find Swarm volumes when using volumes or volumes_from
+Create a Swarm cluster (the best guide is Get started with multi-host networking) or use this handy gist.
+Reproduce volumes
+Create a docker-compose.yml file
+version: "2"
+
+services:
+  test:
+    image: alpine
+    command: ls /
+    volumes:
+      - data:/data
+
+volumes:
+  data:
+    external:
+      name: my-data
+Run the following
+$ docker volume create --name my-data
+my-data
+
+$ docker-compose --verbose up
+...
+compose.volume.initialize: Volume data declared as external. No new volume will be created.
+compose.cli.verbose_proxy.proxy_callable: docker inspect_volume <- ('my-data')
+ERROR: compose.cli.main.main: Volume my-data declared as external, but could not be found. Please create the volume manually using `docker volume create --name=my-data` and try again.
+
+$ docker volume inspect my-data
+[]
+Error: No such volume: my-data
+
+$ docker volume inspect swarm-agent1/my-data
+[
+    {
+        "Name": "my-data",
+        "Driver": "local",
+        "Mountpoint": "/mnt/sda1/var/lib/docker/volumes/my-data/_data"
+    }
+]
+Compose and/or the volume inspect operation doesn't seem to understand the volume name will be prefixed with a node name in Swarm. And naturally we can't be encoding node names in our Compose files.
+Reproduce volumes_from
+Create a docker-compose.yml file
+version: "2"
+
+services:
+  test:
+    image: alpine
+    command: ls /
+    volumes_from:
+      - container:swarm-agent
+Run the following
+$ docker-compose --verbose up
+...
+compose.cli.verbose_proxy.proxy_callable: docker inspect_container <- (u'swarm-agent')
+ERROR: compose.cli.main.main: Service "test" mounts volumes from "swarm-agent", which is not the name of a service or container.
+
+$ docker inspect swarm-agent
+[]
+Error: No such image or container: swarm-agent
+
+$ docker inspect swarm-agent2/swarm-agent
+[ ... lots of JSON ... ]
+Again, Compose and/or the container inspect operation doesn't seem to understand the container name will be prefixed with a node name in Swarm. And naturally we can't be encoding node names in our Compose files.
+Versions
+$ docker version
+Client:
+Version: 1.10.1
+API version: 1.22
+Go version: go1.5.3
+Git commit: 9e83765
+Built: Thu Feb 11 20:39:58 2016
+OS/Arch: darwin/amd64
+Server:
+Version: swarm/1.1.3
+API version: 1.22
+Go version: go1.5.3
+Git commit: 7e9c6bd
+Built: Wed Mar 2 00:15:12 UTC 2016
+OS/Arch: linux/amd64
+$ docker-compose version
+docker-compose version 1.6.0, build d99cad6
+docker-py version: 1.7.0
+CPython version: 2.7.9
+OpenSSL version: OpenSSL 1.0.1j 15 Oct 2014
+2

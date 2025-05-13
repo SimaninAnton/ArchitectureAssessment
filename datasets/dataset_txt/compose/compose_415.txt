@@ -1,0 +1,63 @@
+chiffa commented on 5 Nov 2018
+Description of the issue
+Upon conversion from the short syntax of volume mounting to the long syntax, paths including environment variables in the source definition of the volume directory are no more properly parsed.
+Here is the sample of volume mounting instruction with long syntax:
+    volumes:
+      - type: bind
+        source: $HOME/app/docker-app/db-data
+        target: /data/db
+        bind:
+          propagate: rshared
+The resulting error is:
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.app.volumes contains an invalid type, it should be a string
+Here is the prior short syntax that did not raise any errors:
+    volumes:
+          - $HOME/app/docker-app/db-data:/data/db
+Both of the instructions are issued for version: "2" of docker-compose, but the issue remains in version: "3".
+Context information (for bug reports)
+Output of docker-compose version
+docker-compose version 1.18.0, build 8dd22a9
+docker-py version: 2.6.1
+CPython version: 2.7.13
+OpenSSL version: OpenSSL 1.0.1t  3 May 2016
+Output of docker version
+Client:
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   3a232c8
+ Built:        Tue Feb 28 07:57:58 2017
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      17.03.0-ce
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   3a232c8
+ Built:        Tue Feb 28 07:57:58 2017
+ OS/Arch:      linux/amd64
+ Experimental: false
+Output of docker-compose config
+(Make sure to add the relevant -f and other flags)
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.app.volumes contains an invalid type, it should be a string
+Steps to reproduce the issue
+define a docler-compose file containing the following instruction:
+    volumes:
+      - type: bind
+        source: $HOME/app/docker-app/db-data
+        target: /data/db
+        bind:
+          propagate: rshared
+Issuue a docker-compose build
+Observed result
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.app.volumes contains an invalid type, it should be a string
+Expected result
+Proper volume mapping, consistent with short syntax
+Stacktrace / full error message
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.app.volumes contains an invalid type, it should be a string
+Additional information
+Ubuntu 14.04 LTS 64 Bit, docker-compose installed and updated with apt-get

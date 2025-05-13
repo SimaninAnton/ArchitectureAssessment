@@ -1,0 +1,37 @@
+pieterza commented 4 days ago
+The --ignore-pull-failures flag still exits non-zero when failing to pull.
+I've found this old bug report which was never solved either: #4377
+See example
+pieters@Pieters-MacBook-Pro ~ $ docker-compose -f code/property-core-backend/test.yml pull --ignore-pull-failures
+Pulling php-fpm ... error
+
+ERROR: for php-fpm  pull access denied for thiswontexistanywhereihope, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+ERROR: pull access denied for thiswontexistanywhereihope, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+pieters@Pieters-MacBook-Pro ~ $ echo $?
+1
+Output of docker-compose version
+docker-compose version 1.25.2, build 698e2846
+docker-py version: 4.1.0
+CPython version: 3.7.5
+OpenSSL version: OpenSSL 1.1.1d  10 Sep 2019
+Output of docker version
+Docker version 19.03.5, build 633a0ea
+Output of docker-compose config
+version: "3.7"
+
+services:
+  php-fpm:
+    image: thiswontexistanywhereihope
+    expose:
+      - 9000
+    volumes:
+      - ${PWD}/shared:/shared/app
+    env_file: .env.test
+Steps to reproduce the issue
+docker-compose -f test.yml pull --ignore-pull-failures (ensure image in compose-file does not exist)
+Observed result
+It fails, but exits non-zero
+Expected result
+It fails and exists zero
+3
+1

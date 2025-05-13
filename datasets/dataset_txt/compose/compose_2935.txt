@@ -1,0 +1,12 @@
+marjorienorm commented on 10 Jan 2016
+I tried the docker-compose example shown here https://docs.docker.com/compose/gettingstarted/ on my Ubuntu laptop and all works well. I then tried the same thing from my Windows laptop (Docker Toolbox) with a HyperV created machine (docker-machine); I keep getting the same error
+...
+redis_1 | 1:M 10 Jan 15:47:49.749 * The server is now ready to accept connections on port 6379
+web_1 | python: can't open file 'app.py': [Errno 2] No such file or directory
+see that last line? The app.py is there in the rood directory.
+   Name                     Command             State     Ports
+composetest_redis_1 /entrypoint.sh redis-server Up 6379/tcp
+composetest_web_1 /bin/sh -c python app.py Exit 2
+Also note the docker build steps were successful thou I did see this warning
+Successfully built 6c6476bf74b8
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.

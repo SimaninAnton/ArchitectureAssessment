@@ -1,0 +1,16 @@
+mc0e commented on 29 Sep 2015
+I have a container like
+postfix:
+    build: postfix
+    ports:
+        - "25:25"
+    volumes_from:
+        - mailspool
+    links:
+        - dovecot:dovecot
+    external_links:
+        - mariadb_single_container:mariadb
+It was working fine, but after a recent system reboot, the external_links container is not linked. The environment variables associated with the mariadb container are no longer being set, and it doesn't appear in /etc/hosts either. The mariadb container itself looks fine, and it's being used by other containers that don't use docker-compose. The dovecot container link is working fine. I've restarted the postfix container to make sure it's not something to do with the order the containers came up.
+docker-compose restart gives no errors/warnings. Using the --verbose flag doesn't provide anything that looks helpful.
+Any suggestions as to what might be going wrong?
+5

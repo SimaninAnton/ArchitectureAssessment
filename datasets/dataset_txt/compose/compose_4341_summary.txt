@@ -1,0 +1,1 @@
+fig up does not install requirements.txt

@@ -1,0 +1,21 @@
+Craeckie commented on 21 Mar 2016
+I have the following compose file:
+mysql:
+  image: mariadb:10
+  environment:
+    MYSQL_ROOT_PASSWORD: xxx
+
+server:
+  image: php:5.6-apache
+  links:
+    - mysql:mysql
+Now when I run
+docker-compose create && docker-compose start
+And run
+docker exec -it ..._server_1 ping mysql
+it returns
+ping: unknown host
+(though docker exec -it ..._server_1 ping < IP-Address of container> works)
+If I instead create the containers with docker-compose up command and ping the mysql-container, it works!
+What is the difference between these commands?
+2

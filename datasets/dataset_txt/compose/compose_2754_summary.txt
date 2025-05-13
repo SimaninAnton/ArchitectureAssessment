@@ -1,0 +1,1 @@
+Compose doesn't respect ports with run

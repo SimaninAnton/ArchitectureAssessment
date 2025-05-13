@@ -1,0 +1,15 @@
+Contributor
+aanand commented on 16 Oct 2015
+If I create an empty docker-compose.override.yml in a project, docker-compose up throws the following error:
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 53, in main
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 23, in sys_dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.docopt_command", line 26, in dispatch
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.main", line 163, in perform_command
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 54, in project_from_options
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.cli.command", line 90, in get_project
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.config.config", line 215, in load
+  File "/compose/build/docker-compose/out00-PYZ.pyz/compose.config.config", line 205, in merge_services
+TypeError: 'NoneType' object is not iterable
+We should instead show the same Top level object needs to be a dictionary error that you get if your docker-compose.yml file is empty.

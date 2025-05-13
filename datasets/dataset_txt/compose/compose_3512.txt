@@ -1,0 +1,14 @@
+geeknam commented on 2 Jul 2015
+I have the following setup:
+db:
+  image: postgres:latest
+
+app:
+  ...
+  links:
+    - db
+When I try to run docker-compose run app testcommand twice, it reuses the db container. Is it possible to make app create another db container?
+What I'm after is:
+app_run_1 ---> db_1
+app_run_2 ---> db_2
+I'm trying to isolate the services in order to run tests concurrently.

@@ -1,0 +1,18 @@
+Contributor
+aanand commented on 2 Jun 2015
+Thanks to @albers and @sdurrheimer, we now have both bash and zsh completion, which is fantastic. However, they (understandably) both do a lot of hacky stuff to read the YAML file without actually parsing YAML properly, and they both implement this separately.
+We could potentially add some commands/flags to Compose that would give them the information they need in a simple shell-parseable format. Going off a quick scan of the bash script, it looks like it'd be useful to be able to list:
+names of all services in the file
+names of all services that have a given configuration option set - here, we'd even be able to evaluate extends to get the correct configuration, which I doubt would be any fun at all to implement in shell script
+names of services that have at least one running container
+names of services that have at least one stopped container
+Perhaps a docker-compose services command:
+$ docker-compose services
+web
+redis
+
+$ docker-compose services --with-option="build"
+web
+
+$ docker-compose services --with-running-container
+redis

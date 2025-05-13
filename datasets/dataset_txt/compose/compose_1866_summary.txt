@@ -1,0 +1,1 @@
+Bug in handling .dockerignore multilevel patterns like x/**/y with docker-compose

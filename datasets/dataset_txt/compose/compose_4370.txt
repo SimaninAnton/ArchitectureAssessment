@@ -1,0 +1,2 @@
+gregwebs commented on 12 Mar 2014
+Using fig version 0.3.2 and 0.3.1, I have "3000:3000" in my fig.yml but after running sudo fig up web /bin/bash, the command sudo docker ps only shows 3000/tcp with no mapping to the outside world

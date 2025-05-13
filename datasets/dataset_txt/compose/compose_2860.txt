@@ -1,0 +1,28 @@
+arhea commented on 30 Jan 2016
+We are currently implementing Docker UCP inside a large enterprise. The concept of multiple partitioned environments is still alive. We currently have 3 environments dev, stage, and production. That all run the same applications with different configurations often sharing many of the same environment variables.
+Ansible provides the concept of variables (eg. {{ db_host }}) that can be specified per environment and injected into the tasks. This allows a single set of tasks to be run across many environments.
+Proposal
+A way to specify an environment or variables file docker-compose -i staging -f myapp.yml. The variables would be pulled out of the staging file and then injected using a Jinja like format prior to running on the docker daemon.
+Why does extend not solve this?
+Many environment variables are shared across services and we want to manage those variables in a single location, such as database usernames and passwords. Extend would require us to replicate these configuration variables across all services. and merge the main docker-compose file with the environment specific configuration.
+How do we solve this now?
+We currently use a series of shell scripts to inject environment variables into the compose files. While this works, it is not an elegant solution and increases the barrier to entry for other sysadmins.
+Example
+File: staging
+db_username=admin
+db_password=password
+File: production
+db_username=admin
+db_password=super_prod_password
+File: myapp.yml
+myapp:
+  image: postgres
+  environment:
+    - 'DB_USER={{ db_username }}'
+    - 'DB_PASS={{ db_password }}'
+app:
+  image: node
+  environment:
+    - 'DB_USER={{ db_username }}'
+    - 'DB_PASS={{ db_password }}'
+I pose this proposal/question here, is this something that compose would look to solve? Do you see this being a feature by an outside package? Is this a pain point felt by other enterprises? My team is open to helping development efforts and looks to make this something that benefits the Docker community as a whole.

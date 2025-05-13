@@ -1,0 +1,1 @@
+[ERRO] docker: Error response from daemon: An error occurred while sharing drive.

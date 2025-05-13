@@ -1,0 +1,17 @@
+DonMartin76 commented on 8 Nov 2016
+With docker-compose 1.8.0 in my GoCD pipeline, I get the following error message when trying to pull the images for a compose file which contains (a) images which are to be pulled from a private repository and additionally (b) an image from a public repository (postgres:9.4 in my case):
+16:38:31.454 Logging in to docker registry registry.ourcompany.io...
+16:38:31.509 WARNING: login credentials saved in /var/go/.docker/config.json
+16:38:31.509 Login Succeeded
+16:38:31.511 Docker logs go into docker.log.
+16:38:31.512 Using prebuilt images:
+16:38:31.512 DOCKER_PREFIX=registry.ourcompany.io/somecomponent/
+16:38:31.512 DOCKER_TAG=dev
+16:38:31.512 Templating Dockerfile for test base and compose file...
+16:38:31.517 Using prebuilt images: Pulling images...
+16:38:31.672 Pulling database (postgres:9.4)...
+16:38:32.496 Authentication is required: Get https://registry-1.docker.io/v2/library/postgres/manifests/9.4: unauthorized: incorrect username or password
+Before doing the docker-compose pull I do a docker login with our registry URL (that's the "Login Succeeded"). With other compose files containing only images from our private registry, it works. But here compose seems to use the private credentials for the public registry (registry-1.docker.io).
+Am I doing something wrong, or might this just be a little bug?
+BR, Martin
+2

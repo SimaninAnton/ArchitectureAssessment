@@ -1,0 +1,8 @@
+Contributor
+dnephin commented on 27 Aug 2015
+I've never tried the example projects, but I've noticed we get a decent number of PRs and issues opened about them (ex: #1843, and many of our oldest PRs).
+It may be that we only need to make a couple small changes to smooth out the examples, but I'm opening this issue to track the work.
+Related:
+#750
+#1843
+#254

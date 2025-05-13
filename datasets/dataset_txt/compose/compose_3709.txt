@@ -1,0 +1,10 @@
+polonskiy commented on 20 Apr 2015
+How to pipe data to container sdtin?
+test:
+    image: ubuntu
+    stdin_open: true
+    command: tailf /dev/null
+echo hello | docker-compose run test cat
+Doesn't work.
+I know how to do it with docker exec, but I'm interested in "compose-way" solution.
+3

@@ -1,0 +1,3 @@
+Contributor
+vmalloc commented on 12 Mar 2015
+Currently docker-compose cannot be installed for virtualenvs containing newer requests installations
